@@ -1,6 +1,6 @@
 # Angular 2 Localization
 > Angular 2 Localization is an implementation experiment of translation in the new Angular 2 applications using TypeScript.
-> It works both through direct loading and asynchronous translations.
+> It works both through direct loading and asynchronous of translations.
 
 ## Use Localization class
 - Create the `services` folder in the root of your Angular 2 application, and copy `localization.ts`.
