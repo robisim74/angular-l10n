@@ -1,0 +1,19 @@
+{
+  "name": "js-cookie",
+  "main": [
+    "src/js.cookie.js"
+  ],
+  "ignore": [],
+  "homepage": "https://github.com/js-cookie/js-cookie",
+  "version": "2.0.3",
+  "_release": "2.0.3",
+  "_resolution": {
+    "type": "version",
+    "tag": "v2.0.3",
+    "commit": "d827e087e1f919a4cd106ebe8542f3408d8fe124"
+  },
+  "_source": "git://github.com/js-cookie/js-cookie.git",
+  "_target": "~2.0.3",
+  "_originalSource": "js-cookie",
+  "_direct": true
+}

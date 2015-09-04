@@ -1,0 +1,44 @@
+{
+  "name": "js-cookie",
+  "version": "2.0.3",
+  "description": "A simple, lightweight JavaScript API for handling cookies",
+  "main": "src/js.cookie.js",
+  "directories": {
+    "test": "test"
+  },
+  "keywords": [
+    "jquery-plugin",
+    "cookie",
+    "cookies",
+    "browser",
+    "amd",
+    "commonjs",
+    "client",
+    "js-cookie",
+    "browserify"
+  ],
+  "scripts": {
+    "test": "grunt test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/js-cookie/js-cookie.git"
+  },
+  "author": "Klaus Hartl",
+  "license": "MIT",
+  "devDependencies": {
+    "grunt": "0.4.5",
+    "grunt-compare-size": "0.4.0",
+    "grunt-contrib-connect": "0.10.1",
+    "grunt-contrib-jshint": "0.11.1",
+    "grunt-contrib-nodeunit": "0.4.1",
+    "grunt-contrib-qunit": "0.7.0",
+    "grunt-contrib-uglify": "0.9.1",
+    "grunt-contrib-watch": "0.6.1",
+    "grunt-jscs": "1.6.0",
+    "grunt-saucelabs": "8.6.0",
+    "gzip-js": "0.3.2",
+    "qunitjs": "1.18.0",
+    "requirejs": "2.1.17"
+  }
+}

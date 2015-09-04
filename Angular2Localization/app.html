@@ -1,0 +1,47 @@
+<!--app-->
+<!--route component-->
+
+<header>
+
+  <nav class="navbar navbar-default">
+    <div class="container">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#home-navbar">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="#">{{ translate('TITLE') }}</a>
+      </div>
+
+      <div class="collapse navbar-collapse" id="home-navbar">
+        <ul class="nav navbar-nav navbar-right">
+          <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown" data-target="#">{{ translate('CHANGE_LANGUAGE') }} <span class="caret"></span></a>
+            <ul class="dropdown-menu">
+              
+              <li><a class="btn btn-default btn-block" (click)="selectLanguage('en')">&nbsp;English&nbsp;<i class="glyphicon glyphicon-ok" *ng-if="currentLanguage() == 'en'"></i></a></li>
+              <li><a class="btn btn-default btn-block" (click)="selectLanguage('it')">&nbsp;Italiano&nbsp;<i class="glyphicon glyphicon-ok" *ng-if="currentLanguage() == 'it'"></i></a></li>
+              <!-- add a new language here -->
+            
+            </ul>
+          </li>
+        </ul>
+      </div>
+      <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+  </nav>
+  <!--navbar-->
+
+</header>
+<!--header-->
+
+<main>
+
+  <home></home>
+  <!--home component-->
+
+</main>
+<!--main-->
