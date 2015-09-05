@@ -39,12 +39,12 @@ var app = (function () {
         //this.localization.addTranslation('en', translationEN); // required (parameters: language, translation)
         //this.localization.addTranslation('it', translationIT);  
         //// add a new language here  
-        //this.localization.definePreferredLanguage('en'); // required: define preferred language (parameter: default language)
+        //this.localization.definePreferredLanguage('en', 30); // required: define preferred language (parameter: default language, expires (No days) - if omitted, the cookie becomes a session cookie)
         //// end localization
         this.localization = localization;
         this.localization.addTranslation('en');
         this.localization.addTranslation('it');
-        this.localization.definePreferredLanguage('en');
+        this.localization.definePreferredLanguage('en', 30);
         this.localization.translationProvider('./resources/locale-');
     }
     app.prototype.translate = function (key) {

@@ -43,7 +43,7 @@ class app {
         //this.localization.addTranslation('en', translationEN); // required (parameters: language, translation)
         //this.localization.addTranslation('it', translationIT);  
         //// add a new language here  
-        //this.localization.definePreferredLanguage('en'); // required: define preferred language (parameter: default language)
+        //this.localization.definePreferredLanguage('en', 30); // required: define preferred language (parameter: default language, expires (No days) - if omitted, the cookie becomes a session cookie)
         //// end localization
         
         // ASYNCHRONOUS LOADING
@@ -52,7 +52,7 @@ class app {
         this.localization.addTranslation('en'); // required: add a new translations (parameter: a new language)
         this.localization.addTranslation('it');
         // add a new language here
-        this.localization.definePreferredLanguage('en'); // required: define preferred language (parameter: default language)
+        this.localization.definePreferredLanguage('en', 30); // required: define preferred language (parameter: default language, expires (No days) - if omitted, the cookie becomes a session cookie)
         this.localization.translationProvider('./resources/locale-'); // required: initialize translation provider (parameter: path prefix)
         // end localization
                 

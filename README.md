@@ -33,7 +33,7 @@ var translationEN = {
 this.localization.addTranslation('en', translationEN); // required (parameters: language, translation)
 this.localization.addTranslation('it', translationIT);
 // add a new language here 
-this.localization.definePreferredLanguage('en'); // required: define preferred language (parameter: default language)
+this.localization.definePreferredLanguage('en', 30); // required: define preferred language (parameter: default language, expires (No days) - if omitted, the cookie becomes a session cookie)
 ```
 To get translation by direct loading add the following code in each component:
 ```TypeScript
@@ -52,7 +52,7 @@ To inizialize localization by asynchronous loading add the following code in the
 this.localization.addTranslation('en'); // required: add a new translations (parameter: a new language) 
 this.localization.addTranslation('it');
 // add a new language here 
-this.localization.definePreferredLanguage('en'); // required: define preferred language (parameter: default language)
+this.localization.definePreferredLanguage('en', 30); // required: define preferred language (parameter: default language, expires (No days) - if omitted, the cookie becomes a session cookie)
 this.localization.translationProvider('./resources/locale-'); // required: initialize translation provider (parameter: path prefix)
 ```
 and create the json files of translations such as `locale-en.json` (url is obtained concatenating {prefix} + {locale language code} + ".json").

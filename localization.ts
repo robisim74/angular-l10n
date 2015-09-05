@@ -46,7 +46,7 @@ import {Http} from 'http/http';
  * this.localization.addTranslation('en', translationEN); // required (parameters: language, translation)
  * this.localization.addTranslation('it', translationIT);
  * // add a new language here 
- * this.localization.definePreferredLanguage('en'); // required: define preferred language (parameter: default language)
+ * this.localization.definePreferredLanguage('en', 30); // required: define preferred language (parameter: default language, expires (No days) - if omitted, the cookie becomes a session cookie)
  */
  
 /**
@@ -56,7 +56,7 @@ import {Http} from 'http/http';
  * this.localization.addTranslation('en'); // required: add a new translations (parameter: a new language) 
  * this.localization.addTranslation('it');
  * // add a new language here
- * this.localization.definePreferredLanguage('en'); // required: define preferred language (parameter: default language)
+ * this.localization.definePreferredLanguage('en', 30); // required: define preferred language (parameter: default language, expires (No days) - if omitted, the cookie becomes a session cookie)
  * this.localization.translationProvider('./resources/locale-'); // required: initialize translation provider (parameter: path prefix)
  * 
  * and create the json files of translations such as "locale-en.json"
@@ -72,6 +72,8 @@ import {Http} from 'http/http';
     languagesData: Array<string> = []; // array of available languages codes
     
     translationsData: any = {}; // object of translations
+    
+    expires: number; // define when the cookie will be removed
 
     constructor(public http: Http) { }
             
@@ -88,22 +90,29 @@ import {Http} from 'http/http';
     }
     
     // define preferred language
-    definePreferredLanguage(defaultLanguage: string) {
+    definePreferredLanguage(defaultLanguage: string, expires?: number) {
 
-        // get current browser language or default language
-        var browserLanguage = navigator.language || navigator.userLanguage || navigator.browserLanguage || navigator.systemLanguage;
-
-        browserLanguage = browserLanguage.substring(0, 2); // get two-letter code    
+        this.expires = expires;
         
-        if (this.languagesData.indexOf(browserLanguage) != -1) {
-            this.locale = browserLanguage;
-        }
-        else {
-            this.locale = defaultLanguage;
-        }
+        // get cookie
+        this.locale = Cookies.get("locale");
 
-        Cookies.set("locale", this.locale); // set session cookie
+        if (this.locale == null) {
+            // get current browser language or default language
+            var browserLanguage = navigator.language || navigator.userLanguage || navigator.browserLanguage || navigator.systemLanguage;
 
+            browserLanguage = browserLanguage.substring(0, 2); // get two-letter code    
+        
+            if (this.languagesData.indexOf(browserLanguage) != -1) {
+                this.locale = browserLanguage;
+            }
+            else {
+                this.locale = defaultLanguage;
+            }
+            
+            Cookies.set("locale", this.locale, { expires: this.expires }); // set cookie
+        }
+     
     }
     
     // asinchronous loading: define translation provider & get json data
@@ -145,7 +154,7 @@ import {Http} from 'http/http';
     setCurrentLanguage(locale: string) {
 
         if (this.locale != locale) { // check if language is changed
-            Cookies.set("locale", locale); // set session cookie      
+            Cookies.set("locale", locale, { expires: this.expires }); // set cookie      
             this.locale = locale; // set language code
             
             if (this.prefix != null) {

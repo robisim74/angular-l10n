@@ -31,16 +31,20 @@ var Localization = (function () {
             this.translationsData[locale] = translation;
         }
     };
-    Localization.prototype.definePreferredLanguage = function (defaultLanguage) {
-        var browserLanguage = navigator.language || navigator.userLanguage || navigator.browserLanguage || navigator.systemLanguage;
-        browserLanguage = browserLanguage.substring(0, 2);
-        if (this.languagesData.indexOf(browserLanguage) != -1) {
-            this.locale = browserLanguage;
+    Localization.prototype.definePreferredLanguage = function (defaultLanguage, expires) {
+        this.expires = expires;
+        this.locale = Cookies.get("locale");
+        if (this.locale == null) {
+            var browserLanguage = navigator.language || navigator.userLanguage || navigator.browserLanguage || navigator.systemLanguage;
+            browserLanguage = browserLanguage.substring(0, 2);
+            if (this.languagesData.indexOf(browserLanguage) != -1) {
+                this.locale = browserLanguage;
+            }
+            else {
+                this.locale = defaultLanguage;
+            }
+            Cookies.set("locale", this.locale, { expires: this.expires });
         }
-        else {
-            this.locale = defaultLanguage;
-        }
-        Cookies.set("locale", this.locale);
     };
     Localization.prototype.translationProvider = function (prefix) {
         var _this = this;
@@ -56,7 +60,7 @@ var Localization = (function () {
     };
     Localization.prototype.setCurrentLanguage = function (locale) {
         if (this.locale != locale) {
-            Cookies.set("locale", locale);
+            Cookies.set("locale", locale, { expires: this.expires });
             this.locale = locale;
             if (this.prefix != null) {
                 this.translationProvider(this.prefix);
