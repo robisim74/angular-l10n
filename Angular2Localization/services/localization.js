@@ -16,7 +16,6 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 /// <reference path="../typings/angular2/angular2.d.ts" />
-/// <reference path="../typings/js-cookie/js-cookie.d.ts" />
 var angular2_1 = require('angular2/angular2');
 var http_1 = require('http/http');
 var Localization = (function () {
@@ -33,7 +32,7 @@ var Localization = (function () {
     };
     Localization.prototype.definePreferredLanguage = function (defaultLanguage, expires) {
         this.expires = expires;
-        this.locale = Cookies.get("locale");
+        this.locale = this.getCookie("locale");
         if (this.locale == null) {
             var browserLanguage = navigator.language || navigator.userLanguage || navigator.browserLanguage || navigator.systemLanguage;
             browserLanguage = browserLanguage.substring(0, 2);
@@ -43,7 +42,7 @@ var Localization = (function () {
             else {
                 this.locale = defaultLanguage;
             }
-            Cookies.set("locale", this.locale, { expires: this.expires });
+            this.setCookie("locale", this.locale, this.expires);
         }
     };
     Localization.prototype.translationProvider = function (prefix) {
@@ -60,7 +59,7 @@ var Localization = (function () {
     };
     Localization.prototype.setCurrentLanguage = function (locale) {
         if (this.locale != locale) {
-            Cookies.set("locale", locale, { expires: this.expires });
+            this.setCookie("locale", locale, this.expires);
             this.locale = locale;
             if (this.prefix != null) {
                 this.translationProvider(this.prefix);
@@ -75,6 +74,31 @@ var Localization = (function () {
     Localization.prototype.asyncTranslate = function (key) {
         var value = this.translationsData[key];
         return value;
+    };
+    Localization.prototype.setCookie = function (name, value, days) {
+        if (days != null) {
+            var expirationDate = new Date();
+            expirationDate.setTime(expirationDate.getTime() + (days * 24 * 60 * 60 * 1000));
+            var expires = "; expires=" + expirationDate.toUTCString();
+        }
+        else {
+            var expires = "";
+        }
+        document.cookie = name + "=" + value + expires + "; path=/";
+    };
+    Localization.prototype.getCookie = function (name) {
+        name += "=";
+        var ca = document.cookie.split(';');
+        for (var i = 0; i < ca.length; i++) {
+            var c = ca[i];
+            while (c.charAt(0) == ' ') {
+                c = c.substring(1);
+            }
+            if (c.indexOf(name) == 0) {
+                return c.substring(name.length, c.length);
+            }
+        }
+        return null;
     };
     Localization = __decorate([
         angular2_1.Injectable(), 

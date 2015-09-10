@@ -7,11 +7,8 @@
 
 // dependencies:
 // - angular: v2.0.0-alpha.36
-// - js-cookie
-// tsd & js libraries
 
 /// <reference path="../typings/angular2/angular2.d.ts" />
-/// <reference path="../typings/js-cookie/js-cookie.d.ts" />
 
 import {Injectable} from 'angular2/angular2';
 import {Http} from 'http/http';
@@ -94,12 +91,12 @@ import {Http} from 'http/http';
 
         this.expires = expires;
         
-        // get cookie
-        this.locale = Cookies.get("locale");
+        // try to get cookie
+        this.locale = this.getCookie("locale"); // call get cookie method
 
         if (this.locale == null) {
             // get current browser language or default language
-            var browserLanguage = navigator.language || navigator.userLanguage || navigator.browserLanguage || navigator.systemLanguage;
+            var browserLanguage: string = navigator.language || navigator.userLanguage || navigator.browserLanguage || navigator.systemLanguage;
 
             browserLanguage = browserLanguage.substring(0, 2); // get two-letter code    
         
@@ -109,17 +106,17 @@ import {Http} from 'http/http';
             else {
                 this.locale = defaultLanguage;
             }
-            
-            Cookies.set("locale", this.locale, { expires: this.expires }); // set cookie
+
+            this.setCookie("locale", this.locale, this.expires); // call set cookie method
         }
-     
+
     }
     
     // asinchronous loading: define translation provider & get json data
     translationProvider(prefix: string) {
 
         this.prefix = prefix;
-        var url = this.prefix + this.locale + '.json';
+        var url: string = this.prefix + this.locale + '.json';
         
         // angular 2 http module
         this.http.get(url)
@@ -154,7 +151,7 @@ import {Http} from 'http/http';
     setCurrentLanguage(locale: string) {
 
         if (this.locale != locale) { // check if language is changed
-            Cookies.set("locale", locale, { expires: this.expires }); // set cookie      
+            this.setCookie("locale", locale, this.expires); // call set cookie method      
             this.locale = locale; // set language code
             
             if (this.prefix != null) {
@@ -180,8 +177,8 @@ import {Http} from 'http/http';
     // get translation by direct loading
     translate(key: string) {
 
-        var translation = this.translationsData[this.locale]; // get translations by locale       
-        var value = translation[key]; // get translated value by key
+        var translation: any = this.translationsData[this.locale]; // get translations by locale       
+        var value: string = translation[key]; // get translated value by key
         return value;
 
     }
@@ -202,8 +199,45 @@ import {Http} from 'http/http';
     // get translation by asynchronously loading
     asyncTranslate(key: string) {
 
-        var value = this.translationsData[key]; // get translated value by key
+        var value: string = this.translationsData[key]; // get translated value by key
         return value;
+
+    }
+    
+    // cookies methods
+    // set cookie
+    setCookie(name: string, value: string, days?: number) {
+
+        if (days != null) {
+            var expirationDate: Date = new Date();
+            expirationDate.setTime(expirationDate.getTime() + (days * 24 * 60 * 60 * 1000));
+            var expires: string = "; expires=" + expirationDate.toUTCString();
+        }
+        else {
+            var expires: string = "";
+        }
+
+        document.cookie = name + "=" + value + expires + "; path=/";
+
+    }
+    // get cookie
+    getCookie(name: string) {
+
+        name += "=";
+
+        var ca: string[] = document.cookie.split(';');
+
+        for (var i = 0; i < ca.length; i++) {
+            var c: string = ca[i];
+            while (c.charAt(0) == ' '){
+                c = c.substring(1);
+            }
+            if (c.indexOf(name) == 0){
+                return c.substring(name.length, c.length);
+            }
+        }
+        
+        return null;
 
     }
 

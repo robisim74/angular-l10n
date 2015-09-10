@@ -1,7 +1,0 @@
-{
-  "name": "js-cookie",
-  "main": [
-    "src/js.cookie.js"
-  ],
-  "ignore": []
-}

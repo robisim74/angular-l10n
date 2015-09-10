@@ -47,8 +47,8 @@ This method call `translate(key)` method of the Localization class:
 ```TypeScript
 // get translation by direct loading
 translate(key: string) {
-    var translation = this.translationsData[this.locale]; // get translations by locale       
-    var value = translation[key]; // get translated value by key
+    var translation: any = this.translationsData[this.locale]; // get translations by locale       
+    var value: string = translation[key]; // get translated value by key
     return value;
 }
 ```
@@ -66,8 +66,6 @@ and always instantly all views render the new values.
 
 ## How to use the class
 - Create the `services` folder in the root of your Angular 2 application, and copy `localization.ts`.
-- Include [js-cookie.js](https://github.com/js-cookie/js-cookie.git) library.
-- Include `js-cookie.d.ts` TypeScript Definition from [tsd](https://github.com/DefinitelyTyped/tsd.git).
 - Add in route component:
 ```TypeScript
 @Component({
