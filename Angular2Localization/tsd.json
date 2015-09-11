@@ -6,16 +6,19 @@
   "bundle": "typings/tsd.d.ts",
   "installed": {
     "es6-promise/es6-promise.d.ts": {
-      "commit": "af76bf46025371c760d8fe8c03cf874428da6124"
+      "commit": "a461a243e2e09b213bc49d12650f80d81047576d"
     },
     "rx/rx.d.ts": {
-      "commit": "af76bf46025371c760d8fe8c03cf874428da6124"
+      "commit": "a461a243e2e09b213bc49d12650f80d81047576d"
     },
     "angular2/angular2.d.ts": {
-      "commit": "af76bf46025371c760d8fe8c03cf874428da6124"
+      "commit": "a461a243e2e09b213bc49d12650f80d81047576d"
     },
     "rx/rx-lite.d.ts": {
-      "commit": "af76bf46025371c760d8fe8c03cf874428da6124"
+      "commit": "a461a243e2e09b213bc49d12650f80d81047576d"
+    },
+    "angular2/http.d.ts": {
+      "commit": "a461a243e2e09b213bc49d12650f80d81047576d"
     }
   }
 }

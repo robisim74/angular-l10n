@@ -16,8 +16,9 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 /// <reference path="../typings/angular2/angular2.d.ts" />
+/// <reference path="../typings/angular2/http.d.ts" />
 var angular2_1 = require('angular2/angular2');
-var http_1 = require('http/http');
+var http_1 = require('angular2/http');
 var Localization = (function () {
     function Localization(http) {
         this.http = http;

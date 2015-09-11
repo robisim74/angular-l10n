@@ -6,12 +6,13 @@
 // https://github.com/robisim74/angular2localization
 
 // dependencies:
-// - angular: v2.0.0-alpha.36
+// - angular: v2.0.0-alpha.37
 
 /// <reference path="../typings/angular2/angular2.d.ts" />
+/// <reference path="../typings/angular2/http.d.ts" />
 
 import {Injectable} from 'angular2/angular2';
-import {Http} from 'http/http';
+import {Http} from 'angular2/http';
 
 /**
  * localization is an injectable class that use angular 2 http module
