@@ -53,7 +53,13 @@ var Localization = (function () {
         this.http.get(url)
             .toRx()
             .map(function (res) { return res.json(); })
-            .subscribe(function (res) { return _this.translationsData = res; });
+            .subscribe(function (res) { return _this.translationsData = res; }, function (exception) { return _this.onError; }, this.onCompleted);
+    };
+    Localization.prototype.onCompleted = function () {
+        console.log("translationProvider:", "http get completed");
+    };
+    Localization.prototype.onError = function (exception) {
+        console.error("translationProvider:", exception);
     };
     Localization.prototype.getCurrentLanguage = function () {
         return this.locale;

@@ -123,8 +123,18 @@ import {Http} from 'angular2/http';
         this.http.get(url)
             .toRx()
             .map(res => res.json())
-            .subscribe(res => this.translationsData = res);
-
+            .subscribe(res => this.translationsData = res, (exception: any) => this.onError, this.onCompleted);
+        
+    }
+    onCompleted(){
+        
+        console.log("translationProvider:", "http get completed");
+           
+    }
+    onError(exception: any){
+        
+        console.error("translationProvider:", exception);
+        
     }
         
     // get current language
