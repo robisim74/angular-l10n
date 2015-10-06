@@ -51,7 +51,6 @@ var Localization = (function () {
         this.prefix = prefix;
         var url = this.prefix + this.locale + '.json';
         this.http.get(url)
-            .toRx()
             .map(function (res) { return res.json(); })
             .subscribe(function (res) { return _this.translationsData = res; }, function (exception) { return _this.onError; }, this.onCompleted);
     };

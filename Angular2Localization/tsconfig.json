@@ -7,6 +7,5 @@
     "removeComments": true,
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true
-  },
-  "version": "1.5.3"
+  }
 }

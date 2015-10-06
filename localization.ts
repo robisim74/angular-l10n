@@ -6,7 +6,7 @@
 // https://github.com/robisim74/angular2localization
 
 // dependencies:
-// - angular: v2.0.0-alpha.37
+// - angular: v2.0.0-alpha.38
 
 /// <reference path="../typings/angular2/angular2.d.ts" />
 /// <reference path="../typings/angular2/http.d.ts" />
@@ -121,7 +121,6 @@ import {Http} from 'angular2/http';
         
         // angular 2 http module
         this.http.get(url)
-            .toRx()
             .map(res => res.json())
             .subscribe(res => this.translationsData = res, (exception: any) => this.onError, this.onCompleted);
         
