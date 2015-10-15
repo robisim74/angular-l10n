@@ -10,16 +10,31 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 var angular2_1 = require('angular2/angular2');
-var localization_1 = require('../../services/localization');
+var localization_1 = require('../../services/localization'); // localization class
 var home = (function () {
+    // add a new property here
     function home(localization) {
         this.localization = localization;
-        this.title = "HELLO";
+        // example of key injection from the component
+        this.title = "HELLO"; // set key
+        // add a new key here   
     }
+    // DIRECT LOADING
+    // UNCOMMENT FOLLOWING CODE FOR DIRECT LOADING
+    //// translation: direct loading
+    //translate(key) {
+    //
+    //    return this.localization.translate(key);
+    //
+    //}
+    // ASYNCHRONOUS LOADING
+    // COMMENT FOLLOWING CODE IF DIRECT LOADING
+    // translation: asynchronous loading  
     home.prototype.translate = function (key) {
         return this.localization.asyncTranslate(key);
     };
     home = __decorate([
+        // localization class
         angular2_1.Component({
             selector: 'home'
         }),

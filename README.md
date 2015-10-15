@@ -78,7 +78,7 @@ class app {
      ...
  }
 }
-bootstrap(app, [HTTP_BINDINGS]);
+bootstrap(app, [HTTP_PROVIDERS]);
 ```
 
 ### Direct loading

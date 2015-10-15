@@ -1,4 +1,3 @@
-/// <reference path="./typings/tsd.d.ts" />
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") return Reflect.decorate(decorators, target, key, desc);
     switch (arguments.length) {
@@ -11,9 +10,9 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 var angular2_1 = require('angular2/angular2');
-var http_1 = require('angular2/http');
+var http_1 = require('angular2/http'); // http module
 var home_1 = require('./components/home/home');
-var localization_1 = require('./services/localization');
+var localization_1 = require('./services/localization'); // localization class
 var app = (function () {
     function app(localization) {
         // DIRECT LOADING
@@ -42,24 +41,44 @@ var app = (function () {
         //this.localization.definePreferredLanguage('en', 30); // required: define preferred language (parameter: default language, expires (No days) - if omitted, the cookie becomes a session cookie)
         //// end localization
         this.localization = localization;
-        this.localization.addTranslation('en');
+        // ASYNCHRONOUS LOADING
+        // COMMENT FOLLOWING CODE IF DIRECT LOADING
+        // initialize localization: asynchronous loading               
+        this.localization.addTranslation('en'); // required: add a new translations (parameter: a new language)
         this.localization.addTranslation('it');
-        this.localization.definePreferredLanguage('en', 30);
-        this.localization.translationProvider('./resources/locale-');
+        // add a new language here
+        this.localization.definePreferredLanguage('en', 30); // required: define preferred language (parameter: default language, expires (No days) - if omitted, the cookie becomes a session cookie)
+        this.localization.translationProvider('./resources/locale-'); // required: initialize translation provider (parameter: path prefix)
+        // end localization
     }
+    // DIRECT LOADING
+    // UNCOMMENT FOLLOWING CODE FOR DIRECT LOADING
+    //// translation: direct loading
+    //translate(key) {
+    //
+    //    return this.localization.translate(key);
+    //
+    //}
+    // ASYNCHRONOUS LOADING
+    // COMMENT FOLLOWING CODE IF DIRECT LOADING
+    // translation: asynchronous loading  
     app.prototype.translate = function (key) {
         return this.localization.asyncTranslate(key);
     };
+    // CHANGE LANGUAGE
+    // return the current language
     app.prototype.currentLanguage = function () {
         return this.localization.getCurrentLanguage();
     };
+    // select language
     app.prototype.selectLanguage = function (locale) {
         this.localization.setCurrentLanguage(locale);
     };
     app = __decorate([
+        // localization class
         angular2_1.Component({
             selector: 'app',
-            bindings: [localization_1.Localization]
+            bindings: [localization_1.Localization] // localization binding: inherited by all descendants
         }),
         angular2_1.View({
             templateUrl: './app.html',
@@ -69,4 +88,4 @@ var app = (function () {
     ], app);
     return app;
 })();
-angular2_1.bootstrap(app, [http_1.HTTP_BINDINGS]);
+angular2_1.bootstrap(app, [http_1.HTTP_PROVIDERS]); // http providers

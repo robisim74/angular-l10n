@@ -1,7 +1,5 @@
-/// <reference path="./typings/tsd.d.ts" />
-
 import {Component, View, bootstrap, NgIf} from 'angular2/angular2';
-import {HTTP_BINDINGS} from 'angular2/http'; // http module
+import {HTTP_PROVIDERS} from 'angular2/http'; // http module
 
 import {home} from './components/home/home';
 
@@ -94,4 +92,4 @@ class app {
 
 }
 
-bootstrap(app, [HTTP_BINDINGS]); // http bindings
+bootstrap(app, [HTTP_PROVIDERS]); // http providers

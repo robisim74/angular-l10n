@@ -6,10 +6,7 @@
 // https://github.com/robisim74/angular2localization
 
 // dependencies:
-// - angular: v2.0.0-alpha.40
-
-/// <reference path="../typings/angular2/angular2.d.ts" />
-/// <reference path="../typings/angular2/http.d.ts" />
+// - angular: v2.0.0-alpha.42
 
 import {Injectable} from 'angular2/angular2';
 import {Http} from 'angular2/http';
