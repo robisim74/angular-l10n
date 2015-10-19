@@ -8412,6 +8412,58 @@ System.register("angular2/src/core/util", ["angular2/src/core/util/decorators"],
   return module.exports;
 });
 
+System.register("angular2/src/core/facade/promise", [], true, function(require, exports, module) {
+  var global = System.global,
+      __define = global.define;
+  global.define = undefined;
+  var PromiseWrapper = (function() {
+    function PromiseWrapper() {}
+    PromiseWrapper.resolve = function(obj) {
+      return Promise.resolve(obj);
+    };
+    PromiseWrapper.reject = function(obj, _) {
+      return Promise.reject(obj);
+    };
+    PromiseWrapper.catchError = function(promise, onError) {
+      return promise.catch(onError);
+    };
+    PromiseWrapper.all = function(promises) {
+      if (promises.length == 0)
+        return Promise.resolve([]);
+      return Promise.all(promises);
+    };
+    PromiseWrapper.then = function(promise, success, rejection) {
+      return promise.then(success, rejection);
+    };
+    PromiseWrapper.wrap = function(computation) {
+      return new Promise(function(res, rej) {
+        try {
+          res(computation());
+        } catch (e) {
+          rej(e);
+        }
+      });
+    };
+    PromiseWrapper.completer = function() {
+      var resolve;
+      var reject;
+      var p = new Promise(function(res, rej) {
+        resolve = res;
+        reject = rej;
+      });
+      return {
+        promise: p,
+        resolve: resolve,
+        reject: reject
+      };
+    };
+    return PromiseWrapper;
+  })();
+  exports.PromiseWrapper = PromiseWrapper;
+  global.define = __define;
+  return module.exports;
+});
+
 System.register("@reactivex/rxjs/dist/cjs/util/noop", [], true, function(require, exports, module) {
   var global = System.global,
       __define = global.define;
@@ -8574,7 +8626,30 @@ System.register("@reactivex/rxjs/dist/cjs/util/root", [], true, function(require
   return module.exports;
 });
 
-System.register("@reactivex/rxjs/dist/cjs/subjects/SubjectSubscription", ["@reactivex/rxjs/dist/cjs/Subscription"], true, function(require, exports, module) {
+System.register("@reactivex/rxjs/dist/cjs/util/Symbol_observable", ["@reactivex/rxjs/dist/cjs/util/root"], true, function(require, exports, module) {
+  var global = System.global,
+      __define = global.define;
+  global.define = undefined;
+  'use strict';
+  exports.__esModule = true;
+  var _root = require("@reactivex/rxjs/dist/cjs/util/root");
+  if (!_root.root.Symbol) {
+    _root.root.Symbol = {};
+  }
+  if (!_root.root.Symbol.observable) {
+    if (typeof _root.root.Symbol['for'] === 'function') {
+      _root.root.Symbol.observable = _root.root.Symbol['for']('observable');
+    } else {
+      _root.root.Symbol.observable = '@@observable';
+    }
+  }
+  exports['default'] = _root.root.Symbol.observable;
+  module.exports = exports['default'];
+  global.define = __define;
+  return module.exports;
+});
+
+System.register("@reactivex/rxjs/dist/cjs/subjects/SubjectSubscription", ["@reactivex/rxjs/dist/cjs/Subscription", "@reactivex/rxjs/dist/cjs/Subscriber"], true, function(require, exports, module) {
   var global = System.global,
       __define = global.define;
   global.define = undefined;
@@ -8603,6 +8678,8 @@ System.register("@reactivex/rxjs/dist/cjs/subjects/SubjectSubscription", ["@reac
   }
   var _Subscription2 = require("@reactivex/rxjs/dist/cjs/Subscription");
   var _Subscription3 = _interopRequireDefault(_Subscription2);
+  var _Subscriber = require("@reactivex/rxjs/dist/cjs/Subscriber");
+  var _Subscriber2 = _interopRequireDefault(_Subscriber);
   var SubjectSubscription = (function(_Subscription) {
     _inherits(SubjectSubscription, _Subscription);
     function SubjectSubscription(subject, observer) {
@@ -8622,6 +8699,9 @@ System.register("@reactivex/rxjs/dist/cjs/subjects/SubjectSubscription", ["@reac
       this.subject = void 0;
       if (!observers || observers.length === 0 || subject.isUnsubscribed) {
         return ;
+      }
+      if (this.observer instanceof _Subscriber2['default']) {
+        this.observer.unsubscribe();
       }
       var subscriberIndex = observers.indexOf(this.observer);
       if (subscriberIndex !== -1) {
@@ -9762,6 +9842,15 @@ System.register("angular2/src/core/linker/query_list", ["angular2/src/core/facad
     });
     QueryList.prototype.map = function(fn) {
       return this._results.map(fn);
+    };
+    QueryList.prototype.filter = function(fn) {
+      return this._results.filter(fn);
+    };
+    QueryList.prototype.reduce = function(fn, init) {
+      return this._results.reduce(fn, init);
+    };
+    QueryList.prototype.toArray = function() {
+      return collection_1.ListWrapper.clone(this._results);
     };
     QueryList.prototype[lang_1.getSymbolIterator()] = function() {
       return this._results[lang_1.getSymbolIterator()]();
@@ -11870,13 +11959,6 @@ System.register("angular2/src/core/compiler/style_url_resolver", ["angular2/src/
       __define = global.define;
   global.define = undefined;
   var lang_1 = require("angular2/src/core/facade/lang");
-  function resolveStyleUrls(resolver, baseUrl, cssText) {
-    var foundUrls = [];
-    cssText = extractUrls(resolver, baseUrl, cssText, foundUrls);
-    cssText = replaceUrls(resolver, baseUrl, cssText);
-    return new StyleWithImports(cssText, foundUrls);
-  }
-  exports.resolveStyleUrls = resolveStyleUrls;
   var StyleWithImports = (function() {
     function StyleWithImports(style, styleUrls) {
       this.style = style;
@@ -11885,35 +11967,28 @@ System.register("angular2/src/core/compiler/style_url_resolver", ["angular2/src/
     return StyleWithImports;
   })();
   exports.StyleWithImports = StyleWithImports;
-  function extractUrls(resolver, baseUrl, cssText, foundUrls) {
-    return lang_1.StringWrapper.replaceAllMapped(cssText, _cssImportRe, function(m) {
+  function isStyleUrlResolvable(url) {
+    if (lang_1.isBlank(url) || url.length === 0 || url[0] == '/')
+      return false;
+    var schemeMatch = lang_1.RegExpWrapper.firstMatch(_urlWithSchemaRe, url);
+    return lang_1.isBlank(schemeMatch) || schemeMatch[1] == 'package';
+  }
+  exports.isStyleUrlResolvable = isStyleUrlResolvable;
+  function extractStyleUrls(resolver, baseUrl, cssText) {
+    var foundUrls = [];
+    var modifiedCssText = lang_1.StringWrapper.replaceAllMapped(cssText, _cssImportRe, function(m) {
       var url = lang_1.isPresent(m[1]) ? m[1] : m[2];
-      var schemeMatch = lang_1.RegExpWrapper.firstMatch(_urlWithSchemaRe, url);
-      if (lang_1.isPresent(schemeMatch) && schemeMatch[1] != 'package') {
+      if (!isStyleUrlResolvable(url)) {
         return m[0];
       }
       foundUrls.push(resolver.resolve(baseUrl, url));
       return '';
     });
+    return new StyleWithImports(modifiedCssText, foundUrls);
   }
-  function replaceUrls(resolver, baseUrl, cssText) {
-    return lang_1.StringWrapper.replaceAllMapped(cssText, _cssUrlRe, function(m) {
-      var pre = m[1];
-      var originalUrl = m[2];
-      if (lang_1.RegExpWrapper.test(_dataUrlRe, originalUrl)) {
-        return m[0];
-      }
-      var url = lang_1.StringWrapper.replaceAll(originalUrl, _quoteRe, '');
-      var post = m[3];
-      var resolvedUrl = resolver.resolve(baseUrl, url);
-      return pre + "'" + resolvedUrl + "'" + post;
-    });
-  }
-  var _cssUrlRe = /(url\()([^)]*)(\))/g;
+  exports.extractStyleUrls = extractStyleUrls;
   var _cssImportRe = /@import\s+(?:url\()?\s*(?:(?:['"]([^'"]*))|([^;\)\s]*))[^;]*;?/g;
-  var _quoteRe = /['"]/g;
-  var _dataUrlRe = /^['"]?data:/g;
-  var _urlWithSchemaRe = /^['"]?([a-zA-Z\-\+\.]+):/g;
+  var _urlWithSchemaRe = /^([a-zA-Z\-\+\.]+):/g;
   global.define = __define;
   return module.exports;
 });
@@ -12415,7 +12490,7 @@ System.register("angular2/src/core/compiler/template_preparser", ["angular2/src/
   return module.exports;
 });
 
-System.register("angular2/src/core/compiler/template_normalizer", ["angular2/src/core/compiler/directive_metadata", "angular2/src/core/facade/lang", "angular2/src/core/facade/exceptions", "angular2/src/core/facade/async", "angular2/src/core/compiler/xhr", "angular2/src/core/compiler/url_resolver", "angular2/src/core/compiler/style_url_resolver", "angular2/src/core/di", "angular2/src/core/metadata/view", "angular2/src/core/compiler/html_ast", "angular2/src/core/compiler/html_parser", "angular2/src/core/compiler/template_preparser"], true, function(require, exports, module) {
+System.register("angular2/src/core/compiler/template_normalizer", ["angular2/src/core/compiler/directive_metadata", "angular2/src/core/facade/lang", "angular2/src/core/facade/collection", "angular2/src/core/facade/exceptions", "angular2/src/core/facade/async", "angular2/src/core/compiler/xhr", "angular2/src/core/compiler/url_resolver", "angular2/src/core/compiler/style_url_resolver", "angular2/src/core/di", "angular2/src/core/metadata/view", "angular2/src/core/compiler/html_ast", "angular2/src/core/compiler/html_parser", "angular2/src/core/compiler/template_preparser"], true, function(require, exports, module) {
   var global = System.global,
       __define = global.define;
   global.define = undefined;
@@ -12443,6 +12518,7 @@ System.register("angular2/src/core/compiler/template_normalizer", ["angular2/src
   };
   var directive_metadata_1 = require("angular2/src/core/compiler/directive_metadata");
   var lang_1 = require("angular2/src/core/facade/lang");
+  var collection_1 = require("angular2/src/core/facade/collection");
   var exceptions_1 = require("angular2/src/core/facade/exceptions");
   var async_1 = require("angular2/src/core/facade/async");
   var xhr_1 = require("angular2/src/core/compiler/xhr");
@@ -12483,8 +12559,9 @@ System.register("angular2/src/core/compiler/template_normalizer", ["angular2/src
       }).concat(templateMeta.styleUrls.map(function(url) {
         return _this._urlResolver.resolve(directiveType.moduleUrl, url);
       }));
+      allStyleAbsUrls = collection_1.ListWrapper.filter(allStyleAbsUrls, style_url_resolver_1.isStyleUrlResolvable);
       var allResolvedStyles = allStyles.map(function(style) {
-        var styleWithImports = style_url_resolver_1.resolveStyleUrls(_this._urlResolver, templateAbsUrl, style);
+        var styleWithImports = style_url_resolver_1.extractStyleUrls(_this._urlResolver, templateAbsUrl, style);
         styleWithImports.styleUrls.forEach(function(styleUrl) {
           return allStyleAbsUrls.push(styleUrl);
         });
@@ -13251,6 +13328,79 @@ System.register("angular2/src/core/linker/dynamic_component_loader", ["angular2/
     return DynamicComponentLoader_;
   })(DynamicComponentLoader);
   exports.DynamicComponentLoader_ = DynamicComponentLoader_;
+  global.define = __define;
+  return module.exports;
+});
+
+System.register("angular2/src/core/forms/directives/number_value_accessor", ["angular2/src/core/metadata", "angular2/src/core/linker", "angular2/src/core/render", "angular2/src/core/di", "angular2/src/core/forms/directives/control_value_accessor", "angular2/src/core/facade/lang", "angular2/src/core/forms/directives/shared"], true, function(require, exports, module) {
+  var global = System.global,
+      __define = global.define;
+  global.define = undefined;
+  var __decorate = (this && this.__decorate) || function(decorators, target, key, desc) {
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function")
+      return Reflect.decorate(decorators, target, key, desc);
+    switch (arguments.length) {
+      case 2:
+        return decorators.reduceRight(function(o, d) {
+          return (d && d(o)) || o;
+        }, target);
+      case 3:
+        return decorators.reduceRight(function(o, d) {
+          return (d && d(target, key)), void 0;
+        }, void 0);
+      case 4:
+        return decorators.reduceRight(function(o, d) {
+          return (d && d(target, key, o)) || o;
+        }, desc);
+    }
+  };
+  var __metadata = (this && this.__metadata) || function(k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function")
+      return Reflect.metadata(k, v);
+  };
+  var metadata_1 = require("angular2/src/core/metadata");
+  var linker_1 = require("angular2/src/core/linker");
+  var render_1 = require("angular2/src/core/render");
+  var di_1 = require("angular2/src/core/di");
+  var control_value_accessor_1 = require("angular2/src/core/forms/directives/control_value_accessor");
+  var lang_1 = require("angular2/src/core/facade/lang");
+  var shared_1 = require("angular2/src/core/forms/directives/shared");
+  var NUMBER_VALUE_ACCESSOR = lang_1.CONST_EXPR(new di_1.Provider(control_value_accessor_1.NG_VALUE_ACCESSOR, {
+    useExisting: di_1.forwardRef(function() {
+      return NumberValueAccessor;
+    }),
+    multi: true
+  }));
+  var NumberValueAccessor = (function() {
+    function NumberValueAccessor(_renderer, _elementRef) {
+      this._renderer = _renderer;
+      this._elementRef = _elementRef;
+      this.onChange = function(_) {};
+      this.onTouched = function() {};
+    }
+    NumberValueAccessor.prototype.writeValue = function(value) {
+      shared_1.setProperty(this._renderer, this._elementRef, 'value', value);
+    };
+    NumberValueAccessor.prototype.registerOnChange = function(fn) {
+      this.onChange = function(value) {
+        fn(lang_1.NumberWrapper.parseFloat(value));
+      };
+    };
+    NumberValueAccessor.prototype.registerOnTouched = function(fn) {
+      this.onTouched = fn;
+    };
+    NumberValueAccessor = __decorate([metadata_1.Directive({
+      selector: 'input[type=number][ng-control],input[type=number][ng-form-control],input[type=number][ng-model]',
+      host: {
+        '(change)': 'onChange($event.target.value)',
+        '(input)': 'onChange($event.target.value)',
+        '(blur)': 'onTouched()'
+      },
+      bindings: [NUMBER_VALUE_ACCESSOR]
+    }), __metadata('design:paramtypes', [render_1.Renderer, linker_1.ElementRef])], NumberValueAccessor);
+    return NumberValueAccessor;
+  })();
+  exports.NumberValueAccessor = NumberValueAccessor;
   global.define = __define;
   return module.exports;
 });
@@ -14304,7 +14454,7 @@ System.register("angular2/src/core/forms/form_builder", ["angular2/src/core/di",
   return module.exports;
 });
 
-System.register("angular2/src/core/dom/generic_browser_adapter", ["angular2/src/core/facade/collection", "angular2/src/core/facade/lang", "angular2/src/core/dom/dom_adapter"], true, function(require, exports, module) {
+System.register("angular2/src/core/compiler/xhr_impl", ["angular2/src/core/facade/promise", "angular2/src/core/facade/lang", "angular2/src/core/compiler/xhr"], true, function(require, exports, module) {
   var global = System.global,
       __define = global.define;
   global.define = undefined;
@@ -14317,88 +14467,40 @@ System.register("angular2/src/core/dom/generic_browser_adapter", ["angular2/src/
     }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
   };
-  var collection_1 = require("angular2/src/core/facade/collection");
+  var promise_1 = require("angular2/src/core/facade/promise");
   var lang_1 = require("angular2/src/core/facade/lang");
-  var dom_adapter_1 = require("angular2/src/core/dom/dom_adapter");
-  var GenericBrowserDomAdapter = (function(_super) {
-    __extends(GenericBrowserDomAdapter, _super);
-    function GenericBrowserDomAdapter() {
-      var _this = this;
-      _super.call(this);
-      this._animationPrefix = null;
-      this._transitionEnd = null;
-      try {
-        var element = this.createElement('div', this.defaultDoc());
-        if (lang_1.isPresent(this.getStyle(element, 'animationName'))) {
-          this._animationPrefix = '';
-        } else {
-          var domPrefixes = ['Webkit', 'Moz', 'O', 'ms'];
-          for (var i = 0; i < domPrefixes.length; i++) {
-            if (lang_1.isPresent(this.getStyle(element, domPrefixes[i] + 'AnimationName'))) {
-              this._animationPrefix = '-' + lang_1.StringWrapper.toLowerCase(domPrefixes[i]) + '-';
-              break;
-            }
-          }
-        }
-        var transEndEventNames = {
-          WebkitTransition: 'webkitTransitionEnd',
-          MozTransition: 'transitionend',
-          OTransition: 'oTransitionEnd otransitionend',
-          transition: 'transitionend'
-        };
-        collection_1.StringMapWrapper.forEach(transEndEventNames, function(value, key) {
-          if (lang_1.isPresent(_this.getStyle(element, key))) {
-            _this._transitionEnd = value;
-          }
-        });
-      } catch (e) {
-        this._animationPrefix = null;
-        this._transitionEnd = null;
-      }
+  var xhr_1 = require("angular2/src/core/compiler/xhr");
+  var XHRImpl = (function(_super) {
+    __extends(XHRImpl, _super);
+    function XHRImpl() {
+      _super.apply(this, arguments);
     }
-    GenericBrowserDomAdapter.prototype.getDistributedNodes = function(el) {
-      return el.getDistributedNodes();
+    XHRImpl.prototype.get = function(url) {
+      var completer = promise_1.PromiseWrapper.completer();
+      var xhr = new XMLHttpRequest();
+      xhr.open('GET', url, true);
+      xhr.responseType = 'text';
+      xhr.onload = function() {
+        var response = lang_1.isPresent(xhr.response) ? xhr.response : xhr.responseText;
+        var status = xhr.status === 1223 ? 204 : xhr.status;
+        if (status === 0) {
+          status = response ? 200 : 0;
+        }
+        if (200 <= status && status <= 300) {
+          completer.resolve(response);
+        } else {
+          completer.reject("Failed to load " + url, null);
+        }
+      };
+      xhr.onerror = function() {
+        completer.reject("Failed to load " + url, null);
+      };
+      xhr.send();
+      return completer.promise;
     };
-    GenericBrowserDomAdapter.prototype.resolveAndSetHref = function(el, baseUrl, href) {
-      el.href = href == null ? baseUrl : baseUrl + '/../' + href;
-    };
-    GenericBrowserDomAdapter.prototype.cssToRules = function(css) {
-      var style = this.createStyleElement(css);
-      this.appendChild(this.defaultDoc().head, style);
-      var rules = [];
-      if (lang_1.isPresent(style.sheet)) {
-        try {
-          var rawRules = style.sheet.cssRules;
-          rules = collection_1.ListWrapper.createFixedSize(rawRules.length);
-          for (var i = 0; i < rawRules.length; i++) {
-            rules[i] = rawRules[i];
-          }
-        } catch (e) {}
-      } else {}
-      this.remove(style);
-      return rules;
-    };
-    GenericBrowserDomAdapter.prototype.supportsDOMEvents = function() {
-      return true;
-    };
-    GenericBrowserDomAdapter.prototype.supportsNativeShadowDOM = function() {
-      return lang_1.isFunction(this.defaultDoc().body.createShadowRoot);
-    };
-    GenericBrowserDomAdapter.prototype.supportsUnprefixedCssAnimation = function() {
-      return lang_1.isPresent(this.defaultDoc().body.style) && lang_1.isPresent(this.defaultDoc().body.style.animationName);
-    };
-    GenericBrowserDomAdapter.prototype.getAnimationPrefix = function() {
-      return lang_1.isPresent(this._animationPrefix) ? this._animationPrefix : "";
-    };
-    GenericBrowserDomAdapter.prototype.getTransitionEnd = function() {
-      return lang_1.isPresent(this._transitionEnd) ? this._transitionEnd : "";
-    };
-    GenericBrowserDomAdapter.prototype.supportsAnimation = function() {
-      return lang_1.isPresent(this._animationPrefix) && lang_1.isPresent(this._transitionEnd);
-    };
-    return GenericBrowserDomAdapter;
-  })(dom_adapter_1.DomAdapter);
-  exports.GenericBrowserDomAdapter = GenericBrowserDomAdapter;
+    return XHRImpl;
+  })(xhr_1.XHR);
+  exports.XHRImpl = XHRImpl;
   global.define = __define;
   return module.exports;
 });
@@ -14542,81 +14644,6 @@ System.register("angular2/src/core/testability/testability", ["angular2/src/core
   }
   exports.setTestabilityGetter = setTestabilityGetter;
   var testabilityGetter = lang_1.CONST_EXPR(new NoopGetTestability());
-  global.define = __define;
-  return module.exports;
-});
-
-System.register("angular2/src/core/compiler/xhr_impl", ["angular2/src/core/di", "angular2/src/core/facade/async", "angular2/src/core/facade/lang", "angular2/src/core/compiler/xhr"], true, function(require, exports, module) {
-  var global = System.global,
-      __define = global.define;
-  global.define = undefined;
-  var __extends = (this && this.__extends) || function(d, b) {
-    for (var p in b)
-      if (b.hasOwnProperty(p))
-        d[p] = b[p];
-    function __() {
-      this.constructor = d;
-    }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-  };
-  var __decorate = (this && this.__decorate) || function(decorators, target, key, desc) {
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function")
-      return Reflect.decorate(decorators, target, key, desc);
-    switch (arguments.length) {
-      case 2:
-        return decorators.reduceRight(function(o, d) {
-          return (d && d(o)) || o;
-        }, target);
-      case 3:
-        return decorators.reduceRight(function(o, d) {
-          return (d && d(target, key)), void 0;
-        }, void 0);
-      case 4:
-        return decorators.reduceRight(function(o, d) {
-          return (d && d(target, key, o)) || o;
-        }, desc);
-    }
-  };
-  var __metadata = (this && this.__metadata) || function(k, v) {
-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function")
-      return Reflect.metadata(k, v);
-  };
-  var di_1 = require("angular2/src/core/di");
-  var async_1 = require("angular2/src/core/facade/async");
-  var lang_1 = require("angular2/src/core/facade/lang");
-  var xhr_1 = require("angular2/src/core/compiler/xhr");
-  var XHRImpl = (function(_super) {
-    __extends(XHRImpl, _super);
-    function XHRImpl() {
-      _super.apply(this, arguments);
-    }
-    XHRImpl.prototype.get = function(url) {
-      var completer = async_1.PromiseWrapper.completer();
-      var xhr = new XMLHttpRequest();
-      xhr.open('GET', url, true);
-      xhr.responseType = 'text';
-      xhr.onload = function() {
-        var response = lang_1.isPresent(xhr.response) ? xhr.response : xhr.responseText;
-        var status = xhr.status === 1223 ? 204 : xhr.status;
-        if (status === 0) {
-          status = response ? 200 : 0;
-        }
-        if (200 <= status && status <= 300) {
-          completer.resolve(response);
-        } else {
-          completer.reject("Failed to load " + url, null);
-        }
-      };
-      xhr.onerror = function() {
-        completer.reject("Failed to load " + url, null);
-      };
-      xhr.send();
-      return completer.promise;
-    };
-    XHRImpl = __decorate([di_1.Injectable(), __metadata('design:paramtypes', [])], XHRImpl);
-    return XHRImpl;
-  })(xhr_1.XHR);
-  exports.XHRImpl = XHRImpl;
   global.define = __define;
   return module.exports;
 });
@@ -16750,29 +16777,6 @@ System.register("@reactivex/rxjs/dist/cjs/Subscriber", ["@reactivex/rxjs/dist/cj
   return module.exports;
 });
 
-System.register("@reactivex/rxjs/dist/cjs/util/Symbol_observable", ["@reactivex/rxjs/dist/cjs/util/root"], true, function(require, exports, module) {
-  var global = System.global,
-      __define = global.define;
-  global.define = undefined;
-  'use strict';
-  exports.__esModule = true;
-  var _root = require("@reactivex/rxjs/dist/cjs/util/root");
-  if (!_root.root.Symbol) {
-    _root.root.Symbol = {};
-  }
-  if (!_root.root.Symbol.observable) {
-    if (typeof _root.root.Symbol['for'] === 'function') {
-      _root.root.Symbol.observable = _root.root.Symbol['for']('observable');
-    } else {
-      _root.root.Symbol.observable = '@@observable';
-    }
-  }
-  exports['default'] = _root.root.Symbol.observable;
-  module.exports = exports['default'];
-  global.define = __define;
-  return module.exports;
-});
-
 System.register("angular2/src/core/pipes/date_pipe", ["angular2/src/core/facade/lang", "angular2/src/core/facade/intl", "angular2/src/core/di", "angular2/src/core/metadata", "angular2/src/core/facade/collection", "angular2/src/core/pipes/invalid_pipe_argument_exception"], true, function(require, exports, module) {
   var global = System.global,
       __define = global.define;
@@ -18525,7 +18529,7 @@ System.register("angular2/src/core/compiler/style_compiler", ["angular2/src/core
       return this._styleCodeGen(template.styles, template.styleUrls, shim, suffix);
     };
     StyleCompiler.prototype.compileStylesheetCodeGen = function(stylesheetUrl, cssText) {
-      var styleWithImports = style_url_resolver_1.resolveStyleUrls(this._urlResolver, stylesheetUrl, cssText);
+      var styleWithImports = style_url_resolver_1.extractStyleUrls(this._urlResolver, stylesheetUrl, cssText);
       return [this._styleModule(stylesheetUrl, false, this._styleCodeGen([styleWithImports.style], styleWithImports.styleUrls, false, '')), this._styleModule(stylesheetUrl, true, this._styleCodeGen([styleWithImports.style], styleWithImports.styleUrls, true, ''))];
     };
     StyleCompiler.prototype.clearCache = function() {
@@ -18538,7 +18542,7 @@ System.register("angular2/src/core/compiler/style_compiler", ["angular2/src/core
         var result = _this._styleCache.get(cacheKey);
         if (lang_1.isBlank(result)) {
           result = _this._xhr.get(absUrl).then(function(style) {
-            var styleWithImports = style_url_resolver_1.resolveStyleUrls(_this._urlResolver, absUrl, style);
+            var styleWithImports = style_url_resolver_1.extractStyleUrls(_this._urlResolver, absUrl, style);
             return _this._loadStyles([styleWithImports.style], styleWithImports.styleUrls, encapsulate);
           });
           _this._styleCache.set(cacheKey, result);
@@ -18663,7 +18667,8 @@ System.register("angular2/src/core/compiler/html_parser", ["angular2/src/core/fa
     return new html_ast_1.HtmlTextAst(value, parentSourceInfo + " > #text(" + value + "):nth-child(" + indexInParent + ")");
   }
   function parseAttr(element, parentSourceInfo, attrName, attrValue) {
-    return new html_ast_1.HtmlAttrAst(attrName, attrValue, parentSourceInfo + "[" + attrName + "=" + attrValue + "]");
+    var lowerCaseAttrName = attrName.toLowerCase();
+    return new html_ast_1.HtmlAttrAst(lowerCaseAttrName, attrValue, parentSourceInfo + "[" + lowerCaseAttrName + "=" + attrValue + "]");
   }
   function parseElement(element, indexInParent, parentSourceInfo) {
     var nodeName = dom_adapter_1.DOM.nodeName(element).toLowerCase();
@@ -18876,11 +18881,11 @@ System.register("angular2/src/core/forms/model", ["angular2/src/core/facade/lang
       onlySelf = lang_1.normalizeBool(onlySelf);
       emitEvent = lang_1.isPresent(emitEvent) ? emitEvent : true;
       this._updateValue();
+      this._errors = this.validator(this);
+      this._status = lang_1.isPresent(this._errors) ? exports.INVALID : exports.VALID;
       if (emitEvent) {
         async_1.ObservableWrapper.callNext(this._valueChanges, this._value);
       }
-      this._errors = this.validator(this);
-      this._status = lang_1.isPresent(this._errors) ? exports.INVALID : exports.VALID;
       if (lang_1.isPresent(this._parent) && !onlySelf) {
         this._parent.updateValueAndValidity({
           onlySelf: onlySelf,
@@ -19098,7 +19103,7 @@ System.register("angular2/src/core/linker", ["angular2/src/core/linker/directive
   return module.exports;
 });
 
-System.register("angular2/src/core/forms/directives", ["angular2/src/core/facade/lang", "angular2/src/core/forms/directives/ng_control_name", "angular2/src/core/forms/directives/ng_form_control", "angular2/src/core/forms/directives/ng_model", "angular2/src/core/forms/directives/ng_control_group", "angular2/src/core/forms/directives/ng_form_model", "angular2/src/core/forms/directives/ng_form", "angular2/src/core/forms/directives/default_value_accessor", "angular2/src/core/forms/directives/checkbox_value_accessor", "angular2/src/core/forms/directives/ng_control_status", "angular2/src/core/forms/directives/select_control_value_accessor", "angular2/src/core/forms/directives/validators", "angular2/src/core/forms/directives/ng_control_name", "angular2/src/core/forms/directives/ng_form_control", "angular2/src/core/forms/directives/ng_model", "angular2/src/core/forms/directives/ng_control", "angular2/src/core/forms/directives/ng_control_group", "angular2/src/core/forms/directives/ng_form_model", "angular2/src/core/forms/directives/ng_form", "angular2/src/core/forms/directives/default_value_accessor", "angular2/src/core/forms/directives/checkbox_value_accessor", "angular2/src/core/forms/directives/select_control_value_accessor", "angular2/src/core/forms/directives/validators", "angular2/src/core/forms/directives/ng_control_status"], true, function(require, exports, module) {
+System.register("angular2/src/core/forms/directives", ["angular2/src/core/facade/lang", "angular2/src/core/forms/directives/ng_control_name", "angular2/src/core/forms/directives/ng_form_control", "angular2/src/core/forms/directives/ng_model", "angular2/src/core/forms/directives/ng_control_group", "angular2/src/core/forms/directives/ng_form_model", "angular2/src/core/forms/directives/ng_form", "angular2/src/core/forms/directives/default_value_accessor", "angular2/src/core/forms/directives/checkbox_value_accessor", "angular2/src/core/forms/directives/number_value_accessor", "angular2/src/core/forms/directives/ng_control_status", "angular2/src/core/forms/directives/select_control_value_accessor", "angular2/src/core/forms/directives/validators", "angular2/src/core/forms/directives/ng_control_name", "angular2/src/core/forms/directives/ng_form_control", "angular2/src/core/forms/directives/ng_model", "angular2/src/core/forms/directives/ng_control", "angular2/src/core/forms/directives/ng_control_group", "angular2/src/core/forms/directives/ng_form_model", "angular2/src/core/forms/directives/ng_form", "angular2/src/core/forms/directives/default_value_accessor", "angular2/src/core/forms/directives/checkbox_value_accessor", "angular2/src/core/forms/directives/select_control_value_accessor", "angular2/src/core/forms/directives/validators", "angular2/src/core/forms/directives/ng_control_status"], true, function(require, exports, module) {
   var global = System.global,
       __define = global.define;
   global.define = undefined;
@@ -19111,6 +19116,7 @@ System.register("angular2/src/core/forms/directives", ["angular2/src/core/facade
   var ng_form_1 = require("angular2/src/core/forms/directives/ng_form");
   var default_value_accessor_1 = require("angular2/src/core/forms/directives/default_value_accessor");
   var checkbox_value_accessor_1 = require("angular2/src/core/forms/directives/checkbox_value_accessor");
+  var number_value_accessor_1 = require("angular2/src/core/forms/directives/number_value_accessor");
   var ng_control_status_1 = require("angular2/src/core/forms/directives/ng_control_status");
   var select_control_value_accessor_1 = require("angular2/src/core/forms/directives/select_control_value_accessor");
   var validators_1 = require("angular2/src/core/forms/directives/validators");
@@ -19141,12 +19147,12 @@ System.register("angular2/src/core/forms/directives", ["angular2/src/core/facade
   exports.MaxLengthValidator = validators_2.MaxLengthValidator;
   var ng_control_status_2 = require("angular2/src/core/forms/directives/ng_control_status");
   exports.NgControlStatus = ng_control_status_2.NgControlStatus;
-  exports.FORM_DIRECTIVES = lang_1.CONST_EXPR([ng_control_name_1.NgControlName, ng_control_group_1.NgControlGroup, ng_form_control_1.NgFormControl, ng_model_1.NgModel, ng_form_model_1.NgFormModel, ng_form_1.NgForm, select_control_value_accessor_1.NgSelectOption, default_value_accessor_1.DefaultValueAccessor, checkbox_value_accessor_1.CheckboxControlValueAccessor, select_control_value_accessor_1.SelectControlValueAccessor, ng_control_status_1.NgControlStatus, validators_1.RequiredValidator, validators_1.MinLengthValidator, validators_1.MaxLengthValidator]);
+  exports.FORM_DIRECTIVES = lang_1.CONST_EXPR([ng_control_name_1.NgControlName, ng_control_group_1.NgControlGroup, ng_form_control_1.NgFormControl, ng_model_1.NgModel, ng_form_model_1.NgFormModel, ng_form_1.NgForm, select_control_value_accessor_1.NgSelectOption, default_value_accessor_1.DefaultValueAccessor, number_value_accessor_1.NumberValueAccessor, checkbox_value_accessor_1.CheckboxControlValueAccessor, select_control_value_accessor_1.SelectControlValueAccessor, ng_control_status_1.NgControlStatus, validators_1.RequiredValidator, validators_1.MinLengthValidator, validators_1.MaxLengthValidator]);
   global.define = __define;
   return module.exports;
 });
 
-System.register("angular2/src/core/dom/browser_adapter", ["angular2/src/core/facade/collection", "angular2/src/core/facade/lang", "angular2/src/core/dom/dom_adapter", "angular2/src/core/dom/generic_browser_adapter"], true, function(require, exports, module) {
+System.register("angular2/src/core/dom/generic_browser_adapter", ["angular2/src/core/facade/collection", "angular2/src/core/facade/lang", "angular2/src/core/dom/dom_adapter", "angular2/src/core/compiler/xhr_impl"], true, function(require, exports, module) {
   var global = System.global,
       __define = global.define;
   global.define = undefined;
@@ -19162,509 +19168,89 @@ System.register("angular2/src/core/dom/browser_adapter", ["angular2/src/core/fac
   var collection_1 = require("angular2/src/core/facade/collection");
   var lang_1 = require("angular2/src/core/facade/lang");
   var dom_adapter_1 = require("angular2/src/core/dom/dom_adapter");
-  var generic_browser_adapter_1 = require("angular2/src/core/dom/generic_browser_adapter");
-  var _attrToPropMap = {
-    'class': 'className',
-    'innerHtml': 'innerHTML',
-    'readonly': 'readOnly',
-    'tabindex': 'tabIndex'
-  };
-  var DOM_KEY_LOCATION_NUMPAD = 3;
-  var _keyMap = {
-    '\b': 'Backspace',
-    '\t': 'Tab',
-    '\x7F': 'Delete',
-    '\x1B': 'Escape',
-    'Del': 'Delete',
-    'Esc': 'Escape',
-    'Left': 'ArrowLeft',
-    'Right': 'ArrowRight',
-    'Up': 'ArrowUp',
-    'Down': 'ArrowDown',
-    'Menu': 'ContextMenu',
-    'Scroll': 'ScrollLock',
-    'Win': 'OS'
-  };
-  var _chromeNumKeyPadMap = {
-    'A': '1',
-    'B': '2',
-    'C': '3',
-    'D': '4',
-    'E': '5',
-    'F': '6',
-    'G': '7',
-    'H': '8',
-    'I': '9',
-    'J': '*',
-    'K': '+',
-    'M': '-',
-    'N': '.',
-    'O': '/',
-    '\x60': '0',
-    '\x90': 'NumLock'
-  };
-  var BrowserDomAdapter = (function(_super) {
-    __extends(BrowserDomAdapter, _super);
-    function BrowserDomAdapter() {
-      _super.apply(this, arguments);
-    }
-    BrowserDomAdapter.prototype.parse = function(templateHtml) {
-      throw new Error("parse not implemented");
-    };
-    BrowserDomAdapter.makeCurrent = function() {
-      dom_adapter_1.setRootDomAdapter(new BrowserDomAdapter());
-    };
-    BrowserDomAdapter.prototype.hasProperty = function(element, name) {
-      return name in element;
-    };
-    BrowserDomAdapter.prototype.setProperty = function(el, name, value) {
-      el[name] = value;
-    };
-    BrowserDomAdapter.prototype.getProperty = function(el, name) {
-      return el[name];
-    };
-    BrowserDomAdapter.prototype.invoke = function(el, methodName, args) {
-      el[methodName].apply(el, args);
-    };
-    BrowserDomAdapter.prototype.logError = function(error) {
-      if (window.console.error) {
-        window.console.error(error);
-      } else {
-        window.console.log(error);
-      }
-    };
-    BrowserDomAdapter.prototype.log = function(error) {
-      window.console.log(error);
-    };
-    BrowserDomAdapter.prototype.logGroup = function(error) {
-      if (window.console.group) {
-        window.console.group(error);
-        this.logError(error);
-      } else {
-        window.console.log(error);
-      }
-    };
-    BrowserDomAdapter.prototype.logGroupEnd = function() {
-      if (window.console.groupEnd) {
-        window.console.groupEnd();
-      }
-    };
-    Object.defineProperty(BrowserDomAdapter.prototype, "attrToPropMap", {
-      get: function() {
-        return _attrToPropMap;
-      },
-      enumerable: true,
-      configurable: true
-    });
-    BrowserDomAdapter.prototype.query = function(selector) {
-      return document.querySelector(selector);
-    };
-    BrowserDomAdapter.prototype.querySelector = function(el, selector) {
-      return el.querySelector(selector);
-    };
-    BrowserDomAdapter.prototype.querySelectorAll = function(el, selector) {
-      return el.querySelectorAll(selector);
-    };
-    BrowserDomAdapter.prototype.on = function(el, evt, listener) {
-      el.addEventListener(evt, listener, false);
-    };
-    BrowserDomAdapter.prototype.onAndCancel = function(el, evt, listener) {
-      el.addEventListener(evt, listener, false);
-      return function() {
-        el.removeEventListener(evt, listener, false);
-      };
-    };
-    BrowserDomAdapter.prototype.dispatchEvent = function(el, evt) {
-      el.dispatchEvent(evt);
-    };
-    BrowserDomAdapter.prototype.createMouseEvent = function(eventType) {
-      var evt = document.createEvent('MouseEvent');
-      evt.initEvent(eventType, true, true);
-      return evt;
-    };
-    BrowserDomAdapter.prototype.createEvent = function(eventType) {
-      var evt = document.createEvent('Event');
-      evt.initEvent(eventType, true, true);
-      return evt;
-    };
-    BrowserDomAdapter.prototype.preventDefault = function(evt) {
-      evt.preventDefault();
-      evt.returnValue = false;
-    };
-    BrowserDomAdapter.prototype.isPrevented = function(evt) {
-      return evt.defaultPrevented || lang_1.isPresent(evt.returnValue) && !evt.returnValue;
-    };
-    BrowserDomAdapter.prototype.getInnerHTML = function(el) {
-      return el.innerHTML;
-    };
-    BrowserDomAdapter.prototype.getOuterHTML = function(el) {
-      return el.outerHTML;
-    };
-    BrowserDomAdapter.prototype.nodeName = function(node) {
-      return node.nodeName;
-    };
-    BrowserDomAdapter.prototype.nodeValue = function(node) {
-      return node.nodeValue;
-    };
-    BrowserDomAdapter.prototype.type = function(node) {
-      return node.type;
-    };
-    BrowserDomAdapter.prototype.content = function(node) {
-      if (this.hasProperty(node, "content")) {
-        return node.content;
-      } else {
-        return node;
-      }
-    };
-    BrowserDomAdapter.prototype.firstChild = function(el) {
-      return el.firstChild;
-    };
-    BrowserDomAdapter.prototype.nextSibling = function(el) {
-      return el.nextSibling;
-    };
-    BrowserDomAdapter.prototype.parentElement = function(el) {
-      return el.parentNode;
-    };
-    BrowserDomAdapter.prototype.childNodes = function(el) {
-      return el.childNodes;
-    };
-    BrowserDomAdapter.prototype.childNodesAsList = function(el) {
-      var childNodes = el.childNodes;
-      var res = collection_1.ListWrapper.createFixedSize(childNodes.length);
-      for (var i = 0; i < childNodes.length; i++) {
-        res[i] = childNodes[i];
-      }
-      return res;
-    };
-    BrowserDomAdapter.prototype.clearNodes = function(el) {
-      while (el.firstChild) {
-        el.removeChild(el.firstChild);
-      }
-    };
-    BrowserDomAdapter.prototype.appendChild = function(el, node) {
-      el.appendChild(node);
-    };
-    BrowserDomAdapter.prototype.removeChild = function(el, node) {
-      el.removeChild(node);
-    };
-    BrowserDomAdapter.prototype.replaceChild = function(el, newChild, oldChild) {
-      el.replaceChild(newChild, oldChild);
-    };
-    BrowserDomAdapter.prototype.remove = function(node) {
-      if (node.parentNode) {
-        node.parentNode.removeChild(node);
-      }
-      return node;
-    };
-    BrowserDomAdapter.prototype.insertBefore = function(el, node) {
-      el.parentNode.insertBefore(node, el);
-    };
-    BrowserDomAdapter.prototype.insertAllBefore = function(el, nodes) {
-      nodes.forEach(function(n) {
-        return el.parentNode.insertBefore(n, el);
-      });
-    };
-    BrowserDomAdapter.prototype.insertAfter = function(el, node) {
-      el.parentNode.insertBefore(node, el.nextSibling);
-    };
-    BrowserDomAdapter.prototype.setInnerHTML = function(el, value) {
-      el.innerHTML = value;
-    };
-    BrowserDomAdapter.prototype.getText = function(el) {
-      return el.textContent;
-    };
-    BrowserDomAdapter.prototype.setText = function(el, value) {
-      el.textContent = value;
-    };
-    BrowserDomAdapter.prototype.getValue = function(el) {
-      return el.value;
-    };
-    BrowserDomAdapter.prototype.setValue = function(el, value) {
-      el.value = value;
-    };
-    BrowserDomAdapter.prototype.getChecked = function(el) {
-      return el.checked;
-    };
-    BrowserDomAdapter.prototype.setChecked = function(el, value) {
-      el.checked = value;
-    };
-    BrowserDomAdapter.prototype.createComment = function(text) {
-      return document.createComment(text);
-    };
-    BrowserDomAdapter.prototype.createTemplate = function(html) {
-      var t = document.createElement('template');
-      t.innerHTML = html;
-      return t;
-    };
-    BrowserDomAdapter.prototype.createElement = function(tagName, doc) {
-      if (doc === void 0) {
-        doc = document;
-      }
-      return doc.createElement(tagName);
-    };
-    BrowserDomAdapter.prototype.createTextNode = function(text, doc) {
-      if (doc === void 0) {
-        doc = document;
-      }
-      return doc.createTextNode(text);
-    };
-    BrowserDomAdapter.prototype.createScriptTag = function(attrName, attrValue, doc) {
-      if (doc === void 0) {
-        doc = document;
-      }
-      var el = doc.createElement('SCRIPT');
-      el.setAttribute(attrName, attrValue);
-      return el;
-    };
-    BrowserDomAdapter.prototype.createStyleElement = function(css, doc) {
-      if (doc === void 0) {
-        doc = document;
-      }
-      var style = doc.createElement('style');
-      this.appendChild(style, this.createTextNode(css));
-      return style;
-    };
-    BrowserDomAdapter.prototype.createShadowRoot = function(el) {
-      return el.createShadowRoot();
-    };
-    BrowserDomAdapter.prototype.getShadowRoot = function(el) {
-      return el.shadowRoot;
-    };
-    BrowserDomAdapter.prototype.getHost = function(el) {
-      return el.host;
-    };
-    BrowserDomAdapter.prototype.clone = function(node) {
-      return node.cloneNode(true);
-    };
-    BrowserDomAdapter.prototype.getElementsByClassName = function(element, name) {
-      return element.getElementsByClassName(name);
-    };
-    BrowserDomAdapter.prototype.getElementsByTagName = function(element, name) {
-      return element.getElementsByTagName(name);
-    };
-    BrowserDomAdapter.prototype.classList = function(element) {
-      return Array.prototype.slice.call(element.classList, 0);
-    };
-    BrowserDomAdapter.prototype.addClass = function(element, classname) {
-      element.classList.add(classname);
-    };
-    BrowserDomAdapter.prototype.removeClass = function(element, classname) {
-      element.classList.remove(classname);
-    };
-    BrowserDomAdapter.prototype.hasClass = function(element, classname) {
-      return element.classList.contains(classname);
-    };
-    BrowserDomAdapter.prototype.setStyle = function(element, stylename, stylevalue) {
-      element.style[stylename] = stylevalue;
-    };
-    BrowserDomAdapter.prototype.removeStyle = function(element, stylename) {
-      element.style[stylename] = null;
-    };
-    BrowserDomAdapter.prototype.getStyle = function(element, stylename) {
-      return element.style[stylename];
-    };
-    BrowserDomAdapter.prototype.tagName = function(element) {
-      return element.tagName;
-    };
-    BrowserDomAdapter.prototype.attributeMap = function(element) {
-      var res = new Map();
-      var elAttrs = element.attributes;
-      for (var i = 0; i < elAttrs.length; i++) {
-        var attrib = elAttrs[i];
-        res.set(attrib.name, attrib.value);
-      }
-      return res;
-    };
-    BrowserDomAdapter.prototype.hasAttribute = function(element, attribute) {
-      return element.hasAttribute(attribute);
-    };
-    BrowserDomAdapter.prototype.getAttribute = function(element, attribute) {
-      return element.getAttribute(attribute);
-    };
-    BrowserDomAdapter.prototype.setAttribute = function(element, name, value) {
-      element.setAttribute(name, value);
-    };
-    BrowserDomAdapter.prototype.removeAttribute = function(element, attribute) {
-      element.removeAttribute(attribute);
-    };
-    BrowserDomAdapter.prototype.templateAwareRoot = function(el) {
-      return this.isTemplateElement(el) ? this.content(el) : el;
-    };
-    BrowserDomAdapter.prototype.createHtmlDocument = function() {
-      return document.implementation.createHTMLDocument('fakeTitle');
-    };
-    BrowserDomAdapter.prototype.defaultDoc = function() {
-      return document;
-    };
-    BrowserDomAdapter.prototype.getBoundingClientRect = function(el) {
+  var xhr_impl_1 = require("angular2/src/core/compiler/xhr_impl");
+  var GenericBrowserDomAdapter = (function(_super) {
+    __extends(GenericBrowserDomAdapter, _super);
+    function GenericBrowserDomAdapter() {
+      var _this = this;
+      _super.call(this);
+      this._animationPrefix = null;
+      this._transitionEnd = null;
       try {
-        return el.getBoundingClientRect();
-      } catch (e) {
-        return {
-          top: 0,
-          bottom: 0,
-          left: 0,
-          right: 0,
-          width: 0,
-          height: 0
-        };
-      }
-    };
-    BrowserDomAdapter.prototype.getTitle = function() {
-      return document.title;
-    };
-    BrowserDomAdapter.prototype.setTitle = function(newTitle) {
-      document.title = newTitle || '';
-    };
-    BrowserDomAdapter.prototype.elementMatches = function(n, selector) {
-      var matches = false;
-      if (n instanceof HTMLElement) {
-        if (n.matches) {
-          matches = n.matches(selector);
-        } else if (n.msMatchesSelector) {
-          matches = n.msMatchesSelector(selector);
-        } else if (n.webkitMatchesSelector) {
-          matches = n.webkitMatchesSelector(selector);
-        }
-      }
-      return matches;
-    };
-    BrowserDomAdapter.prototype.isTemplateElement = function(el) {
-      return el instanceof HTMLElement && el.nodeName == "TEMPLATE";
-    };
-    BrowserDomAdapter.prototype.isTextNode = function(node) {
-      return node.nodeType === Node.TEXT_NODE;
-    };
-    BrowserDomAdapter.prototype.isCommentNode = function(node) {
-      return node.nodeType === Node.COMMENT_NODE;
-    };
-    BrowserDomAdapter.prototype.isElementNode = function(node) {
-      return node.nodeType === Node.ELEMENT_NODE;
-    };
-    BrowserDomAdapter.prototype.hasShadowRoot = function(node) {
-      return node instanceof HTMLElement && lang_1.isPresent(node.shadowRoot);
-    };
-    BrowserDomAdapter.prototype.isShadowRoot = function(node) {
-      return node instanceof DocumentFragment;
-    };
-    BrowserDomAdapter.prototype.importIntoDoc = function(node) {
-      var toImport = node;
-      if (this.isTemplateElement(node)) {
-        toImport = this.content(node);
-      }
-      return document.importNode(toImport, true);
-    };
-    BrowserDomAdapter.prototype.adoptNode = function(node) {
-      return document.adoptNode(node);
-    };
-    BrowserDomAdapter.prototype.isPageRule = function(rule) {
-      return rule.type === CSSRule.PAGE_RULE;
-    };
-    BrowserDomAdapter.prototype.isStyleRule = function(rule) {
-      return rule.type === CSSRule.STYLE_RULE;
-    };
-    BrowserDomAdapter.prototype.isMediaRule = function(rule) {
-      return rule.type === CSSRule.MEDIA_RULE;
-    };
-    BrowserDomAdapter.prototype.isKeyframesRule = function(rule) {
-      return rule.type === CSSRule.KEYFRAMES_RULE;
-    };
-    BrowserDomAdapter.prototype.getHref = function(el) {
-      return el.href;
-    };
-    BrowserDomAdapter.prototype.getEventKey = function(event) {
-      var key = event.key;
-      if (lang_1.isBlank(key)) {
-        key = event.keyIdentifier;
-        if (lang_1.isBlank(key)) {
-          return 'Unidentified';
-        }
-        if (key.startsWith('U+')) {
-          key = String.fromCharCode(parseInt(key.substring(2), 16));
-          if (event.location === DOM_KEY_LOCATION_NUMPAD && _chromeNumKeyPadMap.hasOwnProperty(key)) {
-            key = _chromeNumKeyPadMap[key];
+        var element = this.createElement('div', this.defaultDoc());
+        if (lang_1.isPresent(this.getStyle(element, 'animationName'))) {
+          this._animationPrefix = '';
+        } else {
+          var domPrefixes = ['Webkit', 'Moz', 'O', 'ms'];
+          for (var i = 0; i < domPrefixes.length; i++) {
+            if (lang_1.isPresent(this.getStyle(element, domPrefixes[i] + 'AnimationName'))) {
+              this._animationPrefix = '-' + lang_1.StringWrapper.toLowerCase(domPrefixes[i]) + '-';
+              break;
+            }
           }
         }
-      }
-      if (_keyMap.hasOwnProperty(key)) {
-        key = _keyMap[key];
-      }
-      return key;
-    };
-    BrowserDomAdapter.prototype.getGlobalEventTarget = function(target) {
-      if (target == "window") {
-        return window;
-      } else if (target == "document") {
-        return document;
-      } else if (target == "body") {
-        return document.body;
-      }
-    };
-    BrowserDomAdapter.prototype.getHistory = function() {
-      return window.history;
-    };
-    BrowserDomAdapter.prototype.getLocation = function() {
-      return window.location;
-    };
-    BrowserDomAdapter.prototype.getBaseHref = function() {
-      var href = getBaseElementHref();
-      if (lang_1.isBlank(href)) {
-        return null;
-      }
-      return relativePath(href);
-    };
-    BrowserDomAdapter.prototype.resetBaseElement = function() {
-      baseElement = null;
-    };
-    BrowserDomAdapter.prototype.getUserAgent = function() {
-      return window.navigator.userAgent;
-    };
-    BrowserDomAdapter.prototype.setData = function(element, name, value) {
-      this.setAttribute(element, 'data-' + name, value);
-    };
-    BrowserDomAdapter.prototype.getData = function(element, name) {
-      return this.getAttribute(element, 'data-' + name);
-    };
-    BrowserDomAdapter.prototype.getComputedStyle = function(element) {
-      return getComputedStyle(element);
-    };
-    BrowserDomAdapter.prototype.setGlobalVar = function(path, value) {
-      lang_1.setValueOnPath(lang_1.global, path, value);
-    };
-    BrowserDomAdapter.prototype.requestAnimationFrame = function(callback) {
-      return window.requestAnimationFrame(callback);
-    };
-    BrowserDomAdapter.prototype.cancelAnimationFrame = function(id) {
-      window.cancelAnimationFrame(id);
-    };
-    BrowserDomAdapter.prototype.performanceNow = function() {
-      if (lang_1.isPresent(window.performance) && lang_1.isPresent(window.performance.now)) {
-        return window.performance.now();
-      } else {
-        return lang_1.DateWrapper.toMillis(lang_1.DateWrapper.now());
-      }
-    };
-    return BrowserDomAdapter;
-  })(generic_browser_adapter_1.GenericBrowserDomAdapter);
-  exports.BrowserDomAdapter = BrowserDomAdapter;
-  var baseElement = null;
-  function getBaseElementHref() {
-    if (lang_1.isBlank(baseElement)) {
-      baseElement = document.querySelector('base');
-      if (lang_1.isBlank(baseElement)) {
-        return null;
+        var transEndEventNames = {
+          WebkitTransition: 'webkitTransitionEnd',
+          MozTransition: 'transitionend',
+          OTransition: 'oTransitionEnd otransitionend',
+          transition: 'transitionend'
+        };
+        collection_1.StringMapWrapper.forEach(transEndEventNames, function(value, key) {
+          if (lang_1.isPresent(_this.getStyle(element, key))) {
+            _this._transitionEnd = value;
+          }
+        });
+      } catch (e) {
+        this._animationPrefix = null;
+        this._transitionEnd = null;
       }
     }
-    return baseElement.getAttribute('href');
-  }
-  var urlParsingNode = null;
-  function relativePath(url) {
-    if (lang_1.isBlank(urlParsingNode)) {
-      urlParsingNode = document.createElement("a");
-    }
-    urlParsingNode.setAttribute('href', url);
-    return (urlParsingNode.pathname.charAt(0) === '/') ? urlParsingNode.pathname : '/' + urlParsingNode.pathname;
-  }
+    GenericBrowserDomAdapter.prototype.getXHR = function() {
+      return xhr_impl_1.XHRImpl;
+    };
+    GenericBrowserDomAdapter.prototype.getDistributedNodes = function(el) {
+      return el.getDistributedNodes();
+    };
+    GenericBrowserDomAdapter.prototype.resolveAndSetHref = function(el, baseUrl, href) {
+      el.href = href == null ? baseUrl : baseUrl + '/../' + href;
+    };
+    GenericBrowserDomAdapter.prototype.cssToRules = function(css) {
+      var style = this.createStyleElement(css);
+      this.appendChild(this.defaultDoc().head, style);
+      var rules = [];
+      if (lang_1.isPresent(style.sheet)) {
+        try {
+          var rawRules = style.sheet.cssRules;
+          rules = collection_1.ListWrapper.createFixedSize(rawRules.length);
+          for (var i = 0; i < rawRules.length; i++) {
+            rules[i] = rawRules[i];
+          }
+        } catch (e) {}
+      } else {}
+      this.remove(style);
+      return rules;
+    };
+    GenericBrowserDomAdapter.prototype.supportsDOMEvents = function() {
+      return true;
+    };
+    GenericBrowserDomAdapter.prototype.supportsNativeShadowDOM = function() {
+      return lang_1.isFunction(this.defaultDoc().body.createShadowRoot);
+    };
+    GenericBrowserDomAdapter.prototype.supportsUnprefixedCssAnimation = function() {
+      return lang_1.isPresent(this.defaultDoc().body.style) && lang_1.isPresent(this.defaultDoc().body.style.animationName);
+    };
+    GenericBrowserDomAdapter.prototype.getAnimationPrefix = function() {
+      return lang_1.isPresent(this._animationPrefix) ? this._animationPrefix : "";
+    };
+    GenericBrowserDomAdapter.prototype.getTransitionEnd = function() {
+      return lang_1.isPresent(this._transitionEnd) ? this._transitionEnd : "";
+    };
+    GenericBrowserDomAdapter.prototype.supportsAnimation = function() {
+      return lang_1.isPresent(this._animationPrefix) && lang_1.isPresent(this._transitionEnd);
+    };
+    return GenericBrowserDomAdapter;
+  })(dom_adapter_1.DomAdapter);
+  exports.GenericBrowserDomAdapter = GenericBrowserDomAdapter;
   global.define = __define;
   return module.exports;
 });
@@ -21058,7 +20644,7 @@ System.register("angular2/src/core/change_detection/change_detection_jit_generat
   return module.exports;
 });
 
-System.register("@reactivex/rxjs/dist/cjs/Observable", ["@reactivex/rxjs/dist/cjs/Subscriber", "@reactivex/rxjs/dist/cjs/util/Symbol_observable"], true, function(require, exports, module) {
+System.register("@reactivex/rxjs/dist/cjs/Observable", ["@reactivex/rxjs/dist/cjs/Subscriber", "@reactivex/rxjs/dist/cjs/util/root", "@reactivex/rxjs/dist/cjs/util/Symbol_observable"], true, function(require, exports, module) {
   var global = System.global,
       __define = global.define;
   global.define = undefined;
@@ -21074,6 +20660,7 @@ System.register("@reactivex/rxjs/dist/cjs/Observable", ["@reactivex/rxjs/dist/cj
   }
   var _Subscriber = require("@reactivex/rxjs/dist/cjs/Subscriber");
   var _Subscriber2 = _interopRequireDefault(_Subscriber);
+  var _utilRoot = require("@reactivex/rxjs/dist/cjs/util/root");
   var _utilSymbol_observable = require("@reactivex/rxjs/dist/cjs/util/Symbol_observable");
   var _utilSymbol_observable2 = _interopRequireDefault(_utilSymbol_observable);
   var Observable = (function() {
@@ -21108,9 +20695,19 @@ System.register("@reactivex/rxjs/dist/cjs/Observable", ["@reactivex/rxjs/dist/cj
       subscriber.add(this._subscribe(subscriber));
       return subscriber;
     };
-    Observable.prototype.forEach = function forEach(next) {
+    Observable.prototype.forEach = function forEach(next, PromiseCtor) {
       var _this = this;
-      return new Promise(function(resolve, reject) {
+      if (!PromiseCtor) {
+        if (_utilRoot.root.Rx && _utilRoot.root.Rx.config && _utilRoot.root.Rx.config.Promise) {
+          PromiseCtor = _utilRoot.root.Rx.config.Promise;
+        } else if (_utilRoot.root.Promise) {
+          PromiseCtor = _utilRoot.root.Promise;
+        }
+      }
+      if (!PromiseCtor) {
+        throw new Error('no Promise impl found');
+      }
+      return new PromiseCtor(function(resolve, reject) {
         _this.subscribe(next, reject, resolve);
       });
     };
@@ -21532,7 +21129,7 @@ System.register("angular2/src/core/compiler/change_detector_compiler", ["angular
   return module.exports;
 });
 
-System.register("angular2/src/core/compiler/template_parser", ["angular2/src/core/facade/collection", "angular2/src/core/facade/lang", "angular2/src/core/di", "angular2/src/core/facade/exceptions", "angular2/src/core/change_detection/change_detection", "angular2/src/core/compiler/html_parser", "angular2/src/core/compiler/template_ast", "angular2/src/core/compiler/selector", "angular2/src/core/compiler/schema/element_schema_registry", "angular2/src/core/compiler/template_preparser", "angular2/src/core/compiler/html_ast", "angular2/src/core/compiler/util"], true, function(require, exports, module) {
+System.register("angular2/src/core/compiler/template_parser", ["angular2/src/core/facade/collection", "angular2/src/core/facade/lang", "angular2/src/core/di", "angular2/src/core/facade/exceptions", "angular2/src/core/change_detection/change_detection", "angular2/src/core/compiler/html_parser", "angular2/src/core/compiler/template_ast", "angular2/src/core/compiler/selector", "angular2/src/core/compiler/schema/element_schema_registry", "angular2/src/core/compiler/template_preparser", "angular2/src/core/compiler/style_url_resolver", "angular2/src/core/compiler/html_ast", "angular2/src/core/compiler/util"], true, function(require, exports, module) {
   var global = System.global,
       __define = global.define;
   global.define = undefined;
@@ -21568,6 +21165,7 @@ System.register("angular2/src/core/compiler/template_parser", ["angular2/src/cor
   var selector_1 = require("angular2/src/core/compiler/selector");
   var element_schema_registry_1 = require("angular2/src/core/compiler/schema/element_schema_registry");
   var template_preparser_1 = require("angular2/src/core/compiler/template_preparser");
+  var style_url_resolver_1 = require("angular2/src/core/compiler/style_url_resolver");
   var html_ast_1 = require("angular2/src/core/compiler/html_ast");
   var util_1 = require("angular2/src/core/compiler/util");
   var BIND_NAME_REGEXP = /^(?:(?:(?:(bind-)|(var-|#)|(on-)|(bindon-))(.+))|\[\(([^\)]+)\)\]|\[([^\]]+)\]|\(([^\)]+)\))$/g;
@@ -21665,7 +21263,10 @@ System.register("angular2/src/core/compiler/template_parser", ["angular2/src/cor
       var _this = this;
       var nodeName = element.name;
       var preparsedElement = template_preparser_1.preparseElement(element);
-      if (preparsedElement.type === template_preparser_1.PreparsedElementType.SCRIPT || preparsedElement.type === template_preparser_1.PreparsedElementType.STYLE || preparsedElement.type === template_preparser_1.PreparsedElementType.STYLESHEET) {
+      if (preparsedElement.type === template_preparser_1.PreparsedElementType.SCRIPT || preparsedElement.type === template_preparser_1.PreparsedElementType.STYLE) {
+        return null;
+      }
+      if (preparsedElement.type === template_preparser_1.PreparsedElementType.STYLESHEET && style_url_resolver_1.isStyleUrlResolvable(preparsedElement.hrefAttr)) {
         return null;
       }
       var matchableAttrs = [];
@@ -21698,7 +21299,8 @@ System.register("angular2/src/core/compiler/template_parser", ["angular2/src/cor
       if (preparsedElement.type === template_preparser_1.PreparsedElementType.NG_CONTENT) {
         parsedElement = new template_ast_1.NgContentAst(this.ngContentCount++, elementNgContentIndex, element.sourceInfo);
       } else if (isTemplateElement) {
-        this._assertNoComponentsNorElementBindingsOnTemplate(directives, elementProps, events, element.sourceInfo);
+        this._assertAllEventsPublishedByDirectives(directives, events, element.sourceInfo);
+        this._assertNoComponentsNorElementBindingsOnTemplate(directives, elementProps, element.sourceInfo);
         parsedElement = new template_ast_1.EmbeddedTemplateAst(attrs, vars, directives, children, elementNgContentIndex, element.sourceInfo);
       } else {
         this._assertOnlyOneComponent(directives, element.sourceInfo);
@@ -21711,7 +21313,7 @@ System.register("angular2/src/core/compiler/template_parser", ["angular2/src/cor
         var templateCssSelector = createElementCssSelector(TEMPLATE_ELEMENT, templateMatchableAttrs);
         var templateDirectives = this._createDirectiveAsts(element.name, this._parseDirectives(this.selectorMatcher, templateCssSelector), templateElementOrDirectiveProps, [], element.sourceInfo);
         var templateElementProps = this._createElementPropertyAsts(element.name, templateElementOrDirectiveProps, templateDirectives);
-        this._assertNoComponentsNorElementBindingsOnTemplate(templateDirectives, templateElementProps, [], element.sourceInfo);
+        this._assertNoComponentsNorElementBindingsOnTemplate(templateDirectives, templateElementProps, element.sourceInfo);
         parsedElement = new template_ast_1.EmbeddedTemplateAst([], templateVars, templateDirectives, [parsedElement], component.findNgContentIndex(templateCssSelector), element.sourceInfo);
       }
       return parsedElement;
@@ -21949,7 +21551,7 @@ System.register("angular2/src/core/compiler/template_parser", ["angular2/src/cor
         this._reportError("More than one component: " + componentTypeNames.join(',') + " in " + sourceInfo);
       }
     };
-    TemplateParseVisitor.prototype._assertNoComponentsNorElementBindingsOnTemplate = function(directives, elementProps, events, sourceInfo) {
+    TemplateParseVisitor.prototype._assertNoComponentsNorElementBindingsOnTemplate = function(directives, elementProps, sourceInfo) {
       var _this = this;
       var componentTypeNames = this._findComponentDirectiveNames(directives);
       if (componentTypeNames.length > 0) {
@@ -21958,8 +21560,19 @@ System.register("angular2/src/core/compiler/template_parser", ["angular2/src/cor
       elementProps.forEach(function(prop) {
         _this._reportError("Property binding " + prop.name + " not used by any directive on an embedded template in " + prop.sourceInfo);
       });
+    };
+    TemplateParseVisitor.prototype._assertAllEventsPublishedByDirectives = function(directives, events, sourceInfo) {
+      var _this = this;
+      var allDirectiveEvents = new Set();
+      directives.forEach(function(directive) {
+        collection_1.StringMapWrapper.forEach(directive.directive.outputs, function(eventName, _) {
+          allDirectiveEvents.add(eventName);
+        });
+      });
       events.forEach(function(event) {
-        _this._reportError("Event binding " + event.name + " on an embedded template in " + event.sourceInfo);
+        if (lang_1.isPresent(event.target) || !collection_1.SetWrapper.has(allDirectiveEvents, event.name)) {
+          _this._reportError("Event binding " + event.fullName + " not emitted by any directive on an embedded template in " + sourceInfo);
+        }
       });
     };
     return TemplateParseVisitor;
@@ -22133,6 +21746,529 @@ System.register("angular2/src/core/forms/directives/default_value_accessor", ["a
     return DefaultValueAccessor;
   })();
   exports.DefaultValueAccessor = DefaultValueAccessor;
+  global.define = __define;
+  return module.exports;
+});
+
+System.register("angular2/src/core/dom/browser_adapter", ["angular2/src/core/facade/collection", "angular2/src/core/facade/lang", "angular2/src/core/dom/dom_adapter", "angular2/src/core/dom/generic_browser_adapter"], true, function(require, exports, module) {
+  var global = System.global,
+      __define = global.define;
+  global.define = undefined;
+  var __extends = (this && this.__extends) || function(d, b) {
+    for (var p in b)
+      if (b.hasOwnProperty(p))
+        d[p] = b[p];
+    function __() {
+      this.constructor = d;
+    }
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+  };
+  var collection_1 = require("angular2/src/core/facade/collection");
+  var lang_1 = require("angular2/src/core/facade/lang");
+  var dom_adapter_1 = require("angular2/src/core/dom/dom_adapter");
+  var generic_browser_adapter_1 = require("angular2/src/core/dom/generic_browser_adapter");
+  var _attrToPropMap = {
+    'class': 'className',
+    'innerHtml': 'innerHTML',
+    'readonly': 'readOnly',
+    'tabindex': 'tabIndex'
+  };
+  var DOM_KEY_LOCATION_NUMPAD = 3;
+  var _keyMap = {
+    '\b': 'Backspace',
+    '\t': 'Tab',
+    '\x7F': 'Delete',
+    '\x1B': 'Escape',
+    'Del': 'Delete',
+    'Esc': 'Escape',
+    'Left': 'ArrowLeft',
+    'Right': 'ArrowRight',
+    'Up': 'ArrowUp',
+    'Down': 'ArrowDown',
+    'Menu': 'ContextMenu',
+    'Scroll': 'ScrollLock',
+    'Win': 'OS'
+  };
+  var _chromeNumKeyPadMap = {
+    'A': '1',
+    'B': '2',
+    'C': '3',
+    'D': '4',
+    'E': '5',
+    'F': '6',
+    'G': '7',
+    'H': '8',
+    'I': '9',
+    'J': '*',
+    'K': '+',
+    'M': '-',
+    'N': '.',
+    'O': '/',
+    '\x60': '0',
+    '\x90': 'NumLock'
+  };
+  var BrowserDomAdapter = (function(_super) {
+    __extends(BrowserDomAdapter, _super);
+    function BrowserDomAdapter() {
+      _super.apply(this, arguments);
+    }
+    BrowserDomAdapter.prototype.parse = function(templateHtml) {
+      throw new Error("parse not implemented");
+    };
+    BrowserDomAdapter.makeCurrent = function() {
+      dom_adapter_1.setRootDomAdapter(new BrowserDomAdapter());
+    };
+    BrowserDomAdapter.prototype.hasProperty = function(element, name) {
+      return name in element;
+    };
+    BrowserDomAdapter.prototype.setProperty = function(el, name, value) {
+      el[name] = value;
+    };
+    BrowserDomAdapter.prototype.getProperty = function(el, name) {
+      return el[name];
+    };
+    BrowserDomAdapter.prototype.invoke = function(el, methodName, args) {
+      el[methodName].apply(el, args);
+    };
+    BrowserDomAdapter.prototype.logError = function(error) {
+      if (window.console.error) {
+        window.console.error(error);
+      } else {
+        window.console.log(error);
+      }
+    };
+    BrowserDomAdapter.prototype.log = function(error) {
+      window.console.log(error);
+    };
+    BrowserDomAdapter.prototype.logGroup = function(error) {
+      if (window.console.group) {
+        window.console.group(error);
+        this.logError(error);
+      } else {
+        window.console.log(error);
+      }
+    };
+    BrowserDomAdapter.prototype.logGroupEnd = function() {
+      if (window.console.groupEnd) {
+        window.console.groupEnd();
+      }
+    };
+    Object.defineProperty(BrowserDomAdapter.prototype, "attrToPropMap", {
+      get: function() {
+        return _attrToPropMap;
+      },
+      enumerable: true,
+      configurable: true
+    });
+    BrowserDomAdapter.prototype.query = function(selector) {
+      return document.querySelector(selector);
+    };
+    BrowserDomAdapter.prototype.querySelector = function(el, selector) {
+      return el.querySelector(selector);
+    };
+    BrowserDomAdapter.prototype.querySelectorAll = function(el, selector) {
+      return el.querySelectorAll(selector);
+    };
+    BrowserDomAdapter.prototype.on = function(el, evt, listener) {
+      el.addEventListener(evt, listener, false);
+    };
+    BrowserDomAdapter.prototype.onAndCancel = function(el, evt, listener) {
+      el.addEventListener(evt, listener, false);
+      return function() {
+        el.removeEventListener(evt, listener, false);
+      };
+    };
+    BrowserDomAdapter.prototype.dispatchEvent = function(el, evt) {
+      el.dispatchEvent(evt);
+    };
+    BrowserDomAdapter.prototype.createMouseEvent = function(eventType) {
+      var evt = document.createEvent('MouseEvent');
+      evt.initEvent(eventType, true, true);
+      return evt;
+    };
+    BrowserDomAdapter.prototype.createEvent = function(eventType) {
+      var evt = document.createEvent('Event');
+      evt.initEvent(eventType, true, true);
+      return evt;
+    };
+    BrowserDomAdapter.prototype.preventDefault = function(evt) {
+      evt.preventDefault();
+      evt.returnValue = false;
+    };
+    BrowserDomAdapter.prototype.isPrevented = function(evt) {
+      return evt.defaultPrevented || lang_1.isPresent(evt.returnValue) && !evt.returnValue;
+    };
+    BrowserDomAdapter.prototype.getInnerHTML = function(el) {
+      return el.innerHTML;
+    };
+    BrowserDomAdapter.prototype.getOuterHTML = function(el) {
+      return el.outerHTML;
+    };
+    BrowserDomAdapter.prototype.nodeName = function(node) {
+      return node.nodeName;
+    };
+    BrowserDomAdapter.prototype.nodeValue = function(node) {
+      return node.nodeValue;
+    };
+    BrowserDomAdapter.prototype.type = function(node) {
+      return node.type;
+    };
+    BrowserDomAdapter.prototype.content = function(node) {
+      if (this.hasProperty(node, "content")) {
+        return node.content;
+      } else {
+        return node;
+      }
+    };
+    BrowserDomAdapter.prototype.firstChild = function(el) {
+      return el.firstChild;
+    };
+    BrowserDomAdapter.prototype.nextSibling = function(el) {
+      return el.nextSibling;
+    };
+    BrowserDomAdapter.prototype.parentElement = function(el) {
+      return el.parentNode;
+    };
+    BrowserDomAdapter.prototype.childNodes = function(el) {
+      return el.childNodes;
+    };
+    BrowserDomAdapter.prototype.childNodesAsList = function(el) {
+      var childNodes = el.childNodes;
+      var res = collection_1.ListWrapper.createFixedSize(childNodes.length);
+      for (var i = 0; i < childNodes.length; i++) {
+        res[i] = childNodes[i];
+      }
+      return res;
+    };
+    BrowserDomAdapter.prototype.clearNodes = function(el) {
+      while (el.firstChild) {
+        el.removeChild(el.firstChild);
+      }
+    };
+    BrowserDomAdapter.prototype.appendChild = function(el, node) {
+      el.appendChild(node);
+    };
+    BrowserDomAdapter.prototype.removeChild = function(el, node) {
+      el.removeChild(node);
+    };
+    BrowserDomAdapter.prototype.replaceChild = function(el, newChild, oldChild) {
+      el.replaceChild(newChild, oldChild);
+    };
+    BrowserDomAdapter.prototype.remove = function(node) {
+      if (node.parentNode) {
+        node.parentNode.removeChild(node);
+      }
+      return node;
+    };
+    BrowserDomAdapter.prototype.insertBefore = function(el, node) {
+      el.parentNode.insertBefore(node, el);
+    };
+    BrowserDomAdapter.prototype.insertAllBefore = function(el, nodes) {
+      nodes.forEach(function(n) {
+        return el.parentNode.insertBefore(n, el);
+      });
+    };
+    BrowserDomAdapter.prototype.insertAfter = function(el, node) {
+      el.parentNode.insertBefore(node, el.nextSibling);
+    };
+    BrowserDomAdapter.prototype.setInnerHTML = function(el, value) {
+      el.innerHTML = value;
+    };
+    BrowserDomAdapter.prototype.getText = function(el) {
+      return el.textContent;
+    };
+    BrowserDomAdapter.prototype.setText = function(el, value) {
+      el.textContent = value;
+    };
+    BrowserDomAdapter.prototype.getValue = function(el) {
+      return el.value;
+    };
+    BrowserDomAdapter.prototype.setValue = function(el, value) {
+      el.value = value;
+    };
+    BrowserDomAdapter.prototype.getChecked = function(el) {
+      return el.checked;
+    };
+    BrowserDomAdapter.prototype.setChecked = function(el, value) {
+      el.checked = value;
+    };
+    BrowserDomAdapter.prototype.createComment = function(text) {
+      return document.createComment(text);
+    };
+    BrowserDomAdapter.prototype.createTemplate = function(html) {
+      var t = document.createElement('template');
+      t.innerHTML = html;
+      return t;
+    };
+    BrowserDomAdapter.prototype.createElement = function(tagName, doc) {
+      if (doc === void 0) {
+        doc = document;
+      }
+      return doc.createElement(tagName);
+    };
+    BrowserDomAdapter.prototype.createTextNode = function(text, doc) {
+      if (doc === void 0) {
+        doc = document;
+      }
+      return doc.createTextNode(text);
+    };
+    BrowserDomAdapter.prototype.createScriptTag = function(attrName, attrValue, doc) {
+      if (doc === void 0) {
+        doc = document;
+      }
+      var el = doc.createElement('SCRIPT');
+      el.setAttribute(attrName, attrValue);
+      return el;
+    };
+    BrowserDomAdapter.prototype.createStyleElement = function(css, doc) {
+      if (doc === void 0) {
+        doc = document;
+      }
+      var style = doc.createElement('style');
+      this.appendChild(style, this.createTextNode(css));
+      return style;
+    };
+    BrowserDomAdapter.prototype.createShadowRoot = function(el) {
+      return el.createShadowRoot();
+    };
+    BrowserDomAdapter.prototype.getShadowRoot = function(el) {
+      return el.shadowRoot;
+    };
+    BrowserDomAdapter.prototype.getHost = function(el) {
+      return el.host;
+    };
+    BrowserDomAdapter.prototype.clone = function(node) {
+      return node.cloneNode(true);
+    };
+    BrowserDomAdapter.prototype.getElementsByClassName = function(element, name) {
+      return element.getElementsByClassName(name);
+    };
+    BrowserDomAdapter.prototype.getElementsByTagName = function(element, name) {
+      return element.getElementsByTagName(name);
+    };
+    BrowserDomAdapter.prototype.classList = function(element) {
+      return Array.prototype.slice.call(element.classList, 0);
+    };
+    BrowserDomAdapter.prototype.addClass = function(element, classname) {
+      element.classList.add(classname);
+    };
+    BrowserDomAdapter.prototype.removeClass = function(element, classname) {
+      element.classList.remove(classname);
+    };
+    BrowserDomAdapter.prototype.hasClass = function(element, classname) {
+      return element.classList.contains(classname);
+    };
+    BrowserDomAdapter.prototype.setStyle = function(element, stylename, stylevalue) {
+      element.style[stylename] = stylevalue;
+    };
+    BrowserDomAdapter.prototype.removeStyle = function(element, stylename) {
+      element.style[stylename] = null;
+    };
+    BrowserDomAdapter.prototype.getStyle = function(element, stylename) {
+      return element.style[stylename];
+    };
+    BrowserDomAdapter.prototype.tagName = function(element) {
+      return element.tagName;
+    };
+    BrowserDomAdapter.prototype.attributeMap = function(element) {
+      var res = new Map();
+      var elAttrs = element.attributes;
+      for (var i = 0; i < elAttrs.length; i++) {
+        var attrib = elAttrs[i];
+        res.set(attrib.name, attrib.value);
+      }
+      return res;
+    };
+    BrowserDomAdapter.prototype.hasAttribute = function(element, attribute) {
+      return element.hasAttribute(attribute);
+    };
+    BrowserDomAdapter.prototype.getAttribute = function(element, attribute) {
+      return element.getAttribute(attribute);
+    };
+    BrowserDomAdapter.prototype.setAttribute = function(element, name, value) {
+      element.setAttribute(name, value);
+    };
+    BrowserDomAdapter.prototype.removeAttribute = function(element, attribute) {
+      element.removeAttribute(attribute);
+    };
+    BrowserDomAdapter.prototype.templateAwareRoot = function(el) {
+      return this.isTemplateElement(el) ? this.content(el) : el;
+    };
+    BrowserDomAdapter.prototype.createHtmlDocument = function() {
+      return document.implementation.createHTMLDocument('fakeTitle');
+    };
+    BrowserDomAdapter.prototype.defaultDoc = function() {
+      return document;
+    };
+    BrowserDomAdapter.prototype.getBoundingClientRect = function(el) {
+      try {
+        return el.getBoundingClientRect();
+      } catch (e) {
+        return {
+          top: 0,
+          bottom: 0,
+          left: 0,
+          right: 0,
+          width: 0,
+          height: 0
+        };
+      }
+    };
+    BrowserDomAdapter.prototype.getTitle = function() {
+      return document.title;
+    };
+    BrowserDomAdapter.prototype.setTitle = function(newTitle) {
+      document.title = newTitle || '';
+    };
+    BrowserDomAdapter.prototype.elementMatches = function(n, selector) {
+      var matches = false;
+      if (n instanceof HTMLElement) {
+        if (n.matches) {
+          matches = n.matches(selector);
+        } else if (n.msMatchesSelector) {
+          matches = n.msMatchesSelector(selector);
+        } else if (n.webkitMatchesSelector) {
+          matches = n.webkitMatchesSelector(selector);
+        }
+      }
+      return matches;
+    };
+    BrowserDomAdapter.prototype.isTemplateElement = function(el) {
+      return el instanceof HTMLElement && el.nodeName == "TEMPLATE";
+    };
+    BrowserDomAdapter.prototype.isTextNode = function(node) {
+      return node.nodeType === Node.TEXT_NODE;
+    };
+    BrowserDomAdapter.prototype.isCommentNode = function(node) {
+      return node.nodeType === Node.COMMENT_NODE;
+    };
+    BrowserDomAdapter.prototype.isElementNode = function(node) {
+      return node.nodeType === Node.ELEMENT_NODE;
+    };
+    BrowserDomAdapter.prototype.hasShadowRoot = function(node) {
+      return node instanceof HTMLElement && lang_1.isPresent(node.shadowRoot);
+    };
+    BrowserDomAdapter.prototype.isShadowRoot = function(node) {
+      return node instanceof DocumentFragment;
+    };
+    BrowserDomAdapter.prototype.importIntoDoc = function(node) {
+      var toImport = node;
+      if (this.isTemplateElement(node)) {
+        toImport = this.content(node);
+      }
+      return document.importNode(toImport, true);
+    };
+    BrowserDomAdapter.prototype.adoptNode = function(node) {
+      return document.adoptNode(node);
+    };
+    BrowserDomAdapter.prototype.isPageRule = function(rule) {
+      return rule.type === CSSRule.PAGE_RULE;
+    };
+    BrowserDomAdapter.prototype.isStyleRule = function(rule) {
+      return rule.type === CSSRule.STYLE_RULE;
+    };
+    BrowserDomAdapter.prototype.isMediaRule = function(rule) {
+      return rule.type === CSSRule.MEDIA_RULE;
+    };
+    BrowserDomAdapter.prototype.isKeyframesRule = function(rule) {
+      return rule.type === CSSRule.KEYFRAMES_RULE;
+    };
+    BrowserDomAdapter.prototype.getHref = function(el) {
+      return el.href;
+    };
+    BrowserDomAdapter.prototype.getEventKey = function(event) {
+      var key = event.key;
+      if (lang_1.isBlank(key)) {
+        key = event.keyIdentifier;
+        if (lang_1.isBlank(key)) {
+          return 'Unidentified';
+        }
+        if (key.startsWith('U+')) {
+          key = String.fromCharCode(parseInt(key.substring(2), 16));
+          if (event.location === DOM_KEY_LOCATION_NUMPAD && _chromeNumKeyPadMap.hasOwnProperty(key)) {
+            key = _chromeNumKeyPadMap[key];
+          }
+        }
+      }
+      if (_keyMap.hasOwnProperty(key)) {
+        key = _keyMap[key];
+      }
+      return key;
+    };
+    BrowserDomAdapter.prototype.getGlobalEventTarget = function(target) {
+      if (target == "window") {
+        return window;
+      } else if (target == "document") {
+        return document;
+      } else if (target == "body") {
+        return document.body;
+      }
+    };
+    BrowserDomAdapter.prototype.getHistory = function() {
+      return window.history;
+    };
+    BrowserDomAdapter.prototype.getLocation = function() {
+      return window.location;
+    };
+    BrowserDomAdapter.prototype.getBaseHref = function() {
+      var href = getBaseElementHref();
+      if (lang_1.isBlank(href)) {
+        return null;
+      }
+      return relativePath(href);
+    };
+    BrowserDomAdapter.prototype.resetBaseElement = function() {
+      baseElement = null;
+    };
+    BrowserDomAdapter.prototype.getUserAgent = function() {
+      return window.navigator.userAgent;
+    };
+    BrowserDomAdapter.prototype.setData = function(element, name, value) {
+      this.setAttribute(element, 'data-' + name, value);
+    };
+    BrowserDomAdapter.prototype.getData = function(element, name) {
+      return this.getAttribute(element, 'data-' + name);
+    };
+    BrowserDomAdapter.prototype.getComputedStyle = function(element) {
+      return getComputedStyle(element);
+    };
+    BrowserDomAdapter.prototype.setGlobalVar = function(path, value) {
+      lang_1.setValueOnPath(lang_1.global, path, value);
+    };
+    BrowserDomAdapter.prototype.requestAnimationFrame = function(callback) {
+      return window.requestAnimationFrame(callback);
+    };
+    BrowserDomAdapter.prototype.cancelAnimationFrame = function(id) {
+      window.cancelAnimationFrame(id);
+    };
+    BrowserDomAdapter.prototype.performanceNow = function() {
+      if (lang_1.isPresent(window.performance) && lang_1.isPresent(window.performance.now)) {
+        return window.performance.now();
+      } else {
+        return lang_1.DateWrapper.toMillis(lang_1.DateWrapper.now());
+      }
+    };
+    return BrowserDomAdapter;
+  })(generic_browser_adapter_1.GenericBrowserDomAdapter);
+  exports.BrowserDomAdapter = BrowserDomAdapter;
+  var baseElement = null;
+  function getBaseElementHref() {
+    if (lang_1.isBlank(baseElement)) {
+      baseElement = document.querySelector('base');
+      if (lang_1.isBlank(baseElement)) {
+        return null;
+      }
+    }
+    return baseElement.getAttribute('href');
+  }
+  var urlParsingNode = null;
+  function relativePath(url) {
+    if (lang_1.isBlank(urlParsingNode)) {
+      urlParsingNode = document.createElement("a");
+    }
+    urlParsingNode.setAttribute('href', url);
+    return (urlParsingNode.pathname.charAt(0) === '/') ? urlParsingNode.pathname : '/' + urlParsingNode.pathname;
+  }
   global.define = __define;
   return module.exports;
 });
@@ -23462,7 +23598,6 @@ System.register("@reactivex/rxjs/dist/cjs/Subject", ["@reactivex/rxjs/dist/cjs/O
   var _subscriberNext = _Subscriber2['default'].prototype._next;
   var _subscriberError = _Subscriber2['default'].prototype._error;
   var _subscriberComplete = _Subscriber2['default'].prototype._complete;
-  var _observableSubscribe = _Observable3['default'].prototype._subscribe;
   var Subject = (function(_Observable) {
     _inherits(Subject, _Observable);
     function Subject() {
@@ -23590,7 +23725,8 @@ System.register("@reactivex/rxjs/dist/cjs/Subject", ["@reactivex/rxjs/dist/cjs/O
       this.destination = destination;
     }
     BidirectionalSubject.prototype._subscribe = function _subscribe(subscriber) {
-      return _observableSubscribe.call(this, subscriber);
+      var operator = this.operator;
+      return this.source._subscribe.call(this.source, operator ? operator.call(subscriber) : subscriber);
     };
     BidirectionalSubject.prototype.next = function next(x) {
       subscriberNext.call(this, x);
@@ -24888,7 +25024,7 @@ System.register("angular2/src/core/compiler/template_compiler", ["angular2/src/c
   return module.exports;
 });
 
-System.register("angular2/src/core/forms/directives/shared", ["angular2/src/core/facade/collection", "angular2/src/core/facade/lang", "angular2/src/core/facade/exceptions", "angular2/src/core/forms/validators", "angular2/src/core/forms/directives/default_value_accessor", "angular2/src/core/forms/directives/checkbox_value_accessor", "angular2/src/core/forms/directives/select_control_value_accessor"], true, function(require, exports, module) {
+System.register("angular2/src/core/forms/directives/shared", ["angular2/src/core/facade/collection", "angular2/src/core/facade/lang", "angular2/src/core/facade/exceptions", "angular2/src/core/forms/validators", "angular2/src/core/forms/directives/default_value_accessor", "angular2/src/core/forms/directives/number_value_accessor", "angular2/src/core/forms/directives/checkbox_value_accessor", "angular2/src/core/forms/directives/select_control_value_accessor"], true, function(require, exports, module) {
   var global = System.global,
       __define = global.define;
   global.define = undefined;
@@ -24897,6 +25033,7 @@ System.register("angular2/src/core/forms/directives/shared", ["angular2/src/core
   var exceptions_1 = require("angular2/src/core/facade/exceptions");
   var validators_1 = require("angular2/src/core/forms/validators");
   var default_value_accessor_1 = require("angular2/src/core/forms/directives/default_value_accessor");
+  var number_value_accessor_1 = require("angular2/src/core/forms/directives/number_value_accessor");
   var checkbox_value_accessor_1 = require("angular2/src/core/forms/directives/checkbox_value_accessor");
   var select_control_value_accessor_1 = require("angular2/src/core/forms/directives/select_control_value_accessor");
   function controlPath(name, parent) {
@@ -24951,7 +25088,7 @@ System.register("angular2/src/core/forms/directives/shared", ["angular2/src/core
     valueAccessors.forEach(function(v) {
       if (v instanceof default_value_accessor_1.DefaultValueAccessor) {
         defaultAccessor = v;
-      } else if (v instanceof checkbox_value_accessor_1.CheckboxControlValueAccessor || v instanceof select_control_value_accessor_1.SelectControlValueAccessor) {
+      } else if (v instanceof checkbox_value_accessor_1.CheckboxControlValueAccessor || v instanceof number_value_accessor_1.NumberValueAccessor || v instanceof select_control_value_accessor_1.SelectControlValueAccessor) {
         if (lang_1.isPresent(builtinAccessor))
           _throwError(dir, "More than one built-in value accessor matches");
         builtinAccessor = v;
@@ -25415,7 +25552,7 @@ System.register("angular2/src/core/change_detection/proto_change_detector", ["an
   return module.exports;
 });
 
-System.register("angular2/src/core/facade/async", ["angular2/src/core/facade/lang", "@reactivex/rxjs/dist/cjs/Subject"], true, function(require, exports, module) {
+System.register("angular2/src/core/facade/async", ["angular2/src/core/facade/lang", "angular2/src/core/facade/promise", "@reactivex/rxjs/dist/cjs/Subject"], true, function(require, exports, module) {
   var global = System.global,
       __define = global.define;
   global.define = undefined;
@@ -25429,51 +25566,10 @@ System.register("angular2/src/core/facade/async", ["angular2/src/core/facade/lan
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
   };
   var lang_1 = require("angular2/src/core/facade/lang");
+  var promise_1 = require("angular2/src/core/facade/promise");
+  exports.PromiseWrapper = promise_1.PromiseWrapper;
+  exports.Promise = promise_1.Promise;
   var Subject = require("@reactivex/rxjs/dist/cjs/Subject");
-  var PromiseWrapper = (function() {
-    function PromiseWrapper() {}
-    PromiseWrapper.resolve = function(obj) {
-      return Promise.resolve(obj);
-    };
-    PromiseWrapper.reject = function(obj, _) {
-      return Promise.reject(obj);
-    };
-    PromiseWrapper.catchError = function(promise, onError) {
-      return promise.catch(onError);
-    };
-    PromiseWrapper.all = function(promises) {
-      if (promises.length == 0)
-        return Promise.resolve([]);
-      return Promise.all(promises);
-    };
-    PromiseWrapper.then = function(promise, success, rejection) {
-      return promise.then(success, rejection);
-    };
-    PromiseWrapper.wrap = function(computation) {
-      return new Promise(function(res, rej) {
-        try {
-          res(computation());
-        } catch (e) {
-          rej(e);
-        }
-      });
-    };
-    PromiseWrapper.completer = function() {
-      var resolve;
-      var reject;
-      var p = new Promise(function(res, rej) {
-        resolve = res;
-        reject = rej;
-      });
-      return {
-        promise: p,
-        resolve: resolve,
-        reject: reject
-      };
-    };
-    return PromiseWrapper;
-  })();
-  exports.PromiseWrapper = PromiseWrapper;
   var TimerWrapper = (function() {
     function TimerWrapper() {}
     TimerWrapper.setTimeout = function(fn, millis) {
