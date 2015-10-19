@@ -16,7 +16,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 // dependencies:
-// - angular: v2.0.0-alpha.42
+// - angular: v2.0.0-alpha.44
 var angular2_1 = require('angular2/angular2');
 var http_1 = require('angular2/http');
 /**
