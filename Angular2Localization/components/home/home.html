@@ -3,10 +3,10 @@
 <div class="jumbotron">
     <div class="container">
         <!--inject key from component--> 
-        <h1>{{ translate(title) }}!</h1>
+        <h1>{{ title | translate }}!</h1>
     </div>
 </div>
 <div class="container">
-    <h2>{{ translate('SUBTITLE') }}</h2>
-    <p>{{ translate('DESCRIPTION') }}</p>
+    <h2>{{ 'SUBTITLE' | translate }}</h2>
+    <p>{{ 'DESCRIPTION' | translate }}</p>
 </div>

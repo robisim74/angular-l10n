@@ -10,6 +10,7 @@
 
 import {Injectable} from 'angular2/angular2';
 import {Http} from 'angular2/http';
+import {Pipe, PipeTransform} from 'angular2/angular2';
 
 /**
  * localization is an injectable class that use angular 2 http module
@@ -17,7 +18,9 @@ import {Http} from 'angular2/http';
  * 
  * @Component({
  *      selector: 'app',
- *      bindings: [Localization] 
+ *      ...
+ *      providers: [Localization, LocalizationPipe], // localization providers: inherited by all descendants
+ *      pipes: [LocalizationPipe] // add in each component to invoke the transform method
  * })
  * ...
  * class app {
@@ -58,6 +61,21 @@ import {Http} from 'angular2/http';
  * (url is obtained concatenating {prefix} + {locale language code} + ".json")
  */
 
+/**
+ * GET TRANSLATION
+ * to get translation by direct or asyncronous loading add in each component:
+ * 
+ * @Component({
+ *      ...
+ *      pipes: [LocalizationPipe]
+ * })
+ * 
+ * and in the template:
+ * 
+ * <p>{{ 'EXAMPLE' | translate }}</p>
+ */
+
+// localization class
 @Injectable() export class Localization {
 
     prefix: string;
@@ -120,17 +138,17 @@ import {Http} from 'angular2/http';
         this.http.get(url)
             .map(res => res.json())
             .subscribe(res => this.translationsData = res, (exception: any) => this.onError, this.onCompleted);
-        
+
     }
-    onCompleted(){
-        
+    onCompleted() {
+
         console.log("translationProvider:", "http get completed");
-           
+
     }
-    onError(exception: any){
-        
+    onError(exception: any) {
+
         console.error("translationProvider:", exception);
-        
+
     }
         
     // get current language
@@ -168,45 +186,21 @@ import {Http} from 'angular2/http';
 
     }
 
-    /**
-    * DIRECT LOADING
-    * to get translation by direct loading add the following code in each component:
-    * 
-    * translate(key) {
-    *       return this.localization.translate(key);
-    * }
-    * 
-    * and in the view:
-    * 
-    * <p>{{ translate('EXAMPLE') }}</p>
-    */
-
-    // get translation by direct loading
+    // get translation
     translate(key: string) {
 
-        var translation: any = this.translationsData[this.locale]; // get translations by locale       
-        var value: string = translation[key]; // get translated value by key
-        return value;
+        var value: string;
 
-    }
-    
-    /**
-     * ASYNCHRONOUS LOADING
-     * to get translation by asynchronous loading add the following code in each component:
-     * 
-     * translate(key) {
-     *      return this.localization.asyncTranslate(key);
-     * }
-     * 
-     * and in the view:
-     * 
-     * <p>{{ translate('EXAMPLE') }}</p>
-     */
-    
-    // get translation by asynchronously loading
-    asyncTranslate(key: string) {
+        if (this.translationsData[this.locale] == null) {
+            // get translation by asynchronously loading
+            value = this.translationsData[key]; // get translated value by key
+        }
+        else {
+            // get translation by direct loading
+            var translation: any = this.translationsData[this.locale]; // get translations by locale       
+            value = translation[key]; // get translated value by key          
+        }
 
-        var value: string = this.translationsData[key]; // get translated value by key
         return value;
 
     }
@@ -236,17 +230,38 @@ import {Http} from 'angular2/http';
 
         for (var i = 0; i < ca.length; i++) {
             var c: string = ca[i];
-            while (c.charAt(0) == ' '){
+            while (c.charAt(0) == ' ') {
                 c = c.substring(1);
             }
-            if (c.indexOf(name) == 0){
+            if (c.indexOf(name) == 0) {
                 return c.substring(name.length, c.length);
             }
         }
-        
+
         return null;
 
     }
 
 }
 // end localization class
+
+// translate pipe function
+@Pipe({
+    name: 'translate',
+    pure: false // required to update the value
+})
+
+// localization pipe class
+@Injectable() export class LocalizationPipe implements PipeTransform {
+
+    constructor(public localization: Localization) { }
+
+    // translate pipe transform method
+    transform(key: string) {
+
+        return this.localization.translate(key);
+
+    }
+
+}
+// end localization pipe class

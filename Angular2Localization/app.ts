@@ -3,15 +3,14 @@ import {HTTP_PROVIDERS} from 'angular2/http'; // http module
 
 import {home} from './components/home/home';
 
-import {Localization} from './services/localization'; // localization class
+import {Localization, LocalizationPipe} from './services/localization'; // localization class & pipe
 
 @Component({
     selector: 'app',
-    bindings: [Localization] // localization binding: inherited by all descendants
-})
-@View({
-    templateUrl: './app.html',
-    directives: [home, NgIf]
+    templateUrl: './app.html', // component cannot have both pipes and @View set at the same time
+    directives: [home, NgIf],
+    providers: [Localization, LocalizationPipe], // localization providers: inherited by all descendants
+    pipes: [LocalizationPipe] // add in each component to invoke the transform method
 })
 
 class app {
@@ -55,24 +54,6 @@ class app {
         // end localization
                 
     }
-    
-    // DIRECT LOADING
-    // UNCOMMENT FOLLOWING CODE FOR DIRECT LOADING
-    //// translation: direct loading
-    //translate(key) {
-    //
-    //    return this.localization.translate(key);
-    //
-    //}
-    
-    // ASYNCHRONOUS LOADING
-    // COMMENT FOLLOWING CODE IF DIRECT LOADING
-    // translation: asynchronous loading  
-    translate(key) {
-
-        return this.localization.asyncTranslate(key);
-
-    }   
 	
     // CHANGE LANGUAGE
     // return the current language

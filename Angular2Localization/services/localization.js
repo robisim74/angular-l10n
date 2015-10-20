@@ -19,13 +19,16 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 // - angular: v2.0.0-alpha.44
 var angular2_1 = require('angular2/angular2');
 var http_1 = require('angular2/http');
+var angular2_2 = require('angular2/angular2');
 /**
  * localization is an injectable class that use angular 2 http module
  * to start, add in route component:
  *
  * @Component({
  *      selector: 'app',
- *      bindings: [Localization]
+ *      ...
+ *      providers: [Localization, LocalizationPipe], // localization providers: inherited by all descendants
+ *      pipes: [LocalizationPipe] // add in each component to invoke the transform method
  * })
  * ...
  * class app {
@@ -63,6 +66,20 @@ var http_1 = require('angular2/http');
  * and create the json files of translations such as "locale-en.json"
  * (url is obtained concatenating {prefix} + {locale language code} + ".json")
  */
+/**
+ * GET TRANSLATION
+ * to get translation by direct or asyncronous loading add in each component:
+ *
+ * @Component({
+ *      ...
+ *      pipes: [LocalizationPipe]
+ * })
+ *
+ * and in the template:
+ *
+ * <p>{{ 'EXAMPLE' | translate }}</p>
+ */
+// localization class
 var Localization = (function () {
     function Localization(http) {
         this.http = http;
@@ -138,39 +155,18 @@ var Localization = (function () {
             }
         }
     };
-    /**
-    * DIRECT LOADING
-    * to get translation by direct loading add the following code in each component:
-    *
-    * translate(key) {
-    *       return this.localization.translate(key);
-    * }
-    *
-    * and in the view:
-    *
-    * <p>{{ translate('EXAMPLE') }}</p>
-    */
-    // get translation by direct loading
+    // get translation
     Localization.prototype.translate = function (key) {
-        var translation = this.translationsData[this.locale]; // get translations by locale       
-        var value = translation[key]; // get translated value by key
-        return value;
-    };
-    /**
-     * ASYNCHRONOUS LOADING
-     * to get translation by asynchronous loading add the following code in each component:
-     *
-     * translate(key) {
-     *      return this.localization.asyncTranslate(key);
-     * }
-     *
-     * and in the view:
-     *
-     * <p>{{ translate('EXAMPLE') }}</p>
-     */
-    // get translation by asynchronously loading
-    Localization.prototype.asyncTranslate = function (key) {
-        var value = this.translationsData[key]; // get translated value by key
+        var value;
+        if (this.translationsData[this.locale] == null) {
+            // get translation by asynchronously loading
+            value = this.translationsData[key]; // get translated value by key
+        }
+        else {
+            // get translation by direct loading
+            var translation = this.translationsData[this.locale]; // get translations by locale       
+            value = translation[key]; // get translated value by key          
+        }
         return value;
     };
     // cookies methods
@@ -209,3 +205,24 @@ var Localization = (function () {
 })();
 exports.Localization = Localization;
 // end localization class
+// translate pipe function
+var LocalizationPipe = (function () {
+    function LocalizationPipe(localization) {
+        this.localization = localization;
+    }
+    // translate pipe transform method
+    LocalizationPipe.prototype.transform = function (key) {
+        return this.localization.translate(key);
+    };
+    LocalizationPipe = __decorate([
+        angular2_2.Pipe({
+            name: 'translate',
+            pure: false // required to update the value
+        }),
+        angular2_1.Injectable(), 
+        __metadata('design:paramtypes', [Localization])
+    ], LocalizationPipe);
+    return LocalizationPipe;
+})();
+exports.LocalizationPipe = LocalizationPipe;
+// end localization pipe class 

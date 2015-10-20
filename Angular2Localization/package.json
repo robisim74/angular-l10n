@@ -1,0 +1,8 @@
+{
+  "name": "angular2localization",
+  "version": "1.0.0",
+  "dependencies": {
+    "angular2": "2.0.0-alpha.44",
+    "systemjs": "0.19.2"
+  }
+}

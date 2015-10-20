@@ -12,7 +12,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var angular2_1 = require('angular2/angular2');
 var http_1 = require('angular2/http'); // http module
 var home_1 = require('./components/home/home');
-var localization_1 = require('./services/localization'); // localization class
+var localization_1 = require('./services/localization'); // localization class & pipe
 var app = (function () {
     function app(localization) {
         // DIRECT LOADING
@@ -51,20 +51,6 @@ var app = (function () {
         this.localization.translationProvider('./resources/locale-'); // required: initialize translation provider (parameter: path prefix)
         // end localization
     }
-    // DIRECT LOADING
-    // UNCOMMENT FOLLOWING CODE FOR DIRECT LOADING
-    //// translation: direct loading
-    //translate(key) {
-    //
-    //    return this.localization.translate(key);
-    //
-    //}
-    // ASYNCHRONOUS LOADING
-    // COMMENT FOLLOWING CODE IF DIRECT LOADING
-    // translation: asynchronous loading  
-    app.prototype.translate = function (key) {
-        return this.localization.asyncTranslate(key);
-    };
     // CHANGE LANGUAGE
     // return the current language
     app.prototype.currentLanguage = function () {
@@ -75,14 +61,13 @@ var app = (function () {
         this.localization.setCurrentLanguage(locale);
     };
     app = __decorate([
-        // localization class
+        // localization class & pipe
         angular2_1.Component({
             selector: 'app',
-            bindings: [localization_1.Localization] // localization binding: inherited by all descendants
-        }),
-        angular2_1.View({
             templateUrl: './app.html',
-            directives: [home_1.home, angular2_1.NgIf]
+            directives: [home_1.home, angular2_1.NgIf],
+            providers: [localization_1.Localization, localization_1.LocalizationPipe],
+            pipes: [localization_1.LocalizationPipe] // add in each component to invoke the transform method
         }), 
         __metadata('design:paramtypes', [localization_1.Localization])
     ], app);
