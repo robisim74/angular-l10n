@@ -6,10 +6,10 @@
 // https://github.com/robisim74/angular2localization
 
 // dependencies:
-// - angular: v2.0.0-alpha.45
+// - angular: v2.0.0-alpha.46
 
 import {Injectable} from 'angular2/angular2';
-import {Http} from 'angular2/http';
+import {Http, Response} from 'angular2/http';
 import {Pipe, PipeTransform} from 'angular2/angular2';
 
 /**
@@ -136,7 +136,7 @@ import {Pipe, PipeTransform} from 'angular2/angular2';
         
         // angular 2 http module
         this.http.get(url)
-            .map(res => res.json())
+            .map((res: Response) => res.json())
             .subscribe(res => this.translationsData = res, (exception: any) => this.onError, this.onCompleted);
 
     }
