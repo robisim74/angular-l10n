@@ -6,11 +6,12 @@
 // https://github.com/robisim74/angular2localization
 
 // dependencies:
-// - angular: v2.0.0-alpha.46
+// - angular: v2.0.0-alpha.52
 
 import {Injectable} from 'angular2/angular2';
 import {Http, Response} from 'angular2/http';
 import {Pipe, PipeTransform} from 'angular2/angular2';
+import 'rxjs/operators/map';
 
 /**
  * localization is an injectable class that use angular 2 http module
@@ -199,6 +200,13 @@ import {Pipe, PipeTransform} from 'angular2/angular2';
             // get translation by direct loading
             var translation: any = this.translationsData[this.locale]; // get translations by locale       
             value = translation[key]; // get translated value by key          
+        }
+        
+        // if the key value is not present, the same key is returned (see issue #1)
+        if (value == null){
+            
+            value = key;
+            
         }
 
         return value;

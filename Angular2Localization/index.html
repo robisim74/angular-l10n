@@ -8,12 +8,17 @@
     <title>angular 2 localization</title>
 
     <!--frameworks-->
-    <!--angular 2 v2.0.0-alpha.46 imports-->
+    <!--angular 2 v2.0.0-alpha.52 imports-->
     <script src="node_modules/systemjs/dist/system.src.js"></script>
     <script>
         // configure system loader
         System.config({
-            defaultJSExtensions: true
+            defaultJSExtensions: true,
+            paths: {
+                'rxjs/observable/*' : './node_modules/rxjs/add/observable/*.js',
+                'rxjs/operators/*' : './node_modules/rxjs/add/operator/*.js',
+                'rxjs/*' : './node_modules/rxjs/*.js'
+            }
         });
     </script>
     <script src="node_modules/angular2/bundles/angular2.dev.js"></script>

@@ -21,8 +21,8 @@
             <a href="#" class="dropdown-toggle" data-toggle="dropdown" data-target="#">{{ 'CHANGE_LANGUAGE' | translate }} <span class="caret"></span></a>
             <ul class="dropdown-menu">
               
-              <li><a class="btn btn-default btn-block" (click)="selectLanguage('en')">&nbsp;English&nbsp;<i class="glyphicon glyphicon-ok" *ng-if="currentLanguage() == 'en'"></i></a></li>
-              <li><a class="btn btn-default btn-block" (click)="selectLanguage('it')">&nbsp;Italiano&nbsp;<i class="glyphicon glyphicon-ok" *ng-if="currentLanguage() == 'it'"></i></a></li>
+              <li><a class="btn btn-default btn-block" (click)="selectLanguage('en')">&nbsp;English&nbsp;<i class="glyphicon glyphicon-ok" *ngIf="currentLanguage() == 'en'"></i></a></li>
+              <li><a class="btn btn-default btn-block" (click)="selectLanguage('it')">&nbsp;Italiano&nbsp;<i class="glyphicon glyphicon-ok" *ngIf="currentLanguage() == 'it'"></i></a></li>
               <!-- add a new language here -->
             
             </ul>
