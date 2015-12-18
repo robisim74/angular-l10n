@@ -1,4 +1,5 @@
-import {Component, View, bootstrap, NgIf} from 'angular2/angular2';
+import {Component} from 'angular2/core';
+import {bootstrap} from 'angular2/platform/browser';
 import {HTTP_PROVIDERS} from 'angular2/http'; // http module
 
 import {home} from './components/home/home';
@@ -8,7 +9,7 @@ import {Localization, LocalizationPipe} from './services/localization'; // local
 @Component({
     selector: 'app',
     templateUrl: './app.html', // component cannot have both pipes and @View set at the same time
-    directives: [home, NgIf],
+    directives: [home],
     providers: [Localization, LocalizationPipe], // localization providers: inherited by all descendants
     pipes: [LocalizationPipe] // add in each component to invoke the transform method
 })

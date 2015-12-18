@@ -8,41 +8,46 @@
     <title>angular 2 localization</title>
 
     <!--frameworks-->
-    <!--angular 2 v2.0.0-alpha.52 imports-->
+    <!--load angular 2 v2.0.0-beta.0 libraries-->
+    <script src="node_modules/es6-promise/dist/es6-promise.min.js"></script>
+    <script src="node_modules/es6-shim/es6-shim.js"></script>
+    <script src="node_modules/angular2/bundles/angular2-polyfills.js"></script>
     <script src="node_modules/systemjs/dist/system.src.js"></script>
+    <script src="node_modules/rxjs/bundles/Rx.js"></script>
+
+    <!--configure systemjs-->
     <script>
-        // configure system loader
         System.config({
             defaultJSExtensions: true,
             paths: {
                 'rxjs/observable/*' : './node_modules/rxjs/add/observable/*.js',
                 'rxjs/operators/*' : './node_modules/rxjs/add/operator/*.js',
                 'rxjs/*' : './node_modules/rxjs/*.js'
-            }
+            } // operators and observables from rxjs (e.g. .map(), .toArray(), .toPromise(), etc ) need to be explicitly imported
         });
     </script>
+
     <script src="node_modules/angular2/bundles/angular2.dev.js"></script>
     <script src="node_modules/angular2/bundles/http.dev.js"></script>
-
-    <!--libraries-->
-    <!--jquery-->
-    <script src="http://code.jquery.com/jquery-2.1.4.min.js"></script>
 
     <!--css-->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
 </head>
 
+<!--3. display the application-->
+
 <body>
 
     <app></app>
-    <!--route component-->
 
     <script>
         // bootstrap the angular 2 application
         System.import('app')
+            .then(null, console.error.bind(console));
     </script>
 
     <!--scripts-->
+    <script src="http://code.jquery.com/jquery-2.1.4.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
 
 </body>
