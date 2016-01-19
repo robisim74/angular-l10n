@@ -38,20 +38,20 @@ var translationEN = {
 }
 // add a new translation here
  
-this.localization.addTranslation('en', translationEN); // required (parameters: language, translation)
+this.localization.addTranslation('en', translationEN); // required: add language and translation
 this.localization.addTranslation('it', translationIT);
 // add a new language here 
-this.localization.definePreferredLanguage('en', 30); // required: define preferred language (parameter: default language, expires (No days) - if omitted, the cookie becomes a session cookie)
+this.localization.definePreferredLanguage('en', 30); // required: define preferred language and expiry (No days) - if omitted, the cookie becomes a session cookie
 ```
 
 ### Asynchronous loading
 To inizialize localization by asynchronous loading add the following code in the body of constructor of route component:
 ```TypeScript
-this.localization.addTranslation('en'); // required: add a new translations (parameter: a new language) 
+this.localization.addTranslation('en'); // required: required: add a new translations
 this.localization.addTranslation('it');
 // add a new language here 
-this.localization.definePreferredLanguage('en', 30); // required: define preferred language (parameter: default language, expires (No days) - if omitted, the cookie becomes a session cookie)
-this.localization.translationProvider('./resources/locale-'); // required: initialize translation provider (parameter: path prefix)
+this.localization.definePreferredLanguage('en', 30); // required: define preferred language and expiry (No days) - if omitted, the cookie becomes a session cookie
+this.localization.translationProvider('./resources/locale-'); // required: initialize translation provider with the path prefix
 ```
 and create the json files of translations such as `locale-en.json` (url is obtained concatenating {prefix} + {locale language code} + ".json").
 
@@ -75,7 +75,7 @@ selectLanguage(locale) {
      this.localization.setCurrentLanguage(locale);
 }
 ```
-where locale parameter is the language code; then add in the view:
+where `locale` parameter is the language code; then add in the view:
 ```Html
 <a (click)="selectLanguage('en')">English<</a>
 ...

@@ -1,12 +1,11 @@
-﻿// ANGULAR 2 LOCALIZATION
-// an injectable class for localization of angular 2 applications
-// by direct or asynchronous loading of translations
-// written by roberto simonetti
-// MIT license
-// https://github.com/robisim74/angular2localization
-
-// dependencies:
-// - angular: v2.0.0-beta.0
+﻿/**
+ * ANGULAR 2 LOCALIZATION
+ * an injectable class for localization of angular 2 applications
+ * by direct or asynchronous loading of translations
+ * written by roberto simonetti
+ * MIT license
+ * https://github.com/robisim74/angular2localization
+ */
 
 import {Injectable} from 'angular2/core';
 import {Http, Response} from 'angular2/http';
@@ -30,9 +29,7 @@ import 'rxjs/operators/map';
  *  }
  * }
  * bootstrap(app, [HTTP_PROVIDERS]);
- */
-
-/**
+ *
  * DIRECT LOADING
  * to inizialize localization by direct loading add the following code in the body of constructor of route component:
  * 
@@ -42,27 +39,23 @@ import 'rxjs/operators/map';
  * }
  * // add a new translation here
  * 
- * this.localization.addTranslation('en', translationEN); // required (parameters: language, translation)
+ * this.localization.addTranslation('en', translationEN); // required: add language and translation
  * this.localization.addTranslation('it', translationIT);
  * // add a new language here 
- * this.localization.definePreferredLanguage('en', 30); // required: define preferred language (parameter: default language, expires (No days) - if omitted, the cookie becomes a session cookie)
- */
- 
-/**
+ * this.localization.definePreferredLanguage('en', 30); // required: define preferred language and expiry (No days) - if omitted, the cookie becomes a session cookie
+ *
  * ASYNCHRONOUS LOADING
  * to inizialize localization by asynchronous loading add the following code in the body of constructor of route component:
  * 
- * this.localization.addTranslation('en'); // required: add a new translations (parameter: a new language) 
+ * this.localization.addTranslation('en'); // required: add a new translations
  * this.localization.addTranslation('it');
  * // add a new language here
- * this.localization.definePreferredLanguage('en', 30); // required: define preferred language (parameter: default language, expires (No days) - if omitted, the cookie becomes a session cookie)
- * this.localization.translationProvider('./resources/locale-'); // required: initialize translation provider (parameter: path prefix)
+ * this.localization.definePreferredLanguage('en', 30); // required: define preferred language and expiry (No days) - if omitted, the cookie becomes a session cookie
+ * this.localization.translationProvider('./resources/locale-'); // required: initialize translation provider with the path prefix
  * 
  * and create the json files of translations such as "locale-en.json"
- * (url is obtained concatenating {prefix} + {locale language code} + ".json")
- */
-
-/**
+ * (the url is obtained concatenating {prefix} + {locale language code} + ".json")
+ *
  * GET TRANSLATION
  * to get translation by direct or asyncronous loading add in each component:
  * 
@@ -74,9 +67,21 @@ import 'rxjs/operators/map';
  * and in the template:
  * 
  * <p>{{ 'EXAMPLE' | translate }}</p>
+ * 
+ * CHANGE LANGUAGE
+ * to change language at runtime, add in the component:
+ *  
+ * selectLanguage(locale) {
+ *      this.localization.setCurrentLanguage(locale);
+ * }
+ * 
+ * where locale parameter is the language code; then add in the view:
+ * 
+ * <a (click)="selectLanguage('en')">English<</a>
+ * ...
+ * 
+ * @author roberto simonetti
  */
-
-// localization class
 @Injectable() export class Localization {
 
     prefix: string;
@@ -90,8 +95,13 @@ import 'rxjs/operators/map';
     expires: number; // define when the cookie will be removed
 
     constructor(public http: Http) { }
-            
-    // direct & asynchronous loading: add a new translation
+
+    /**
+     * direct & asynchronous loading: add a new translation
+     * 
+     * @param locale the language of translation
+     * @param translation nullable
+     */
     addTranslation(locale: string, translation?: any) {
 
         this.languagesData.push(locale);
@@ -102,8 +112,13 @@ import 'rxjs/operators/map';
         }
 
     }
-    
-    // define preferred language
+
+    /**
+     * define preferred language
+     * 
+     * @param defaultLanguage
+     * @param expires nullable expires (No days)
+     */
     definePreferredLanguage(defaultLanguage: string, expires?: number) {
 
         this.expires = expires;
@@ -129,7 +144,11 @@ import 'rxjs/operators/map';
 
     }
     
-    // asinchronous loading: define translation provider & get json data
+    /**
+     * asinchronous loading: define translation provider & get json data
+     * 
+     * @param prefix the path prefix
+     */
     translationProvider(prefix: string) {
 
         this.prefix = prefix;
@@ -152,28 +171,22 @@ import 'rxjs/operators/map';
 
     }
         
-    // get current language
+    /**
+     * get current language
+     * 
+     * @return the current language
+     */
     getCurrentLanguage() {
 
         return this.locale;
 
     }
-    
+
     /**
-     * CHANGE LANGUAGE
-     * to change language at runtime, add in the component:
-     *  
-     * selectLanguage(locale) {
-     *      this.localization.setCurrentLanguage(locale);
-     * }
+     * set current language
      * 
-     * where locale parameter is the language code; then add in the view:
-     * 
-     * <a (click)="selectLanguage('en')">English<</a>
-     * ...
+     * @param locale new language
      */
-        
-    // set current language
     setCurrentLanguage(locale: string) {
 
         if (this.locale != locale) { // check if language is changed
@@ -187,7 +200,12 @@ import 'rxjs/operators/map';
 
     }
 
-    // get translation
+    /**
+     * get translation
+     * 
+     * @param key of translation
+     * @return value of translation
+     */
     translate(key: string) {
 
         var value: string;
@@ -203,19 +221,24 @@ import 'rxjs/operators/map';
         }
         
         // if the key value is not present, the same key is returned (see issue #1)
-        if (value == null){
-            
+        if (value == null) {
+
             value = key;
-            
+
         }
 
         return value;
 
     }
     
-    // cookies methods
-    // set cookie
-    setCookie(name: string, value: string, days?: number) {
+    /**
+     * set cookie
+     * 
+     * @param name
+     * @param value
+     * @param days expiry
+     */
+    private setCookie(name: string, value: string, days?: number) {
 
         if (days != null) {
             var expirationDate: Date = new Date();
@@ -229,8 +252,12 @@ import 'rxjs/operators/map';
         document.cookie = name + "=" + value + expires + "; path=/";
 
     }
-    // get cookie
-    getCookie(name: string) {
+    /**
+     * get cookie
+     * 
+     * @param name
+     */
+    private getCookie(name: string) {
 
         name += "=";
 
@@ -251,20 +278,30 @@ import 'rxjs/operators/map';
     }
 
 }
-// end localization class
 
-// translate pipe function
+/**
+ * translate pipe function
+ */
 @Pipe({
     name: 'translate',
     pure: false // required to update the value
 })
 
-// localization pipe class
+/**
+ * localization pipe class
+ * 
+ * @author roberto simonetti
+ */
 @Injectable() export class LocalizationPipe implements PipeTransform {
 
     constructor(public localization: Localization) { }
 
-    // translate pipe transform method
+    /**
+     * translate pipe transform method
+     * 
+     * @param key the translation key
+     * @return the translated value
+     */
     transform(key: string) {
 
         return this.localization.translate(key);
@@ -272,4 +309,3 @@ import 'rxjs/operators/map';
     }
 
 }
-// end localization pipe class

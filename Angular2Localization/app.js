@@ -50,20 +50,20 @@ System.register(['angular2/core', 'angular2/platform/browser', 'angular2/http', 
                     //}
                     //// add a new translation here 
                     //     
-                    //this.localization.addTranslation('en', translationEN); // required (parameters: language, translation)
+                    //this.localization.addTranslation('en', translationEN); // required: add language and translation
                     //this.localization.addTranslation('it', translationIT);  
                     //// add a new language here  
-                    //this.localization.definePreferredLanguage('en', 30); // required: define preferred language (parameter: default language, expires (No days) - if omitted, the cookie becomes a session cookie)
+                    //this.localization.definePreferredLanguage('en', 30); // required: define preferred language and expiry (No days) - if omitted, the cookie becomes a session cookie
                     //// end localization
                     this.localization = localization;
                     // ASYNCHRONOUS LOADING
                     // COMMENT FOLLOWING CODE IF DIRECT LOADING
                     // initialize localization: asynchronous loading               
-                    this.localization.addTranslation('en'); // required: add a new translations (parameter: a new language)
+                    this.localization.addTranslation('en'); // required: add a new translations
                     this.localization.addTranslation('it');
                     // add a new language here
-                    this.localization.definePreferredLanguage('en', 30); // required: define preferred language (parameter: default language, expires (No days) - if omitted, the cookie becomes a session cookie)
-                    this.localization.translationProvider('./resources/locale-'); // required: initialize translation provider (parameter: path prefix)
+                    this.localization.definePreferredLanguage('en', 30); // required: define preferred language and expiry (No days) - if omitted, the cookie becomes a session cookie
+                    this.localization.translationProvider('./resources/locale-'); // required: initialize translation provider with the path prefix
                     // end localization
                 }
                 // CHANGE LANGUAGE
