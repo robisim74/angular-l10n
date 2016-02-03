@@ -1,5 +1,5 @@
 # Angular 2 Localization
-> Angular 2 Localization is an implementation experiment of translation in the new Angular 2 apps using TypeScript.
+> An injectable class to translate in the new Angular 2 apps using TypeScript.
 > It works both through direct and asynchronous loading of translations.
 
 # Contents

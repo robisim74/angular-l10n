@@ -1,7 +1,7 @@
 ﻿/**
  * ANGULAR 2 LOCALIZATION
- * an injectable class for localization of angular 2 applications
- * by direct or asynchronous loading of translations
+ * an injectable class to translate in the new Angular 2 apps using TypeScript
+ * through direct or asynchronous loading of translations
  * written by roberto simonetti
  * MIT license
  * https://github.com/robisim74/angular2localization
