@@ -1,6 +1,6 @@
 ﻿/**
  * ANGULAR 2 LOCALIZATION
- * an injectable class to translate in the new Angular 2 apps using TypeScript
+ * an injectable class to translate in the new angular 2 applications using typescript
  * through direct or asynchronous loading of translations
  * written by roberto simonetti
  * MIT license
@@ -10,7 +10,7 @@
 import {Injectable} from 'angular2/core';
 import {Http, Response} from 'angular2/http';
 import {Pipe, PipeTransform} from 'angular2/core';
-import 'rxjs/operators/map';
+import 'rxjs/add/operator/map';
 
 /**
  * localization is an injectable class that use angular 2 http module

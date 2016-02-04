@@ -9,29 +9,26 @@
 
     <!--frameworks-->
     <!--load angular 2 libraries-->
-    <script src="node_modules/es6-promise/dist/es6-promise.min.js"></script>
     <script src="node_modules/es6-shim/es6-shim.js"></script>
     <script src="node_modules/angular2/bundles/angular2-polyfills.js"></script>
     <script src="node_modules/systemjs/dist/system.src.js"></script>
-    <script src="node_modules/rxjs/bundles/Rx.js"></script>
+    <script src="node_modules/rxjs/bundles/Rx.min.js"></script>
 
     <!--configure systemjs-->
     <script>
         System.config({
+            map: {
+                'rxjs': 'node_modules/rxjs'
+            },
             defaultJSExtensions: true,
-            paths: {
-                'rxjs/observable/*' : './node_modules/rxjs/add/observable/*.js',
-                'rxjs/operators/*' : './node_modules/rxjs/add/operator/*.js',
-                'rxjs/*' : './node_modules/rxjs/*.js'
-            } // operators and observables from rxjs (e.g. .map(), .toArray(), .toPromise(), etc ) need to be explicitly imported
         });
     </script>
 
-    <script src="node_modules/angular2/bundles/angular2.dev.js"></script>
-    <script src="node_modules/angular2/bundles/http.dev.js"></script>
+    <script src="node_modules/angular2/bundles/angular2.min.js"></script>
+    <script src="node_modules/angular2/bundles/http.min.js"></script>
 
     <!--css-->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
 </head>
 
 <!--display the application-->
@@ -46,8 +43,8 @@
     </script>
 
     <!--scripts-->
-    <script src="http://code.jquery.com/jquery-2.1.4.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+    <script src="http://code.jquery.com/jquery-2.2.0.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
 
 </body>
 

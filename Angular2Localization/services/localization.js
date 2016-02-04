@@ -1,12 +1,12 @@
 /**
  * ANGULAR 2 LOCALIZATION
- * an injectable class to translate in the new Angular 2 apps using TypeScript
+ * an injectable class to translate in the new angular 2 applications using typescript
  * through direct or asynchronous loading of translations
  * written by roberto simonetti
  * MIT license
  * https://github.com/robisim74/angular2localization
  */
-System.register(['angular2/core', 'angular2/http', 'rxjs/operators/map'], function(exports_1) {
+System.register(['angular2/core', 'angular2/http', 'rxjs/add/operator/map'], function(exports_1) {
     var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
         var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
         if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
