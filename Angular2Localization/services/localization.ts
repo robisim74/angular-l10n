@@ -1,8 +1,8 @@
 ﻿/**
  * ANGULAR 2 LOCALIZATION
- * an injectable class to translate in the new angular 2 applications using typescript
- * through direct or asynchronous loading of translations
- * written by roberto simonetti
+ * An injectable class to translate in the new Angular 2 applications using TypeScript
+ * through the direct or asynchronous loading of translations
+ * written by Roberto Simonetti
  * MIT license
  * https://github.com/robisim74/angular2localization
  */
@@ -13,14 +13,14 @@ import {Pipe, PipeTransform} from 'angular2/core';
 import 'rxjs/add/operator/map';
 
 /**
- * localization is an injectable class that use angular 2 http module
- * to start, add in route component:
+ * Localization is an injectable class that use the Angular 2 Http module.
+ * To start, add in the route component:
  * 
  * @Component({
  *      selector: 'app',
  *      ...
- *      providers: [Localization, LocalizationPipe], // localization providers: inherited by all descendants
- *      pipes: [LocalizationPipe] // add in each component to invoke the transform method
+ *      providers: [Localization, LocalizationPipe], // Localization providers: inherited by all descendants.
+ *      pipes: [LocalizationPipe] // Add in each component to invoke the transform method.
  * })
  * ...
  * class app {
@@ -31,33 +31,33 @@ import 'rxjs/add/operator/map';
  * bootstrap(app, [HTTP_PROVIDERS]);
  *
  * DIRECT LOADING
- * to inizialize localization by direct loading add the following code in the body of constructor of route component:
+ * To inizialize the Localization class for the direct loading add the following code in the body of constructor of the route component:
  * 
  * var translationEN = {
  *      EXAMPLE: 'example',
  *      ...
  * }
- * // add a new translation here
+ * // Add a new translation here.
  * 
- * this.localization.addTranslation('en', translationEN); // required: add language and translation
+ * this.localization.addTranslation('en', translationEN); // Required: adds language and translation.
  * this.localization.addTranslation('it', translationIT);
- * // add a new language here 
- * this.localization.definePreferredLanguage('en', 30); // required: define preferred language and expiry (No days) - if omitted, the cookie becomes a session cookie
+ * // Add a new language here. 
+ * this.localization.definePreferredLanguage('en', 30); // Required: defines preferred language and expiry (No days). If omitted, the cookie becomes a session cookie.
  *
  * ASYNCHRONOUS LOADING
- * to inizialize localization by asynchronous loading add the following code in the body of constructor of route component:
+ * To inizialize the Localization class for the asynchronous loading add the following code in the body of constructor of the route component:
  * 
- * this.localization.addTranslation('en'); // required: add a new translations
+ * this.localization.addTranslation('en'); // Required: adds a new translation.
  * this.localization.addTranslation('it');
- * // add a new language here
- * this.localization.definePreferredLanguage('en', 30); // required: define preferred language and expiry (No days) - if omitted, the cookie becomes a session cookie
- * this.localization.translationProvider('./resources/locale-'); // required: initialize translation provider with the path prefix
+ * // Add a new language here.
+ * this.localization.definePreferredLanguage('en', 30); // Required: defines preferred language and expiry (No days). If omitted, the cookie becomes a session cookie.
+ * this.localization.translationProvider('./resources/locale-'); // Required: initializes the translation provider with the path prefix.
  * 
- * and create the json files of translations such as "locale-en.json"
- * (the url is obtained concatenating {prefix} + {locale language code} + ".json")
+ * and create the json files of the translations such as "locale-en.json"
+ * (the URL is obtained concatenating {prefix} + {locale language code} + ".json").
  *
- * GET TRANSLATION
- * to get translation by direct or asyncronous loading add in each component:
+ * GET THE TRANSLATION
+ * To get the translation through direct or asyncronous loading add in each component:
  * 
  * @Component({
  *      ...
@@ -69,68 +69,68 @@ import 'rxjs/add/operator/map';
  * <p>{{ 'EXAMPLE' | translate }}</p>
  * 
  * CHANGE LANGUAGE
- * to change language at runtime, add in the component:
+ * To change language at runtime, add in the component:
  *  
  * selectLanguage(locale) {
  *      this.localization.setCurrentLanguage(locale);
  * }
  * 
- * where locale parameter is the language code; then add in the view:
+ * where the locale parameter is the language code; then add in the view:
  * 
  * <a (click)="selectLanguage('en')">English<</a>
  * ...
  * 
- * @author roberto simonetti
+ * @author Roberto Simonetti
  */
 @Injectable() export class Localization {
 
     prefix: string;
 
-    locale: string; // language code
+    locale: string; // Language code.
     
-    languagesData: Array<string> = []; // array of available languages codes
+    languagesData: Array<string> = []; // Array of the available languages codes.
     
-    translationsData: any = {}; // object of translations
+    translationsData: any = {}; // Object of the translations.
     
-    expires: number; // define when the cookie will be removed
+    expires: number; // Defines when the cookie will be removed.
 
     constructor(public http: Http) { }
 
     /**
-     * direct & asynchronous loading: add a new translation
+     * Direct & asynchronous loading: adds a new translation.
      * 
-     * @param locale the language of translation
-     * @param translation nullable
+     * @param locale The language of translation
+     * @param translation Nullable
      */
     addTranslation(locale: string, translation?: any) {
 
         this.languagesData.push(locale);
 
         if (translation != null) {
-            // direct loading
+            // Direct loading.
             this.translationsData[locale] = translation;
         }
 
     }
 
     /**
-     * define preferred language
+     * Defines the preferred language.
      * 
      * @param defaultLanguage
-     * @param expires nullable expires (No days)
+     * @param expires Nullable expiry (No days)
      */
     definePreferredLanguage(defaultLanguage: string, expires?: number) {
 
         this.expires = expires;
         
-        // try to get cookie
-        this.locale = this.getCookie("locale"); // call get cookie method
+        // Tries to get the cookie.
+        this.locale = this.getCookie("locale"); // Calls the getCookie method.
 
         if (this.locale == null) {
-            // get current browser language or default language
+            // Gets the current browser language or the default language.
             var browserLanguage: string = navigator.language || navigator.userLanguage || navigator.browserLanguage || navigator.systemLanguage;
 
-            browserLanguage = browserLanguage.substring(0, 2); // get two-letter code    
+            browserLanguage = browserLanguage.substring(0, 2); // Gets the two-letter code.    
         
             if (this.languagesData.indexOf(browserLanguage) != -1) {
                 this.locale = browserLanguage;
@@ -139,22 +139,22 @@ import 'rxjs/add/operator/map';
                 this.locale = defaultLanguage;
             }
 
-            this.setCookie("locale", this.locale, this.expires); // call set cookie method
+            this.setCookie("locale", this.locale, this.expires); // Calls the setCookie method.
         }
 
     }
     
     /**
-     * asinchronous loading: define translation provider & get json data
+     * Asinchronous loading: defines the translation provider & gets the json data.
      * 
-     * @param prefix the path prefix
+     * @param prefix The path prefix
      */
     translationProvider(prefix: string) {
 
         this.prefix = prefix;
         var url: string = this.prefix + this.locale + '.json';
         
-        // angular 2 http module
+        // Angular 2 Http module.
         this.http.get(url)
             .map((res: Response) => res.json())
             .subscribe(res => this.translationsData = res, (exception: any) => this.onError, this.onCompleted);
@@ -172,9 +172,9 @@ import 'rxjs/add/operator/map';
     }
         
     /**
-     * get current language
+     * Gets the current language.
      * 
-     * @return the current language
+     * @return The current language.
      */
     getCurrentLanguage() {
 
@@ -183,44 +183,44 @@ import 'rxjs/add/operator/map';
     }
 
     /**
-     * set current language
+     * Sets the current language.
      * 
-     * @param locale new language
+     * @param locale The new language
      */
     setCurrentLanguage(locale: string) {
 
-        if (this.locale != locale) { // check if language is changed
-            this.setCookie("locale", locale, this.expires); // call set cookie method      
-            this.locale = locale; // set language code
+        if (this.locale != locale) { // Checks if the language is changed.
+            this.setCookie("locale", locale, this.expires); // Calls the setCookie method.      
+            this.locale = locale; // Sets the language code.
             
             if (this.prefix != null) {
-                this.translationProvider(this.prefix); // update translations data               
+                this.translationProvider(this.prefix); // Updates the translations data.               
             }
         }
 
     }
 
     /**
-     * get translation
+     * Gets the translation.
      * 
-     * @param key of translation
-     * @return value of translation
+     * @param key The key to be translated.
+     * @return The value of the translation.
      */
     translate(key: string) {
 
         var value: string;
 
         if (this.translationsData[this.locale] == null) {
-            // get translation by asynchronously loading
-            value = this.translationsData[key]; // get translated value by key
+            // Gets the translation through asynchronously loading.
+            value = this.translationsData[key]; // Gets the translated value by key.
         }
         else {
-            // get translation by direct loading
-            var translation: any = this.translationsData[this.locale]; // get translations by locale       
-            value = translation[key]; // get translated value by key          
+            // Gets the translation through direct loading.
+            var translation: any = this.translationsData[this.locale]; // Gets the translations by locale.       
+            value = translation[key]; // Gets the translated value by key.          
         }
         
-        // if the key value is not present, the same key is returned (see issue #1)
+        // If the key value is not present, the same key is returned (see issue #1).
         if (value == null) {
 
             value = key;
@@ -232,11 +232,11 @@ import 'rxjs/add/operator/map';
     }
     
     /**
-     * set cookie
+     * Sets cookie.
      * 
      * @param name
      * @param value
-     * @param days expiry
+     * @param days Expiry
      */
     private setCookie(name: string, value: string, days?: number) {
 
@@ -253,7 +253,7 @@ import 'rxjs/add/operator/map';
 
     }
     /**
-     * get cookie
+     * Gets cookie.
      * 
      * @param name
      */
@@ -280,27 +280,27 @@ import 'rxjs/add/operator/map';
 }
 
 /**
- * translate pipe function
+ * Translate pipe function.
  */
 @Pipe({
     name: 'translate',
-    pure: false // required to update the value
+    pure: false // Required to update the value.
 })
 
 /**
- * localization pipe class
+ * Localization pipe class.
  * 
- * @author roberto simonetti
+ * @author Roberto Simonetti
  */
 @Injectable() export class LocalizationPipe implements PipeTransform {
 
     constructor(public localization: Localization) { }
 
     /**
-     * translate pipe transform method
+     * Translate pipe transform method.
      * 
-     * @param key the translation key
-     * @return the translated value
+     * @param key The translation key.
+     * @return The translated value.
      */
     transform(key: string) {
 

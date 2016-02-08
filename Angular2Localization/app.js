@@ -32,8 +32,8 @@ System.register(['angular2/core', 'angular2/platform/browser', 'angular2/http', 
                 function app(localization) {
                     // DIRECT LOADING
                     // UNCOMMENT FOLLOWING CODE FOR DIRECT LOADING
-                    //// initialize localization: direct loading
-                    //// translations data
+                    //// Initializes the Localization class: direct loading.
+                    //// Translations data.
                     // var translationEN = {
                     //    TITLE: 'ANGULAR 2 LOCALIZATION',
                     //    CHANGE_LANGUAGE: 'change language',
@@ -45,50 +45,50 @@ System.register(['angular2/core', 'angular2/platform/browser', 'angular2/http', 
                     //    TITLE: 'ANGULAR 2 LOCALIZZAZIONE',
                     //    CHANGE_LANGUAGE: 'cambia lingua',
                     //    HELLO: 'ciao',
-                    //    SUBTITLE: "carimento diretto",
+                    //    SUBTITLE: "caricamento diretto",
                     //    DESCRIPTION: "questa traduzione è stata caricata direttamente"
                     //}
-                    //// add a new translation here 
+                    //// Add a new translation here. 
                     //     
-                    //this.localization.addTranslation('en', translationEN); // required: add language and translation
+                    //this.localization.addTranslation('en', translationEN); // Required: adds language and translation.
                     //this.localization.addTranslation('it', translationIT);  
                     //// add a new language here  
-                    //this.localization.definePreferredLanguage('en', 30); // required: define preferred language and expiry (No days) - if omitted, the cookie becomes a session cookie
-                    //// end localization
+                    //this.localization.definePreferredLanguage('en', 30); // Required: defines preferred language and expiry (No days). If omitted, the cookie becomes a session cookie.
+                    //// End localization.
                     this.localization = localization;
                     // ASYNCHRONOUS LOADING
                     // COMMENT FOLLOWING CODE IF DIRECT LOADING
-                    // initialize localization: asynchronous loading               
-                    this.localization.addTranslation('en'); // required: add a new translations
+                    // Initializes the Localization class: asynchronous loading.               
+                    this.localization.addTranslation('en'); // Required: adds a new translation.
                     this.localization.addTranslation('it');
-                    // add a new language here
-                    this.localization.definePreferredLanguage('en', 30); // required: define preferred language and expiry (No days) - if omitted, the cookie becomes a session cookie
-                    this.localization.translationProvider('./resources/locale-'); // required: initialize translation provider with the path prefix
-                    // end localization
+                    // Add a new language here.
+                    this.localization.definePreferredLanguage('en', 30); // Required: defines preferred language and expiry (No days). If omitted, the cookie becomes a session cookie.
+                    this.localization.translationProvider('./resources/locale-'); // Required: initializes the translation provider with the path prefix.
+                    // End localization.
                 }
                 // CHANGE LANGUAGE
-                // return the current language
+                // Returns the current language.
                 app.prototype.currentLanguage = function () {
                     return this.localization.getCurrentLanguage();
                 };
-                // select language
+                // Sets a new language.
                 app.prototype.selectLanguage = function (locale) {
                     this.localization.setCurrentLanguage(locale);
                 };
                 app = __decorate([
-                    // localization class & pipe
+                    // Localization class & pipe.
                     core_1.Component({
                         selector: 'app',
                         templateUrl: './app.html',
                         directives: [home_1.home],
                         providers: [localization_1.Localization, localization_1.LocalizationPipe],
-                        pipes: [localization_1.LocalizationPipe] // add in each component to invoke the transform method
+                        pipes: [localization_1.LocalizationPipe] // Add in each component to invoke the transform method.
                     }), 
                     __metadata('design:paramtypes', [localization_1.Localization])
                 ], app);
                 return app;
             })();
-            browser_1.bootstrap(app, [http_1.HTTP_PROVIDERS]); // http providers
+            browser_1.bootstrap(app, [http_1.HTTP_PROVIDERS]); // Http providers.
         }
     }
 });

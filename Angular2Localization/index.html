@@ -8,13 +8,12 @@
     <title>angular 2 localization</title>
 
     <!--frameworks-->
-    <!--load angular 2 libraries-->
-    <script src="node_modules/es6-shim/es6-shim.js"></script>
+    <!--loads Angular 2 libraries-->
     <script src="node_modules/angular2/bundles/angular2-polyfills.js"></script>
     <script src="node_modules/systemjs/dist/system.src.js"></script>
     <script src="node_modules/rxjs/bundles/Rx.min.js"></script>
 
-    <!--configure systemjs-->
+    <!--configures SystemJS-->
     <script>
         System.config({
             map: {
@@ -24,20 +23,20 @@
         });
     </script>
 
-    <script src="node_modules/angular2/bundles/angular2.min.js"></script>
-    <script src="node_modules/angular2/bundles/http.min.js"></script>
+    <script src="node_modules/angular2/bundles/angular2.dev.js"></script>
+    <script src="node_modules/angular2/bundles/http.dev.js"></script>
 
-    <!--css-->
+    <!--CSS-->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
 </head>
 
-<!--display the application-->
+<!--displays the application-->
 <body>
 
     <app></app>
 
     <script>
-        // bootstrap the angular 2 application
+        // bootstraps the Angular 2 application
         System.import('app')
             .then(null, console.error.bind(console));
     </script>
