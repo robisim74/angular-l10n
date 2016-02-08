@@ -9,7 +9,7 @@ System.register(['angular2/core', '../../services/localization'], function(expor
         if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
     };
     var core_1, localization_1;
-    var home;
+    var HomeComponent;
     return {
         setters:[
             function (core_1_1) {
@@ -19,25 +19,25 @@ System.register(['angular2/core', '../../services/localization'], function(expor
                 localization_1 = localization_1_1;
             }],
         execute: function() {
-            home = (function () {
+            HomeComponent = (function () {
                 // Add a new property here.
-                function home() {
+                function HomeComponent() {
                     // Example of key injection from the component.
                     this.title = "HELLO"; // Sets the key.
                     // Add a new key here.   
                 }
-                home = __decorate([
+                HomeComponent = __decorate([
                     // Localization pipe.
                     core_1.Component({
-                        selector: 'home',
-                        templateUrl: './components/home/home.html',
+                        selector: 'home-component',
+                        templateUrl: './components/home/home.component.html',
                         pipes: [localization_1.LocalizationPipe] // Add in each component to invoke the transform method.
                     }), 
                     __metadata('design:paramtypes', [])
-                ], home);
-                return home;
+                ], HomeComponent);
+                return HomeComponent;
             })();
-            exports_1("home", home);
+            exports_1("HomeComponent", HomeComponent);
         }
     }
 });

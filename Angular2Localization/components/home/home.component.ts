@@ -3,12 +3,12 @@
 import {LocalizationPipe} from '../../services/localization'; // Localization pipe.
 
 @Component({
-    selector: 'home',
-    templateUrl: './components/home/home.html',
+    selector: 'home-component',
+    templateUrl: './components/home/home.component.html',
     pipes: [LocalizationPipe] // Add in each component to invoke the transform method.
 })
 
-export class home {
+export class HomeComponent {
 
     title: string;
     // Add a new property here.

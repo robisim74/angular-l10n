@@ -12,21 +12,21 @@
 
 ## How to use the class
 - Create the `services` folder in the root of your Angular 2 application, and copy `localization.ts`.
-- Add in route component:
+- Add in the route component:
 ```TypeScript
 @Component({
-      selector: 'app',
-      templateUrl: './app.html',
+      selector: 'app-component',
+      templateUrl: './app.component.html',
       providers: [Localization, LocalizationPipe], // Localization providers: inherited by all descendants.
       pipes: [LocalizationPipe] // Add in each component to invoke the transform method.
 })
 ...
-class app {
+class AppComponent {
      constructor(public localization: Localization){
      ...
  }
 }
-bootstrap(app, [HTTP_PROVIDERS]);
+bootstrap(AppComponent, [HTTP_PROVIDERS]);
 ```
 
 ### Direct loading

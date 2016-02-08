@@ -2,19 +2,19 @@ import {Component} from 'angular2/core';
 import {bootstrap} from 'angular2/platform/browser';
 import {HTTP_PROVIDERS} from 'angular2/http'; // Http module.
 
-import {home} from './components/home/home';
+import {HomeComponent} from './components/home/home.component';
 
 import {Localization, LocalizationPipe} from './services/localization'; // Localization class & pipe.
 
 @Component({
-    selector: 'app',
-    templateUrl: './app.html', // A component cannot have both pipes and @View set at the same time.
-    directives: [home],
+    selector: 'app-component',
+    templateUrl: './app.component.html', // A component cannot have both pipes and @View set at the same time.
+    directives: [HomeComponent],
     providers: [Localization, LocalizationPipe], // Localization providers: inherited by all descendants.
     pipes: [LocalizationPipe] // Add in each component to invoke the transform method.
 })
 
-class app {
+class AppComponent {
 
     constructor(public localization: Localization) { // Injects an instance of the Localization class in the constructor.
         
@@ -74,4 +74,4 @@ class app {
 
 }
 
-bootstrap(app, [HTTP_PROVIDERS]); // Http providers.
+bootstrap(AppComponent, [HTTP_PROVIDERS]); // Http providers.

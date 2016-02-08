@@ -17,18 +17,18 @@ import 'rxjs/add/operator/map';
  * To start, add in the route component:
  * 
  * @Component({
- *      selector: 'app',
+ *      selector: 'app-component',
  *      ...
  *      providers: [Localization, LocalizationPipe], // Localization providers: inherited by all descendants.
  *      pipes: [LocalizationPipe] // Add in each component to invoke the transform method.
  * })
  * ...
- * class app {
+ * class AppComponent {
  *      constructor(public localization: Localization){
  *      ...
  *  }
  * }
- * bootstrap(app, [HTTP_PROVIDERS]);
+ * bootstrap(AppComponent, [HTTP_PROVIDERS]);
  *
  * DIRECT LOADING
  * To inizialize the Localization class for the direct loading add the following code in the body of constructor of the route component:
@@ -162,7 +162,7 @@ import 'rxjs/add/operator/map';
     }
     onCompleted() {
 
-        console.log("translationProvider:", "http get completed");
+        console.log("translationProvider:", "http get method completed.");
 
     }
     onError(exception: any) {
