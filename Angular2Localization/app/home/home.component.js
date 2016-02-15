@@ -30,7 +30,7 @@ System.register(['angular2/core', '../../services/localization'], function(expor
                     // Localization pipe.
                     core_1.Component({
                         selector: 'home-component',
-                        templateUrl: './components/home/home.component.html',
+                        templateUrl: './app/home/home.component.html',
                         pipes: [localization_1.LocalizationPipe] // Add in each component to invoke the transform method.
                     }), 
                     __metadata('design:paramtypes', [])

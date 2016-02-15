@@ -11,35 +11,37 @@
     <!--loads Angular 2 libraries-->
     <script src="node_modules/angular2/bundles/angular2-polyfills.js"></script>
     <script src="node_modules/systemjs/dist/system.src.js"></script>
-    <script src="node_modules/rxjs/bundles/Rx.min.js"></script>
+    <script src="node_modules/rxjs/bundles/Rx.js"></script>
+    <script src="node_modules/angular2/bundles/angular2.dev.js"></script>
+    <script src="node_modules/angular2/bundles/http.dev.js"></script>
 
     <!--configures SystemJS-->
     <script>
         System.config({
-            map: {
-                'rxjs': 'node_modules/rxjs'
-            },
-            defaultJSExtensions: true,
-        });
+        packages: {        
+          app: {
+            format: 'register',
+            defaultExtension: 'js'
+          },
+          services: {
+            format: 'register',
+            defaultExtension: 'js'
+          }
+        }
+      });
+      System.import('app/main')
+            .then(null, console.error.bind(console));
     </script>
-
-    <script src="node_modules/angular2/bundles/angular2.dev.js"></script>
-    <script src="node_modules/angular2/bundles/http.dev.js"></script>
 
     <!--CSS-->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
 </head>
 
 <!--displays the application-->
+
 <body>
 
     <app-component></app-component>
-
-    <script>
-        // bootstraps the Angular 2 application
-        System.import('app.component')
-            .then(null, console.error.bind(console));
-    </script>
 
     <!--scripts-->
     <script src="http://code.jquery.com/jquery-2.2.0.min.js"></script>

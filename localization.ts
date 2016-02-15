@@ -23,11 +23,14 @@ import 'rxjs/add/operator/map';
  *      pipes: [LocalizationPipe] // Add in each component to invoke the transform method.
  * })
  * ...
- * class AppComponent {
+ * export class AppComponent {
  *      constructor(public localization: Localization){
  *      ...
  *  }
  * }
+ * 
+ * and in the main:
+ * 
  * bootstrap(AppComponent, [HTTP_PROVIDERS]);
  *
  * DIRECT LOADING

@@ -4,7 +4,7 @@ import {LocalizationPipe} from '../../services/localization'; // Localization pi
 
 @Component({
     selector: 'home-component',
-    templateUrl: './components/home/home.component.html',
+    templateUrl: './app/home/home.component.html',
     pipes: [LocalizationPipe] // Add in each component to invoke the transform method.
 })
 

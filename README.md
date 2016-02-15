@@ -16,7 +16,7 @@
 ```TypeScript
 @Component({
       selector: 'app-component',
-      templateUrl: './app.component.html',
+      templateUrl: './app/app.component.html',
       providers: [Localization, LocalizationPipe], // Localization providers: inherited by all descendants.
       pipes: [LocalizationPipe] // Add in each component to invoke the transform method.
 })
@@ -26,6 +26,9 @@ class AppComponent {
      ...
  }
 }
+```
+and in the main:
+```TypeScript
 bootstrap(AppComponent, [HTTP_PROVIDERS]);
 ```
 

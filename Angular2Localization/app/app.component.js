@@ -1,5 +1,4 @@
-///<reference path="node_modules/angular2/typings/browser.d.ts"/>
-System.register(['angular2/core', 'angular2/platform/browser', 'angular2/http', './components/home/home.component', './services/localization'], function(exports_1) {
+System.register(['angular2/core', '../services/localization', './home/home.component'], function(exports_1) {
     var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
         var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
         if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -9,24 +8,18 @@ System.register(['angular2/core', 'angular2/platform/browser', 'angular2/http', 
     var __metadata = (this && this.__metadata) || function (k, v) {
         if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
     };
-    var core_1, browser_1, http_1, home_component_1, localization_1;
+    var core_1, localization_1, home_component_1;
     var AppComponent;
     return {
         setters:[
             function (core_1_1) {
                 core_1 = core_1_1;
             },
-            function (browser_1_1) {
-                browser_1 = browser_1_1;
-            },
-            function (http_1_1) {
-                http_1 = http_1_1;
+            function (localization_1_1) {
+                localization_1 = localization_1_1;
             },
             function (home_component_1_1) {
                 home_component_1 = home_component_1_1;
-            },
-            function (localization_1_1) {
-                localization_1 = localization_1_1;
             }],
         execute: function() {
             AppComponent = (function () {
@@ -77,10 +70,9 @@ System.register(['angular2/core', 'angular2/platform/browser', 'angular2/http', 
                     this.localization.setCurrentLanguage(locale);
                 };
                 AppComponent = __decorate([
-                    // Localization class & pipe.
                     core_1.Component({
                         selector: 'app-component',
-                        templateUrl: './app.component.html',
+                        templateUrl: './app/app.component.html',
                         directives: [home_component_1.HomeComponent],
                         providers: [localization_1.Localization, localization_1.LocalizationPipe],
                         pipes: [localization_1.LocalizationPipe] // Add in each component to invoke the transform method.
@@ -89,7 +81,7 @@ System.register(['angular2/core', 'angular2/platform/browser', 'angular2/http', 
                 ], AppComponent);
                 return AppComponent;
             })();
-            browser_1.bootstrap(AppComponent, [http_1.HTTP_PROVIDERS]); // Http providers.
+            exports_1("AppComponent", AppComponent);
         }
     }
 });

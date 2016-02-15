@@ -40,11 +40,14 @@ System.register(['angular2/core', 'angular2/http', 'rxjs/add/operator/map'], fun
              *      pipes: [LocalizationPipe] // Add in each component to invoke the transform method.
              * })
              * ...
-             * class AppComponent {
+             * export class AppComponent {
              *      constructor(public localization: Localization){
              *      ...
              *  }
              * }
+             *
+             * and in the main:
+             *
              * bootstrap(AppComponent, [HTTP_PROVIDERS]);
              *
              * DIRECT LOADING
