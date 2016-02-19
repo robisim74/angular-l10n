@@ -1,4 +1,4 @@
-System.register(['angular2/core', '../services/localization', './home/home.component'], function(exports_1) {
+System.register(['angular2/core', '../services/localization-service', './home/home.component'], function(exports_1) {
     var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
         var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
         if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -8,15 +8,15 @@ System.register(['angular2/core', '../services/localization', './home/home.compo
     var __metadata = (this && this.__metadata) || function (k, v) {
         if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
     };
-    var core_1, localization_1, home_component_1;
+    var core_1, localization_service_1, home_component_1;
     var AppComponent;
     return {
         setters:[
             function (core_1_1) {
                 core_1 = core_1_1;
             },
-            function (localization_1_1) {
-                localization_1 = localization_1_1;
+            function (localization_service_1_1) {
+                localization_service_1 = localization_service_1_1;
             },
             function (home_component_1_1) {
                 home_component_1 = home_component_1_1;
@@ -26,7 +26,7 @@ System.register(['angular2/core', '../services/localization', './home/home.compo
                 function AppComponent(localization) {
                     // DIRECT LOADING
                     // UNCOMMENT FOLLOWING CODE FOR DIRECT LOADING
-                    //// Initializes the Localization class: direct loading.
+                    //// Initializes the LocalizationService class: direct loading.
                     //// Translations data.
                     // var translationEN = {
                     //    TITLE: 'ANGULAR 2 LOCALIZATION',
@@ -52,7 +52,7 @@ System.register(['angular2/core', '../services/localization', './home/home.compo
                     this.localization = localization;
                     // ASYNCHRONOUS LOADING
                     // COMMENT FOLLOWING CODE IF DIRECT LOADING
-                    // Initializes the Localization class: asynchronous loading.               
+                    // Initializes the LocalizationService class: asynchronous loading.               
                     this.localization.addTranslation('en'); // Required: adds a new translation.
                     this.localization.addTranslation('it');
                     // Add a new language here.
@@ -74,10 +74,10 @@ System.register(['angular2/core', '../services/localization', './home/home.compo
                         selector: 'app-component',
                         templateUrl: './app/app.component.html',
                         directives: [home_component_1.HomeComponent],
-                        providers: [localization_1.Localization, localization_1.LocalizationPipe],
-                        pipes: [localization_1.LocalizationPipe] // Add in each component to invoke the transform method.
+                        providers: [localization_service_1.LocalizationService, localization_service_1.LocalizationPipe],
+                        pipes: [localization_service_1.LocalizationPipe] // Add in each component to invoke the transform method.
                     }), 
-                    __metadata('design:paramtypes', [localization_1.Localization])
+                    __metadata('design:paramtypes', [localization_service_1.LocalizationService])
                 ], AppComponent);
                 return AppComponent;
             })();

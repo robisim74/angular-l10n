@@ -17,7 +17,7 @@ System.register(['angular2/core', 'angular2/http', 'rxjs/add/operator/map'], fun
         if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
     };
     var core_1, http_1, core_2;
-    var Localization, LocalizationPipe;
+    var LocalizationService, LocalizationPipe;
     return {
         setters:[
             function (core_1_1) {
@@ -30,18 +30,18 @@ System.register(['angular2/core', 'angular2/http', 'rxjs/add/operator/map'], fun
             function (_1) {}],
         execute: function() {
             /**
-             * Localization is an injectable class that use the Angular 2 Http module.
+             * LocalizationService is an injectable class that use the Angular 2 Http module.
              * To start, add in the route component:
              *
              * @Component({
              *      selector: 'app-component',
              *      ...
-             *      providers: [Localization, LocalizationPipe], // Localization providers: inherited by all descendants.
+             *      providers: [LocalizationService, LocalizationPipe], // Localization providers: inherited by all descendants.
              *      pipes: [LocalizationPipe] // Add in each component to invoke the transform method.
              * })
              * ...
              * export class AppComponent {
-             *      constructor(public localization: Localization){
+             *      constructor(public localization: LocalizationService){
              *      ...
              *  }
              * }
@@ -51,7 +51,7 @@ System.register(['angular2/core', 'angular2/http', 'rxjs/add/operator/map'], fun
              * bootstrap(AppComponent, [HTTP_PROVIDERS]);
              *
              * DIRECT LOADING
-             * To inizialize the Localization class for the direct loading add the following code in the body of constructor of the route component:
+             * To inizialize the LocalizationService class for the direct loading add the following code in the body of constructor of the route component:
              *
              * var translationEN = {
              *      EXAMPLE: 'example',
@@ -65,7 +65,7 @@ System.register(['angular2/core', 'angular2/http', 'rxjs/add/operator/map'], fun
              * this.localization.definePreferredLanguage('en', 30); // Required: defines preferred language and expiry (No days). If omitted, the cookie becomes a session cookie.
              *
              * ASYNCHRONOUS LOADING
-             * To inizialize the Localization class for the asynchronous loading add the following code in the body of constructor of the route component:
+             * To inizialize the LocalizationService class for the asynchronous loading add the following code in the body of constructor of the route component:
              *
              * this.localization.addTranslation('en'); // Required: adds a new translation.
              * this.localization.addTranslation('it');
@@ -102,19 +102,25 @@ System.register(['angular2/core', 'angular2/http', 'rxjs/add/operator/map'], fun
              *
              * @author Roberto Simonetti
              */
-            Localization = (function () {
-                function Localization(http) {
+            LocalizationService = (function () {
+                function LocalizationService(http) {
                     this.http = http;
-                    this.languagesData = []; // Array of the available languages codes.
-                    this.translationsData = {}; // Object of the translations.
+                    /**
+                     * Array of the available languages codes.
+                     */
+                    this.languagesData = [];
+                    /**
+                     * Object of the translations.
+                     */
+                    this.translationsData = {};
                 }
                 /**
                  * Direct & asynchronous loading: adds a new translation.
                  *
                  * @param locale The language of translation
-                 * @param translation Nullable
+                 * @param translation
                  */
-                Localization.prototype.addTranslation = function (locale, translation) {
+                LocalizationService.prototype.addTranslation = function (locale, translation) {
                     this.languagesData.push(locale);
                     if (translation != null) {
                         // Direct loading.
@@ -125,9 +131,9 @@ System.register(['angular2/core', 'angular2/http', 'rxjs/add/operator/map'], fun
                  * Defines the preferred language.
                  *
                  * @param defaultLanguage
-                 * @param expires Nullable expiry (No days)
+                 * @param expires Expiry (No days)
                  */
-                Localization.prototype.definePreferredLanguage = function (defaultLanguage, expires) {
+                LocalizationService.prototype.definePreferredLanguage = function (defaultLanguage, expires) {
                     this.expires = expires;
                     // Tries to get the cookie.
                     this.locale = this.getCookie("locale"); // Calls the getCookie method.
@@ -149,27 +155,34 @@ System.register(['angular2/core', 'angular2/http', 'rxjs/add/operator/map'], fun
                  *
                  * @param prefix The path prefix
                  */
-                Localization.prototype.translationProvider = function (prefix) {
+                LocalizationService.prototype.translationProvider = function (prefix) {
                     var _this = this;
                     this.prefix = prefix;
                     var url = this.prefix + this.locale + '.json';
                     // Angular 2 Http module.
                     this.http.get(url)
                         .map(function (res) { return res.json(); })
-                        .subscribe(function (res) { return _this.translationsData = res; }, function (exception) { return _this.onError; }, this.onCompleted);
-                };
-                Localization.prototype.onCompleted = function () {
-                    console.log("translationProvider:", "http get method completed.");
-                };
-                Localization.prototype.onError = function (exception) {
-                    console.error("translationProvider:", exception);
+                        .subscribe(
+                    // Observer or next.
+                    function (res) {
+                        // Assigns to the traslations data.
+                        _this.translationsData = res;
+                    }, 
+                    // Error.
+                    function (error) {
+                        console.error("Localization service:", error);
+                    }, 
+                    // Complete.
+                    function () {
+                        console.log("Localization service:", "Http get method completed.");
+                    });
                 };
                 /**
                  * Gets the current language.
                  *
-                 * @return The current language.
+                 * @return The current language
                  */
-                Localization.prototype.getCurrentLanguage = function () {
+                LocalizationService.prototype.getCurrentLanguage = function () {
                     return this.locale;
                 };
                 /**
@@ -177,7 +190,7 @@ System.register(['angular2/core', 'angular2/http', 'rxjs/add/operator/map'], fun
                  *
                  * @param locale The new language
                  */
-                Localization.prototype.setCurrentLanguage = function (locale) {
+                LocalizationService.prototype.setCurrentLanguage = function (locale) {
                     if (this.locale != locale) {
                         this.setCookie("locale", locale, this.expires); // Calls the setCookie method.      
                         this.locale = locale; // Sets the language code.
@@ -189,10 +202,10 @@ System.register(['angular2/core', 'angular2/http', 'rxjs/add/operator/map'], fun
                 /**
                  * Gets the translation.
                  *
-                 * @param key The key to be translated.
-                 * @return The value of the translation.
+                 * @param key The key to be translated
+                 * @return The value of the translation
                  */
-                Localization.prototype.translate = function (key) {
+                LocalizationService.prototype.translate = function (key) {
                     var value;
                     if (this.translationsData[this.locale] == null) {
                         // Gets the translation through asynchronously loading.
@@ -216,7 +229,7 @@ System.register(['angular2/core', 'angular2/http', 'rxjs/add/operator/map'], fun
                  * @param value
                  * @param days Expiry
                  */
-                Localization.prototype.setCookie = function (name, value, days) {
+                LocalizationService.prototype.setCookie = function (name, value, days) {
                     if (days != null) {
                         var expirationDate = new Date();
                         expirationDate.setTime(expirationDate.getTime() + (days * 24 * 60 * 60 * 1000));
@@ -232,7 +245,7 @@ System.register(['angular2/core', 'angular2/http', 'rxjs/add/operator/map'], fun
                  *
                  * @param name
                  */
-                Localization.prototype.getCookie = function (name) {
+                LocalizationService.prototype.getCookie = function (name) {
                     name += "=";
                     var ca = document.cookie.split(';');
                     for (var i = 0; i < ca.length; i++) {
@@ -246,13 +259,13 @@ System.register(['angular2/core', 'angular2/http', 'rxjs/add/operator/map'], fun
                     }
                     return null;
                 };
-                Localization = __decorate([
+                LocalizationService = __decorate([
                     core_1.Injectable(), 
                     __metadata('design:paramtypes', [http_1.Http])
-                ], Localization);
-                return Localization;
+                ], LocalizationService);
+                return LocalizationService;
             })();
-            exports_1("Localization", Localization);
+            exports_1("LocalizationService", LocalizationService);
             /**
              * Translate pipe function.
              */
@@ -263,8 +276,8 @@ System.register(['angular2/core', 'angular2/http', 'rxjs/add/operator/map'], fun
                 /**
                  * Translate pipe transform method.
                  *
-                 * @param key The translation key.
-                 * @return The translated value.
+                 * @param key The translation key
+                 * @return The translated value
                  */
                 LocalizationPipe.prototype.transform = function (key) {
                     return this.localization.translate(key);
@@ -275,7 +288,7 @@ System.register(['angular2/core', 'angular2/http', 'rxjs/add/operator/map'], fun
                         pure: false // Required to update the value.
                     }),
                     core_1.Injectable(), 
-                    __metadata('design:paramtypes', [Localization])
+                    __metadata('design:paramtypes', [LocalizationService])
                 ], LocalizationPipe);
                 return LocalizationPipe;
             })();

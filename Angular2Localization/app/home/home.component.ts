@@ -1,16 +1,16 @@
 ﻿import {Component} from 'angular2/core';
-
-import {LocalizationPipe} from '../../services/localization'; // Localization pipe.
+// Services.
+import {LocalizationPipe} from '../../services/localization-service';
 
 @Component({
     selector: 'home-component',
     templateUrl: './app/home/home.component.html',
-    pipes: [LocalizationPipe] // Add in each component to invoke the transform method.
+    pipes: [LocalizationPipe]
 })
 
 export class HomeComponent {
 
-    title: string;
+    private title: string;
     // Add a new property here.
 
     constructor() {

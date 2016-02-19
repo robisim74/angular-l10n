@@ -1,24 +1,24 @@
 import {Component} from 'angular2/core';
-
-import {Localization, LocalizationPipe} from '../services/localization'; // Localization class & pipe.
-
+// Services.
+import {LocalizationService, LocalizationPipe} from '../services/localization-service'; // LocalizationService class & LocalizationPipe.
+// Components.
 import {HomeComponent} from './home/home.component';
 
 @Component({
     selector: 'app-component',
     templateUrl: './app/app.component.html', // A component cannot have both pipes and @View set at the same time.
     directives: [HomeComponent],
-    providers: [Localization, LocalizationPipe], // Localization providers: inherited by all descendants.
+    providers: [LocalizationService, LocalizationPipe], // Localization providers: inherited by all descendants.
     pipes: [LocalizationPipe] // Add in each component to invoke the transform method.
 })
 
 export class AppComponent {
 
-    constructor(public localization: Localization) { // Injects an instance of the Localization class in the constructor.
+    constructor(public localization: LocalizationService) { // Injects an instance of the LocalizationService class in the constructor.
         
         // DIRECT LOADING
         // UNCOMMENT FOLLOWING CODE FOR DIRECT LOADING
-        //// Initializes the Localization class: direct loading.
+        //// Initializes the LocalizationService class: direct loading.
         //// Translations data.
         // var translationEN = {
         //    TITLE: 'ANGULAR 2 LOCALIZATION',
@@ -44,7 +44,7 @@ export class AppComponent {
         
         // ASYNCHRONOUS LOADING
         // COMMENT FOLLOWING CODE IF DIRECT LOADING
-        // Initializes the Localization class: asynchronous loading.               
+        // Initializes the LocalizationService class: asynchronous loading.               
         this.localization.addTranslation('en'); // Required: adds a new translation.
         this.localization.addTranslation('it');
         // Add a new language here.
@@ -56,7 +56,7 @@ export class AppComponent {
 	
     // CHANGE LANGUAGE
     // Returns the current language.
-    currentLanguage() {
+    currentLanguage(): string {
 
         return this.localization.getCurrentLanguage();
 

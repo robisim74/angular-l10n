@@ -11,18 +11,18 @@
 * [Running the sample app](#running-the-sample-app)
 
 ## How to use the class
-- Create the `services` folder in the root of your Angular 2 application, and copy `localization.ts`.
+- Create the `services` folder in the root of your Angular 2 application, and copy `localization-service.ts`.
 - Add in the route component:
 ```TypeScript
 @Component({
       selector: 'app-component',
       templateUrl: './app/app.component.html',
-      providers: [Localization, LocalizationPipe], // Localization providers: inherited by all descendants.
+      providers: [LocalizationService, LocalizationPipe], // Localization providers: inherited by all descendants.
       pipes: [LocalizationPipe] // Add in each component to invoke the transform method.
 })
 ...
 class AppComponent {
-     constructor(public localization: Localization){
+     constructor(public localization: LocalizationService){
      ...
  }
 }
@@ -33,7 +33,7 @@ bootstrap(AppComponent, [HTTP_PROVIDERS]);
 ```
 
 ### Direct loading
-To inizialize the Localization class for the direct loading add the following code in the body of constructor of the route component:
+To inizialize the LocalizationService class for the direct loading add the following code in the body of constructor of the route component:
 ```TypeScript
 var translationEN = {
       EXAMPLE: 'example',
@@ -48,7 +48,7 @@ this.localization.definePreferredLanguage('en', 30); // Required: defines prefer
 ```
 
 ### Asynchronous loading
-To inizialize the Localization class for the asynchronous loading add the following code in the body of constructor of the route component:
+To inizialize the LocalizationService class for the asynchronous loading add the following code in the body of constructor of the route component:
 ```TypeScript
 this.localization.addTranslation('en'); // Required: adds a new translation.
 this.localization.addTranslation('it');
