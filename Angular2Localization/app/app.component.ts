@@ -1,6 +1,6 @@
 import {Component} from 'angular2/core';
 // Services.
-import {LocalizationService, LocalizationPipe} from '../services/localization-service'; // LocalizationService class & LocalizationPipe.
+import {LocalizationService, LocalizationPipe} from '../services/localization.service'; // LocalizationService class & LocalizationPipe.
 // Components.
 import {HomeComponent} from './home/home.component';
 

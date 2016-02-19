@@ -1,4 +1,4 @@
-﻿/**
+/**
  * ANGULAR 2 LOCALIZATION
  * An injectable class to translate in the new Angular 2 applications using TypeScript
  * through the direct or asynchronous loading of translations
@@ -22,7 +22,7 @@ import 'rxjs/add/operator/map';
  *      providers: [LocalizationService, LocalizationPipe], // Localization providers: inherited by all descendants.
  *      pipes: [LocalizationPipe] // Add in each component to invoke the transform method.
  * })
- * ...
+ * 
  * export class AppComponent {
  *      constructor(public localization: LocalizationService){
  *      ...
@@ -178,7 +178,7 @@ import 'rxjs/add/operator/map';
             .subscribe(
                 
             // Observer or next.
-            (res) => {            
+            (res: any) => {            
                 // Assigns to the traslations data.
                 this.translationsData = res;
             },

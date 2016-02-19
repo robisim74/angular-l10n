@@ -1,6 +1,6 @@
 ﻿import {Component} from 'angular2/core';
 // Services.
-import {LocalizationPipe} from '../../services/localization-service';
+import {LocalizationPipe} from '../../services/localization.service';
 
 @Component({
     selector: 'home-component',

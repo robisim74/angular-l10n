@@ -1,13 +1,13 @@
 # Angular 2 Localization
-> An injectable class to translate in the new Angular 2 apps using TypeScript.
+> An injectable class to translate in the new Angular 2 applications using TypeScript.
 > It works both through the direct and asynchronous loading of translations.
 
 # Contents
 * [How to use the class](#how-to-use-the-class)
     * [Direct loading](#direct-loading)
     * [Asynchronous loading](#asynchronous-loading)
-    * [Get the translation](#get-the-translation)
-    * [Change language](#change-language)
+    * [Getting the translation](#getting-the-translation)
+    * [Changing language](#changing-language)
 * [Running the sample app](#running-the-sample-app)
 
 ## How to use the class
@@ -20,8 +20,8 @@
       providers: [LocalizationService, LocalizationPipe], // Localization providers: inherited by all descendants.
       pipes: [LocalizationPipe] // Add in each component to invoke the transform method.
 })
-...
-class AppComponent {
+
+export class AppComponent {
      constructor(public localization: LocalizationService){
      ...
  }
@@ -58,7 +58,7 @@ this.localization.translationProvider('./resources/locale-'); // Required: initi
 ```
 and create the json files of the translations such as `locale-en.json` (the URL is obtained concatenating {prefix} + {locale language code} + ".json").
 
-### Get the translation
+### Getting the translation
 To get the translation through direct or asyncronous loading add in each component:
 ```TypeScript
 @Component({
@@ -71,7 +71,7 @@ and in the template:
 <p>{{ 'EXAMPLE' | translate }}</p>
 ```
 
-### Change language
+### Changing language
 To change language at runtime, add in the component:
 ```TypeScript
 selectLanguage(locale) {
@@ -86,14 +86,14 @@ where the `locale` parameter is the language code; then add in the view:
 
 ## Running the sample app
 What you need to run this app:
-- this repository
-- [Node and npm](https://nodejs.org) already installed
+- this repository;
+- [Node and npm](https://nodejs.org) already installed.
 
 In the command-prompt, go to the directory that contains `index.html`:
 ```
 npm install
 
-npm install -g http-server
-http-server
+npm install -g lite-server
+lite-server
 ```
-and then in a browser, visit `localhost:8080/index.html`.
+and then in a browser, visit `localhost:3000/index.html`.

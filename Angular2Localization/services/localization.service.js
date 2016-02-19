@@ -39,7 +39,7 @@ System.register(['angular2/core', 'angular2/http', 'rxjs/add/operator/map'], fun
              *      providers: [LocalizationService, LocalizationPipe], // Localization providers: inherited by all descendants.
              *      pipes: [LocalizationPipe] // Add in each component to invoke the transform method.
              * })
-             * ...
+             *
              * export class AppComponent {
              *      constructor(public localization: LocalizationService){
              *      ...
