@@ -57,7 +57,7 @@ import 'rxjs/add/operator/map';
  * this.localization.addTranslation('it', translationIT);
  * ...
  * 
- * this.localization.definePreferredLanguage('en', 30); // Required: defines preferred language and expiry (No days). If the expiry is omitted, the cookie becomes a session cookie.
+ * this.localization.definePreferredLanguage('en', 30); // Required: default language and expiry (No days). If the expiry is omitted, the cookie becomes a session cookie.
  *
  * Asynchronous loading.
  * 
@@ -67,7 +67,7 @@ import 'rxjs/add/operator/map';
  * this.localization.addTranslation('it');
  * ...
  * 
- * this.localization.definePreferredLanguage('en', 30); // Required: default language and expiry (No days). If omitted, the cookie becomes a session cookie.
+ * this.localization.definePreferredLanguage('en', 30); // Required: default language and expiry (No days). If the expiry is omitted, the cookie becomes a session cookie.
  * 
  * this.localization.translationProvider('./resources/locale-'); // Required: initializes the translation provider with the given path prefix.
  * 
