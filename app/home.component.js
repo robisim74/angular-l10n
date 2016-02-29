@@ -1,4 +1,4 @@
-System.register(['angular2/core', '../../services/localization.service'], function(exports_1) {
+System.register(['angular2/core', './pipes/localization.pipe'], function(exports_1) {
     var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
         var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
         if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -8,29 +8,27 @@ System.register(['angular2/core', '../../services/localization.service'], functi
     var __metadata = (this && this.__metadata) || function (k, v) {
         if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
     };
-    var core_1, localization_service_1;
+    var core_1, localization_pipe_1;
     var HomeComponent;
     return {
         setters:[
             function (core_1_1) {
                 core_1 = core_1_1;
             },
-            function (localization_service_1_1) {
-                localization_service_1 = localization_service_1_1;
+            function (localization_pipe_1_1) {
+                localization_pipe_1 = localization_pipe_1_1;
             }],
         execute: function() {
             HomeComponent = (function () {
-                // Add a new property here.
                 function HomeComponent() {
                     // Example of key injection from the component.
-                    this.title = "HELLO"; // Sets the key.
-                    // Add a new key here.   
+                    this.greeting = "GREETING"; // Sets the key.
                 }
                 HomeComponent = __decorate([
                     core_1.Component({
                         selector: 'home-component',
-                        templateUrl: './app/home/home.component.html',
-                        pipes: [localization_service_1.LocalizationPipe]
+                        templateUrl: './app/home.component.html',
+                        pipes: [localization_pipe_1.LocalizationPipe]
                     }), 
                     __metadata('design:paramtypes', [])
                 ], HomeComponent);

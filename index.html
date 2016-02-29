@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Angular 2 Localization</title>
+    <meta name="description" content="A translation service for the new Angular 2 applications using TypeScript">
+    <meta name="author" content="Roberto Simonetti">
+
+    <!--frameworks-->
+    <!--loads Angular 2 libraries-->
+    <!--IE required polyfills, in this exact order-->
+    <script src="dist/lib/es6-shim.min.js"></script>
+    <script src="dist/lib/system-polyfills.js"></script>
+
+    <script src="dist/lib/angular2-polyfills.js"></script>
+    <script src="dist/lib/system.src.js"></script>
+    <script src="dist/lib/Rx.js"></script>
+    <script src="dist/lib/angular2.dev.js"></script>
+    <script src="dist/lib/http.dev.js"></script>
+
+    <!--configures SystemJS-->
+    <script>
+        System.config({
+            packages: {        
+                app: {
+                    format: 'register',
+                    defaultExtension: 'js'
+                }
+            }
+        });
+        System.import('app/main')
+                .then(null, console.error.bind(console));
+    </script>
+
+    <!--CSS-->
+    <link rel="stylesheet" type="text/css" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+</head>
+
+<!--displays the application-->
+
+<body>
+
+    <app-component></app-component>
+
+    <!--scripts-->
+    <script src="//code.jquery.com/jquery-1.12.0.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+
+</body>
+
+</html>

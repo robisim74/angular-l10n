@@ -1,12 +1,11 @@
 <!--app component view-->
-<!--route component-->
 
 <header>
 
     <nav class="navbar navbar-default">
         <div class="container">
             <div class="navbar-header">
-                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#home-navbar">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#app-navbar">
                     <span class="sr-only">toggle navigation</span>
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
@@ -15,10 +14,10 @@
                 <a class="navbar-brand" href="#">{{ 'TITLE' | translate }}</a>
             </div>
 
-            <div class="collapse navbar-collapse" id="home-navbar">
+            <div class="collapse navbar-collapse" id="app-navbar">
                 <ul class="nav navbar-nav navbar-right">
                     <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" data-target="#">{{ 'CHANGE_LANGUAGE' | translate }} <span class="caret"></span></a>
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">{{ 'CHANGE_LANGUAGE' | translate }}&nbsp;<span class="caret"></span></a>
                         <ul class="dropdown-menu">
 
                             <li><a class="btn btn-default btn-block" (click)="selectLanguage('en')">&nbsp;English&nbsp;<i class="glyphicon glyphicon-ok" *ngIf="currentLanguage() == 'en'"></i></a></li>
@@ -34,7 +33,6 @@
 
 </header>
 
-<!--main-->
 <main>
 
     <!--home component-->
