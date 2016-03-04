@@ -9,6 +9,7 @@
 import {Injectable} from 'angular2/core';
 import {Pipe, PipeTransform} from 'angular2/core';
 // Services.
+import {LocaleService} from '../services/locale.service';
 import {LocalizationService} from '../services/localization.service';
 
 /**
@@ -21,7 +22,8 @@ import {LocalizationService} from '../services/localization.service';
 
 /**
  * Localization pipe class.
- * An instance is created for each key. 
+ * 
+ * An instance of this class is created for each key.
  * 
  * @author Roberto Simonetti
  */
@@ -30,14 +32,14 @@ import {LocalizationService} from '../services/localization.service';
     /**
      * The language code for the key.
      */
-    private locale: string;
+    private languageCode: string;
 
     /**
      * The value of the translation for the key.
      */
     private value: string;
 
-    constructor(public localization: LocalizationService) { }
+    constructor(public locale: LocaleService, public localization: LocalizationService) { }
 
     /**
      * Translate pipe transform method.
@@ -46,12 +48,19 @@ import {LocalizationService} from '../services/localization.service';
      * @return The value of the translation
      */
     transform(key: string): string {
+        
+        // When the language changes, updates the language code and loads the translations data for the asynchronous loading.
+        if (this.locale.getCurrentLanguage() != "" && this.locale.getCurrentLanguage() != this.localization.languageCode) {
+
+            this.localization.updateTranslation();
+
+        }
 
         // Checks the service state.
         if (this.localization.isReady) {
 
             // Updates the value of the translation if it's empty or if the language is changed.
-            if (this.value == "" || this.locale != this.localization.getCurrentLanguage()) {
+            if (this.value == "" || this.languageCode != this.localization.languageCode) {
 
                 // Gets the value of the translation.
                 this.localization.translate(key).forEach(
@@ -68,7 +77,7 @@ import {LocalizationService} from '../services/localization.service';
                     () => {
                         
                         // Updates the language code for the key.
-                        this.locale = this.localization.getCurrentLanguage();
+                        this.languageCode = this.localization.languageCode;
 
                         return this.value;
 

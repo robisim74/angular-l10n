@@ -5,7 +5,7 @@
  * MIT license
  * https://github.com/robisim74/angular2localization
  */
-System.register(['angular2/core', '../services/localization.service'], function(exports_1) {
+System.register(['angular2/core', '../services/locale.service', '../services/localization.service'], function(exports_1) {
     var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
         var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
         if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -15,13 +15,16 @@ System.register(['angular2/core', '../services/localization.service'], function(
     var __metadata = (this && this.__metadata) || function (k, v) {
         if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
     };
-    var core_1, core_2, localization_service_1;
+    var core_1, core_2, locale_service_1, localization_service_1;
     var LocalizationPipe;
     return {
         setters:[
             function (core_1_1) {
                 core_1 = core_1_1;
                 core_2 = core_1_1;
+            },
+            function (locale_service_1_1) {
+                locale_service_1 = locale_service_1_1;
             },
             function (localization_service_1_1) {
                 localization_service_1 = localization_service_1_1;
@@ -31,7 +34,8 @@ System.register(['angular2/core', '../services/localization.service'], function(
              * Translate pipe function.
              */
             LocalizationPipe = (function () {
-                function LocalizationPipe(localization) {
+                function LocalizationPipe(locale, localization) {
+                    this.locale = locale;
                     this.localization = localization;
                 }
                 /**
@@ -42,10 +46,14 @@ System.register(['angular2/core', '../services/localization.service'], function(
                  */
                 LocalizationPipe.prototype.transform = function (key) {
                     var _this = this;
+                    // When the language changes, updates the language code and loads the translations data for the asynchronous loading.
+                    if (this.locale.getCurrentLanguage() != "" && this.locale.getCurrentLanguage() != this.localization.languageCode) {
+                        this.localization.updateTranslation();
+                    }
                     // Checks the service state.
                     if (this.localization.isReady) {
                         // Updates the value of the translation if it's empty or if the language is changed.
-                        if (this.value == "" || this.locale != this.localization.getCurrentLanguage()) {
+                        if (this.value == "" || this.languageCode != this.localization.languageCode) {
                             // Gets the value of the translation.
                             this.localization.translate(key).forEach(
                             // Next.
@@ -53,7 +61,7 @@ System.register(['angular2/core', '../services/localization.service'], function(
                                 _this.value = value;
                             }, null).then(function () {
                                 // Updates the language code for the key.
-                                _this.locale = _this.localization.getCurrentLanguage();
+                                _this.languageCode = _this.localization.languageCode;
                                 return _this.value;
                             });
                         }
@@ -73,7 +81,7 @@ System.register(['angular2/core', '../services/localization.service'], function(
                         pure: false // Required to update the value.
                     }),
                     core_1.Injectable(), 
-                    __metadata('design:paramtypes', [localization_service_1.LocalizationService])
+                    __metadata('design:paramtypes', [locale_service_1.LocaleService, localization_service_1.LocalizationService])
                 ], LocalizationPipe);
                 return LocalizationPipe;
             })();

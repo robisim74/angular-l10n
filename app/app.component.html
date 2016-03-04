@@ -15,13 +15,17 @@
             </div>
 
             <div class="collapse navbar-collapse" id="app-navbar">
+                <ul class="nav navbar-nav">
+                    <li [ngClass]="{active: location.path() == ''}"><a [routerLink]="['Home']">home</a></li>
+                    <li [ngClass]="{active: location.path() == '/advanced-use'}"><a [routerLink]="['AdvancedUse']">{{ 'ADVANCED_USE' | translate }}</a></li>
+                </ul>
                 <ul class="nav navbar-nav navbar-right">
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">{{ 'CHANGE_LANGUAGE' | translate }}&nbsp;<span class="caret"></span></a>
                         <ul class="dropdown-menu">
 
-                            <li><a class="btn btn-default btn-block" (click)="selectLanguage('en')">&nbsp;English&nbsp;<i class="glyphicon glyphicon-ok" *ngIf="currentLanguage() == 'en'"></i></a></li>
-                            <li><a class="btn btn-default btn-block" (click)="selectLanguage('it')">&nbsp;italiano&nbsp;<i class="glyphicon glyphicon-ok" *ngIf="currentLanguage() == 'it'"></i></a></li>
+                            <li><a class="btn btn-default btn-block" (click)="selectLanguage('en')">&nbsp;English&nbsp;<i class="glyphicon glyphicon-ok" *ngIf="currentLanguage == 'en'"></i></a></li>
+                            <li><a class="btn btn-default btn-block" (click)="selectLanguage('it')">&nbsp;italiano&nbsp;<i class="glyphicon glyphicon-ok" *ngIf="currentLanguage == 'it'"></i></a></li>
                             <!--add a new language here-->
 
                         </ul>
@@ -35,7 +39,7 @@
 
 <main>
 
-    <!--home component-->
-    <home-component></home-component>
+    <!--router outlet-->
+    <router-outlet></router-outlet>
 
 </main>

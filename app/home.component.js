@@ -21,13 +21,10 @@ System.register(['angular2/core', './pipes/localization.pipe'], function(exports
         execute: function() {
             HomeComponent = (function () {
                 function HomeComponent() {
-                    // Example of key injection from the component.
-                    this.greeting = "GREETING"; // Sets the key.
                 }
                 HomeComponent = __decorate([
                     core_1.Component({
-                        selector: 'home-component',
-                        templateUrl: './app/home.component.html',
+                        template: "\n            <!--home component view-->\n\n            <div class=\"container\">\n\n                <div class=\"row\">\n\n                    <div class=\"col-sm-6\">\n\n                        <blockquote class=\"blockquote-reverse\">\n\n                            <p>{{ 'DUMMY_TEXT' | translate }}</p>\n                            <footer>{{ 'AUTHOR' | translate }},&nbsp;<cite title=\"Source Title\">{{ 'SOURCE_TITLE' | translate }}</cite></footer>\n\n                        </blockquote>\n\n                    </div>\n\n                </div>\n\n            </div>\n            ",
                         pipes: [localization_pipe_1.LocalizationPipe]
                     }), 
                     __metadata('design:paramtypes', [])
