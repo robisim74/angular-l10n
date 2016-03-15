@@ -1,0 +1,39 @@
+<!--i18n component view-->
+
+<div class="container">
+
+    <div class="row">
+
+        <div class="col-sm-6">
+
+            <h2>i18n</h2>
+
+            <hr>
+
+            <label class="radio-inline">
+                <input type="radio" name="gender" #female value="female" (click)="gender = female.value" checked> {{ 'FEMALE' | translate }}
+            </label>
+            <label class="radio-inline">
+                <input type="radio" name="gender" #male value="male" (click)="gender = male.value"> {{ 'MALE' | translate }}
+            </label>
+            <br>
+            <br>
+            <p class="text-info">{{ gender | i18nSelect: inviteMapping | translate }}</p>
+
+            <hr>
+
+            <form (ngSubmit)="addMessage(message)" class="form-inline">
+                <div class="form-group">
+                    <input type="text" class="form-control" size="30" [(ngModel)]="message" placeholder="{{ 'ADD_MESSAGE' | translate }}" required>
+                </div>
+                <input type="submit" class="btn btn-primary" value="{{ 'ADD' | translate }}">
+                <br>
+                <br>
+                <p class="text-info">{{ messages.length | i18nPlural: messageMapping | translate}}.</p>
+            </form>
+
+        </div>
+
+    </div>
+
+</div>

@@ -9,7 +9,7 @@ System.register(['angular2/core', './services/localization.service', './pipes/lo
         if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
     };
     var core_1, localization_service_1, localization_pipe_1;
-    var AdvancedUseComponent;
+    var I18nComponent;
     return {
         setters:[
             function (core_1_1) {
@@ -22,23 +22,39 @@ System.register(['angular2/core', './services/localization.service', './pipes/lo
                 localization_pipe_1 = localization_pipe_1_1;
             }],
         execute: function() {
-            AdvancedUseComponent = (function () {
+            I18nComponent = (function () {
                 // Instantiates a new LocalizationService for this component and for its descendants.
-                function AdvancedUseComponent(localizationAdvancedUse) {
-                    this.localizationAdvancedUse = localizationAdvancedUse;
-                    this.localizationAdvancedUse.translationProvider('./resources/locale-advanced-use-'); // Required: initializes the translation provider with the given path prefix.
+                function I18nComponent(localizationI18n) {
+                    this.localizationI18n = localizationI18n;
+                    this.message = "";
+                    this.gender = "female";
+                    this.inviteMapping = {
+                        'male': 'INVITE_HIM',
+                        'female': 'INVITE_HER'
+                    };
+                    this.messages = [];
+                    this.messageMapping = {
+                        '=0': 'NO_MESSAGES',
+                        '=1': 'ONE_MESSAGE',
+                        'other': '# MESSAGES'
+                    };
+                    this.localizationI18n.translationProvider('./resources/locale-i18n-'); // Required: initializes the translation provider with the given path prefix.
                 }
-                AdvancedUseComponent = __decorate([
+                I18nComponent.prototype.addMessage = function (message) {
+                    this.messages.push(message);
+                    this.message = "";
+                };
+                I18nComponent = __decorate([
                     core_1.Component({
-                        template: "\n            <!--advanced use component view-->\n\n            <div class=\"container\">\n\n                <div class=\"row\">\n\n                    <div class=\"col-sm-6\">\n\n                        <samp>{{ 'DESCRIPTION' | translate }}</samp>\n\n                    </div>\n\n                </div>\n\n            </div>\n            ",
+                        templateUrl: './app/i18n.component.html',
                         providers: [localization_service_1.LocalizationService, localization_pipe_1.LocalizationPipe],
                         pipes: [localization_pipe_1.LocalizationPipe]
                     }), 
                     __metadata('design:paramtypes', [localization_service_1.LocalizationService])
-                ], AdvancedUseComponent);
-                return AdvancedUseComponent;
+                ], I18nComponent);
+                return I18nComponent;
             })();
-            exports_1("AdvancedUseComponent", AdvancedUseComponent);
+            exports_1("I18nComponent", I18nComponent);
         }
     }
 });

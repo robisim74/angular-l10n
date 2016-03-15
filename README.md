@@ -10,12 +10,15 @@ To get the translation, add in the template:
 ```
 {{ 'TITLE' | translate }}
 ```
-and in each component:
-```TypeScript
-@Component({
-     ...
-     pipes: [LocalizationPipe]
-})
+
+### Translating with i18n
+With `I18n Select` that displays the string that matches the current value:
+```
+{{ gender | i18nSelect: inviteMapping | translate }}
+```
+With `I18n Plural` that pluralizes the value properly:
+```
+{{ messages.length | i18nPlural: messageMapping | translate }}
 ```
 
 ## How to use the translation service
@@ -116,13 +119,13 @@ If you use an `AsyncRoute` in an extended application, you can create an instanc
 ![AdvancedUse](https://github.com/robisim74/angular2localization/blob/master/AdvancedUse.jpg)
 Each instance is different, and can be directly or asynchronously loaded, as in this example:
 ```TypeScript
-export class AdvancedUseComponent {
+export class I18nComponent {
 
     // Instantiates a new LocalizationService for this component and for its descendants.
-    constructor(public localizationAdvancedUse: LocalizationService) {
+    constructor(public localizationI18n: LocalizationService) {
 
-        this.localizationAdvancedUse.translationProvider('./resources/locale-advanced-use-'); // Required: initializes the translation provider with the given path prefix.
-            
+        this.localizationI18n.translationProvider('./resources/locale-i18n-'); // Required: initializes the translation provider with the given path prefix.
+
     }
 
 }

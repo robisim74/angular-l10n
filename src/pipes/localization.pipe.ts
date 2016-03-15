@@ -21,18 +21,23 @@ import {LocalizationService} from '../services/localization.service';
 })
 
 /**
- * Localization pipe class.
+ * LocalizationPipe class.
  * 
- * An instance of this class is created for each key.
+ * An instance of this class is created for each translate pipe function.
  * 
  * @author Roberto Simonetti
  */
 @Injectable() export class LocalizationPipe implements PipeTransform {
 
     /**
-     * The language code for the key.
+     * The language code for the translate pipe.
      */
     private languageCode: string;
+
+    /**
+     * The key of the translate pipe.
+     */
+    private key: string;
 
     /**
      * The value of the translation for the key.
@@ -48,7 +53,7 @@ import {LocalizationService} from '../services/localization.service';
      * @return The value of the translation
      */
     transform(key: string): string {
-        
+
         // When the language changes, updates the language code and loads the translations data for the asynchronous loading.
         if (this.locale.getCurrentLanguage() != "" && this.locale.getCurrentLanguage() != this.localization.languageCode) {
 
@@ -59,39 +64,48 @@ import {LocalizationService} from '../services/localization.service';
         // Checks the service state.
         if (this.localization.isReady) {
 
-            // Updates the value of the translation if it's empty or if the language is changed.
-            if (this.value == "" || this.languageCode != this.localization.languageCode) {
+            // Updates the key & the value of the translation for the key if:
+            // - the key is changed (i18n);
+            // - the value is empty;
+            // - the language is changed.
+            if (this.key != key || this.value == "" || this.languageCode != this.localization.languageCode) {
+
+                // i18n: remove the value of template locale variable. 
+                var formatKey: string = key.replace(/^\d+\b/, '');
+                formatKey = formatKey.trim();
 
                 // Gets the value of the translation.
-                this.localization.translate(key).forEach(
-                    
+                this.localization.translate(formatKey).forEach(
+
                     // Next.
                     (value: string) => {
 
-                        this.value = value;
+                        this.value = key.replace(formatKey, value);
 
                     }, null
 
                 ).then(
 
                     () => {
-                        
-                        // Updates the language code for the key.
+
+                        // Updates the language code for the translate pipe.
                         this.languageCode = this.localization.languageCode;
+                        // Updates the key of the translate pipe.
+                        this.key = key;
 
                         return this.value;
 
                     });
 
             } else {
-                
+
                 // The value of the translation isn't changed.
                 return this.value;
 
             }
 
         } else {
-            
+
             // The service isn't ready.
             return this.value;
 

@@ -8,7 +8,7 @@ import {LocalizationService} from './services/localization.service'; // Localiza
 import {LocalizationPipe} from './pipes/localization.pipe'; // LocalizationPipe class.
 // Components.
 import {HomeComponent} from './home.component';
-import {AdvancedUseComponent} from './advanced-use.component';
+import {I18nComponent} from './i18n.component';
 
 @Component({
     selector: 'app-component',
@@ -20,7 +20,7 @@ import {AdvancedUseComponent} from './advanced-use.component';
 
 @RouteConfig([
     new AsyncRoute({ path: '/', loader: () => Promise.resolve(HomeComponent), name: 'Home', useAsDefault: true }),
-    new AsyncRoute({ path: '/advanced-use', loader: () => Promise.resolve(AdvancedUseComponent), name: 'AdvancedUse' })
+    new AsyncRoute({ path: '/i18n', loader: () => Promise.resolve(I18nComponent), name: 'I18n' })
 ])
 
 export class AppComponent {

@@ -52,16 +52,24 @@ System.register(['angular2/core', '../services/locale.service', '../services/loc
                     }
                     // Checks the service state.
                     if (this.localization.isReady) {
-                        // Updates the value of the translation if it's empty or if the language is changed.
-                        if (this.value == "" || this.languageCode != this.localization.languageCode) {
+                        // Updates the key & the value of the translation for the key if:
+                        // - the key is changed (i18n);
+                        // - the value is empty;
+                        // - the language is changed.
+                        if (this.key != key || this.value == "" || this.languageCode != this.localization.languageCode) {
+                            // i18n: remove the value of template locale variable. 
+                            var formatKey = key.replace(/^\d+\b/, '');
+                            formatKey = formatKey.trim();
                             // Gets the value of the translation.
-                            this.localization.translate(key).forEach(
+                            this.localization.translate(formatKey).forEach(
                             // Next.
                             function (value) {
-                                _this.value = value;
+                                _this.value = key.replace(formatKey, value);
                             }, null).then(function () {
-                                // Updates the language code for the key.
+                                // Updates the language code for the translate pipe.
                                 _this.languageCode = _this.localization.languageCode;
+                                // Updates the key of the translate pipe.
+                                _this.key = key;
                                 return _this.value;
                             });
                         }
