@@ -1,8 +1,8 @@
 /**
  * ANGULAR 2 LOCALIZATION
- * A translation service for the new Angular 2 applications using TypeScript
- * written by Roberto Simonetti
- * MIT license
+ * An Angular 2 library for i18n and l10n that implements a translation service - using TypeScript and SystemJS.
+ * Written by Roberto Simonetti.
+ * MIT license.
  * https://github.com/robisim74/angular2localization
  */
 
@@ -21,13 +21,33 @@ import {LocalizationService} from '../services/localization.service';
 })
 
 /**
- * LocalizationPipe class.
- * 
+ * TranslatePipe class. 
  * An instance of this class is created for each translate pipe function.
+ * 
+ * Getting the translation.
+ * 
+ * To get the translation, add in the template:
+ * 
+ * {{ 'TITLE' | translate }}
+ * 
+ * and in each component:
+ * 
+ * @Component({
+ *      ...
+ *      pipes: [TranslatePipe]
+ * })
+ * 
+ * With 'I18n Select' that displays the string that matches the current value:
+ *
+ * {{ gender | i18nSelect: inviteMapping | translate }}
+ * 
+ * With 'I18n Plural' that pluralizes the value properly:
+ *
+ * {{ messages.length | i18nPlural: messageMapping | translate }}
  * 
  * @author Roberto Simonetti
  */
-@Injectable() export class LocalizationPipe implements PipeTransform {
+@Injectable() export class TranslatePipe implements PipeTransform {
 
     /**
      * The language code for the translate pipe.

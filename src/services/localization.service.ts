@@ -1,8 +1,8 @@
 ﻿/**
  * ANGULAR 2 LOCALIZATION
- * A translation service for the new Angular 2 applications using TypeScript
- * written by Roberto Simonetti
- * MIT license
+ * An Angular 2 library for i18n and l10n that implements a translation service - using TypeScript and SystemJS.
+ * Written by Roberto Simonetti.
+ * MIT license.
  * https://github.com/robisim74/angular2localization
  */
 
@@ -17,45 +17,12 @@ import {LocaleService} from './locale.service';
 /**
  * LocalizationService class.
  * 
- * How to use the translation service.
- * 
- * // Services.
- * import {LocaleService} from './services/locale.service'; // LocaleService class.
- * import {LocalizationService} from './services/localization.service'; // LocalizationService class.
- * // Pipes.
- * import {LocalizationPipe} from './pipes/localization.pipe'; // LocalizationPipe class.
- *
- * @Component({
- *      selector: 'app-component',
- *      ...
- *      providers: [LocaleService, LocalizationService, LocalizationPipe], // Localization providers: inherited by all descendants.
- *      pipes: [LocalizationPipe] // Add in each component to invoke the transform method.
- * })
- * 
- * export class AppComponent {
- * 
- *      constructor(public locale: LocaleService, public localization: LocalizationService) {
- * 
- *          // Initializes the LocaleService.
- *          this.locale.addLanguage('en'); // Required: adds a new language.
- *          this.locale.addLanguage('it');
- *          ...
- *          this.locale.definePreferredLanguage('en', 30); // Required: default language and expiry (No days). If the expiry is omitted, the cookie becomes a session cookie.
- *
- *      }
- * 
- * }
- * 
- * Also add in the main:
- * 
- * bootstrap(AppComponent, [HTTP_PROVIDERS]);
- *
  * Direct loading.
  * 
  * To initialize the LocalizationService for the direct loading, add the following code in the body of the constructor of the route component:
  *
  * var translationEN = {
- *      TITLE: 'ANGULAR 2 LOCALIZATION',
+ *      TITLE: 'angular 2 localization',
  *      CHANGE_LANGUAGE: 'change language',
  *      ...
  * }
@@ -71,7 +38,7 @@ import {LocaleService} from './locale.service';
  * 
  * this.localization.translationProvider('./resources/locale-'); // Required: Initializes the translation provider with the given path prefix.
  * 
- * and create the json files of the translations such as "locale-en.json":
+ * and create the json files of the translations such as 'locale-en.json':
  * 
  * {
  *     "TITLE": "angular 2 localization",
@@ -81,38 +48,13 @@ import {LocaleService} from './locale.service';
  *
  * Special characters.
  * 
- * Use the escape character \ to insert special characters into the values of the translations:
+ * You can use quotes inside a string, as long as they don't match the quotes surrounding the string:
+ *
+ * "It wasn't a dream."
+ *
+ * Because strings must be written within quotes, use the '\' escape character to insert special characters into the values of the translations:
  * 
- * \'	single quote
- * \"	double quote
- * 
- * Getting the translation.
- * 
- * To get the translation, add in the template:
- * 
- * {{ 'EXAMPLE' | translate }}
- * 
- * and in each component:
- * 
- * @Component({
- *      ...
- *      pipes: [LocalizationPipe]
- * })
- *  
- * Changing language.
- * 
- * To change language at runtime, add in the component:
- *  
- * selectLanguage(language) {
- * 
- *      this.locale.setCurrentLanguage(language);
- * 
- * }
- * 
- * where "language" is the two-letter code of the language; then add in the view:
- * 
- * <a (click)="selectLanguage('en')">English</a>
- * ...
+ * "\"What's happened to me?\" he thought."
  * 
  * @author Roberto Simonetti
  */
@@ -136,7 +78,7 @@ import {LocaleService} from './locale.service';
     /**
      * The service state. 
      */
-    public isReady;
+    public isReady: boolean;
 
     constructor(public http: Http, public locale: LocaleService) {
 

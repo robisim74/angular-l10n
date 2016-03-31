@@ -1,44 +1,68 @@
 # Angular 2 Localization
-> A translation service for the new Angular 2 applications using TypeScript.
-> Simple & fast.
+> An Angular 2 library for i18n and l10n that implements a translation service - using TypeScript and SystemJS.
 
-## Sample application
+## Sample app
 Sample application that implements the translation service: [demo](http://robisim74.github.io/angular2localization)
+
+## Installation
+You can add `angular2localization` to your project via [Node and npm](https://nodejs.org):
+```
+npm install --save angular2localization
+```
+To load the package you have two methods:
+- Loading the bundle:
+```Html
+<!--loads angular2localization-->
+<script src="node_modules/angular2localization/bundles/angular2localization.js"></script>
+```
+- Using SystemJS:
+```Html
+<!--configures SystemJS-->
+<script>
+    System.config({
+        defaultJSExtensions: true,
+        map: {
+            'angular2localization': 'node_modules/angular2localization'
+        }
+    });
+</script>
+```
 
 ## Getting the translation
 To get the translation, add in the template:
-```
+```Html
 {{ 'TITLE' | translate }}
 ```
-
-### Translating with i18n
-With `I18n Select` that displays the string that matches the current value:
+and in each component:
+```TypeScript
+@Component({
+     ...
+     pipes: [TranslatePipe]
+})
 ```
+With `I18n Select` that displays the string that matches the current value:
+```Html
 {{ gender | i18nSelect: inviteMapping | translate }}
 ```
 With `I18n Plural` that pluralizes the value properly:
-```
+```Html
 {{ messages.length | i18nPlural: messageMapping | translate }}
 ```
 
-## How to use the translation service
-Include in your application:
-* the `locale` and `localization` services;
-* the `localization` pipe;
-
-and register `LocaleService`, `LocalizationService` and `LocalizationPipe` in the route component:
+## Basic usage
+Add in the route component in order to access the data of location from anywhere in the application:
 ```TypeScript
 // Services.
-import {LocaleService} from './services/locale.service'; // LocaleService class.
-import {LocalizationService} from './services/localization.service'; // LocalizationService class.
+import {LocaleService} from 'angular2localization/angular2localization'; // LocaleService class.
+import {LocalizationService} from 'angular2localization/angular2localization'; // LocalizationService class.
 // Pipes.
-import {LocalizationPipe} from './pipes/localization.pipe'; // LocalizationPipe class.
+import {TranslatePipe} from 'angular2localization/angular2localization'; // TranslatePipe class.
 
 @Component({
      selector: 'app-component',
      ...
-     providers: [LocaleService, LocalizationService, LocalizationPipe], // Localization providers: inherited by all descendants.
-     pipes: [LocalizationPipe] // Add in each component to invoke the transform method.
+     providers: [LocaleService, LocalizationService, TranslatePipe], // Localization providers: inherited by all descendants.
+     pipes: [TranslatePipe] // Add in each component to invoke the transform method.
 })
  
 export class AppComponent {
@@ -64,7 +88,7 @@ bootstrap(AppComponent, [HTTP_PROVIDERS]);
 To initialize the `LocalizationService` for the direct loading, add the following code in the body of the constructor of the route component:
 ```TypeScript
 var translationEN = {
-     TITLE: 'ANGULAR 2 LOCALIZATION',
+     TITLE: 'angular 2 localization',
      CHANGE_LANGUAGE: 'change language',
      ...
 }
@@ -80,7 +104,7 @@ To initialize the `LocalizationService` for the asynchronous loading add the fol
 ```TypeScript
 this.localization.translationProvider('./resources/locale-'); // Required: initializes the translation provider with the given path prefix.
 ```
-and create the json files of the translations such as `locale-en.json`:
+and create the `json` files of the translations such as `locale-en.json`:
 ```
 {
     "TITLE": "angular 2 localization",
@@ -99,24 +123,23 @@ Because strings must be written within quotes, use the `\` escape character to i
 "\"What's happened to me?\" he thought."
 ```
 
-## Changing language
+### Changing language
 To change language at runtime, add in the route component:
 ```TypeScript
-selectLanguage(language) {
+selectLanguage(language: string) {
 
      this.locale.setCurrentLanguage(language);
  
 }
 ```
 where `language` is the two-letter code of the language; then add in the view:
-```
+```Html
 <a (click)="selectLanguage('en')">English</a>
 ...
 ```
 
 ## Advanced use with AsyncRoute
-If you use an `AsyncRoute` in an extended application, you can create an instance of the `LocalizationService` for every asynchronously loaded component, as shown:
-![AdvancedUse](https://github.com/robisim74/angular2localization/blob/master/AdvancedUse.jpg)
+If you use an `AsyncRoute` in an extended application, you can create an instance of the `LocalizationService` for every asynchronously loaded component.
 Each instance is different, and can be directly or asynchronously loaded, as in this example:
 ```TypeScript
 export class I18nComponent {
@@ -130,21 +153,7 @@ export class I18nComponent {
 
 }
 ```
-In this way, application performance and memory usage are optimized.
+In this way, application performance and memory usage are optimized. See the [demo](http://robisim74.github.io/angular2localization) for a sample code.
 
-## Running the sample app
-What you need to run the sample app:
-- this repository
-- [Node and npm](https://nodejs.org) already installed.
-
-In the command line, go to the directory that contains `index.html`:
-```
-npm install
-gulp
-```
-You need a static server as [lite-server](https://github.com/johnpapa/lite-server):
-```
-npm install -g lite-server
-lite-server
-```
-and then in a browser visit `localhost:3000/index.html`.
+##License
+MIT

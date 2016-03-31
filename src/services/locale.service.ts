@@ -1,8 +1,8 @@
 /**
  * ANGULAR 2 LOCALIZATION
- * A translation service for the new Angular 2 applications using TypeScript
- * written by Roberto Simonetti
- * MIT license
+ * An Angular 2 library for i18n and l10n that implements a translation service - using TypeScript and SystemJS.
+ * Written by Roberto Simonetti.
+ * MIT license.
  * https://github.com/robisim74/angular2localization
  */
 
@@ -11,8 +11,54 @@ import {Injectable} from 'angular2/core';
 /**
  * LocaleService class.
  * 
- * Instantiate this class only once in the route component in order to access the data of location from anywhere in the application. 
+ * Instantiate this class only once in the route component in order to access the data of location from anywhere in the application: 
  * 
+ * // Services.
+ * import {LocaleService} from 'angular2localization/angular2localization'; // LocaleService class.
+ * import {LocalizationService} from 'angular2localization/angular2localization'; // LocalizationService class.
+ * // Pipes.
+ * import {TranslatePipe} from 'angular2localization/angular2localization'; // TranslatePipe class.
+ *
+ * @Component({
+ *      selector: 'app-component',
+ *      ...
+ *      providers: [LocaleService, LocalizationService, TranslatePipe], // Localization providers: inherited by all descendants.
+ *      pipes: [TranslatePipe] // Add in each component to invoke the transform method.
+ * })
+ * 
+ * export class AppComponent {
+ * 
+ *      constructor(public locale: LocaleService, public localization: LocalizationService) {
+ * 
+ *          // Initializes the LocaleService.
+ *          this.locale.addLanguage('en'); // Required: adds a new language.
+ *          this.locale.addLanguage('it');
+ *          ...
+ *          this.locale.definePreferredLanguage('en', 30); // Required: default language and expiry (No days). If the expiry is omitted, the cookie becomes a session cookie.
+ *
+ *      }
+ * 
+ * }
+ * 
+ * Also add in the main:
+ * 
+ * bootstrap(AppComponent, [HTTP_PROVIDERS]);
+ *  
+ * Changing language.
+ * 
+ * To change language at runtime, add in the component:
+ *  
+ * selectLanguage(language: string) {
+ * 
+ *      this.locale.setCurrentLanguage(language);
+ * 
+ * }
+ * 
+ * where 'language' is the two-letter code of the language; then add in the view:
+ * 
+ * <a (click)="selectLanguage('en')">English</a>
+ * ...
+ *
  * @author Roberto Simonetti
  */
 @Injectable() export class LocaleService {

@@ -1,25 +1,49 @@
 // Plug-ins.
-const gulp = require('gulp');
-const del = require('del');
+var gulp = require('gulp'),
+    del = require('del');
 
-// Cleans the contents of the distribution directory.
-gulp.task('clean', function () {
-    return del('dist/**/*');
+// Script paths.
+var path = require("path"),
+    dest = 'bundles';
+
+// SystemJS Build Tool.
+var Builder = require('systemjs-builder');
+
+var builder = new Builder();
+
+var config = {
+    baseURL: path.baseURL,
+    defaultJSExtensions: true,
+    map: {
+        'angular2': 'node_modules/angular2',
+        'rxjs': 'node_modules/rxjs'
+    },
+    paths: {
+        'angular2localization/*': '*.js',
+    },
+    meta: {
+        'node_modules/angular2/*': { build: false },
+        'node_modules/rxjs/*': { build: false }
+    }
+};
+
+builder.config(config);
+
+// Clean task: cleans the contents of the bundles directory.
+gulp.task('clean', function() {
+
+    return del(dest);
+
 });
 
-// Copies dependencies.
-gulp.task('copy:libs', ['clean'], function () {
-    return gulp.src([
-        'node_modules/es6-shim/es6-shim.min.js',
-        'node_modules/systemjs/dist/system-polyfills.js',
-        'node_modules/angular2/bundles/angular2-polyfills.js',
-        'node_modules/systemjs/dist/system.src.js',
-        'node_modules/rxjs/bundles/Rx.js',
-        'node_modules/angular2/bundles/angular2.dev.js',
-        'node_modules/angular2/bundles/http.dev.js',
-        'node_modules/angular2/bundles/router.dev.js'
-    ])
-        .pipe(gulp.dest('dist/lib'))
+// Bundles task: creates bundles files.
+gulp.task('bundles', ['clean'], function() {
+
+    // Creates js file.
+    builder.bundle('angular2localization/angular2localization', dest + '/angular2localization.js', { minify: false, sourceMaps: false });
+    // Creates minified js file.
+    builder.bundle('angular2localization/angular2localization', dest + '/angular2localization.min.js', { minify: true, sourceMaps: false });
+
 });
 
-gulp.task('default', ['copy:libs']);
+gulp.task('default', ['bundles']);
