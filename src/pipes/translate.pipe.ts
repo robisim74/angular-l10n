@@ -1,19 +1,18 @@
 /**
  * ANGULAR 2 LOCALIZATION
- * An Angular 2 library for i18n and l10n that implements a translation service - using TypeScript and SystemJS.
+ * An Angular 2 library to translate messages, dates and numbers.
  * Written by Roberto Simonetti.
  * MIT license.
  * https://github.com/robisim74/angular2localization
  */
 
-import {Injectable} from 'angular2/core';
-import {Pipe, PipeTransform} from 'angular2/core';
+import {Injectable, Pipe, PipeTransform} from 'angular2/core';
 // Services.
 import {LocaleService} from '../services/locale.service';
 import {LocalizationService} from '../services/localization.service';
 
 /**
- * Translate pipe function.
+ * translate pipe function.
  */
 @Pipe({
     name: 'translate',
@@ -24,24 +23,28 @@ import {LocalizationService} from '../services/localization.service';
  * TranslatePipe class. 
  * An instance of this class is created for each translate pipe function.
  * 
- * Getting the translation.
+ * Getting the message translation:
  * 
- * To get the translation, add in the template:
+ * expression | translate
+ * 
+ * where 'expression' is a string key that indicates the message to translate.
+ * 
+ * For example, to get the translation, add in the template:
  * 
  * {{ 'TITLE' | translate }}
  * 
- * and in each component:
+ * and in the component:
  * 
  * @Component({
  *      ...
  *      pipes: [TranslatePipe]
  * })
  * 
- * With 'I18n Select' that displays the string that matches the current value:
+ * With 'I18nSelectPipe' that displays the string that matches the current value:
  *
  * {{ gender | i18nSelect: inviteMapping | translate }}
  * 
- * With 'I18n Plural' that pluralizes the value properly:
+ * With 'I18nPluralPipe' that pluralizes the value properly:
  *
  * {{ messages.length | i18nPlural: messageMapping | translate }}
  * 
@@ -85,9 +88,9 @@ import {LocalizationService} from '../services/localization.service';
         if (this.localization.isReady) {
 
             // Updates the key & the value of the translation for the key if:
-            // - the key is changed (i18n);
+            // - the key has changed (i18n);
             // - the value is empty;
-            // - the language is changed.
+            // - the language has changed.
             if (this.key != key || this.value == "" || this.languageCode != this.localization.languageCode) {
 
                 // i18n: remove the value of template locale variable. 
@@ -119,7 +122,7 @@ import {LocalizationService} from '../services/localization.service';
 
             } else {
 
-                // The value of the translation isn't changed.
+                // The value of the translation hasn't changed.
                 return this.value;
 
             }

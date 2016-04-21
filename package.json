@@ -1,10 +1,18 @@
 {
     "name": "angular2localization",
-    "version": "0.4.0",
-    "description": "An Angular 2 library for i18n and l10n that implements a translation service - using TypeScript and SystemJS",
+    "version": "0.5.0",
+    "description": "An Angular 2 library to translate messages, dates and numbers",
     "main": "",
     "scripts": {},
-    "keywords": ["angular2", "typescript", "SystemJS", "internationalization", "i18n", "localization", "l10n", "translation"],
+    "keywords": [
+        "Angular2",
+        "TypeScript",
+        "Internationalization",
+        "i18n",
+        "Localization",
+        "l10n",
+        "Translate"
+    ],
     "author": "Roberto Simonetti",
     "license": "MIT",
     "repository": {
@@ -17,12 +25,12 @@
     "homepage": "https://github.com/robisim74/angular2localization",
     "typings": "./angular2localization.d.ts",
     "dependencies": {
-        "angular2": "2.0.0-beta.13",
-        "systemjs": "0.19.24",
+        "angular2": "2.0.0-beta.15",
+        "systemjs": "0.19.26",
         "es6-shim": "^0.35.0",
         "reflect-metadata": "0.1.2",
         "rxjs": "5.0.0-beta.2",
-        "zone.js": "0.6.6"
+        "zone.js": "0.6.10"
     },
     "devDependencies": {
         "typescript": "^1.8.9",

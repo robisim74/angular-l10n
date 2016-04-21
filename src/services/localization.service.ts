@@ -1,6 +1,6 @@
 ﻿/**
  * ANGULAR 2 LOCALIZATION
- * An Angular 2 library for i18n and l10n that implements a translation service - using TypeScript and SystemJS.
+ * An Angular 2 library to translate messages, dates and numbers.
  * Written by Roberto Simonetti.
  * MIT license.
  * https://github.com/robisim74/angular2localization
@@ -19,30 +19,29 @@ import {LocaleService} from './locale.service';
  * 
  * Direct loading.
  * 
- * To initialize the LocalizationService for the direct loading, add the following code in the body of the constructor of the route component:
+ * To initialize LocalizationService for the direct loading, add the following code in the body of the constructor of the route component:
  *
  * var translationEN = {
- *      TITLE: 'angular 2 localization',
- *      CHANGE_LANGUAGE: 'change language',
+ *      TITLE: 'Angular 2 Localization',
+ *      CHANGE_LANGUAGE: 'Change language',
  *      ...
  * }
  * // Add a new translation here.
  * 
  * this.localization.addTranslation('en', translationEN); // Required: adds a new translation with the given language code.
- * this.localization.addTranslation('it', translationIT);
- * ...
+ * // Add a new translation with the given language code here.
  * 
  * Asynchronous loading.
  * 
- * To initialize the LocalizationService for the asynchronous loading add the following code in the body of the constructor of the route component:
+ * To initialize LocalizationService for the asynchronous loading add the following code in the body of the constructor of the route component:
  * 
  * this.localization.translationProvider('./resources/locale-'); // Required: Initializes the translation provider with the given path prefix.
  * 
  * and create the json files of the translations such as 'locale-en.json':
  * 
  * {
- *     "TITLE": "angular 2 localization",
- *     "CHANGE_LANGUAGE": "change language",
+ *     "TITLE": "Angular 2 Localization",
+ *     "CHANGE_LANGUAGE": "Change language",
  *     ...
  * }
  *
@@ -64,17 +63,17 @@ import {LocaleService} from './locale.service';
      * The path prefix for the asynchronous loading.
      */
     private prefix: string;
-       
+
     /**
      * The translations data: {locale: {key: value}}.
      */
     private translationsData: any = {};
-    
+
     /**
      * The language code for the service.
      */
     public languageCode: string;
-       
+
     /**
      * The service state. 
      */
@@ -85,7 +84,7 @@ import {LocaleService} from './locale.service';
         this.prefix = "";
 
         this.languageCode = "";
-                
+
         // Initializes the service state.
         this.isReady = false;
 
@@ -101,12 +100,12 @@ import {LocaleService} from './locale.service';
 
         // Adds the new translation data.
         this.translationsData[language] = translation;
-            
+
         // Updates the service state.
         this.isReady = true;
 
     }
-    
+
     /**
      * Asinchronous loading: defines the translation provider.
      * 
@@ -117,31 +116,31 @@ import {LocaleService} from './locale.service';
         this.prefix = prefix;
 
     }
-    
+
     /**
      * Gets the json data.
      */
     private getTranslation() {
-        
+
         // Initializes the translations data & the service state.
         this.translationsData = {};
         this.isReady = false;
 
         var url: string = this.prefix + this.languageCode + '.json';
-        
+
         // Angular 2 Http module.
         this.http.get(url)
             .map((res: Response) => res.json())
             .subscribe(
-                
+
             // Observer or next.
             (res: any) => {
-                            
+
                 // Assigns the observer to the traslations data.
                 this.translationsData[this.languageCode] = res;
 
             },
-            
+
             // Error.
             (error: any) => {
 
@@ -151,7 +150,7 @@ import {LocaleService} from './locale.service';
 
             // Complete.
             () => {
-                
+
                 // Updates the service state.
                 this.isReady = true;
 
@@ -176,7 +175,7 @@ import {LocaleService} from './locale.service';
             if (this.translationsData[this.languageCode] != null) {
 
                 // Gets the translation by language code. 
-                var translation: any = this.translationsData[this.languageCode];   
+                var translation: any = this.translationsData[this.languageCode];
                 // Gets the value of the translation by key.   
                 value = translation[key];
 
@@ -205,8 +204,8 @@ import {LocaleService} from './locale.service';
         this.languageCode = this.locale.getCurrentLanguage();
 
         // Asynchronous loading.
-        if (this.prefix != "") {                         
-            
+        if (this.prefix != "") {
+
             // Updates the translations data.  
             this.getTranslation();
 
