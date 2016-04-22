@@ -65,7 +65,7 @@ import {LocaleService} from './locale.service';
     private prefix: string;
 
     /**
-     * The translations data: {locale: {key: value}}.
+     * The translations data: {languageCode: {key: value}}.
      */
     private translationsData: any = {};
 

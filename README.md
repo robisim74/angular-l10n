@@ -48,11 +48,11 @@ import {TranslatePipe} from 'angular2localization/angular2localization';
      pipes: [TranslatePipe]
 })
 ```
-With `I18nSelectPipe` that displays the string that matches the current value:
+With Angular 2 `I18nSelectPipe` that displays the string that matches the current value:
 ```Html
 {{ gender | i18nSelect: inviteMapping | translate }}
 ```
-With `I18nPluralPipe` that pluralizes the value properly:
+With Angular 2 `I18nPluralPipe` that pluralizes the value properly:
 ```Html
 {{ messages.length | i18nPlural: messageMapping | translate }}
 ```
@@ -123,8 +123,7 @@ export class AppComponent {
      constructor(public locale: LocaleService,) {
  
          // Initializes LocaleService.
-         this.locale.addLanguage('en'); // Required: adds a new language (ISO 639 two-letter code).
-         this.locale.definePreferredLanguage('en'); // Required: default language.
+         this.locale.definePreferredLanguage('en'); // Required: default language (ISO 639 two-letter code).
           
          // Default country for date & numbers (ISO 3166 two-letter, uppercase code). 
          this.locale.definePreferredCountry('US');
@@ -221,7 +220,7 @@ export class I18nComponent {
 
 }
 ```
-In this way, application performance and memory usage are optimized. See the [demo](http://robisim74.github.io/angular2localization) for a sample code.
+In this way, application performance and memory usage are optimized.
 
 ### Changing language
 To change language at runtime, call the following method:

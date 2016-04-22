@@ -27,7 +27,7 @@ import {Injectable} from 'angular2/core';
  *      constructor(public locale: LocaleService) {
  * 
  *          // Initializes LocaleService.
- *          this.locale.addLanguage('en'); // Required: adds a new language (ISO 639 two-letter code).
+ *          this.locale.addLanguage('en'); // Optional: adds a new language (ISO 639 two-letter code).
  *          // Add a new language here.
  *          this.locale.definePreferredLanguage('en', 30); // Required: default language and expiry (No days). If the expiry is omitted, the cookie becomes a session cookie.
  *          
@@ -39,11 +39,6 @@ import {Injectable} from 'angular2/core';
  *      }
  * 
  * }
- * 
- * Also add in the main:
- * 
- * bootstrap(AppComponent, [HTTP_PROVIDERS]);
- * 
  * 
  * Changing language.
  * 
@@ -96,7 +91,7 @@ import {Injectable} from 'angular2/core';
     private defaultLocale: string;
 
     /**
-     * The available languages codes.
+     * The available language codes.
      */
     private languageCodes: Array<string> = [];
 
@@ -115,7 +110,7 @@ import {Injectable} from 'angular2/core';
     }
 
     /**
-     * Asynchronous loading: adds a new language.
+     * Adds a new language.
      * 
      * @params language The two-letter code of the new language
      */
@@ -126,7 +121,7 @@ import {Injectable} from 'angular2/core';
     }
 
     /**
-     * Direct & asynchronous loading: defines the preferred language. 
+     * Defines the preferred language. 
      * Selects the current language of the browser if it has been added, else the default language. 
      * 
      * @params defaultLanguage The two-letter code of the default language
@@ -148,7 +143,7 @@ import {Injectable} from 'angular2/core';
 
             browserLanguage = browserLanguage.substring(0, 2); // Gets the two-letter code.    
 
-            if (this.languageCodes.indexOf(browserLanguage) != -1) {
+            if (this.languageCodes.length > 0 && this.languageCodes.indexOf(browserLanguage) != -1) {
 
                 this.languageCode = browserLanguage;
 
@@ -161,8 +156,17 @@ import {Injectable} from 'angular2/core';
             // Sets the default locale.
             this.setDefaultLocale();
 
-            // Sets the cookie "locale".
-            this.setCookie("locale", this.defaultLocale, this.expiry);
+            if (this.languageCodes.length > 0) {
+
+                // Sets the cookie "locale".
+                this.setCookie("locale", this.defaultLocale, this.expiry);
+
+            }
+
+        } else {
+
+            // Sets the default locale.
+            this.setDefaultLocale();
 
         }
 
@@ -184,13 +188,22 @@ import {Injectable} from 'angular2/core';
 
             this.countryCode = defaultCountry.toUpperCase();
 
+            // Sets the default locale.
+            this.setDefaultLocale();
+
+            if (this.languageCodes.length > 0) {
+
+                // Sets the cookie "locale".
+                this.setCookie("locale", this.defaultLocale, this.expiry);
+
+            }
+
+        } else {
+
+            // Sets the default locale.
+            this.setDefaultLocale();
+
         }
-
-        // Sets the default locale.
-        this.setDefaultLocale();
-
-        // Sets the cookie "locale".
-        this.setCookie("locale", this.defaultLocale, this.expiry);
 
     }
 
@@ -208,10 +221,14 @@ import {Injectable} from 'angular2/core';
 
             this.currencyCode = defaultCurrency.toUpperCase();
 
-        }
+            if (this.languageCodes.length > 0) {
 
-        // Sets the cookie "currency".
-        this.setCookie("currency", this.currencyCode, this.expiry);
+                // Sets the cookie "currency".
+                this.setCookie("currency", this.currencyCode, this.expiry);
+
+            }
+
+        }
 
     }
 
