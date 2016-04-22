@@ -41,6 +41,8 @@ For example, to get the translation, add in the template:
 ```
 and include `TranslatePipe` in the component:
 ```TypeScript
+import {TranslatePipe} from 'angular2localization/angular2localization';
+
 @Component({
      ...
      pipes: [TranslatePipe]
@@ -59,7 +61,7 @@ With `I18nPluralPipe` that pluralizes the value properly:
 ```
 expression | localedate[:format]
 ```
-where `expression` is a date object or a number (milliseconds since UTC epoch) and `format` indicates which date/time components to include. See `DatePipe` for further information.
+where `expression` is a date object or a number (milliseconds since UTC epoch) and `format` indicates which date/time components to include. See Angular 2 `DatePipe` for further information.
 
 For example, to get the local date, add in the template:
 ```Html
@@ -72,7 +74,7 @@ and include `LocaleDatePipe` in the component.
 ```
 expression | number[:digitInfo]
 ```
-where `expression` is a number and `digitInfo` has the following format: `{minIntegerDigits}.{minFractionDigits}-{maxFractionDigits}`. See `DecimalPipe` for further information.
+where `expression` is a number and `digitInfo` has the following format: `{minIntegerDigits}.{minFractionDigits}-{maxFractionDigits}`. See Angular 2 `DecimalPipe` for further information.
 
 For example, to get the local decimal, add in the template:
 ```Html
@@ -83,7 +85,6 @@ and include `LocaleDecimalPipe` in the component.
 ```
 expression | percent[:digitInfo]
 ```
-See `PercentPipe` for further information.
 
 For example, to get the local percentage, add in the template:
 ```Html
@@ -123,7 +124,7 @@ export class AppComponent {
  
          // Initializes LocaleService.
          this.locale.addLanguage('en'); // Required: adds a new language (ISO 639 two-letter code).
-         this.locale.definePreferredLanguage('en', 30); // Required: default language and expiry (No days). If the expiry is omitted, the cookie becomes a session cookie.
+         this.locale.definePreferredLanguage('en'); // Required: default language.
           
          // Default country for date & numbers (ISO 3166 two-letter, uppercase code). 
          this.locale.definePreferredCountry('US');
