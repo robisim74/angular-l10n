@@ -1,8 +1,7 @@
 # Angular 2 Localization
 > An Angular 2 library to translate messages, dates and numbers.
 
-## Sample app
-Sample application that implements the translation: [demo](http://robisim74.github.io/angular2localization)
+Sample app that implements the translation: [demo](http://robisim74.github.io/angular2localization)
 
 ## Installation
 You can add `angular2localization` to your project via [Node and npm](https://nodejs.org):
@@ -12,12 +11,10 @@ npm install --save angular2localization
 To load the package you have two methods:
 - Loading the bundle:
 ```Html
-<!--loads angular2localization-->
 <script src="node_modules/angular2localization/bundles/angular2localization.js"></script>
 ```
 - Using SystemJS:
 ```Html
-<!--configures SystemJS-->
 <script>
     System.config({
         defaultJSExtensions: true,
@@ -50,40 +47,40 @@ import {TranslatePipe} from 'angular2localization/angular2localization';
 ```
 With Angular 2 `I18nSelectPipe` that displays the string that matches the current value:
 ```Html
-{{ gender | i18nSelect: inviteMapping | translate }}
+{{ expression | i18nSelect:mapping | translate }}
 ```
 With Angular 2 `I18nPluralPipe` that pluralizes the value properly:
 ```Html
-{{ messages.length | i18nPlural: messageMapping | translate }}
+{{ expression | i18nPlural:mapping | translate }}
 ```
 
 ### Dates
 ```
 expression | localedate[:format]
 ```
-where `expression` is a date object or a number (milliseconds since UTC epoch) and `format` indicates which date/time components to include. See Angular 2 `DatePipe` for further information.
+where `expression` is a date object or a number (milliseconds since UTC epoch) and `format` indicates which date/time components to include.
 
 For example, to get the local date, add in the template:
 ```Html
-{{ today | localedate: 'fullDate' }}
+{{ today | localedate:'fullDate' }}
 ```
-and include `LocaleDatePipe` in the component.
+and include `LocaleDatePipe` in the component. See Angular 2 `DatePipe` for further information.
 
 ### Numbers
 #### Decimals
 ```
-expression | number[:digitInfo]
+expression | localedecimal[:digitInfo]
 ```
-where `expression` is a number and `digitInfo` has the following format: `{minIntegerDigits}.{minFractionDigits}-{maxFractionDigits}`. See Angular 2 `DecimalPipe` for further information.
+where `expression` is a number and `digitInfo` has the following format: `{minIntegerDigits}.{minFractionDigits}-{maxFractionDigits}`.
 
 For example, to get the local decimal, add in the template:
 ```Html
 {{ pi | localedecimal:'1.5-5' }}
 ```
-and include `LocaleDecimalPipe` in the component.
+and include `LocaleDecimalPipe` in the component. See Angular 2 `DecimalPipe` for further information.
 #### Percentages
 ```
-expression | percent[:digitInfo]
+expression | localepercent[:digitInfo]
 ```
 
 For example, to get the local percentage, add in the template:
@@ -93,7 +90,7 @@ For example, to get the local percentage, add in the template:
 and include `LocalePercentPipe` in the component.
 #### Currencies
 ```
-expression | currency[:symbolDisplay[:digitInfo]]]
+expression | localecurrency[:symbolDisplay[:digitInfo]]]
 ```
 where `symbolDisplay` is a boolean indicating whether to use the currency symbol (e.g. $) or the currency code (e.g. USD) in the output. 
 
@@ -106,10 +103,8 @@ and include `LocaleCurrencyPipe` in the component.
 ## First scenario
 > You need to localize dates and numbers, but no messages.
 
-### Basic usage
 Add in the route component in order to access the data of location from anywhere in the application:
 ```TypeScript
-// Services.
 import {LocaleService} from 'angular2localization/angular2localization';
 
 @Component({
@@ -117,21 +112,19 @@ import {LocaleService} from 'angular2localization/angular2localization';
      ...
      providers: [LocaleService], // Inherited by all descendants.
 })
- 
+
 export class AppComponent {
- 
+
      constructor(public locale: LocaleService,) {
- 
-         // Initializes LocaleService.
-         this.locale.definePreferredLanguage('en'); // Required: default language (ISO 639 two-letter code).
-          
-         // Default country for date & numbers (ISO 3166 two-letter, uppercase code). 
-         this.locale.definePreferredCountry('US');
+
+         // Required: default language (ISO 639 two-letter code) and country (ISO 3166 two-letter, uppercase code).
+         this.locale.definePreferredLocale('en', 'US');
+
          // Optional: default currency (ISO 4217 three-letter code).
          this.locale.definePreferredCurrency('USD');
- 
+
      }
- 
+
 }
 ```
 
@@ -141,28 +134,27 @@ export class AppComponent {
 ### Basic usage
 Add in the route component in order to access the data of location from anywhere in the application:
 ```TypeScript
-// Services.
-import {LocaleService} from 'angular2localization/angular2localization';
-import {LocalizationService} from 'angular2localization/angular2localization';
+import {LocaleService, LocalizationService} from 'angular2localization/angular2localization';
 
 @Component({
      selector: 'app-component',
      ...
-     providers: [LocaleService, LocalizationService], // Localization providers: inherited by all descendants.
+     providers: [LocaleService, LocalizationService], // Inherited by all descendants.
 })
- 
+
 export class AppComponent {
- 
+
      constructor(public locale: LocaleService, public localization: LocalizationService) {
- 
-         // Initializes LocaleService.
-         this.locale.addLanguage('en'); // Required: adds a new language (ISO 639 two-letter code).
-         this.locale.addLanguage('it');
+
+         // Adds a new language (ISO 639 two-letter code).
+         this.locale.addLanguage('en');
          // Add a new language here.
-         this.locale.definePreferredLanguage('en', 30); // Required: default language and expiry (No days). If the expiry is omitted, the cookie becomes a session cookie.
- 
+
+         // Required: default language and expiry (No days). If the expiry is omitted, the cookie becomes a session cookie.
+         this.locale.definePreferredLanguage('en', 30);
+
      }
- 
+
 }
 ```
 Also add in the main:
@@ -170,7 +162,7 @@ Also add in the main:
 bootstrap(AppComponent, [HTTP_PROVIDERS]);
 ```
 #### Direct loading
-To initialize `LocalizationService` for the direct loading, add the following code in the body of the constructor of the route component:
+To initialize `LocalizationService` for the direct loading, add the following code in the body of constructor of the route component:
 ```TypeScript
 var translationEN = {
      TITLE: 'Angular 2 Localization',
@@ -179,13 +171,15 @@ var translationEN = {
 }
 // Add a new translation here.
  
-this.localization.addTranslation('en', translationEN); // Required: adds a new translation with the given language code.
+// Required: adds a new translation with the given language code.
+this.localization.addTranslation('en', translationEN);
 // Add a new translation with the given language code here.
 ```
 #### Asynchronous loading
-To initialize `LocalizationService` for the asynchronous loading add the following code in the body of the constructor of the route component:
+Alternatively, to initialize `LocalizationService` for the asynchronous loading add the following code in the body of constructor of the route component:
 ```TypeScript
-this.localization.translationProvider('./resources/locale-'); // Required: initializes the translation provider with the given path prefix.
+// Required: initializes the translation provider with the given path prefix.
+this.localization.translationProvider('./resources/locale-');
 ```
 and create the `json` files of the translations such as `locale-en.json`:
 ```
@@ -214,7 +208,8 @@ export class I18nComponent {
     // Instantiates a new LocalizationService for this component and for its descendants.
     constructor(public localizationI18n: LocalizationService) {
 
-        this.localizationI18n.translationProvider('./resources/locale-i18n-'); // Required: initializes the translation provider with the given path prefix.
+        // Required: initializes the translation provider with the given path prefix.
+        this.localizationI18n.translationProvider('./resources/locale-i18n-');
 
     }
 
@@ -233,19 +228,24 @@ where `language` is the two-letter code of the new language (ISO 639).
 > You need to translate messages, dates and numbers.
 
 ### Basic usage
-In addition to what has been said for the messages, add the following code in the body of the constructor of the route component:
+Unlike what said for messages, use the following code in the body of the constructor of the route component:
 ```TypeScript
-// Default country for date & numbers (ISO 3166 two-letter, uppercase code). 
-this.locale.definePreferredCountry('US');
+// Adds a new language (ISO 639 two-letter code).
+this.locale.addLanguage('en');
+// Add a new language here.
+
+// Required: default language, country (ISO 3166 two-letter, uppercase code) and expiry (No days). If the expiry is omitted, the cookie becomes a session cookie.
+this.locale.definePreferredLocale('en', 'US', 30);
+
 // Optional: default currency (ISO 4217 three-letter code).
 this.locale.definePreferredCurrency('USD');
 ```
-### Changing country and currency
-To change country at runtime, call the following method:
+### Changing locale and currency
+To change locale at runtime, call the following method:
 ```TypeScript
-this.locale.setCurrentCountry(country);
+this.locale.setCurrentLocale(language, country);
 ```
-where `country` is the two-letter, uppercase code of the new country (ISO 3166).
+where `language` is the two-letter code of the new language (ISO 639) and `country` is the two-letter, uppercase code of the new country (ISO 3166).
 
 To change currency at runtime, call the following method:
 ```TypeScript
@@ -256,7 +256,13 @@ where `currency` is the three-letter code of the new currency (ISO 4217).
 See the [demo](http://robisim74.github.io/angular2localization) for a sample code.
 
 ## Internationalization API
-To localize dates and numbers, this library uses Intl, through the classes available in Angular 2. For browsers compatibility, follow this [issue](https://github.com/angular/angular/issues/3333).
+To localize dates and numbers, this library uses `Intl` API, through Angular 2. 
+All modern browsers, except Safari, have implemented this API. You can use [Intl.js](https://github.com/andyearnshaw/Intl.js) to extend support to all browsers. 
+Just add one script tag in your `index.html`:
+```Html
+<script src="https://cdn.polyfill.io/v2/polyfill.min.js?features=Intl.~locale.en-US"></script>
+```
+When specifying the `features`, you have to specify what locale, or locales to load.
 
 ##License
 MIT

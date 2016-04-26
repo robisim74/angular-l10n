@@ -1,6 +1,6 @@
 {
     "name": "angular2localization",
-    "version": "0.5.0",
+    "version": "0.5.1",
     "description": "An Angular 2 library to translate messages, dates and numbers",
     "main": "",
     "scripts": {},
@@ -25,12 +25,12 @@
     "homepage": "https://github.com/robisim74/angular2localization",
     "typings": "./angular2localization.d.ts",
     "dependencies": {
-        "angular2": "2.0.0-beta.15",
+        "angular2": "2.0.0-beta.16",
         "systemjs": "0.19.26",
         "es6-shim": "^0.35.0",
         "reflect-metadata": "0.1.2",
         "rxjs": "5.0.0-beta.2",
-        "zone.js": "0.6.10"
+        "zone.js": "0.6.12"
     },
     "devDependencies": {
         "typescript": "^1.8.9",

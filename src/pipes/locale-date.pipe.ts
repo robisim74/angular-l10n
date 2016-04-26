@@ -16,7 +16,7 @@ import {InvalidPipeArgumentException} from 'angular2/src/common/pipes/invalid_pi
 import {LocaleService} from '../services/locale.service';
 
 /**
- * localedate pipe function.
+ * 'localedate' pipe function.
  */
 @Pipe({
   name: 'localedate',
@@ -25,7 +25,7 @@ import {LocaleService} from '../services/locale.service';
 
 /**
  * LocaleDatePipe class.
- * An instance of this class is created for each localedate pipe function.
+ * An instance of this class is created for each 'localedate' pipe function.
  * 
  * Getting the local date:
  * 
@@ -33,13 +33,13 @@ import {LocaleService} from '../services/locale.service';
  * 
  * where 'expression' is a date object or a number (milliseconds since UTC epoch) and 'format' indicates which date/time components to include.
  * 
- * See DatePipe for further information.
- * 
  * For example, to get the local date, add in the template:
  * 
- * {{ today | localedate: 'fullDate' }}
+ * {{ today | localedate:'fullDate' }}
  * 
- * and in the component:
+ * and include LocaleDatePipe in the component:
+ * 
+ * import {LocaleDatePipe} from 'angular2localization/angular2localization';
  * 
  * @Component({
  *      ...
@@ -47,6 +47,7 @@ import {LocaleService} from '../services/locale.service';
  * })
  * 
  * @author Roberto Simonetti
+ * @see Angular 2 DatePipe for further information
  */
 @Injectable() export class LocaleDatePipe implements PipeTransform {
   static ALIASES: { [key: string]: String } = {
@@ -61,12 +62,12 @@ import {LocaleService} from '../services/locale.service';
   };
 
   /**
-   * The default locale for the localedate pipe.
+   * The default locale for LocaleDatePipe.
    */
   private defaultLocale: string;
 
   /**
-   * The value of the localedate pipe.
+   * The value of LocaleDatePipe.
    */
   private value: any;
 
@@ -78,13 +79,13 @@ import {LocaleService} from '../services/locale.service';
   constructor(public locale: LocaleService) { }
 
   /**
-   * Localedate pipe transform method.
+   * LocaleDatePipe transform method.
    * 
-   * @params value The date to be localized
-   * @params args The format of the date
+   * @param value The date to be localized
+   * @param pattern The format of the date
    * @return The locale date
    */
-  transform(value: any, args: any[]): string {
+  transform(value: any, pattern: string = 'mediumDate'): string {
 
     if (isBlank(value)) return null;
 
@@ -100,8 +101,6 @@ import {LocaleService} from '../services/locale.service';
     // - the default locale has changed.
     if (this.value != value || this.localeDate == "" || this.defaultLocale != this.locale.getDefaultLocale()) {
 
-      var pattern: string = isPresent(args) && args.length > 0 ? args[0] : 'mediumDate';
-
       if (isNumber(value)) {
 
         value = DateWrapper.fromMillis(value);
@@ -114,9 +113,9 @@ import {LocaleService} from '../services/locale.service';
 
       }
 
-      // Updates the default locale for the localedate pipe.
+      // Updates the default locale for LocaleDatePipe.
       this.defaultLocale = this.locale.getDefaultLocale();
-      // Updates the value of the localedate pipe.
+      // Updates the value of LocaleDatePipe.
       this.value = value;
 
       // Gets the locale date.

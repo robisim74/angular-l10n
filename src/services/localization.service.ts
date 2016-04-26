@@ -19,7 +19,7 @@ import {LocaleService} from './locale.service';
  * 
  * Direct loading.
  * 
- * To initialize LocalizationService for the direct loading, add the following code in the body of the constructor of the route component:
+ * To initialize LocalizationService for the direct loading, add the following code in the body of constructor of the route component:
  *
  * var translationEN = {
  *      TITLE: 'Angular 2 Localization',
@@ -28,14 +28,16 @@ import {LocaleService} from './locale.service';
  * }
  * // Add a new translation here.
  * 
- * this.localization.addTranslation('en', translationEN); // Required: adds a new translation with the given language code.
+ * // Required: adds a new translation with the given language code.
+ * this.localization.addTranslation('en', translationEN);
  * // Add a new translation with the given language code here.
  * 
  * Asynchronous loading.
  * 
- * To initialize LocalizationService for the asynchronous loading add the following code in the body of the constructor of the route component:
+ * To initialize LocalizationService for the asynchronous loading, add the following code in the body of constructor of the route component:
  * 
- * this.localization.translationProvider('./resources/locale-'); // Required: Initializes the translation provider with the given path prefix.
+ * // Required: initializes the translation provider with the given path prefix.
+ * this.localization.translationProvider('./resources/locale-');
  * 
  * and create the json files of the translations such as 'locale-en.json':
  * 
@@ -44,16 +46,6 @@ import {LocaleService} from './locale.service';
  *     "CHANGE_LANGUAGE": "Change language",
  *     ...
  * }
- *
- * Special characters.
- * 
- * You can use quotes inside a string, as long as they don't match the quotes surrounding the string:
- *
- * "It wasn't a dream."
- *
- * Because strings must be written within quotes, use the '\' escape character to insert special characters into the values of the translations:
- * 
- * "\"What's happened to me?\" he thought."
  * 
  * @author Roberto Simonetti
  */
@@ -65,9 +57,9 @@ import {LocaleService} from './locale.service';
     private prefix: string;
 
     /**
-     * The translations data: {languageCode: {key: value}}.
+     * The translation data: {languageCode: {key: value}}.
      */
-    private translationsData: any = {};
+    private translationData: any = {};
 
     /**
      * The language code for the service.
@@ -82,7 +74,6 @@ import {LocaleService} from './locale.service';
     constructor(public http: Http, public locale: LocaleService) {
 
         this.prefix = "";
-
         this.languageCode = "";
 
         // Initializes the service state.
@@ -93,13 +84,13 @@ import {LocaleService} from './locale.service';
     /**
      * Direct loading: adds new translation data.
      * 
-     * @params language The two-letter code of the language for the translation data
-     * @params translation The new translation data
+     * @param language The two-letter code of the language for the translation data
+     * @param translation The new translation data
      */
     addTranslation(language: string, translation: any) {
 
         // Adds the new translation data.
-        this.translationsData[language] = translation;
+        this.translationData[language] = translation;
 
         // Updates the service state.
         this.isReady = true;
@@ -109,7 +100,7 @@ import {LocaleService} from './locale.service';
     /**
      * Asinchronous loading: defines the translation provider.
      * 
-     * @params prefix The path prefix of the json files
+     * @param prefix The path prefix of the json files
      */
     translationProvider(prefix: string) {
 
@@ -122,8 +113,8 @@ import {LocaleService} from './locale.service';
      */
     private getTranslation() {
 
-        // Initializes the translations data & the service state.
-        this.translationsData = {};
+        // Initializes the translation data & the service state.
+        this.translationData = {};
         this.isReady = false;
 
         var url: string = this.prefix + this.languageCode + '.json';
@@ -136,8 +127,8 @@ import {LocaleService} from './locale.service';
             // Observer or next.
             (res: any) => {
 
-                // Assigns the observer to the traslations data.
-                this.translationsData[this.languageCode] = res;
+                // Assigns the observer to the translation data.
+                this.translationData[this.languageCode] = res;
 
             },
 
@@ -161,10 +152,10 @@ import {LocaleService} from './locale.service';
     }
 
     /**
-     * Translate a key.
+     * Translates a key.
      * 
-     * @params key The key to be translated
-     * @return An observable of the value of the translation
+     * @param key The key to be translated
+     * @return An observable of the value of translation
      */
     translate(key: string): Observable<string> {
 
@@ -172,16 +163,16 @@ import {LocaleService} from './locale.service';
 
             var value: string;
 
-            if (this.translationsData[this.languageCode] != null) {
+            if (this.translationData[this.languageCode] != null) {
 
                 // Gets the translation by language code. 
-                var translation: any = this.translationsData[this.languageCode];
-                // Gets the value of the translation by key.   
+                var translation: any = this.translationData[this.languageCode];
+                // Gets the value of translation by key.   
                 value = translation[key];
 
             }
 
-            // If the value of the translation is not present, the same key is returned (see issue #1).
+            // If the value of translation is not present, the same key is returned (see issue #1).
             if (value == null || value == "") {
 
                 value = key;
@@ -196,7 +187,7 @@ import {LocaleService} from './locale.service';
     }
 
     /**
-     * When the language changes, updates the language code and loads the translations data for the asynchronous loading.
+     * When the language changes, updates the language code and loads the translation data for the asynchronous loading.
      */
     updateTranslation() {
 
@@ -206,7 +197,7 @@ import {LocaleService} from './locale.service';
         // Asynchronous loading.
         if (this.prefix != "") {
 
-            // Updates the translations data.  
+            // Updates the translation data.  
             this.getTranslation();
 
         }

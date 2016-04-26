@@ -30,14 +30,14 @@ var config = {
 builder.config(config);
 
 // Clean task: cleans the contents of the bundles directory.
-gulp.task('clean', function() {
+gulp.task('clean', function () {
 
     return del(dest);
 
 });
 
-// Bundles task: creates bundles files.
-gulp.task('bundles', ['clean'], function() {
+// Bundles task: creates files.
+gulp.task('bundles', ['clean'], function () {
 
     // Creates js file.
     builder.bundle('angular2localization/angular2localization', dest + '/angular2localization.js', { minify: false, sourceMaps: false });

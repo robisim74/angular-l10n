@@ -13,7 +13,8 @@ import {Injectable} from 'angular2/core';
  * 
  * Instantiate this class only once in the route component in order to access the data of location from anywhere in the application: 
  * 
- * // Services.
+ * FIRST SCENARIO - Dates & numbers.
+ * 
  * import {LocaleService} from 'angular2localization/angular2localization';
  *
  * @Component({
@@ -26,13 +27,62 @@ import {Injectable} from 'angular2/core';
  * 
  *      constructor(public locale: LocaleService) {
  * 
- *          // Initializes LocaleService.
- *          this.locale.addLanguage('en'); // Optional: adds a new language (ISO 639 two-letter code).
+ *          // Required: default language (ISO 639 two-letter code) and country (ISO 3166 two-letter, uppercase code).
+ *          this.locale.definePreferredLocale('en', 'US');
+ * 
+ *          // Optional: default currency (ISO 4217 three-letter code).
+ *          this.locale.definePreferredCurrency('USD');
+ * 
+ *      }
+ * 
+ * }
+ * 
+ * SECOND SCENARIO - Messages.
+ * 
+ * import {LocaleService, LocalizationService} from 'angular2localization/angular2localization';
+ *
+ * @Component({
+ *      selector: 'app-component',
+ *      ...
+ *      providers: [LocaleService, LocalizationService] // Inherited by all descendants.
+ * })
+ * 
+ * export class AppComponent {
+ * 
+ *      constructor(public locale: LocaleService, public localization: LocalizationService) {
+ * 
+ *          // Adds a new language (ISO 639 two-letter code).
+ *          this.locale.addLanguage('en');
  *          // Add a new language here.
- *          this.locale.definePreferredLanguage('en', 30); // Required: default language and expiry (No days). If the expiry is omitted, the cookie becomes a session cookie.
- *          
- *          // Optional: default country for date & numbers (ISO 3166 two-letter, uppercase code). 
- *          this.locale.definePreferredCountry('US');
+ * 
+ *          // Required: default language and expiry (No days). If the expiry is omitted, the cookie becomes a session cookie.
+ *          this.locale.definePreferredLanguage('en', 30);
+ *           
+ *      }
+ * 
+ * }
+ * 
+ * THIRD SCENARIO - Messages, dates & numbers.
+ * 
+ * import {LocaleService, LocalizationService} from 'angular2localization/angular2localization';
+ *
+ * @Component({
+ *      selector: 'app-component',
+ *      ...
+ *      providers: [LocaleService, LocalizationService] // Inherited by all descendants.
+ * })
+ * 
+ * export class AppComponent {
+ * 
+ *      constructor(public locale: LocaleService, public localization: LocalizationService) {
+ * 
+ *          // Adds a new language (ISO 639 two-letter code).
+ *          this.locale.addLanguage('en');
+ *          // Add a new language here.
+ * 
+ *          // Required: default language, country (ISO 3166 two-letter, uppercase code) and expiry (No days). If the expiry is omitted, the cookie becomes a session cookie.
+ *          this.locale.definePreferredLocale('en', 'US', 30);
+ *  
  *          // Optional: default currency (ISO 4217 three-letter code).
  *          this.locale.definePreferredCurrency('USD');
  * 
@@ -49,13 +99,14 @@ import {Injectable} from 'angular2/core';
  * where 'language' is the two-letter code of the new language (ISO 639).
  * 
  * 
- * Changing country.
+ * Changing locale.
  * 
- * To change country at runtime, call the following method:
+ * To change locale at runtime, call the following method:
  *  
- * this.locale.setCurrentCountry(country);
+ * this.locale.setCurrentLocale(language, country);
  * 
- * where 'country' is the two-letter, uppercase code of the new country (ISO 3166).
+ * where 'language' is the two-letter code of the new language (ISO 639)
+ * and 'country' is the two-letter, uppercase code of the new country (ISO 3166).
  *
  * 
  * Changing currency.
@@ -112,7 +163,7 @@ import {Injectable} from 'angular2/core';
     /**
      * Adds a new language.
      * 
-     * @params language The two-letter code of the new language
+     * @param language The two-letter code of the new language
      */
     addLanguage(language: string) {
 
@@ -124,8 +175,8 @@ import {Injectable} from 'angular2/core';
      * Defines the preferred language. 
      * Selects the current language of the browser if it has been added, else the default language. 
      * 
-     * @params defaultLanguage The two-letter code of the default language
-     * @params expiry Number of days on the expiry. If omitted, the cookie becomes a session cookie
+     * @param defaultLanguage The two-letter code of the default language
+     * @param expiry Number of days on the expiry. If omitted, the cookie becomes a session cookie
      */
     definePreferredLanguage(defaultLanguage: string, expiry?: number) {
 
@@ -175,7 +226,8 @@ import {Injectable} from 'angular2/core';
     /**
      * Defines the preferred country. 
      * 
-     * @params defaultCountry The two-letter, uppercase code of the default country
+     * @param defaultCountry The two-letter, uppercase code of the default country
+     * @deprecated Replaced by definePreferredLocale
      */
     definePreferredCountry(defaultCountry: string) {
 
@@ -208,9 +260,70 @@ import {Injectable} from 'angular2/core';
     }
 
     /**
+     * Defines preferred languange and country, regardless of the browser language.
+     * 
+     * @param defaultLanguage The two-letter code of the default language
+     * @param defaultCountry The two-letter, uppercase code of the default country
+     * @param expiry Number of days on the expiry. If omitted, the cookie becomes a session cookie
+     */
+    definePreferredLocale(defaultLanguage: string, defaultCountry: string, expiry?: number) {
+
+        this.expiry = expiry;
+
+        // Tries to get the cookie "locale".
+        var locale: string = this.getCookie("locale");
+        // Gets the two-letter code. 
+        this.languageCode = locale.substring(0, 2);
+
+        if (this.languageCode == "") {
+
+            this.languageCode = defaultLanguage.toLowerCase();
+            this.countryCode = defaultCountry.toUpperCase();
+
+            // Sets the default locale.
+            this.setDefaultLocale();
+
+            if (this.languageCodes.length > 0) {
+
+                // Sets the cookie "locale".
+                this.setCookie("locale", this.defaultLocale, this.expiry);
+
+            }
+
+        } else {
+
+            // Gets the two-letter, uppercase code.
+            this.countryCode = locale.substring(3, 5);
+
+            if (this.countryCode == "") {
+
+                this.countryCode = defaultCountry.toUpperCase();
+
+                // Sets the default locale.
+                this.setDefaultLocale();
+
+                if (this.languageCodes.length > 0) {
+
+                    // Sets the cookie "locale".
+                    this.setCookie("locale", this.defaultLocale, this.expiry);
+
+                }
+
+            } else {
+
+                // Sets the default locale.
+                this.setDefaultLocale();
+
+            }
+
+        }
+
+    }
+
+    /**
      * Defines the preferred currency. 
      * 
-     * @params defaultCurrency The three-letter code of the default currency
+     * @param defaultCurrency The three-letter code of the default currency
      */
     definePreferredCurrency(defaultCurrency: string) {
 
@@ -268,7 +381,7 @@ import {Injectable} from 'angular2/core';
     /**
      * Sets the current language.
      * 
-     * @params language The two-letter code of the new language
+     * @param language The two-letter code of the new language
      */
     setCurrentLanguage(language: string) {
 
@@ -293,7 +406,8 @@ import {Injectable} from 'angular2/core';
     /**
      * Sets the current country.
      * 
-     * @params country The two-letter, uppercase code of the new country
+     * @param country The two-letter, uppercase code of the new country
+     * @deprecated Replaced by setCurrentLocale
      */
     setCurrentCountry(country: string) {
 
@@ -316,9 +430,38 @@ import {Injectable} from 'angular2/core';
     }
 
     /**
+     * Sets the current locale.
+     * 
+     * @param language The two-letter code of the new language
+     * @param country The two-letter, uppercase code of the new country
+     */
+    setCurrentLocale(language: string, country: string) {
+
+        language = language.toLowerCase();
+        country = country.toUpperCase();
+
+        // Checks if language or country have changed.
+        if (this.languageCode != language || this.countryCode != country) {
+
+            // Sets the current language code.
+            this.languageCode = language;
+            // Sets the current country code.
+            this.countryCode = country;
+
+            // Sets the default locale.
+            this.setDefaultLocale();
+
+            // Sets the cookie "locale".
+            this.setCookie("locale", this.defaultLocale, this.expiry);
+
+        }
+
+    }
+
+    /**
      * Sets the current currency.
      * 
-     * @params currency The three-letter code of the new currency
+     * @param currency The three-letter code of the new currency
      */
     setCurrentcurrency(currency: string) {
 
@@ -363,9 +506,9 @@ import {Injectable} from 'angular2/core';
     /**
      * Sets the cookie.
      * 
-     * @params name The name of the cookie
-     * @params value The value of the cookie
-     * @params days Number of days on the expiry
+     * @param name The name of the cookie
+     * @param value The value of the cookie
+     * @param days Number of days on the expiry
      */
     private setCookie(name: string, value: string, days?: number) {
 
@@ -393,7 +536,7 @@ import {Injectable} from 'angular2/core';
     /**
      * Gets the cookie.
      * 
-     * @params name The name of the cookie
+     * @param name The name of the cookie
      * @return The value of the cookie
      */
     private getCookie(name: string): string {

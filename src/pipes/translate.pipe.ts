@@ -12,7 +12,7 @@ import {LocaleService} from '../services/locale.service';
 import {LocalizationService} from '../services/localization.service';
 
 /**
- * translate pipe function.
+ * 'translate' pipe function.
  */
 @Pipe({
     name: 'translate',
@@ -21,7 +21,7 @@ import {LocalizationService} from '../services/localization.service';
 
 /**
  * TranslatePipe class. 
- * An instance of this class is created for each translate pipe function.
+ * An instance of this class is created for each 'translate' pipe function.
  * 
  * Getting the message translation:
  * 
@@ -33,51 +33,53 @@ import {LocalizationService} from '../services/localization.service';
  * 
  * {{ 'TITLE' | translate }}
  * 
- * and in the component:
+ * and include TranslatePipe in the component:
+ * 
+ * import {TranslatePipe} from 'angular2localization/angular2localization';
  * 
  * @Component({
  *      ...
  *      pipes: [TranslatePipe]
  * })
  * 
- * With 'I18nSelectPipe' that displays the string that matches the current value:
+ * With Angular 2 I18nSelectPipe that displays the string that matches the current value:
  *
- * {{ gender | i18nSelect: inviteMapping | translate }}
+ * {{ expression | i18nSelect:mapping | translate }}
  * 
- * With 'I18nPluralPipe' that pluralizes the value properly:
+ * With Angular 2 I18nPluralPipe that pluralizes the value properly:
  *
- * {{ messages.length | i18nPlural: messageMapping | translate }}
+ * {{ expression | i18nPlural:mapping | translate }}
  * 
  * @author Roberto Simonetti
  */
 @Injectable() export class TranslatePipe implements PipeTransform {
 
     /**
-     * The language code for the translate pipe.
+     * The language code for TranslatePipe.
      */
     private languageCode: string;
 
     /**
-     * The key of the translate pipe.
+     * The key of TranslatePipe.
      */
     private key: string;
 
     /**
-     * The value of the translation for the key.
+     * The value of translation for the key.
      */
     private value: string;
 
     constructor(public locale: LocaleService, public localization: LocalizationService) { }
 
     /**
-     * Translate pipe transform method.
+     * TranslatePipe transform method.
      * 
-     * @params key The key to be translated
-     * @return The value of the translation
+     * @param key The key to be translated
+     * @return The value of translation
      */
     transform(key: string): string {
 
-        // When the language changes, updates the language code and loads the translations data for the asynchronous loading.
+        // When the language changes, updates the language code and loads the translation data for the asynchronous loading.
         if (this.locale.getCurrentLanguage() != "" && this.locale.getCurrentLanguage() != this.localization.languageCode) {
 
             this.localization.updateTranslation();
@@ -87,17 +89,17 @@ import {LocalizationService} from '../services/localization.service';
         // Checks the service state.
         if (this.localization.isReady) {
 
-            // Updates the key & the value of the translation for the key if:
+            // Updates the key & the value of translation for the key if:
             // - the key has changed (i18n);
             // - the value is empty;
             // - the language has changed.
             if (this.key != key || this.value == "" || this.languageCode != this.localization.languageCode) {
 
-                // i18n: remove the value of template locale variable. 
+                // i18n: removes the value of template locale variable. 
                 var formatKey: string = key.replace(/^\d+\b/, '');
                 formatKey = formatKey.trim();
 
-                // Gets the value of the translation.
+                // Gets the value of translation.
                 this.localization.translate(formatKey).forEach(
 
                     // Next.
@@ -111,9 +113,9 @@ import {LocalizationService} from '../services/localization.service';
 
                     () => {
 
-                        // Updates the language code for the translate pipe.
+                        // Updates the language code for TranslatePipe.
                         this.languageCode = this.localization.languageCode;
-                        // Updates the key of the translate pipe.
+                        // Updates the key of TranslatePipe.
                         this.key = key;
 
                         return this.value;
@@ -122,7 +124,7 @@ import {LocalizationService} from '../services/localization.service';
 
             } else {
 
-                // The value of the translation hasn't changed.
+                // The value of translation hasn't changed.
                 return this.value;
 
             }
