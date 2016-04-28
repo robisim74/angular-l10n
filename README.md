@@ -228,7 +228,7 @@ where `language` is the two-letter code of the new language (ISO 639).
 > You need to translate messages, dates and numbers.
 
 ### Basic usage
-Unlike what said for messages, use the following code in the body of the constructor of the route component:
+Unlike what said for messages, use the following code in the body of constructor of the route component:
 ```TypeScript
 // Adds a new language (ISO 639 two-letter code).
 this.locale.addLanguage('en');
