@@ -189,6 +189,7 @@ and create the `json` files of the translations such as `locale-en.json`:
     ...
 }
 ```
+N.B. Resource files must be saved in `UTF-8` format.
 #### Special characters
 You can use quotes inside a string, as long as they don't match the quotes surrounding the string:
 ```
