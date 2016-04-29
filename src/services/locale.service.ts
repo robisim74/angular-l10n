@@ -122,17 +122,17 @@ import {Injectable, EventEmitter, Output} from 'angular2/core';
 @Injectable() export class LocaleService {
 
     /**
-     * output for event Current language code changed.
+     * output for event current language code changed.
      */
     @Output() languageCodeChanged = new EventEmitter<string>();
 
       /**
-     * output for event  Current country code changed.
+     * output for event current country code changed.
      */
     @Output() countryCodeChanged = new EventEmitter<string>();
 
       /**
-     * output for event Current currency code changed.
+     * output for event current currency code changed.
      */
     @Output() currencyCodeChanged = new EventEmitter<string>();
 
