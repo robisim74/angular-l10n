@@ -122,17 +122,17 @@ import {Injectable, EventEmitter, Output} from 'angular2/core';
 @Injectable() export class LocaleService {
 
     /**
-     * output for event current language code changed.
+     * Output for event current language code changed.
      */
     @Output() languageCodeChanged = new EventEmitter<string>();
 
-      /**
-     * output for event current country code changed.
+    /**
+     * Output for event current country code changed.
      */
     @Output() countryCodeChanged = new EventEmitter<string>();
 
-      /**
-     * output for event current currency code changed.
+    /**
+     * Output for event current currency code changed.
      */
     @Output() currencyCodeChanged = new EventEmitter<string>();
 
@@ -414,7 +414,7 @@ import {Injectable, EventEmitter, Output} from 'angular2/core';
             // Sets the cookie "locale".
             this.setCookie("locale", this.defaultLocale, this.expiry);
 
-            // send an event
+            // Send an event.
             this.languageCodeChanged.emit(language);
         }
 
@@ -442,7 +442,7 @@ import {Injectable, EventEmitter, Output} from 'angular2/core';
             // Sets the cookie "locale".
             this.setCookie("locale", this.defaultLocale, this.expiry);
 
-            // send an event
+            // Send an event.
             this.countryCodeChanged.emit(country);
         }
 
@@ -473,7 +473,7 @@ import {Injectable, EventEmitter, Output} from 'angular2/core';
             // Sets the cookie "locale".
             this.setCookie("locale", this.defaultLocale, this.expiry);
 
-            // send the events
+            // Send the events.
             this.countryCodeChanged.emit(country);
             this.languageCodeChanged.emit(language);
         }
@@ -498,7 +498,7 @@ import {Injectable, EventEmitter, Output} from 'angular2/core';
             // Sets the cookie "currency".
             this.setCookie("currency", this.currencyCode, this.expiry);
 
-            // send the event
+            // Send an event.
             this.currencyCodeChanged.emit(currency);
         }
 
