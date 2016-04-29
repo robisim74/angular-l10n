@@ -6,7 +6,7 @@
  * https://github.com/robisim74/angular2localization
  */
 
-import {Injectable} from 'angular2/core';
+import {Injectable, EventEmitter, Output} from 'angular2/core';
 
 /**
  * LocaleService class.
@@ -120,6 +120,21 @@ import {Injectable} from 'angular2/core';
  * @author Roberto Simonetti
  */
 @Injectable() export class LocaleService {
+
+    /**
+     * output for event Current language code changed.
+     */
+    @Output() languageCodeChanged = new EventEmitter<string>();
+
+      /**
+     * output for event  Current country code changed.
+     */
+    @Output() countryCodeChanged = new EventEmitter<string>();
+
+      /**
+     * output for event Current currency code changed.
+     */
+    @Output() currencyCodeChanged = new EventEmitter<string>();
 
     /**
      * Current language code.
@@ -399,6 +414,8 @@ import {Injectable} from 'angular2/core';
             // Sets the cookie "locale".
             this.setCookie("locale", this.defaultLocale, this.expiry);
 
+            // send an event
+            this.languageCodeChanged.emit(language);
         }
 
     }
@@ -425,6 +442,8 @@ import {Injectable} from 'angular2/core';
             // Sets the cookie "locale".
             this.setCookie("locale", this.defaultLocale, this.expiry);
 
+            // send an event
+            this.countryCodeChanged.emit(country);
         }
 
     }
@@ -454,6 +473,9 @@ import {Injectable} from 'angular2/core';
             // Sets the cookie "locale".
             this.setCookie("locale", this.defaultLocale, this.expiry);
 
+            // send the events
+            this.countryCodeChanged.emit(country);
+            this.languageCodeChanged.emit(language);
         }
 
     }
@@ -476,6 +498,8 @@ import {Injectable} from 'angular2/core';
             // Sets the cookie "currency".
             this.setCookie("currency", this.currencyCode, this.expiry);
 
+            // send the event
+            this.currencyCodeChanged.emit(currency);
         }
 
     }
