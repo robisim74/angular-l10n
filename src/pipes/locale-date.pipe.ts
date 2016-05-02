@@ -101,6 +101,12 @@ import {LocaleService} from '../services/locale.service';
     // - the default locale has changed.
     if (this.value != value || this.localeDate == "" || this.defaultLocale != this.locale.getDefaultLocale()) {
 
+      // Updates the default locale for LocaleDatePipe.
+      this.defaultLocale = this.locale.getDefaultLocale();
+
+      // Updates the value of LocaleDatePipe before it changes.
+      this.value = value;
+
       if (isNumber(value)) {
 
         value = DateWrapper.fromMillis(value);
@@ -112,11 +118,6 @@ import {LocaleService} from '../services/locale.service';
         pattern = <string>StringMapWrapper.get(LocaleDatePipe.ALIASES, pattern);
 
       }
-
-      // Updates the default locale for LocaleDatePipe.
-      this.defaultLocale = this.locale.getDefaultLocale();
-      // Updates the value of LocaleDatePipe.
-      this.value = value;
 
       // Gets the locale date.
       this.localeDate = DateFormatter.format(value, this.defaultLocale, pattern);
