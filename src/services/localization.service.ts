@@ -6,8 +6,8 @@
  * https://github.com/robisim74/angular2localization
  */
 
-import {Injectable} from 'angular2/core';
-import {Http, Response} from 'angular2/http';
+import {Injectable} from '@angular/core';
+import {Http, Response} from '@angular/http';
 import {Observer} from 'rxjs/Observer';
 import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
@@ -62,6 +62,11 @@ import {LocaleService} from './locale.service';
     private translationData: any = {};
 
     /**
+     * The loading mode for the service.
+     */
+    public loadingMode: LoadingMode;
+
+    /**
      * The language code for the service.
      */
     public languageCode: string;
@@ -69,15 +74,16 @@ import {LocaleService} from './locale.service';
     /**
      * The service state. 
      */
-    public isReady: boolean;
+    public serviceState: ServiceState;
 
     constructor(public http: Http, public locale: LocaleService) {
 
         this.prefix = "";
+        this.loadingMode = LoadingMode.Unknown;
         this.languageCode = "";
 
         // Initializes the service state.
-        this.isReady = false;
+        this.serviceState = ServiceState.isWaiting;
 
     }
 
@@ -93,18 +99,24 @@ import {LocaleService} from './locale.service';
         this.translationData[language] = translation;
 
         // Updates the service state.
-        this.isReady = true;
+        this.serviceState = ServiceState.isReady;
+
+        // Updates the loading mode.
+        this.loadingMode = LoadingMode.Direct;
 
     }
 
     /**
-     * Asinchronous loading: defines the translation provider.
+     * Asynchronous loading: defines the translation provider.
      * 
      * @param prefix The path prefix of the json files
      */
     translationProvider(prefix: string) {
 
         this.prefix = prefix;
+
+        // Updates the loading mode.
+        this.loadingMode = LoadingMode.Async;
 
     }
 
@@ -115,7 +127,7 @@ import {LocaleService} from './locale.service';
 
         // Initializes the translation data & the service state.
         this.translationData = {};
-        this.isReady = false;
+        this.serviceState = ServiceState.isLoading;
 
         var url: string = this.prefix + this.languageCode + '.json';
 
@@ -143,11 +155,41 @@ import {LocaleService} from './locale.service';
             () => {
 
                 // Updates the service state.
-                this.isReady = true;
+                this.serviceState = ServiceState.isReady;
 
                 console.log("Localization service:", "Http get method completed.");
 
             });
+
+    }
+
+    /**
+     * Gets a translated value by key.
+     * 
+     * @param key The key to be translated
+     * @return The value of translation
+     */
+    getValue(key: string): string {
+
+        var value: string;
+
+        if (this.translationData[this.languageCode] != null) {
+
+            // Gets the translation by language code. 
+            var translation: any = this.translationData[this.languageCode];
+            // Gets the value of translation by key.   
+            value = translation[key];
+
+        }
+
+        // If the value of translation is not present, the same key is returned (see issue #1).
+        if (value == null || value == "") {
+
+            value = key;
+
+        }
+
+        return value;
 
     }
 
@@ -161,23 +203,8 @@ import {LocaleService} from './locale.service';
 
         return new Observable((observer: Observer<string>) => {
 
-            var value: string;
-
-            if (this.translationData[this.languageCode] != null) {
-
-                // Gets the translation by language code. 
-                var translation: any = this.translationData[this.languageCode];
-                // Gets the value of translation by key.   
-                value = translation[key];
-
-            }
-
-            // If the value of translation is not present, the same key is returned (see issue #1).
-            if (value == null || value == "") {
-
-                value = key;
-
-            }
+            // Gets the value of translation for the key.
+            var value: string = this.getValue(key);
 
             observer.next(value);
             observer.complete();
@@ -191,11 +218,11 @@ import {LocaleService} from './locale.service';
      */
     updateTranslation() {
 
-        // Updates the language code for the service.
+        // Updates the language code of the service.
         this.languageCode = this.locale.getCurrentLanguage();
 
         // Asynchronous loading.
-        if (this.prefix != "") {
+        if (this.loadingMode == LoadingMode.Async) {
 
             // Updates the translation data.  
             this.getTranslation();
@@ -203,5 +230,45 @@ import {LocaleService} from './locale.service';
         }
 
     }
+
+}
+
+/**
+ * Defines the service state.
+ */
+export enum ServiceState {
+
+    /**
+     * The translation data has been loaded.
+     */
+    isReady,
+    /**
+     * The service is loading the data.
+     */
+    isLoading,
+    /**
+     * The service is waiting for the data.
+     */
+    isWaiting
+
+}
+
+/**
+ * Defines the loading mode.
+ */
+export enum LoadingMode {
+
+    /**
+     * Initial state.
+     */
+    Unknown,
+    /**
+     * Direct loading.
+     */
+    Direct,
+    /**
+     * Asynchronous loading.
+     */
+    Async
 
 }

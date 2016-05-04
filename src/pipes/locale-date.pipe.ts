@@ -6,11 +6,11 @@
  * https://github.com/robisim74/angular2localization
  */
 
-import {Injectable, Pipe, PipeTransform} from 'angular2/core';
-import {isDate, isNumber, isPresent, DateWrapper, isBlank} from 'angular2/src/facade/lang';
-import {DateFormatter} from 'angular2/src/facade/intl';
-import {StringMapWrapper} from 'angular2/src/facade/collection';
-import {InvalidPipeArgumentException} from 'angular2/src/common/pipes/invalid_pipe_argument_exception';
+import {Injectable, Pipe, PipeTransform} from '@angular/core';
+import {isDate, isNumber, isPresent, DateWrapper, isBlank} from '@angular/common/src/facade/lang';
+import {DateFormatter} from '@angular/common/src/facade/intl';
+import {StringMapWrapper} from '@angular/common/src/facade/collection';
+import {InvalidPipeArgumentException} from '@angular/common/src/pipes/invalid_pipe_argument_exception';
 
 // Services.
 import {LocaleService} from '../services/locale.service';

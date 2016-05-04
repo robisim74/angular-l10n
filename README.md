@@ -20,9 +20,13 @@ To load the package you have two methods:
 ```Html
 <script>
     System.config({
-        defaultJSExtensions: true,
         map: {
+            ...
             'angular2localization': 'node_modules/angular2localization'
+        },
+        packages: {
+            ...
+            'angular2localization': { defaultExtension: 'js' }
         }
     });
 </script>

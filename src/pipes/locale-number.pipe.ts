@@ -6,11 +6,11 @@
  * https://github.com/robisim74/angular2localization
  */
 
-import {Injectable, Pipe, PipeTransform} from 'angular2/core';
-import {isNumber, isPresent, isBlank, NumberWrapper, RegExpWrapper} from 'angular2/src/facade/lang';
-import {BaseException} from 'angular2/src/facade/exceptions';
-import {NumberFormatter, NumberFormatStyle} from 'angular2/src/facade/intl';
-import {InvalidPipeArgumentException} from 'angular2/src/common/pipes/invalid_pipe_argument_exception';
+import {Injectable, Pipe, PipeTransform} from '@angular/core';
+import {isNumber, isPresent, isBlank, NumberWrapper, RegExpWrapper} from '@angular/common/src/facade/lang';
+import {BaseException} from '@angular/common/src/facade/exceptions';
+import {NumberFormatter, NumberFormatStyle} from '@angular/common/src/facade/intl';
+import {InvalidPipeArgumentException} from '@angular/common/src/pipes/invalid_pipe_argument_exception';
 
 // Services.
 import {LocaleService} from '../services/locale.service';

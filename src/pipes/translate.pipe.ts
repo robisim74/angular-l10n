@@ -6,10 +6,10 @@
  * https://github.com/robisim74/angular2localization
  */
 
-import {Injectable, Pipe, PipeTransform} from 'angular2/core';
+import {Injectable, Pipe, PipeTransform} from '@angular/core';
 // Services.
 import {LocaleService} from '../services/locale.service';
-import {LocalizationService} from '../services/localization.service';
+import {LocalizationService, ServiceState} from '../services/localization.service';
 
 /**
  * 'translate' pipe function.
@@ -87,8 +87,8 @@ import {LocalizationService} from '../services/localization.service';
         }
 
         // Checks the service state.
-        if (this.localization.isReady) {
-
+        if (this.localization.serviceState == ServiceState.isReady) {
+            
             // Updates the key & the value of translation for the key if:
             // - the key has changed (i18n);
             // - the value is empty;
@@ -107,7 +107,7 @@ import {LocalizationService} from '../services/localization.service';
 
                         this.value = key.replace(formatKey, value);
 
-                    }, null
+                    }
 
                 ).then(
 

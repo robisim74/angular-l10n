@@ -6,7 +6,7 @@
  * https://github.com/robisim74/angular2localization
  */
 
-import {Injectable, EventEmitter, Output} from 'angular2/core';
+import {Injectable, EventEmitter, Output} from '@angular/core';
 
 /**
  * LocaleService class.
@@ -414,7 +414,7 @@ import {Injectable, EventEmitter, Output} from 'angular2/core';
             // Sets the cookie "locale".
             this.setCookie("locale", this.defaultLocale, this.expiry);
 
-            // Send an event.
+            // Sends an event.
             this.languageCodeChanged.emit(language);
         }
 
@@ -442,7 +442,7 @@ import {Injectable, EventEmitter, Output} from 'angular2/core';
             // Sets the cookie "locale".
             this.setCookie("locale", this.defaultLocale, this.expiry);
 
-            // Send an event.
+            // Sends an event.
             this.countryCodeChanged.emit(country);
         }
 
@@ -473,7 +473,7 @@ import {Injectable, EventEmitter, Output} from 'angular2/core';
             // Sets the cookie "locale".
             this.setCookie("locale", this.defaultLocale, this.expiry);
 
-            // Send the events.
+            // Sends the events.
             this.countryCodeChanged.emit(country);
             this.languageCodeChanged.emit(language);
         }
@@ -498,7 +498,7 @@ import {Injectable, EventEmitter, Output} from 'angular2/core';
             // Sets the cookie "currency".
             this.setCookie("currency", this.currencyCode, this.expiry);
 
-            // Send an event.
+            // Sends an event.
             this.currencyCodeChanged.emit(currency);
         }
 

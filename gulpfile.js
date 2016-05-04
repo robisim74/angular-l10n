@@ -15,14 +15,14 @@ var config = {
     baseURL: path.baseURL,
     defaultJSExtensions: true,
     map: {
-        'angular2': 'node_modules/angular2',
+        '@angular': 'node_modules/@angular',
         'rxjs': 'node_modules/rxjs'
     },
     paths: {
         'angular2localization/*': '*.js',
     },
     meta: {
-        'node_modules/angular2/*': { build: false },
+        'node_modules/@angular/*': { build: false },
         'node_modules/rxjs/*': { build: false }
     }
 };
