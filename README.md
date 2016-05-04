@@ -207,8 +207,8 @@ Because strings must be written within quotes, use the `\` escape character to i
 "\"What's happened to me?\" he thought."
 ```
 
-### Advanced use with AsyncRoute
-If you use an `AsyncRoute` in an extended application, you can create an instance of `LocalizationService` for every asynchronously loaded component.
+### Advanced use with Router
+If you use a `Router` in an extended application, you can create an instance of `LocalizationService` for every asynchronously loaded component.
 Each instance is different, and can be directly or asynchronously loaded, as in this example:
 ```TypeScript
 export class I18nComponent {
