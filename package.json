@@ -1,6 +1,6 @@
 {
     "name": "angular2localization",
-    "version": "0.5.3",
+    "version": "0.6.0",
     "description": "An Angular 2 library to translate messages, dates and numbers",
     "main": "",
     "scripts": {},

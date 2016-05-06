@@ -50,6 +50,7 @@ import {LocaleService} from '../services/locale.service';
  * @see Angular 2 DatePipe for further information
  */
 @Injectable() export class LocaleDatePipe implements PipeTransform {
+  
   static ALIASES: { [key: string]: String } = {
     'medium': 'yMMMdjms',
     'short': 'yMdjm',
@@ -128,5 +129,6 @@ import {LocaleService} from '../services/locale.service';
 
   }
 
-  supports(obj: any): boolean { return isDate(obj) || isNumber(obj); }
+  private supports(obj: any): boolean { return isDate(obj) || isNumber(obj); }
+  
 }

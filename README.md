@@ -106,6 +106,43 @@ For example, to get the local currency, add in the template:
 {{ b | localecurrency:true:'1.2-2' }}
 ```
 and include `LocaleCurrencyPipe` in the component.
+#### List
+Now you can localize an array of objects or an array of arrays:
+```
+*ngFor="let item of items | translatearray: {'keyname': {'pipe': '', 'format': '', 'symbolDisplay': bool, 'digitInfo': ''}
+```
+where the parameters of `translatearray` are in Json format.
+
+For example, to get the localized array, add in the template:
+```Html
+<!--Array of Data objects-->
+<md-card *ngFor="let item of DATA | translatearray: {'name': '', 
+                                                     'position': {
+                                                        'pipe': 'translate'
+                                                        }, 
+                                                     'salary': {
+                                                        'pipe': 'localecurrency', 
+                                                        'symbolDisplay': true, 
+                                                        'digitInfo': '1.0-0'
+                                                        },
+                                                     'startDate': {
+                                                        'pipe': 'localedate', 
+                                                        'format': 'mediumDate'
+                                                        }
+                                                    }">
+    <md-card-title>{{ item.name }}</md-card-title>
+    <md-card-content>
+        <md-list>
+            <md-list-item>
+                <h3 md-line>{{ item.position }}</h3>
+                <p md-line>{{ item.salary }}</p>
+                <p md-line>{{ item.startDate }}</p>
+            </md-list-item>
+        </md-list>
+    </md-card-content>
+</md-card>
+```
+and include `TranslateArrayPipe` in the component.
 
 ## First scenario
 > You need to localize dates and numbers, but no messages.

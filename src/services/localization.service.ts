@@ -230,7 +230,7 @@ import {LocaleService} from './locale.service';
         }
 
     }
-
+    
 }
 
 /**
@@ -271,4 +271,4 @@ export enum LoadingMode {
      */
     Async
 
-}
+} 
