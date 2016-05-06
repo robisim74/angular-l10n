@@ -157,8 +157,6 @@ import {LocaleService} from './locale.service';
                 // Updates the service state.
                 this.serviceState = ServiceState.isReady;
 
-                console.log("Localization service:", "Http get method completed.");
-
             });
 
     }
