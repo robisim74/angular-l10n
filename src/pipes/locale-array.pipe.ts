@@ -15,30 +15,27 @@ import {InvalidPipeArgumentException} from '@angular/common/src/pipes/invalid_pi
 // Services.
 import {LocaleNumber} from '../services/locale-number';
 import {LocaleService} from '../services/locale.service';
-import {LocalizationService, ServiceState} from '../services/localization.service';
 
 /**
- * 'translatearray' pipe function.
+ * 'localearray' pipe function.
  */
 @Pipe({
-    name: 'translatearray',
+    name: 'localearray',
     pure: false // Required to update the value.
 })
 
 /**
- * TranslateArrayPipe class. 
- * An instance of this class is created for each 'translatearray' pipe function.
+ * LocaleArrayPipe class. 
+ * An instance of this class is created for each 'localearray' pipe function.
  * 
  * Getting the localized array:
  * 
- * *ngFor="let item of items | translatearray: {'keyname': {'pipe': '', 'format': '', 'symbolDisplay': bool, 'digitInfo': ''}
+ * *ngFor="let item of items | localearray: {'keyname': {'pipe': '', 'format': '', 'symbolDisplay': bool, 'digitInfo': ''}
  * 
  * For example, to get the localized array, add in the template:
  * 
  * *ngFor="let item of items | translatearray: {'name': '', 
- *                                              'position': {
- *                                                 'pipe': 'translate'
- *                                                 },
+ *                                              'position': '',
  *                                              'salary': {
  *                                                 'pipe': 'localecurrency', 
  *                                                 'symbolDisplay': true, 
@@ -50,18 +47,18 @@ import {LocalizationService, ServiceState} from '../services/localization.servic
  *                                                 }
  *                                             }"
  * 
- * and include TranslateArrayPipe in the component:
+ * and include LocaleArrayPipe in the component:
  * 
- * import {TranslateArrayPipe} from 'angular2localization/angular2localization';
+ * import {LocaleArrayPipe} from 'angular2localization/angular2localization';
  * 
  * @Component({
  *      ...
- *      pipes: [TranslateArrayPipe]
+ *      pipes: [LocaleArrayPipe]
  * })
  * 
  * @author Roberto Simonetti
  */
-@Injectable() export class TranslateArrayPipe extends LocaleNumber implements PipeTransform {
+@Injectable() export class LocaleArrayPipe extends LocaleNumber implements PipeTransform {
 
     static ALIASES: { [key: string]: String } = {
         'medium': 'yMMMdjms',
@@ -75,22 +72,17 @@ import {LocalizationService, ServiceState} from '../services/localization.servic
     };
 
     /**
-     * The language code for TranslateArrayPipe.
-     */
-    private languageCode: string;
-
-    /**
-     * The currency code for TranslateArrayPipe.
+     * The currency code for LocaleArrayPipe.
      */
     private currencyCode: string;
 
     /**
-     * The default locale for TranslateArrayPipe.
+     * The default locale for LocaleArrayPipe.
      */
     private defaultLocale: string;
 
     /**
-     * The stored list of TranslateArrayPipe.
+     * The stored list of LocaleArrayPipe.
      */
     private storedList: Array<any>;
 
@@ -99,67 +91,36 @@ import {LocalizationService, ServiceState} from '../services/localization.servic
      */
     private translatedList: Array<any>;
 
-    /**
-     * Sorting key.
-     */
-    private keyName: any;
-
-    /**
-     * 'asc' or 'desc'.
-     */
-    private order: string;
-
-    /**
-     * The value to search for.
-     */
-    private search: string;
-
-    constructor(public locale: LocaleService, public localization: LocalizationService) {
+    constructor(public locale: LocaleService) {
         super();
     }
 
     /**
-     * TranslateArrayPipe transform method.
+     * LocaleArrayPipe transform method.
      * 
      * @param list An array of objects or an array of arrays
      * @param args Params in Json format
-     * @param keyName Sorting key. Not yet implemented
-     * @param order 'asc' or 'desc'. Not yet implemented
-     * @param search The value to search for. Not yet implemented
      * @return A new localized list
      */
-    transform(list: Array<any>, args: any, keyName?: any, order?: string, search?: string): Array<any> {
-
+    transform(list: Array<any>, args: any): Array<any> {
+        
         if (list == null || args == null) return null;
-
-        // When the language changes, updates the language code and loads the translation data for the asynchronous loading.
-        if (this.locale.getCurrentLanguage() != "" && this.locale.getCurrentLanguage() != this.localization.languageCode) {
-
-            this.localization.updateTranslation();
-
-        }
-
-        // Checks the service state.
-        if (this.localization.serviceState == ServiceState.isReady) {
 
             // Checks if list has changed.       
             var equals: boolean = this.compare(this.storedList, list);
 
             if ((equals == false
                 || this.translatedList == null
-                || this.languageCode != this.localization.languageCode
                 || this.currencyCode != this.locale.getCurrentCurrency()
                 || this.defaultLocale != this.locale.getDefaultLocale())) {
-                
+
                 // Saves the list.
                 this.storedList = new Array<any>();
                 this.storedList = list;
 
-                // Updates the language code for TranslateArrayPipe.
-                this.languageCode = this.localization.languageCode;
-                // Updates the currency code for TranslateArrayPipe.
+                // Updates the currency code for LocaleArrayPipe.
                 this.currencyCode = this.locale.getCurrentCurrency();
-                // Updates the default locale for TranslateArrayPipe.
+                // Updates the default locale for LocaleArrayPipe.
                 this.defaultLocale = this.locale.getDefaultLocale();
 
                 // Creates a deep copy.
@@ -173,9 +134,6 @@ import {LocalizationService, ServiceState} from '../services/localization.servic
 
                     switch (args[key]['pipe']) {
 
-                        case 'translate':
-                            workList = this.tranlate(workList, key);
-                            break;
                         case 'localedate':
                             workList = this.toLocaleDate(workList, key, args[key]['format']);
                             break;
@@ -203,36 +161,9 @@ import {LocalizationService, ServiceState} from '../services/localization.servic
 
             return this.translatedList;
 
-            // TODO Sorting.
-
-            // TODO Search.
-
-        } else {
-
-            // The service isn't ready.
-            return this.translatedList;
-
-        }
-
     }
 
     private supports(obj: any): boolean { return isDate(obj) || isNumber(obj); }
-
-    private tranlate(workList: Array<any>, key: any): Array<any> {
-
-        for (let item of workList) {
-
-            // Gets the value of translation for the key.
-            var value: string = this.localization.getValue(item[key]);
-            // Replaces the value in the list.
-            item[key] = value;
-
-        }
-
-        // Returns the same updated list. 
-        return workList;
-
-    }
 
     private toLocaleDate(workList: Array<any>, key: any, pattern: string = 'mediumDate'): Array<any> {
 
@@ -242,7 +173,7 @@ import {LocalizationService, ServiceState} from '../services/localization.servic
 
             if (!this.supports(item[key])) {
 
-                throw new InvalidPipeArgumentException(TranslateArrayPipe, item[key]);
+                throw new InvalidPipeArgumentException(LocaleArrayPipe, item[key]);
 
             }
 
@@ -252,9 +183,9 @@ import {LocalizationService, ServiceState} from '../services/localization.servic
 
             }
 
-            if (StringMapWrapper.contains(TranslateArrayPipe.ALIASES, pattern)) {
+            if (StringMapWrapper.contains(LocaleArrayPipe.ALIASES, pattern)) {
 
-                pattern = <string>StringMapWrapper.get(TranslateArrayPipe.ALIASES, pattern);
+                pattern = <string>StringMapWrapper.get(LocaleArrayPipe.ALIASES, pattern);
 
             }
 
@@ -328,7 +259,7 @@ import {LocalizationService, ServiceState} from '../services/localization.servic
         var xKeys: string[] = Object.keys(x[0]);
         var yKeys: string[] = Object.keys(y[0]);
 
-        if (xKeys.length != yKeys.length) return false; // The lenght of arrays keys is different.
+        if (xKeys.length != yKeys.length) return false; // The arrays keys are different.
 
         for (var i: number; i < x.length; i++) {
 
@@ -370,4 +301,3 @@ import {LocalizationService, ServiceState} from '../services/localization.servic
     }
 
 }
-
