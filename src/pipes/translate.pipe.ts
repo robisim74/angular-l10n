@@ -8,7 +8,6 @@
 
 import {Injectable, Pipe, PipeTransform} from '@angular/core';
 // Services.
-import {LocaleService} from '../services/locale.service';
 import {LocalizationService, ServiceState} from '../services/localization.service';
 
 /**
@@ -16,25 +15,25 @@ import {LocalizationService, ServiceState} from '../services/localization.servic
  */
 @Pipe({
     name: 'translate',
-    pure: false // Required to update the value.
+    pure: true
 })
 
 /**
- * TranslatePipe class. 
- * An instance of this class is created for each 'translate' pipe function.
+ * TranslatePipe class.
  * 
  * Getting the message translation:
  * 
- * expression | translate
+ * expression | translate:lang
  * 
- * where 'expression' is a string key that indicates the message to translate.
+ * where 'expression' is a string key that indicates the message to translate and 'lang' is the language code for the LocalizationService.
  * 
  * For example, to get the translation, add in the template:
  * 
- * {{ 'TITLE' | translate }}
+ * {{ 'TITLE' | translate:lang }}
  * 
- * and include TranslatePipe in the component:
+ * and include in the component:
  * 
+ * import {LocalizationService} from 'angular2localization/angular2localization';
  * import {TranslatePipe} from 'angular2localization/angular2localization';
  * 
  * @Component({
@@ -42,97 +41,55 @@ import {LocalizationService, ServiceState} from '../services/localization.servic
  *      pipes: [TranslatePipe]
  * })
  * 
+ * export class AppComponent {
+ * 
+ *      constructor(public localization: LocalizationService) {
+ *          ...
+ *      }
+ * 
+ *     // Gets the language code for the LocalizationService.
+ *     get lang(): string {
+ *
+ *          return this.localization.languageCode;
+ *      
+ *      }
+ * 
+ * }
+ * 
  * With Angular 2 I18nSelectPipe that displays the string that matches the current value:
  *
- * {{ expression | i18nSelect:mapping | translate }}
+ * {{ expression | i18nSelect:mapping | translate:lang }}
  * 
  * With Angular 2 I18nPluralPipe that pluralizes the value properly:
  *
- * {{ expression | i18nPlural:mapping | translate }}
+ * {{ expression | i18nPlural:mapping | translate:lang }}
  * 
  * @author Roberto Simonetti
  */
 @Injectable() export class TranslatePipe implements PipeTransform {
 
-    /**
-     * The language code for TranslatePipe.
-     */
-    private languageCode: string;
-
-    /**
-     * The key of TranslatePipe.
-     */
-    private key: string;
-
-    /**
-     * The value of translation for the key.
-     */
-    private value: string;
-
-    constructor(public locale: LocaleService, public localization: LocalizationService) { }
+    constructor(public localization: LocalizationService) { }
 
     /**
      * TranslatePipe transform method.
      * 
      * @param key The key to be translated
+     * @param lang The current language code for the LocalizationService
      * @return The value of translation
      */
-    transform(key: string): string {
-
-        // When the language changes, updates the language code and loads the translation data for the asynchronous loading.
-        if (this.locale.getCurrentLanguage() != "" && this.locale.getCurrentLanguage() != this.localization.languageCode) {
-
-            this.localization.updateTranslation();
-
-        }
+    transform(key: string, lang: string): string {
 
         // Checks the service state.
         if (this.localization.serviceState == ServiceState.isReady) {
-            
-            // Updates the key & the value of translation for the key if:
-            // - the key has changed (i18n);
-            // - the value is empty;
-            // - the language has changed.
-            if (this.key != key || this.value == "" || this.languageCode != this.localization.languageCode) {
 
-                // i18n: removes the value of template locale variable. 
-                var formatKey: string = key.replace(/^\d+\b/, '');
-                formatKey = formatKey.trim();
+            // i18n: removes the value of template locale variable. 
+            var formatKey: string = key.replace(/^\d+\b/, '');
+            formatKey = formatKey.trim();
 
-                // Gets the value of translation.
-                this.localization.translate(formatKey).forEach(
+            // Gets the value of translation for the key.
+            var value = this.localization.translate(formatKey);
 
-                    // Next.
-                    (value: string) => {
-
-                        this.value = key.replace(formatKey, value);
-
-                    }
-
-                ).then(
-
-                    () => {
-
-                        // Updates the language code for TranslatePipe.
-                        this.languageCode = this.localization.languageCode;
-                        // Updates the key of TranslatePipe.
-                        this.key = key;
-
-                        return this.value;
-
-                    });
-
-            } else {
-
-                // The value of translation hasn't changed.
-                return this.value;
-
-            }
-
-        } else {
-
-            // The service isn't ready.
-            return this.value;
+            return key.replace(formatKey, value);
 
         }
 

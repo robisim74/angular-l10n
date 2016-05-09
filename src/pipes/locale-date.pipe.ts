@@ -20,25 +20,25 @@ import {LocaleService} from '../services/locale.service';
  */
 @Pipe({
   name: 'localedate',
-  pure: false // Required to update the value.
+  pure: true
 })
 
 /**
  * LocaleDatePipe class.
- * An instance of this class is created for each 'localedate' pipe function.
  * 
  * Getting the local date:
  * 
- * expression | localedate[:format]
+ * expression | localedate[:defaultLocale[:format]]
  * 
- * where 'expression' is a date object or a number (milliseconds since UTC epoch) and 'format' indicates which date/time components to include.
+ * where 'expression' is a date object or a number (milliseconds since UTC epoch), 'defaultLocale' is the default locale and 'format' indicates which date/time components to include.
  * 
  * For example, to get the local date, add in the template:
  * 
- * {{ today | localedate:'fullDate' }}
+ * {{ today | localedate:defaultLocale:'fullDate' }}
  * 
- * and include LocaleDatePipe in the component:
+ * and include in the component:
  * 
+ * import {LocaleService} from 'angular2localization/angular2localization';
  * import {LocaleDatePipe} from 'angular2localization/angular2localization';
  * 
  * @Component({
@@ -46,11 +46,26 @@ import {LocaleService} from '../services/locale.service';
  *      pipes: [LocaleDatePipe]
  * })
  * 
+ * export class AppComponent {
+ * 
+ *      constructor(public locale: LocaleService) {
+ *          ...
+ *      }
+ * 
+ *     // Gets the default locale.
+ *     get defaultLocale(): string {
+ *
+ *          return this.locale.getDefaultLocale();
+ *      
+ *      }
+ * 
+ * }
+ * 
  * @author Roberto Simonetti
  * @see Angular 2 DatePipe for further information
  */
 @Injectable() export class LocaleDatePipe implements PipeTransform {
-  
+
   static ALIASES: { [key: string]: String } = {
     'medium': 'yMMMdjms',
     'short': 'yMdjm',
@@ -62,31 +77,17 @@ import {LocaleService} from '../services/locale.service';
     'shortTime': 'jm'
   };
 
-  /**
-   * The default locale for LocaleDatePipe.
-   */
-  private defaultLocale: string;
-
-  /**
-   * The value of LocaleDatePipe.
-   */
-  private value: any;
-
-  /**
-   * The locale date for the value.
-   */
-  private localeDate: string;
-
   constructor(public locale: LocaleService) { }
 
   /**
    * LocaleDatePipe transform method.
    * 
    * @param value The date to be localized
+   * @param defaultLocale The default locale
    * @param pattern The format of the date
    * @return The locale date
    */
-  transform(value: any, pattern: string = 'mediumDate'): string {
+  transform(value: any, defaultLocale: string, pattern: string = 'mediumDate'): string {
 
     if (isBlank(value)) return null;
 
@@ -96,39 +97,22 @@ import {LocaleService} from '../services/locale.service';
 
     }
 
-    // Updates the locale date for the value if:
-    // - the value has changed;
-    // - the locale date is empty;
-    // - the default locale has changed.
-    if (this.value != value || this.localeDate == "" || this.defaultLocale != this.locale.getDefaultLocale()) {
+    if (isNumber(value)) {
 
-      // Updates the default locale for LocaleDatePipe.
-      this.defaultLocale = this.locale.getDefaultLocale();
-
-      // Updates the value of LocaleDatePipe before it changes.
-      this.value = value;
-
-      if (isNumber(value)) {
-
-        value = DateWrapper.fromMillis(value);
-
-      }
-
-      if (StringMapWrapper.contains(LocaleDatePipe.ALIASES, pattern)) {
-
-        pattern = <string>StringMapWrapper.get(LocaleDatePipe.ALIASES, pattern);
-
-      }
-
-      // Gets the locale date.
-      this.localeDate = DateFormatter.format(value, this.defaultLocale, pattern);
+      value = DateWrapper.fromMillis(value);
 
     }
 
-    return this.localeDate;
+    if (StringMapWrapper.contains(LocaleDatePipe.ALIASES, pattern)) {
+
+      pattern = <string>StringMapWrapper.get(LocaleDatePipe.ALIASES, pattern);
+
+    }
+
+    return DateFormatter.format(value, defaultLocale, pattern);
 
   }
 
   private supports(obj: any): boolean { return isDate(obj) || isNumber(obj); }
-  
+
 }

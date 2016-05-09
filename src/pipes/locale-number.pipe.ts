@@ -18,27 +18,27 @@ import {LocaleService} from '../services/locale.service';
  */
 @Pipe({
   name: 'localedecimal',
-  pure: false // Required to update the value.
+  pure: true
 })
 
 /**
  * LocaleDecimalPipe class.
- * An instance of this class is created for each 'localedecimal' pipe function.
  * 
  * Getting the local decimal:
  * 
- * expression | localedecimal[:digitInfo]
+ * expression | localedecimal[:defaultLocale:[digitInfo]]
  * 
- * where 'expression' is a number and 'digitInfo' has the following format:
+ * where 'expression' is a number, 'defaultLocale' is the default locale and 'digitInfo' has the following format:
  * 
  * {minIntegerDigits}.{minFractionDigits}-{maxFractionDigits}
  * 
  * For example, to get the local decimal, add in the template:
  * 
- * {{ pi | localedecimal:'1.5-5' }}
+ * {{ pi | localedecimal:defaultLocale:'1.5-5' }}
  * 
- * and include LocaleDecimalPipe in the component:
+ * and include in the component:
  * 
+ * import {LocaleService} from 'angular2localization/angular2localization';
  * import {LocaleDecimalPipe} from 'angular2localization/angular2localization';
  * 
  * @Component({
@@ -46,25 +46,25 @@ import {LocaleService} from '../services/locale.service';
  *      pipes: [LocaleDecimalPipe]
  * })
  * 
+ * export class AppComponent {
+ * 
+ *      constructor(public locale: LocaleService) {
+ *          ...
+ *      }
+ * 
+ *     // Gets the default locale.
+ *     get defaultLocale(): string {
+ *
+ *          return this.locale.getDefaultLocale();
+ *      
+ *      }
+ * 
+ * }
+ * 
  * @author Roberto Simonetti
  * @see Angular 2 DecimalPipe for further information
  */
 @Injectable() export class LocaleDecimalPipe extends LocaleNumber implements PipeTransform {
-
-  /**
-   * The default locale for LocaleDecimalPipe.
-   */
-  private defaultLocale: string;
-
-  /**
-   * The value of LocaleDecimalPipe.
-   */
-  private value: any;
-
-  /**
-   * The locale decimal for the value.
-   */
-  private localeDecimal: string;
 
   constructor(public locale: LocaleService) {
     super();
@@ -74,31 +74,16 @@ import {LocaleService} from '../services/locale.service';
    * LocaleDecimalPipe transform method.
    * 
    * @param value The number to be localized
+   * @param defaultLocale The default locale
    * @param digits The format of the number
    * @return The locale decimal
    */
-  transform(value: any, digits: string = null): string {
+  transform(value: any, defaultLocale: string, digits: string = null): string {
 
-    // Updates the locale decimal for the value if:
-    // - the value has changed;
-    // - the locale decimal is empty;
-    // - the default locale has changed.
-    if (this.value != value || this.localeDecimal == "" || this.defaultLocale != this.locale.getDefaultLocale()) {
+    return LocaleNumber.format(defaultLocale, value, NumberFormatStyle.Decimal, digits);
 
-      // Updates the default locale for LocaleDecimalPipe.
-      this.defaultLocale = this.locale.getDefaultLocale();
-      // Updates the value of LocaleDecimalPipe.
-      this.value = value;
-
-      // Gets the locale decimal.
-      this.localeDecimal = LocaleNumber.format(this.defaultLocale, value, NumberFormatStyle.Decimal, digits);
-
-    }
-
-    return this.localeDecimal;
-    
   }
-  
+
 }
 
 /**
@@ -106,23 +91,23 @@ import {LocaleService} from '../services/locale.service';
  */
 @Pipe({
   name: 'localepercent',
-  pure: false // Required to update the value.
+  pure: true
 })
 
 /**
  * LocalePercentPipe class.
- * An instance of this class is created for each 'localepercent' pipe function.
  * 
  * Getting the local percentage:
  * 
- * expression | localepercent[:digitInfo]
+ * expression | localepercent[:defaultLocale:[digitInfo]]
  * 
  * For example, to get the local percentage, add in the template:
  * 
- * {{ a | localepercent:'1.1-1' }}
+ * {{ a | localepercent:defaultLocale:'1.1-1' }}
  * 
- * and include LocalePercentPipe in the component:
+ * and include in the component:
  * 
+ * import {LocaleService} from 'angular2localization/angular2localization';
  * import {LocalePercentPipe} from 'angular2localization/angular2localization';
  * 
  * @Component({
@@ -130,25 +115,25 @@ import {LocaleService} from '../services/locale.service';
  *      pipes: [LocalePercentPipe]
  * })
  * 
+ * export class AppComponent {
+ * 
+ *      constructor(public locale: LocaleService) {
+ *          ...
+ *      }
+ * 
+ *     // Gets the default locale.
+ *     get defaultLocale(): string {
+ *
+ *          return this.locale.getDefaultLocale();
+ *      
+ *      }
+ * 
+ * }
+ * 
  * @author Roberto Simonetti
  * @see Angular 2 PercentPipe for further information
  */
 @Injectable() export class LocalePercentPipe extends LocaleNumber implements PipeTransform {
-
-  /**
-   * The default locale for LocalePercentPipe.
-   */
-  private defaultLocale: string;
-
-  /**
-   * The value of LocalePercentPipe.
-   */
-  private value: any;
-
-  /**
-   * The locale percent for the value.
-   */
-  private localePercent: string;
 
   constructor(public locale: LocaleService) {
     super();
@@ -158,31 +143,16 @@ import {LocaleService} from '../services/locale.service';
    * LocalePercentPipe transform method.
    * 
    * @param value The number to be localized
+   * @param defaultLocale The default locale
    * @param digits The format of the number
    * @return The locale percent
    */
-  transform(value: any, digits: string = null): string {
+  transform(value: any, defaultLocale: string, digits: string = null): string {
 
-    // Updates the locale percent for the value if:
-    // - the value has changed;
-    // - the locale percent is empty;
-    // - the default locale has changed.
-    if (this.value != value || this.localePercent == "" || this.defaultLocale != this.locale.getDefaultLocale()) {
+    return LocaleNumber.format(defaultLocale, value, NumberFormatStyle.Percent, digits);
 
-      // Updates the default locale for LocalePercentPipe.
-      this.defaultLocale = this.locale.getDefaultLocale();
-      // Updates the value of LocalePercentPipe.
-      this.value = value;
-
-      // Gets the locale percent.
-      this.localePercent = LocaleNumber.format(this.defaultLocale, value, NumberFormatStyle.Percent, digits);
-
-    }
-
-    return this.localePercent;
-    
   }
-  
+
 }
 
 /**
@@ -190,25 +160,25 @@ import {LocaleService} from '../services/locale.service';
  */
 @Pipe({
   name: 'localecurrency',
-  pure: false // Required to update the value.
+  pure: true
 })
 
 /**
  * LocaleCurrencyPipe class.
- * An instance of this class is created for each 'localecurrency' pipe function.
  * 
  * Getting the local currency:
  * 
- * expression | localecurrency[:symbolDisplay[:digitInfo]]]
+ * expression | localecurrency[:defaultLocale[:currency[:symbolDisplay[:digitInfo]]]]
  * 
- * where 'symbolDisplay' is a boolean indicating whether to use the currency symbol (e.g. $) or the currency code (e.g. USD) in the output. 
+ * where 'currency' is the current currency and 'symbolDisplay' is a boolean indicating whether to use the currency symbol (e.g. $) or the currency code (e.g. USD) in the output. 
  * 
  * For example, to get the local currency, add in the template:
  * 
- * {{ b | localecurrency:true:'1.2-2' }}
+ * {{ b | localecurrency:defaultLocale:currency:true:'1.2-2' }}
  * 
- * and include LocaleCurrencyPipe in the component:
+ * and include in the component:
  * 
+ * import {LocaleService} from 'angular2localization/angular2localization';
  * import {LocaleCurrencyPipe} from 'angular2localization/angular2localization';
  * 
  * @Component({
@@ -216,30 +186,32 @@ import {LocaleService} from '../services/locale.service';
  *      pipes: [LocaleCurrencyPipe]
  * })
  * 
+ * export class AppComponent {
+ * 
+ *      constructor(public locale: LocaleService) {
+ *          ...
+ *      }
+ * 
+ *     // Gets the default locale.
+ *     get defaultLocale(): string {
+ *
+ *          return this.locale.getDefaultLocale();
+ *      
+ *      }
+ * 
+ *     // Gets the current currency.
+ *     get currency(): string {
+ *
+ *          return this.locale.getCurrentCurrency();
+ *      
+ *      }
+ * 
+ * }
+ * 
  * @author Roberto Simonetti
  * @see Angular 2 CurrencyPipe for further information
  */
 @Injectable() export class LocaleCurrencyPipe extends LocaleNumber implements PipeTransform {
-
-  /**
-   * The currency code for LocaleCurrencyPipe.
-   */
-  private currencyCode: string;
-
-  /**
-   * The default locale for LocaleCurrencyPipe.
-   */
-  private defaultLocale: string;
-
-  /**
-   * The value of LocaleCurrencyPipe.
-   */
-  private value: any;
-
-  /**
-   * The locale currency for the value.
-   */
-  private localeCurrency: string;
 
   constructor(public locale: LocaleService) {
     super();
@@ -249,36 +221,20 @@ import {LocaleService} from '../services/locale.service';
    * LocaleCurrencyPipe transform method.
    * 
    * @param value The number to be localized
+   * @param defaultLocale The default locale
+   * @param currency The current currency
    * @param symbolDisplay Indicates whether to use the currency symbol
    * @param digits The format of the number
    * @return The locale currency
    */
-  transform(value: any, symbolDisplay: boolean = false, digits: string = null): string {
+  transform(value: any,
+    defaultLocale: string,
+    currency: string,
+    symbolDisplay: boolean = false,
+    digits: string = null): string {
 
-    // Updates the locale currency for the value if:
-    // - the value has changed;
-    // - the locale currency is empty;
-    // - the currency code has changed;
-    // - the default locale has changed.
-    if (this.value != value
-      || this.localeCurrency == ""
-      || this.currencyCode != this.locale.getCurrentCurrency()
-      || this.defaultLocale != this.locale.getDefaultLocale()) {
+    return LocaleNumber.format(defaultLocale, value, NumberFormatStyle.Currency, digits, currency, symbolDisplay);
 
-      // Updates the currency code for LocaleCurrencyPipe.
-      this.currencyCode = this.locale.getCurrentCurrency();
-      // Updates the default locale for LocaleCurrencyPipe.
-      this.defaultLocale = this.locale.getDefaultLocale();
-      // Updates the value of LocaleCurrencyPipe.
-      this.value = value;
-
-      // Gets the locale currency.
-      this.localeCurrency = LocaleNumber.format(this.defaultLocale, value, NumberFormatStyle.Currency, digits, this.currencyCode, symbolDisplay);
-
-    }
-
-    return this.localeCurrency;
-    
   }
-  
+
 }

@@ -31,6 +31,7 @@ import {LocaleService} from './locale.service';
  * // Required: adds a new translation with the given language code.
  * this.localization.addTranslation('en', translationEN);
  * // Add a new translation with the given language code here.
+ * this.localization.updateTranslation(); // Need to update the translation.
  * 
  * Asynchronous loading.
  * 
@@ -38,6 +39,7 @@ import {LocaleService} from './locale.service';
  * 
  * // Required: initializes the translation provider with the given path prefix.
  * this.localization.translationProvider('./resources/locale-');
+ * this.localization.updateTranslation(); // Need to update the translation.
  * 
  * and create the json files of the translations such as 'locale-en.json':
  * 
@@ -62,14 +64,14 @@ import {LocaleService} from './locale.service';
     private translationData: any = {};
 
     /**
-     * The loading mode for the service.
-     */
-    public loadingMode: LoadingMode;
-
-    /**
      * The language code for the service.
      */
     public languageCode: string;
+
+    /**
+     * The loading mode for the service.
+     */
+    public loadingMode: LoadingMode;
 
     /**
      * The service state. 
@@ -81,6 +83,9 @@ import {LocaleService} from './locale.service';
         this.prefix = "";
         this.loadingMode = LoadingMode.Unknown;
         this.languageCode = "";
+
+        // Initializes the loading mode.
+        this.loadingMode = LoadingMode.Direct;
 
         // Initializes the service state.
         this.serviceState = ServiceState.isWaiting;
@@ -97,12 +102,6 @@ import {LocaleService} from './locale.service';
 
         // Adds the new translation data.
         this.translationData[language] = translation;
-
-        // Updates the service state.
-        this.serviceState = ServiceState.isReady;
-
-        // Updates the loading mode.
-        this.loadingMode = LoadingMode.Direct;
 
     }
 
@@ -129,7 +128,7 @@ import {LocaleService} from './locale.service';
         this.translationData = {};
         this.serviceState = ServiceState.isLoading;
 
-        var url: string = this.prefix + this.languageCode + '.json';
+        var url: string = this.prefix + this.locale.getCurrentLanguage() + '.json';
 
         // Angular 2 Http module.
         this.http.get(url)
@@ -140,7 +139,7 @@ import {LocaleService} from './locale.service';
             (res: any) => {
 
                 // Assigns the observer to the translation data.
-                this.translationData[this.languageCode] = res;
+                this.translationData[this.locale.getCurrentLanguage()] = res;
 
             },
 
@@ -154,6 +153,9 @@ import {LocaleService} from './locale.service';
             // Complete.
             () => {
 
+                // Updates the language code of the service.
+                this.languageCode = this.locale.getCurrentLanguage();
+
                 // Updates the service state.
                 this.serviceState = ServiceState.isReady;
 
@@ -162,12 +164,12 @@ import {LocaleService} from './locale.service';
     }
 
     /**
-     * Gets a translated value by key.
+     * Translates a key.
      * 
      * @param key The key to be translated
      * @return The value of translation
      */
-    getValue(key: string): string {
+    translate(key: string): string {
 
         var value: string;
 
@@ -197,12 +199,12 @@ import {LocaleService} from './locale.service';
      * @param key The key to be translated
      * @return An observable of the value of translation
      */
-    translate(key: string): Observable<string> {
+    translateAsync(key: string): Observable<string> {
 
         return new Observable((observer: Observer<string>) => {
 
             // Gets the value of translation for the key.
-            var value: string = this.getValue(key);
+            var value: string = this.translate(key);
 
             observer.next(value);
             observer.complete();
@@ -212,23 +214,32 @@ import {LocaleService} from './locale.service';
     }
 
     /**
-     * When the language changes, updates the language code and loads the translation data for the asynchronous loading.
+     * Updates the language code and loads the translation data for the asynchronous loading.
      */
     updateTranslation() {
 
-        // Updates the language code of the service.
-        this.languageCode = this.locale.getCurrentLanguage();
+        if (this.locale.getCurrentLanguage() != "" && this.locale.getCurrentLanguage() != this.languageCode) {
 
-        // Asynchronous loading.
-        if (this.loadingMode == LoadingMode.Async) {
+            // Asynchronous loading.
+            if (this.loadingMode == LoadingMode.Async) {
 
-            // Updates the translation data.  
-            this.getTranslation();
+                // Updates the translation data.  
+                this.getTranslation();
+
+            } else {
+
+                // Updates the language code of the service.
+                this.languageCode = this.locale.getCurrentLanguage();
+
+                // Updates the service state.
+                this.serviceState = ServiceState.isReady;
+
+            }
 
         }
 
     }
-    
+
 }
 
 /**

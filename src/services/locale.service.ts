@@ -92,18 +92,20 @@ import {Injectable, EventEmitter, Output} from '@angular/core';
  * 
  * Changing language.
  * 
- * To change language at runtime, call the following method:
+ * To change language at runtime, call the following methods:
  *  
  * this.locale.setCurrentLanguage(language);
+ * this.localization.updateTranslation(); // Need to update the translation.
  * 
  * where 'language' is the two-letter code of the new language (ISO 639).
  * 
  * 
  * Changing locale.
  * 
- * To change locale at runtime, call the following method:
+ * To change locale at runtime, call the following methods:
  *  
  * this.locale.setCurrentLocale(language, country);
+ * this.localization.updateTranslation(); // Need to update the translation.
  * 
  * where 'language' is the two-letter code of the new language (ISO 639)
  * and 'country' is the two-letter, uppercase code of the new country (ISO 3166).
@@ -218,42 +220,6 @@ import {Injectable, EventEmitter, Output} from '@angular/core';
                 this.languageCode = defaultLanguage.toLowerCase();
 
             }
-
-            // Sets the default locale.
-            this.setDefaultLocale();
-
-            if (this.languageCodes.length > 0) {
-
-                // Sets the cookie "locale".
-                this.setCookie("locale", this.defaultLocale, this.expiry);
-
-            }
-
-        } else {
-
-            // Sets the default locale.
-            this.setDefaultLocale();
-
-        }
-
-    }
-
-    /**
-     * Defines the preferred country. 
-     * 
-     * @param defaultCountry The two-letter, uppercase code of the default country
-     * @deprecated Replaced by definePreferredLocale
-     */
-    definePreferredCountry(defaultCountry: string) {
-
-        // Tries to get the cookie "locale".
-        var locale: string = this.getCookie("locale");
-        // Gets the two-letter, uppercase code.
-        this.countryCode = locale.substring(3, 5);
-
-        if (this.countryCode == "") {
-
-            this.countryCode = defaultCountry.toUpperCase();
 
             // Sets the default locale.
             this.setDefaultLocale();
@@ -424,7 +390,6 @@ import {Injectable, EventEmitter, Output} from '@angular/core';
      * Sets the current country.
      * 
      * @param country The two-letter, uppercase code of the new country
-     * @deprecated Replaced by setCurrentLocale
      */
     setCurrentCountry(country: string) {
 
@@ -485,7 +450,7 @@ import {Injectable, EventEmitter, Output} from '@angular/core';
      * 
      * @param currency The three-letter code of the new currency
      */
-    setCurrentcurrency(currency: string) {
+    setCurrentCurrency(currency: string) {
 
         currency = currency.toUpperCase();
 

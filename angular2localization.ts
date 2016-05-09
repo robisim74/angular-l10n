@@ -5,5 +5,3 @@ export * from './src/services/locale-number';
 export * from './src/pipes/translate.pipe';
 export * from './src/pipes/locale-date.pipe';
 export * from './src/pipes/locale-number.pipe';
-export * from './src/pipes/translate-array.pipe';
-export * from './src/pipes/locale-array.pipe';
