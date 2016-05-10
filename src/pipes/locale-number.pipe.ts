@@ -42,22 +42,22 @@ import {LocaleService} from '../services/locale.service';
  * import {LocaleDecimalPipe} from 'angular2localization/angular2localization';
  * 
  * @Component({
- *      ...
- *      pipes: [LocaleDecimalPipe]
+ *     ...
+ *     pipes: [LocaleDecimalPipe]
  * })
  * 
  * export class AppComponent {
  * 
- *      constructor(public locale: LocaleService) {
- *          ...
- *      }
+ *     constructor(public locale: LocaleService) {
+ *         ...
+ *     }
  * 
  *     // Gets the default locale.
  *     get defaultLocale(): string {
  *
- *          return this.locale.getDefaultLocale();
+ *         return this.locale.getDefaultLocale();
  *      
- *      }
+ *     }
  * 
  * }
  * 
@@ -111,22 +111,22 @@ import {LocaleService} from '../services/locale.service';
  * import {LocalePercentPipe} from 'angular2localization/angular2localization';
  * 
  * @Component({
- *      ...
- *      pipes: [LocalePercentPipe]
+ *     ...
+ *     pipes: [LocalePercentPipe]
  * })
  * 
  * export class AppComponent {
  * 
- *      constructor(public locale: LocaleService) {
- *          ...
- *      }
+ *     constructor(public locale: LocaleService) {
+ *         ...
+ *     }
  * 
  *     // Gets the default locale.
  *     get defaultLocale(): string {
  *
- *          return this.locale.getDefaultLocale();
+ *         return this.locale.getDefaultLocale();
  *      
- *      }
+ *     }
  * 
  * }
  * 
@@ -182,29 +182,29 @@ import {LocaleService} from '../services/locale.service';
  * import {LocaleCurrencyPipe} from 'angular2localization/angular2localization';
  * 
  * @Component({
- *      ...
- *      pipes: [LocaleCurrencyPipe]
+ *     ...
+ *     pipes: [LocaleCurrencyPipe]
  * })
  * 
  * export class AppComponent {
  * 
- *      constructor(public locale: LocaleService) {
- *          ...
- *      }
+ *     constructor(public locale: LocaleService) {
+ *         ...
+ *     }
  * 
  *     // Gets the default locale.
  *     get defaultLocale(): string {
  *
- *          return this.locale.getDefaultLocale();
+ *         return this.locale.getDefaultLocale();
  *      
- *      }
+ *     }
  * 
  *     // Gets the current currency.
  *     get currency(): string {
  *
- *          return this.locale.getCurrentCurrency();
+ *         return this.locale.getCurrentCurrency();
  *      
- *      }
+ *     }
  * 
  * }
  * 

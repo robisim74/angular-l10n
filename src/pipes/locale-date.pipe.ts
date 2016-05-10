@@ -42,22 +42,22 @@ import {LocaleService} from '../services/locale.service';
  * import {LocaleDatePipe} from 'angular2localization/angular2localization';
  * 
  * @Component({
- *      ...
- *      pipes: [LocaleDatePipe]
+ *     ...
+ *     pipes: [LocaleDatePipe]
  * })
  * 
  * export class AppComponent {
  * 
- *      constructor(public locale: LocaleService) {
- *          ...
- *      }
+ *     constructor(public locale: LocaleService) {
+ *         ...
+ *     }
  * 
  *     // Gets the default locale.
  *     get defaultLocale(): string {
  *
- *          return this.locale.getDefaultLocale();
+ *         return this.locale.getDefaultLocale();
  *      
- *      }
+ *     }
  * 
  * }
  * 

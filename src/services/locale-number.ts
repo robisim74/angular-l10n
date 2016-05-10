@@ -15,7 +15,7 @@ import {InvalidPipeArgumentException} from '@angular/common/src/pipes/invalid_pi
 /**
  * LocaleNumber superclass.
  */
-@Injectable() export class LocaleNumber {
+export class LocaleNumber {
 
   constructor() { }
 

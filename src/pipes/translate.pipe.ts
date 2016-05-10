@@ -37,22 +37,22 @@ import {LocalizationService, ServiceState} from '../services/localization.servic
  * import {TranslatePipe} from 'angular2localization/angular2localization';
  * 
  * @Component({
- *      ...
- *      pipes: [TranslatePipe]
+ *     ...
+ *     pipes: [TranslatePipe]
  * })
  * 
  * export class AppComponent {
  * 
- *      constructor(public localization: LocalizationService) {
- *          ...
- *      }
+ *     constructor(public localization: LocalizationService) {
+ *         ...
+ *     }
  * 
  *     // Gets the language code for the LocalizationService.
  *     get lang(): string {
  *
- *          return this.localization.languageCode;
+ *         return this.localization.languageCode;
  *      
- *      }
+ *     }
  * 
  * }
  * 

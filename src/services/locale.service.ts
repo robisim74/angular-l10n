@@ -18,20 +18,20 @@ import {Injectable, EventEmitter, Output} from '@angular/core';
  * import {LocaleService} from 'angular2localization/angular2localization';
  *
  * @Component({
- *      selector: 'app-component',
- *      ...
- *      providers: [LocaleService] // Inherited by all descendants.
+ *     selector: 'app-component',
+ *     ...
+ *     providers: [LocaleService] // Inherited by all descendants.
  * })
  * 
  * export class AppComponent {
  * 
- *      constructor(public locale: LocaleService) {
+ *     constructor(public locale: LocaleService) {
  * 
- *          // Required: default language (ISO 639 two-letter code) and country (ISO 3166 two-letter, uppercase code).
- *          this.locale.definePreferredLocale('en', 'US');
+ *         // Required: default language (ISO 639 two-letter code) and country (ISO 3166 two-letter, uppercase code).
+ *         this.locale.definePreferredLocale('en', 'US');
  * 
- *          // Optional: default currency (ISO 4217 three-letter code).
- *          this.locale.definePreferredCurrency('USD');
+ *         // Optional: default currency (ISO 4217 three-letter code).
+ *         this.locale.definePreferredCurrency('USD');
  * 
  *      }
  * 
@@ -42,23 +42,23 @@ import {Injectable, EventEmitter, Output} from '@angular/core';
  * import {LocaleService, LocalizationService} from 'angular2localization/angular2localization';
  *
  * @Component({
- *      selector: 'app-component',
- *      ...
- *      providers: [LocaleService, LocalizationService] // Inherited by all descendants.
+ *     selector: 'app-component',
+ *     ...
+ *     providers: [LocaleService, LocalizationService] // Inherited by all descendants.
  * })
  * 
  * export class AppComponent {
  * 
- *      constructor(public locale: LocaleService, public localization: LocalizationService) {
+ *     constructor(public locale: LocaleService, public localization: LocalizationService) {
  * 
- *          // Adds a new language (ISO 639 two-letter code).
- *          this.locale.addLanguage('en');
- *          // Add a new language here.
+ *         // Adds a new language (ISO 639 two-letter code).
+ *         this.locale.addLanguage('en');
+ *         // Add a new language here.
  * 
- *          // Required: default language and expiry (No days). If the expiry is omitted, the cookie becomes a session cookie.
- *          this.locale.definePreferredLanguage('en', 30);
+ *         // Required: default language and expiry (No days). If the expiry is omitted, the cookie becomes a session cookie.
+ *         this.locale.definePreferredLanguage('en', 30);
  *           
- *      }
+ *     }
  * 
  * }
  * 
@@ -67,26 +67,26 @@ import {Injectable, EventEmitter, Output} from '@angular/core';
  * import {LocaleService, LocalizationService} from 'angular2localization/angular2localization';
  *
  * @Component({
- *      selector: 'app-component',
- *      ...
- *      providers: [LocaleService, LocalizationService] // Inherited by all descendants.
+ *     selector: 'app-component',
+ *     ...
+ *     providers: [LocaleService, LocalizationService] // Inherited by all descendants.
  * })
  * 
  * export class AppComponent {
  * 
- *      constructor(public locale: LocaleService, public localization: LocalizationService) {
+ *     constructor(public locale: LocaleService, public localization: LocalizationService) {
  * 
- *          // Adds a new language (ISO 639 two-letter code).
- *          this.locale.addLanguage('en');
- *          // Add a new language here.
+ *         // Adds a new language (ISO 639 two-letter code).
+ *         this.locale.addLanguage('en');
+ *         // Add a new language here.
  * 
- *          // Required: default language, country (ISO 3166 two-letter, uppercase code) and expiry (No days). If the expiry is omitted, the cookie becomes a session cookie.
- *          this.locale.definePreferredLocale('en', 'US', 30);
+ *         // Required: default language, country (ISO 3166 two-letter, uppercase code) and expiry (No days). If the expiry is omitted, the cookie becomes a session cookie.
+ *         this.locale.definePreferredLocale('en', 'US', 30);
  *  
- *          // Optional: default currency (ISO 4217 three-letter code).
- *          this.locale.definePreferredCurrency('USD');
+ *         // Optional: default currency (ISO 4217 three-letter code).
+ *         this.locale.definePreferredCurrency('USD');
  * 
- *      }
+ *     }
  * 
  * }
  * 
