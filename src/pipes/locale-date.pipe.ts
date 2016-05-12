@@ -14,13 +14,14 @@ import {InvalidPipeArgumentException} from '@angular/common/src/pipes/invalid_pi
 
 // Services.
 import {LocaleService} from '../services/locale.service';
+import {IntlSupport} from '../services/Intl-support';
 
 /**
  * 'localedate' pipe function.
  */
 @Pipe({
-  name: 'localedate',
-  pure: true
+    name: 'localedate',
+    pure: true
 })
 
 /**
@@ -66,53 +67,61 @@ import {LocaleService} from '../services/locale.service';
  */
 @Injectable() export class LocaleDatePipe implements PipeTransform {
 
-  static ALIASES: { [key: string]: String } = {
-    'medium': 'yMMMdjms',
-    'short': 'yMdjm',
-    'fullDate': 'yMMMMEEEEd',
-    'longDate': 'yMMMMd',
-    'mediumDate': 'yMMMd',
-    'shortDate': 'yMd',
-    'mediumTime': 'jms',
-    'shortTime': 'jm'
-  };
+    static ALIASES: { [key: string]: String } = {
+        'medium': 'yMMMdjms',
+        'short': 'yMdjm',
+        'fullDate': 'yMMMMEEEEd',
+        'longDate': 'yMMMMd',
+        'mediumDate': 'yMMMd',
+        'shortDate': 'yMd',
+        'mediumTime': 'jms',
+        'shortTime': 'jm'
+    };
 
-  constructor(public locale: LocaleService) { }
+    constructor(public locale: LocaleService) { }
 
-  /**
-   * LocaleDatePipe transform method.
-   * 
-   * @param value The date to be localized
-   * @param defaultLocale The default locale
-   * @param pattern The format of the date
-   * @return The locale date
-   */
-  transform(value: any, defaultLocale: string, pattern: string = 'mediumDate'): string {
+    /**
+     * LocaleDatePipe transform method.
+     * 
+     * @param value The date to be localized
+     * @param defaultLocale The default locale
+     * @param pattern The format of the date
+     * @return The locale date
+     */
+    transform(value: any, defaultLocale: string, pattern: string = 'mediumDate'): string {
 
-    if (isBlank(value)) return null;
+        if (isBlank(value)) return null;
 
-    if (!this.supports(value)) {
+        if (!this.supports(value)) {
 
-      throw new InvalidPipeArgumentException(LocaleDatePipe, value);
+            throw new InvalidPipeArgumentException(LocaleDatePipe, value);
+
+        }
+
+        if (isNumber(value)) {
+
+            value = <Date>DateWrapper.fromMillis(value);
+
+        }
+
+        // Checks for support for Intl.
+        if (IntlSupport.DateTimeFormat(defaultLocale) == true) {
+
+            if (StringMapWrapper.contains(LocaleDatePipe.ALIASES, pattern)) {
+
+                pattern = <string>StringMapWrapper.get(LocaleDatePipe.ALIASES, pattern);
+
+            }
+
+            return DateFormatter.format(value, defaultLocale, pattern);
+
+        }
+
+        // Returns the date without localization.
+        return value;
 
     }
 
-    if (isNumber(value)) {
-
-      value = DateWrapper.fromMillis(value);
-
-    }
-
-    if (StringMapWrapper.contains(LocaleDatePipe.ALIASES, pattern)) {
-
-      pattern = <string>StringMapWrapper.get(LocaleDatePipe.ALIASES, pattern);
-
-    }
-
-    return DateFormatter.format(value, defaultLocale, pattern);
-
-  }
-
-  private supports(obj: any): boolean { return isDate(obj) || isNumber(obj); }
+    private supports(obj: any): boolean { return isDate(obj) || isNumber(obj); }
 
 }

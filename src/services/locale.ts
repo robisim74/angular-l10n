@@ -1,18 +1,19 @@
 /**
- * ANGULAR 2 MAPS
- * Google Maps JavaScript API in the new Angular 2 applications using TypeScript
- * written by Roberto Simonetti
- * MIT license
- * https://github.com/robisim74/angular2maps
+ * ANGULAR 2 LOCALIZATION
+ * An Angular 2 library to translate messages, dates and numbers.
+ * Written by Roberto Simonetti.
+ * MIT license.
+ * https://github.com/robisim74/angular2localization
  */
 
+// Services.
 import {LocaleService} from './locale.service';
 import {LocalizationService} from '../services/localization.service';
 
 /**
  * Locale superclass.
  * 
- * Extend this class in components to provide the necessary methods to localization:
+ * Extend this class in components to provide the necessary methods for localization:
  * 
  * export class AppComponent extends Locale {
  *
@@ -36,7 +37,7 @@ export class Locale {
 
     }
 
-    // Gets the current locale.
+    // Gets the default locale.
     get defaultLocale(): string {
 
         return this.locale.getDefaultLocale();

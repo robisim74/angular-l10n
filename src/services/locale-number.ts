@@ -6,7 +6,6 @@
  * https://github.com/robisim74/angular2localization
  */
 
-import {Injectable} from '@angular/core';
 import {isNumber, isPresent, isBlank, NumberWrapper, RegExpWrapper} from '@angular/common/src/facade/lang';
 import {BaseException} from '@angular/common/src/facade/exceptions';
 import {NumberFormatter, NumberFormatStyle} from '@angular/common/src/facade/intl';
@@ -60,4 +59,5 @@ export class LocaleNumber {
     });
 
   }
+
 }

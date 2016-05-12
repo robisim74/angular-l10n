@@ -10,15 +10,16 @@ import {Injectable, Pipe, PipeTransform} from '@angular/core';
 import {NumberFormatStyle} from '@angular/common/src/facade/intl';
 
 // Services.
-import {LocaleNumber} from '../services/locale-number';
 import {LocaleService} from '../services/locale.service';
+import {LocaleNumber} from '../services/locale-number';
+import {IntlSupport} from '../services/Intl-support';
 
 /**
  * 'localedecimal' pipe function.
  */
 @Pipe({
-  name: 'localedecimal',
-  pure: true
+    name: 'localedecimal',
+    pure: true
 })
 
 /**
@@ -64,25 +65,31 @@ import {LocaleService} from '../services/locale.service';
  * @author Roberto Simonetti
  * @see Angular 2 DecimalPipe for further information
  */
-@Injectable() export class LocaleDecimalPipe extends LocaleNumber implements PipeTransform {
+@Injectable() export class LocaleDecimalPipe implements PipeTransform {
 
-  constructor(public locale: LocaleService) {
-    super();
-  }
+    constructor(public locale: LocaleService) { }
 
-  /**
-   * LocaleDecimalPipe transform method.
-   * 
-   * @param value The number to be localized
-   * @param defaultLocale The default locale
-   * @param digits The format of the number
-   * @return The locale decimal
-   */
-  transform(value: any, defaultLocale: string, digits: string = null): string {
+    /**
+     * LocaleDecimalPipe transform method.
+     * 
+     * @param value The number to be localized
+     * @param defaultLocale The default locale
+     * @param digits The format of the number
+     * @return The locale decimal
+     */
+    transform(value: any, defaultLocale: string, digits: string = null): string {
 
-    return LocaleNumber.format(defaultLocale, value, NumberFormatStyle.Decimal, digits);
+        // Checks for support for Intl.
+        if (IntlSupport.NumberFormat(defaultLocale) == true) {
 
-  }
+            return LocaleNumber.format(defaultLocale, value, NumberFormatStyle.Decimal, digits);
+
+        }
+
+        // Returns the number without localization.
+        return value;
+
+    }
 
 }
 
@@ -90,8 +97,8 @@ import {LocaleService} from '../services/locale.service';
  * 'localepercent' pipe function.
  */
 @Pipe({
-  name: 'localepercent',
-  pure: true
+    name: 'localepercent',
+    pure: true
 })
 
 /**
@@ -133,25 +140,31 @@ import {LocaleService} from '../services/locale.service';
  * @author Roberto Simonetti
  * @see Angular 2 PercentPipe for further information
  */
-@Injectable() export class LocalePercentPipe extends LocaleNumber implements PipeTransform {
+@Injectable() export class LocalePercentPipe implements PipeTransform {
 
-  constructor(public locale: LocaleService) {
-    super();
-  }
+    constructor(public locale: LocaleService) { }
 
-  /**
-   * LocalePercentPipe transform method.
-   * 
-   * @param value The number to be localized
-   * @param defaultLocale The default locale
-   * @param digits The format of the number
-   * @return The locale percent
-   */
-  transform(value: any, defaultLocale: string, digits: string = null): string {
+    /**
+     * LocalePercentPipe transform method.
+     * 
+     * @param value The number to be localized
+     * @param defaultLocale The default locale
+     * @param digits The format of the number
+     * @return The locale percent
+     */
+    transform(value: any, defaultLocale: string, digits: string = null): string {
 
-    return LocaleNumber.format(defaultLocale, value, NumberFormatStyle.Percent, digits);
+        // Checks for support for Intl.
+        if (IntlSupport.NumberFormat(defaultLocale) == true) {
 
-  }
+            return LocaleNumber.format(defaultLocale, value, NumberFormatStyle.Percent, digits);
+
+        }
+
+        // Returns the number without localization.
+        return value;
+
+    }
 
 }
 
@@ -159,8 +172,8 @@ import {LocaleService} from '../services/locale.service';
  * 'localecurrency' pipe function.
  */
 @Pipe({
-  name: 'localecurrency',
-  pure: true
+    name: 'localecurrency',
+    pure: true
 })
 
 /**
@@ -211,30 +224,36 @@ import {LocaleService} from '../services/locale.service';
  * @author Roberto Simonetti
  * @see Angular 2 CurrencyPipe for further information
  */
-@Injectable() export class LocaleCurrencyPipe extends LocaleNumber implements PipeTransform {
+@Injectable() export class LocaleCurrencyPipe implements PipeTransform {
 
-  constructor(public locale: LocaleService) {
-    super();
-  }
+    constructor(public locale: LocaleService) { }
 
-  /**
-   * LocaleCurrencyPipe transform method.
-   * 
-   * @param value The number to be localized
-   * @param defaultLocale The default locale
-   * @param currency The current currency
-   * @param symbolDisplay Indicates whether to use the currency symbol
-   * @param digits The format of the number
-   * @return The locale currency
-   */
-  transform(value: any,
-    defaultLocale: string,
-    currency: string,
-    symbolDisplay: boolean = false,
-    digits: string = null): string {
+    /**
+     * LocaleCurrencyPipe transform method.
+     * 
+     * @param value The number to be localized
+     * @param defaultLocale The default locale
+     * @param currency The current currency
+     * @param symbolDisplay Indicates whether to use the currency symbol
+     * @param digits The format of the number
+     * @return The locale currency
+     */
+    transform(value: any,
+        defaultLocale: string,
+        currency: string,
+        symbolDisplay: boolean = false,
+        digits: string = null): string {
 
-    return LocaleNumber.format(defaultLocale, value, NumberFormatStyle.Currency, digits, currency, symbolDisplay);
+        // Checks for support for Intl.
+        if (IntlSupport.NumberFormat(defaultLocale) == true) {
 
-  }
+            return LocaleNumber.format(defaultLocale, value, NumberFormatStyle.Currency, digits, currency, symbolDisplay);
+
+        }
+
+        // Returns the number without localization & currency.
+        return value + " " + currency;         
+
+    }
 
 }
