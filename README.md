@@ -155,6 +155,21 @@ get currency(): string {
 }
 ```
 
+### Quick use
+If you want, you can avoid including `get lang()`, `get defaultLocale()` or `get currency()` by extending the `Locale` superclass in components:
+```TypeScript
+import {Locale, LocaleService, LocalizationService} from 'angular2localization/angular2localization';
+...
+export class AppComponent extends Locale {
+
+    constructor(public locale: LocaleService, public localization: LocalizationService) {
+        super(locale, localization);
+        ...
+    }
+
+} 
+```
+
 ### List
 Now you can localize a list simply. For example:
 ```Html
@@ -178,22 +193,9 @@ Now you can localize a list simply. For example:
 * `search(s: string, list: Array<any>, keyNames: any[], options: any = { usage: 'search' }): Array<any>`
 * `searchAsync(s: string, list: Array<any>, keyNames: any[], options: any = { usage: 'search' }): Observable<any>`
 
-For more information see the internal documentation. N.B. This feature is not supported by all browsers, even with the use of `Intl.js`.
+For more information see the internal documentation and [here](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Collator).
 
-### Advanced use
-If you want, you can avoid including `get lang()`, `get defaultLocale()` or `get currency()` by extending the `Locale` superclass in components:
-```TypeScript
-import {Locale, LocaleService, LocalizationService} from 'angular2localization/angular2localization';
-...
-export class AppComponent extends Locale {
-
-    constructor(public locale: LocaleService, public localization: LocalizationService) {
-        super(locale, localization);
-        ...
-    }
-
-} 
-```
+*N.B. This feature is not supported by all browsers, even with the use of `Intl.js`.*
 
 ## First scenario
 > You need to localize dates and numbers, but no messages.
@@ -287,7 +289,7 @@ and create the `json` files of the translations such as `locale-en.json`:
     ...
 }
 ```
-N.B. Resource files must be saved in `UTF-8` format.
+*N.B. Resource files must be saved in `UTF-8` format.*
 
 ### Special characters
 You can use quotes inside a string, as long as they don't match the quotes surrounding the string:
@@ -346,7 +348,7 @@ Just add one script tag in your `index.html`:
 ```
 When specifying the `features`, you have to specify what locale, or locales to load.
 
-N.B. When a feature is not supported, however, for example in older browsers, now `angular2localization` does not generate an error in the browser, but returns the value without performing operations.
+*N.B. When a feature is not supported, however, for example in older browsers, now `angular2localization` does not generate an error in the browser, but returns the value without performing operations.*
 
 ## Boilerplates
 [Angular 2 Localization with an ASP.NET CORE MVC Service](https://damienbod.com/2016/04/29/angular-2-localization-with-an-asp-net-core-mvc-service/) @damienbod
