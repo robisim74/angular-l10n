@@ -16,7 +16,7 @@ To load the package you have two methods:
 ```Html
 <script src="node_modules/angular2localization/bundles/angular2localization.js"></script>
 ```
-- Using SystemJS:
+- Using `SystemJS`:
 ```Html
 <script>
     System.config({
@@ -42,11 +42,6 @@ Date | Date/Number | `expression | localedate[:defaultLocale[:format]]`
 Number | Decimal | `expression | localedecimal[:defaultLocale:[digitInfo]]`
 Number | Percentage | `expression | localepercent[:defaultLocale:[digitInfo]]`
 Number | Currency | `expression | localecurrency[:defaultLocale[:currency[:symbolDisplay[:digitInfo]]]]`
-
-Type | Action
----- | ------
-List | Sorting
-List | Filtering
 
 To know the full use, see the [Wiki](https://github.com/robisim74/angular2localization/wiki/Getting-the-translation) page.
 
