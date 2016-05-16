@@ -13,7 +13,6 @@ import {StringMapWrapper} from '@angular/common/src/facade/collection';
 import {InvalidPipeArgumentException} from '@angular/common/src/pipes/invalid_pipe_argument_exception';
 
 // Services.
-import {LocaleService} from '../services/locale.service';
 import {IntlSupport} from '../services/Intl-support';
 
 /**
@@ -78,7 +77,7 @@ import {IntlSupport} from '../services/Intl-support';
         'shortTime': 'jm'
     };
 
-    constructor(public locale: LocaleService) { }
+    constructor() { }
 
     /**
      * LocaleDatePipe transform method.

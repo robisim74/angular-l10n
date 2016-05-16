@@ -10,7 +10,6 @@ import {Injectable, Pipe, PipeTransform} from '@angular/core';
 import {NumberFormatStyle} from '@angular/common/src/facade/intl';
 
 // Services.
-import {LocaleService} from '../services/locale.service';
 import {LocaleNumber} from '../services/locale-number';
 import {IntlSupport} from '../services/Intl-support';
 
@@ -67,7 +66,7 @@ import {IntlSupport} from '../services/Intl-support';
  */
 @Injectable() export class LocaleDecimalPipe implements PipeTransform {
 
-    constructor(public locale: LocaleService) { }
+    constructor() { }
 
     /**
      * LocaleDecimalPipe transform method.
@@ -142,7 +141,7 @@ import {IntlSupport} from '../services/Intl-support';
  */
 @Injectable() export class LocalePercentPipe implements PipeTransform {
 
-    constructor(public locale: LocaleService) { }
+    constructor() { }
 
     /**
      * LocalePercentPipe transform method.
@@ -226,7 +225,7 @@ import {IntlSupport} from '../services/Intl-support';
  */
 @Injectable() export class LocaleCurrencyPipe implements PipeTransform {
 
-    constructor(public locale: LocaleService) { }
+    constructor() { }
 
     /**
      * LocaleCurrencyPipe transform method.
@@ -252,7 +251,7 @@ import {IntlSupport} from '../services/Intl-support';
         }
 
         // Returns the number without localization & currency.
-        return value + " " + currency;         
+        return value + " " + currency;
 
     }
 
