@@ -203,7 +203,7 @@ import {IntlSupport} from '../services/Intl-support';
      */
     translateAsync(key: string): Observable<string> {
 
-        return new Observable((observer: Observer<string>) => {
+        return new Observable<string>((observer: Observer<string>) => {
 
             // Gets the value of translation for the key.
             var value: string = this.translate(key);
@@ -340,7 +340,7 @@ import {IntlSupport} from '../services/Intl-support';
      */
     sortAsync(list: Array<any>, keyName: any, order?: string, extension?: string, options?: any): Observable<Array<any>> {
 
-        return new Observable((observer: Observer<Array<any>>) => {
+        return new Observable<any>((observer: Observer<Array<any>>) => {
 
             // Gets the sorted list.
             observer.next(this.sort(list, keyName, order, extension, options));
