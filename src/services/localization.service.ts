@@ -436,7 +436,7 @@ import {IntlSupport} from '../services/Intl-support';
 
         if (list == null) return null;
 
-        if (keyNames == null || s == "" || IntlSupport.Collator(this.languageCode) == false) return new Observable((observer: Observer<any>) => {
+        if (keyNames == null || s == "" || IntlSupport.Collator(this.languageCode) == false) return new Observable<any>((observer: Observer<any>) => {
 
             for (let item of list) {
 
@@ -448,7 +448,7 @@ import {IntlSupport} from '../services/Intl-support';
 
         });
 
-        return new Observable((observer: Observer<any>) => {
+        return new Observable<any>((observer: Observer<any>) => {
 
             // Gets the value of translation for the each column.
             var translated = new Array<string>();

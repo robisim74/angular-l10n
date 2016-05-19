@@ -12,7 +12,7 @@ import {NumberFormatter, NumberFormatStyle} from '@angular/common/src/facade/int
 import {InvalidPipeArgumentException} from '@angular/common/src/pipes/invalid_pipe_argument_exception';
 
 /**
- * LocaleNumber superclass.
+ * LocaleNumber class.
  */
 export class LocaleNumber {
 
