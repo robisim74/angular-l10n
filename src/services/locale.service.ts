@@ -167,6 +167,16 @@ import {Injectable, EventEmitter, Output} from '@angular/core';
      * Defines when the cookie will be removed.
      */
     private expiry: number;
+        
+    /**
+     * Reference counter for the service. 
+     */
+    private static referenceCounter: number = 0;
+
+    /**
+     * Enable/disable cookie.
+     */
+    public enableCookie: boolean = false;
 
     constructor() {
 
@@ -174,6 +184,16 @@ import {Injectable, EventEmitter, Output} from '@angular/core';
         this.countryCode = "";
         this.currencyCode = "";
         this.defaultLocale = "";
+        
+        // Counts the reference to the service.
+        LocaleService.referenceCounter++;
+
+        // Enables the cookies only for the first instance of the service (see issue #11).
+        if (LocaleService.referenceCounter == 1) {
+
+            this.enableCookie = true;
+
+        }
 
     }
 
@@ -491,7 +511,7 @@ import {Injectable, EventEmitter, Output} from '@angular/core';
         }
 
     }
-
+    
     /**
      * Sets the cookie.
      * 
@@ -518,7 +538,11 @@ import {Injectable, EventEmitter, Output} from '@angular/core';
         }
 
         // Creates the cookie.
-        document.cookie = name + "=" + value + expires + "; path=/";
+        if (this.enableCookie == true) {
+
+            document.cookie = name + "=" + value + expires + "; path=/";
+
+        }
 
     }
 
