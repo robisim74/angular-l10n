@@ -7,8 +7,13 @@
  */
 
 import {Injectable, Pipe, PipeTransform} from '@angular/core';
+import {NumberFormatStyle} from '@angular/common/src/facade/intl';
+
 // Services.
 import {LocalizationService, ServiceState} from '../services/localization.service';
+import {LocaleService} from '../services/locale.service';
+import {LocaleNumber} from '../services/locale-number';
+import {IntlSupport} from '../services/Intl-support';
 
 /**
  * 'translate' pipe function.
@@ -68,7 +73,7 @@ import {LocalizationService, ServiceState} from '../services/localization.servic
  */
 @Injectable() export class TranslatePipe implements PipeTransform {
 
-    constructor(public localization: LocalizationService) { }
+    constructor(public localization: LocalizationService, public locale: LocaleService) { }
 
     /**
      * TranslatePipe transform method.
@@ -82,14 +87,33 @@ import {LocalizationService, ServiceState} from '../services/localization.servic
         // Checks the service state.
         if (this.localization.serviceState == ServiceState.isReady) {
 
-            // i18n: removes the value of template locale variable. 
-            var formatKey: string = key.replace(/^\d+\b/, '');
-            formatKey = formatKey.trim();
+            var REGEXP: RegExp = /^\d+\b/;
+            var keyStr: string = key;
 
-            // Gets the value of translation for the key.
-            var value = this.localization.translate(formatKey);
+            // i18n plural.
+            if (REGEXP.exec(key) != null) {
 
-            return key.replace(formatKey, value);
+                // Tries to extract the number.
+                var keyNum: number = parseInt(key);
+
+                // Tries to extract the string. 
+                keyStr = key.replace(REGEXP, '');
+                keyStr = keyStr.trim();
+
+                // Checks the number & support for Intl.
+                if (!isNaN(keyNum) && IntlSupport.NumberFormat(this.locale.getDefaultLocale()) == true) {
+
+                    // Localizes the number.
+                    key = key.replace(/^\d+/, LocaleNumber.format(this.locale.getDefaultLocale(), keyNum, NumberFormatStyle.Decimal, '1.0-0'));
+
+                }
+
+            }
+
+            // Gets the value of translation for the key string.
+            var value = this.localization.translate(keyStr);
+
+            return key.replace(keyStr, value);
 
         }
 
