@@ -8,7 +8,7 @@
 
 // Services.
 import {LocaleService} from './locale.service';
-import {LocalizationService} from '../services/localization.service';
+import {LocalizationService} from './localization.service';
 
 /**
  * Locale superclass.

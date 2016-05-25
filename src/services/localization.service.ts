@@ -14,7 +14,7 @@ import 'rxjs/add/operator/map';
 
 // Services.
 import {LocaleService} from './locale.service';
-import {IntlSupport} from '../services/Intl-support';
+import {IntlSupport} from './Intl-support';
 
 /**
  * LocalizationService class.
