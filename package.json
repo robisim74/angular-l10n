@@ -1,6 +1,6 @@
 {
     "name": "angular2localization",
-    "version": "0.7.2",
+    "version": "0.8.0",
     "description": "An Angular 2 library to translate messages, dates and numbers",
     "main": "",
     "scripts": {},
@@ -11,7 +11,8 @@
         "i18n",
         "Localization",
         "l10n",
-        "Translate"
+        "Translate",
+        "Validation"
     ],
     "author": "Roberto Simonetti",
     "license": "MIT",
