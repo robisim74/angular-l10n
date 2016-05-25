@@ -33,7 +33,7 @@ To load the package you have two methods:
 ```
 
 ## Getting the translation
-Now this library uses pure pipes. To know the advantages over impure pipes, please see [here](https://angular.io/docs/ts/latest/guide/pipes.html). 
+This library uses pure pipes. To know the advantages over impure pipes, please see [here](https://angular.io/docs/ts/latest/guide/pipes.html). 
 
 Type | Format | Syntax
 ---- | ------ | ------
@@ -52,6 +52,11 @@ First | You need to localize dates and numbers, but no messages | [Wiki](https:/
 Second | You only need to translate messages | [Wiki](https://github.com/robisim74/angular2localization/wiki/Second-scenario)
 Third | You need to translate messages, dates and numbers | [Wiki](https://github.com/robisim74/angular2localization/wiki/Third-scenario)
 
+## Validation by locales
+Type | Directive | Validator | Options | Errors | Wiki page
+---- | --------- | --------- | ------- | ------ | ---------
+Number | `LocaleNumberValidator` | `validateLocaleNumber=[digitInfo]` | `[minValue]` `[maxValue]` | `format` or `minValue` or `maxValue` | [Wiki](https://github.com/robisim74/angular2localization/wiki/Number-validation)
+
 ## Internationalization API
 To localize dates and numbers, this library uses `Intl` API, through Angular 2. 
 All modern browsers, except Safari, have implemented this API. You can use [Intl.js](https://github.com/andyearnshaw/Intl.js) to extend support to all browsers. 
@@ -61,7 +66,7 @@ Just add one script tag in your `index.html`:
 ```
 When specifying the `features`, you have to specify what locale, or locales to load.
 
-*N.B. When a feature is not supported, however, for example in older browsers, now `angular2localization` does not generate an error in the browser, but returns the value without performing operations.*
+*N.B. When a feature is not supported, however, for example in older browsers, `angular2localization` does not generate an error in the browser, but returns the value without performing operations.*
 
 ## Boilerplates
 [Angular 2 Localization with an ASP.NET CORE MVC Service](https://damienbod.com/2016/04/29/angular-2-localization-with-an-asp-net-core-mvc-service/) @damienbod
