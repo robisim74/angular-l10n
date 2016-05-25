@@ -94,7 +94,7 @@ import {IntlSupport} from '../services/Intl-support';
             if (REGEXP.exec(key) != null) {
 
                 // Tries to extract the number.
-                var keyNum: number = parseInt(key);
+                var keyNum: number = parseFloat(key);
 
                 // Tries to extract the string. 
                 keyStr = key.replace(REGEXP, '');
@@ -104,7 +104,7 @@ import {IntlSupport} from '../services/Intl-support';
                 if (!isNaN(keyNum) && IntlSupport.NumberFormat(this.locale.getDefaultLocale()) == true) {
 
                     // Localizes the number.
-                    key = key.replace(/^\d+/, LocaleNumber.format(this.locale.getDefaultLocale(), keyNum, NumberFormatStyle.Decimal, '1.0-0'));
+                    key = key.replace(/^\d+/, LocaleNumber.format(this.locale.getDefaultLocale(), keyNum, NumberFormatStyle.Decimal, '1.0-3'));
 
                 }
 
