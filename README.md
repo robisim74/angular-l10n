@@ -11,12 +11,12 @@ You can add `angular2localization` to your project via [Node and npm](https://no
 ```
 npm install --save angular2localization
 ```
-To load the package you have two methods:
+To load the package you have two methods using `SystemJS`:
 - Loading the bundle:
 ```Html
 <script src="node_modules/angular2localization/bundles/angular2localization.js"></script>
 ```
-- Using `SystemJS`:
+- Using `System.config`:
 ```Html
 <script>
     System.config({
