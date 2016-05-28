@@ -17,7 +17,7 @@ import {IntlSupport} from './Intl-support';
 /**
  * LocaleParser class.
  * 
- * @author Roberto Simonetti 20/05/2016
+ * @author Roberto Simonetti
  */
 export class LocaleParser {
 

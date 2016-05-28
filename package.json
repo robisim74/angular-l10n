@@ -1,45 +1,55 @@
 {
-    "name": "angular2localization",
-    "version": "0.8.0",
-    "description": "An Angular 2 library to translate messages, dates and numbers",
-    "main": "",
-    "scripts": {},
-    "keywords": [
-        "Angular2",
-        "TypeScript",
-        "Internationalization",
-        "i18n",
-        "Localization",
-        "l10n",
-        "Translate",
-        "Validation"
-    ],
-    "author": "Roberto Simonetti",
-    "license": "MIT",
-    "repository": {
-        "type": "git",
-        "url": "https://github.com/robisim74/angular2localization.git"
-    },
-    "bugs": {
-        "url": "https://github.com/robisim74/angular2localization/issues"
-    },
-    "homepage": "https://github.com/robisim74/angular2localization",
-    "typings": "./angular2localization.d.ts",
-    "dependencies": {
-        "@angular/common": "2.0.0-rc.1",
-        "@angular/compiler": "2.0.0-rc.1",
-        "@angular/core": "2.0.0-rc.1",
-        "@angular/http": "2.0.0-rc.1",
-        "systemjs": "0.19.27",
-        "es6-shim": "^0.35.0",
-        "reflect-metadata": "^0.1.3",
-        "rxjs": "5.0.0-beta.6",
-        "zone.js": "^0.6.12"
-    },
-    "devDependencies": {
-        "typescript": "^1.8.10",
-        "gulp": "^3.9.1",
-        "del": "^2.2.0",
-        "systemjs-builder": "^0.15.16"
-    }
+  "name": "angular2localization",
+  "version": "0.8.1",
+  "description": "An Angular 2 library to translate messages, dates and numbers",
+  "main": "angular2localization.js",
+  "scripts": {},
+  "typings": "./angular2localization.d.ts",
+  "keywords": [
+    "Angular2",
+    "TypeScript",
+    "Internationalization",
+    "i18n",
+    "Localization",
+    "l10n",
+    "Translate",
+    "Validation"
+  ],
+  "author": "Roberto Simonetti",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/robisim74/angular2localization.git"
+  },
+  "bugs": {
+    "url": "https://github.com/robisim74/angular2localization/issues"
+  },
+  "homepage": "https://github.com/robisim74/angular2localization",
+  "peerDependencies": {
+    "@angular/common": "^2.0.0-rc.1",
+    "@angular/compiler": "^2.0.0-rc.1",
+    "@angular/core": "^2.0.0-rc.1",
+    "@angular/platform-browser": "^2.0.0-rc.1",
+    "@angular/platform-browser-dynamic": "^2.0.0-rc.1",
+    "@angular/http": "2.0.0-rc.1"
+  },
+  "devDependencies": {
+    "@angular/common": "^2.0.0-rc.1",
+    "@angular/compiler": "^2.0.0-rc.1",
+    "@angular/core": "^2.0.0-rc.1",
+    "@angular/platform-browser": "^2.0.0-rc.1",
+    "@angular/platform-browser-dynamic": "^2.0.0-rc.1",
+    "@angular/http": "2.0.0-rc.1",
+    "es6-promise": "^3.0.2",
+    "es6-shim": "^0.35.0",
+    "reflect-metadata": "0.1.2",
+    "rxjs": "5.0.0-beta.6",
+    "systemjs": "^0.19.26",
+    "typescript": "^1.8.10",
+    "typings": "^0.8.1",
+    "zone.js": "^0.6.12",
+    "gulp": "^3.9.1",
+    "del": "^2.2.0",
+    "systemjs-builder": "^0.15.18"
+  }
 }

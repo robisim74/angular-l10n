@@ -11,13 +11,15 @@ You can add `angular2localization` to your project via [Node and npm](https://no
 ```
 npm install --save angular2localization
 ```
+
+### Loading via SystemJS
 To load the package you have two methods using `SystemJS`:
 - Loading the bundle:
-```Html
+```JavaScript
 <script src="node_modules/angular2localization/bundles/angular2localization.js"></script>
 ```
-- Using `System.config`:
-```Html
+- Using `SystemJS` configuration:
+```JavaScript
 <script>
     System.config({
         map: {
@@ -26,10 +28,20 @@ To load the package you have two methods using `SystemJS`:
         },
         packages: {
             ...
-            'angular2localization': { defaultExtension: 'js' }
+            'angular2localization': { format: 'cjs', defaultExtension: 'js' }
         }
     });
 </script>
+```
+If you compile your app in `CommonJS`, remember to add your own app to the packages specifying the format:
+```JavaScript
+'app': { format: 'cjs', main: 'main.js', defaultExtension: 'js' }
+```
+
+### Loading via webpack
+If you consume the library via `webpack`, simply import the library in your `vendor` file after Angular 2 imports:
+```TypeScript
+import 'angular2localization/angular2localization';
 ```
 
 ## Getting the translation
@@ -70,6 +82,8 @@ When specifying the `features`, you have to specify what locale, or locales to l
 
 ## Boilerplates
 [Angular 2 Localization with an ASP.NET CORE MVC Service](https://damienbod.com/2016/04/29/angular-2-localization-with-an-asp-net-core-mvc-service/) @damienbod
+
+## Contributing
 
 ##License
 MIT
