@@ -84,6 +84,21 @@ When specifying the `features`, you have to specify what locale, or locales to l
 [Angular 2 Localization with an ASP.NET CORE MVC Service](https://damienbod.com/2016/04/29/angular-2-localization-with-an-asp-net-core-mvc-service/) @damienbod
 
 ## Contributing
+- Clone or download this repository
+```
+npm install
+typings install
+tsc
+gulp
+```
+- To test locally the npm package:
+```
+npm pack
+```
+Then you can install it in your app to test it:
+```
+npm install [path]/angular2localization/angular2localization-[version].tgz
+```
 
 ##License
 MIT
