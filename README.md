@@ -20,22 +20,17 @@ To load the package you have two methods using `SystemJS`:
 ```
 - Using `SystemJS` configuration:
 ```JavaScript
-<script>
-    System.config({
-        map: {
-            ...
-            'angular2localization': 'node_modules/angular2localization'
-        },
-        packages: {
-            ...
-            'angular2localization': { format: 'cjs', defaultExtension: 'js' }
-        }
-    });
-</script>
-```
-If you compile your app in `CommonJS`, remember to add your own app to the packages specifying the format:
-```JavaScript
-'app': { format: 'cjs', main: 'main.js', defaultExtension: 'js' }
+var map = {
+    'app': 'app',
+    ...
+    'angular2localization': 'node_modules/angular2localization'
+};
+
+var packages = {
+    'app': { format: 'cjs', main: 'main.js', defaultExtension: 'js' },
+    ...
+    'angular2localization': { format: 'cjs', defaultExtension: 'js' }
+};
 ```
 
 ### Loading via webpack
@@ -84,20 +79,20 @@ When specifying the `features`, you have to specify what locale, or locales to l
 [Angular 2 Localization with an ASP.NET CORE MVC Service](https://damienbod.com/2016/04/29/angular-2-localization-with-an-asp-net-core-mvc-service/) @damienbod
 
 ## Contributing
-- Clone or download this repository
+Clone or download this repository.
 ```
 npm install
 typings install
 tsc
 gulp
 ```
-- To test locally the npm package:
+To test locally the npm package:
 ```
 npm pack
 ```
 Then you can install it in your app to test it:
 ```
-npm install [path]/angular2localization/angular2localization-[version].tgz
+npm install [path]angular2localization-[version].tgz
 ```
 
 ##License
