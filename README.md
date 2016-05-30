@@ -2,7 +2,7 @@
 [![npm version](https://badge.fury.io/js/angular2localization.svg)](https://badge.fury.io/js/angular2localization)
 > An Angular 2 library to translate messages, dates and numbers.
 
-Sample app built with Angular 2 Material: [demo](http://robisim74.github.io/angular2localization)
+Sample app built with Angular 2 Material & webpack: [demo](http://robisim74.github.io/angular2localization)
 
 Get the changelog: [releases](https://github.com/robisim74/angular2localization/releases)
 
