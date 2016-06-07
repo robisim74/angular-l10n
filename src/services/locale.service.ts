@@ -27,7 +27,7 @@ import {Injectable, EventEmitter, Output} from '@angular/core';
  * 
  *     constructor(public locale: LocaleService) {
  * 
- *         // Required: default language (ISO 639 two-letter code) and country (ISO 3166 two-letter, uppercase code).
+ *         // Required: default language (ISO 639 two-letter or three-letter code) and country (ISO 3166 two-letter, uppercase code).
  *         this.locale.definePreferredLocale('en', 'US');
  * 
  *         // Optional: default currency (ISO 4217 three-letter code).
@@ -51,7 +51,7 @@ import {Injectable, EventEmitter, Output} from '@angular/core';
  * 
  *     constructor(public locale: LocaleService, public localization: LocalizationService) {
  * 
- *         // Adds a new language (ISO 639 two-letter code).
+ *         // Adds a new language (ISO 639 two-letter or three-letter code).
  *         this.locale.addLanguage('en');
  *         // Add a new language here.
  * 
@@ -76,7 +76,7 @@ import {Injectable, EventEmitter, Output} from '@angular/core';
  * 
  *     constructor(public locale: LocaleService, public localization: LocalizationService) {
  * 
- *         // Adds a new language (ISO 639 two-letter code).
+ *         // Adds a new language (ISO 639 two-letter or three-letter code).
  *         this.locale.addLanguage('en');
  *         // Add a new language here.
  * 
@@ -97,7 +97,7 @@ import {Injectable, EventEmitter, Output} from '@angular/core';
  * this.locale.setCurrentLanguage(language);
  * this.localization.updateTranslation(); // Need to update the translation.
  * 
- * where 'language' is the two-letter code of the new language (ISO 639).
+ * where 'language' is the two-letter or three-letter code of the new language (ISO 639).
  * 
  * 
  * Changing locale.
@@ -107,7 +107,7 @@ import {Injectable, EventEmitter, Output} from '@angular/core';
  * this.locale.setCurrentLocale(language, country);
  * this.localization.updateTranslation(); // Need to update the translation.
  * 
- * where 'language' is the two-letter code of the new language (ISO 639)
+ * where 'language' is the two-letter or three-letter code of the new language (ISO 639)
  * and 'country' is the two-letter, uppercase code of the new country (ISO 3166).
  *
  * 
@@ -139,6 +139,21 @@ import {Injectable, EventEmitter, Output} from '@angular/core';
     @Output() currencyCodeChanged = new EventEmitter<string>();
 
     /**
+     * Output for event script code changed.
+     */
+    @Output() scriptCodeChanged = new EventEmitter<string>();
+
+    /**
+     * Output for event numbering system changed.
+     */
+    @Output() numberingSystemChanged = new EventEmitter<string>();
+
+    /**
+     * Output for event calendar changed.
+     */
+    @Output() calendarChanged = new EventEmitter<string>();
+
+    /**
      * Current language code.
      */
     private languageCode: string;
@@ -167,7 +182,22 @@ import {Injectable, EventEmitter, Output} from '@angular/core';
      * Defines when the cookie will be removed.
      */
     private expiry: number;
-        
+
+    /**
+     * The optional script code.
+     */
+    private scriptCode: string;
+
+    /**
+     * The optional numbering system.
+     */
+    private numberingSystem: string;
+
+    /**
+     * The optional calendar.
+     */
+    private calendar: string;
+
     /**
      * Reference counter for the service. 
      */
@@ -184,11 +214,15 @@ import {Injectable, EventEmitter, Output} from '@angular/core';
         this.countryCode = "";
         this.currencyCode = "";
         this.defaultLocale = "";
-        
+
+        this.scriptCode = "";
+        this.numberingSystem = "";
+        this.calendar = "";
+
         // Counts the reference to the service.
         LocaleService.referenceCounter++;
 
-        // Enables the cookies only for the first instance of the service (see issue #11).
+        // Enables the cookies for the first instance of the service (see issue #11).
         if (LocaleService.referenceCounter == 1) {
 
             this.enableCookie = true;
@@ -200,7 +234,7 @@ import {Injectable, EventEmitter, Output} from '@angular/core';
     /**
      * Adds a new language.
      * 
-     * @param language The two-letter code of the new language
+     * @param language The two-letter or three-letter code of the new language
      */
     addLanguage(language: string) {
 
@@ -212,24 +246,27 @@ import {Injectable, EventEmitter, Output} from '@angular/core';
      * Defines the preferred language. 
      * Selects the current language of the browser if it has been added, else the default language. 
      * 
-     * @param defaultLanguage The two-letter code of the default language
+     * @param defaultLanguage The two-letter or three-letter code of the default language
      * @param expiry Number of days on the expiry. If omitted, the cookie becomes a session cookie
      */
     definePreferredLanguage(defaultLanguage: string, expiry?: number) {
 
         this.expiry = expiry;
 
-        // Tries to get the cookie "locale".
-        var locale: string = this.getCookie("locale");
-        // Gets the two-letter code. 
-        this.languageCode = locale.substring(0, 2);
+        // Parses the cookie "locale" to extract the codes.
+        this.parseCookie("locale");
 
         if (this.languageCode == "") {
 
             // Gets the current language of the browser or the default language.
             var browserLanguage: string = navigator.language || navigator.userLanguage || navigator.browserLanguage || navigator.systemLanguage;
 
-            browserLanguage = browserLanguage.substring(0, 2); // Gets the two-letter code.    
+            var index: number = browserLanguage.indexOf('-');
+            if (index != -1) {
+
+                browserLanguage = browserLanguage.substring(0, index); // Gets the language code.
+
+            }
 
             if (this.languageCodes.length > 0 && this.languageCodes.indexOf(browserLanguage) != -1) {
 
@@ -237,87 +274,46 @@ import {Injectable, EventEmitter, Output} from '@angular/core';
 
             } else {
 
-                this.languageCode = defaultLanguage.toLowerCase();
+                this.languageCode = defaultLanguage;
 
             }
-
-            // Sets the default locale.
-            this.setDefaultLocale();
-
-            if (this.languageCodes.length > 0) {
-
-                // Sets the cookie "locale".
-                this.setCookie("locale", this.defaultLocale, this.expiry);
-
-            }
-
-        } else {
-
-            // Sets the default locale.
-            this.setDefaultLocale();
 
         }
+
+        // Sets the default locale.
+        this.setDefaultLocale();
 
     }
 
     /**
      * Defines preferred languange and country, regardless of the browser language.
      * 
-     * @param defaultLanguage The two-letter code of the default language
+     * @param defaultLanguage The two-letter or three-letter code of the default language
      * @param defaultCountry The two-letter, uppercase code of the default country
      * @param expiry Number of days on the expiry. If omitted, the cookie becomes a session cookie
+     * @param script The optional four-letter script code
+     * @param numberingSystem The optional numbering system to be used
+     * @param calendar The optional calendar to be used
      */
-    definePreferredLocale(defaultLanguage: string, defaultCountry: string, expiry?: number) {
+    definePreferredLocale(defaultLanguage: string, defaultCountry: string, expiry?: number, script: string = "", numberingSystem: string = "", calendar: string = "") {
 
         this.expiry = expiry;
 
-        // Tries to get the cookie "locale".
-        var locale: string = this.getCookie("locale");
-        // Gets the two-letter code. 
-        this.languageCode = locale.substring(0, 2);
+        // Parses the cookie "locale" to extract the codes & the extension.
+        this.parseCookie("locale");
 
-        if (this.languageCode == "") {
+        if (this.languageCode == "" || this.countryCode == "") {
 
-            this.languageCode = defaultLanguage.toLowerCase();
-            this.countryCode = defaultCountry.toUpperCase();
-
-            // Sets the default locale.
-            this.setDefaultLocale();
-
-            if (this.languageCodes.length > 0) {
-
-                // Sets the cookie "locale".
-                this.setCookie("locale", this.defaultLocale, this.expiry);
-
-            }
-
-        } else {
-
-            // Gets the two-letter, uppercase code.
-            this.countryCode = locale.substring(3, 5);
-
-            if (this.countryCode == "") {
-
-                this.countryCode = defaultCountry.toUpperCase();
-
-                // Sets the default locale.
-                this.setDefaultLocale();
-
-                if (this.languageCodes.length > 0) {
-
-                    // Sets the cookie "locale".
-                    this.setCookie("locale", this.defaultLocale, this.expiry);
-
-                }
-
-            } else {
-
-                // Sets the default locale.
-                this.setDefaultLocale();
-
-            }
+            this.languageCode = defaultLanguage;
+            this.countryCode = defaultCountry;
+            this.scriptCode = script;
+            this.numberingSystem = numberingSystem;
+            this.calendar = calendar;
 
         }
+
+        // Sets the default locale.
+        this.setDefaultLocale();
 
     }
 
@@ -328,19 +324,19 @@ import {Injectable, EventEmitter, Output} from '@angular/core';
      */
     definePreferredCurrency(defaultCurrency: string) {
 
-        // Tries to get the cookie "currency".
-        this.currencyCode = this.getCookie("currency");
+        // Parses the cookie "currency" to extract the code.
+        this.parseCookie("currency");
 
         if (this.currencyCode == "") {
 
-            this.currencyCode = defaultCurrency.toUpperCase();
+            this.currencyCode = defaultCurrency;
 
-            if (this.languageCodes.length > 0) {
+        }
 
-                // Sets the cookie "currency".
-                this.setCookie("currency", this.currencyCode, this.expiry);
+        // Sets the cookie "currency".
+        if (this.enableCookie == true && this.languageCodes.length > 0) {
 
-            }
+            this.setCookie("currency", this.currencyCode, this.expiry);
 
         }
 
@@ -349,7 +345,7 @@ import {Injectable, EventEmitter, Output} from '@angular/core';
     /**
      * Gets the current language.
      * 
-     * @return The two-letter code of the current language
+     * @return The two-letter or three-letter code of the current language
      */
     getCurrentLanguage(): string {
 
@@ -380,28 +376,56 @@ import {Injectable, EventEmitter, Output} from '@angular/core';
     }
 
     /**
+     * Gets the script.
+     * 
+     * @return The four-letter code of the script
+     */
+    getScript(): string {
+
+        return this.scriptCode;
+
+    }
+
+    /**
+     * Gets the numbering system.
+     * 
+     * @return The numbering system
+     */
+    getNumberingSystem(): string {
+
+        return this.numberingSystem;
+
+    }
+
+    /**
+     * Gets the calendar.
+     * 
+     * @return The calendar
+     */
+    getCalendar(): string {
+
+        return this.calendar;
+
+    }
+
+    /**
      * Sets the current language.
      * 
-     * @param language The two-letter code of the new language
+     * @param language The two-letter or three-letter code of the new language
      */
     setCurrentLanguage(language: string) {
-
-        language = language.toLowerCase();
 
         // Checks if the language has changed.
         if (this.languageCode != language) {
 
-            // Sets the current language code.
             this.languageCode = language;
 
             // Sets the default locale.
             this.setDefaultLocale();
 
-            // Sets the cookie "locale".
-            this.setCookie("locale", this.defaultLocale, this.expiry);
-
             // Sends an event.
             this.languageCodeChanged.emit(language);
+
         }
 
     }
@@ -413,22 +437,17 @@ import {Injectable, EventEmitter, Output} from '@angular/core';
      */
     setCurrentCountry(country: string) {
 
-        country = country.toUpperCase();
-
         // Checks if the country has changed.
         if (this.countryCode != country) {
 
-            // Sets the current country code.
             this.countryCode = country;
 
             // Sets the default locale.
             this.setDefaultLocale();
 
-            // Sets the cookie "locale".
-            this.setCookie("locale", this.defaultLocale, this.expiry);
-
             // Sends an event.
             this.countryCodeChanged.emit(country);
+
         }
 
     }
@@ -436,31 +455,33 @@ import {Injectable, EventEmitter, Output} from '@angular/core';
     /**
      * Sets the current locale.
      * 
-     * @param language The two-letter code of the new language
+     * @param language The two-letter or three-letter code of the new language
      * @param country The two-letter, uppercase code of the new country
+     * @param script The optional four-letter script code
+     * @param numberingSystem The optional numbering system to be used
+     * @param calendar The optional calendar to be used
      */
-    setCurrentLocale(language: string, country: string) {
+    setCurrentLocale(language: string, country: string, script: string = "", numberingSystem: string = "", calendar: string = "") {
 
-        language = language.toLowerCase();
-        country = country.toUpperCase();
+        // Checks if language, country, script or extension have changed.
+        if (this.languageCode != language || this.countryCode != country || this.scriptCode != script || this.numberingSystem != numberingSystem || this.calendar != calendar) {
 
-        // Checks if language or country have changed.
-        if (this.languageCode != language || this.countryCode != country) {
-
-            // Sets the current language code.
             this.languageCode = language;
-            // Sets the current country code.
             this.countryCode = country;
+            this.scriptCode = script;
+            this.numberingSystem = numberingSystem;
+            this.calendar = calendar;
 
             // Sets the default locale.
             this.setDefaultLocale();
 
-            // Sets the cookie "locale".
-            this.setCookie("locale", this.defaultLocale, this.expiry);
-
-            // Sends the events.
-            this.countryCodeChanged.emit(country);
+            // Sends the events.     
             this.languageCodeChanged.emit(language);
+            this.countryCodeChanged.emit(country);
+            this.scriptCodeChanged.emit(script);
+            this.numberingSystemChanged.emit(numberingSystem);
+            this.calendarChanged.emit(calendar);
+
         }
 
     }
@@ -472,19 +493,21 @@ import {Injectable, EventEmitter, Output} from '@angular/core';
      */
     setCurrentCurrency(currency: string) {
 
-        currency = currency.toUpperCase();
-
         // Checks if the currency has changed.
         if (this.currencyCode != currency) {
 
-            // Sets the current currency code.
             this.currencyCode = currency;
 
             // Sets the cookie "currency".
-            this.setCookie("currency", this.currencyCode, this.expiry);
+            if (this.enableCookie == true && this.languageCodes.length > 0) {
+
+                this.setCookie("currency", this.currencyCode, this.expiry);
+
+            }
 
             // Sends an event.
             this.currencyCodeChanged.emit(currency);
+
         }
 
     }
@@ -500,18 +523,90 @@ import {Injectable, EventEmitter, Output} from '@angular/core';
 
     }
 
+    /**
+     * Builds the default locale.
+     */
     private setDefaultLocale() {
 
         this.defaultLocale = this.languageCode
 
-        if (this.countryCode != "") {
+        this.defaultLocale += this.scriptCode != "" ? "-" + this.scriptCode : "";
 
-            this.defaultLocale = this.defaultLocale + "-" + this.countryCode;
+        this.defaultLocale += this.countryCode != "" ? "-" + this.countryCode : "";
+
+        // Builds the extension.
+        // Adds the 'u' (Unicode) extension.
+        this.defaultLocale += this.numberingSystem != "" || this.calendar != "" ? "-u" : "";
+        // Adds numbering system.
+        this.defaultLocale += this.numberingSystem != "" ? "-nu-" + this.numberingSystem : "";
+        // Adds calendar.
+        this.defaultLocale += this.calendar != "" ? "-ca-" + this.calendar : "";
+
+        // Sets the cookie "locale".
+        if (this.enableCookie == true && this.languageCodes.length > 0) {
+
+            this.setCookie("locale", this.defaultLocale, this.expiry);
 
         }
 
     }
-    
+
+    /**
+     * Parses the cookie to extract the codes & the extension.
+     * 
+     * @param name The name of the cookie
+     */
+    private parseCookie(name: string) {
+
+        // Tries to get the cookie.
+        var cookie: string = this.getCookie(name);
+
+        // Looks for the 'u' (Unicode) extension.
+        var index: number = cookie.search('-u');
+        if (index != -1) {
+
+            var extensions: string[] = cookie.substring(index + 1).split('-');
+            switch (extensions.length) {
+
+                case 3:
+                    if (extensions[1] == "nu") this.numberingSystem = extensions[2];
+                    else if (extensions[1] == "ca") this.calendar = extensions[2];
+                    break;
+                case 5:
+                    this.numberingSystem = extensions[2];
+                    this.calendar = extensions[4];
+                    break;
+
+            }
+
+            // Extracts the codes.
+            cookie = cookie.substring(0, index);
+
+        }
+
+        // Splits the cookie to each hyphen.
+        var codes: string[] = cookie.split('-');
+
+        switch (codes.length) {
+
+            case 1:
+                if (name == "locale") this.languageCode = codes[0];
+                else if (name == "currency") this.currencyCode = codes[0];
+                break;
+            case 2:
+                this.languageCode = codes[0];
+                this.countryCode = codes[1];
+                break;
+            case 3:
+                this.languageCode = codes[0];
+                this.scriptCode = codes[1];
+                this.countryCode = codes[2];
+                break;
+
+        }
+
+    }
+
     /**
      * Sets the cookie.
      * 
@@ -538,11 +633,7 @@ import {Injectable, EventEmitter, Output} from '@angular/core';
         }
 
         // Creates the cookie.
-        if (this.enableCookie == true) {
-
-            document.cookie = name + "=" + value + expires + "; path=/";
-
-        }
+        document.cookie = name + "=" + value + expires + "; path=/";
 
     }
 
