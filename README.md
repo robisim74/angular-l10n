@@ -59,6 +59,10 @@ First | You need to localize dates and numbers, but no messages | [Wiki](https:/
 Second | You only need to translate messages | [Wiki](https://github.com/robisim74/angular2localization/wiki/Second-scenario)
 Third | You need to translate messages, dates and numbers | [Wiki](https://github.com/robisim74/angular2localization/wiki/Third-scenario)
 
+## Defining default locale
+In the first & third scenario, you can define the default locale to set the language and country, the script, the numbering system and calendar: 
+[Wiki](https://github.com/robisim74/angular2localization/wiki/Defining-default-locale).
+
 ## Validation by locales
 Type | Directive | Validator | Options | Errors | Wiki page
 ---- | --------- | --------- | ------- | ------ | ---------
