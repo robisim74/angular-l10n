@@ -24,7 +24,7 @@ export class LocaleParser {
     constructor() { }
 
     /**
-     * Builds the regular expression for the default locale.
+     * Builds the regular expression of a number for the default locale.
      * 
      * @param defaultLocale The default locale
      * @param digits The digit info: {minIntegerDigits}.{minFractionDigits}-{maxFractionDigits}
@@ -94,7 +94,7 @@ export class LocaleParser {
         } else {
 
             // Integer number.
-            pattern = pattern = "^"
+            pattern = "^"
                 + minusSign
                 + "?[" + zero + "-" + nine
                 + "]{" + minInt + ",}$";
@@ -250,7 +250,7 @@ class DecimalCode extends NumberCode {
 
             var charCode: string = this.Unicode(char);
 
-            // Try to look for the char code in numbers and signs.
+            // Tries to look for the char code in numbers and signs.
             var index: number = this.numbers.indexOf(charCode);
             if (index != -1) {
 
