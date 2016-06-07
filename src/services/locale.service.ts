@@ -418,13 +418,12 @@ import {Injectable, EventEmitter, Output} from '@angular/core';
         // Checks if the language has changed.
         if (this.languageCode != language) {
 
+            // Assigns the value & sends an event.
             this.languageCode = language;
+            this.languageCodeChanged.emit(language);
 
             // Sets the default locale.
             this.setDefaultLocale();
-
-            // Sends an event.
-            this.languageCodeChanged.emit(language);
 
         }
 
@@ -440,13 +439,12 @@ import {Injectable, EventEmitter, Output} from '@angular/core';
         // Checks if the country has changed.
         if (this.countryCode != country) {
 
+            // Assigns the value & sends an event.
             this.countryCode = country;
+            this.countryCodeChanged.emit(country);
 
             // Sets the default locale.
             this.setDefaultLocale();
-
-            // Sends an event.
-            this.countryCodeChanged.emit(country);
 
         }
 
@@ -466,21 +464,15 @@ import {Injectable, EventEmitter, Output} from '@angular/core';
         // Checks if language, country, script or extension have changed.
         if (this.languageCode != language || this.countryCode != country || this.scriptCode != script || this.numberingSystem != numberingSystem || this.calendar != calendar) {
 
-            this.languageCode = language;
-            this.countryCode = country;
-            this.scriptCode = script;
-            this.numberingSystem = numberingSystem;
-            this.calendar = calendar;
+            // Assigns the values & sends the events.
+            if (this.languageCode != language) { this.languageCode = language; this.languageCodeChanged.emit(language); }
+            if (this.countryCode != country) { this.countryCode = country; this.countryCodeChanged.emit(country); }
+            if (this.scriptCode != script) { this.scriptCode = script; this.scriptCodeChanged.emit(script); }
+            if (this.numberingSystem != numberingSystem) { this.numberingSystem = numberingSystem; this.numberingSystemChanged.emit(numberingSystem); }
+            if (this.calendar != calendar) { this.calendar = calendar; this.calendarChanged.emit(calendar); }
 
             // Sets the default locale.
             this.setDefaultLocale();
-
-            // Sends the events.     
-            this.languageCodeChanged.emit(language);
-            this.countryCodeChanged.emit(country);
-            this.scriptCodeChanged.emit(script);
-            this.numberingSystemChanged.emit(numberingSystem);
-            this.calendarChanged.emit(calendar);
 
         }
 
@@ -496,7 +488,9 @@ import {Injectable, EventEmitter, Output} from '@angular/core';
         // Checks if the currency has changed.
         if (this.currencyCode != currency) {
 
+            // Assigns the value & sends an event.
             this.currencyCode = currency;
+            this.currencyCodeChanged.emit(currency);
 
             // Sets the cookie "currency".
             if (this.enableCookie == true && this.languageCodes.length > 0) {
@@ -504,9 +498,6 @@ import {Injectable, EventEmitter, Output} from '@angular/core';
                 this.setCookie("currency", this.currencyCode, this.expiry);
 
             }
-
-            // Sends an event.
-            this.currencyCodeChanged.emit(currency);
 
         }
 
