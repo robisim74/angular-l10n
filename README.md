@@ -52,7 +52,7 @@ See [library specification](https://github.com/robisim74/angular2localization/bl
 [Angular 2 Localization with an ASP.NET CORE MVC Service](https://damienbod.com/2016/04/29/angular-2-localization-with-an-asp-net-core-mvc-service/) @damienbod
 
 ## Building
-In order to build the library, clone or download the latest version of this repository:
+In order to build the library if you want to contribute:
 ```
 npm install
 typings install
