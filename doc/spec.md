@@ -406,7 +406,7 @@ Each instance must be injected, and can be directly or asynchronously loaded, as
 ```TypeScript
 @Component({
     ...
-    providers: [LocalizationService], // Inherited by all descendants.
+    providers: [LocalizationService] // Inherited by all descendants.
 })
 
 export class ListComponent {
