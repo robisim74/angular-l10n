@@ -402,12 +402,16 @@ When you invoke one of them, in addition to set the language and country, you ca
 ## <a name="5"/>5 Lazy routing
 If you use a `Router` in an extended application, you can create an instance of the `LocalizationService` for every asynchronously loaded component, as shown:
 ![LazyRouting](images/LazyRouting.png)
-Each instance is different, and can be directly or asynchronously loaded, as in this example:
+Each instance must be injected, and can be directly or asynchronously loaded, as in this example:
 ```TypeScript
-export class ListComponent extends Locale {
+@Component({
+    ...
+    providers: [LocalizationService], // Inherited by all descendants.
+})
+
+export class ListComponent {
 
     constructor(public localization: LocalizationService) {
-        super(null, localization);
 
         // Instantiates a new LocalizationService for this component and for its descendants.
         this.localization.translationProvider('./resources/locale-list-'); // Required: initializes the translation provider with the given path prefix.
