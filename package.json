@@ -1,9 +1,13 @@
 {
   "name": "angular2localization",
-  "version": "0.8.2",
+  "version": "0.8.3",
   "description": "An Angular 2 library to translate messages, dates and numbers",
   "main": "angular2localization.js",
-  "scripts": {},
+  "scripts": {
+    "build": "npm run tsc && npm run gulp",
+    "tsc": "tsc",
+    "gulp": "gulp"
+  },
   "typings": "./angular2localization.d.ts",
   "keywords": [
     "Angular2",
