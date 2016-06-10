@@ -8,6 +8,7 @@
 
 /**
  * IntlSupport class.
+ * Provides the methods to check if Intl is supported.
  * 
  * @author Roberto Simonetti
  */

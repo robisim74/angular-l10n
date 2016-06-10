@@ -23,12 +23,13 @@ import {IntlSupport} from '../services/Intl-support';
 
 /**
  * LocaleDecimalPipe class.
+ * Localizes decimal numbers.
  * 
  * Getting the local decimal:
  * 
  * expression | localedecimal[:defaultLocale:[digitInfo]]
  * 
- * where 'expression' is a number, 'defaultLocale' is the default locale and 'digitInfo' has the following format:
+ * where 'expression' is a number and 'digitInfo' has the following format:
  * 
  * {minIntegerDigits}.{minFractionDigits}-{maxFractionDigits}
  * 
@@ -102,6 +103,7 @@ import {IntlSupport} from '../services/Intl-support';
 
 /**
  * LocalePercentPipe class.
+ * Localizes percent numbers.
  * 
  * Getting the local percentage:
  * 
@@ -177,12 +179,13 @@ import {IntlSupport} from '../services/Intl-support';
 
 /**
  * LocaleCurrencyPipe class.
+ * Localizes currencies.
  * 
  * Getting the local currency:
  * 
  * expression | localecurrency[:defaultLocale[:currency[:symbolDisplay[:digitInfo]]]]
  * 
- * where 'currency' is the current currency and 'symbolDisplay' is a boolean indicating whether to use the currency symbol (e.g. $) or the currency code (e.g. USD) in the output. 
+ * where 'symbolDisplay' is a boolean indicating whether to use the currency symbol (e.g. $) or the currency code (e.g. USD) in the output. 
  * 
  * For example, to get the local currency, add in the template:
  * 

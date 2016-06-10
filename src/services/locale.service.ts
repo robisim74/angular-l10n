@@ -10,6 +10,7 @@ import {Injectable, EventEmitter, Output} from '@angular/core';
 
 /**
  * LocaleService class.
+ * Defines language, default locale & currency.
  * 
  * Instantiate this class only once in the route component in order to access the data of location from anywhere in the application: 
  * 
@@ -92,20 +93,18 @@ import {Injectable, EventEmitter, Output} from '@angular/core';
  * 
  * Changing language.
  * 
- * To change language at runtime, call the following methods:
+ * To change language at runtime, call the following method:
  *  
  * this.locale.setCurrentLanguage(language);
- * this.localization.updateTranslation(); // Need to update the translation.
  * 
  * where 'language' is the two-letter or three-letter code of the new language (ISO 639).
  * 
  * 
  * Changing locale.
  * 
- * To change locale at runtime, call the following methods:
+ * To change locale at runtime, call the following method:
  *  
  * this.locale.setCurrentLocale(language, country);
- * this.localization.updateTranslation(); // Need to update the translation.
  * 
  * where 'language' is the two-letter or three-letter code of the new language (ISO 639)
  * and 'country' is the two-letter, uppercase code of the new country (ISO 3166).
@@ -430,27 +429,6 @@ import {Injectable, EventEmitter, Output} from '@angular/core';
     }
 
     /**
-     * Sets the current country.
-     * 
-     * @param country The two-letter, uppercase code of the new country
-     */
-    setCurrentCountry(country: string) {
-
-        // Checks if the country has changed.
-        if (this.countryCode != country) {
-
-            // Assigns the value & sends an event.
-            this.countryCode = country;
-            this.countryCodeChanged.emit(country);
-
-            // Sets the default locale.
-            this.setDefaultLocale();
-
-        }
-
-    }
-
-    /**
      * Sets the current locale.
      * 
      * @param language The two-letter or three-letter code of the new language
@@ -522,10 +500,8 @@ import {Injectable, EventEmitter, Output} from '@angular/core';
         this.defaultLocale = this.languageCode
 
         this.defaultLocale += this.scriptCode != "" ? "-" + this.scriptCode : "";
-
         this.defaultLocale += this.countryCode != "" ? "-" + this.countryCode : "";
 
-        // Builds the extension.
         // Adds the 'u' (Unicode) extension.
         this.defaultLocale += this.numberingSystem != "" || this.calendar != "" ? "-u" : "";
         // Adds numbering system.

@@ -18,6 +18,7 @@ import {IntlSupport} from './Intl-support';
 
 /**
  * LocalizationService class.
+ * Gets the translation data and performs operations.
  * 
  * Direct loading.
  * 
@@ -92,6 +93,14 @@ import {IntlSupport} from './Intl-support';
         // Initializes the service state.
         this.serviceState = ServiceState.isWaiting;
 
+        // When the language changes, subscribes to the event & call updateTranslation method.
+        this.locale.languageCodeChanged.subscribe(
+
+            // Generator or next.
+            (language: string) => this.updateTranslation(language)
+
+        );
+
     }
 
     /**
@@ -123,14 +132,16 @@ import {IntlSupport} from './Intl-support';
 
     /**
      * Gets the json data.
+     * 
+     * @param language The two-letter or three-letter code of the language
      */
-    private getTranslation() {
+    private getTranslation(language: string) {
 
         // Initializes the translation data & the service state.
         this.translationData = {};
         this.serviceState = ServiceState.isLoading;
 
-        var url: string = this.prefix + this.locale.getCurrentLanguage() + '.json';
+        var url: string = this.prefix + language + '.json';
 
         // Angular 2 Http module.
         this.http.get(url)
@@ -141,7 +152,7 @@ import {IntlSupport} from './Intl-support';
             (res: any) => {
 
                 // Assigns the observer to the translation data.
-                this.translationData[this.locale.getCurrentLanguage()] = res;
+                this.translationData[language] = res;
 
             },
 
@@ -155,11 +166,11 @@ import {IntlSupport} from './Intl-support';
             // Complete.
             () => {
 
-                // Updates the language code of the service.
-                this.languageCode = this.locale.getCurrentLanguage();
-
                 // Updates the service state.
                 this.serviceState = ServiceState.isReady;
+
+                // Updates the language code of the service.
+                this.languageCode = language;
 
             });
 
@@ -217,21 +228,23 @@ import {IntlSupport} from './Intl-support';
 
     /**
      * Updates the language code and loads the translation data for the asynchronous loading.
+     * 
+     * @param language The two-letter or three-letter code of the language
      */
-    updateTranslation() {
+    updateTranslation(language: string = this.locale.getCurrentLanguage()) {
 
-        if (this.locale.getCurrentLanguage() != "" && this.locale.getCurrentLanguage() != this.languageCode) {
+        if (language != "" && language != this.languageCode) {
 
             // Asynchronous loading.
             if (this.loadingMode == LoadingMode.Async) {
 
                 // Updates the translation data.  
-                this.getTranslation();
+                this.getTranslation(language);
 
             } else {
 
                 // Updates the language code of the service.
-                this.languageCode = this.locale.getCurrentLanguage();
+                this.languageCode = language;
 
                 // Updates the service state.
                 this.serviceState = ServiceState.isReady;

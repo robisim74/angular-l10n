@@ -25,12 +25,13 @@ import {IntlSupport} from '../services/Intl-support';
 
 /**
  * LocaleDatePipe class.
+ * Localizes dates.
  * 
  * Getting the local date:
  * 
  * expression | localedate[:defaultLocale[:format]]
  * 
- * where 'expression' is a date object or a number (milliseconds since UTC epoch), 'defaultLocale' is the default locale and 'format' indicates which date/time components to include.
+ * where 'expression' is a date object or a number (milliseconds since UTC epoch) and 'format' indicates which date/time components to include.
  * 
  * For example, to get the local date, add in the template:
  * 

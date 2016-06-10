@@ -25,6 +25,7 @@ import {IntlSupport} from '../services/Intl-support';
 
 /**
  * TranslatePipe class.
+ * Translates messages.
  * 
  * Getting the message translation:
  * 
@@ -116,6 +117,8 @@ import {IntlSupport} from '../services/Intl-support';
             return key.replace(keyStr, value);
 
         }
+
+        return key;
 
     }
 

@@ -12,6 +12,7 @@ import {LocalizationService} from './localization.service';
 
 /**
  * Locale superclass.
+ * Provides the methods for localization.
  * 
  * Extend this class in components to provide the necessary methods for localization:
  * 

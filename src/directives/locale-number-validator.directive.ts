@@ -80,6 +80,7 @@ export function validateLocaleNumber(locale: LocaleService, digits: string, MIN_
 
 /**
  * LocaleNumberValidator class.
+ * Validates a number by default locale.
  * 
  * @author Roberto Simonetti
  */

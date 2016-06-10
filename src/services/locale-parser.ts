@@ -16,6 +16,7 @@ import {IntlSupport} from './Intl-support';
 
 /**
  * LocaleParser class.
+ * Parses a string and returns a number by default locale.
  * 
  * @author Roberto Simonetti
  */
@@ -24,7 +25,7 @@ export class LocaleParser {
     constructor() { }
 
     /**
-     * Builds the regular expression of a number for the default locale.
+     * Builds the regular expression for a number by default locale.
      * 
      * @param defaultLocale The default locale
      * @param digits The digit info: {minIntegerDigits}.{minFractionDigits}-{maxFractionDigits}
