@@ -6,7 +6,7 @@
  * https://github.com/robisim74/angular2localization
  */
 
-import {Injectable, Pipe, PipeTransform} from '@angular/core';
+import {Pipe, PipeTransform} from '@angular/core';
 import {NumberFormatStyle} from '@angular/common/src/facade/intl';
 
 // Services.
@@ -65,7 +65,7 @@ import {IntlSupport} from '../services/Intl-support';
  * @author Roberto Simonetti
  * @see Angular 2 DecimalPipe for further information
  */
-@Injectable() export class LocaleDecimalPipe implements PipeTransform {
+export class LocaleDecimalPipe implements PipeTransform {
 
     constructor() { }
 
@@ -82,7 +82,7 @@ import {IntlSupport} from '../services/Intl-support';
         // Checks for support for Intl.
         if (IntlSupport.NumberFormat(defaultLocale) == true) {
 
-            return LocaleNumber.format(defaultLocale, value, NumberFormatStyle.Decimal, digits);
+            return LocaleNumber.format(LocaleDecimalPipe, defaultLocale, value, NumberFormatStyle.Decimal, digits);
 
         }
 
@@ -141,7 +141,7 @@ import {IntlSupport} from '../services/Intl-support';
  * @author Roberto Simonetti
  * @see Angular 2 PercentPipe for further information
  */
-@Injectable() export class LocalePercentPipe implements PipeTransform {
+export class LocalePercentPipe implements PipeTransform {
 
     constructor() { }
 
@@ -158,7 +158,7 @@ import {IntlSupport} from '../services/Intl-support';
         // Checks for support for Intl.
         if (IntlSupport.NumberFormat(defaultLocale) == true) {
 
-            return LocaleNumber.format(defaultLocale, value, NumberFormatStyle.Percent, digits);
+            return LocaleNumber.format(LocalePercentPipe, defaultLocale, value, NumberFormatStyle.Percent, digits);
 
         }
 
@@ -226,7 +226,7 @@ import {IntlSupport} from '../services/Intl-support';
  * @author Roberto Simonetti
  * @see Angular 2 CurrencyPipe for further information
  */
-@Injectable() export class LocaleCurrencyPipe implements PipeTransform {
+export class LocaleCurrencyPipe implements PipeTransform {
 
     constructor() { }
 
@@ -249,7 +249,7 @@ import {IntlSupport} from '../services/Intl-support';
         // Checks for support for Intl.
         if (IntlSupport.NumberFormat(defaultLocale) == true) {
 
-            return LocaleNumber.format(defaultLocale, value, NumberFormatStyle.Currency, digits, currency, symbolDisplay);
+            return LocaleNumber.format(LocaleCurrencyPipe, defaultLocale, value, NumberFormatStyle.Currency, digits, currency, symbolDisplay);
 
         }
 

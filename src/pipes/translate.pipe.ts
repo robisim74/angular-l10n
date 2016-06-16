@@ -6,7 +6,7 @@
  * https://github.com/robisim74/angular2localization
  */
 
-import {Injectable, Pipe, PipeTransform} from '@angular/core';
+import {Pipe, PipeTransform} from '@angular/core';
 import {NumberFormatStyle} from '@angular/common/src/facade/intl';
 
 // Services.
@@ -72,7 +72,7 @@ import {IntlSupport} from '../services/Intl-support';
  * 
  * @author Roberto Simonetti
  */
-@Injectable() export class TranslatePipe implements PipeTransform {
+export class TranslatePipe implements PipeTransform {
 
     constructor(public localization: LocalizationService, public locale: LocaleService) { }
 
@@ -105,7 +105,7 @@ import {IntlSupport} from '../services/Intl-support';
                 if (!isNaN(keyNum) && IntlSupport.NumberFormat(this.locale.getDefaultLocale()) == true) {
 
                     // Localizes the number.
-                    key = key.replace(/^\d+/, LocaleNumber.format(this.locale.getDefaultLocale(), keyNum, NumberFormatStyle.Decimal, '1.0-3'));
+                    key = key.replace(/^\d+/, LocaleNumber.format(TranslatePipe, this.locale.getDefaultLocale(), keyNum, NumberFormatStyle.Decimal, '1.0-3'));
 
                 }
 

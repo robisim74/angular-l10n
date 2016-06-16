@@ -8,10 +8,9 @@
 
 import {isPresent, isBlank, NumberWrapper, RegExpWrapper} from '@angular/common/src/facade/lang';
 import {BaseException} from '@angular/common/src/facade/exceptions';
-import {NumberFormatStyle} from '@angular/common/src/facade/intl';
+import {NumberFormatStyle, NumberFormatter} from '@angular/common/src/facade/intl';
 
 // Services.
-import {LocaleNumber} from './locale-number';
 import {IntlSupport} from './Intl-support';
 
 /**
@@ -81,7 +80,7 @@ export class LocaleParser {
                 + "}$";
 
         } else if (minFraction == 0 && maxFraction > 0) {
-            
+
             // Decimal separator is optional.
             pattern = "^"
                 + minusSign
@@ -156,7 +155,13 @@ abstract class NumberCode {
             // Updates Unicode for numbers by default locale.
             for (var i: number = 0; i <= 9; i++) {
 
-                this.numbers[i] = this.Unicode(LocaleNumber.format(defaultLocale, i, NumberFormatStyle.Decimal, '1.0-0'));
+                this.numbers[i] = this.Unicode(NumberFormatter.format(i, defaultLocale, NumberFormatStyle.Decimal, {
+                    minimumIntegerDigits: 1,
+                    minimumFractionDigits: 0,
+                    maximumFractionDigits: 0,
+                    currency: null,
+                    currencyAsSymbol: false
+                }));
 
             }
 
@@ -220,7 +225,13 @@ class DecimalCode extends NumberCode {
 
             // Updates Unicode for signs by default locale.
             var value: number = -0.9; // Reference value.
-            var localeValue: string = LocaleNumber.format(defaultLocale, value, NumberFormatStyle.Decimal, '1.1-1');
+            var localeValue: string = NumberFormatter.format(value, defaultLocale, NumberFormatStyle.Decimal, {
+                minimumIntegerDigits: 1,
+                minimumFractionDigits: 1,
+                maximumFractionDigits: 1,
+                currency: null,
+                currencyAsSymbol: false
+            });
 
             // Checks Unicode character 'RIGHT-TO-LEFT MARK' (U+200F).
             var index: number;

@@ -6,8 +6,8 @@
  * https://github.com/robisim74/angular2localization
  */
 
-import {Injectable, Pipe, PipeTransform} from '@angular/core';
-import {isDate, isNumber, isPresent, DateWrapper, isBlank} from '@angular/common/src/facade/lang';
+import {Pipe, PipeTransform} from '@angular/core';
+import {isDate, isNumber, isString, DateWrapper, isBlank} from '@angular/common/src/facade/lang';
 import {DateFormatter} from '@angular/common/src/facade/intl';
 import {StringMapWrapper} from '@angular/common/src/facade/collection';
 import {InvalidPipeArgumentException} from '@angular/common/src/pipes/invalid_pipe_argument_exception';
@@ -65,7 +65,7 @@ import {IntlSupport} from '../services/Intl-support';
  * @author Roberto Simonetti
  * @see Angular 2 DatePipe for further information
  */
-@Injectable() export class LocaleDatePipe implements PipeTransform {
+export class LocaleDatePipe implements PipeTransform {
 
     static ALIASES: { [key: string]: String } = {
         'medium': 'yMMMdjms',
@@ -102,6 +102,10 @@ import {IntlSupport} from '../services/Intl-support';
 
             value = <Date>DateWrapper.fromMillis(value);
 
+        } else if (isString(value)) {
+
+            value = <Date>DateWrapper.fromISOString(value);
+
         }
 
         // Checks for support for Intl.
@@ -122,6 +126,14 @@ import {IntlSupport} from '../services/Intl-support';
 
     }
 
-    private supports(obj: any): boolean { return isDate(obj) || isNumber(obj); }
+    private supports(obj: any): boolean {
+
+        if (isDate(obj) || isNumber(obj)) { return true; }
+
+        if (isString(obj) && isDate(DateWrapper.fromISOString(obj))) { return true; }
+
+        return false;
+
+    }
 
 }
