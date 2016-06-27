@@ -10,7 +10,7 @@ Because it is only a branch of Angular 2, the goal is the complete integration w
 
 Get the changelog by [releases](https://github.com/robisim74/angular2localization/releases).
 
-Compatible with Angular 2.0.0-rc.2
+Compatible with Angular 2.0.0-rc.3
 
 ## Installing
 You can add `angular2localization` to your project via [Node and npm](https://nodejs.org):
