@@ -7,7 +7,7 @@
  */
 
 import {Pipe, PipeTransform} from '@angular/core';
-import {isDate, isNumber, isString, DateWrapper, isBlank} from '@angular/common/src/facade/lang';
+import {DateWrapper, NumberWrapper, isBlank, isDate, isString} from '@angular/common/src/facade/lang';
 import {DateFormatter} from '@angular/common/src/facade/intl';
 import {StringMapWrapper} from '@angular/common/src/facade/collection';
 import {InvalidPipeArgumentException} from '@angular/common/src/pipes/invalid_pipe_argument_exception';
@@ -98,9 +98,9 @@ export class LocaleDatePipe implements PipeTransform {
 
         }
 
-        if (isNumber(value)) {
+        if (NumberWrapper.isNumeric(value)) {
 
-            value = <Date>DateWrapper.fromMillis(value);
+            value = DateWrapper.fromMillis(NumberWrapper.parseInt(value, 10));
 
         } else if (isString(value)) {
 
@@ -128,7 +128,7 @@ export class LocaleDatePipe implements PipeTransform {
 
     private supports(obj: any): boolean {
 
-        if (isDate(obj) || isNumber(obj)) { return true; }
+        if (isDate(obj) || NumberWrapper.isNumeric(obj)) { return true; }
 
         if (isString(obj) && isDate(DateWrapper.fromISOString(obj))) { return true; }
 

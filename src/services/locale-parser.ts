@@ -36,11 +36,11 @@ export class LocaleParser {
         var minInt: number = 1;
         var minFraction: number = 0;
         var maxFraction: number = 3;
-        var re: RegExp = RegExpWrapper.create('^(\\d+)?\\.((\\d+)(\\-(\\d+))?)?$');
+        const NUMBER_FORMAT_REGEXP: RegExp = /^(\d+)?\.((\d+)(\-(\d+))?)?$/g;
 
         if (isPresent(digits)) {
 
-            var parts = RegExpWrapper.firstMatch(re, digits);
+            var parts = RegExpWrapper.firstMatch(NUMBER_FORMAT_REGEXP, digits);
 
             if (isBlank(parts)) {
                 throw new BaseException(`${digits} is not a valid digit info for number`);
