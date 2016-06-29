@@ -100,7 +100,7 @@ export class LocaleParser {
                 + "]{" + minInt + ",}$";
 
         }
-        pattern = eval("'" + pattern + "'");
+        pattern = codes.UnicodeToChar(pattern);
         var regExp: RegExp = new RegExp(pattern);
 
         return regExp;
@@ -176,6 +176,8 @@ abstract class NumberCode {
      * @return A number
      */
     abstract parse(s: string): number;
+
+    abstract UnicodeToChar(pattern: string): string;
 
     protected Unicode(c: string): string {
 
@@ -281,6 +283,15 @@ class DecimalCode extends NumberCode {
         }
 
         return parseFloat(value);
+
+    }
+
+    UnicodeToChar(pattern: string): string {
+
+        return pattern.replace(/\\u[\dA-F]{4}/gi,
+            (match: string) => {
+                return String.fromCharCode(parseInt(match.replace(/\\u/g, ''), 16));
+            });
 
     }
 
