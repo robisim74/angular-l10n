@@ -1,9 +1,4 @@
 $ cat .gitignore
 /node_modules
-/bundles
+/dist
 /typings
-
-# Ignored files
-*.js
-*.map
-*.d.ts

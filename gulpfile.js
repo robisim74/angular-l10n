@@ -1,49 +1,121 @@
-// Plug-ins.
+// Plugins.
 var gulp = require('gulp'),
-    del = require('del');
+    del = require('del'),
+    ts = require('gulp-typescript'),
+    merge = require('merge2'),
+    sourcemaps = require('gulp-sourcemaps'),
+    run = require('gulp-run'),
+    runSequence = require('run-sequence'),
+    uglify = require('gulp-uglify'),
+    pump = require('pump'),
+    rename = require("gulp-rename");
 
-// Script paths.
-var path = require("path"),
-    dest = 'bundles';
+// TypeScript compiler options. 
+var tsProject = ts.createProject('tsconfig.json', {
+    typescript: require('typescript')
+});
 
-// SystemJS Build Tool.
-var Builder = require('systemjs-builder');
+// TypeScript es2015 compiler options. 
+var tsES2015Project = ts.createProject('tsconfig-es2015.json', {
+    typescript: require('typescript')
+});
 
-var builder = new Builder();
+// build task.
+gulp.task('build', function () {
 
-var config = {
-    baseURL: path.baseURL,
-    defaultJSExtensions: true,
-    map: {
-        '@angular': 'node_modules/@angular',
-        'rxjs': 'node_modules/rxjs'
-    },
-    paths: {
-        'angular2localization/*': '*.js',
-    },
-    meta: {
-        'node_modules/@angular/*': { build: false },
-        'node_modules/rxjs/*': { build: false }
-    }
-};
-
-builder.config(config);
-
-// Clean task: cleans the contents of the bundles directory.
-gulp.task('clean', function () {
-
-    return del(dest);
+    runSequence('clean:dist',
+        'script:src',
+        'script:esm',
+        'bundle:umd:es2015',
+        'bundle:umd',
+        'bundle:umd:min',
+        'copy:files',
+        'clean:tmp');
 
 });
 
-// Bundles task: creates files.
-gulp.task('bundles', ['clean'], function () {
+gulp.task('clean:dist', function () {
 
-    // Creates js file.
-    builder.bundle('angular2localization/angular2localization', dest + '/angular2localization.js', { minify: false, sourceMaps: false });
-    // Creates minified js file.
-    builder.bundle('angular2localization/angular2localization', dest + '/angular2localization.min.js', { minify: true, sourceMaps: false });
+    return del('dist');
 
 });
 
-gulp.task('default', ['bundles']);
+gulp.task('script:src', function () {
+
+    var tsResult = tsProject.src()
+        .pipe(sourcemaps.init())
+        .pipe(ts(tsProject));
+
+    return merge([
+        tsResult.dts.pipe(gulp.dest('dist')),
+        tsResult.js
+            .pipe(sourcemaps.write('.'))
+            .pipe(gulp.dest('dist'))
+    ]);
+
+});
+
+gulp.task('script:esm', function () {
+
+    var tsResult = tsES2015Project.src()
+        .pipe(sourcemaps.init())
+        .pipe(ts(tsES2015Project));
+
+    return merge([
+        tsResult.dts.pipe(gulp.dest('dist/esm')),
+        tsResult.js
+            .pipe(sourcemaps.write('.'))
+            .pipe(gulp.dest('dist/esm'))
+    ]);
+
+});
+
+gulp.task('bundle:umd:es2015', function () {
+
+    // gulp-run: node_modules/.bin is included on the path. Supports Linux and Windows.
+    return run('rollup -c rollup.config.js').exec();
+
+});
+
+gulp.task('bundle:umd', function () {
+
+    return gulp.src('dist/tmp/angular2localization.umd.js')
+        .pipe(ts({
+            out: 'angular2localization.umd.js',
+            target: 'es5',
+            allowJs: true,
+            typescript: require('typescript'),
+            noExternalResolve: true
+        }))
+        .pipe(gulp.dest('dist/bundles'));
+
+});
+
+gulp.task('bundle:umd:min', function () {
+
+    pump([
+        gulp.src('dist/bundles/angular2localization.umd.js'),
+        uglify(),
+        rename({
+            suffix: '.min'
+        }),
+        gulp.dest('dist/bundles')
+    ]);
+
+});
+
+gulp.task('copy:files', function () {
+
+    return gulp
+        .src(['package.json', 'LICENSE', 'README.md'])
+        .pipe(gulp.dest('dist'));
+
+});
+
+gulp.task('clean:tmp', function () {
+
+    return del('dist/tmp');
+
+});
+
+gulp.task('default', ['build']);
