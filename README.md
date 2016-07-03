@@ -2,15 +2,15 @@
 [![npm version](https://badge.fury.io/js/angular2localization.svg)](https://badge.fury.io/js/angular2localization)
 > An Angular 2 library to translate messages, dates and numbers.
 
-This library is developed using TypeScript and Angular 2 for i18n and l10n of Angular 2 applications. 
+This library is developed using TypeScript and Angular 2 for i18n and l10n of Angular 2 apps written in TypeScript, ES5 or ES6. 
 It allows, in addition to translation, to localize numbers and dates of your app, adding language code, country code, and optionally script code, numbering system and calendar, through [Internationalization API](https://developer.mozilla.org/it/docs/Web/JavaScript/Reference/Global_Objects/Intl). It also implements the validation of numbers by locales. 
 Because it is only a branch of Angular 2, the goal is the complete integration with the native solutions of Angular 2.
 
-**[Sample app](http://robisim74.github.io/angular2localization)** built with Angular 2 Material & webpack, and its [source code](https://github.com/robisim74/angular2localization/tree/gh-pages).
+[Sample app](http://robisim74.github.io/angular2localization) built with Angular 2 Material & webpack, and its [source code](https://github.com/robisim74/angular2localization/tree/gh-pages).
 
 Get the changelog by [releases](https://github.com/robisim74/angular2localization/releases).
 
-Compatible with **Angular 2.0.0-rc.4**
+Compatible with Angular 2.0.0-rc.4.
 
 ## Installing
 You can add `angular2localization` to your project using `npm`:
@@ -41,10 +41,11 @@ import 'angular2localization/angular2localization';
 ```
 
 #### Plain JavaScript
-If you build apps in Angular 2 using plain JavaScript, you can include the `umd` bundle in your `index.html`:
+If you build apps in Angular 2 using ES5, you can include the `umd` bundle in your `index.html`:
 ```Html
 <script src="node_modules/angular2localization/bundles/angular2localization.umd.min.js"></script>
 ```
+and using global `ng.angular2localization` namespace.
 
 ## Usage
 See [library specification](https://github.com/robisim74/angular2localization/blob/master/doc/spec.md).

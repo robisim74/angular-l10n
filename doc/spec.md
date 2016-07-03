@@ -1,5 +1,5 @@
 # Angular 2 Localization library specification
-Version 0.8.5
+Library version: 0.8.6
 
 ## Table of contents
 * [1 The library structure](#1)
@@ -36,6 +36,7 @@ Version 0.8.5
     * [7.2 LocalizationService](#7.2)
     * [7.3 LocaleParser](#7.3)
     * [7.4 IntlSupport](#7.4)
+* [8 Appendix - ES5 example](#8)
 
 ## <a name="1"/>1 The library structure
 This library has the following classes:
@@ -633,3 +634,39 @@ Method | Function
 `static DateTimeFormat(defaultLocale: string): boolean;` | Support for dates
 `static NumberFormat(defaultLocale: string): boolean;` | Support for numbers
 `static Collator(lang: string): boolean;` | Support for Collator
+
+## <a name="8"/>8 Appendix - ES5 example
+This is an example in ES5 for the [First scenario](#3.1):
+```JavaScript
+(function (app) {
+  app.AppComponent =
+    ng.core.Component({
+      selector: 'app-component',
+      template: `<h1>{{ today | localedate:defaultLocale:'fullDate' }}`,
+      providers: [ng.angular2localization.LocaleService],
+      pipes: [ng.angular2localization.LocaleDatePipe]
+    })
+      .Class({
+        constructor: [ng.angular2localization.LocaleService, function (locale) {
+
+          this.locale = locale;
+
+          // Required: default language (ISO 639 two-letter or three-letter code) and country (ISO 3166 two-letter, uppercase code).
+          this.locale.definePreferredLocale('en', 'US');
+
+          this.today = Date.now();
+
+        }]
+      });
+
+  Object.defineProperty(app.AppComponent.prototype, "defaultLocale", {
+    // Gets the default locale.
+    get: function () {
+
+      return this.locale.getDefaultLocale();
+
+    }
+  });
+
+})(window.app || (window.app = {}));
+```
