@@ -1,6 +1,6 @@
 {
   "name": "angular2localization",
-  "version": "0.8.6",
+  "version": "0.8.7",
   "description": "An Angular 2 library to translate messages, dates and numbers",
   "main": "angular2localization.js",
   "jsnext:main": "esm/angular2localization.js",
@@ -34,14 +34,16 @@
     "@angular/common": "2.0.0-rc.4",
     "@angular/compiler": "2.0.0-rc.4",
     "@angular/core": "2.0.0-rc.4",
+    "@angular/forms": "0.2.0",
+    "@angular/http": "2.0.0-rc.4",
     "@angular/platform-browser": "2.0.0-rc.4",
-    "@angular/platform-browser-dynamic": "2.0.0-rc.4",
-    "@angular/http": "2.0.0-rc.4"
+    "@angular/platform-browser-dynamic": "2.0.0-rc.4"
   },
   "devDependencies": {
     "@angular/common": "2.0.0-rc.4",
     "@angular/compiler": "2.0.0-rc.4",
     "@angular/core": "2.0.0-rc.4",
+    "@angular/forms": "0.2.0",
     "@angular/http": "2.0.0-rc.4",
     "@angular/platform-browser": "2.0.0-rc.4",
     "@angular/platform-browser-dynamic": "2.0.0-rc.4",

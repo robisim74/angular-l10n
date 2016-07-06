@@ -7,7 +7,7 @@
  */
 
 import {Directive, provide, forwardRef, Input, OnInit} from '@angular/core';
-import {NG_VALIDATORS, Control, Validator} from '@angular/common';
+import {NG_VALIDATORS, FormControl, Validator} from '@angular/forms';
 
 // Services.
 import {LocaleService} from '../services/locale.service';
@@ -27,7 +27,7 @@ export function validateLocaleNumber(locale: LocaleService, digits: string, MIN_
     var defaultLocale: string;
     var NUMBER_REGEXP: RegExp;
 
-    return (c: Control): { [key: string]: any } => {
+    return (c: FormControl): { [key: string]: any } => {
 
         // Checks if the default locale has changed. 
         if (defaultLocale != locale.getDefaultLocale()) {
@@ -69,7 +69,7 @@ export function validateLocaleNumber(locale: LocaleService, digits: string, MIN_
 }
 
 @Directive({
-    selector: '[validateLocaleNumber][ngControl],[validateLocaleNumber][ngModel],[validateLocaleNumber][ngFormControl]', // Validator works with ngControl, ngModel or ngFormControl directives.
+    selector: '[validateLocaleNumber][ngModel],[validateLocaleNumber][formControl]', // Validator works with ngModel and formControl directives.
     providers: [
         provide(NG_VALIDATORS, {
             useExisting: forwardRef(() => LocaleNumberValidator),
@@ -117,7 +117,7 @@ export class LocaleNumberValidator implements Validator, OnInit {
 
     }
 
-    validate(c: Control): Function {
+    validate(c: FormControl): Function {
 
         return this.validator(c);
 

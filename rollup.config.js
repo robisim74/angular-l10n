@@ -36,11 +36,13 @@ export default {
     external: [
         '@angular/core',
         '@angular/common',
+        '@angular/forms',
         '@angular/http'
     ],
     globals: {
         '@angular/core': 'ng.core',
         '@angular/common': 'ng.common',
+        '@angular/forms': 'ng.forms',
         '@angular/http': 'ng.http'
     },
     plugins: [
