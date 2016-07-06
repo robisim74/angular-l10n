@@ -1,5 +1,5 @@
 # Angular 2 Localization library specification
-Library version: 0.8.6
+Library version: 0.8.7
 
 ## Table of contents
 * [1 The library structure](#1)
@@ -30,7 +30,7 @@ Library version: 0.8.6
     * [6.1 Validating a number](#6.1)
         * [6.1.1 Parsing a number](#6.1.1)
         * [6.1.2 FormBuilder](#6.1.2)
-        * [6.1.3 Full example with FormBuilder and NgFormControl](#6.1.3)
+        * [6.1.3 Full example with FormBuilder and formControl](#6.1.3)
 * [7 Services API](#7)
     * [7.1 LocaleService](#7.1)
     * [7.2 LocalizationService](#7.2)
@@ -433,11 +433,11 @@ where `digitInfo` has the following format: `{minIntegerDigits}.{minFractionDigi
 
 For example, to validate a decimal number, add in the template:
 ```Html
-<md-input validateLocaleNumber="1.2-2" [minValue]="0" [maxValue]="1000" ngControl="decimal"></md-input>
+<md-input validateLocaleNumber="1.2-2" [minValue]="0" [maxValue]="1000" name="decimal" #decimal="ngModel" ngModel></md-input>
 ```
 or, if you use variables:
 ```Html
-<md-input [validateLocaleNumber]="digits" [minValue]="minValue" [maxValue]="maxValue" ngControl="decimal"></md-input>
+<md-input [validateLocaleNumber]="digits" [minValue]="minValue" [maxValue]="maxValue" name="decimal" #decimal="ngModel" ngModel></md-input>
 ```
 and include in the component:
 ```TypeScript
@@ -466,7 +466,7 @@ onSubmit(value: string) {
 #### <a name="6.1.2"/>6.1.2 FormBuilder
 If you use `validateLocaleNumber` with `FormBuilder`, you have to invoke the following function:
 ```TypeScript
-export declare function validateLocaleNumber(locale: LocaleService, digits: string, MIN_VALUE?: number, MAX_VALUE?: number): (c: Control) => {
+export declare function validateLocaleNumber(locale: LocaleService, digits: string, MIN_VALUE?: number, MAX_VALUE?: number): (c: FormControl) => {
     [key: string]: any;
 };
 ```
@@ -476,7 +476,8 @@ digits: string = "1.2-2";
 minValue: number = -Math.round(Math.random() * 10000) / 100;
 maxValue: number = Math.round(Math.random() * 10000) / 100;
 
-numberForm: ControlGroup;
+numberForm: FormGroup;
+decimal: AbstractControl;
 
 constructor(public locale: LocaleService, private fb: FormBuilder) {
 
@@ -484,32 +485,35 @@ constructor(public locale: LocaleService, private fb: FormBuilder) {
         'decimal': ['', validateLocaleNumber(this.locale, this.digits, this.minValue, this.maxValue)]
     });
 
+    // 'decimal' control. 
+    this.decimal = this.numberForm.controls['decimal'];
+
 }
 ```
 
-#### <a name="6.1.3"/>6.1.3 Full example with FormBuilder and NgFormControl
+#### <a name="6.1.3"/>6.1.3 Full example with FormBuilder and formControl
 This is the view:
 ```Html
 <md-card>
     <md-card-title>{{ 'NUMBERS' | translate:lang }}</md-card-title>
     <md-card-content>
-        <form [ngFormModel]="numberForm" (ngSubmit)="onSubmit(numberForm.value)">
+        <form [formGroup]="numberForm" (ngSubmit)="onSubmit(numberForm.value)">
             <div>
-                <md-input placeholder="{{ 0 | localedecimal:defaultLocale:digits }}" ref-decimal="ngForm" [ngFormControl]="numberForm.controls['decimal']"
-                    [(ngModel)]="value" (keyup)="decimal.control.valid ? parsedValue : parsedValue = null" style="width: 100%"></md-input>
+                <md-input placeholder="{{ 0 | localedecimal:defaultLocale:digits }}" [formControl]="decimal" (keyup)="decimal.valid ? parsedValue : parsedValue = null"
+                    style="width: 100%"></md-input>
 
-                <div *ngIf="decimal.control.hasError('format') && value != ''" style="color: #D32F2F;">
+                <div *ngIf="decimal.hasError('format') && decimal.value != ''" style="color: #D32F2F;">
                     {{ 'NUMBER_IS_INVALID' | translate:lang }} {{ 0 | localedecimal:defaultLocale:digits }}
                 </div>
-                <div *ngIf="decimal.control.hasError('minValue') && value != ''" style="color: #D32F2F;">
+                <div *ngIf="decimal.hasError('minValue') && decimal.value != ''" style="color: #D32F2F;">
                     {{ 'MIN_VALUE_ERROR' | translate:lang }} {{ minValue | localedecimal:defaultLocale:digits }}
                 </div>
-                <div *ngIf="decimal.control.hasError('maxValue') && value != ''" style="color: #D32F2F;">
+                <div *ngIf="decimal.hasError('maxValue') && decimal.value != ''" style="color: #D32F2F;">
                     {{ 'MAX_VALUE_ERROR' | translate:lang }} {{ maxValue | localedecimal:defaultLocale:digits }}
                 </div>
             </div>
             <br>
-            <button type="submit" [disabled]="!decimal.control.valid" md-raised-button color="primary">{{ 'SUBMIT' | translate:lang }}</button>
+            <button type="submit" [disabled]="!decimal.valid" md-raised-button color="primary">{{ 'SUBMIT' | translate:lang }}</button>
             <br>
             <br>
             <p>{{ 'NUMBER_VALUE' | translate:lang }} {{ parsedValue }}</p>
@@ -520,8 +524,8 @@ This is the view:
 and the code of the component is the following:
 ```TypeScript
 import {Component} from '@angular/core';
-// FormBuilder with NgFormControl.
-import {FormBuilder, ControlGroup} from '@angular/common';
+// FormBuilder with formControl.
+import {FORM_DIRECTIVES, REACTIVE_FORM_DIRECTIVES, FormBuilder, FormGroup, AbstractControl} from '@angular/forms';
 // Angular 2 Material.
 import {MD_CARD_DIRECTIVES} from '@angular2-material/card';
 import {MD_INPUT_DIRECTIVES} from '@angular2-material/input';
@@ -531,18 +535,16 @@ import {Locale, LocaleService, LocalizationService, LocaleParser} from 'angular2
 // Pipes.
 import {TranslatePipe} from 'angular2localization/angular2localization';
 import {LocaleDecimalPipe} from 'angular2localization/angular2localization';
-// Directives for FormBuilder with NgFormControl.
+// Directives for FormBuilder with formControl.
 import {LocaleNumberValidator, validateLocaleNumber} from 'angular2localization/angular2localization';
 
 @Component({
     templateUrl: './app/validation.component.html',
     pipes: [TranslatePipe, LocaleDecimalPipe],
-    directives: [LocaleNumberValidator, MD_CARD_DIRECTIVES, MD_INPUT_DIRECTIVES, MdButton]
+    directives: [FORM_DIRECTIVES, REACTIVE_FORM_DIRECTIVES, LocaleNumberValidator, MD_CARD_DIRECTIVES, MD_INPUT_DIRECTIVES, MdButton]
 })
 
 export class ValidationComponent extends Locale {
-
-    value: string = "";
 
     // Options.
     digits: string = "1.2-2";
@@ -551,8 +553,9 @@ export class ValidationComponent extends Locale {
 
     parsedValue: number = null;
 
-    // FormBuilder with NgFormControl.
-    numberForm: ControlGroup;
+    // FormBuilder with formControl.
+    numberForm: FormGroup;
+    decimal: AbstractControl;
 
     constructor(public locale: LocaleService, public localization: LocalizationService, private fb: FormBuilder) {
         super(locale, localization)
@@ -560,6 +563,9 @@ export class ValidationComponent extends Locale {
         this.numberForm = fb.group({
             'decimal': ['', validateLocaleNumber(this.locale, this.digits, this.minValue, this.maxValue)]
         });
+
+        // 'decimal' control. 
+        this.decimal = this.numberForm.controls['decimal'];
 
     }
 
