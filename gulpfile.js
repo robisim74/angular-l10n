@@ -8,7 +8,9 @@ var gulp = require('gulp'),
     runSequence = require('run-sequence'),
     uglify = require('gulp-uglify'),
     pump = require('pump'),
-    rename = require("gulp-rename");
+    rename = require("gulp-rename"),
+    tslint = require('gulp-tslint'),
+    tslintConfig = require('./tslint.json');
 
 // TypeScript compiler options. 
 var tsProject = ts.createProject('tsconfig.json', {
@@ -21,7 +23,7 @@ var tsES2015Project = ts.createProject('tsconfig-es2015.json', {
 });
 
 // build task.
-gulp.task('build', function () {
+gulp.task('build', ['lint'], function () {
 
     runSequence('clean:dist',
         'script:src',
@@ -115,6 +117,20 @@ gulp.task('copy:files', function () {
 gulp.task('clean:tmp', function () {
 
     return del('dist/tmp');
+
+});
+
+// TSLint with Codelyzer.
+// https://github.com/palantir/tslint/blob/master/src/configs/recommended.ts
+// https://github.com/mgechev/codelyzer
+gulp.task('lint', () => {
+
+    return gulp.src(['*.ts', 'src/**/*.ts'])
+        .pipe(tslint({
+            tslint: require('tslint').default,
+            configuration: tslintConfig
+        }))
+        .pipe(tslint.report('prose', { emitError: true }));
 
 });
 

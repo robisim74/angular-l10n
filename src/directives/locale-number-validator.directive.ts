@@ -6,12 +6,12 @@
  * https://github.com/robisim74/angular2localization
  */
 
-import {Directive, provide, forwardRef, Input, OnInit} from '@angular/core';
-import {NG_VALIDATORS, FormControl, Validator} from '@angular/forms';
+import { Directive, provide, forwardRef, Input, OnInit } from '@angular/core';
+import { NG_VALIDATORS, FormControl, Validator } from '@angular/forms';
 
 // Services.
-import {LocaleService} from '../services/locale.service';
-import {LocaleParser} from '../services/locale-parser';
+import { LocaleService } from '../services/locale.service';
+import { LocaleParser } from '../services/locale-parser';
 
 /**
  * Function that takes a Control and returns either null when it’s valid, or and error object if it’s not.
@@ -22,7 +22,7 @@ import {LocaleParser} from '../services/locale-parser';
  * @param MAX_VALUE The maximum value for the number
  * @return An error object: 'format', 'minValue' or 'maxValue'; null in case the value is valid
  */
-export function validateLocaleNumber(locale: LocaleService, digits: string, MIN_VALUE: number = Number.MIN_VALUE, MAX_VALUE: number = Number.MAX_VALUE) {
+export function validateLocaleNumber(locale: LocaleService, digits: string, MIN_VALUE: number = Number.MIN_VALUE, MAX_VALUE: number = Number.MAX_VALUE): Function {
 
     var defaultLocale: string;
     var NUMBER_REGEXP: RegExp;
@@ -48,9 +48,7 @@ export function validateLocaleNumber(locale: LocaleService, digits: string, MIN_
 
                 return { minValue: false };
 
-            }
-
-            else if (parsedValue > MAX_VALUE) {
+            } else if (parsedValue > MAX_VALUE) {
 
                 return { maxValue: false };
 
@@ -86,10 +84,6 @@ export function validateLocaleNumber(locale: LocaleService, digits: string, MIN_
  */
 export class LocaleNumberValidator implements Validator, OnInit {
 
-    private MIN_VALUE: number = Number.MIN_VALUE;
-
-    private MAX_VALUE: number = Number.MAX_VALUE;
-
     /**
      * Format: {minIntegerDigits}.{minFractionDigits}-{maxFractionDigits}.
      */
@@ -107,21 +101,24 @@ export class LocaleNumberValidator implements Validator, OnInit {
 
     }
 
+    private MIN_VALUE: number = Number.MIN_VALUE;
+
+    private MAX_VALUE: number = Number.MAX_VALUE;
+
     private validator: Function;
 
     constructor(public locale: LocaleService) { }
 
-    ngOnInit() {
+    ngOnInit(): void {
 
         this.validator = validateLocaleNumber(this.locale, this.digits, this.MIN_VALUE, this.MAX_VALUE);
 
     }
 
-    validate(c: FormControl): Function {
+    public validate(c: FormControl): Function {
 
         return this.validator(c);
 
     }
 
 }
-

@@ -6,7 +6,7 @@
  * https://github.com/robisim74/angular2localization
  */
 
-import {Injectable, EventEmitter, Output} from '@angular/core';
+import { Injectable, EventEmitter, Output } from '@angular/core';
 
 /**
  * LocaleService class.
@@ -123,34 +123,44 @@ import {Injectable, EventEmitter, Output} from '@angular/core';
 @Injectable() export class LocaleService {
 
     /**
+     * Reference counter for the service. 
+     */
+    private static referenceCounter: number = 0;
+
+    /**
      * Output for event current language code changed.
      */
-    @Output() languageCodeChanged = new EventEmitter<string>();
+    @Output() languageCodeChanged: EventEmitter<string> = new EventEmitter<string>();
 
     /**
      * Output for event current country code changed.
      */
-    @Output() countryCodeChanged = new EventEmitter<string>();
+    @Output() countryCodeChanged: EventEmitter<string> = new EventEmitter<string>();
 
     /**
      * Output for event current currency code changed.
      */
-    @Output() currencyCodeChanged = new EventEmitter<string>();
+    @Output() currencyCodeChanged: EventEmitter<string> = new EventEmitter<string>();
 
     /**
      * Output for event script code changed.
      */
-    @Output() scriptCodeChanged = new EventEmitter<string>();
+    @Output() scriptCodeChanged: EventEmitter<string> = new EventEmitter<string>();
 
     /**
      * Output for event numbering system changed.
      */
-    @Output() numberingSystemChanged = new EventEmitter<string>();
+    @Output() numberingSystemChanged: EventEmitter<string> = new EventEmitter<string>();
 
     /**
      * Output for event calendar changed.
      */
-    @Output() calendarChanged = new EventEmitter<string>();
+    @Output() calendarChanged: EventEmitter<string> = new EventEmitter<string>();
+
+    /**
+     * Enable/disable cookie.
+     */
+    public enableCookie: boolean = false;
 
     /**
      * Current language code.
@@ -197,16 +207,6 @@ import {Injectable, EventEmitter, Output} from '@angular/core';
      */
     private calendar: string;
 
-    /**
-     * Reference counter for the service. 
-     */
-    private static referenceCounter: number = 0;
-
-    /**
-     * Enable/disable cookie.
-     */
-    public enableCookie: boolean = false;
-
     constructor() {
 
         this.languageCode = "";
@@ -235,7 +235,7 @@ import {Injectable, EventEmitter, Output} from '@angular/core';
      * 
      * @param language The two-letter or three-letter code of the new language
      */
-    addLanguage(language: string) {
+    public addLanguage(language: string): void {
 
         this.languageCodes.push(language);
 
@@ -248,7 +248,7 @@ import {Injectable, EventEmitter, Output} from '@angular/core';
      * @param defaultLanguage The two-letter or three-letter code of the default language
      * @param expiry Number of days on the expiry. If omitted, the cookie becomes a session cookie
      */
-    definePreferredLanguage(defaultLanguage: string, expiry?: number) {
+    public definePreferredLanguage(defaultLanguage: string, expiry?: number): void {
 
         this.expiry = expiry;
 
@@ -260,7 +260,7 @@ import {Injectable, EventEmitter, Output} from '@angular/core';
             // Gets the current language of the browser or the default language.
             var browserLanguage: string = navigator.language || navigator.userLanguage || navigator.browserLanguage || navigator.systemLanguage;
 
-            var index: number = browserLanguage.indexOf('-');
+            var index: number = browserLanguage.indexOf("-");
             if (index != -1) {
 
                 browserLanguage = browserLanguage.substring(0, index); // Gets the language code.
@@ -294,7 +294,7 @@ import {Injectable, EventEmitter, Output} from '@angular/core';
      * @param numberingSystem The optional numbering system to be used
      * @param calendar The optional calendar to be used
      */
-    definePreferredLocale(defaultLanguage: string, defaultCountry: string, expiry?: number, script: string = "", numberingSystem: string = "", calendar: string = "") {
+    public definePreferredLocale(defaultLanguage: string, defaultCountry: string, expiry?: number, script: string = "", numberingSystem: string = "", calendar: string = ""): void {
 
         this.expiry = expiry;
 
@@ -321,7 +321,7 @@ import {Injectable, EventEmitter, Output} from '@angular/core';
      * 
      * @param defaultCurrency The three-letter code of the default currency
      */
-    definePreferredCurrency(defaultCurrency: string) {
+    public definePreferredCurrency(defaultCurrency: string): void {
 
         // Parses the cookie "currency" to extract the code.
         this.parseCookie("currency");
@@ -346,7 +346,7 @@ import {Injectable, EventEmitter, Output} from '@angular/core';
      * 
      * @return The two-letter or three-letter code of the current language
      */
-    getCurrentLanguage(): string {
+    public getCurrentLanguage(): string {
 
         return this.languageCode;
 
@@ -357,7 +357,7 @@ import {Injectable, EventEmitter, Output} from '@angular/core';
      * 
      * @return The two-letter, uppercase code of the current country
      */
-    getCurrentCountry(): string {
+    public getCurrentCountry(): string {
 
         return this.countryCode;
 
@@ -368,7 +368,7 @@ import {Injectable, EventEmitter, Output} from '@angular/core';
      * 
      * @return The three-letter code of the current currency
      */
-    getCurrentCurrency(): string {
+    public getCurrentCurrency(): string {
 
         return this.currencyCode;
 
@@ -379,7 +379,7 @@ import {Injectable, EventEmitter, Output} from '@angular/core';
      * 
      * @return The four-letter code of the script
      */
-    getScript(): string {
+    public getScript(): string {
 
         return this.scriptCode;
 
@@ -390,7 +390,7 @@ import {Injectable, EventEmitter, Output} from '@angular/core';
      * 
      * @return The numbering system
      */
-    getNumberingSystem(): string {
+    public getNumberingSystem(): string {
 
         return this.numberingSystem;
 
@@ -401,7 +401,7 @@ import {Injectable, EventEmitter, Output} from '@angular/core';
      * 
      * @return The calendar
      */
-    getCalendar(): string {
+    public getCalendar(): string {
 
         return this.calendar;
 
@@ -412,7 +412,7 @@ import {Injectable, EventEmitter, Output} from '@angular/core';
      * 
      * @param language The two-letter or three-letter code of the new language
      */
-    setCurrentLanguage(language: string) {
+    public setCurrentLanguage(language: string): void {
 
         // Checks if the language has changed.
         if (this.languageCode != language) {
@@ -437,7 +437,7 @@ import {Injectable, EventEmitter, Output} from '@angular/core';
      * @param numberingSystem The optional numbering system to be used
      * @param calendar The optional calendar to be used
      */
-    setCurrentLocale(language: string, country: string, script: string = "", numberingSystem: string = "", calendar: string = "") {
+    public setCurrentLocale(language: string, country: string, script: string = "", numberingSystem: string = "", calendar: string = ""): void {
 
         // Checks if language, country, script or extension have changed.
         if (this.languageCode != language || this.countryCode != country || this.scriptCode != script || this.numberingSystem != numberingSystem || this.calendar != calendar) {
@@ -461,7 +461,7 @@ import {Injectable, EventEmitter, Output} from '@angular/core';
      * 
      * @param currency The three-letter code of the new currency
      */
-    setCurrentCurrency(currency: string) {
+    public setCurrentCurrency(currency: string): void {
 
         // Checks if the currency has changed.
         if (this.currencyCode != currency) {
@@ -486,7 +486,7 @@ import {Injectable, EventEmitter, Output} from '@angular/core';
      * 
      * @return The default locale
      */
-    getDefaultLocale(): string {
+    public getDefaultLocale(): string {
 
         return this.defaultLocale;
 
@@ -495,9 +495,9 @@ import {Injectable, EventEmitter, Output} from '@angular/core';
     /**
      * Builds the default locale.
      */
-    private setDefaultLocale() {
+    private setDefaultLocale(): void {
 
-        this.defaultLocale = this.languageCode
+        this.defaultLocale = this.languageCode;
 
         this.defaultLocale += this.scriptCode != "" ? "-" + this.scriptCode : "";
         this.defaultLocale += this.countryCode != "" ? "-" + this.countryCode : "";
@@ -523,21 +523,24 @@ import {Injectable, EventEmitter, Output} from '@angular/core';
      * 
      * @param name The name of the cookie
      */
-    private parseCookie(name: string) {
+    private parseCookie(name: string): void {
 
         // Tries to get the cookie.
         var cookie: string = this.getCookie(name);
 
         // Looks for the 'u' (Unicode) extension.
-        var index: number = cookie.search('-u');
+        var index: number = cookie.search("-u");
         if (index != -1) {
 
-            var extensions: string[] = cookie.substring(index + 1).split('-');
+            var extensions: string[] = cookie.substring(index + 1).split("-");
             switch (extensions.length) {
 
                 case 3:
-                    if (extensions[1] == "nu") this.numberingSystem = extensions[2];
-                    else if (extensions[1] == "ca") this.calendar = extensions[2];
+                    if (extensions[1] == "nu") {
+                        this.numberingSystem = extensions[2];
+                    } else if (extensions[1] == "ca") {
+                        this.calendar = extensions[2];
+                    }
                     break;
                 case 5:
                     this.numberingSystem = extensions[2];
@@ -552,13 +555,16 @@ import {Injectable, EventEmitter, Output} from '@angular/core';
         }
 
         // Splits the cookie to each hyphen.
-        var codes: string[] = cookie.split('-');
+        var codes: string[] = cookie.split("-");
 
         switch (codes.length) {
 
             case 1:
-                if (name == "locale") this.languageCode = codes[0];
-                else if (name == "currency") this.currencyCode = codes[0];
+                if (name == "locale") {
+                    this.languageCode = codes[0];
+                } else if (name == "currency") {
+                    this.currencyCode = codes[0];
+                }
                 break;
             case 2:
                 this.languageCode = codes[0];
@@ -581,7 +587,7 @@ import {Injectable, EventEmitter, Output} from '@angular/core';
      * @param value The value of the cookie
      * @param days Number of days on the expiry
      */
-    private setCookie(name: string, value: string, days?: number) {
+    private setCookie(name: string, value: string, days?: number): void {
 
         if (days != null) {
 
@@ -616,14 +622,14 @@ import {Injectable, EventEmitter, Output} from '@angular/core';
         name += "=";
 
         // Splits document.cookie on semicolons into an array.
-        var ca: string[] = document.cookie.split(';');
+        var ca: string[] = document.cookie.split(";");
 
         // Loops through the ca array, and reads out each value.
-        for (var i = 0; i < ca.length; i++) {
+        for (var i: number = 0; i < ca.length; i++) {
 
             var c: string = ca[i];
 
-            while (c.charAt(0) == ' ') {
+            while (c.charAt(0) == " ") {
 
                 c = c.substring(1);
 

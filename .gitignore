@@ -2,3 +2,5 @@ $ cat .gitignore
 /node_modules
 /dist
 /typings
+
+*.log

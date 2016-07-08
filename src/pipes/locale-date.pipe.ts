@@ -6,14 +6,14 @@
  * https://github.com/robisim74/angular2localization
  */
 
-import {Pipe, PipeTransform} from '@angular/core';
-import {DateWrapper, NumberWrapper, isBlank, isDate, isString} from '@angular/common/src/facade/lang';
-import {DateFormatter} from '@angular/common/src/facade/intl';
-import {StringMapWrapper} from '@angular/common/src/facade/collection';
-import {InvalidPipeArgumentException} from '@angular/common/src/pipes/invalid_pipe_argument_exception';
+import { Pipe, PipeTransform } from '@angular/core';
+import { DateWrapper, NumberWrapper, isBlank, isDate, isString } from '@angular/common/src/facade/lang';
+import { DateFormatter } from '@angular/common/src/facade/intl';
+import { StringMapWrapper } from '@angular/common/src/facade/collection';
+import { InvalidPipeArgumentException } from '@angular/common/src/pipes/invalid_pipe_argument_exception';
 
 // Services.
-import {IntlSupport} from '../services/Intl-support';
+import { IntlSupport } from '../services/Intl-support';
 
 /**
  * 'localedate' pipe function.
@@ -67,7 +67,7 @@ import {IntlSupport} from '../services/Intl-support';
  */
 export class LocaleDatePipe implements PipeTransform {
 
-    static ALIASES: { [key: string]: String } = {
+    public static ALIASES: { [key: string]: String } = {
         'medium': 'yMMMdjms',
         'short': 'yMdjm',
         'fullDate': 'yMMMMEEEEd',
@@ -78,8 +78,6 @@ export class LocaleDatePipe implements PipeTransform {
         'shortTime': 'jm'
     };
 
-    constructor() { }
-
     /**
      * LocaleDatePipe transform method.
      * 
@@ -88,9 +86,9 @@ export class LocaleDatePipe implements PipeTransform {
      * @param pattern The format of the date
      * @return The locale date
      */
-    transform(value: any, defaultLocale: string, pattern: string = 'mediumDate'): string {
+    public transform(value: any, defaultLocale: string, pattern: string = 'mediumDate'): string {
 
-        if (isBlank(value)) return null;
+        if (isBlank(value)) { return null; }
 
         if (!this.supports(value)) {
 

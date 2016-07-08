@@ -6,12 +6,12 @@
  * https://github.com/robisim74/angular2localization
  */
 
-import {Pipe, PipeTransform} from '@angular/core';
-import {NumberFormatStyle} from '@angular/common/src/facade/intl';
+import { Pipe, PipeTransform } from '@angular/core';
+import { NumberFormatStyle } from '@angular/common/src/facade/intl';
 
 // Services.
-import {LocaleNumber} from '../services/locale-number';
-import {IntlSupport} from '../services/Intl-support';
+import { LocaleNumber } from '../services/locale-number';
+import { IntlSupport } from '../services/Intl-support';
 
 /**
  * 'localedecimal' pipe function.
@@ -67,8 +67,6 @@ import {IntlSupport} from '../services/Intl-support';
  */
 export class LocaleDecimalPipe implements PipeTransform {
 
-    constructor() { }
-
     /**
      * LocaleDecimalPipe transform method.
      * 
@@ -77,7 +75,7 @@ export class LocaleDecimalPipe implements PipeTransform {
      * @param digits The format of the number
      * @return The locale decimal
      */
-    transform(value: any, defaultLocale: string, digits: string = null): string {
+    public transform(value: any, defaultLocale: string, digits: string = null): string {
 
         // Checks for support for Intl.
         if (IntlSupport.NumberFormat(defaultLocale) == true) {
@@ -143,8 +141,6 @@ export class LocaleDecimalPipe implements PipeTransform {
  */
 export class LocalePercentPipe implements PipeTransform {
 
-    constructor() { }
-
     /**
      * LocalePercentPipe transform method.
      * 
@@ -153,7 +149,7 @@ export class LocalePercentPipe implements PipeTransform {
      * @param digits The format of the number
      * @return The locale percent
      */
-    transform(value: any, defaultLocale: string, digits: string = null): string {
+    public transform(value: any, defaultLocale: string, digits: string = null): string {
 
         // Checks for support for Intl.
         if (IntlSupport.NumberFormat(defaultLocale) == true) {
@@ -228,8 +224,6 @@ export class LocalePercentPipe implements PipeTransform {
  */
 export class LocaleCurrencyPipe implements PipeTransform {
 
-    constructor() { }
-
     /**
      * LocaleCurrencyPipe transform method.
      * 
@@ -240,7 +234,7 @@ export class LocaleCurrencyPipe implements PipeTransform {
      * @param digits The format of the number
      * @return The locale currency
      */
-    transform(value: any,
+    public transform(value: any,
         defaultLocale: string,
         currency: string,
         symbolDisplay: boolean = false,

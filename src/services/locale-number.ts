@@ -6,10 +6,10 @@
  * https://github.com/robisim74/angular2localization
  */
 
-import {NumberWrapper, RegExpWrapper, Type, isBlank, isNumber, isPresent} from '@angular/common/src/facade/lang';
-import {BaseException} from '@angular/common/src/facade/exceptions';
-import {NumberFormatStyle, NumberFormatter} from '@angular/common/src/facade/intl';
-import {InvalidPipeArgumentException} from '@angular/common/src/pipes/invalid_pipe_argument_exception';
+import { NumberWrapper, RegExpWrapper, Type, isBlank, isNumber, isPresent } from '@angular/common/src/facade/lang';
+import { BaseException } from '@angular/common/src/facade/exceptions';
+import { NumberFormatStyle, NumberFormatter } from '@angular/common/src/facade/intl';
+import { InvalidPipeArgumentException } from '@angular/common/src/pipes/invalid_pipe_argument_exception';
 
 /**
  * LocaleNumber class.
@@ -17,11 +17,9 @@ import {InvalidPipeArgumentException} from '@angular/common/src/pipes/invalid_pi
  */
 export class LocaleNumber {
 
-    constructor() { }
+    public static format(pipe: Type, defaultLocale: string, value: number, style: NumberFormatStyle, digits: string, currency: string = null, currencyAsSymbol: boolean = false): string {
 
-    static format(pipe: Type, defaultLocale: string, value: number, style: NumberFormatStyle, digits: string, currency: string = null, currencyAsSymbol: boolean = false): string {
-
-        if (isBlank(value)) return null;
+        if (isBlank(value)) { return null; }
 
         if (!isNumber(value)) {
 
@@ -36,7 +34,7 @@ export class LocaleNumber {
 
         if (isPresent(digits)) {
 
-            var parts = RegExpWrapper.firstMatch(NUMBER_FORMAT_REGEXP, digits);
+            var parts: RegExpExecArray = RegExpWrapper.firstMatch(NUMBER_FORMAT_REGEXP, digits);
 
             if (isBlank(parts)) {
                 throw new BaseException(`${digits} is not a valid digit info for number pipes`);

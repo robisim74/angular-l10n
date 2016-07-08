@@ -14,15 +14,13 @@
  */
 export class IntlSupport {
 
-    constructor() { }
-
     /**
      * Support for dates.
      * 
      * @param defaultLocale The default locale
      * @return True if the browser supports locales for dates, otherwise false.
      */
-    static DateTimeFormat(defaultLocale: string): boolean {
+    public static DateTimeFormat(defaultLocale: string): boolean {
 
         // Checking for support.
         try {
@@ -45,7 +43,7 @@ export class IntlSupport {
      * @param defaultLocale The default locale
      * @return True if the browser supports locales for numbers, otherwise false.
      */
-    static NumberFormat(defaultLocale: string): boolean {
+    public static NumberFormat(defaultLocale: string): boolean {
 
         // Checking for support.
         try {
@@ -70,12 +68,15 @@ export class IntlSupport {
      * @param lang The current language code
      * @return True if the browser supports Collator, otherwise false.
      */
-    static Collator(lang: string): boolean {
+    public static Collator(lang: string): boolean {
 
         // Checking for support.
         try {
 
-            new Intl.Collator(lang);
+            var value1: string = "a";
+            var value2: string = "b";
+
+            new Intl.Collator(lang).compare(value1, value2);
 
         } catch (e) {
 

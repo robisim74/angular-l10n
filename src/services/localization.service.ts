@@ -6,15 +6,15 @@
  * https://github.com/robisim74/angular2localization
  */
 
-import {Injectable} from '@angular/core';
-import {Http, Response} from '@angular/http';
-import {Observer} from 'rxjs/Observer';
-import {Observable} from 'rxjs/Observable';
+import { Injectable } from '@angular/core';
+import { Http, Response } from '@angular/http';
+import { Observer } from 'rxjs/Observer';
+import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
 
 // Services.
-import {LocaleService} from './locale.service';
-import {IntlSupport} from './Intl-support';
+import { LocaleService } from './locale.service';
+import { IntlSupport } from './Intl-support';
 
 /**
  * LocalizationService class.
@@ -57,16 +57,6 @@ import {IntlSupport} from './Intl-support';
 @Injectable() export class LocalizationService {
 
     /**
-     * The path prefix for the asynchronous loading.
-     */
-    private prefix: string;
-
-    /**
-     * The translation data: {languageCode: {key: value}}.
-     */
-    private translationData: any = {};
-
-    /**
      * The language code for the service.
      */
     public languageCode: string;
@@ -80,6 +70,16 @@ import {IntlSupport} from './Intl-support';
      * The service state. 
      */
     public serviceState: ServiceState;
+
+    /**
+     * The path prefix for the asynchronous loading.
+     */
+    private prefix: string;
+
+    /**
+     * The translation data: {languageCode: {key: value}}.
+     */
+    private translationData: any = {};
 
     constructor(public http: Http, public locale: LocaleService) {
 
@@ -109,7 +109,7 @@ import {IntlSupport} from './Intl-support';
      * @param language The two-letter code of the language for the translation data
      * @param translation The new translation data
      */
-    addTranslation(language: string, translation: any) {
+    public addTranslation(language: string, translation: any): void {
 
         // Adds the new translation data.
         this.translationData[language] = translation;
@@ -121,7 +121,7 @@ import {IntlSupport} from './Intl-support';
      * 
      * @param prefix The path prefix of the json files
      */
-    translationProvider(prefix: string) {
+    public translationProvider(prefix: string): void {
 
         this.prefix = prefix;
 
@@ -131,58 +131,12 @@ import {IntlSupport} from './Intl-support';
     }
 
     /**
-     * Gets the json data.
-     * 
-     * @param language The two-letter or three-letter code of the language
-     */
-    private getTranslation(language: string) {
-
-        // Initializes the translation data & the service state.
-        this.translationData = {};
-        this.serviceState = ServiceState.isLoading;
-
-        var url: string = this.prefix + language + '.json';
-
-        // Angular 2 Http module.
-        this.http.get(url)
-            .map((res: Response) => res.json())
-            .subscribe(
-
-            // Observer or next.
-            (res: any) => {
-
-                // Assigns the observer to the translation data.
-                this.translationData[language] = res;
-
-            },
-
-            // Error.
-            (error: any) => {
-
-                console.error("Localization service:", error);
-
-            },
-
-            // Complete.
-            () => {
-
-                // Updates the service state.
-                this.serviceState = ServiceState.isReady;
-
-                // Updates the language code of the service.
-                this.languageCode = language;
-
-            });
-
-    }
-
-    /**
      * Translates a key.
      * 
      * @param key The key to be translated
      * @return The value of translation
      */
-    translate(key: string): string {
+    public translate(key: string): string {
 
         var value: string;
 
@@ -212,7 +166,7 @@ import {IntlSupport} from './Intl-support';
      * @param key The key to be translated
      * @return An observable of the value of translation
      */
-    translateAsync(key: string): Observable<string> {
+    public translateAsync(key: string): Observable<string> {
 
         return new Observable<string>((observer: Observer<string>) => {
 
@@ -231,7 +185,7 @@ import {IntlSupport} from './Intl-support';
      * 
      * @param language The two-letter or three-letter code of the language
      */
-    updateTranslation(language: string = this.locale.getCurrentLanguage()) {
+    public updateTranslation(language: string = this.locale.getCurrentLanguage()): void {
 
         if (language != "" && language != this.languageCode) {
 
@@ -266,7 +220,7 @@ import {IntlSupport} from './Intl-support';
      * @return A negative value if the value of translation of key1 comes before the value of translation of key2; a positive value if key1 comes after key2; 0 if they are considered equal or Intl.Collator is not supported
      * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Collator
      */
-    compare(key1: string, key2: string, extension?: string, options?: any): number {
+    public compare(key1: string, key2: string, extension?: string, options?: any): number {
 
         // Checks for support for Intl.
         if (IntlSupport.Collator(this.languageCode) == false) {
@@ -277,7 +231,7 @@ import {IntlSupport} from './Intl-support';
 
         // Gets the value of translation for the keys.
         var value1: string = this.translate(key1);
-        var value2: string = this.translate(key2);;
+        var value2: string = this.translate(key2);
 
         var locale: string = this.addExtension(this.languageCode, extension);
 
@@ -296,9 +250,9 @@ import {IntlSupport} from './Intl-support';
      * @return The same sorted list or the same list if Intl.Collator is not supported
      * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Collator
      */
-    sort(list: Array<any>, keyName: any, order?: string, extension?: string, options?: any): Array<any> {
+    public sort(list: Array<any>, keyName: any, order?: string, extension?: string, options?: any): Array<any> {
 
-        if (list == null || keyName == null || IntlSupport.Collator(this.languageCode) == false) return list;
+        if (list == null || keyName == null || IntlSupport.Collator(this.languageCode) == false) { return list; }
 
         // Gets the value of translation for the keys.
         for (let item of list) {
@@ -306,7 +260,7 @@ import {IntlSupport} from './Intl-support';
             // Gets the value of translation for the key.
             var value: string = this.translate(item[keyName]);
             // Adds a new column for translated values.
-            var translated: string = keyName.concat("Translated")
+            var translated: string = keyName.concat("Translated");
             // Updates the value in the list.
             item[translated] = value;
 
@@ -315,22 +269,22 @@ import {IntlSupport} from './Intl-support';
         var locale: string = this.addExtension(this.languageCode, extension);
 
         // Intl.Collator.
-        var collator = new Intl.Collator(locale, options); // It can be passed directly to Array.prototype.sort.
+        var collator: Intl.Collator = new Intl.Collator(locale, options); // It can be passed directly to Array.prototype.sort.
 
-        list.sort((a, b) => {
+        list.sort((a: any, b: any) => {
 
             return collator.compare(a[translated], b[translated]);
 
         });
 
         // Removes the column of translated values.
-        var index = list.indexOf(translated, 0);
+        var index: number = list.indexOf(translated, 0);
         if (index > -1) {
             list.splice(index, 1);
         }
 
         // Descending order.
-        if (order != null && order == 'desc') {
+        if (order != null && order == "desc") {
 
             list.reverse();
 
@@ -351,7 +305,7 @@ import {IntlSupport} from './Intl-support';
      * @return An observable of the sorted list or of the same list if Intl.Collator is not supported
      * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Collator
      */
-    sortAsync(list: Array<any>, keyName: any, order?: string, extension?: string, options?: any): Observable<Array<any>> {
+    public sortAsync(list: Array<any>, keyName: any, order?: string, extension?: string, options?: any): Observable<Array<any>> {
 
         return new Observable<any>((observer: Observer<Array<any>>) => {
 
@@ -373,12 +327,12 @@ import {IntlSupport} from './Intl-support';
      * @return A filtered list or the same list if Intl.Collator is not supported
      * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Collator
      */
-    search(s: string, list: Array<any>, keyNames: any[], options: any = { usage: 'search' }): Array<any> {
+    public search(s: string, list: Array<any>, keyNames: any[], options: any = { usage: 'search' }): Array<any> {
 
-        if (list == null || keyNames == null || s == "" || IntlSupport.Collator(this.languageCode) == false) return list;
+        if (list == null || keyNames == null || s == "" || IntlSupport.Collator(this.languageCode) == false) { return list; }
 
         // Gets the value of translation for the each column.
-        var translated = new Array<string>();
+        var translated: Array<string> = new Array<string>();
 
         var i: number = 0;
         for (var i: number = 0; i < keyNames.length; i++) {
@@ -400,9 +354,9 @@ import {IntlSupport} from './Intl-support';
         var locale: string = this.languageCode;
 
         // Intl.Collator.
-        var collator = new Intl.Collator(locale, options);
+        var collator: Intl.Collator = new Intl.Collator(locale, options);
 
-        var matches = list.filter((v) => {
+        var matches: Array<any> = list.filter((v: any) => {
 
             var found: boolean = false;
             for (var i: number = 0; i < translated.length; i++) {
@@ -424,7 +378,7 @@ import {IntlSupport} from './Intl-support';
         // Removes the columns of translated values.
         for (var i: number = 0; i < translated.length; i++) {
 
-            var index = matches.indexOf(translated[i], 0);
+            var index: number = matches.indexOf(translated[i], 0);
             if (index > -1) {
                 matches.splice(index, 1);
             }
@@ -445,26 +399,30 @@ import {IntlSupport} from './Intl-support';
      * @return An observable for each element of the filtered list or the same list if Intl.Collator is not supported
      * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Collator
      */
-    searchAsync(s: string, list: Array<any>, keyNames: any[], options: any = { usage: 'search' }): Observable<any> {
+    public searchAsync(s: string, list: Array<any>, keyNames: any[], options: any = { usage: 'search' }): Observable<any> {
 
-        if (list == null) return null;
+        if (list == null) { return null; }
 
-        if (keyNames == null || s == "" || IntlSupport.Collator(this.languageCode) == false) return new Observable<any>((observer: Observer<any>) => {
+        if (keyNames == null || s == "" || IntlSupport.Collator(this.languageCode) == false) {
 
-            for (let item of list) {
+            return new Observable<any>((observer: Observer<any>) => {
 
-                observer.next(item);
+                for (let item of list) {
 
-            }
+                    observer.next(item);
 
-            observer.complete();
+                }
 
-        });
+                observer.complete();
+
+            });
+
+        }
 
         return new Observable<any>((observer: Observer<any>) => {
 
             // Gets the value of translation for the each column.
-            var translated = new Array<string>();
+            var translated: Array<string> = new Array<string>();
 
             var i: number = 0;
             for (var i: number = 0; i < keyNames.length; i++) {
@@ -486,7 +444,7 @@ import {IntlSupport} from './Intl-support';
             var locale: string = this.languageCode;
 
             // Intl.Collator.
-            var collator = new Intl.Collator(locale, options);
+            var collator: Intl.Collator = new Intl.Collator(locale, options);
 
             for (let v of list) {
 
@@ -507,12 +465,12 @@ import {IntlSupport} from './Intl-support';
             // Removes the columns of translated values.
             for (var i: number = 0; i < translated.length; i++) {
 
-                var index = list.indexOf(translated[i], 0);
+                var index: number = list.indexOf(translated[i], 0);
                 if (index > -1) {
                     list.splice(index, 1);
                 }
 
-            };
+            }
 
             observer.complete();
 
@@ -545,7 +503,7 @@ import {IntlSupport} from './Intl-support';
         var vLength: number = v.length;
         var sLength: number = s.length;
 
-        if (sLength > vLength) return false; // The search string is longer than value.
+        if (sLength > vLength) { return false; } // The search string is longer than value.
 
         if (sLength == vLength) {
 
@@ -568,6 +526,52 @@ import {IntlSupport} from './Intl-support';
         }
 
         return found;
+
+    }
+
+    /**
+     * Gets the json data.
+     * 
+     * @param language The two-letter or three-letter code of the language
+     */
+    private getTranslation(language: string): void {
+
+        // Initializes the translation data & the service state.
+        this.translationData = {};
+        this.serviceState = ServiceState.isLoading;
+
+        var url: string = this.prefix + language + ".json";
+
+        // Angular 2 Http module.
+        this.http.get(url)
+            .map((res: Response) => res.json())
+            .subscribe(
+
+            // Observer or next.
+            (res: any) => {
+
+                // Assigns the observer to the translation data.
+                this.translationData[language] = res;
+
+            },
+
+            // Error.
+            (error: any) => {
+
+                console.error("Localization service:", error);
+
+            },
+
+            // Complete.
+            () => {
+
+                // Updates the service state.
+                this.serviceState = ServiceState.isReady;
+
+                // Updates the language code of the service.
+                this.languageCode = language;
+
+            });
 
     }
 
@@ -611,4 +615,4 @@ export enum LoadingMode {
      */
     Async
 
-} 
+}

@@ -7,8 +7,8 @@
  */
 
 // Services.
-import {LocaleService} from './locale.service';
-import {LocalizationService} from './localization.service';
+import { LocaleService } from './locale.service';
+import { LocalizationService } from './localization.service';
 
 /**
  * Locale superclass.
@@ -32,21 +32,21 @@ export class Locale {
     constructor(public locale?: LocaleService, public localization?: LocalizationService) { }
 
     // Gets the language code for the LocalizationService.
-    get lang(): string {
+    public get lang(): string {
 
         return this.localization.languageCode;
 
     }
 
     // Gets the default locale.
-    get defaultLocale(): string {
+    public get defaultLocale(): string {
 
         return this.locale.getDefaultLocale();
 
     }
 
     // Gets the current currency.
-    get currency(): string {
+    public get currency(): string {
 
         return this.locale.getCurrentCurrency();
 

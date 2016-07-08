@@ -6,14 +6,14 @@
  * https://github.com/robisim74/angular2localization
  */
 
-import {Pipe, PipeTransform} from '@angular/core';
-import {NumberFormatStyle} from '@angular/common/src/facade/intl';
+import { Pipe, PipeTransform } from '@angular/core';
+import { NumberFormatStyle } from '@angular/common/src/facade/intl';
 
 // Services.
-import {LocalizationService, ServiceState} from '../services/localization.service';
-import {LocaleService} from '../services/locale.service';
-import {LocaleNumber} from '../services/locale-number';
-import {IntlSupport} from '../services/Intl-support';
+import { LocalizationService, ServiceState } from '../services/localization.service';
+import { LocaleService } from '../services/locale.service';
+import { LocaleNumber } from '../services/locale-number';
+import { IntlSupport } from '../services/Intl-support';
 
 /**
  * 'translate' pipe function.
@@ -83,7 +83,7 @@ export class TranslatePipe implements PipeTransform {
      * @param lang The current language code for the LocalizationService
      * @return The value of translation
      */
-    transform(key: string, lang: string): string {
+    public transform(key: string, lang: string): string {
 
         // Checks the service state.
         if (this.localization.serviceState == ServiceState.isReady) {
@@ -98,7 +98,7 @@ export class TranslatePipe implements PipeTransform {
                 var keyNum: number = parseFloat(key);
 
                 // Tries to extract the string. 
-                keyStr = key.replace(REGEXP, '');
+                keyStr = key.replace(REGEXP, "");
                 keyStr = keyStr.trim();
 
                 // Checks the number & support for Intl.
@@ -112,7 +112,7 @@ export class TranslatePipe implements PipeTransform {
             }
 
             // Gets the value of translation for the key string.
-            var value = this.localization.translate(keyStr);
+            var value: string = this.localization.translate(keyStr);
 
             return key.replace(keyStr, value);
 

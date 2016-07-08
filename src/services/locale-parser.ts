@@ -6,12 +6,12 @@
  * https://github.com/robisim74/angular2localization
  */
 
-import {isPresent, isBlank, NumberWrapper, RegExpWrapper} from '@angular/common/src/facade/lang';
-import {BaseException} from '@angular/common/src/facade/exceptions';
-import {NumberFormatStyle, NumberFormatter} from '@angular/common/src/facade/intl';
+import { isPresent, isBlank, NumberWrapper, RegExpWrapper } from '@angular/common/src/facade/lang';
+import { BaseException } from '@angular/common/src/facade/exceptions';
+import { NumberFormatStyle, NumberFormatter } from '@angular/common/src/facade/intl';
 
 // Services.
-import {IntlSupport} from './Intl-support';
+import { IntlSupport } from './Intl-support';
 
 /**
  * LocaleParser class.
@@ -21,8 +21,6 @@ import {IntlSupport} from './Intl-support';
  */
 export class LocaleParser {
 
-    constructor() { }
-
     /**
      * Builds the regular expression for a number by default locale.
      * 
@@ -30,7 +28,7 @@ export class LocaleParser {
      * @param digits The digit info: {minIntegerDigits}.{minFractionDigits}-{maxFractionDigits}
      * @return A RegExp object
      */
-    static NumberRegExpFactory(defaultLocale: string, digits: string): RegExp {
+    public static NumberRegExpFactory(defaultLocale: string, digits: string): RegExp {
 
         // Gets digits.
         var minInt: number = 1;
@@ -40,7 +38,7 @@ export class LocaleParser {
 
         if (isPresent(digits)) {
 
-            var parts = RegExpWrapper.firstMatch(NUMBER_FORMAT_REGEXP, digits);
+            var parts: RegExpExecArray = RegExpWrapper.firstMatch(NUMBER_FORMAT_REGEXP, digits);
 
             if (isBlank(parts)) {
                 throw new BaseException(`${digits} is not a valid digit info for number`);
@@ -115,9 +113,9 @@ export class LocaleParser {
      * @param defaultLocale The default locale
      * @return A number. If the string cannot be converted to a number, returns NaN
      */
-    static Number(s: string, defaultLocale: string): number {
+    public static Number(s: string, defaultLocale: string): number {
 
-        if (s == '' || defaultLocale == '' || defaultLocale == null) return null;
+        if (s == "" || defaultLocale == "" || defaultLocale == null) { return null; }
 
         var codes: DecimalCode = new DecimalCode(defaultLocale);
 
@@ -175,9 +173,9 @@ abstract class NumberCode {
      * @param s The string to be parsed
      * @return A number
      */
-    abstract parse(s: string): number;
+    public abstract parse(s: string): number;
 
-    abstract UnicodeToChar(pattern: string): string;
+    public abstract UnicodeToChar(pattern: string): string;
 
     protected Unicode(c: string): string {
 
@@ -217,7 +215,7 @@ class DecimalCode extends NumberCode {
     public decimalSeparator: string;
 
     constructor(public defaultLocale: string) {
-        super(defaultLocale)
+        super(defaultLocale);
 
         this.minusSign = this.Unicode("-");
         this.decimalSeparator = this.Unicode(".");
@@ -252,10 +250,10 @@ class DecimalCode extends NumberCode {
 
     }
 
-    parse(s: string): number {
+    public parse(s: string): number {
 
         // Splits the String object into an array of characters.
-        var characters: Array<string> = s.split('');
+        var characters: Array<string> = s.split("");
 
         // Builds the value.
         var value: string = "";
@@ -286,12 +284,13 @@ class DecimalCode extends NumberCode {
 
     }
 
-    UnicodeToChar(pattern: string): string {
+    public UnicodeToChar(pattern: string): string {
 
-        return pattern.replace(/\\u[\dA-F]{4}/gi,
-            (match: string) => {
-                return String.fromCharCode(parseInt(match.replace(/\\u/g, ''), 16));
-            });
+        return pattern.replace(/\\u[\dA-F]{4}/gi, (match: string) => {
+
+            return String.fromCharCode(parseInt(match.replace(/\\u/g, ""), 16));
+
+        });
 
     }
 
