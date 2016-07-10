@@ -9,8 +9,7 @@ var gulp = require('gulp'),
     uglify = require('gulp-uglify'),
     pump = require('pump'),
     rename = require("gulp-rename"),
-    tslint = require('gulp-tslint'),
-    tslintConfig = require('./tslint.json');
+    tslint = require('gulp-tslint');
 
 // TypeScript compiler options. 
 var tsProject = ts.createProject('tsconfig.json', {
@@ -124,6 +123,8 @@ gulp.task('clean:tmp', function () {
 // https://github.com/palantir/tslint/blob/master/src/configs/recommended.ts
 // https://github.com/mgechev/codelyzer
 gulp.task('lint', () => {
+
+    var tslintConfig = require('./tslint.json');
 
     return gulp.src(['*.ts', 'src/**/*.ts'])
         .pipe(tslint({
