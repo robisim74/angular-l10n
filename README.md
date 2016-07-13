@@ -28,7 +28,7 @@ var map = {
 
 var packages = {
     ...
-    'angular2localization': { main: '/bundles/angular2localization.umd.min.js', defaultExtension: 'js' },
+    'angular2localization': { main: '/bundles/angular2localization.umd.min.js', defaultExtension: 'js' }
 };
 ```
 #### Angular-CLI
