@@ -19,28 +19,38 @@ npm install --save angular2localization
 ```
 
 ## Loading
-#### Using SystemJS configuration
+### Using SystemJS configuration
 ```JavaScript
 var map = {
-    'app': 'app',
     ...
-    'angular2localization': 'node_modules'
+    'angular2localization': 'node_modules/angular2localization'
 };
 
 var packages = {
-    'app': { format: 'cjs', main: 'main.js', defaultExtension: 'js' },
     ...
-    'angular2localization/angular2localization': { main: '/bundles/angular2localization.umd.min.js', defaultExtension: 'js' }
+    'angular2localization': { main: '/bundles/angular2localization.umd.min.js', defaultExtension: 'js' },
+};
+```
+#### Angular-CLI
+If you use Angular-CLI, also add to `angular-cli-build.js` file to `vendorNpmFiles` array:
+```JavaScript
+module.exports = function(defaults) {
+  return new Angular2App(defaults, {
+    vendorNpmFiles: [
+      ...
+      'angular2localization/**/*.+(js|js.map)'
+    ]
+  });
 };
 ```
 
-#### Via webpack
+### Via webpack
 Import the library in your `vendor` file after Angular 2 imports:
 ```TypeScript
 import 'angular2localization/angular2localization';
 ```
 
-#### Plain JavaScript
+### Plain JavaScript
 If you build apps in Angular 2 using ES5, you can include the `umd` bundle in your `index.html`:
 ```Html
 <script src="node_modules/angular2localization/bundles/angular2localization.umd.min.js"></script>
