@@ -77,6 +77,16 @@ import { IntlSupport } from './Intl-support';
     private prefix: string;
 
     /**
+     * Data format for the asynchronous loading.
+     */
+    private dataFormat: string;
+
+    /**
+     * True if the asynchronous loading uses a Web API to get the data.
+     */
+    private webAPI: boolean;
+
+    /**
      * The translation data: {languageCode: {key: value}}.
      */
     private translationData: any = {};
@@ -120,10 +130,14 @@ import { IntlSupport } from './Intl-support';
      * Asynchronous loading: defines the translation provider.
      * 
      * @param prefix The path prefix of the json files
+     * @param dataFormat Data format: default value is 'json'.
+     * @param webAPI True if the asynchronous loading uses a Web API to get the data.
      */
-    public translationProvider(prefix: string): void {
+    public translationProvider(prefix: string, dataFormat: string = "json", webAPI: boolean = false): void {
 
         this.prefix = prefix;
+        this.dataFormat = dataFormat;
+        this.webAPI = webAPI;
 
         // Updates the loading mode.
         this.loadingMode = LoadingMode.Async;
@@ -530,7 +544,7 @@ import { IntlSupport } from './Intl-support';
     }
 
     /**
-     * Gets the json data.
+     * Asynchronous loading: gets translation data.
      * 
      * @param language The two-letter or three-letter code of the language
      */
@@ -540,7 +554,20 @@ import { IntlSupport } from './Intl-support';
         this.translationData = {};
         this.serviceState = ServiceState.isLoading;
 
-        var url: string = this.prefix + language + ".json";
+        // Builds the URL.
+        var url: string = this.prefix;
+
+        if (this.webAPI == true) {
+
+            // Absolute URL for Web API.
+            url += language;
+
+        } else {
+
+            // Relative server path for 'json' files.
+            url += language + "." + this.dataFormat;
+
+        }
 
         // Angular 2 Http module.
         this.http.get(url)
