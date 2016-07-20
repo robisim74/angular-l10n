@@ -1,5 +1,5 @@
 # Angular 2 Localization
-[![npm version](https://badge.fury.io/js/angular2localization.svg)](https://badge.fury.io/js/angular2localization)
+[![Build Status](https://travis-ci.org/robisim74/angular2localization.svg?branch=master)](https://travis-ci.org/robisim74/angular2localization) [![npm version](https://badge.fury.io/js/angular2localization.svg)](https://badge.fury.io/js/angular2localization)
 > An Angular 2 library to translate messages, dates and numbers.
 
 This library is developed using TypeScript and Angular 2 for i18n and l10n of Angular 2 apps written in TypeScript, ES5 or ES6. 
