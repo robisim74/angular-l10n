@@ -9,7 +9,8 @@ var gulp = require('gulp'),
     uglify = require('gulp-uglify'),
     pump = require('pump'),
     rename = require("gulp-rename"),
-    tslint = require('gulp-tslint');
+    tslint = require('gulp-tslint'),
+    filter = require('gulp-filter');
 
 // TypeScript compiler options. 
 var tsProject = ts.createProject('tsconfig.json', {
@@ -43,13 +44,18 @@ gulp.task('clean:dist', function () {
 
 gulp.task('script:src', function () {
 
+    var f = filter(['angular2localization.*', 'src/**/*.*']);
+
     var tsResult = tsProject.src()
         .pipe(sourcemaps.init())
         .pipe(ts(tsProject));
 
     return merge([
-        tsResult.dts.pipe(gulp.dest('dist')),
+        tsResult.dts
+            .pipe(f)
+            .pipe(gulp.dest('dist')),
         tsResult.js
+            .pipe(f)
             .pipe(sourcemaps.write('.'))
             .pipe(gulp.dest('dist'))
     ]);
@@ -58,13 +64,18 @@ gulp.task('script:src', function () {
 
 gulp.task('script:esm', function () {
 
+    var f = filter(['angular2localization.*', 'src/**/*.*']);
+
     var tsResult = tsES2015Project.src()
         .pipe(sourcemaps.init())
         .pipe(ts(tsES2015Project));
 
     return merge([
-        tsResult.dts.pipe(gulp.dest('dist/esm')),
+        tsResult.dts
+            .pipe(f)
+            .pipe(gulp.dest('dist/esm')),
         tsResult.js
+            .pipe(f)
             .pipe(sourcemaps.write('.'))
             .pipe(gulp.dest('dist/esm'))
     ]);
@@ -126,7 +137,7 @@ gulp.task('lint', () => {
 
     var tslintConfig = require('./tslint.json');
 
-    return gulp.src(['*.ts', 'src/**/*.ts'])
+    return gulp.src(['angular2localization.ts', 'src/**/*.ts'])
         .pipe(tslint({
             tslint: require('tslint').default,
             configuration: tslintConfig

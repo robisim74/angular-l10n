@@ -32,7 +32,7 @@ export default {
     entry: './dist/esm/angular2localization.js',
     dest: './dist/tmp/angular2localization.umd.js',
     format: 'umd',
-    moduleName: 'ng.angular2localization', // The name to use for the module for UMD bundle.
+    moduleName: 'ng.angular2localization',
     external: [
         '@angular/core',
         '@angular/common',

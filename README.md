@@ -10,7 +10,7 @@ Because it is only a branch of Angular 2, the goal is the complete integration w
 
 Get the changelog by [releases](https://github.com/robisim74/angular2localization/releases).
 
-Compatible with Angular 2.0.0-rc.4 & forms 0.2.0.
+Compatible with Angular 2.0.0-rc.4.
 
 ## Installing
 You can add `angular2localization` to your project using `npm`:
@@ -31,8 +31,9 @@ var packages = {
     'angular2localization': { main: '/bundles/angular2localization.umd.min.js', defaultExtension: 'js' }
 };
 ```
+`Map` tells the System loader where to look for packages (`node_modules` or your `vendor` folder).
 #### Angular-CLI
-If you use Angular-CLI, also add to `angular-cli-build.js` file to `vendorNpmFiles` array:
+If you use Angular-CLI, also add to `angular-cli-build.js`:
 ```JavaScript
 module.exports = function(defaults) {
   return new Angular2App(defaults, {
@@ -68,6 +69,9 @@ In order to build the library if you want to contribute:
 ```Shell
 npm install
 typings install
+
+npm test
+
 npm run build
 ```
 To test locally the npm package:
