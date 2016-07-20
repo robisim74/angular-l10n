@@ -1,5 +1,5 @@
 # Angular 2 Localization library specification
-Library version: 0.8.7
+Library version: 0.8.8
 
 ## Table of contents
 * [1 The library structure](#1)
@@ -19,9 +19,10 @@ Library version: 0.8.7
     * [3.1 First scenario: you need to localize dates and numbers, but no messages](#3.1)
     * [3.2 Second scenario: you only need to translate messages](#3.2)
         * [3.2.1 Direct loading](#3.2.1)
-        * [3.2.2 Asynchronous loading](#3.2.2)
-        * [3.2.3 Special characters](#3.2.3)
-        * [3.2.4 Changing language](#3.2.4)
+        * [3.2.2 Asynchronous loading of json files](#3.2.2)
+        * [3.2.3 Asynchronous loading through a Web API](#3.2.3)
+        * [3.2.4 Special characters](#3.2.4)
+        * [3.2.5 Changing language](#3.2.5)
     * [3.3 Third scenario: you need to translate messages, dates and numbers](#3.3)
         * [3.3.1 Changing locale and currency](#3.3.1)
 * [4 Default locale](#4)
@@ -321,7 +322,7 @@ this.localization.addTranslation('en', translationEN);
 this.localization.updateTranslation(); // Need to update the translation.
 ```
 
-#### <a name="3.2.2"/>3.2.2 Asynchronous loading
+#### <a name="3.2.2"/>3.2.2 Asynchronous loading of json files
 Alternatively, to initialize `LocalizationService` for the asynchronous loading add the following code in the body of constructor of the route component:
 ```TypeScript
 // Required: initializes the translation provider with the given path prefix.
@@ -338,7 +339,17 @@ and create the `json` files of the translations such as `locale-en.json`:
 ```
 *N.B. Resource files must be saved in `UTF-8` format.*
 
-#### <a name="3.2.3"/>3.2.3 Special characters
+#### <a name="3.2.3"/>3.2.3 Asynchronous loading through a Web API
+You can also load the data asynchronously through a Web API:
+```TypeScript
+this.localization.translationProvider('http://localhost:54703/api/values/', 'json', true);
+this.localization.updateTranslation(); // Need to update the translation.
+```
+`LocalizationService` adds to the absolute URL provided only the language code. So the example URL will be something like: `http://localhost:54703/api/values/en`.
+
+*N.B. Check that the `json` response data are in the correct format as shown above.*
+
+#### <a name="3.2.4"/>3.2.4 Special characters
 You can use quotes inside a string, as long as they don't match the quotes surrounding the string:
 ```
 "It wasn't a dream."
@@ -348,7 +359,7 @@ Because strings must be written within quotes, use the `\` escape character to i
 "\"What's happened to me?\" he thought."
 ```
 
-#### <a name="3.2.4"/>3.2.4 Changing language
+#### <a name="3.2.5"/>3.2.5 Changing language
 To change language at runtime, call the following method:
 ```TypeScript
 this.locale.setCurrentLanguage(language);
@@ -618,7 +629,7 @@ Property | Value
 Method | Function
 ------ | --------
 `addTranslation(language: string, translation: any): void;` | Direct loading: adds new translation data
-`translationProvider(prefix: string): void;` | Asynchronous loading: defines the translation provider
+`translationProvider(prefix: string, dataFormat?: string, webAPI?: boolean): void;` | Asynchronous loading: defines the translation provider
 `translate(key: string): string;` | Translates a key
 `translateAsync(key: string): Observable<string>;` | Translates a key
 `updateTranslation(language?: string): void;` | Updates the language code and loads the translation data for the asynchronous loading
