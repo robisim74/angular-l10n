@@ -1,0 +1,12 @@
+language: node_js
+
+node_js:
+  - stable
+
+install:
+  - npm install
+  - typings install
+
+script:
+  - npm test
+  
