@@ -14,7 +14,7 @@ Compatible with Angular 2.0.0-rc.4.
 
 ## Installing
 You can add `angular2localization` to your project using `npm`:
-```
+```Shell
 npm install --save angular2localization
 ```
 
@@ -31,19 +31,10 @@ var packages = {
     'angular2localization': { main: '/bundles/angular2localization.umd.min.js', defaultExtension: 'js' }
 };
 ```
-`Map` tells the System loader where to look for packages (`node_modules` or your `vendor` folder).
 #### Angular-CLI
-If you use Angular-CLI, also add to `angular-cli-build.js`:
-```JavaScript
-module.exports = function(defaults) {
-  return new Angular2App(defaults, {
-    vendorNpmFiles: [
-      ...
-      'angular2localization/**/*.+(js|js.map)'
-    ]
-  });
-};
-```
+See [Angular-CLI settings](https://github.com/robisim74/angular2localization/blob/master/doc/spec.md#Appendix%20A).
+#### IONIC 2
+[Using IONIC 2](https://github.com/robisim74/angular2localization/blob/master/doc/spec.md#Appendix%20B).
 
 ### Via webpack
 Import the library in your `vendor` file after Angular 2 imports:
@@ -56,7 +47,7 @@ If you build apps in Angular 2 using ES5, you can include the `umd` bundle in yo
 ```Html
 <script src="node_modules/angular2localization/bundles/angular2localization.umd.min.js"></script>
 ```
-and using global `ng.angular2localization` namespace.
+and using global `ng.angular2localization` namespace. For a basic usage, see this [ES5 example](https://github.com/robisim74/angular2localization/blob/master/doc/spec.md#Appendix%20C).
 
 ## Usage
 See [library specification](https://github.com/robisim74/angular2localization/blob/master/doc/spec.md).

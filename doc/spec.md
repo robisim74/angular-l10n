@@ -37,7 +37,9 @@ Library version: 0.8.8
     * [7.2 LocalizationService](#7.2)
     * [7.3 LocaleParser](#7.3)
     * [7.4 IntlSupport](#7.4)
-* [8 Appendix - ES5 example](#8)
+* [Appendix A - Angular-CLI settings](#Appendix A)
+* [Appendix B - Using Ionic 2](#Appendix B)
+* [Appendix C - ES5 example](#Appendix C)
 
 ## <a name="1"/>1 The library structure
 This library has the following classes:
@@ -79,7 +81,7 @@ For example, to get the translation, add in the template:
 ```
 and include in the component:
 ```TypeScript
-import {LocalizationService, TranslatePipe} from 'angular2localization/angular2localization';
+import { LocalizationService, TranslatePipe } from 'angular2localization/angular2localization';
 
 @Component({
     ...
@@ -138,7 +140,7 @@ For example, to get the local date, add in the template:
 ```
 and include in the component:
 ```TypeScript
-import {LocaleService, LocaleDatePipe} from 'angular2localization/angular2localization';
+import { LocaleService, LocaleDatePipe } from 'angular2localization/angular2localization';
 
 @Component({
     ...
@@ -207,7 +209,7 @@ get currency(): string {
 ### <a name="2.3"/>2.3 Quick use
 If you want, you can avoid including `get lang()`, `get defaultLocale()` or `get currency()` by extending the `Locale` superclass in the components:
 ```TypeScript
-import {Locale, LocaleService, LocalizationService} from 'angular2localization/angular2localization';
+import { Locale, LocaleService, LocalizationService } from 'angular2localization/angular2localization';
 ...
 export class AppComponent extends Locale {
 
@@ -252,7 +254,7 @@ These methods use the [Intl.Collator](https://developer.mozilla.org/en-US/docs/W
 ### <a name="3.1"/>3.1 First scenario: you need to localize dates and numbers, but no messages
 Add in the route component in order to access the data of location from anywhere in the application:
 ```TypeScript
-import {LocaleService} from 'angular2localization/angular2localization';
+import { LocaleService } from 'angular2localization/angular2localization';
 
 @Component({
     selector: 'app-component',
@@ -278,7 +280,7 @@ export class AppComponent {
 ### <a name="3.2"/>3.2 Second scenario: you only need to translate messages
 Add in the route component in order to access the data of location from anywhere in the application:
 ```TypeScript
-import {LocaleService, LocalizationService} from 'angular2localization/angular2localization';
+import { LocaleService, LocalizationService } from 'angular2localization/angular2localization';
 
 @Component({
     selector: 'app-component',
@@ -452,7 +454,7 @@ or, if you use variables:
 ```
 and include in the component:
 ```TypeScript
-import {LocaleNumberValidator} from 'angular2localization/angular2localization';
+import { LocaleNumberValidator } from 'angular2localization/angular2localization';
 
 @Component({
     ...
@@ -534,20 +536,22 @@ This is the view:
 ```
 and the code of the component is the following:
 ```TypeScript
-import {Component} from '@angular/core';
+import { Component } from '@angular/core';
 // FormBuilder with formControl.
-import {FORM_DIRECTIVES, REACTIVE_FORM_DIRECTIVES, FormBuilder, FormGroup, AbstractControl} from '@angular/forms';
+import { FORM_DIRECTIVES, REACTIVE_FORM_DIRECTIVES, FormBuilder, FormGroup, AbstractControl } from '@angular/forms';
 // Angular 2 Material.
-import {MD_CARD_DIRECTIVES} from '@angular2-material/card';
-import {MD_INPUT_DIRECTIVES} from '@angular2-material/input';
-import {MdButton} from '@angular2-material/button';
+import {
+    MD_CARD_DIRECTIVES,
+    MD_INPUT_DIRECTIVES,
+    MdButton
+} from './shared/material';
 // Services.
-import {Locale, LocaleService, LocalizationService, LocaleParser} from 'angular2localization/angular2localization';
+import { Locale, LocaleService, LocalizationService, LocaleParser } from 'angular2localization/angular2localization';
 // Pipes.
-import {TranslatePipe} from 'angular2localization/angular2localization';
-import {LocaleDecimalPipe} from 'angular2localization/angular2localization';
+import { TranslatePipe } from 'angular2localization/angular2localization';
+import { LocaleDecimalPipe } from 'angular2localization/angular2localization';
 // Directives for FormBuilder with formControl.
-import {LocaleNumberValidator, validateLocaleNumber} from 'angular2localization/angular2localization';
+import { LocaleNumberValidator, validateLocaleNumber } from 'angular2localization/angular2localization';
 
 @Component({
     templateUrl: './app/validation.component.html',
@@ -652,7 +656,79 @@ Method | Function
 `static NumberFormat(defaultLocale: string): boolean;` | Support for numbers
 `static Collator(lang: string): boolean;` | Support for Collator
 
-## <a name="8"/>8 Appendix - ES5 example
+## <a name="Appendix A"/>Appendix A - Angular-CLI settings
+Install the library:
+```
+npm install --save angular2localization
+```
+Add the library to `angular-cli-build.js` file to `vendorNpmFiles` array:
+```JavaScript
+module.exports = function(defaults) {
+  return new Angular2App(defaults, {
+    vendorNpmFiles: [
+      ...
+      'angular2localization/**/*.+(js|js.map)'
+    ]
+  });
+};
+```
+Then configure SystemJS mappings to know where to look for the library: move to `src` folder and add to `system.config.js` file:
+```JavaScript
+/** Map relative paths to URLs. */
+const map: any = {
+  'angular2localization': 'vendor/angular2localization'
+};
+
+/** User packages configuration. */
+const packages: any = {
+  'angular2localization': { format: 'cjs', defaultExtension: 'js' }
+};
+```
+
+## <a name="Appendix B"/>Appendix B - Using Ionic 2
+Install the library:
+```Shell
+npm install --save angular2localization
+```
+Initialize the services of the library in `app.ts` files, when the platform is ready. This in an example for the [Second scenario](#3.2):
+```TypeScript
+...
+import { HTTP_PROVIDERS } from '@angular/http';
+
+import { LocaleService, LocalizationService } from 'angular2localization/angular2localization';
+
+@Component({
+    ...
+    providers: [LocaleService, LocalizationService] // Inherited by all descendants.
+})
+export class MyApp {
+    ...
+    constructor(public locale: LocaleService, public localization: LocalizationService, private platform: Platform) {
+        ...
+        platform.ready().then(() => {
+            // Okay, so the platform is ready and our plugins are available.
+            // Here you can do any higher level native things you might need.
+            ...
+
+            // Adds a new language (ISO 639 two-letter or three-letter code).
+            this.locale.addLanguage('en');
+            // Add a new language here.
+
+            // Required: default language and expiry (No days). If the expiry is omitted, the cookie becomes a session cookie.
+            this.locale.definePreferredLanguage('en', 30);
+
+            // Initializes LocalizationService: asynchronous loading.
+            this.localization.translationProvider('./i18n/locale-'); // Required: initializes the translation provider with the given path prefix.      
+            this.localization.updateTranslation(); // Need to update the translation.
+        });
+    }
+}
+
+ionicBootstrap(MyApp, [HTTP_PROVIDERS]);
+```
+and create the `json` files of the translations such as `locale-en.json` in `wwww/i18n` folder.
+
+## <a name="Appendix C"/>Appendix C - ES5 example
 This is an example in ES5 for the [First scenario](#3.1):
 ```JavaScript
 (function (app) {
