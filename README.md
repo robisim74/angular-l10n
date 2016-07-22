@@ -33,8 +33,8 @@ var packages = {
 ```
 #### Angular-CLI
 See [Angular-CLI settings](https://github.com/robisim74/angular2localization/blob/master/doc/spec.md#Appendix%20A).
-#### IONIC 2
-[Using IONIC 2](https://github.com/robisim74/angular2localization/blob/master/doc/spec.md#Appendix%20B).
+#### Ionic 2
+[Using Ionic 2](https://github.com/robisim74/angular2localization/blob/master/doc/spec.md#Appendix%20B) with this library.
 
 ### Via webpack
 Import the library in your `vendor` file after Angular 2 imports:
