@@ -163,6 +163,11 @@ import { Injectable, EventEmitter, Output } from '@angular/core';
     public enableCookie: boolean = false;
 
     /**
+     * Enable/disable Local Storage.
+     */
+    public enableLocalStorage: boolean = false;
+
+    /**
      * Current language code.
      */
     private languageCode: string;
@@ -242,6 +247,15 @@ import { Injectable, EventEmitter, Output } from '@angular/core';
     }
 
     /**
+     * Sets Local Storage as default.
+     */
+    public useLocalStorage(): void {
+
+        this.enableLocalStorage = true;
+
+    }
+
+    /**
      * Defines the preferred language. 
      * Selects the current language of the browser if it has been added, else the default language. 
      * 
@@ -252,28 +266,41 @@ import { Injectable, EventEmitter, Output } from '@angular/core';
 
         this.expiry = expiry;
 
-        // Parses the cookie "locale" to extract the codes.
-        this.parseCookie("locale");
+        // Parses the storage "locale" to extract the codes.
+        this.parseStorage("locale");
 
         if (this.languageCode == "") {
 
-            // Gets the current language of the browser or the default language.
-            var browserLanguage: string = navigator.language || navigator.userLanguage || navigator.browserLanguage || navigator.systemLanguage;
+            this.languageCode = defaultLanguage;
 
-            var index: number = browserLanguage.indexOf("-");
-            if (index != -1) {
+            // Verifies browser language.
+            var browserLanguage: string = "";
 
-                browserLanguage = browserLanguage.substring(0, index); // Gets the language code.
-
+            if (typeof navigator.language != "undefined") {
+                browserLanguage = navigator.language;
+            } else if (typeof navigator.userLanguage != "undefined") {
+                browserLanguage = navigator.userLanguage;
+            } else if (typeof navigator.browserLanguage != "undefined") {
+                browserLanguage = navigator.browserLanguage;
+            } else if (typeof navigator.systemLanguage != "undefined") {
+                browserLanguage = navigator.systemLanguage;
             }
 
-            if (this.languageCodes.length > 0 && this.languageCodes.indexOf(browserLanguage) != -1) {
+            // Tries to gets the current language of browser.
+            if (browserLanguage != "") {
 
-                this.languageCode = browserLanguage;
+                var index: number = browserLanguage.indexOf("-");
+                if (index != -1) {
 
-            } else {
+                    browserLanguage = browserLanguage.substring(0, index); // Gets the language code.
 
-                this.languageCode = defaultLanguage;
+                }
+
+                if (this.languageCodes.length > 0 && this.languageCodes.indexOf(browserLanguage) != -1) {
+
+                    this.languageCode = browserLanguage;
+
+                }
 
             }
 
@@ -298,8 +325,8 @@ import { Injectable, EventEmitter, Output } from '@angular/core';
 
         this.expiry = expiry;
 
-        // Parses the cookie "locale" to extract the codes & the extension.
-        this.parseCookie("locale");
+        // Parses the storage "locale" to extract the codes & the extension.
+        this.parseStorage("locale");
 
         if (this.languageCode == "" || this.countryCode == "") {
 
@@ -323,8 +350,8 @@ import { Injectable, EventEmitter, Output } from '@angular/core';
      */
     public definePreferredCurrency(defaultCurrency: string): void {
 
-        // Parses the cookie "currency" to extract the code.
-        this.parseCookie("currency");
+        // Parses the storage "currency" to extract the code.
+        this.parseStorage("currency");
 
         if (this.currencyCode == "") {
 
@@ -332,12 +359,8 @@ import { Injectable, EventEmitter, Output } from '@angular/core';
 
         }
 
-        // Sets the cookie "currency".
-        if (this.enableCookie == true && this.languageCodes.length > 0) {
-
-            this.setCookie("currency", this.currencyCode, this.expiry);
-
-        }
+        // Sets the storage "currency".
+        this.setStorage("currency", this.currencyCode);
 
     }
 
@@ -470,12 +493,8 @@ import { Injectable, EventEmitter, Output } from '@angular/core';
             this.currencyCode = currency;
             this.currencyCodeChanged.emit(currency);
 
-            // Sets the cookie "currency".
-            if (this.enableCookie == true && this.languageCodes.length > 0) {
-
-                this.setCookie("currency", this.currencyCode, this.expiry);
-
-            }
+            // Sets the storage "currency".
+            this.setStorage("currency", this.currencyCode);
 
         }
 
@@ -509,74 +528,150 @@ import { Injectable, EventEmitter, Output } from '@angular/core';
         // Adds calendar.
         this.defaultLocale += this.calendar != "" ? "-ca-" + this.calendar : "";
 
-        // Sets the cookie "locale".
-        if (this.enableCookie == true && this.languageCodes.length > 0) {
+        // Sets the storage "locale".
+        this.setStorage("locale", this.defaultLocale);
 
-            this.setCookie("locale", this.defaultLocale, this.expiry);
+    }
+
+    /**
+     * Parses the storage to extract the codes & the extension.
+     * 
+     * @param name The name of the storage
+     */
+    private parseStorage(name: string): void {
+
+        var storage: string = "";
+
+        if (this.enableLocalStorage && this.verifyLocalStorage) {
+
+            storage = this.getLocalStorage(name);
+
+        } else if (this.enableCookie && this.languageCodes.length > 0 && this.verifyCookie) {
+
+            storage = this.getCookie(name);
+
+        }
+
+        if (storage != "") {
+
+            // Looks for the 'u' (Unicode) extension.
+            var index: number = storage.search("-u");
+            if (index != -1) {
+
+                var extensions: string[] = storage.substring(index + 1).split("-");
+                switch (extensions.length) {
+
+                    case 3:
+                        if (extensions[1] == "nu") {
+                            this.numberingSystem = extensions[2];
+                        } else if (extensions[1] == "ca") {
+                            this.calendar = extensions[2];
+                        }
+                        break;
+                    case 5:
+                        this.numberingSystem = extensions[2];
+                        this.calendar = extensions[4];
+                        break;
+
+                }
+
+                // Extracts the codes.
+                storage = storage.substring(0, index);
+
+            }
+
+            // Splits the string to each hyphen.
+            var codes: string[] = storage.split("-");
+
+            switch (codes.length) {
+
+                case 1:
+                    if (name == "locale") {
+                        this.languageCode = codes[0];
+                    } else if (name == "currency") {
+                        this.currencyCode = codes[0];
+                    }
+                    break;
+                case 2:
+                    this.languageCode = codes[0];
+                    this.countryCode = codes[1];
+                    break;
+                case 3:
+                    this.languageCode = codes[0];
+                    this.scriptCode = codes[1];
+                    this.countryCode = codes[2];
+                    break;
+
+            }
 
         }
 
     }
 
     /**
-     * Parses the cookie to extract the codes & the extension.
+     * Checks browser support for Local Storage.
      * 
-     * @param name The name of the cookie
+     * @return True if Web Storage is supported.
      */
-    private parseCookie(name: string): void {
+    private verifyLocalStorage(): boolean {
 
-        // Tries to get the cookie.
-        var cookie: string = this.getCookie(name);
+        return typeof Storage != "undefined";
 
-        // Looks for the 'u' (Unicode) extension.
-        var index: number = cookie.search("-u");
-        if (index != -1) {
+    }
 
-            var extensions: string[] = cookie.substring(index + 1).split("-");
-            switch (extensions.length) {
+    /**
+     * Checks browser support for cookies.
+     * 
+     * @return True if cookies are supported.
+     */
+    private verifyCookie(): boolean {
 
-                case 3:
-                    if (extensions[1] == "nu") {
-                        this.numberingSystem = extensions[2];
-                    } else if (extensions[1] == "ca") {
-                        this.calendar = extensions[2];
-                    }
-                    break;
-                case 5:
-                    this.numberingSystem = extensions[2];
-                    this.calendar = extensions[4];
-                    break;
+        return typeof navigator.cookieEnabled != "undefined" && navigator.cookieEnabled;
 
-            }
+    }
 
-            // Extracts the codes.
-            cookie = cookie.substring(0, index);
+    /**
+     * Sets the storage.
+     * 
+     * @param name The name of the storage
+     * @param value The value of the storage
+     */
+    private setStorage(name: string, value: string): void {
 
-        }
+        if (this.enableLocalStorage && this.verifyLocalStorage) {
 
-        // Splits the cookie to each hyphen.
-        var codes: string[] = cookie.split("-");
+            this.setLocalStorage(name, value);
 
-        switch (codes.length) {
+        } else if (this.enableCookie == true && this.languageCodes.length > 0 && this.verifyCookie) {
 
-            case 1:
-                if (name == "locale") {
-                    this.languageCode = codes[0];
-                } else if (name == "currency") {
-                    this.currencyCode = codes[0];
-                }
-                break;
-            case 2:
-                this.languageCode = codes[0];
-                this.countryCode = codes[1];
-                break;
-            case 3:
-                this.languageCode = codes[0];
-                this.scriptCode = codes[1];
-                this.countryCode = codes[2];
-                break;
+            this.setCookie(name, value, this.expiry);
 
         }
+
+    }
+
+    /**
+     * Saves Local Storage value.
+     * 
+     * @param name The name of the storage
+     * @param value The value of the storage
+     */
+    private setLocalStorage(name: string, value: string): void {
+
+        localStorage.setItem(name, value);
+
+    }
+
+    /**
+     * Saves Local Storage value.
+     * 
+     * @param name The name of the storage
+     * @return The value of the storage
+     */
+    private getLocalStorage(name: string): string {
+
+        // If the storage is not found, returns an empty string.
+        return localStorage.getItem(name) != null ? localStorage.getItem(name) : "";
 
     }
 
