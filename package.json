@@ -1,6 +1,6 @@
 {
   "name": "angular2localization",
-  "version": "0.8.8",
+  "version": "0.8.9",
   "description": "An Angular 2 library to translate messages, dates and numbers",
   "main": "angular2localization.js",
   "jsnext:main": "esm/angular2localization.js",

@@ -1,5 +1,5 @@
 # Angular 2 Localization library specification
-Library version: 0.8.8
+Library version: 0.8.9
 
 ## Table of contents
 * [1 The library structure](#1)
@@ -26,6 +26,7 @@ Library version: 0.8.8
     * [3.3 Third scenario: you need to translate messages, dates and numbers](#3.3)
         * [3.3.1 Changing locale and currency](#3.3.1)
 * [4 Default locale](#4)
+    * [4.1 Storage](#4.1)
 * [5 Lazy routing](#5)
 * [6 Validation by locales](#6)
     * [6.1 Validating a number](#6.1)
@@ -240,10 +241,10 @@ Now you can localize a list simply. For example:
 
 #### <a name="2.4.1"/>2.4.1 Sorting & search
 [LocalizationService](#7.2) has the following methods for sorting and filtering a list by locales:
-* `sort`
-* `sortAsync`
-* `search`
-* `searchAsync`
+* `sort(list: Array<any>, keyName: any, order?: string, extension?: string, options?: any): Array<any>;`
+* `sortAsync(list: Array<any>, keyName: any, order?: string, extension?: string, options?: any): Observable<Array<any>>;`
+* `search(s: string, list: Array<any>, keyNames: any[], options?: any): Array<any>;`
+* `searchAsync(s: string, list: Array<any>, keyNames: any[], options?: any): Observable<any>;`
 
 These methods use the [Intl.Collator](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Collator) object, a constructor for collators, objects that enable language sensitive string comparison.
 
@@ -297,6 +298,7 @@ export class AppComponent {
         // Add a new language here.
 
         // Required: default language and expiry (No days). If the expiry is omitted, the cookie becomes a session cookie.
+        // Selects the current language of the browser/user if it has been added, else the default language.
         this.locale.definePreferredLanguage('en', 30);
 
     }
@@ -376,6 +378,7 @@ this.locale.addLanguage('en');
 // Add a new language here.
 
 // Required: default language, country (ISO 3166 two-letter, uppercase code) and expiry (No days). If the expiry is omitted, the cookie becomes a session cookie.
+// Selects the default language and country, regardless of the browser language, to avoid inconsistencies between the language and country.
 this.locale.definePreferredLocale('en', 'US', 30);
 
 // Optional: default currency (ISO 4217 three-letter code).
@@ -408,10 +411,29 @@ and optionally:
 For more information see [Intl API](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl).
 
 [LocaleService](#7.1) has the following methods to define the default locale:
-* `definePreferredLocale`
-* `setCurrentLocale`
+* `definePreferredLocale(defaultLanguage: string, defaultCountry: string, expiry?: number, script?: string, numberingSystem?: string, calendar?: string): void;`
+* `setCurrentLocale(language: string, country: string, script?: string, numberingSystem?: string, calendar?: string): void;`
 
 When you invoke one of them, in addition to set the language and country, you can set the script, the numbering system and calendar.
+
+### <a name="4.1"/>4.1 Storage
+By default, the default locale and eventually the currency chosen by the user are stored in cookies. When you call the following method in the [Second scenario](#3.2):
+* `definePreferredLanguage(defaultLanguage: string, expiry?: number): void;`
+
+or, in the [Third scenario](#3.3):
+* `definePreferredLocale(defaultLanguage: string, defaultCountry: string, expiry?: number, script?: string, numberingSystem?: string, calendar?: string): void;`
+
+you can set the cookie expiration in days - if the expiry is omitted, the cookie becomes a session cookie.
+
+You can also change the default storage method, enabling the `Local Storage`, before invoking the above methods:
+```TypeScript
+this.locale.useLocalStorage();
+
+definePreferred...
+```
+The `LocaleService` will try to use the Web Storage, otherwise it will attempt to use the cookie. 
+
+*N.B. Unlike the cookie, the Local Storage doesn't expire.*
 
 ## <a name="5"/>5 Lazy routing
 If you use a `Router` in an extended application, you can create an instance of the `LocalizationService` for every asynchronously loaded component, as shown:
@@ -605,11 +627,13 @@ Property | Value
 `numberingSystemChanged: EventEmitter<string>;` | Output for event numbering system changed
 `calendarChanged: EventEmitter<string>;` | Output for event calendar changed
 `enableCookie: boolean;` | Enable/disable cookie
+`enableLocalStorage: boolean;` | Enable/disable Local Storage
 
 Method | Function
 ------ | --------
 `addLanguage(language: string): void;` | Adds a new language
-`definePreferredLanguage(defaultLanguage: string, expiry?: number): void;` | Defines the preferred language. Selects the current language of the browser if it has been added, else the default language
+`useLocalStorage(): void;` | Sets Local Storage as default
+`definePreferredLanguage(defaultLanguage: string, expiry?: number): void;` | Defines the preferred language. Selects the current language of the browser/user if it has been added, else the default language
 `definePreferredLocale(defaultLanguage: string, defaultCountry: string, expiry?: number, script?: string, numberingSystem?: string, calendar?: string): void;` | Defines preferred languange and country, regardless of the browser language
 `definePreferredCurrency(defaultCurrency: string): void;` | Defines the preferred currency
 `getCurrentLanguage(): string;` | Gets the current language
@@ -714,8 +738,11 @@ export class MyApp {
             this.locale.addLanguage('en');
             // Add a new language here.
 
-            // Required: default language and expiry (No days). If the expiry is omitted, the cookie becomes a session cookie.
-            this.locale.definePreferredLanguage('en', 30);
+            this.locale.useLocalStorage(); // To store the user's chosen language, prefer Local Storage.
+
+            // Required: default language.
+            // Selects the current language of the browser/user if it has been added, else the default language.
+            this.locale.definePreferredLanguage('en');
 
             // Initializes LocalizationService: asynchronous loading.
             this.localization.translationProvider('./i18n/locale-'); // Required: initializes the translation provider with the given path prefix.      
