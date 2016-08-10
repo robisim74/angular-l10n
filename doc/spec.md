@@ -1,5 +1,5 @@
 # Angular 2 Localization library specification
-Library version: 0.8.9
+Library version: 0.8.10
 
 ## Table of contents
 * [1 The library structure](#1)
@@ -221,6 +221,17 @@ export class AppComponent extends Locale {
 
 } 
 ```
+Instead of in each component, you can also declare the use of the pipes once in `NgModule`, for example:
+```TypeScript
+@NgModule({
+    ...
+    declarations: [
+        ...
+        TranslatePipe
+    ],
+    ...
+})
+```
 
 ### <a name="2.4"/>2.4 List
 Now you can localize a list simply. For example:
@@ -277,6 +288,16 @@ export class AppComponent {
 
 }
 ```
+You can also avoid adding the `providers` in the route component, and instead use `NgModule`:
+```TypeScript
+@NgModule({
+    ...
+    providers: [
+        LocaleService
+    ],
+    ...
+})
+```
 
 ### <a name="3.2"/>3.2 Second scenario: you only need to translate messages
 Add in the route component in order to access the data of location from anywhere in the application:
@@ -305,9 +326,19 @@ export class AppComponent {
 
 }
 ```
-Also add in the main:
+In `NgModule`, import `HttpModule`, and if you want to avoid adding the `providers` in the route component:
 ```TypeScript
-bootstrap(AppComponent, [HTTP_PROVIDERS]);
+@NgModule({
+    imports: [
+        HttpModule
+    ],
+    ...
+    providers: [
+        LocaleService,
+        LocalizationService
+    ],
+    ...
+})
 ```
 
 #### <a name="3.2.1"/>3.2.1 Direct loading
@@ -560,7 +591,7 @@ and the code of the component is the following:
 ```TypeScript
 import { Component } from '@angular/core';
 // FormBuilder with formControl.
-import { FORM_DIRECTIVES, REACTIVE_FORM_DIRECTIVES, FormBuilder, FormGroup, AbstractControl } from '@angular/forms';
+import { FormBuilder, FormGroup, AbstractControl } from '@angular/forms';
 // Angular 2 Material.
 import {
     MD_CARD_DIRECTIVES,
@@ -570,15 +601,14 @@ import {
 // Services.
 import { Locale, LocaleService, LocalizationService, LocaleParser } from 'angular2localization/angular2localization';
 // Pipes.
-import { TranslatePipe } from 'angular2localization/angular2localization';
 import { LocaleDecimalPipe } from 'angular2localization/angular2localization';
 // Directives for FormBuilder with formControl.
 import { LocaleNumberValidator, validateLocaleNumber } from 'angular2localization/angular2localization';
 
 @Component({
     templateUrl: './app/validation.component.html',
-    pipes: [TranslatePipe, LocaleDecimalPipe],
-    directives: [FORM_DIRECTIVES, REACTIVE_FORM_DIRECTIVES, LocaleNumberValidator, MD_CARD_DIRECTIVES, MD_INPUT_DIRECTIVES, MdButton]
+    pipes: [LocaleDecimalPipe],
+    directives: [LocaleNumberValidator, MD_CARD_DIRECTIVES, MD_INPUT_DIRECTIVES, MdButton]
 })
 
 export class ValidationComponent extends Locale {
@@ -595,7 +625,7 @@ export class ValidationComponent extends Locale {
     decimal: AbstractControl;
 
     constructor(public locale: LocaleService, public localization: LocalizationService, private fb: FormBuilder) {
-        super(locale, localization)
+        super(locale, localization);
 
         this.numberForm = fb.group({
             'decimal': ['', validateLocaleNumber(this.locale, this.digits, this.minValue, this.maxValue)]
@@ -613,6 +643,26 @@ export class ValidationComponent extends Locale {
     }
 
 }
+```
+Finally, import `ReactiveFormsModule` in `NgModule`:
+```TypeScript
+@NgModule({
+    imports: [
+        ...
+        FormsModule,
+        ReactiveFormsModule,
+        ...
+    ],
+    declarations: [
+        ...
+        TranslatePipe
+    ],
+    providers: [
+        LocaleService,
+        LocalizationService
+    ],
+    ...
+})
 ```
 
 ## <a name="7"/>7 Services API
@@ -680,7 +730,7 @@ Method | Function
 `static NumberFormat(defaultLocale: string): boolean;` | Support for numbers
 `static Collator(lang: string): boolean;` | Support for Collator
 
-## <a name="Appendix A"/>Appendix A - Angular-CLI settings
+## <a name="Appendix A"/>Appendix A - Angular-CLI settings up to 1.0.0-beta.10
 Install the library:
 ```
 npm install --save angular2localization
@@ -709,7 +759,7 @@ const packages: any = {
 };
 ```
 
-## <a name="Appendix B"/>Appendix B - Using Ionic 2
+## <a name="Appendix B"/>Appendix B - Using Ionic 2 up to 2.0.0-beta.11
 Install the library:
 ```Shell
 npm install --save angular2localization
