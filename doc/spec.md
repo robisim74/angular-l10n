@@ -522,7 +522,7 @@ parsedValue: number = null;
 
 constructor(public locale: LocaleService) { }
 
-onSubmit(value: string) {
+onSubmit(value: string): void {
 
     this.parsedValue = LocaleParser.Number(value, this.locale.getDefaultLocale());
 
@@ -592,12 +592,6 @@ and the code of the component is the following:
 import { Component } from '@angular/core';
 // FormBuilder with formControl.
 import { FormBuilder, FormGroup, AbstractControl } from '@angular/forms';
-// Angular 2 Material.
-import {
-    MD_CARD_DIRECTIVES,
-    MD_INPUT_DIRECTIVES,
-    MdButton
-} from './shared/material';
 // Services.
 import { Locale, LocaleService, LocalizationService, LocaleParser } from 'angular2localization/angular2localization';
 // Pipes.
@@ -607,8 +601,8 @@ import { LocaleNumberValidator, validateLocaleNumber } from 'angular2localizatio
 
 @Component({
     templateUrl: './app/validation.component.html',
-    pipes: [LocaleDecimalPipe],
-    directives: [LocaleNumberValidator, MD_CARD_DIRECTIVES, MD_INPUT_DIRECTIVES, MdButton]
+    directives: [LocaleNumberValidator],
+    pipes: [LocaleDecimalPipe]
 })
 
 export class ValidationComponent extends Locale {
@@ -636,7 +630,7 @@ export class ValidationComponent extends Locale {
 
     }
 
-    onSubmit(value: any) {
+    onSubmit(value: any): void {
 
         this.parsedValue = LocaleParser.Number(value.decimal, this.locale.getDefaultLocale());
 
