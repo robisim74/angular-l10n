@@ -6,9 +6,8 @@
  * https://github.com/robisim74/angular2localization
  */
 
-import { isPresent, isBlank, NumberWrapper, RegExpWrapper } from '@angular/common/src/facade/lang';
-import { BaseException } from '@angular/common/src/facade/exceptions';
 import { NumberFormatStyle, NumberFormatter } from '@angular/common/src/facade/intl';
+import { NumberWrapper, isPresent } from '@angular/common/src/facade/lang';
 
 // Services.
 import { IntlSupport } from './Intl-support';
@@ -31,17 +30,18 @@ export class LocaleParser {
     public static NumberRegExpFactory(defaultLocale: string, digits: string): RegExp {
 
         // Gets digits.
-        var minInt: number = 1;
-        var minFraction: number = 0;
-        var maxFraction: number = 3;
-        const NUMBER_FORMAT_REGEXP: RegExp = /^(\d+)?\.((\d+)(\-(\d+))?)?$/g;
+        let minInt: number = 1;
+        let minFraction: number = 0;
+        let maxFraction: number = 3;
+
+        const NUMBER_FORMAT_REGEXP: RegExp = /^(\d+)?\.((\d+)(\-(\d+))?)?$/;
 
         if (isPresent(digits)) {
 
-            var parts: RegExpExecArray = RegExpWrapper.firstMatch(NUMBER_FORMAT_REGEXP, digits);
+            var parts: RegExpMatchArray = digits.match(NUMBER_FORMAT_REGEXP);
 
-            if (isBlank(parts)) {
-                throw new BaseException(`${digits} is not a valid digit info for number`);
+            if (parts === null) {
+                throw new Error(`${digits} is not a valid digit info for number`);
             }
             if (isPresent(parts[1])) {  // Min integer digits.
                 minInt = NumberWrapper.parseIntAutoRadix(parts[1]);
@@ -52,7 +52,6 @@ export class LocaleParser {
             if (isPresent(parts[5])) {  // Max fraction digits.
                 maxFraction = NumberWrapper.parseIntAutoRadix(parts[5]);
             }
-
         }
 
         // Converts numbers & signs to Unicode by default locale.

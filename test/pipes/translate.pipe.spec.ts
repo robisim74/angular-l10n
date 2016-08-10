@@ -3,7 +3,7 @@
  */
 
 // Testing.
-import { beforeEach, describe, expect, it, inject, fakeAsync, addProviders } from '@angular/core/testing';
+import { inject, fakeAsync, addProviders } from '@angular/core/testing';
 import { browserDetection } from '@angular/platform-browser/testing/browser_util';
 import { MockBackend, MockConnection } from '@angular/http/testing';
 import {
