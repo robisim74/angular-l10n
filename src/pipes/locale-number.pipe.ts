@@ -40,13 +40,7 @@ import { IntlSupport } from '../services/Intl-support';
  * and include in the component:
  * 
  * import {LocaleService} from 'angular2localization/angular2localization';
- * import {LocaleDecimalPipe} from 'angular2localization/angular2localization';
- * 
- * @Component({
- *     ...
- *     pipes: [LocaleDecimalPipe]
- * })
- * 
+ * ...
  * export class AppComponent {
  * 
  *     constructor(public locale: LocaleService) {
@@ -114,13 +108,7 @@ export class LocaleDecimalPipe implements PipeTransform {
  * and include in the component:
  * 
  * import {LocaleService} from 'angular2localization/angular2localization';
- * import {LocalePercentPipe} from 'angular2localization/angular2localization';
- * 
- * @Component({
- *     ...
- *     pipes: [LocalePercentPipe]
- * })
- * 
+ * ...
  * export class AppComponent {
  * 
  *     constructor(public locale: LocaleService) {
@@ -190,13 +178,7 @@ export class LocalePercentPipe implements PipeTransform {
  * and include in the component:
  * 
  * import {LocaleService} from 'angular2localization/angular2localization';
- * import {LocaleCurrencyPipe} from 'angular2localization/angular2localization';
- * 
- * @Component({
- *     ...
- *     pipes: [LocaleCurrencyPipe]
- * })
- * 
+ * ...
  * export class AppComponent {
  * 
  *     constructor(public locale: LocaleService) {

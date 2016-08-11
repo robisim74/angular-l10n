@@ -40,13 +40,7 @@ import { IntlSupport } from '../services/Intl-support';
  * and include in the component:
  * 
  * import {LocaleService} from 'angular2localization/angular2localization';
- * import {LocaleDatePipe} from 'angular2localization/angular2localization';
- * 
- * @Component({
- *     ...
- *     pipes: [LocaleDatePipe]
- * })
- * 
+ * ...
  * export class AppComponent {
  * 
  *     constructor(public locale: LocaleService) {

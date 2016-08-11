@@ -70,6 +70,33 @@ Number | Decimal | `expression | localedecimal[:defaultLocale:[digitInfo]]`
 Number | Percentage | `expression | localepercent[:defaultLocale:[digitInfo]]`
 Number | Currency | `expression | localecurrency[:defaultLocale[:currency[:symbolDisplay[:digitInfo]]]]`
 
+Declare the pipes you need in `AppModule`:
+```TypeScript
+// Pipes.
+import {
+    TranslatePipe,
+    LocaleDatePipe,
+    LocaleDecimalPipe,
+    LocalePercentPipe,
+    LocaleCurrencyPipe
+} from 'angular2localization/angular2localization';
+
+@NgModule({
+    ...
+    declarations: [
+        ...
+        TranslatePipe,
+        LocaleDatePipe,
+        LocaleDecimalPipe,
+        LocalePercentPipe,
+        LocaleCurrencyPipe
+    ],
+    ...
+})
+
+export class AppModule { }
+```
+
 ### <a name="2.1"/>2.1 Messages
 ```
 expression | translate:lang
@@ -82,13 +109,8 @@ For example, to get the translation, add in the template:
 ```
 and include in the component:
 ```TypeScript
-import { LocalizationService, TranslatePipe } from 'angular2localization/angular2localization';
-
-@Component({
-    ...
-    pipes: [TranslatePipe]
-})
-
+import { LocalizationService } from 'angular2localization/angular2localization';
+...
 export class AppComponent {
 
     constructor(public localization: LocalizationService) {
@@ -141,13 +163,8 @@ For example, to get the local date, add in the template:
 ```
 and include in the component:
 ```TypeScript
-import { LocaleService, LocaleDatePipe } from 'angular2localization/angular2localization';
-
-@Component({
-    ...
-    pipes: [LocaleDatePipe]
-})
-
+import { LocaleService } from 'angular2localization/angular2localization';
+...
 export class AppComponent {
 
     constructor(public locale: LocaleService) {
@@ -175,7 +192,7 @@ For example, to get the local decimal, add in the template:
 ```Html
 {{ pi | localedecimal:defaultLocale:'1.5-5' }}
 ```
-and include `LocaleDecimalPipe` and `get defaultLocale()` in the component.
+and include `get defaultLocale()` in the component.
 
 #### <a name="2.2.3"/>2.2.3 Percentages
 ```
@@ -185,7 +202,7 @@ For example, to get the local percentage, add in the template:
 ```Html
 {{ a | localepercent:defaultLocale:'1.1-1' }}
 ```
-and include `LocalePercentPipe` and `get defaultLocale()` in the component.
+and include `get defaultLocale()` in the component.
 
 #### <a name="2.2.4"/>2.2.4 Currencies
 ```
@@ -197,7 +214,7 @@ For example, to get the local currency, add in the template:
 ```Html
 {{ b | localecurrency:defaultLocale:currency:true:'1.2-2' }}
 ```
-and include `LocaleCurrencyPipe`, `get defaultLocale()` and `get currency()` in the component:
+and include `get defaultLocale()` and `get currency()` in the component:
 ```TypeScript
 // Gets the current currency.
 get currency(): string {
@@ -220,17 +237,6 @@ export class AppComponent extends Locale {
     }
 
 } 
-```
-Instead of in each component, you can also declare the use of the pipes once in `NgModule`, for example:
-```TypeScript
-@NgModule({
-    ...
-    declarations: [
-        ...
-        TranslatePipe
-    ],
-    ...
-})
 ```
 
 ### <a name="2.4"/>2.4 List
@@ -262,18 +268,28 @@ These methods use the [Intl.Collator](https://developer.mozilla.org/en-US/docs/W
 *N.B. This feature is not supported by all browsers, even with the use of `Intl.js`.*
 
 ## <a name="3"/>3 Scenarios
-
-### <a name="3.1"/>3.1 First scenario: you need to localize dates and numbers, but no messages
-Add in the route component in order to access the data of location from anywhere in the application:
+Add services you need in `AppModule`:
 ```TypeScript
-import { LocaleService } from 'angular2localization/angular2localization';
+// Services.
+import { LocaleService, LocalizationService } from 'angular2localization/angular2localization';
 
-@Component({
-    selector: 'app-component',
+@NgModule({
     ...
-    providers: [LocaleService] // Inherited by all descendants.
+    providers: [
+        LocaleService,
+        LocalizationService
+    ],
+    ...
 })
 
+export class AppModule { }
+```
+
+### <a name="3.1"/>3.1 First scenario: you need to localize dates and numbers, but no messages
+Add in the bootstrap component `AppComponent` in order to access the data of location from anywhere in the application:
+```TypeScript
+import { LocaleService } from 'angular2localization/angular2localization';
+...
 export class AppComponent {
 
     constructor(public locale: LocaleService) {
@@ -288,28 +304,12 @@ export class AppComponent {
 
 }
 ```
-You can also avoid adding the `providers` in the route component, and instead use `NgModule`:
-```TypeScript
-@NgModule({
-    ...
-    providers: [
-        LocaleService
-    ],
-    ...
-})
-```
 
 ### <a name="3.2"/>3.2 Second scenario: you only need to translate messages
-Add in the route component in order to access the data of location from anywhere in the application:
+Add in the bootstrap component `AppComponent` in order to access the data of location from anywhere in the application:
 ```TypeScript
 import { LocaleService, LocalizationService } from 'angular2localization/angular2localization';
-
-@Component({
-    selector: 'app-component',
-    ...
-    providers: [LocaleService, LocalizationService] // Inherited by all descendants.
-})
-
+...
 export class AppComponent {
 
     constructor(public locale: LocaleService, public localization: LocalizationService) {
@@ -326,23 +326,9 @@ export class AppComponent {
 
 }
 ```
-In `NgModule`, import `HttpModule`, and if you want to avoid adding the `providers` in the route component:
-```TypeScript
-@NgModule({
-    imports: [
-        HttpModule
-    ],
-    ...
-    providers: [
-        LocaleService,
-        LocalizationService
-    ],
-    ...
-})
-```
 
 #### <a name="3.2.1"/>3.2.1 Direct loading
-To initialize `LocalizationService` for the direct loading, add the following code in the body of constructor of the route component:
+To initialize `LocalizationService` for the direct loading, add the following code in the body of constructor of the bootstrap component:
 ```TypeScript
 var translationEN = {
      TITLE: 'Angular 2 Localization',
@@ -358,7 +344,7 @@ this.localization.updateTranslation(); // Need to update the translation.
 ```
 
 #### <a name="3.2.2"/>3.2.2 Asynchronous loading of json files
-Alternatively, to initialize `LocalizationService` for the asynchronous loading add the following code in the body of constructor of the route component:
+Alternatively, to initialize `LocalizationService` for the asynchronous loading add the following code in the body of constructor of the bootstrap component:
 ```TypeScript
 // Required: initializes the translation provider with the given path prefix.
 this.localization.translationProvider('./resources/locale-');
@@ -402,7 +388,7 @@ this.locale.setCurrentLanguage(language);
 where `language` is the two-letter or three-letter code of the new language (ISO 639).
 
 ### <a name="3.3"/>3.3 Third scenario: you need to translate messages, dates and numbers
-Unlike what said for messages in the [Second scenario](#3.2), use the following code in the body of constructor of the route component:
+Unlike what said for messages in the [Second scenario](#3.2), use the following code in the body of constructor of the bootstrap component:
 ```TypeScript
 // Adds a new language (ISO 639 two-letter or three-letter code).
 this.locale.addLanguage('en');
@@ -505,15 +491,7 @@ or, if you use variables:
 ```Html
 <md-input [validateLocaleNumber]="digits" [minValue]="minValue" [maxValue]="maxValue" name="decimal" #decimal="ngModel" ngModel></md-input>
 ```
-and include in the component:
-```TypeScript
-import { LocaleNumberValidator } from 'angular2localization/angular2localization';
-
-@Component({
-    ...
-    directives: [LocaleNumberValidator]
-})
-```
+and declare `LocaleNumberValidator` in `AppModule`.
 
 #### <a name="6.1.1"/>6.1.1 Parsing a number
 When the number is valid, you can get its value by the `Number` static method of [LocaleParser](#7.1):
@@ -594,15 +572,11 @@ import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, AbstractControl } from '@angular/forms';
 // Services.
 import { Locale, LocaleService, LocalizationService, LocaleParser } from 'angular2localization/angular2localization';
-// Pipes.
-import { LocaleDecimalPipe } from 'angular2localization/angular2localization';
 // Directives for FormBuilder with formControl.
-import { LocaleNumberValidator, validateLocaleNumber } from 'angular2localization/angular2localization';
+import { validateLocaleNumber } from 'angular2localization/angular2localization';
 
 @Component({
-    templateUrl: './app/validation.component.html',
-    directives: [LocaleNumberValidator],
-    pipes: [LocaleDecimalPipe]
+    templateUrl: './app/validation.component.html'
 })
 
 export class ValidationComponent extends Locale {
@@ -638,26 +612,7 @@ export class ValidationComponent extends Locale {
 
 }
 ```
-Finally, import `ReactiveFormsModule` in `NgModule`:
-```TypeScript
-@NgModule({
-    imports: [
-        ...
-        FormsModule,
-        ReactiveFormsModule,
-        ...
-    ],
-    declarations: [
-        ...
-        TranslatePipe
-    ],
-    providers: [
-        LocaleService,
-        LocalizationService
-    ],
-    ...
-})
-```
+Finally, import `ReactiveFormsModule` and declare `LocaleNumberValidator` in `AppModule`.
 
 ## <a name="7"/>7 Services API
 
@@ -800,15 +755,28 @@ ionicBootstrap(MyApp, [HTTP_PROVIDERS]);
 and create the `json` files of the translations such as `locale-en.json` in `wwww/i18n` folder.
 
 ## <a name="Appendix C"/>Appendix C - ES5 example
-This is an example in ES5 for the [First scenario](#3.1):
+This is an example in ES5 for the [First scenario](#3.1). The `AppModule`:
+```JavaScript
+(function (app) {
+  app.AppModule =
+    ng.core.NgModule({
+      imports: [ng.platformBrowser.BrowserModule],
+      declarations: [app.AppComponent, ng.angular2localization.LocaleDatePipe],
+      providers: [ng.angular2localization.LocaleService],
+      bootstrap: [app.AppComponent]
+    })
+      .Class({
+        constructor: function () { }
+      });
+})(window.app || (window.app = {}));
+```
+And the `AppComponent`:
 ```JavaScript
 (function (app) {
   app.AppComponent =
     ng.core.Component({
       selector: 'app-component',
-      template: `<h1>{{ today | localedate:defaultLocale:'fullDate' }}`,
-      providers: [ng.angular2localization.LocaleService],
-      pipes: [ng.angular2localization.LocaleDatePipe]
+      template: `<h1>{{ today | localedate:defaultLocale:'fullDate' }}`
     })
       .Class({
         constructor: [ng.angular2localization.LocaleService, function (locale) {

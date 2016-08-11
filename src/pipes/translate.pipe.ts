@@ -40,13 +40,7 @@ import { IntlSupport } from '../services/Intl-support';
  * and include in the component:
  * 
  * import {LocalizationService} from 'angular2localization/angular2localization';
- * import {TranslatePipe} from 'angular2localization/angular2localization';
- * 
- * @Component({
- *     ...
- *     pipes: [TranslatePipe]
- * })
- * 
+ * ...
  * export class AppComponent {
  * 
  *     constructor(public localization: LocalizationService) {

@@ -12,18 +12,12 @@ import { Injectable, EventEmitter, Output } from '@angular/core';
  * LocaleService class.
  * Defines language, default locale & currency.
  * 
- * Instantiate this class only once in the route component in order to access the data of location from anywhere in the application: 
+ * Instantiate this class only once in the bootstrap component in order to access the data of location from anywhere in the application: 
  * 
  * FIRST SCENARIO - Dates & numbers.
  * 
  * import {LocaleService} from 'angular2localization/angular2localization';
- *
- * @Component({
- *     selector: 'app-component',
- *     ...
- *     providers: [LocaleService] // Inherited by all descendants.
- * })
- * 
+ * ...
  * export class AppComponent {
  * 
  *     constructor(public locale: LocaleService) {
@@ -41,13 +35,7 @@ import { Injectable, EventEmitter, Output } from '@angular/core';
  * SECOND SCENARIO - Messages.
  * 
  * import {LocaleService, LocalizationService} from 'angular2localization/angular2localization';
- *
- * @Component({
- *     selector: 'app-component',
- *     ...
- *     providers: [LocaleService, LocalizationService] // Inherited by all descendants.
- * })
- * 
+ * ...
  * export class AppComponent {
  * 
  *     constructor(public locale: LocaleService, public localization: LocalizationService) {
@@ -66,13 +54,7 @@ import { Injectable, EventEmitter, Output } from '@angular/core';
  * THIRD SCENARIO - Messages, dates & numbers.
  * 
  * import {LocaleService, LocalizationService} from 'angular2localization/angular2localization';
- *
- * @Component({
- *     selector: 'app-component',
- *     ...
- *     providers: [LocaleService, LocalizationService] // Inherited by all descendants.
- * })
- * 
+ * ...
  * export class AppComponent {
  * 
  *     constructor(public locale: LocaleService, public localization: LocalizationService) {

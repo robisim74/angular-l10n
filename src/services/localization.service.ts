@@ -22,7 +22,7 @@ import { IntlSupport } from './Intl-support';
  * 
  * Direct loading.
  * 
- * To initialize LocalizationService for the direct loading, add the following code in the body of constructor of the route component:
+ * To initialize LocalizationService for the direct loading, add the following code in the body of constructor of the bootstrap component:
  *
  * var translationEN = {
  *      TITLE: 'Angular 2 Localization',
@@ -38,7 +38,7 @@ import { IntlSupport } from './Intl-support';
  * 
  * Asynchronous loading.
  * 
- * To initialize LocalizationService for the asynchronous loading, add the following code in the body of constructor of the route component:
+ * To initialize LocalizationService for the asynchronous loading, add the following code in the body of constructor of the bootstrap component:
  * 
  * // Required: initializes the translation provider with the given path prefix.
  * this.localization.translationProvider('./resources/locale-');
