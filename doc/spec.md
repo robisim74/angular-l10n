@@ -708,10 +708,10 @@ const packages: any = {
 };
 ```
 
-## <a name="Appendix B"/>Appendix B - Using Ionic 2 up to 2.0.0-beta.11
+## <a name="Appendix B"/>Appendix B - Using Ionic 2 up to 2.0.0-beta.11 & Angular 2.0.0-rc.4
 Install the library:
 ```Shell
-npm install --save angular2localization
+npm install --save angular2localization@0.8.9
 ```
 Initialize the services of the library in `app.ts` files, when the platform is ready. This in an example for the [Second scenario](#3.2):
 ```TypeScript
