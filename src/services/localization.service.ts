@@ -6,7 +6,7 @@
  * https://github.com/robisim74/angular2localization
  */
 
-import { Injectable } from '@angular/core';
+import { Injectable, EventEmitter, Output } from '@angular/core';
 import { Http, Response } from '@angular/http';
 import { Observer } from 'rxjs/Observer';
 import { Observable } from 'rxjs/Observable';
@@ -55,6 +55,11 @@ import { IntlSupport } from './Intl-support';
  * @author Roberto Simonetti
  */
 @Injectable() export class LocalizationService {
+
+    /**
+     * Output for event translation changed.
+     */
+    @Output() translationChanged: EventEmitter<boolean> = new EventEmitter<boolean>();
 
     /**
      * The language code for the service.
@@ -597,6 +602,9 @@ import { IntlSupport } from './Intl-support';
 
                 // Updates the language code of the service.
                 this.languageCode = language;
+
+                // Sends an event.
+                this.translationChanged.emit(true);
 
             });
 
