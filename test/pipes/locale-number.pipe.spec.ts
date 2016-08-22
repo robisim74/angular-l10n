@@ -3,7 +3,8 @@
  */
 
 // Testing.
-import { inject, fakeAsync, addProviders } from '@angular/core/testing';
+import { inject, TestBed } from '@angular/core/testing/test_bed';
+import { fakeAsync } from '@angular/core/testing/fake_async';
 import { browserDetection } from '@angular/platform-browser/testing/browser_util';
 import { PipeResolver } from '@angular/compiler/src/pipe_resolver';
 
@@ -23,9 +24,11 @@ describe('Locale number pipes', () => {
 
             beforeEach(() => {
                 // Providers.
-                addProviders([
-                    LocaleService
-                ]);
+                TestBed.configureTestingModule({
+                    providers: [
+                        LocaleService
+                    ]
+                });
 
                 pipe = new LocaleDecimalPipe();
             });
@@ -60,9 +63,11 @@ describe('Locale number pipes', () => {
 
             beforeEach(() => {
                 // Providers.
-                addProviders([
-                    LocaleService
-                ]);
+                TestBed.configureTestingModule({
+                    providers: [
+                        LocaleService
+                    ]
+                });
 
                 pipe = new LocalePercentPipe();
             });
@@ -97,9 +102,11 @@ describe('Locale number pipes', () => {
 
             beforeEach(() => {
                 // Providers.
-                addProviders([
-                    LocaleService
-                ]);
+                TestBed.configureTestingModule({
+                    providers: [
+                        LocaleService
+                    ]
+                });
 
                 pipe = new LocaleCurrencyPipe();
             });

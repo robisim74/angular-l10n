@@ -3,7 +3,8 @@
  */
 
 // Testing.
-import { inject, fakeAsync, addProviders } from '@angular/core/testing';
+import { inject, TestBed } from '@angular/core/testing/test_bed';
+import { fakeAsync } from '@angular/core/testing/fake_async';
 import { browserDetection } from '@angular/platform-browser/testing/browser_util';
 import { MockBackend, MockConnection } from '@angular/http/testing';
 import {
@@ -13,7 +14,6 @@ import {
     Response,
     ResponseOptions
 } from '@angular/http';
-import { provide } from '@angular/core';
 import { PipeResolver } from '@angular/compiler/src/pipe_resolver';
 
 // Pipes.
@@ -25,18 +25,19 @@ describe('TranslatePipe', () => {
 
     // Providers.
     beforeEach(() => {
-        addProviders([
-            BaseRequestOptions,
-            MockBackend,
-            LocaleService,
-            LocalizationService,
-            provide(Http, {
-                useFactory: (backend: ConnectionBackend,
-                    defaultOptions: BaseRequestOptions) => {
-                    return new Http(backend, defaultOptions);
-                }, deps: [MockBackend, BaseRequestOptions]
-            }),
-        ]);
+        TestBed.configureTestingModule({
+            providers: [
+                BaseRequestOptions,
+                MockBackend,
+                LocaleService,
+                LocalizationService,
+                {
+                    provide: Http, useFactory: (backend: ConnectionBackend, defaultOptions: BaseRequestOptions) => {
+                        return new Http(backend, defaultOptions);
+                    }, deps: [MockBackend, BaseRequestOptions]
+                }
+            ]
+        });
     });
 
     // Multiple Requests with different URL.
