@@ -19,7 +19,7 @@ import { IntlSupport } from '../services/Intl-support';
  * 'localedate' pipe function.
  */
 @Pipe({
-    name: 'localedate',
+    name: 'localeDate',
     pure: true
 })
 

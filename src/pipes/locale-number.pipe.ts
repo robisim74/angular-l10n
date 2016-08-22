@@ -14,10 +14,10 @@ import { LocaleNumber } from '../services/locale-number';
 import { IntlSupport } from '../services/Intl-support';
 
 /**
- * 'localedecimal' pipe function.
+ * 'localeDecimal' pipe function.
  */
 @Pipe({
-    name: 'localedecimal',
+    name: 'localeDecimal',
     pure: true
 })
 
@@ -27,7 +27,7 @@ import { IntlSupport } from '../services/Intl-support';
  * 
  * Getting the local decimal:
  * 
- * expression | localedecimal[:defaultLocale:[digitInfo]]
+ * expression | localeDecimal[:defaultLocale:[digitInfo]]
  * 
  * where 'expression' is a number and 'digitInfo' has the following format:
  * 
@@ -35,7 +35,7 @@ import { IntlSupport } from '../services/Intl-support';
  * 
  * For example, to get the local decimal, add in the template:
  * 
- * {{ pi | localedecimal:defaultLocale:'1.5-5' }}
+ * {{ pi | localeDecimal:defaultLocale:'1.5-5' }}
  * 
  * and include in the component:
  * 
@@ -86,10 +86,10 @@ export class LocaleDecimalPipe implements PipeTransform {
 }
 
 /**
- * 'localepercent' pipe function.
+ * 'localePercent' pipe function.
  */
 @Pipe({
-    name: 'localepercent',
+    name: 'localePercent',
     pure: true
 })
 
@@ -99,11 +99,11 @@ export class LocaleDecimalPipe implements PipeTransform {
  * 
  * Getting the local percentage:
  * 
- * expression | localepercent[:defaultLocale:[digitInfo]]
+ * expression | localePercent[:defaultLocale:[digitInfo]]
  * 
  * For example, to get the local percentage, add in the template:
  * 
- * {{ a | localepercent:defaultLocale:'1.1-1' }}
+ * {{ a | localePercent:defaultLocale:'1.1-1' }}
  * 
  * and include in the component:
  * 
@@ -154,10 +154,10 @@ export class LocalePercentPipe implements PipeTransform {
 }
 
 /**
- * 'localecurrency' pipe function.
+ * 'localeCurrency' pipe function.
  */
 @Pipe({
-    name: 'localecurrency',
+    name: 'localeCurrency',
     pure: true
 })
 
@@ -167,13 +167,13 @@ export class LocalePercentPipe implements PipeTransform {
  * 
  * Getting the local currency:
  * 
- * expression | localecurrency[:defaultLocale[:currency[:symbolDisplay[:digitInfo]]]]
+ * expression | localeCurrency[:defaultLocale[:currency[:symbolDisplay[:digitInfo]]]]
  * 
  * where 'symbolDisplay' is a boolean indicating whether to use the currency symbol (e.g. $) or the currency code (e.g. USD) in the output. 
  * 
  * For example, to get the local currency, add in the template:
  * 
- * {{ b | localecurrency:defaultLocale:currency:true:'1.2-2' }}
+ * {{ b | localeCurrency:defaultLocale:currency:true:'1.2-2' }}
  * 
  * and include in the component:
  * 
