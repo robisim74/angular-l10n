@@ -278,12 +278,14 @@ export class HomeComponent {
 ## <a name="3"/>3 Scenarios
 Import the modules you need in `AppModule`:
 ```TypeScript
+import { HttpModule } from '@angular/http';
 // Angular 2 Localization.
 import { LocaleModule, LocalizationModule } from 'angular2localization/angular2localization';
 
 @NgModule({
     imports: [
         ...
+        HttpModule,
         LocaleModule.forRoot(), // New instance of LocaleService.
         LocalizationModule.forRoot() // New instance of LocalizationService.
     ],
