@@ -10,7 +10,7 @@ Because it is only a branch of Angular 2, the goal is the complete integration w
 
 Get the changelog by [releases](https://github.com/robisim74/angular2localization/releases).
 
-Compatible with Angular 2.0.0-rc.5.
+Angular version: 2.0.0-rc.5.
 
 ## Installing
 You can add `angular2localization` to your project using `npm`:
@@ -23,12 +23,12 @@ npm install --save angular2localization
 ```JavaScript
 var map = {
     ...
-    'angular2localization': 'node_modules/angular2localization'
+    'angular2localization': 'node_modules'
 };
 
 var packages = {
     ...
-    'angular2localization': { main: '/bundles/angular2localization.umd.min.js', defaultExtension: 'js' }
+    'angular2localization/angular2localization': { main: '/bundles/angular2localization.umd.min.js', defaultExtension: 'js' }
 };
 ```
 #### Angular-CLI

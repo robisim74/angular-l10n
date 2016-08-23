@@ -1,5 +1,5 @@
 # Angular 2 Localization library specification
-Library version: 0.8.10
+Library version: 0.9.0
 
 ## Table of contents
 * [1 The library structure](#1)
@@ -15,6 +15,7 @@ Library version: 0.8.10
     * [2.3 Quick use](#2.3)
     * [2.4 List](#2.4)
         * [2.4.1 Sorting & search](#2.4.1)
+    * [2.5 Getting the translation in component class](#2.5)
 * [3 Scenarios](#3)
     * [3.1 First scenario: you need to localize dates and numbers, but no messages](#3.1)
     * [3.2 Second scenario: you only need to translate messages](#3.2)
@@ -45,19 +46,19 @@ Library version: 0.8.10
 ## <a name="1"/>1 The library structure
 This library has the following classes:
 
-Name | Type | Contract
----- | -----| --------
-`LocaleService` | Service | Defines language, default locale & currency
-`LocalizationService` | Service | Gets the translation data and performs operations
-`Locale` | Service | Provides the methods for localization
-`LocaleParser` | Service | Parses a string and returns a number by default locale
-`IntlSupport` | Service | Provides the methods to check if Intl is supported
-`TranslatePipe` | Pipe | Translates messages
-`LocaleDatePipe` | Pipe | Localizes dates
-`LocaleDecimalPipe` | Pipe | Localizes decimal numbers
-`LocalePercentPipe` | Pipe | Localizes percent numbers
-`LocaleCurrencyPipe` | Pipe | Localizes currencies
-`LocaleNumberValidator` | Directive | Validates a number by default locale
+Module | Class | Type | Contract
+------ | ----- | -----| --------
+`LocaleModule` | `LocaleService` | Service | Defines language, default locale & currency
+`LocaleModule` | `LocaleDatePipe` | Pipe | Localizes dates
+`LocaleModule` | `LocaleDecimalPipe` | Pipe | Localizes decimal numbers
+`LocaleModule` | `LocalePercentPipe` | Pipe | Localizes percent numbers
+`LocaleModule` | `LocaleCurrencyPipe` | Pipe | Localizes currencies
+`LocaleModule` | `LocaleNumberValidator` | Directive | Validates a number by default locale
+`LocalizationModule` | `LocalizationService` | Service | Gets the translation data and performs operations
+`LocalizationModule` | `TranslatePipe` | Pipe | Translates messages
+ | `Locale` | Service | Provides the methods for localization
+ | `LocaleParser` | Service | Parses a string and returns a number by default locale
+ | `IntlSupport` | Service | Provides the methods to check if Intl is supported
 
 ## <a name="2"/>2 Getting the translation
 To get the translation, this library uses pure pipes. To know the advantages over impure pipes, please see [here](https://angular.io/docs/ts/latest/guide/pipes.html). 
@@ -65,37 +66,10 @@ To get the translation, this library uses pure pipes. To know the advantages ove
 Type | Format | Syntax
 ---- | ------ | ------
 Message | String | `expression | translate:lang`
-Date | Date/Number | `expression | localedate[:defaultLocale[:format]]`
-Number | Decimal | `expression | localedecimal[:defaultLocale:[digitInfo]]`
-Number | Percentage | `expression | localepercent[:defaultLocale:[digitInfo]]`
-Number | Currency | `expression | localecurrency[:defaultLocale[:currency[:symbolDisplay[:digitInfo]]]]`
-
-Declare the pipes you need in `AppModule`:
-```TypeScript
-// Pipes.
-import {
-    TranslatePipe,
-    LocaleDatePipe,
-    LocaleDecimalPipe,
-    LocalePercentPipe,
-    LocaleCurrencyPipe
-} from 'angular2localization/angular2localization';
-
-@NgModule({
-    ...
-    declarations: [
-        ...
-        TranslatePipe,
-        LocaleDatePipe,
-        LocaleDecimalPipe,
-        LocalePercentPipe,
-        LocaleCurrencyPipe
-    ],
-    ...
-})
-
-export class AppModule { }
-```
+Date | Date/Number | `expression | localeDate[:defaultLocale[:format]]`
+Number | Decimal | `expression | localeDecimal[:defaultLocale:[digitInfo]]`
+Number | Percentage | `expression | localePercent[:defaultLocale:[digitInfo]]`
+Number | Currency | `expression | localeCurrency[:defaultLocale[:currency[:symbolDisplay[:digitInfo]]]]`
 
 ### <a name="2.1"/>2.1 Messages
 ```
@@ -152,14 +126,14 @@ When specifying the `features`, you have to specify what locale, or locales to l
 
 #### <a name="2.2.1"/>2.2.1 Dates
 ```
-expression | localedate[:defaultLocale[:format]]
+expression | localeDate[:defaultLocale[:format]]
 ```
 where `expression` is a date object or a number (milliseconds since UTC epoch) and `format` indicates which date/time components to include. 
 See Angular 2 [DatePipe](https://angular.io/docs/ts/latest/api/common/index/DatePipe-class.html) for further information.
 
 For example, to get the local date, add in the template:
 ```Html
-{{ today | localedate:defaultLocale:'fullDate' }}
+{{ today | localeDate:defaultLocale:'fullDate' }}
 ```
 and include in the component:
 ```TypeScript
@@ -183,36 +157,36 @@ export class AppComponent {
 
 #### <a name="2.2.2"/>2.2.2 Decimals
 ```
-expression | localedecimal[:defaultLocale:[digitInfo]]
+expression | localeDecimal[:defaultLocale:[digitInfo]]
 ```
 where `expression` is a number and `digitInfo` has the following format: `{minIntegerDigits}.{minFractionDigits}-{maxFractionDigits}`. 
 See Angular 2 [DecimalPipe](https://angular.io/docs/ts/latest/api/common/index/DecimalPipe-class.html) for further information.
 
 For example, to get the local decimal, add in the template:
 ```Html
-{{ pi | localedecimal:defaultLocale:'1.5-5' }}
+{{ pi | localeDecimal:defaultLocale:'1.5-5' }}
 ```
 and include `get defaultLocale()` in the component.
 
 #### <a name="2.2.3"/>2.2.3 Percentages
 ```
-expression | localepercent[:defaultLocale:[digitInfo]]
+expression | localePercent[:defaultLocale:[digitInfo]]
 ```
 For example, to get the local percentage, add in the template:
 ```Html
-{{ a | localepercent:defaultLocale:'1.1-1' }}
+{{ a | localePercent:defaultLocale:'1.1-1' }}
 ```
 and include `get defaultLocale()` in the component.
 
 #### <a name="2.2.4"/>2.2.4 Currencies
 ```
-expression | localecurrency[:defaultLocale[:currency[:symbolDisplay[:digitInfo]]]]
+expression | localeCurrency[:defaultLocale[:currency[:symbolDisplay[:digitInfo]]]]
 ```
 where `symbolDisplay` is a boolean indicating whether to use the currency symbol (e.g. $) or the currency code (e.g. USD) in the output. 
 
 For example, to get the local currency, add in the template:
 ```Html
-{{ b | localecurrency:defaultLocale:currency:true:'1.2-2' }}
+{{ b | localeCurrency:defaultLocale:currency:true:'1.2-2' }}
 ```
 and include `get defaultLocale()` and `get currency()` in the component:
 ```TypeScript
@@ -248,8 +222,8 @@ Now you can localize a list simply. For example:
         <md-list>
             <md-list-item>
                 <h3 md-line>{{ item.position | translate:lang }}</h3>
-                <p md-line>{{ item.salary | localecurrency:defaultLocale:currency:true:'1.0-0' }}</p>
-                <p md-line>{{ item.startDate | localedate:defaultLocale:'mediumDate' }}</p>
+                <p md-line>{{ item.salary | localeCurrency:defaultLocale:currency:true:'1.0-0' }}</p>
+                <p md-line>{{ item.startDate | localeDate:defaultLocale:'mediumDate' }}</p>
             </md-list-item>
         </md-list>
     </md-card-content>
@@ -267,17 +241,51 @@ These methods use the [Intl.Collator](https://developer.mozilla.org/en-US/docs/W
 
 *N.B. This feature is not supported by all browsers, even with the use of `Intl.js`.*
 
-## <a name="3"/>3 Scenarios
-Add services you need in `AppModule`:
+### <a name="2.5"/>2.5 Getting the translation in component class
+If you need to get the translation in component class, [LocalizationService](#7.2) has the following methods:
+* `translate(key: string): string;`
+* `translateAsync(key: string): Observable<string>;`
+
+But if you need to get the translation when the selected language changes, you must subscribe to the following event:
+* `translationChanged: EventEmitter<boolean>;`
+
+For example:
 ```TypeScript
-// Services.
-import { LocaleService, LocalizationService } from 'angular2localization/angular2localization';
+@Component({
+    ...
+    template: '<h1>{{ title }}</h1>'
+})
+export class HomeComponent {
+
+    // Initializes the variable 'title' with the current translation at the time of the component loading.
+    public title: string = this.localization.translate('TITLE');
+
+    constructor(public localization: LocalizationService) {
+
+        this.localization.translationChanged.subscribe(
+
+            // Refresh the variable 'title' with the new translation when the selected language changes.
+            () => { this.title = this.localization.translate('TITLE'); }
+
+        );
+
+    }
+
+}
+```
+*N.B. In the bootstrap component and in its children you have to subscribe to the `translationChanged` event to detect the first asynchronous loading of the translation data.*
+
+## <a name="3"/>3 Scenarios
+Import the modules you need in `AppModule`:
+```TypeScript
+// Angular 2 Localization.
+import { LocaleModule, LocalizationModule } from 'angular2localization/angular2localization';
 
 @NgModule({
-    ...
-    providers: [
-        LocaleService,
-        LocalizationService
+    imports: [
+        ...
+        LocaleModule.forRoot(), // New instance of LocaleService.
+        LocalizationModule.forRoot() // New instance of LocalizationService.
     ],
     ...
 })
@@ -453,20 +461,27 @@ The `LocaleService` will try to use the Web Storage, otherwise it will attempt t
 *N.B. Unlike the cookie, the Local Storage doesn't expire.*
 
 ## <a name="5"/>5 Lazy routing
-If you use a `Router` in an extended application, you can create an instance of the `LocalizationService` for every asynchronously loaded component, as shown:
+If you use a `Router` in an extended application, you can create an instance of the `LocalizationService` with its own translation data for every lazy loaded module/component, as shown:
 ![LazyRouting](images/LazyRouting.png)
-Each instance must be injected, and can be directly or asynchronously loaded, as in this example:
+Each instance must be injected, and can be directly or asynchronously loaded.
+For example, if you have a feature module:
 ```TypeScript
-@Component({
-    ...
-    providers: [LocalizationService] // Inherited by all descendants.
+@NgModule({
+    imports: [
+        ...
+        LocaleModule, // LocaleService is singleton.
+        LocalizationModule.forRoot() // New instance of LocalizationService.
+    ],
+    declarations: [ListComponent]
 })
+```
 
+```TypeScript
 export class ListComponent {
 
     constructor(public localization: LocalizationService) {
 
-        // Instantiates a new LocalizationService for this component and for its descendants.
+        // Initializes LocalizationService: asynchronous loading.
         this.localization.translationProvider('./resources/locale-list-'); // Required: initializes the translation provider with the given path prefix.
         this.localization.updateTranslation(); // Need to update the translation.
 
@@ -543,17 +558,17 @@ This is the view:
     <md-card-content>
         <form [formGroup]="numberForm" (ngSubmit)="onSubmit(numberForm.value)">
             <div>
-                <md-input placeholder="{{ 0 | localedecimal:defaultLocale:digits }}" [formControl]="decimal" (keyup)="decimal.valid ? parsedValue : parsedValue = null"
+                <md-input placeholder="{{ 0 | localeDecimal:defaultLocale:digits }}" [formControl]="decimal" (keyup)="decimal.valid ? parsedValue : parsedValue = null"
                     style="width: 100%"></md-input>
 
                 <div *ngIf="decimal.hasError('format') && decimal.value != ''" style="color: #D32F2F;">
-                    {{ 'NUMBER_IS_INVALID' | translate:lang }} {{ 0 | localedecimal:defaultLocale:digits }}
+                    {{ 'NUMBER_IS_INVALID' | translate:lang }} {{ 0 | localeDecimal:defaultLocale:digits }}
                 </div>
                 <div *ngIf="decimal.hasError('minValue') && decimal.value != ''" style="color: #D32F2F;">
-                    {{ 'MIN_VALUE_ERROR' | translate:lang }} {{ minValue | localedecimal:defaultLocale:digits }}
+                    {{ 'MIN_VALUE_ERROR' | translate:lang }} {{ minValue | localeDecimal:defaultLocale:digits }}
                 </div>
                 <div *ngIf="decimal.hasError('maxValue') && decimal.value != ''" style="color: #D32F2F;">
-                    {{ 'MAX_VALUE_ERROR' | translate:lang }} {{ maxValue | localedecimal:defaultLocale:digits }}
+                    {{ 'MAX_VALUE_ERROR' | translate:lang }} {{ maxValue | localeDecimal:defaultLocale:digits }}
                 </div>
             </div>
             <br>
@@ -612,7 +627,7 @@ export class ValidationComponent extends Locale {
 
 }
 ```
-Finally, import `ReactiveFormsModule` and declare `LocaleNumberValidator` in `AppModule`.
+Finally, import `ReactiveFormsModule` in `AppModule`.
 
 ## <a name="7"/>7 Services API
 
@@ -649,6 +664,7 @@ Method | Function
 ### <a name="7.2"/>7.2 LocalizationService
 Property | Value
 ---------- | -----
+`translationChanged: EventEmitter<boolean>;` | Output for event translation changed
 `languageCode: string;` | The language code for the service
 `loadingMode: LoadingMode;` | The loading mode for the service
 `serviceState: ServiceState;` | The service state
@@ -760,9 +776,8 @@ This is an example in ES5 for the [First scenario](#3.1). The `AppModule`:
 (function (app) {
   app.AppModule =
     ng.core.NgModule({
-      imports: [ng.platformBrowser.BrowserModule],
-      declarations: [app.AppComponent, ng.angular2localization.LocaleDatePipe],
-      providers: [ng.angular2localization.LocaleService],
+      imports: [ng.platformBrowser.BrowserModule, ng.angular2localization.LocaleModule.forRoot()],
+      declarations: [app.AppComponent],
       bootstrap: [app.AppComponent]
     })
       .Class({
@@ -776,7 +791,7 @@ And the `AppComponent`:
   app.AppComponent =
     ng.core.Component({
       selector: 'app-component',
-      template: `<h1>{{ today | localedate:defaultLocale:'fullDate' }}`
+      template: `<h1>{{ today | localeDate:defaultLocale:'fullDate' }}`
     })
       .Class({
         constructor: [ng.angular2localization.LocaleService, function (locale) {
