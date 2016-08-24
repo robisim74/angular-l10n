@@ -697,11 +697,16 @@ Method | Function
 `static NumberFormat(defaultLocale: string): boolean;` | Support for numbers
 `static Collator(lang: string): boolean;` | Support for Collator
 
-## <a name="Appendix A"/>Appendix A - Angular-CLI settings up to 1.0.0-beta.10
+## <a name="Appendix A"/>Appendix A - Angular-CLI settings
 Install the library:
 ```
 npm install --save angular2localization
 ```
+
+### angular-cli@webpack
+No need to set up anything, just import in your code.
+
+### angular-cli
 Add the library to `angular-cli-build.js` file to `vendorNpmFiles` array:
 ```JavaScript
 module.exports = function(defaults) {
