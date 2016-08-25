@@ -264,7 +264,7 @@ export class HomeComponent {
 
         this.localization.translationChanged.subscribe(
 
-            // Refresh the variable 'title' with the new translation when the selected language changes.
+            // Refreshes the variable 'title' with the new translation when the selected language changes.
             () => { this.title = this.localization.translate('TITLE'); }
 
         );
