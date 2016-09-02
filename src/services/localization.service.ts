@@ -59,7 +59,7 @@ import { IntlSupport } from './Intl-support';
     /**
      * Output for event translation changed.
      */
-    @Output() translationChanged: EventEmitter<boolean> = new EventEmitter<boolean>();
+    @Output() translationChanged: EventEmitter<any> = new EventEmitter<any>();
 
     /**
      * The language code for the service.
@@ -604,7 +604,7 @@ import { IntlSupport } from './Intl-support';
                 this.languageCode = language;
 
                 // Sends an event.
-                this.translationChanged.emit(true);
+                this.translationChanged.emit(null);
 
             });
 

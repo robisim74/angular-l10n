@@ -7,12 +7,11 @@
  */
 
 import { Pipe, PipeTransform } from '@angular/core';
-import { NumberFormatStyle } from '@angular/common/src/facade/intl';
+import { DecimalPipe } from '@angular/common';
 
 // Services.
 import { LocalizationService, ServiceState } from '../services/localization.service';
 import { LocaleService } from '../services/locale.service';
-import { LocaleNumber } from '../services/locale-number';
 import { IntlSupport } from '../services/Intl-support';
 
 /**
@@ -98,8 +97,10 @@ export class TranslatePipe implements PipeTransform {
                 // Checks the number & support for Intl.
                 if (!isNaN(keyNum) && IntlSupport.NumberFormat(this.locale.getDefaultLocale()) == true) {
 
+                    var localeDecimal: DecimalPipe = new DecimalPipe(this.locale.getDefaultLocale());
+
                     // Localizes the number.
-                    key = key.replace(/^\d+/, LocaleNumber.format(TranslatePipe, this.locale.getDefaultLocale(), keyNum, NumberFormatStyle.Decimal, '1.0-3'));
+                    key = key.replace(/^\d+/, localeDecimal.transform(keyNum, '1.0-3'));
 
                 }
 

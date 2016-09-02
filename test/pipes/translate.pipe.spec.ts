@@ -3,9 +3,8 @@
  */
 
 // Testing.
-import { inject, TestBed } from '@angular/core/testing/test_bed';
-import { fakeAsync } from '@angular/core/testing/fake_async';
-import { browserDetection } from '@angular/platform-browser/testing/browser_util';
+import { inject, TestBed } from '@angular/core/testing';
+import { fakeAsync } from '@angular/core/testing';
 import { MockBackend, MockConnection } from '@angular/http/testing';
 import {
     Http,
@@ -14,7 +13,7 @@ import {
     Response,
     ResponseOptions
 } from '@angular/http';
-import { PipeResolver } from '@angular/compiler/src/pipe_resolver';
+import { PipeResolver } from '@angular/compiler';
 
 // Pipes.
 import { TranslatePipe } from './../../angular2localization';
@@ -108,33 +107,29 @@ describe('TranslatePipe', () => {
     );
 
     // i18n plural.
-    if (browserDetection.supportsIntlApi && (browserDetection.isFirefox || browserDetection.isChromeDesktop)) {
+    it('should translate 18n plural', fakeAsync(
+        inject([LocaleService, LocalizationService],
+            (locale: LocaleService, localization: LocalizationService) => {
 
-        it('should translate 18n plural', fakeAsync(
-            inject([LocaleService, LocalizationService],
-                (locale: LocaleService, localization: LocalizationService) => {
+                locale.enableCookie = false;
 
-                    locale.enableCookie = false;
+                locale.addLanguage('ar');
 
-                    locale.addLanguage('ar');
+                locale.definePreferredLanguage('ar');
 
-                    locale.definePreferredLanguage('ar');
+                var translationAR = {
+                    messages: 'رسائل'
+                }
 
-                    var translationAR = {
-                        messages: 'رسائل'
-                    }
+                localization.addTranslation('ar', translationAR);
+                localization.updateTranslation();
 
-                    localization.addTranslation('ar', translationAR);
-                    localization.updateTranslation();
+                pipe = new TranslatePipe(localization, locale);
 
-                    pipe = new TranslatePipe(localization, locale);
+                expect(pipe.transform('10 messages', localization.languageCode)).toEqual("١٠ رسائل");
 
-                    expect(pipe.transform('10 messages', localization.languageCode)).toEqual("١٠ رسائل");
-
-                }))
-        );
-
-    }
+            }))
+    );
 
     // Async loading.
     it('should translate through async loading',

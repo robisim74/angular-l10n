@@ -7,10 +7,7 @@
  */
 
 import { Pipe, PipeTransform } from '@angular/core';
-import { StringMapWrapper } from '@angular/common/src/facade/collection';
-import { DateFormatter } from '@angular/common/src/facade/intl';
-import { DateWrapper, NumberWrapper, isBlank, isDate, isString } from '@angular/common/src/facade/lang';
-import { InvalidPipeArgumentException } from '@angular/common/src/pipes/invalid_pipe_argument_exception';
+import { DatePipe } from '@angular/common';
 
 // Services.
 import { IntlSupport } from '../services/Intl-support';
@@ -61,17 +58,6 @@ import { IntlSupport } from '../services/Intl-support';
  */
 export class LocaleDatePipe implements PipeTransform {
 
-    public static ALIASES: { [key: string]: String } = {
-        'medium': 'yMMMdjms',
-        'short': 'yMdjm',
-        'fullDate': 'yMMMMEEEEd',
-        'longDate': 'yMMMMd',
-        'mediumDate': 'yMMMd',
-        'shortDate': 'yMd',
-        'mediumTime': 'jms',
-        'shortTime': 'jm'
-    };
-
     /**
      * LocaleDatePipe transform method.
      * 
@@ -82,49 +68,17 @@ export class LocaleDatePipe implements PipeTransform {
      */
     public transform(value: any, defaultLocale: string, pattern: string = 'mediumDate'): string {
 
-        if (isBlank(value)) { return null; }
-
-        if (!this.supports(value)) {
-
-            throw new InvalidPipeArgumentException(LocaleDatePipe, value);
-
-        }
-
-        if (NumberWrapper.isNumeric(value)) {
-
-            value = DateWrapper.fromMillis(NumberWrapper.parseInt(value, 10));
-
-        } else if (isString(value)) {
-
-            value = <Date>DateWrapper.fromISOString(value);
-
-        }
-
         // Checks for support for Intl.
         if (IntlSupport.DateTimeFormat(defaultLocale) == true) {
 
-            if (StringMapWrapper.contains(LocaleDatePipe.ALIASES, pattern)) {
+            var localeDate: DatePipe = new DatePipe(defaultLocale);
 
-                pattern = <string>StringMapWrapper.get(LocaleDatePipe.ALIASES, pattern);
-
-            }
-
-            return DateFormatter.format(value, defaultLocale, pattern);
+            return localeDate.transform(value, pattern);
 
         }
 
         // Returns the date without localization.
         return value;
-
-    }
-
-    private supports(obj: any): boolean {
-
-        if (isDate(obj) || NumberWrapper.isNumeric(obj)) { return true; }
-
-        if (isString(obj) && isDate(DateWrapper.fromISOString(obj))) { return true; }
-
-        return false;
 
     }
 

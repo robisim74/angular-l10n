@@ -27,7 +27,6 @@ gulp.task('build', ['lint'], function () {
 
     runSequence('clean:dist',
         'script:src',
-        'script:esm',
         'bundle:umd:es2015',
         'bundle:umd',
         'bundle:umd:min',
@@ -46,9 +45,9 @@ gulp.task('script:src', function () {
 
     var f = filter(['angular2localization.*', 'src/**/*.*']);
 
-    var tsResult = tsProject.src()
+    var tsResult = tsES2015Project.src()
         .pipe(sourcemaps.init())
-        .pipe(ts(tsProject));
+        .pipe(ts(tsES2015Project));
 
     return merge([
         tsResult.dts
@@ -58,26 +57,6 @@ gulp.task('script:src', function () {
             .pipe(f)
             .pipe(sourcemaps.write('.'))
             .pipe(gulp.dest('dist'))
-    ]);
-
-});
-
-gulp.task('script:esm', function () {
-
-    var f = filter(['angular2localization.*', 'src/**/*.*']);
-
-    var tsResult = tsES2015Project.src()
-        .pipe(sourcemaps.init())
-        .pipe(ts(tsES2015Project));
-
-    return merge([
-        tsResult.dts
-            .pipe(f)
-            .pipe(gulp.dest('dist/esm')),
-        tsResult.js
-            .pipe(f)
-            .pipe(sourcemaps.write('.'))
-            .pipe(gulp.dest('dist/esm'))
     ]);
 
 });

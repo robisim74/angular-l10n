@@ -6,7 +6,7 @@
  * https://github.com/robisim74/angular2localization
  */
 
-import { Directive, provide, forwardRef, Input, OnInit } from '@angular/core';
+import { Directive, forwardRef, Input, OnInit } from '@angular/core';
 import { NG_VALIDATORS, FormControl, Validator } from '@angular/forms';
 
 // Services.
@@ -69,10 +69,7 @@ export function validateLocaleNumber(locale: LocaleService, digits: string, MIN_
 @Directive({
     selector: '[validateLocaleNumber][ngModel],[validateLocaleNumber][formControl]', // Validator works with ngModel and formControl directives.
     providers: [
-        provide(NG_VALIDATORS, {
-            useExisting: forwardRef(() => LocaleNumberValidator),
-            multi: true
-        })
+        { provide: NG_VALIDATORS, useExisting: forwardRef(() => LocaleNumberValidator), multi: true }
     ]
 })
 

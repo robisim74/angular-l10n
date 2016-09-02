@@ -7,10 +7,9 @@
  */
 
 import { Pipe, PipeTransform } from '@angular/core';
-import { NumberFormatStyle } from '@angular/common/src/facade/intl';
+import { DecimalPipe, PercentPipe, CurrencyPipe } from '@angular/common';
 
 // Services.
-import { LocaleNumber } from '../services/locale-number';
 import { IntlSupport } from '../services/Intl-support';
 
 /**
@@ -74,7 +73,9 @@ export class LocaleDecimalPipe implements PipeTransform {
         // Checks for support for Intl.
         if (IntlSupport.NumberFormat(defaultLocale) == true) {
 
-            return LocaleNumber.format(LocaleDecimalPipe, defaultLocale, value, NumberFormatStyle.Decimal, digits);
+            var localeDecimal: DecimalPipe = new DecimalPipe(defaultLocale);
+
+            return localeDecimal.transform(value, digits);
 
         }
 
@@ -142,7 +143,9 @@ export class LocalePercentPipe implements PipeTransform {
         // Checks for support for Intl.
         if (IntlSupport.NumberFormat(defaultLocale) == true) {
 
-            return LocaleNumber.format(LocalePercentPipe, defaultLocale, value, NumberFormatStyle.Percent, digits);
+            var localePercent: PercentPipe = new PercentPipe(defaultLocale);
+
+            return localePercent.transform(value, digits);
 
         }
 
@@ -225,7 +228,9 @@ export class LocaleCurrencyPipe implements PipeTransform {
         // Checks for support for Intl.
         if (IntlSupport.NumberFormat(defaultLocale) == true) {
 
-            return LocaleNumber.format(LocaleCurrencyPipe, defaultLocale, value, NumberFormatStyle.Currency, digits, currency, symbolDisplay);
+            var localeCurrency: CurrencyPipe = new CurrencyPipe(defaultLocale);
+
+            return localeCurrency.transform(value, currency, symbolDisplay, digits);
 
         }
 

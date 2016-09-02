@@ -6,11 +6,16 @@
  * https://github.com/robisim74/angular2localization
  */
 
-import { NumberFormatStyle, NumberFormatter } from '@angular/common/src/facade/intl';
-import { NumberWrapper, isPresent } from '@angular/common/src/facade/lang';
+import { DecimalPipe } from '@angular/common';
 
 // Services.
 import { IntlSupport } from './Intl-support';
+
+function isPresent(obj: any): boolean {
+
+    return obj !== undefined && obj !== null;
+
+}
 
 /**
  * LocaleParser class.
@@ -152,13 +157,9 @@ abstract class NumberCode {
             // Updates Unicode for numbers by default locale.
             for (var i: number = 0; i <= 9; i++) {
 
-                this.numbers[i] = this.Unicode(NumberFormatter.format(i, defaultLocale, NumberFormatStyle.Decimal, {
-                    minimumIntegerDigits: 1,
-                    minimumFractionDigits: 0,
-                    maximumFractionDigits: 0,
-                    currency: null,
-                    currencyAsSymbol: false
-                }));
+                var localeDecimal: DecimalPipe = new DecimalPipe(defaultLocale);
+
+                this.numbers[i] = this.Unicode(localeDecimal.transform(i, '1.0-0'));
 
             }
 
@@ -224,13 +225,9 @@ class DecimalCode extends NumberCode {
 
             // Updates Unicode for signs by default locale.
             var value: number = -0.9; // Reference value.
-            var localeValue: string = NumberFormatter.format(value, defaultLocale, NumberFormatStyle.Decimal, {
-                minimumIntegerDigits: 1,
-                minimumFractionDigits: 1,
-                maximumFractionDigits: 1,
-                currency: null,
-                currencyAsSymbol: false
-            });
+            var localeDecimal: DecimalPipe = new DecimalPipe(defaultLocale);
+
+            var localeValue: string = localeDecimal.transform(value, '1.1-1');
 
             // Checks Unicode character 'RIGHT-TO-LEFT MARK' (U+200F).
             var index: number;
@@ -290,6 +287,49 @@ class DecimalCode extends NumberCode {
             return String.fromCharCode(parseInt(match.replace(/\\u/g, ""), 16));
 
         });
+
+    }
+
+}
+
+class NumberWrapper {
+
+    static parseIntAutoRadix(text: string): number {
+
+        var result: number = parseInt(text, null);
+
+        if (isNaN(result)) {
+            throw new Error('Invalid integer literal when parsing ' + text);
+        }
+
+        return result;
+
+    }
+
+    static parseInt(text: string, radix: number): number {
+
+        if (radix == 10) {
+
+            if (/^(\-|\+)?[0-9]+$/.test(text)) {
+                return parseInt(text, radix);
+            }
+
+        } else if (radix == 16) {
+
+            if (/^(\-|\+)?[0-9ABCDEFabcdef]+$/.test(text)) {
+                return parseInt(text, radix);
+            }
+
+        } else {
+
+            var result: number = parseInt(text, radix);
+
+            if (!isNaN(result)) {
+                return result;
+            }
+
+        }
+        throw new Error('Invalid integer literal when parsing ' + text + ' in base ' + radix);
 
     }
 

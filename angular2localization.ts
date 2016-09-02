@@ -13,7 +13,6 @@ import { LocaleNumberValidator } from './src/directives/locale-number-validator.
 export * from './src/services/localization.service';
 export * from './src/services/locale.service';
 export * from './src/services/locale';
-export * from './src/services/locale-number';
 export * from './src/services/Intl-support';
 export * from './src/services/locale-parser';
 export * from './src/pipes/translate.pipe';
@@ -48,6 +47,13 @@ export class LocaleModule {
         };
     }
 
+    static forChild(): ModuleWithProviders {
+        return {
+            ngModule: LocaleModule,
+            providers: [LocaleService]
+        };
+    }
+
 }
 
 @NgModule({
@@ -62,6 +68,13 @@ export class LocaleModule {
 export class LocalizationModule {
 
     static forRoot(): ModuleWithProviders {
+        return {
+            ngModule: LocalizationModule,
+            providers: [LocalizationService]
+        };
+    }
+
+    static forChild(): ModuleWithProviders {
         return {
             ngModule: LocalizationModule,
             providers: [LocalizationService]
