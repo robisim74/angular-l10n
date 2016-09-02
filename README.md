@@ -10,7 +10,7 @@ Because it is only a branch of Angular 2, the goal is the complete integration w
 
 Get the changelog by [releases](https://github.com/robisim74/angular2localization/releases).
 
-Angular version: 2.0.0-rc.5.
+Angular version: 2.0.0-rc.6.
 
 ## Angular 2 i18n solutions
              | **Angular 2 (work-in)** _Native_ | **ng2-translate** _External library_ | **angular2localization** _External library_
@@ -19,9 +19,9 @@ _Messages_ | Html attribute, Message ID, ? | impure pipe | pure pipe
 _File formats_ | XLIFF, XMB/XTB, ? | static JSON | static JSON and via Web API
 _New bootstrap (when language changes)_ | yes | no | no
 _Getting the translation in component class_ | ? | yes | yes
-_Default locale_ | ? | no | yes
-_Numbers_ | pure pipe via Intl (only for en-US) | - | pure pipe via Intl
-_Dates_ | pure pipe via Intl (only for en-US) | - | pure pipe via Intl
+_Default locale_ | yes | no | yes
+_Numbers_ | pure pipe via Intl | - | pure pipe via Intl
+_Dates_ | pure pipe via Intl | - | pure pipe via Intl
 _Validation_ | - | - | numbers validation 
 
 ## Installing
@@ -33,15 +33,29 @@ npm install --save angular2localization
 ## Loading
 ### Using SystemJS configuration
 ```JavaScript
-var map = {
-    ...
-    'angular2localization': 'node_modules'
-};
-
-var packages = {
-    ...
-    'angular2localization/angular2localization': { main: '/bundles/angular2localization.umd.min.js', defaultExtension: 'js' }
-};
+System.config({
+        paths: {
+            'npm:': 'node_modules/'
+        },
+        map: {
+            app: 'app',
+            // angular bundles
+            ...
+            // other libraries
+            'rxjs': 'npm:rxjs',
+            'angular2localization': 'npm:angular2localization/bundles/angular2localization.umd.min.js'
+        },
+        packages: {
+            app: {
+                format: 'cjs',
+                main: './main.js',
+                defaultExtension: 'js'
+            },
+            rxjs: {
+                defaultExtension: 'js'
+            }
+        }
+    });
 ```
 #### Angular-CLI
 See [Angular-CLI settings](https://github.com/robisim74/angular2localization/blob/master/doc/spec.md#Appendix%20A).
@@ -51,7 +65,7 @@ See [Angular-CLI settings](https://github.com/robisim74/angular2localization/blo
 ### Via webpack
 Import the library in your `vendor` file after Angular 2 imports:
 ```TypeScript
-import 'angular2localization/angular2localization';
+import 'angular2localization';
 ```
 
 ### Plain JavaScript

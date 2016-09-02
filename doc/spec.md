@@ -1,5 +1,5 @@
 # Angular 2 Localization library specification
-Library version: 0.9.0
+Library version: 0.10.0
 
 ## Table of contents
 * [1 The library structure](#1)
@@ -83,7 +83,7 @@ For example, to get the translation, add in the template:
 ```
 and include in the component:
 ```TypeScript
-import { LocalizationService } from 'angular2localization/angular2localization';
+import { LocalizationService } from 'angular2localization';
 ...
 export class AppComponent {
 
@@ -137,7 +137,7 @@ For example, to get the local date, add in the template:
 ```
 and include in the component:
 ```TypeScript
-import { LocaleService } from 'angular2localization/angular2localization';
+import { LocaleService } from 'angular2localization';
 ...
 export class AppComponent {
 
@@ -201,7 +201,7 @@ get currency(): string {
 ### <a name="2.3"/>2.3 Quick use
 If you want, you can avoid including `get lang()`, `get defaultLocale()` or `get currency()` by extending the `Locale` superclass in the components:
 ```TypeScript
-import { Locale, LocaleService, LocalizationService } from 'angular2localization/angular2localization';
+import { Locale, LocaleService, LocalizationService } from 'angular2localization';
 ...
 export class AppComponent extends Locale {
 
@@ -247,7 +247,7 @@ If you need to get the translation in component class, [LocalizationService](#7.
 * `translateAsync(key: string): Observable<string>;`
 
 But if you need to get the translation when the selected language changes, you must subscribe to the following event:
-* `translationChanged: EventEmitter<boolean>;`
+* `translationChanged: EventEmitter<any>;`
 
 For example:
 ```TypeScript
@@ -280,7 +280,7 @@ Import the modules you need in `AppModule`:
 ```TypeScript
 import { HttpModule } from '@angular/http';
 // Angular 2 Localization.
-import { LocaleModule, LocalizationModule } from 'angular2localization/angular2localization';
+import { LocaleModule, LocalizationModule } from 'angular2localization';
 
 @NgModule({
     imports: [
@@ -298,7 +298,7 @@ export class AppModule { }
 ### <a name="3.1"/>3.1 First scenario: you need to localize dates and numbers, but no messages
 Add in the bootstrap component `AppComponent` in order to access the data of location from anywhere in the application:
 ```TypeScript
-import { LocaleService } from 'angular2localization/angular2localization';
+import { LocaleService } from 'angular2localization';
 ...
 export class AppComponent {
 
@@ -318,7 +318,7 @@ export class AppComponent {
 ### <a name="3.2"/>3.2 Second scenario: you only need to translate messages
 Add in the bootstrap component `AppComponent` in order to access the data of location from anywhere in the application:
 ```TypeScript
-import { LocaleService, LocalizationService } from 'angular2localization/angular2localization';
+import { LocaleService, LocalizationService } from 'angular2localization';
 ...
 export class AppComponent {
 
@@ -472,7 +472,7 @@ For example, if you have a feature module:
     imports: [
         ...
         LocaleModule, // LocaleService is singleton.
-        LocalizationModule.forRoot() // New instance of LocalizationService.
+        LocalizationModule.forChild() // New instance of LocalizationService.
     ],
     declarations: [ListComponent]
 })
@@ -588,9 +588,9 @@ import { Component } from '@angular/core';
 // FormBuilder with formControl.
 import { FormBuilder, FormGroup, AbstractControl } from '@angular/forms';
 // Services.
-import { Locale, LocaleService, LocalizationService, LocaleParser } from 'angular2localization/angular2localization';
+import { Locale, LocaleService, LocalizationService, LocaleParser } from 'angular2localization';
 // Directives for FormBuilder with formControl.
-import { validateLocaleNumber } from 'angular2localization/angular2localization';
+import { validateLocaleNumber } from 'angular2localization';
 
 @Component({
     templateUrl: './app/validation.component.html'
@@ -666,7 +666,7 @@ Method | Function
 ### <a name="7.2"/>7.2 LocalizationService
 Property | Value
 ---------- | -----
-`translationChanged: EventEmitter<boolean>;` | Output for event translation changed
+`translationChanged: EventEmitter<any>;` | Output for event translation changed
 `languageCode: string;` | The language code for the service
 `loadingMode: LoadingMode;` | The loading mode for the service
 `serviceState: ServiceState;` | The service state
@@ -706,31 +706,6 @@ npm install --save angular2localization
 ### angular-cli@webpack
 No need to set up anything, just import in your code.
 
-### angular-cli
-Add the library to `angular-cli-build.js` file to `vendorNpmFiles` array:
-```JavaScript
-module.exports = function(defaults) {
-  return new Angular2App(defaults, {
-    vendorNpmFiles: [
-      ...
-      'angular2localization/**/*.+(js|js.map)'
-    ]
-  });
-};
-```
-Then configure SystemJS mappings to know where to look for the library: move to `src` folder and add to `system.config.js` file:
-```JavaScript
-/** Map relative paths to URLs. */
-const map: any = {
-  'angular2localization': 'vendor/angular2localization'
-};
-
-/** User packages configuration. */
-const packages: any = {
-  'angular2localization': { format: 'cjs', defaultExtension: 'js' }
-};
-```
-
 ## <a name="Appendix B"/>Appendix B - Using Ionic 2 up to 2.0.0-beta.11 & Angular 2.0.0-rc.4
 Install the library:
 ```Shell
@@ -741,7 +716,7 @@ Initialize the services of the library in `app.ts` files, when the platform is r
 ...
 import { HTTP_PROVIDERS } from '@angular/http';
 
-import { LocaleService, LocalizationService } from 'angular2localization/angular2localization';
+import { LocaleService, LocalizationService } from 'angular2localization';
 
 @Component({
     ...
