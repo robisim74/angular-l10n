@@ -36,7 +36,7 @@ import { IntlSupport } from '../services/Intl-support';
  * 
  * and include in the component:
  * 
- * import {LocaleService} from 'angular2localization/angular2localization';
+ * import {LocaleService} from 'angular2localization';
  * ...
  * export class AppComponent {
  * 

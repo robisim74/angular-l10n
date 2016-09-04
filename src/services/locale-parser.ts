@@ -329,6 +329,7 @@ class NumberWrapper {
             }
 
         }
+        
         throw new Error('Invalid integer literal when parsing ' + text + ' in base ' + radix);
 
     }

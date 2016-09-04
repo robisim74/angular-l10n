@@ -16,7 +16,7 @@ import { Injectable, EventEmitter, Output } from '@angular/core';
  * 
  * FIRST SCENARIO - Dates & numbers.
  * 
- * import {LocaleService} from 'angular2localization/angular2localization';
+ * import {LocaleService} from 'angular2localization';
  * ...
  * export class AppComponent {
  * 
@@ -34,7 +34,7 @@ import { Injectable, EventEmitter, Output } from '@angular/core';
  * 
  * SECOND SCENARIO - Messages.
  * 
- * import {LocaleService, LocalizationService} from 'angular2localization/angular2localization';
+ * import {LocaleService, LocalizationService} from 'angular2localization';
  * ...
  * export class AppComponent {
  * 
@@ -53,7 +53,7 @@ import { Injectable, EventEmitter, Output } from '@angular/core';
  * 
  * THIRD SCENARIO - Messages, dates & numbers.
  * 
- * import {LocaleService, LocalizationService} from 'angular2localization/angular2localization';
+ * import {LocaleService, LocalizationService} from 'angular2localization';
  * ...
  * export class AppComponent {
  * 

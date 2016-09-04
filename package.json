@@ -3,7 +3,7 @@
     "version": "0.10.0",
     "description": "An Angular 2 library to translate messages, dates and numbers",
     "main": "bundles/angular2localization.umd.js",
-    "jsnext:main": "angular2localization.js",
+    "module": "angular2localization.js",
     "scripts": {
         "build": "npm run gulp",
         "gulp": "gulp",

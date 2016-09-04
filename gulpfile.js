@@ -12,11 +12,6 @@ var gulp = require('gulp'),
     tslint = require('gulp-tslint'),
     filter = require('gulp-filter');
 
-// TypeScript compiler options. 
-var tsProject = ts.createProject('tsconfig.json', {
-    typescript: require('typescript')
-});
-
 // TypeScript es2015 compiler options. 
 var tsES2015Project = ts.createProject('tsconfig-es2015.json', {
     typescript: require('typescript')
