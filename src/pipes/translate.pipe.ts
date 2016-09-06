@@ -74,9 +74,10 @@ export class TranslatePipe implements PipeTransform {
      * 
      * @param key The key to be translated
      * @param lang The current language code for the LocalizationService
+     * @param args Optional parameters
      * @return The value of translation
      */
-    public transform(key: string, lang: string): string {
+    public transform(key: string, lang: string, ...args: Array<any>): string {
 
         // Checks the service state.
         if (this.localization.serviceState == ServiceState.isReady) {
@@ -107,7 +108,7 @@ export class TranslatePipe implements PipeTransform {
             }
 
             // Gets the value of translation for the key string.
-            var value: string = this.localization.translate(keyStr);
+            var value: string = this.localization.translate(keyStr, args[0]);
 
             return key.replace(keyStr, value);
 

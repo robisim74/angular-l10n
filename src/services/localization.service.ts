@@ -153,9 +153,10 @@ import { IntlSupport } from './Intl-support';
      * Translates a key.
      * 
      * @param key The key to be translated
+     * @params args Parameters
      * @return The value of translation
      */
-    public translate(key: string): string {
+    public translate(key: string, args?: any): string {
 
         var value: string;
 
@@ -173,6 +174,15 @@ import { IntlSupport } from './Intl-support';
 
             value = key;
 
+        } else if (args != null) { // Parameters (see issue #19).
+
+            const TEMPLATE_REGEXP: RegExp = /{{\s?([^{}\s]*)\s?}}/g;
+
+            return value.replace(TEMPLATE_REGEXP, (substring: string, parsedKey: string) => {
+                var response: string = <string>args[parsedKey];
+                return typeof response !== 'undefined' ? response : substring;
+            });
+
         }
 
         return value;
@@ -183,14 +193,15 @@ import { IntlSupport } from './Intl-support';
      * Translates a key.
      * 
      * @param key The key to be translated
+     * @params args Parameters
      * @return An observable of the value of translation
      */
-    public translateAsync(key: string): Observable<string> {
+    public translateAsync(key: string, args?: any): Observable<string> {
 
         return new Observable<string>((observer: Observer<string>) => {
 
             // Gets the value of translation for the key.
-            var value: string = this.translate(key);
+            var value: string = this.translate(key, args);
 
             observer.next(value);
             observer.complete();
