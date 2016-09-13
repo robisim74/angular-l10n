@@ -136,7 +136,7 @@ export class LocaleParser {
  * 
  * @author Roberto Simonetti
  */
-abstract class NumberCode {
+export abstract class NumberCode {
 
     /**
      * Unicode for numbers from 0 to 9.

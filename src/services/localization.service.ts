@@ -172,7 +172,7 @@ import { IntlSupport } from './Intl-support';
         // If the value of translation is not present, the same key is returned (see issue #1).
         if (value == null || value == "") {
 
-            value = key;
+            return key;
 
         } else if (args != null) { // Parameters (see issue #19).
 
@@ -180,7 +180,7 @@ import { IntlSupport } from './Intl-support';
 
             return value.replace(TEMPLATE_REGEXP, (substring: string, parsedKey: string) => {
                 var response: string = <string>args[parsedKey];
-                return typeof response !== 'undefined' ? response : substring;
+                return (typeof response !== 'undefined') ? response : substring;
             });
 
         }
