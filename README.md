@@ -10,7 +10,7 @@ Because it is only a branch of Angular 2, the goal is the complete integration w
 
 Get the changelog by [releases](https://github.com/robisim74/angular2localization/releases).
 
-Angular version: 2.0.0-rc.6.
+Angular version: 2.0.0-rc.7.
 
 ## Angular 2 i18n solutions
 | _Feature_ | **Angular 2 (work-in)** _Native_ | **ng2-translate** _External library_ | **angular2localization** _External library_ |

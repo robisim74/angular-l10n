@@ -1,5 +1,5 @@
 # Angular 2 Localization library specification
-Library version: 0.10.0
+Library version: 0.10.1
 
 ## Table of contents
 * [1 The library structure](#1)
@@ -80,6 +80,10 @@ where `expression` is a string key that indicates the message to translate.
 For example, to get the translation, add in the template:
 ```Html
 {{ 'TITLE' | translate:lang }}
+```
+or if you want to use parameters:
+```Html
+{{ 'USER_NOTIFICATIONS' | translate:lang:{ user: username, NoMessages: messages.length } }}</div>
 ```
 and include in the component:
 ```TypeScript
@@ -243,8 +247,8 @@ These methods use the [Intl.Collator](https://developer.mozilla.org/en-US/docs/W
 
 ### <a name="2.5"/>2.5 Getting the translation in component class
 If you need to get the translation in component class, [LocalizationService](#7.2) has the following methods:
-* `translate(key: string): string;`
-* `translateAsync(key: string): Observable<string>;`
+* `translate(key: string, args?: any): string;`
+* `translateAsync(key: string, args?: any): Observable<string>;`
 
 But if you need to get the translation when the selected language changes, you must subscribe to the following event:
 * `translationChanged: EventEmitter<any>;`
@@ -675,8 +679,8 @@ Method | Function
 ------ | --------
 `addTranslation(language: string, translation: any): void;` | Direct loading: adds new translation data
 `translationProvider(prefix: string, dataFormat?: string, webAPI?: boolean): void;` | Asynchronous loading: defines the translation provider
-`translate(key: string): string;` | Translates a key
-`translateAsync(key: string): Observable<string>;` | Translates a key
+`translate(key: string, args?: any): string;` | Translates a key
+`translateAsync(key: string, args?: any): Observable<string>;` | Translates a key
 `updateTranslation(language?: string): void;` | Updates the language code and loads the translation data for the asynchronous loading
 `compare(key1: string, key2: string, extension?: string, options?: any): number;` | Compares two keys by the value of translation & the current language code
 `sort(list: Array<any>, keyName: any, order?: string, extension?: string, options?: any): Array<any>;` | Sorts an array of objects or an array of arrays by the current language code
