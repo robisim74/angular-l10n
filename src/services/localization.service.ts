@@ -164,6 +164,16 @@ import { IntlSupport } from './Intl-support';
 
             // Gets the translation by language code. 
             var translation: any = this.translationData[this.languageCode];
+
+            // Checks for composed key (see issue #21).
+            var keys: string[] = key.split(".");
+            do {
+                key = keys.shift();
+                if (translation[key] != null && (typeof translation[key] == "object")) {
+                    translation = translation[key];
+                }
+            } while (keys.length > 0);
+
             // Gets the value of translation by key.   
             value = translation[key];
 
