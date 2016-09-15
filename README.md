@@ -4,13 +4,12 @@
 
 This library is developed using TypeScript and Angular 2 for i18n and l10n of Angular 2 apps written in TypeScript, ES5 or ES6. 
 It allows, in addition to translation, to localize numbers and dates of your app, adding language code, country code, and optionally script code, numbering system and calendar, through [Internationalization API](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl). It also implements the validation of numbers by locales. 
-Because it is only a branch of Angular 2, the goal is the complete integration with the native solutions of Angular 2.
 
 [Sample app](http://robisim74.github.io/angular2localization) built with Angular 2 Material & webpack, and its [source code](https://github.com/robisim74/angular2localization/tree/gh-pages).
 
 Get the changelog by [releases](https://github.com/robisim74/angular2localization/releases).
 
-Angular version: 2.0.0-rc.7.
+**Angular version: 2.0.0 Final Release.**
 
 ## Angular 2 i18n solutions
 | _Feature_ | **Angular 2 (work-in)** _Native_ | **ng2-translate** _External library_ | **angular2localization** _External library_ |

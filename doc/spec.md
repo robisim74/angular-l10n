@@ -1,5 +1,5 @@
 # Angular 2 Localization library specification
-Library version: 0.10.1
+Library version: 1.0.0
 
 ## Table of contents
 * [1 The library structure](#1)
@@ -81,11 +81,15 @@ For example, to get the translation, add in the template:
 ```Html
 {{ 'TITLE' | translate:lang }}
 ```
-or if you want to use parameters:
+You can also use composed keys:
 ```Html
-{{ 'USER_NOTIFICATIONS' | translate:lang:{ user: username, NoMessages: messages.length } }}</div>
+{{ 'HOME.TITLE' | translate:lang }}
 ```
-and include in the component:
+If you want to use parameters:
+```Html
+{{ 'USER_NOTIFICATIONS' | translate:lang:{ user: username, NoMessages: messages.length } }}
+```
+Then include in the component:
 ```TypeScript
 import { LocalizationService } from 'angular2localization';
 ...
@@ -369,6 +373,23 @@ and create the `json` files of the translations such as `locale-en.json`:
 {
     "TITLE": "Angular 2 Localization",
     "CHANGE_LANGUAGE": "Change language",
+    ...
+}
+```
+If you use composed key:
+```
+{
+    "HOME": {
+        "TITLE": "Angular 2 Localization",
+        ...
+    },
+    ...
+}
+```
+or parameters:
+```
+{
+    "USER_NOTIFICATIONS": "{{ user }}, you have {{ NoMessages }} new messages",
     ...
 }
 ```
