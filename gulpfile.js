@@ -13,7 +13,7 @@ var gulp = require('gulp'),
     filter = require('gulp-filter');
 
 // TypeScript es2015 compiler options. 
-var tsES2015Project = ts.createProject('tsconfig-es2015.json', {
+var tsBuildProject = ts.createProject('tsconfig-build.json', {
     typescript: require('typescript')
 });
 
@@ -22,7 +22,7 @@ gulp.task('build', ['lint'], function () {
 
     runSequence('clean:dist',
         'script:src',
-        'bundle:umd:es2015',
+        'bundle:umd:build',
         'bundle:umd',
         'bundle:umd:min',
         'copy:files',
@@ -36,27 +36,15 @@ gulp.task('clean:dist', function () {
 
 });
 
+// ngc compiler.
 gulp.task('script:src', function () {
 
-    var f = filter(['angular2localization.*', 'src/**/*.*']);
-
-    var tsResult = tsES2015Project.src()
-        .pipe(sourcemaps.init())
-        .pipe(ts(tsES2015Project));
-
-    return merge([
-        tsResult.dts
-            .pipe(f)
-            .pipe(gulp.dest('dist')),
-        tsResult.js
-            .pipe(f)
-            .pipe(sourcemaps.write('.'))
-            .pipe(gulp.dest('dist'))
-    ]);
+    // gulp-run: node_modules/.bin is included on the path. Supports Linux and Windows.
+    return run('ngc -p tsconfig-build.json').exec();
 
 });
 
-gulp.task('bundle:umd:es2015', function () {
+gulp.task('bundle:umd:build', function () {
 
     // gulp-run: node_modules/.bin is included on the path. Supports Linux and Windows.
     return run('rollup -c rollup.config.js').exec();

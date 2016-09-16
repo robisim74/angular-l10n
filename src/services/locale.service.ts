@@ -260,12 +260,6 @@ import { Injectable, EventEmitter, Output } from '@angular/core';
 
             if (typeof navigator.language != "undefined") {
                 browserLanguage = navigator.language;
-            } else if (typeof navigator.userLanguage != "undefined") {
-                browserLanguage = navigator.userLanguage;
-            } else if (typeof navigator.browserLanguage != "undefined") {
-                browserLanguage = navigator.browserLanguage;
-            } else if (typeof navigator.systemLanguage != "undefined") {
-                browserLanguage = navigator.systemLanguage;
             }
 
             // Tries to gets the current language of browser.

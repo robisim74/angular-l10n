@@ -4,3 +4,4 @@ $ cat .gitignore
 /typings
 
 *.log
+*.ngfactory.ts
