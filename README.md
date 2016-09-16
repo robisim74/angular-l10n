@@ -30,7 +30,7 @@ npm install --save angular2localization
 ```
 
 ## Loading
-### Using SystemJS configuration
+#### Using SystemJS configuration
 ```JavaScript
 System.config({
         paths: {
@@ -56,18 +56,23 @@ System.config({
         }
     });
 ```
+
 #### Angular-CLI
 See [Angular-CLI settings](https://github.com/robisim74/angular2localization/blob/master/doc/spec.md#Appendix%20A).
-#### Ionic 2
-[Using Ionic 2](https://github.com/robisim74/angular2localization/blob/master/doc/spec.md#Appendix%20B) with this library.
 
-### Via webpack
+#### AoT compilation
+No need to set up anything, just import in your code.
+
+#### Via webpack
 Import the library in your `vendor` file after Angular 2 imports:
 ```TypeScript
 import 'angular2localization';
 ```
 
-### Plain JavaScript
+#### Ionic 2
+[Using Ionic 2](https://github.com/robisim74/angular2localization/blob/master/doc/spec.md#Appendix%20B) with this library.
+
+#### Plain JavaScript
 If you build apps in Angular 2 using ES5, you can include the `umd` bundle in your `index.html`:
 ```Html
 <script src="node_modules/angular2localization/bundles/angular2localization.umd.min.js"></script>
