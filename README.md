@@ -5,7 +5,7 @@
 This library is developed using TypeScript and Angular 2 for i18n and l10n of Angular 2 apps written in TypeScript, ES5 or ES6. 
 It allows, in addition to translation, to localize numbers and dates of your app, adding language code, country code, and optionally script code, numbering system and calendar, through [Internationalization API](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl). It also implements the validation of numbers by locales. 
 
-[Sample app](http://robisim74.github.io/angular2localization) built with Angular 2 Material & webpack, and its [source code](https://github.com/robisim74/angular2localization/tree/gh-pages).
+[Sample app](http://robisim74.github.io/angular2localization) built with Angular 2 Material, AoT compilation & webpack, and its [source code](https://github.com/robisim74/angular2localization/tree/gh-pages).
 
 Get the changelog by [releases](https://github.com/robisim74/angular2localization/releases).
 
@@ -57,27 +57,24 @@ System.config({
     });
 ```
 
-#### Angular-CLI
-See [Angular-CLI settings](https://github.com/robisim74/angular2localization/blob/master/doc/spec.md#Appendix%20A).
-
-#### AoT compilation
+#### Angular-CLI webpack
 No need to set up anything, just import in your code.
 
 #### Via webpack
-Import the library in your `vendor` file after Angular 2 imports:
-```TypeScript
-import 'angular2localization';
-```
+No need to set up anything, just import in your code.
 
 #### Ionic 2
-[Using Ionic 2](https://github.com/robisim74/angular2localization/blob/master/doc/spec.md#Appendix%20B) with this library.
+[Using Ionic 2](https://github.com/robisim74/angular2localization/blob/master/doc/spec.md#Appendix%20A) with this library.
 
 #### Plain JavaScript
 If you build apps in Angular 2 using ES5, you can include the `umd` bundle in your `index.html`:
 ```Html
 <script src="node_modules/angular2localization/bundles/angular2localization.umd.min.js"></script>
 ```
-and using global `ng.angular2localization` namespace. For a basic usage, see this [ES5 example](https://github.com/robisim74/angular2localization/blob/master/doc/spec.md#Appendix%20C).
+and using global `ng.angular2localization` namespace. For a basic usage, see this [ES5 example](https://github.com/robisim74/angular2localization/blob/master/doc/spec.md#Appendix%20B).
+
+## AoT compilation
+This library is compatible with AoT compilation, just import in your code.
 
 ## Usage
 See [library specification](https://github.com/robisim74/angular2localization/blob/master/doc/spec.md).

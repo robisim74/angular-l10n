@@ -39,9 +39,8 @@ Library version: 1.0.1
     * [7.2 LocalizationService](#7.2)
     * [7.3 LocaleParser](#7.3)
     * [7.4 IntlSupport](#7.4)
-* [Appendix A - Angular-CLI settings](#Appendix A)
-* [Appendix B - Using Ionic 2](#Appendix B)
-* [Appendix C - ES5 example](#Appendix C)
+* [Appendix A - Using Ionic 2](#Appendix A)
+* [Appendix B - ES5 example](#Appendix B)
 
 ## <a name="1"/>1 The library structure
 This library has the following classes:
@@ -722,16 +721,7 @@ Method | Function
 `static NumberFormat(defaultLocale: string): boolean;` | Support for numbers
 `static Collator(lang: string): boolean;` | Support for Collator
 
-## <a name="Appendix A"/>Appendix A - Angular-CLI settings
-Install the library:
-```
-npm install --save angular2localization
-```
-
-### angular-cli@webpack
-No need to set up anything, just import in your code.
-
-## <a name="Appendix B"/>Appendix B - Using Ionic 2 up to 2.0.0-beta.11 & Angular 2.0.0-rc.4
+## <a name="Appendix A"/>Appendix A - Using Ionic 2 up to 2.0.0-beta.11 & Angular 2.0.0-rc.4
 Install the library:
 ```Shell
 npm install --save angular2localization@0.8.9
@@ -777,7 +767,7 @@ ionicBootstrap(MyApp, [HTTP_PROVIDERS]);
 ```
 and create the `json` files of the translations such as `locale-en.json` in `wwww/i18n` folder.
 
-## <a name="Appendix C"/>Appendix C - ES5 example
+## <a name="Appendix B"/>Appendix B - ES5 example
 This is an example in ES5 for the [First scenario](#3.1). The `AppModule`:
 ```JavaScript
 (function (app) {
