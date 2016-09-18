@@ -731,7 +731,7 @@ Initialize the services of the library in `app.ts` files, when the platform is r
 ...
 import { HTTP_PROVIDERS } from '@angular/http';
 
-import { LocaleService, LocalizationService } from 'angular2localization';
+import { LocaleService, LocalizationService } from ''angular2localization/angular2localization';
 
 @Component({
     ...
