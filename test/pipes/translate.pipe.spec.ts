@@ -147,7 +147,7 @@ describe('TranslatePipe', () => {
                 // Selects the current language of the browser if it has been added, else the preferred language.
                 locale.definePreferredLanguage('en');
 
-                localization.translationProvider('./resources/locale-');
+                localization.addProvider('./resources/locale-');
                 localization.updateTranslation();
 
                 pipe = new TranslatePipe(localization, locale);

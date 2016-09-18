@@ -17,6 +17,24 @@ import { LocaleService } from './locale.service';
 import { IntlSupport } from './Intl-support';
 
 /**
+ * Merges two translation data.
+ */
+export function extend<A>(a: A): A;
+export function extend<A, B>(a: A, b: B): A & B;
+export function extend<A, B, C>(a: A, b: B, c: C): A & B & C;
+export function extend<A, B, C, D>(a: A, b: B, c: C, d: D): A & B & C & D;
+export function extend(...args: any[]): any {
+    const newObj: any = {};
+    for (let obj of args) {
+        for (let key in obj) {
+            // Copies all the fields.
+            newObj[key] = obj[key];
+        }
+    }
+    return newObj;
+};
+
+/**
  * LocalizationService class.
  * Gets the translation data and performs operations.
  * 
@@ -77,29 +95,22 @@ import { IntlSupport } from './Intl-support';
     public serviceState: ServiceState;
 
     /**
-     * The path prefix for the asynchronous loading.
+     * The providers for the asynchronous loading.
      */
-    private prefix: string;
-
-    /**
-     * Data format for the asynchronous loading.
-     */
-    private dataFormat: string;
-
-    /**
-     * True if the asynchronous loading uses a Web API to get the data.
-     */
-    private webAPI: boolean;
+    private providers: Array<Provider> = [];
 
     /**
      * The translation data: {languageCode: {key: value}}.
      */
     private translationData: any = {};
 
+    /**
+     * Requests counter.
+     */
+    private counter: number;
+
     constructor(public http: Http, public locale: LocaleService) {
 
-        this.prefix = "";
-        this.loadingMode = LoadingMode.Unknown;
         this.languageCode = "";
 
         // Initializes the loading mode.
@@ -127,25 +138,23 @@ import { IntlSupport } from './Intl-support';
     public addTranslation(language: string, translation: any): void {
 
         // Adds the new translation data.
-        this.translationData[language] = translation;
+        this.addData(translation, language);
 
     }
 
     /**
-     * Asynchronous loading: defines the translation provider.
+     * Asynchronous loading: adds a translation provider.
      * 
      * @param prefix The path prefix of the json files
      * @param dataFormat Data format: default value is 'json'.
      * @param webAPI True if the asynchronous loading uses a Web API to get the data.
      */
-    public translationProvider(prefix: string, dataFormat: string = "json", webAPI: boolean = false): void {
+    public addProvider(prefix: string, dataFormat: string = "json", webAPI: boolean = false): void {
 
-        this.prefix = prefix;
-        this.dataFormat = dataFormat;
-        this.webAPI = webAPI;
+        this.providers.push({ prefix, dataFormat, webAPI });
 
         // Updates the loading mode.
-        this.loadingMode = LoadingMode.Async;
+        if (this.providers.length == 1) { this.loadingMode = LoadingMode.Async; }
 
     }
 
@@ -223,7 +232,7 @@ import { IntlSupport } from './Intl-support';
     /**
      * Updates the language code and loads the translation data for the asynchronous loading.
      * 
-     * @param language The two-letter or three-letter code of the language
+     * @param language The two-letter or three-letter code of the language: default is the current language
      */
     public updateTranslation(language: string = this.locale.getCurrentLanguage()): void {
 
@@ -571,8 +580,6 @@ import { IntlSupport } from './Intl-support';
 
     /**
      * Asynchronous loading: gets translation data.
-     * 
-     * @param language The two-letter or three-letter code of the language
      */
     private getTranslation(language: string): void {
 
@@ -580,56 +587,90 @@ import { IntlSupport } from './Intl-support';
         this.translationData = {};
         this.serviceState = ServiceState.isLoading;
 
-        // Builds the URL.
-        var url: string = this.prefix;
+        // Get translation data for all providers.
+        this.counter = this.providers.length;
 
-        if (this.webAPI == true) {
+        for (let provider of this.providers) {
 
-            // Absolute URL for Web API.
-            url += language;
+            // Builds the URL.
+            var url: string = provider.prefix;
 
-        } else {
+            if (provider.webAPI == true) {
 
-            // Relative server path for 'json' files.
-            url += language + "." + this.dataFormat;
+                // Absolute URL for Web API.
+                url += language;
+
+            } else {
+
+                // Relative server path for 'json' files.
+                url += language + "." + provider.dataFormat;
+
+            }
+
+            // Angular 2 Http module.
+            this.http.get(url)
+                .map((res: Response) => res.json())
+                .subscribe(
+
+                // Observer or next.
+                (res: any) => {
+
+                    // Adds response to the translation data.
+                    this.addData(res, language);
+
+                },
+
+                // Error.
+                (error: any) => {
+
+                    console.error("Localization service:", error);
+
+                },
+
+                // Complete.
+                () => {
+
+                    this.counter--;
+
+                    // Checks for the last one request.
+                    if (this.counter <= 0) {
+
+                        // Updates the service state.
+                        this.serviceState = ServiceState.isReady;
+
+                        // Updates the language code of the service: all the translate pipe will invoke the trasform method.
+                        this.languageCode = language;
+
+                        // Sends an event for the components.
+                        this.translationChanged.emit(null);
+
+                    }
+
+                });
 
         }
 
-        // Angular 2 Http module.
-        this.http.get(url)
-            .map((res: Response) => res.json())
-            .subscribe(
+    }
 
-            // Observer or next.
-            (res: any) => {
+    // Adds or extends translation data.
+    private addData(data: any, language: string): void {
 
-                // Assigns the observer to the translation data.
-                this.translationData[language] = res;
-
-            },
-
-            // Error.
-            (error: any) => {
-
-                console.error("Localization service:", error);
-
-            },
-
-            // Complete.
-            () => {
-
-                // Updates the service state.
-                this.serviceState = ServiceState.isReady;
-
-                // Updates the language code of the service.
-                this.languageCode = language;
-
-                // Sends an event.
-                this.translationChanged.emit(null);
-
-            });
+        this.translationData[language] = (typeof this.translationData[language] != "undefined") ? extend(this.translationData[language], data) : data;
 
     }
+
+}
+
+/**
+ * Defines the provider for asynchronous loading of the translation data.
+ */
+class Provider {
+
+    prefix: string;
+
+    dataFormat: string;
+
+    webAPI: boolean;
 
 }
 
@@ -658,10 +699,6 @@ export enum ServiceState {
  */
 export enum LoadingMode {
 
-    /**
-     * Initial state.
-     */
-    Unknown,
     /**
      * Direct loading.
      */

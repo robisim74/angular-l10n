@@ -229,6 +229,19 @@ import { Injectable, EventEmitter, Output } from '@angular/core';
     }
 
     /**
+     * Adds languages.
+     * 
+     * @param languages The array of the two-letter or three-letter code of the languages
+     */
+    public addLanguages(languages: Array<string>): void {
+
+        for (let language of languages) {
+            this.languageCodes.push(language);
+        }
+
+    }
+
+    /**
      * Sets Local Storage as default.
      */
     public useLocalStorage(): void {
