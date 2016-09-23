@@ -9,7 +9,7 @@ It allows, in addition to translation, to localize numbers and dates of your app
 
 Get the changelog by [releases](https://github.com/robisim74/angular2localization/releases).
 
-**Angular version: 2.0.0 Final Release.**
+**Angular version: ^2.0.0**
 
 ## Angular 2 i18n solutions
 | _Feature_ | **Angular 2 (work-in)** _Native_ | **ng2-translate** _External library_ | **angular2localization** _External library_ |

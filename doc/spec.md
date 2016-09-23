@@ -1,5 +1,5 @@
 # Angular 2 Localization library specification
-Library version: 1.0.1
+Library version: 1.0.2
 
 ## Table of contents
 * [1 The library structure](#1)
@@ -515,6 +515,20 @@ export class ListComponent {
 ```
 In this way, application performance and memory usage are optimized.
 
+If you have shared resources, you can also add more than one provider for each translation:
+```TypeScript
+export class ListComponent {
+
+    constructor(public localization: LocalizationService) {
+
+        // Initializes LocalizationService: asynchronous loading.
+        this.localization.addProvider('./resources/locale-list-');
+        this.localization.addProvider('./resources/global-'); // Contains the shared keys.
+        this.localization.updateTranslation(); // Need to update the translation.
+
+    }
+```
+
 ## <a name="6"/>6 Validation by locales
 
 ### <a name="6.1"/>6.1 Validating a number
@@ -672,6 +686,7 @@ Property | Value
 Method | Function
 ------ | --------
 `addLanguage(language: string): void;` | Adds a new language
+`addLanguages(languages: Array<string>): void;` | Adds languages
 `useLocalStorage(): void;` | Sets Local Storage as default
 `definePreferredLanguage(defaultLanguage: string, expiry?: number): void;` | Defines the preferred language. Selects the current language of the browser/user if it has been added, else the default language
 `definePreferredLocale(defaultLanguage: string, defaultCountry: string, expiry?: number, script?: string, numberingSystem?: string, calendar?: string): void;` | Defines preferred languange and country, regardless of the browser language
@@ -699,6 +714,7 @@ Method | Function
 ------ | --------
 `addTranslation(language: string, translation: any): void;` | Direct loading: adds new translation data
 `translationProvider(prefix: string, dataFormat?: string, webAPI?: boolean): void;` | Asynchronous loading: defines the translation provider
+`addProvider(prefix: string, dataFormat?: string, webAPI?: boolean): void;` | Asynchronous loading: adds a translation provider
 `translate(key: string, args?: any): string;` | Translates a key
 `translateAsync(key: string, args?: any): Observable<string>;` | Translates a key
 `updateTranslation(language?: string): void;` | Updates the language code and loads the translation data for the asynchronous loading
