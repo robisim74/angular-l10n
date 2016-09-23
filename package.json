@@ -1,6 +1,6 @@
 {
     "name": "angular2localization",
-    "version": "1.0.1",
+    "version": "1.0.2",
     "description": "An Angular 2 library to translate messages, dates and numbers",
     "main": "bundles/angular2localization.umd.js",
     "module": "angular2localization.js",
@@ -40,7 +40,7 @@
     "devDependencies": {
         "@angular/common": "2.0.0",
         "@angular/compiler": "2.0.0",
-        "@angular/compiler-cli": "^0.6.2",
+        "@angular/compiler-cli": "0.6.2",
         "@angular/core": "2.0.0",
         "@angular/forms": "2.0.0",
         "@angular/http": "2.0.0",
