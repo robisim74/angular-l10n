@@ -143,6 +143,19 @@ export function extend(...args: any[]): any {
     }
 
     /**
+     * Asynchronous loading: defines the translation provider.
+     * 
+     * @param prefix The path prefix of the json files
+     * @param dataFormat Data format: default value is 'json'.
+     * @param webAPI True if the asynchronous loading uses a Web API to get the data.
+     */
+    public translationProvider(prefix: string, dataFormat: string = "json", webAPI: boolean = false): void {
+
+        this.addProvider(prefix, dataFormat, webAPI);
+
+    }
+
+    /**
      * Asynchronous loading: adds a translation provider.
      * 
      * @param prefix The path prefix of the json files
