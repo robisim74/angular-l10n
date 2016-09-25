@@ -92,14 +92,19 @@ describe('TranslatePipe', () => {
                     expect(pipe.transform('TITLE', localization.languageCode)).toEqual("Angular 2 Localization");
 
                     locale.setCurrentLanguage('it');
-                    expect(pipe.transform('TITLE', localization.languageCode)).toEqual("Localizzazione in Angular 2");
+                    localization.translationChanged.subscribe(
+                        () => expect(pipe.transform('TITLE', localization.languageCode)).toEqual("Localizzazione in Angular 2")
+                    );
+
 
                 } else {
 
                     expect(pipe.transform('TITLE', localization.languageCode)).toEqual("Localizzazione in Angular 2");
 
                     locale.setCurrentLanguage('en');
-                    expect(pipe.transform('TITLE', localization.languageCode)).toEqual("Angular 2 Localization");
+                    localization.translationChanged.subscribe(
+                        () => expect(pipe.transform('TITLE', localization.languageCode)).toEqual("Angular 2 Localization")
+                    );
 
                 }
 
@@ -157,14 +162,19 @@ describe('TranslatePipe', () => {
                     expect(pipe.transform('SUBTITLE', localization.languageCode)).toEqual("It's a small word");
 
                     locale.setCurrentLanguage('it');
-                    expect(pipe.transform('SUBTITLE', localization.languageCode)).toEqual("Il mondo è piccolo");
+                    localization.translationChanged.subscribe(
+                        () => expect(pipe.transform('SUBTITLE', localization.languageCode)).toEqual("Il mondo è piccolo")
+                    );
+
 
                 } else {
 
                     expect(pipe.transform('SUBTITLE', localization.languageCode)).toEqual("Il mondo è piccolo");
 
                     locale.setCurrentLanguage('en');
-                    expect(pipe.transform('SUBTITLE', localization.languageCode)).toEqual("It's a small word");
+                    localization.translationChanged.subscribe(
+                        () => expect(pipe.transform('SUBTITLE', localization.languageCode)).toEqual("It's a small word")
+                    );
 
                 }
 

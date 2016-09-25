@@ -108,7 +108,7 @@ export class TranslatePipe implements PipeTransform {
             }
 
             // Gets the value of translation for the key string.
-            var value: string = this.localization.translate(keyStr, args[0]);
+            var value: string = this.localization.translate(keyStr, args[0], lang);
 
             return key.replace(keyStr, value);
 

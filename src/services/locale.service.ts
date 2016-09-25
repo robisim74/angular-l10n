@@ -455,11 +455,17 @@ import { Injectable, EventEmitter, Output } from '@angular/core';
         if (this.languageCode != language || this.countryCode != country || this.scriptCode != script || this.numberingSystem != numberingSystem || this.calendar != calendar) {
 
             // Assigns the values & sends the events.
-            if (this.languageCode != language) { this.languageCode = language; this.languageCodeChanged.emit(language); }
-            if (this.countryCode != country) { this.countryCode = country; this.countryCodeChanged.emit(country); }
-            if (this.scriptCode != script) { this.scriptCode = script; this.scriptCodeChanged.emit(script); }
-            if (this.numberingSystem != numberingSystem) { this.numberingSystem = numberingSystem; this.numberingSystemChanged.emit(numberingSystem); }
-            if (this.calendar != calendar) { this.calendar = calendar; this.calendarChanged.emit(calendar); }
+            this.languageCode = language;
+            this.countryCode = country;
+            this.scriptCode = script;
+            this.numberingSystem = numberingSystem;
+            this.calendar = calendar;
+
+            this.languageCodeChanged.emit(language);
+            this.countryCodeChanged.emit(country);
+            this.scriptCodeChanged.emit(script);
+            this.numberingSystemChanged.emit(numberingSystem);
+            this.calendarChanged.emit(calendar);
 
             // Sets the default locale.
             this.setDefaultLocale();

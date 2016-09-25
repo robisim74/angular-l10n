@@ -95,6 +95,11 @@ export function extend(...args: any[]): any {
     public serviceState: ServiceState;
 
     /**
+     * Enable/disable locale as language.
+     */
+    public enableLocale: boolean = false;
+
+    /**
      * The providers for the asynchronous loading.
      */
     private providers: Array<Provider> = [];
@@ -123,7 +128,17 @@ export function extend(...args: any[]): any {
         this.locale.languageCodeChanged.subscribe(
 
             // Generator or next.
-            (language: string) => this.updateTranslation(language)
+            () => this.updateTranslation()
+
+        );
+
+        // When the country changes, subscribes to the event & call updateTranslation method only if enableLocale is true.
+        this.locale.countryCodeChanged.subscribe(
+
+            // Generator or next.
+            () => {
+                if (this.enableLocale) { this.updateTranslation(); }
+            }
 
         );
 
@@ -175,17 +190,18 @@ export function extend(...args: any[]): any {
      * Translates a key.
      * 
      * @param key The key to be translated
-     * @params args Parameters
+     * @param args Parameters
+     * @param lang The current language
      * @return The value of translation
      */
-    public translate(key: string, args?: any): string {
+    public translate(key: string, args?: any, lang: string = this.languageCode): string {
 
         var value: string;
 
-        if (this.translationData[this.languageCode] != null) {
+        if (this.translationData[lang] != null) {
 
             // Gets the translation by language code. 
-            var translation: any = this.translationData[this.languageCode];
+            var translation: any = this.translationData[lang];
 
             // Checks for composed key (see issue #21).
             var keys: string[] = key.split(".");
@@ -225,15 +241,16 @@ export function extend(...args: any[]): any {
      * Translates a key.
      * 
      * @param key The key to be translated
-     * @params args Parameters
+     * @param args Parameters
+     * @param lang The current language
      * @return An observable of the value of translation
      */
-    public translateAsync(key: string, args?: any): Observable<string> {
+    public translateAsync(key: string, args?: any, lang: string = this.languageCode): Observable<string> {
 
         return new Observable<string>((observer: Observer<string>) => {
 
             // Gets the value of translation for the key.
-            var value: string = this.translate(key, args);
+            var value: string = this.translate(key, args, lang);
 
             observer.next(value);
             observer.complete();
@@ -243,13 +260,26 @@ export function extend(...args: any[]): any {
     }
 
     /**
+     * Sets the use of locale as language for the service (see issue #24).
+     */
+    public useLocaleAsLanguage(): void {
+
+        this.enableLocale = true;
+
+    }
+
+    /**
      * Updates the language code and loads the translation data for the asynchronous loading.
      * 
-     * @param language The two-letter or three-letter code of the language: default is the current language
+     * @param language The language for the service
      */
-    public updateTranslation(language: string = this.locale.getCurrentLanguage()): void {
+    public updateTranslation(language: string = !this.enableLocale
+        ? this.locale.getCurrentLanguage()
+        : this.locale.getCurrentLanguage()
+        + "-"
+        + this.locale.getCurrentCountry()): void {
 
-        if (language != "" && language != this.languageCode) {
+        if (language != "" && language != this.languageCode && this.serviceState != ServiceState.isLoading) {
 
             // Asynchronous loading.
             if (this.loadingMode == LoadingMode.Async) {
@@ -259,11 +289,7 @@ export function extend(...args: any[]): any {
 
             } else {
 
-                // Updates the language code of the service.
-                this.languageCode = language;
-
-                // Updates the service state.
-                this.serviceState = ServiceState.isReady;
+                this.translationComplete(language);
 
             }
 
@@ -285,7 +311,7 @@ export function extend(...args: any[]): any {
     public compare(key1: string, key2: string, extension?: string, options?: any): number {
 
         // Checks for support for Intl.
-        if (IntlSupport.Collator(this.languageCode) == false) {
+        if (IntlSupport.Collator(this.locale.getCurrentLanguage()) == false) {
 
             return 0;
 
@@ -295,7 +321,7 @@ export function extend(...args: any[]): any {
         var value1: string = this.translate(key1);
         var value2: string = this.translate(key2);
 
-        var locale: string = this.addExtension(this.languageCode, extension);
+        var locale: string = this.addExtension(this.locale.getCurrentLanguage(), extension);
 
         return new Intl.Collator(locale).compare(value1, value2);
 
@@ -314,7 +340,7 @@ export function extend(...args: any[]): any {
      */
     public sort(list: Array<any>, keyName: any, order?: string, extension?: string, options?: any): Array<any> {
 
-        if (list == null || keyName == null || IntlSupport.Collator(this.languageCode) == false) { return list; }
+        if (list == null || keyName == null || IntlSupport.Collator(this.locale.getCurrentLanguage()) == false) { return list; }
 
         // Gets the value of translation for the keys.
         for (let item of list) {
@@ -328,7 +354,7 @@ export function extend(...args: any[]): any {
 
         }
 
-        var locale: string = this.addExtension(this.languageCode, extension);
+        var locale: string = this.addExtension(this.locale.getCurrentLanguage(), extension);
 
         // Intl.Collator.
         var collator: Intl.Collator = new Intl.Collator(locale, options); // It can be passed directly to Array.prototype.sort.
@@ -391,7 +417,7 @@ export function extend(...args: any[]): any {
      */
     public search(s: string, list: Array<any>, keyNames: any[], options: any = { usage: 'search' }): Array<any> {
 
-        if (list == null || keyNames == null || s == "" || IntlSupport.Collator(this.languageCode) == false) { return list; }
+        if (list == null || keyNames == null || s == "" || IntlSupport.Collator(this.locale.getCurrentLanguage()) == false) { return list; }
 
         // Gets the value of translation for the each column.
         var translated: Array<string> = new Array<string>();
@@ -413,7 +439,7 @@ export function extend(...args: any[]): any {
 
         }
 
-        var locale: string = this.languageCode;
+        var locale: string = this.locale.getCurrentLanguage();
 
         // Intl.Collator.
         var collator: Intl.Collator = new Intl.Collator(locale, options);
@@ -465,7 +491,7 @@ export function extend(...args: any[]): any {
 
         if (list == null) { return null; }
 
-        if (keyNames == null || s == "" || IntlSupport.Collator(this.languageCode) == false) {
+        if (keyNames == null || s == "" || IntlSupport.Collator(this.locale.getCurrentLanguage()) == false) {
 
             return new Observable<any>((observer: Observer<any>) => {
 
@@ -503,7 +529,7 @@ export function extend(...args: any[]): any {
 
             }
 
-            var locale: string = this.languageCode;
+            var locale: string = this.locale.getCurrentLanguage();
 
             // Intl.Collator.
             var collator: Intl.Collator = new Intl.Collator(locale, options);
@@ -648,14 +674,7 @@ export function extend(...args: any[]): any {
                     // Checks for the last one request.
                     if (this.counter <= 0) {
 
-                        // Updates the service state.
-                        this.serviceState = ServiceState.isReady;
-
-                        // Updates the language code of the service: all the translate pipe will invoke the trasform method.
-                        this.languageCode = language;
-
-                        // Sends an event for the components.
-                        this.translationChanged.emit(null);
+                        this.translationComplete(language);
 
                     }
 
@@ -669,6 +688,19 @@ export function extend(...args: any[]): any {
     private addData(data: any, language: string): void {
 
         this.translationData[language] = (typeof this.translationData[language] != "undefined") ? extend(this.translationData[language], data) : data;
+
+    }
+
+    private translationComplete(language: string): void {
+
+        // Updates the service state.
+        this.serviceState = ServiceState.isReady;
+
+        // Updates the language code of the service: all the translate pipe will invoke the trasform method.
+        this.languageCode = language;
+
+        // Sends an event for the components.
+        this.translationChanged.emit(null);
 
     }
 
