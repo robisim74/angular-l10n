@@ -125,20 +125,10 @@ export function extend(...args: any[]): any {
         this.serviceState = ServiceState.isWaiting;
 
         // When the language changes, subscribes to the event & call updateTranslation method.
-        this.locale.languageCodeChanged.subscribe(
+        this.locale.updateLocalization.subscribe(
 
             // Generator or next.
             () => this.updateTranslation()
-
-        );
-
-        // When the country changes, subscribes to the event & call updateTranslation method only if enableLocale is true.
-        this.locale.countryCodeChanged.subscribe(
-
-            // Generator or next.
-            () => {
-                if (this.enableLocale) { this.updateTranslation(); }
-            }
 
         );
 
@@ -269,7 +259,7 @@ export function extend(...args: any[]): any {
     }
 
     /**
-     * Updates the language code and loads the translation data for the asynchronous loading.
+     * Gets language code and loads the translation data for the asynchronous loading.
      * 
      * @param language The language for the service
      */
@@ -279,7 +269,7 @@ export function extend(...args: any[]): any {
         + "-"
         + this.locale.getCurrentCountry()): void {
 
-        if (language != "" && language != this.languageCode && this.serviceState != ServiceState.isLoading) {
+        if (language != "" && language != this.languageCode) {
 
             // Asynchronous loading.
             if (this.loadingMode == LoadingMode.Async) {

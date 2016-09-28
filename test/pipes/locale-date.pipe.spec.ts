@@ -37,7 +37,7 @@ describe('LocaleDatePipe', () => {
 
     });
 
-    it('should localize a date', fakeAsync(
+    it('should localize a date',
         inject([LocaleService],
             (locale: LocaleService) => {
 
@@ -49,7 +49,7 @@ describe('LocaleDatePipe', () => {
 
                 expect(pipe.transform(date, locale.getDefaultLocale(), 'shortDate')).toEqual('19/7/2016');
 
-            }))
+            })
     );
 
 });

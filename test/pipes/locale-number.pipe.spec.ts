@@ -37,7 +37,7 @@ describe('Locale number pipes', () => {
 
         });
 
-        it('should localize a decimal number', fakeAsync(
+        it('should localize a decimal number',
             inject([LocaleService],
                 (locale: LocaleService) => {
 
@@ -49,7 +49,7 @@ describe('Locale number pipes', () => {
 
                     expect(pipe.transform(1234.5, locale.getDefaultLocale(), '1.2-2')).toEqual('1.234,50');
 
-                }))
+                })
         );
     });
 
@@ -76,7 +76,7 @@ describe('Locale number pipes', () => {
 
         });
 
-        it('should localize a percent number', fakeAsync(
+        it('should localize a percent number',
             inject([LocaleService],
                 (locale: LocaleService) => {
 
@@ -88,7 +88,7 @@ describe('Locale number pipes', () => {
 
                     expect(pipe.transform(1.23, locale.getDefaultLocale(), '1.0-0')).toEqual('123%');
 
-                }))
+                })
         );
     });
 
@@ -115,7 +115,7 @@ describe('Locale number pipes', () => {
 
         });
 
-        it('should localize a currency', fakeAsync(
+        it('should localize a currency',
             inject([LocaleService],
                 (locale: LocaleService) => {
 
@@ -141,7 +141,7 @@ describe('Locale number pipes', () => {
 
                     expect(value).toEqual('1.234,50 €');
 
-                }))
+                })
         );
 
     });

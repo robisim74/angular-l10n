@@ -112,32 +112,37 @@ import { Injectable, EventEmitter, Output } from '@angular/core';
     /**
      * Output for event current language code changed.
      */
-    @Output() languageCodeChanged: EventEmitter<string> = new EventEmitter<string>();
+    @Output() languageCodeChanged: EventEmitter<string> = new EventEmitter<string>(true);
 
     /**
      * Output for event current country code changed.
      */
-    @Output() countryCodeChanged: EventEmitter<string> = new EventEmitter<string>();
+    @Output() countryCodeChanged: EventEmitter<string> = new EventEmitter<string>(true);
 
     /**
      * Output for event current currency code changed.
      */
-    @Output() currencyCodeChanged: EventEmitter<string> = new EventEmitter<string>();
+    @Output() currencyCodeChanged: EventEmitter<string> = new EventEmitter<string>(true);
 
     /**
      * Output for event script code changed.
      */
-    @Output() scriptCodeChanged: EventEmitter<string> = new EventEmitter<string>();
+    @Output() scriptCodeChanged: EventEmitter<string> = new EventEmitter<string>(true);
 
     /**
      * Output for event numbering system changed.
      */
-    @Output() numberingSystemChanged: EventEmitter<string> = new EventEmitter<string>();
+    @Output() numberingSystemChanged: EventEmitter<string> = new EventEmitter<string>(true);
 
     /**
      * Output for event calendar changed.
      */
-    @Output() calendarChanged: EventEmitter<string> = new EventEmitter<string>();
+    @Output() calendarChanged: EventEmitter<string> = new EventEmitter<string>(true);
+
+    /**
+     * Output for event update Localization.
+     */
+    @Output() updateLocalization: EventEmitter<any> = new EventEmitter<any>(true);
 
     /**
      * Enable/disable cookie.
@@ -429,12 +434,16 @@ import { Injectable, EventEmitter, Output } from '@angular/core';
         // Checks if the language has changed.
         if (this.languageCode != language) {
 
-            // Assigns the value & sends an event.
+            // Assigns the value.
             this.languageCode = language;
-            this.languageCodeChanged.emit(language);
 
             // Sets the default locale.
             this.setDefaultLocale();
+
+            // Sends the events.
+            this.updateLocalization.emit(null); // Event for LocalizationService.
+
+            this.languageCodeChanged.emit(language);
 
         }
 
@@ -454,21 +463,32 @@ import { Injectable, EventEmitter, Output } from '@angular/core';
         // Checks if language, country, script or extension have changed.
         if (this.languageCode != language || this.countryCode != country || this.scriptCode != script || this.numberingSystem != numberingSystem || this.calendar != calendar) {
 
-            // Assigns the values & sends the events.
+            // Stores the changes.
+            var changes: any = {};
+            changes["languageCode"] = this.languageCode != language ? true : false;
+            changes["countryCode"] = this.countryCode != country ? true : false;
+            changes["scriptCode"] = this.scriptCode != script ? true : false;
+            changes["numberingSystem"] = this.numberingSystem != numberingSystem ? true : false;
+            changes["calendar"] = this.calendar != calendar ? true : false;
+
+            // Assigns the values.
             this.languageCode = language;
             this.countryCode = country;
             this.scriptCode = script;
             this.numberingSystem = numberingSystem;
             this.calendar = calendar;
 
-            this.languageCodeChanged.emit(language);
-            this.countryCodeChanged.emit(country);
-            this.scriptCodeChanged.emit(script);
-            this.numberingSystemChanged.emit(numberingSystem);
-            this.calendarChanged.emit(calendar);
-
             // Sets the default locale.
             this.setDefaultLocale();
+
+            // Sends the events.
+            if (changes["languageCode"] || changes["countryCode"]) { this.updateLocalization.emit(null); } // Event for LocalizationService.
+
+            if (changes["languageCode"]) { this.languageCodeChanged.emit(language); }
+            if (changes["countryCode"]) { this.countryCodeChanged.emit(country); }
+            if (changes["scriptCode"]) { this.scriptCodeChanged.emit(script); }
+            if (changes["numberingSystem"]) { this.numberingSystemChanged.emit(numberingSystem); }
+            if (changes["calendar"]) { this.calendarChanged.emit(calendar); }
 
         }
 
@@ -484,13 +504,14 @@ import { Injectable, EventEmitter, Output } from '@angular/core';
         // Checks if the currency has changed.
         if (this.currencyCode != currency) {
 
-            // Assigns the value & sends an event.
+            // Assigns the value.
             this.currencyCode = currency;
-            this.currencyCodeChanged.emit(currency);
 
             // Sets the storage "currency".
             this.setStorage("currency", this.currencyCode);
 
+            // Sends an event.
+            this.currencyCodeChanged.emit(currency);
         }
 
     }

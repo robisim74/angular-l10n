@@ -62,7 +62,7 @@ describe('TranslatePipe', () => {
     });
 
     // Direct loading.
-    it('should translate through direct loading', fakeAsync(
+    it('should translate through direct loading',
         inject([LocaleService, LocalizationService],
             (locale: LocaleService, localization: LocalizationService) => {
 
@@ -108,11 +108,11 @@ describe('TranslatePipe', () => {
 
                 }
 
-            }))
+            })
     );
 
     // i18n plural.
-    it('should translate 18n plural', fakeAsync(
+    it('should translate 18n plural',
         inject([LocaleService, LocalizationService],
             (locale: LocaleService, localization: LocalizationService) => {
 
@@ -133,13 +133,13 @@ describe('TranslatePipe', () => {
 
                 expect(pipe.transform('10 messages', localization.languageCode)).toEqual("١٠ رسائل");
 
-            }))
+            })
     );
 
     // Async loading.
     it('should translate through async loading',
         inject([LocaleService, LocalizationService, MockBackend],
-            fakeAsync((locale: LocaleService, localization: LocalizationService, backend: MockBackend) => {
+            (locale: LocaleService, localization: LocalizationService, backend: MockBackend) => {
 
                 // Mock backend for testing the Http service.
                 expectURL(backend);
@@ -178,7 +178,7 @@ describe('TranslatePipe', () => {
 
                 }
 
-            }))
+            })
     );
 
 });
