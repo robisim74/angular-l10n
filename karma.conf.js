@@ -46,7 +46,8 @@ module.exports = function (config) {
                         loaders: ['ts-loader'],
                         exclude: /node_modules/
                     }
-                ]
+                ],
+                exprContextCritical: false
             }
         },
 

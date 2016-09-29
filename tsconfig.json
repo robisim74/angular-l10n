@@ -9,9 +9,14 @@
         "experimentalDecorators": true,
         "removeComments": false,
         "noImplicitAny": true,
-        "declaration": true
-    },
-    "exclude": [
-        "node_modules"
-    ]
+        "declaration": true,
+        "lib": [
+            "es2015",
+            "dom"
+        ],
+        "types": [
+            "jasmine",
+            "node"
+        ]
+    }
 }
