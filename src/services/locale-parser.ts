@@ -6,8 +6,6 @@
  * https://github.com/robisim74/angular2localization
  */
 
-import { DecimalPipe } from '@angular/common';
-
 // Services.
 import { IntlSupport } from './Intl-support';
 
@@ -157,9 +155,7 @@ export abstract class NumberCode {
             // Updates Unicode for numbers by default locale.
             for (var i: number = 0; i <= 9; i++) {
 
-                var localeDecimal: DecimalPipe = new DecimalPipe(defaultLocale);
-
-                this.numbers[i] = this.Unicode(localeDecimal.transform(i, '1.0-0'));
+                this.numbers[i] = this.Unicode(new Intl.NumberFormat(defaultLocale).format(i));
 
             }
 
@@ -225,22 +221,29 @@ class DecimalCode extends NumberCode {
 
             // Updates Unicode for signs by default locale.
             var value: number = -0.9; // Reference value.
-            var localeDecimal: DecimalPipe = new DecimalPipe(defaultLocale);
 
-            var localeValue: string = localeDecimal.transform(value, '1.1-1');
+            var localeValue: string = new Intl.NumberFormat(defaultLocale).format(value);
 
             // Checks Unicode character 'RIGHT-TO-LEFT MARK' (U+200F).
-            var index: number;
-            if (this.Unicode(localeValue.charAt(0)) != "\\u200F") {
-                // Left to right.
-                index = 0;
-            } else {
-                // Right to left.
-                index = 1;
-            }
+            if (this.Unicode(localeValue.charAt(0)) == "\\u200F") {
 
-            this.minusSign = this.Unicode(localeValue.charAt(index));
-            this.decimalSeparator = this.Unicode(localeValue.charAt(index + 2));
+                // Right to left.
+                this.minusSign = this.Unicode(localeValue.charAt(1));
+                this.decimalSeparator = this.Unicode(localeValue.charAt(3));
+
+            } else if (this.Unicode(localeValue.charAt(0)) == this.Unicode(new Intl.NumberFormat(defaultLocale).format(0))) {
+
+                // IE & Edge reverse the order.
+                this.minusSign = this.Unicode(localeValue.charAt(3));
+                this.decimalSeparator = this.Unicode(localeValue.charAt(1));
+
+            } else {
+
+                // Left to right.
+                this.minusSign = this.Unicode(localeValue.charAt(0));
+                this.decimalSeparator = this.Unicode(localeValue.charAt(2));
+
+            }
 
         }
 
