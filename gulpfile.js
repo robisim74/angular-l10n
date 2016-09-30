@@ -59,7 +59,7 @@ gulp.task('bundle:umd', function () {
             target: 'es5',
             allowJs: true,
             typescript: require('typescript'),
-            noExternalResolve: true
+            noResolve: true
         }))
         .pipe(gulp.dest('dist/bundles'));
 
