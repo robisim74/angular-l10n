@@ -86,7 +86,6 @@ See [library specification](https://github.com/robisim74/angular2localization/bl
 In order to build the library if you want to contribute to it:
 ```Shell
 npm install
-typings install
 
 npm test
 
