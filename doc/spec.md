@@ -22,11 +22,11 @@ Library version: 1.0.3
         * [3.2.1 Direct loading](#3.2.1)
         * [3.2.2 Asynchronous loading of json files](#3.2.2)
         * [3.2.3 Asynchronous loading through a Web API](#3.2.3)
-        * [3.2.4 Using locale as language](#3.2.4)
-        * [3.2.5 Special characters](#3.2.5)
-        * [3.2.6 Changing language](#3.2.6)
+        * [3.2.4 Special characters](#3.2.4)
+        * [3.2.5 Changing language](#3.2.5)
     * [3.3 Third scenario: you need to translate messages, dates and numbers](#3.3)
-        * [3.3.1 Changing locale and currency](#3.3.1)
+        * [3.3.1 Using locale as language](#3.3.1)
+        * [3.3.2 Changing locale and currency](#3.3.2)
 * [4 Default locale](#4)
     * [4.1 Storage](#4.1)
 * [5 Lazy routing](#5)
@@ -405,28 +405,7 @@ this.localization.updateTranslation(); // Need to update the translation.
 
 *N.B. Check that the `json` response data are in the correct format as shown above.*
 
-#### <a name="3.2.4"/>3.2.4 Using locale as language
-You can use different countries for the same language, calling `useLocaleAsLanguage` method at initialization of the `LocalizationService`:
-```TypeScript
-this.locale.addLanguages(['en', 'ar']);
-this.locale.definePreferredLocale('en', 'US');
-
-this.localization.translationProvider('./resources/locale-');
-
-this.localization.useLocaleAsLanguage(); // Enables the feature.
-
-this.localization.updateTranslation();
-```
-and create the json files as:
-```
-locale-en-US.json
-locale-en-GB.json
-locale-ar-SA.json
-locale-ar-EG.json
-...
-```
-
-#### <a name="3.2.5"/>3.2.5 Special characters
+#### <a name="3.2.4"/>3.2.4 Special characters
 You can use quotes inside a string, as long as they don't match the quotes surrounding the string:
 ```
 "It wasn't a dream."
@@ -436,7 +415,7 @@ Because strings must be written within quotes, use the `\` escape character to i
 "\"What's happened to me?\" he thought."
 ```
 
-#### <a name="3.2.6"/>3.2.6 Changing language
+#### <a name="3.2.5"/>3.2.5 Changing language
 To change language at runtime, call the following method:
 ```TypeScript
 this.locale.setCurrentLanguage(language);
@@ -458,7 +437,32 @@ this.locale.definePreferredLocale('en', 'US', 30);
 this.locale.definePreferredCurrency('USD');
 ```
 
-#### <a name="3.3.1"/>3.3.1 Changing locale and currency
+#### <a name="3.3.1"/>3.3.1 Using locale as language
+You can use different countries for the same language, calling `useLocaleAsLanguage` method at initialization of the `LocalizationService`:
+```TypeScript
+// Adds a new language (ISO 639 two-letter or three-letter code).
+this.locale.addLanguage('ar');
+// Add a new language here.
+
+// Required: default language, country (ISO 3166 two-letter, uppercase code) and expiry (No days). If the expiry is omitted, the cookie becomes a session cookie.
+// Selects the default language and country, regardless of the browser language, to avoid inconsistencies between the language and country.
+this.locale.definePreferredLocale('ar', 'SA', 30);
+
+// Required: initializes the translation provider with the given path prefix.
+this.localization.translationProvider('./resources/locale-');
+
+this.localization.useLocaleAsLanguage(); // Enables the feature.
+
+this.localization.updateTranslation();
+```
+and create the json files as:
+```
+locale-ar-SA.json
+locale-ar-EG.json
+...
+```
+
+#### <a name="3.3.2"/>3.3.2 Changing locale and currency
 To change locale at runtime, call the following method:
 ```TypeScript
 this.locale.setCurrentLocale(language, country);
