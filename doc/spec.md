@@ -1,5 +1,5 @@
 # Angular 2 Localization library specification
-Library version: 1.0.2
+Library version: 1.0.3
 
 ## Table of contents
 * [1 The library structure](#1)
@@ -22,8 +22,9 @@ Library version: 1.0.2
         * [3.2.1 Direct loading](#3.2.1)
         * [3.2.2 Asynchronous loading of json files](#3.2.2)
         * [3.2.3 Asynchronous loading through a Web API](#3.2.3)
-        * [3.2.4 Special characters](#3.2.4)
-        * [3.2.5 Changing language](#3.2.5)
+        * [3.2.4 Using locale as language](#3.2.4)
+        * [3.2.5 Special characters](#3.2.5)
+        * [3.2.6 Changing language](#3.2.6)
     * [3.3 Third scenario: you need to translate messages, dates and numbers](#3.3)
         * [3.3.1 Changing locale and currency](#3.3.1)
 * [4 Default locale](#4)
@@ -250,8 +251,8 @@ These methods use the [Intl.Collator](https://developer.mozilla.org/en-US/docs/W
 
 ### <a name="2.5"/>2.5 Getting the translation in component class
 If you need to get the translation in component class, [LocalizationService](#7.2) has the following methods:
-* `translate(key: string, args?: any): string;`
-* `translateAsync(key: string, args?: any): Observable<string>;`
+* `translate(key: string, args?: any, lang?: string): string;`
+* `translateAsync(key: string, args?: any, lang?: string): Observable<string>;`
 
 But if you need to get the translation when the selected language changes, you must subscribe to the following event:
 * `translationChanged: EventEmitter<any>;`
@@ -404,7 +405,28 @@ this.localization.updateTranslation(); // Need to update the translation.
 
 *N.B. Check that the `json` response data are in the correct format as shown above.*
 
-#### <a name="3.2.4"/>3.2.4 Special characters
+#### <a name="3.2.4"/>3.2.4 Using locale as language
+You can use different countries for the same language, calling `useLocaleAsLanguage` method at initialization of the `LocalizationService`:
+```TypeScript
+this.locale.addLanguages(['en', 'ar']);
+this.locale.definePreferredLocale('en', 'US');
+
+this.localization.translationProvider('./resources/locale-');
+
+this.localization.useLocaleAsLanguage(); // Enables the feature.
+
+this.localization.updateTranslation();
+```
+and create the json files as:
+```
+locale-en-US.json
+locale-en-GB.json
+locale-ar-SA.json
+locale-ar-EG.json
+...
+```
+
+#### <a name="3.2.5"/>3.2.5 Special characters
 You can use quotes inside a string, as long as they don't match the quotes surrounding the string:
 ```
 "It wasn't a dream."
@@ -414,7 +436,7 @@ Because strings must be written within quotes, use the `\` escape character to i
 "\"What's happened to me?\" he thought."
 ```
 
-#### <a name="3.2.5"/>3.2.5 Changing language
+#### <a name="3.2.6"/>3.2.6 Changing language
 To change language at runtime, call the following method:
 ```TypeScript
 this.locale.setCurrentLanguage(language);
@@ -680,6 +702,7 @@ Property | Value
 `scriptCodeChanged: EventEmitter<string>;` | Output for event script code changed
 `numberingSystemChanged: EventEmitter<string>;` | Output for event numbering system changed
 `calendarChanged: EventEmitter<string>;` | Output for event calendar changed
+`updateLocalization: EventEmitter<any>;` | Output for event update Localization.
 `enableCookie: boolean;` | Enable/disable cookie
 `enableLocalStorage: boolean;` | Enable/disable Local Storage
 
@@ -709,15 +732,17 @@ Property | Value
 `languageCode: string;` | The language code for the service
 `loadingMode: LoadingMode;` | The loading mode for the service
 `serviceState: ServiceState;` | The service state
+`enableLocale: boolean;` | Enable/disable locale as language
 
 Method | Function
 ------ | --------
 `addTranslation(language: string, translation: any): void;` | Direct loading: adds new translation data
 `translationProvider(prefix: string, dataFormat?: string, webAPI?: boolean): void;` | Asynchronous loading: defines the translation provider
 `addProvider(prefix: string, dataFormat?: string, webAPI?: boolean): void;` | Asynchronous loading: adds a translation provider
-`translate(key: string, args?: any): string;` | Translates a key
-`translateAsync(key: string, args?: any): Observable<string>;` | Translates a key
-`updateTranslation(language?: string): void;` | Updates the language code and loads the translation data for the asynchronous loading
+`translate(key: string, args?: any, lang?: string): string;` | Translates a key
+`translateAsync(key: string, args?: any, lang?: string): Observable<string>;` | Translates a key
+`useLocaleAsLanguage(): void;` | Sets the use of locale as language for the service
+`updateTranslation(language?: string): void;` | Gets language code and loads the translation data for the asynchronous loading
 `compare(key1: string, key2: string, extension?: string, options?: any): number;` | Compares two keys by the value of translation & the current language code
 `sort(list: Array<any>, keyName: any, order?: string, extension?: string, options?: any): Array<any>;` | Sorts an array of objects or an array of arrays by the current language code
 `sortAsync(list: Array<any>, keyName: any, order?: string, extension?: string, options?: any): Observable<Array<any>>;` | Sorts an array of objects or an array of arrays by the current language code
@@ -737,26 +762,39 @@ Method | Function
 `static NumberFormat(defaultLocale: string): boolean;` | Support for numbers
 `static Collator(lang: string): boolean;` | Support for Collator
 
-## <a name="Appendix A"/>Appendix A - Using Ionic 2 up to 2.0.0-beta.11 & Angular 2.0.0-rc.4
+## <a name="Appendix A"/>Appendix A - Using Ionic 2
 Install the library:
 ```Shell
-npm install --save angular2localization@0.8.9
+npm install --save angular2localization
 ```
-Initialize the services of the library in `app.ts` files, when the platform is ready. This in an example for the [Second scenario](#3.2):
+Import the modules you need in `app.module.ts`:
 ```TypeScript
 ...
-import { HTTP_PROVIDERS } from '@angular/http';
+import { HttpModule } from '@angular/http';
+// Angular 2 Localization.
+import { LocaleModule, LocalizationModule } from 'angular2localization';
 
-import { LocaleService, LocalizationService } from ''angular2localization/angular2localization';
-
-@Component({
+@NgModule({
     ...
-    providers: [LocaleService, LocalizationService] // Inherited by all descendants.
+    imports: [
+        ...
+        HttpModule,
+        LocaleModule.forRoot(), // New instance of LocaleService.
+        LocalizationModule.forRoot() // New instance of LocalizationService.
+    ],
+    ...
 })
+
+export class AppModule { }
+```
+Initialize the services of the library in `app.component.ts` file, when the platform is ready. This in an example for the [Second scenario](#3.2):
+```TypeScript
+...
+import { LocaleService, LocalizationService } from 'angular2localization';
+...
 export class MyApp {
     ...
-    constructor(public locale: LocaleService, public localization: LocalizationService, private platform: Platform) {
-        ...
+    constructor(public locale: LocaleService, public localization: LocalizationService, platform: Platform) {
         platform.ready().then(() => {
             // Okay, so the platform is ready and our plugins are available.
             // Here you can do any higher level native things you might need.
@@ -778,10 +816,8 @@ export class MyApp {
         });
     }
 }
-
-ionicBootstrap(MyApp, [HTTP_PROVIDERS]);
 ```
-and create the `json` files of the translations such as `locale-en.json` in `wwww/i18n` folder.
+and add the `json` files of the translations such as `locale-en.json` in `wwww/i18n` folder.
 
 ## <a name="Appendix B"/>Appendix B - ES5 example
 This is an example in ES5 for the [First scenario](#3.1). The `AppModule`:

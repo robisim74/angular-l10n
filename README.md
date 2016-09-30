@@ -57,11 +57,11 @@ System.config({
     });
 ```
 
-#### Angular-CLI webpack
-No need to set up anything, just import in your code.
+#### Angular-CLI
+No need to set up anything, just import it in your code.
 
-#### Via webpack
-No need to set up anything, just import in your code.
+#### Tree shaking via rollup or webpack
+No need to set up anything, just import it in your code.
 
 #### Ionic 2
 [Using Ionic 2](https://github.com/robisim74/angular2localization/blob/master/doc/spec.md#Appendix%20A) with this library.
@@ -74,7 +74,7 @@ If you build apps in Angular 2 using ES5, you can include the `umd` bundle in yo
 and using global `ng.angular2localization` namespace. For a basic usage, see this [ES5 example](https://github.com/robisim74/angular2localization/blob/master/doc/spec.md#Appendix%20B).
 
 ## AoT compilation
-This library is compatible with AoT compilation, just import in your code.
+This library is compatible with AoT compilation, just import it in your code.
 
 ## Usage
 See [library specification](https://github.com/robisim74/angular2localization/blob/master/doc/spec.md).
@@ -83,7 +83,7 @@ See [library specification](https://github.com/robisim74/angular2localization/bl
 [Angular 2 Localization with an ASP.NET CORE MVC Service](https://damienbod.com/2016/04/29/angular-2-localization-with-an-asp-net-core-mvc-service/) @damienbod
 
 ## Building
-In order to build the library if you want to contribute:
+In order to build the library if you want to contribute to it:
 ```Shell
 npm install
 typings install
