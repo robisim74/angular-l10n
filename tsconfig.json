@@ -10,6 +10,7 @@
         "removeComments": false,
         "noImplicitAny": true,
         "declaration": true,
+        "skipLibCheck": true,
         "lib": [
             "es2015",
             "dom"

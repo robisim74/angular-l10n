@@ -36,11 +36,11 @@ module.exports = function (config) {
         // webpack
         webpack: {
             resolve: {
-                extensions: ['', '.ts', '.js']
+                extensions: ['.ts', '.js']
             },
             devtool: 'source-map',
             module: {
-                loaders: [
+                rules: [
                     {
                         test: /\.ts/,
                         loaders: ['ts-loader'],

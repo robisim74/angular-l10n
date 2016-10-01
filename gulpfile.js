@@ -12,7 +12,7 @@ var gulp = require('gulp'),
     tslint = require('gulp-tslint'),
     filter = require('gulp-filter');
 
-// TypeScript es2015 compiler options. 
+// Compiler options for ngc. 
 var tsBuildProject = ts.createProject('tsconfig-build.json', {
     typescript: require('typescript')
 });
