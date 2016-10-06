@@ -12,13 +12,12 @@ Get the changelog by [releases](https://github.com/robisim74/angular2localizatio
 **Angular version: ^2.0.0**
 
 ## Angular 2 i18n solutions
-| _Feature_ | **Angular 2 (work-in)** _Native_ | **ng2-translate** _External library_ | **angular2localization** _External library_ |
+| _Feature_ | [Angular 2](https://angular.io/docs/ts/latest/cookbook/i18n.html) _Native_ | [ng2-translate](https://github.com/ocombe/ng2-translate) _External library_ | [angular2localization](https://github.com/robisim74/angular2localization/blob/master/doc/spec.md) _External library_ |
 | --------- | -------------------------------- | ------------------------------------ | ------------------------------------------- |
-_Messages_ | Html attribute, Message ID, ? | impure pipe | pure pipe
-_File formats_ | XLIFF, XMB/XTB, ? | static JSON | static JSON and via Web API
+_Messages_ | Html attribute, Message ID | impure pipe | pure pipe
+_File formats_ | XLIFF, XMB/XTB | static JSON | static JSON and via Web API
 _No bootstrap (when language changes)_ | no | yes | yes
 _Getting the translation in component class_ | ? | yes | yes
-_Default locale_ | yes | no | yes
 _Numbers_ | pure pipe via Intl | - | pure pipe via Intl
 _Dates_ | pure pipe via Intl | - | pure pipe via Intl
 _Validation_ | - | - | numbers validation 
