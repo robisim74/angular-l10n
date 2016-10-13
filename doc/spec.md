@@ -1,5 +1,5 @@
 # Angular 2 Localization library specification
-Library version: 1.0.3
+Library version: 1.1.0
 
 ## Table of contents
 * [1 The library structure](#1)
