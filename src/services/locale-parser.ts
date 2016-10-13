@@ -9,7 +9,7 @@
 // Services.
 import { IntlSupport } from './Intl-support';
 
-function isPresent(obj: any): boolean {
+export function isPresent(obj: any): boolean {
 
     return obj !== undefined && obj !== null;
 
