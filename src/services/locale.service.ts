@@ -110,6 +110,11 @@ import { Injectable, EventEmitter, Output } from '@angular/core';
     private static referenceCounter: number = 0;
 
     /**
+     * Output for event default locale changed.
+     */
+    @Output() defaultLocaleChanged: EventEmitter<string> = new EventEmitter<string>(true);
+
+    /**
      * Output for event current language code changed.
      */
     @Output() languageCodeChanged: EventEmitter<string> = new EventEmitter<string>(true);
@@ -546,6 +551,9 @@ import { Injectable, EventEmitter, Output } from '@angular/core';
 
         // Sets the storage "locale".
         this.setStorage("locale", this.defaultLocale);
+
+        // Sends an event.
+        this.defaultLocaleChanged.emit(this.defaultLocale);
 
     }
 

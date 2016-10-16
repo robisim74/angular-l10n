@@ -12,7 +12,7 @@ import { LocalizationService } from './localization.service';
 
 /**
  * Locale superclass.
- * Provides the methods for localization.
+ * Provides the updates for localization.
  * 
  * Extend this class in components to provide the necessary methods for localization:
  * 
@@ -29,26 +29,60 @@ import { LocalizationService } from './localization.service';
  */
 export class Locale {
 
-    constructor(public locale?: LocaleService, public localization?: LocalizationService) { }
+    /**
+     * Language code of the LocalizationService.
+     */
+    lang: string;
 
-    // Gets the language code for the LocalizationService.
-    public get lang(): string {
+    /**
+     * The default locale.
+     */
+    defaultLocale: string;
 
-        return this.localization.languageCode;
+    /**
+     * The current currency.
+     */
+    currency: string;
 
-    }
+    constructor(public locale?: LocaleService, public localization?: LocalizationService) {
 
-    // Gets the default locale.
-    public get defaultLocale(): string {
+        if (this.localization != null) {
 
-        return this.locale.getDefaultLocale();
+            this.lang = this.localization.languageCode;
 
-    }
+            // When the language changes, subscribes to the event & updates lang property.
+            this.localization.translationChanged.subscribe(
 
-    // Gets the current currency.
-    public get currency(): string {
+                // Generator or next.
+                (language: string) => { this.lang = language; }
 
-        return this.locale.getCurrentCurrency();
+            );
+
+        }
+
+        if (this.locale != null) {
+
+            this.defaultLocale = this.locale.getDefaultLocale();
+
+            // When the default locale changes, subscribes to the event & updates defaultLocale property.
+            this.locale.defaultLocaleChanged.subscribe(
+
+                // Generator or next.
+                (defaultLocale: string) => { this.defaultLocale = defaultLocale; }
+
+            );
+
+            this.currency = this.locale.getCurrentCurrency();
+
+            // When the currency changes, subscribes to the event & updates currency property.
+            this.locale.currencyCodeChanged.subscribe(
+
+                // Generator or next.
+                (currency: string) => { this.currency = currency; }
+
+            );
+
+        }
 
     }
 

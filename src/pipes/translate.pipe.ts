@@ -114,7 +114,7 @@ export class TranslatePipe implements PipeTransform {
 
         }
 
-        return key;
+        return "";
 
     }
 

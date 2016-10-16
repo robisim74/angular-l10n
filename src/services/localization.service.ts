@@ -77,7 +77,7 @@ export function extend(...args: any[]): any {
     /**
      * Output for event translation changed.
      */
-    @Output() translationChanged: EventEmitter<any> = new EventEmitter<any>();
+    @Output() translationChanged: EventEmitter<string> = new EventEmitter<string>();
 
     /**
      * The language code for the service.
@@ -690,7 +690,7 @@ export function extend(...args: any[]): any {
         this.languageCode = language;
 
         // Sends an event for the components.
-        this.translationChanged.emit(null);
+        this.translationChanged.emit(language);
 
     }
 
