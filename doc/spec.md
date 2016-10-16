@@ -1,5 +1,5 @@
 # Angular 2 Localization library specification
-Library version: 1.1.0
+Library version: 1.1.1
 
 ## Table of contents
 * [1 The library structure](#1)
@@ -12,10 +12,9 @@ Library version: 1.1.0
         * [2.2.2 Decimals](#2.2.2)
         * [2.2.3 Percentages](#2.2.3)
         * [2.2.4 Currencies](#2.2.4)
-    * [2.3 Quick use](#2.3)
-    * [2.4 List](#2.4)
-        * [2.4.1 Sorting & search](#2.4.1)
-    * [2.5 Getting the translation in component class](#2.5)
+    * [2.3 List](#2.3)
+        * [2.3.1 Sorting & search](#2.3.1)
+    * [2.4 Getting the translation in component class](#2.4)
 * [3 Scenarios](#3)
     * [3.1 First scenario: you need to localize dates and numbers, but no messages](#3.1)
     * [3.2 Second scenario: you only need to translate messages](#3.2)
@@ -25,8 +24,8 @@ Library version: 1.1.0
         * [3.2.4 Special characters](#3.2.4)
         * [3.2.5 Changing language](#3.2.5)
     * [3.3 Third scenario: you need to translate messages, dates and numbers](#3.3)
-        * [3.3.1 Using locale as language](#3.3.1)
-        * [3.3.2 Changing locale and currency](#3.3.2)
+        * [3.3.1 Changing locale and currency](#3.3.1)
+        * [3.3.2 Option: using locale as language](#3.3.2)
 * [4 Default locale](#4)
     * [4.1 Storage](#4.1)
 * [5 Lazy routing](#5)
@@ -56,7 +55,7 @@ Module | Class | Type | Contract
 `LocaleModule` | `LocaleNumberValidator` | Directive | Validates a number by default locale
 `LocalizationModule` | `LocalizationService` | Service | Gets the translation data and performs operations
 `LocalizationModule` | `TranslatePipe` | Pipe | Translates messages
- | `Locale` | Service | Provides the methods for localization
+ | `Locale` | Service | Provides the updates for localization
  | `LocaleParser` | Service | Parses a string and returns a number by default locale
  | `IntlSupport` | Service | Provides the methods to check if Intl is supported
 
@@ -91,22 +90,16 @@ If you want to use parameters:
 ```
 Then include in the component:
 ```TypeScript
-import { LocalizationService } from 'angular2localization';
+import { Locale, LocalizationService } from 'angular2localization';
 ...
-export class AppComponent {
+export class HomeComponent extends Locale {
 
     constructor(public localization: LocalizationService) {
+        super(null, localization);
         ...
     }
 
-    // Gets the language code for the LocalizationService.
-    get lang(): string {
-
-        return this.localization.languageCode;
-     
-    }
-
-}
+} 
 ```
 
 #### <a name="2.1.1"/>2.1.1 Gender
@@ -145,22 +138,16 @@ For example, to get the local date, add in the template:
 ```
 and include in the component:
 ```TypeScript
-import { LocaleService } from 'angular2localization';
+import { Locale, LocaleService, LocalizationService } from 'angular2localization';
 ...
-export class AppComponent {
+export class HomeComponent extends Locale {
 
-    constructor(public locale: LocaleService) {
+    constructor(public locale: LocaleService, public localization: LocalizationService) {
+        super(locale, localization);
         ...
     }
 
-    // Gets the default locale.
-    get defaultLocale(): string {
-
-        return this.locale.getDefaultLocale();
-
-    }
-
-}
+} 
 ```
 
 #### <a name="2.2.2"/>2.2.2 Decimals
@@ -174,7 +161,7 @@ For example, to get the local decimal, add in the template:
 ```Html
 {{ pi | localeDecimal:defaultLocale:'1.5-5' }}
 ```
-and include `get defaultLocale()` in the component.
+and extend `Locale` class in the component.
 
 #### <a name="2.2.3"/>2.2.3 Percentages
 ```
@@ -184,7 +171,7 @@ For example, to get the local percentage, add in the template:
 ```Html
 {{ a | localePercent:defaultLocale:'1.1-1' }}
 ```
-and include `get defaultLocale()` in the component.
+and extend `Locale` class in the component.
 
 #### <a name="2.2.4"/>2.2.4 Currencies
 ```
@@ -196,32 +183,9 @@ For example, to get the local currency, add in the template:
 ```Html
 {{ b | localeCurrency:defaultLocale:currency:true:'1.2-2' }}
 ```
-and include `get defaultLocale()` and `get currency()` in the component:
-```TypeScript
-// Gets the current currency.
-get currency(): string {
+and extend `Locale` class in the component.
 
-    return this.locale.getCurrentCurrency();
-   
-}
-```
-
-### <a name="2.3"/>2.3 Quick use
-If you want, you can avoid including `get lang()`, `get defaultLocale()` or `get currency()` by extending the `Locale` superclass in the components:
-```TypeScript
-import { Locale, LocaleService, LocalizationService } from 'angular2localization';
-...
-export class AppComponent extends Locale {
-
-    constructor(public locale: LocaleService, public localization: LocalizationService) {
-        super(locale, localization);
-        ...
-    }
-
-} 
-```
-
-### <a name="2.4"/>2.4 List
+### <a name="2.3"/>2.3 List
 Now you can localize a list simply. For example:
 ```Html
 <md-card *ngFor="let item of DATA">
@@ -238,7 +202,7 @@ Now you can localize a list simply. For example:
 </md-card>
 ```
 
-#### <a name="2.4.1"/>2.4.1 Sorting & search
+#### <a name="2.3.1"/>2.3.1 Sorting & search
 [LocalizationService](#7.2) has the following methods for sorting and filtering a list by locales:
 * `sort(list: Array<any>, keyName: any, order?: string, extension?: string, options?: any): Array<any>;`
 * `sortAsync(list: Array<any>, keyName: any, order?: string, extension?: string, options?: any): Observable<Array<any>>;`
@@ -249,13 +213,13 @@ These methods use the [Intl.Collator](https://developer.mozilla.org/en-US/docs/W
 
 *N.B. This feature is not supported by all browsers, even with the use of `Intl.js`.*
 
-### <a name="2.5"/>2.5 Getting the translation in component class
+### <a name="2.4"/>2.4 Getting the translation in component class
 If you need to get the translation in component class, [LocalizationService](#7.2) has the following methods:
 * `translate(key: string, args?: any, lang?: string): string;`
 * `translateAsync(key: string, args?: any, lang?: string): Observable<string>;`
 
 But if you need to get the translation when the selected language changes, you must subscribe to the following event:
-* `translationChanged: EventEmitter<any>;`
+* `translationChanged: EventEmitter<string>;`
 
 For example:
 ```TypeScript
@@ -437,7 +401,20 @@ this.locale.definePreferredLocale('en', 'US', 30);
 this.locale.definePreferredCurrency('USD');
 ```
 
-#### <a name="3.3.1"/>3.3.1 Using locale as language
+#### <a name="3.3.1"/>3.3.1 Changing locale and currency
+To change locale at runtime, call the following method:
+```TypeScript
+this.locale.setCurrentLocale(language, country);
+```
+where `language` is the two-letter or three-letter code of the new language (ISO 639) and `country` is the two-letter, uppercase code of the new country (ISO 3166).
+
+To change currency at runtime, call the following method:
+```TypeScript
+this.locale.setCurrentCurrency(currency);
+```
+where `currency` is the three-letter code of the new currency (ISO 4217).
+
+#### <a name="3.3.2"/>3.3.2 Option: using locale as language
 You can use different countries for the same language, calling `useLocaleAsLanguage` method at initialization of the `LocalizationService`:
 ```TypeScript
 // Adds a new language (ISO 639 two-letter or three-letter code).
@@ -461,19 +438,6 @@ locale-ar-SA.json
 locale-ar-EG.json
 ...
 ```
-
-#### <a name="3.3.2"/>3.3.2 Changing locale and currency
-To change locale at runtime, call the following method:
-```TypeScript
-this.locale.setCurrentLocale(language, country);
-```
-where `language` is the two-letter or three-letter code of the new language (ISO 639) and `country` is the two-letter, uppercase code of the new country (ISO 3166).
-
-To change currency at runtime, call the following method:
-```TypeScript
-this.locale.setCurrentCurrency(currency);
-```
-where `currency` is the three-letter code of the new currency (ISO 4217).
 
 ## <a name="4"/>4 Default locale
 The default locale contains the current language and culture. It consists of:
@@ -700,6 +664,7 @@ Finally, import `ReactiveFormsModule` in `AppModule`.
 ### <a name="7.1"/>7.1 LocaleService
 Property | Value
 ---------- | -----
+`defaultLocaleChanged: EventEmitter<string>;` | Output for event default locale changed
 `languageCodeChanged: EventEmitter<string>;` | Output for event current language code changed
 `countryCodeChanged: EventEmitter<string>;` | Output for event current country code changed
 `currencyCodeChanged: EventEmitter<string>;` | Output for event current currency code changed
@@ -732,7 +697,7 @@ Method | Function
 ### <a name="7.2"/>7.2 LocalizationService
 Property | Value
 ---------- | -----
-`translationChanged: EventEmitter<any>;` | Output for event translation changed
+`translationChanged: EventEmitter<string>;` | Output for event translation changed
 `languageCode: string;` | The language code for the service
 `loadingMode: LoadingMode;` | The loading mode for the service
 `serviceState: ServiceState;` | The service state
