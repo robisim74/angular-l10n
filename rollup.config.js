@@ -2,7 +2,7 @@
 
 export default {
     entry: './dist/angular2localization.js',
-    dest: './dist/tmp/angular2localization.umd.js',
+    dest: './dist/bundles/angular2localization.umd.js',
     format: 'umd',
     moduleName: 'ng.angular2localization',
     external: [
