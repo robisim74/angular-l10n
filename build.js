@@ -34,8 +34,8 @@ let results = files.map(file => {
         for (let i = 0; i < failures.length; i++) {
             echo('TSLint:',
                 chalk.yellow(failures[i].failure),
-                chalk.white('[' + failures[i].startPosition.line +
-                    ', ' + failures[i].startPosition.character + ']'),
+                chalk.white('[' + (failures[i].startPosition.line + 1) +
+                    ', ' + (failures[i].startPosition.character + 1) + ']'),
                 failures[i].name);
         }
 
