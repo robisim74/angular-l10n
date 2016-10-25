@@ -5,11 +5,10 @@
     "main": "bundles/angular2localization.umd.js",
     "module": "angular2localization.js",
     "scripts": {
-        "build": "npm run gulp",
-        "gulp": "gulp",
+        "build": "node build.js",
         "test": "karma start"
     },
-    "typings": "./angular2localization.d.ts",
+    "typings": "angular2localization.d.ts",
     "keywords": [
         "angular2",
         "javascript",
@@ -51,12 +50,6 @@
         "@types/node": "6.0.45",
         "codelyzer": "1.0.0-beta.2",
         "core-js": "2.4.1",
-        "del": "2.2.2",
-        "gulp": "3.9.1",
-        "gulp-rename": "1.2.2",
-        "gulp-run": "1.7.1",
-        "gulp-tslint": "6.1.2",
-        "gulp-uglify": "2.0.0",
         "jasmine-core": "2.5.2",
         "karma": "1.3.0",
         "karma-chrome-launcher": "2.0.0",
@@ -65,16 +58,17 @@
         "karma-sourcemap-loader": "0.3.7",
         "karma-spec-reporter": "0.0.26",
         "karma-webpack": "1.8.0",
-        "pump": "1.0.1",
         "reflect-metadata": "0.1.8",
         "rollup": "0.36.3",
-        "run-sequence": "1.2.2",
         "rxjs": "5.0.0-beta.12",
         "ts-helpers": "1.1.1",
         "ts-loader": "0.9.1",
         "tslint": "3.15.1",
         "typescript": "2.0.3",
         "webpack": "2.1.0-beta.25",
-        "zone.js": "0.6.25"
+        "zone.js": "0.6.25",
+        "shelljs": "0.7.4",
+        "chalk": "1.1.3",
+        "uglify-js": "2.7.4"
     }
 }

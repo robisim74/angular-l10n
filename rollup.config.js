@@ -23,6 +23,5 @@ export default {
         'rxjs/Observer': 'Rx',
         'rxjs/add/operator/map': 'Rx'
     },
-    plugins: [
-    ]
+    onwarn: () => { return }
 }

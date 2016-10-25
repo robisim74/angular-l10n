@@ -40,6 +40,9 @@
         "component-class-suffix": false,
         "directive-class-suffix": false,
         "import-destructuring-spacing": true,
+        "templates-use-public": true,
+        "no-access-missing-member": true,
+        "invoke-injectable": true,
         "align": [
             true,
             "arguments",
