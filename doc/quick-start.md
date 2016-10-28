@@ -16,7 +16,7 @@ Add the library to `systemjs.config.js` file (skip this step if you don't use Sy
             'angular2localization': 'npm:angular2localization/bundles/angular2localization.umd.js'
         }
 ```
-Import the modules you need in `AppModule`:
+Import the modules you need in `app.module.ts`:
 ```TypeScript
 ...
 import { AppComponent } from './app.component';
@@ -104,7 +104,7 @@ and create the _json_ files of the translations such as `locale-en.json` and `lo
     "CHANGE_COUNTRY": "Cambia Paese"
 }
 ```
-Add a component: `home.component.ts`:
+Add a component, `home.component.ts`:
 ```TypeScript
 import { Component } from '@angular/core';
 // Services.
