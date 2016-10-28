@@ -15,7 +15,7 @@ Get the changelog by [releases](https://github.com/robisim74/angular2localizatio
 | _Feature_ | [Angular 2](https://angular.io/docs/ts/latest/cookbook/i18n.html) _Native_ | [ng2-translate](https://github.com/ocombe/ng2-translate) _External library_ | [angular2localization](https://github.com/robisim74/angular2localization/blob/master/doc/spec.md) _External library_ |
 | --------- | -------------------------------- | ------------------------------------ | ------------------------------------------- |
 _Messages_ | Html attribute, Message ID | impure pipe | pure pipe
-_File formats_ | XLIFF, XMB/XTB | static JSON | static JSON and via Web API
+_File formats_ | XLIFF, XMB/XTB | JSON | JSON
 _No bootstrap (when language changes)_ | no | yes | yes
 _Getting the translation in component class_ | ? | yes | yes
 _Numbers_ | pure pipe via Intl | - | pure pipe via Intl
@@ -76,7 +76,7 @@ and using global `ng.angular2localization` namespace. For a basic usage, see thi
 This library is compatible with AoT compilation, just import it in your code.
 
 ## Usage
-See [library specification](https://github.com/robisim74/angular2localization/blob/master/doc/spec.md).
+See [quick start](https://github.com/robisim74/angular2localization/blob/master/doc/quick-start.md) and [library specification](https://github.com/robisim74/angular2localization/blob/master/doc/spec.md).
 
 ## Related projects
 [Angular 2 Localization with an ASP.NET CORE MVC Service](https://damienbod.com/2016/04/29/angular-2-localization-with-an-asp-net-core-mvc-service/) @damienbod
