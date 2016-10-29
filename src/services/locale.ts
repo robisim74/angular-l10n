@@ -14,16 +14,7 @@ import { LocalizationService } from './localization.service';
  * Locale superclass.
  * Provides the updates for localization.
  * 
- * Extend this class in components to provide the necessary methods for localization:
- * 
- * export class AppComponent extends Locale {
- *
- *     constructor(public locale: LocaleService, public localization: LocalizationService) {
- *         super(locale, localization);
- *
- *     }
- *
- * } 
+ * Extend this class in components to provide the necessary methods for localization.
  * 
  * @author Roberto Simonetti
  */

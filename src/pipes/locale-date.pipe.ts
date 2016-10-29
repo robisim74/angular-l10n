@@ -13,7 +13,7 @@ import { DatePipe } from '@angular/common';
 import { IntlSupport } from '../services/Intl-support';
 
 /**
- * 'localedate' pipe function.
+ * 'localeDate' pipe function.
  */
 @Pipe({
     name: 'localeDate',
@@ -23,35 +23,6 @@ import { IntlSupport } from '../services/Intl-support';
 /**
  * LocaleDatePipe class.
  * Localizes dates.
- * 
- * Getting the local date:
- * 
- * expression | localedate[:defaultLocale[:format]]
- * 
- * where 'expression' is a date object or a number (milliseconds since UTC epoch) and 'format' indicates which date/time components to include.
- * 
- * For example, to get the local date, add in the template:
- * 
- * {{ today | localedate:defaultLocale:'fullDate' }}
- * 
- * and include in the component:
- * 
- * import {LocaleService} from 'angular2localization';
- * ...
- * export class AppComponent {
- * 
- *     constructor(public locale: LocaleService) {
- *         ...
- *     }
- * 
- *     // Gets the default locale.
- *     get defaultLocale(): string {
- *
- *         return this.locale.getDefaultLocale();
- *      
- *     }
- * 
- * }
  * 
  * @author Roberto Simonetti
  * @see Angular 2 DatePipe for further information

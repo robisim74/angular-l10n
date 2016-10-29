@@ -38,38 +38,6 @@ export function extend(...args: any[]): any {
  * LocalizationService class.
  * Gets the translation data and performs operations.
  * 
- * Direct loading.
- * 
- * To initialize LocalizationService for the direct loading, add the following code in the body of constructor of the bootstrap component:
- *
- * var translationEN = {
- *      TITLE: 'Angular 2 Localization',
- *      CHANGE_LANGUAGE: 'Change language',
- *      ...
- * }
- * // Add a new translation here.
- * 
- * // Required: adds a new translation with the given language code.
- * this.localization.addTranslation('en', translationEN);
- * // Add a new translation with the given language code here.
- * this.localization.updateTranslation(); // Need to update the translation.
- * 
- * Asynchronous loading.
- * 
- * To initialize LocalizationService for the asynchronous loading, add the following code in the body of constructor of the bootstrap component:
- * 
- * // Required: initializes the translation provider with the given path prefix.
- * this.localization.translationProvider('./resources/locale-');
- * this.localization.updateTranslation(); // Need to update the translation.
- * 
- * and create the json files of the translations such as 'locale-en.json':
- * 
- * {
- *     "TITLE": "Angular 2 Localization",
- *     "CHANGE_LANGUAGE": "Change language",
- *     ...
- * }
- * 
  * @author Roberto Simonetti
  */
 @Injectable() export class LocalizationService {

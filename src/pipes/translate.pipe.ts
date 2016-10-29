@@ -26,43 +26,6 @@ import { IntlSupport } from '../services/Intl-support';
  * TranslatePipe class.
  * Translates messages.
  * 
- * Getting the message translation:
- * 
- * expression | translate:lang
- * 
- * where 'expression' is a string key that indicates the message to translate and 'lang' is the language code for the LocalizationService.
- * 
- * For example, to get the translation, add in the template:
- * 
- * {{ 'TITLE' | translate:lang }}
- * 
- * and include in the component:
- * 
- * import {LocalizationService} from 'angular2localization';
- * ...
- * export class AppComponent {
- * 
- *     constructor(public localization: LocalizationService) {
- *         ...
- *     }
- * 
- *     // Gets the language code for the LocalizationService.
- *     get lang(): string {
- *
- *         return this.localization.languageCode;
- *      
- *     }
- * 
- * }
- * 
- * With Angular 2 I18nSelectPipe that displays the string that matches the current value:
- *
- * {{ expression | i18nSelect:mapping | translate:lang }}
- * 
- * With Angular 2 I18nPluralPipe that pluralizes the value properly:
- *
- * {{ expression | i18nPlural:mapping | translate:lang }}
- * 
  * @author Roberto Simonetti
  */
 export class TranslatePipe implements PipeTransform {
