@@ -16,7 +16,7 @@ Add the library to `systemjs.config.js` file (skip this step if you don't use Sy
             'angular2localization': 'npm:angular2localization/bundles/angular2localization.umd.js'
         }
 ```
-Import the modules you need in `app.module.ts`:
+Import the modules and the components you need in `app.module.ts`:
 ```TypeScript
 ...
 import { AppComponent } from './app.component';
@@ -39,7 +39,7 @@ import { LocaleModule, LocalizationModule } from 'angular2localization';
 
 export class AppModule { }
 ```
-Add in the bootstrap component `app.component.ts` in order to access the data of location from anywhere in the application:
+Add to `app.component.ts` in order to access the data of location from anywhere in the application:
 ```TypeScript
 import { Component } from '@angular/core';
 // Services.
@@ -104,7 +104,7 @@ and create the _json_ files of the translations such as `locale-en.json` and `lo
     "CHANGE_COUNTRY": "Cambia Paese"
 }
 ```
-Add a component, `home.component.ts`:
+Add `home.component.ts`:
 ```TypeScript
 import { Component } from '@angular/core';
 // Services.
@@ -136,7 +136,7 @@ export class HomeComponent extends Locale {
 
 }
 ```
-Finally, to extend support for all browser, add the following script tag in `index.html`:
+Finally, to extend support for all browsers, add the following script tag in `index.html`:
 ```Html
 <script src="https://cdn.polyfill.io/v2/polyfill.min.js?features=Intl.~locale.en-US,Intl.~locale.en-GB,Intl.~locale.it-IT"></script>
 ```
