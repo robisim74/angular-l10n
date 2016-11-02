@@ -17,24 +17,6 @@ import { LocaleService } from './locale.service';
 import { IntlSupport } from './Intl-support';
 
 /**
- * Merges two translation data.
- */
-export function extend<A>(a: A): A;
-export function extend<A, B>(a: A, b: B): A & B;
-export function extend<A, B, C>(a: A, b: B, c: C): A & B & C;
-export function extend<A, B, C, D>(a: A, b: B, c: C, d: D): A & B & C & D;
-export function extend(...args: any[]): any {
-    const newObj: any = {};
-    for (let obj of args) {
-        for (let key in obj) {
-            // Copies all the fields.
-            newObj[key] = obj[key];
-        }
-    }
-    return newObj;
-};
-
-/**
  * LocalizationService class.
  * Gets the translation data and performs operations.
  * 
@@ -642,10 +624,32 @@ export function extend(...args: any[]): any {
 
     }
 
-    // Adds or extends translation data.
+    /**
+     * Adds or extends translation data.
+     */
     private addData(data: any, language: string): void {
 
-        this.translationData[language] = (typeof this.translationData[language] != "undefined") ? extend(this.translationData[language], data) : data;
+        this.translationData[language] = (typeof this.translationData[language] != "undefined") ? this.extend(this.translationData[language], data) : data;
+
+    }
+
+    /**
+     * Merges two translation data.
+     */
+    private extend(...args: Array<any>): any {
+
+        const newObj: any = {};
+
+        for (let obj of args) {
+            for (let key in obj) {
+
+                // Copies all the fields.
+                newObj[key] = obj[key];
+
+            }
+        }
+
+        return newObj;
 
     }
 
