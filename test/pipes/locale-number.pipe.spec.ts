@@ -13,21 +13,19 @@ import { LocaleService } from './../../angular2localization';
 
 describe('Locale number pipes', () => {
 
+    beforeEach(() => {
+        // Providers.
+        TestBed.configureTestingModule({
+            providers: [
+                LocaleService
+            ]
+        });
+    });
+
     // LocaleDecimalPipe.
     describe('LocaleDecimalPipe', () => {
 
         var pipe: LocaleDecimalPipe;
-
-        beforeEach(() => {
-            // Providers.
-            TestBed.configureTestingModule({
-                providers: [
-                    LocaleService
-                ]
-            });
-
-            pipe = new LocaleDecimalPipe();
-        });
 
         // Pure pipe.
         it('should be marked as pure', () => {
@@ -40,6 +38,9 @@ describe('Locale number pipes', () => {
             inject([LocaleService],
                 (locale: LocaleService) => {
 
+                    pipe = new LocaleDecimalPipe();
+
+                    locale.enableCookie = false;
                     locale.definePreferredLocale('en', 'US');
 
                     expect(pipe.transform(1234.5, locale.getDefaultLocale(), '1.2-2')).toEqual('1,234.50');
@@ -50,23 +51,13 @@ describe('Locale number pipes', () => {
 
                 })
         );
+
     });
 
     // LocalePercentPipe.
     describe('LocalePercentPipe', () => {
 
         var pipe: LocalePercentPipe;
-
-        beforeEach(() => {
-            // Providers.
-            TestBed.configureTestingModule({
-                providers: [
-                    LocaleService
-                ]
-            });
-
-            pipe = new LocalePercentPipe();
-        });
 
         // Pure pipe.
         it('should be marked as pure', () => {
@@ -79,6 +70,9 @@ describe('Locale number pipes', () => {
             inject([LocaleService],
                 (locale: LocaleService) => {
 
+                    pipe = new LocalePercentPipe();
+
+                    locale.enableCookie = false;
                     locale.definePreferredLocale('en', 'US');
 
                     expect(pipe.transform(1.23, locale.getDefaultLocale(), '1.0-0')).toEqual('123%');
@@ -89,23 +83,13 @@ describe('Locale number pipes', () => {
 
                 })
         );
+
     });
 
     // LocaleCurrencyPipe.
     describe('LocaleCurrencyPipe', () => {
 
         var pipe: LocaleCurrencyPipe;
-
-        beforeEach(() => {
-            // Providers.
-            TestBed.configureTestingModule({
-                providers: [
-                    LocaleService
-                ]
-            });
-
-            pipe = new LocaleCurrencyPipe();
-        });
 
         // Pure pipe.
         it('should be marked as pure', () => {
@@ -118,6 +102,9 @@ describe('Locale number pipes', () => {
             inject([LocaleService],
                 (locale: LocaleService) => {
 
+                    pipe = new LocaleCurrencyPipe();
+
+                    locale.enableCookie = false;
                     locale.definePreferredLocale('en', 'US');
                     locale.definePreferredCurrency('USD');
 

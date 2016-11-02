@@ -13,8 +13,6 @@ import { LocaleService } from './../../angular2localization';
 
 describe('LocaleDatePipe', () => {
 
-    var date: Date;
-    // Translate pipe object.
     var pipe: LocaleDatePipe;
 
     beforeEach(() => {
@@ -24,9 +22,6 @@ describe('LocaleDatePipe', () => {
                 LocaleService
             ]
         });
-
-        date = new Date('7/19/2016');
-        pipe = new LocaleDatePipe();
     });
 
     // Pure pipe.
@@ -38,9 +33,14 @@ describe('LocaleDatePipe', () => {
 
     it('should localize a date',
         inject([LocaleService],
-            (locale: LocaleService) => {
+            (locale: LocaleService) => {               
 
+                pipe = new LocaleDatePipe();
+
+                locale.enableCookie = false;
                 locale.definePreferredLocale('en', 'US');
+
+                var date = new Date('7/19/2016');
 
                 expect(pipe.transform(date, locale.getDefaultLocale(), 'shortDate')).toEqual('7/19/2016');
 

@@ -45,7 +45,7 @@ export function extend(...args: any[]): any {
     /**
      * Output for event translation changed.
      */
-    @Output() translationChanged: EventEmitter<string> = new EventEmitter<string>();
+    @Output() translationChanged: EventEmitter<string> = new EventEmitter<string>(true);
 
     /**
      * The language code for the service.
@@ -584,7 +584,7 @@ export function extend(...args: any[]): any {
         this.translationData = {};
         this.serviceState = ServiceState.isLoading;
 
-        // Get translation data for all providers.
+        // Gets translation data for all providers.
         this.counter = this.providers.length;
 
         for (let provider of this.providers) {
