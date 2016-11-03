@@ -245,7 +245,6 @@ export class HomeComponent {
 
 }
 ```
-*N.B. In the bootstrap component and in its children you have to subscribe to the `translationChanged` event to detect the first asynchronous loading of the translation data.*
 
 ## <a name="3"/>3 Scenarios
 Import the modules you need in `AppModule`:
@@ -268,7 +267,7 @@ export class AppModule { }
 ```
 
 ### <a name="3.1"/>3.1 First scenario: you need to localize dates and numbers, but no messages
-Add in the bootstrap component `AppComponent` in order to access the data of location from anywhere in the application:
+Add in the application root module `AppModule` or in bootstrap component `AppComponent` in order to access the data of location from anywhere in the application:
 ```TypeScript
 import { LocaleService } from 'angular2localization';
 ...
@@ -288,7 +287,7 @@ export class AppComponent {
 ```
 
 ### <a name="3.2"/>3.2 Second scenario: you only need to translate messages
-Add in the bootstrap component `AppComponent` in order to access the data of location from anywhere in the application:
+Add in the application root module `AppModule` or in bootstrap component `AppComponent` in order to access the data of location from anywhere in the application:
 ```TypeScript
 import { LocaleService, LocalizationService } from 'angular2localization';
 ...
@@ -310,7 +309,7 @@ export class AppComponent {
 ```
 
 #### <a name="3.2.1"/>3.2.1 Direct loading
-To initialize `LocalizationService` for the direct loading, add the following code in the body of constructor of the bootstrap component:
+To initialize `LocalizationService` for the direct loading, add the following code in the body of constructor of the application root module or bootstrap component:
 ```TypeScript
 var translationEN = {
      TITLE: 'Angular 2 Localization',
@@ -326,7 +325,7 @@ this.localization.updateTranslation(); // Need to update the translation.
 ```
 
 #### <a name="3.2.2"/>3.2.2 Asynchronous loading of json files
-Alternatively, to initialize `LocalizationService` for the asynchronous loading add the following code in the body of constructor of the bootstrap component:
+Alternatively, to initialize `LocalizationService` for the asynchronous loading add the following code in the body of constructor of the application root module or bootstrap component:
 ```TypeScript
 // Required: initializes the translation provider with the given path prefix.
 this.localization.translationProvider('./resources/locale-');
@@ -387,7 +386,7 @@ this.locale.setCurrentLanguage(language);
 where `language` is the two-letter or three-letter code of the new language (ISO 639).
 
 ### <a name="3.3"/>3.3 Third scenario: you need to translate messages, dates and numbers
-Unlike what said for messages in the [Second scenario](#3.2), use the following code in the body of constructor of the bootstrap component:
+Unlike what said for messages in the [Second scenario](#3.2), use the following code in the body of constructor of the application root module or bootstrap component:
 ```TypeScript
 // Adds a new language (ISO 639 two-letter or three-letter code).
 this.locale.addLanguage('en');
