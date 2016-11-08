@@ -60,6 +60,16 @@ import { IntlSupport } from './Intl-support';
     private translationData: any = {};
 
     /**
+     * Value for missing keys.
+     */
+    private missingValue: string;
+
+    /**
+     * Key for missing keys.
+     */
+    private missingKey: string;
+
+    /**
      * Requests counter.
      */
     private counter: number;
@@ -157,10 +167,20 @@ import { IntlSupport } from './Intl-support';
 
         }
 
-        // If the value of translation is not present, the same key is returned (see issue #1).
+        // Handles missing keys (see issues #1 & #31).
         if (value == null || value == "") {
 
-            return key;
+            if (this.missingKey) {
+
+                return this.translate(this.missingKey, args, lang);
+
+            } else if (this.missingValue) {
+
+                return this.missingValue;
+
+            }
+
+            return key; // The same key is returned.
 
         } else if (args != null) { // Parameters (see issue #19).
 
@@ -234,6 +254,28 @@ import { IntlSupport } from './Intl-support';
             }
 
         }
+
+    }
+
+    /**
+     * Sets the value to use for missing keys.
+     * 
+     * @param value The value to use for missing keys
+     */
+    public setMissingValue(value: string): void {
+
+        this.missingValue = value;
+
+    }
+
+    /**
+     * Sets the key to use for missing keys.
+     * 
+     * @param key The key to use for missing keys
+     */
+    public setMissingKey(key: string): void {
+
+        this.missingKey = key;
 
     }
 

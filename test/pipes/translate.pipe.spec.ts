@@ -103,8 +103,8 @@ describe('TranslatePipe', () => {
 
         // Multiple Requests with different URL.
         var responses: any = {};
-        responses['./resources/locale-it.json'] = new Response(new ResponseOptions({ body: '{"HOME": {"TITLE": "Localizzazione in Angular 2"}, "SUBTITLE": "Il mondo è piccolo", "USER_NOTIFICATIONS": "{{ user }}, tu hai {{ NoMessages }} nuovi messaggi"}' }));
-        responses['./resources/locale-en.json'] = new Response(new ResponseOptions({ body: '{"HOME": {"TITLE": "Angular 2 Localization"}, "SUBTITLE": "It\'s a small word", "USER_NOTIFICATIONS": "{{ user }}, you have {{ NoMessages }} new messages"}' }));
+        responses['./resources/locale-it.json'] = new Response(new ResponseOptions({ body: '{"HOME": {"TITLE": "Localizzazione in Angular 2"}, "SUBTITLE": "Il mondo è piccolo", "USER_NOTIFICATIONS": "{{ user }}, tu hai {{ NoMessages }} nuovi messaggi", "MISSING": "Nessuna chiave"}' }));
+        responses['./resources/locale-en.json'] = new Response(new ResponseOptions({ body: '{"HOME": {"TITLE": "Angular 2 Localization"}, "SUBTITLE": "It\'s a small word", "USER_NOTIFICATIONS": "{{ user }}, you have {{ NoMessages }} new messages", "MISSING": "No key"}' }));
 
         // Async loading.
         it('should translate through async loading', async(
@@ -120,6 +120,7 @@ describe('TranslatePipe', () => {
                     locale.definePreferredLanguage('en');
 
                     localization.translationProvider('./resources/locale-');
+                    localization.setMissingKey("MISSING");
 
                     pipe = new TranslatePipe(localization, locale);
 
@@ -140,12 +141,14 @@ describe('TranslatePipe', () => {
                                 expect(pipe.transform('HOME.TITLE', localization.languageCode)).toEqual("Angular 2 Localization");
                                 expect(pipe.transform('SUBTITLE', localization.languageCode)).toEqual("It's a small word");
                                 expect(pipe.transform('USER_NOTIFICATIONS', localization.languageCode, params)).toEqual("robisim74, you have 2 new messages");
+                                expect(pipe.transform('TEST', localization.languageCode)).toEqual("No key");
 
                             } else {
 
                                 expect(pipe.transform('HOME.TITLE', localization.languageCode)).toEqual("Localizzazione in Angular 2");
                                 expect(pipe.transform('SUBTITLE', localization.languageCode)).toEqual("Il mondo è piccolo");
                                 expect(pipe.transform('USER_NOTIFICATIONS', localization.languageCode, params)).toEqual("robisim74, tu hai 2 nuovi messaggi");
+                                expect(pipe.transform('TEST', localization.languageCode)).toEqual("Nessuna chiave");
 
                             }
                         }
@@ -170,6 +173,7 @@ describe('TranslatePipe', () => {
                     locale.definePreferredLanguage('en');
 
                     localization.translationProvider('./resources/locale-');
+                    localization.setMissingKey("MISSING");
 
                     localization.updateTranslation();
 
@@ -192,12 +196,14 @@ describe('TranslatePipe', () => {
                                 expect(pipe.transform('HOME.TITLE', localization.languageCode)).toEqual("Angular 2 Localization");
                                 expect(pipe.transform('SUBTITLE', localization.languageCode)).toEqual("It's a small word");
                                 expect(pipe.transform('USER_NOTIFICATIONS', localization.languageCode, params)).toEqual("robisim74, you have 2 new messages");
+                                expect(pipe.transform('TEST', localization.languageCode)).toEqual("No key");
 
                             } else {
 
                                 expect(pipe.transform('HOME.TITLE', localization.languageCode)).toEqual("Localizzazione in Angular 2");
                                 expect(pipe.transform('SUBTITLE', localization.languageCode)).toEqual("Il mondo è piccolo");
                                 expect(pipe.transform('USER_NOTIFICATIONS', localization.languageCode, params)).toEqual("robisim74, tu hai 2 nuovi messaggi");
+                                expect(pipe.transform('TEST', localization.languageCode)).toEqual("Nessuna chiave");
 
                             }
                         }
