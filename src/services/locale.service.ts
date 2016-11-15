@@ -166,6 +166,17 @@ import { Injectable, EventEmitter, Output } from '@angular/core';
     }
 
     /**
+     * Gets all available languages
+     * 
+     * @return An array with two-letter or three-letter codes for all available languages
+     */
+    public getAvailableLanguages(): Array<string> {
+
+        return this.languageCodes;
+
+    }
+
+    /**
      * Sets Local Storage as default.
      */
     public useLocalStorage(): void {
