@@ -46,11 +46,19 @@ export function validateLocaleNumber(locale: LocaleService, digits: string, MIN_
 
             if (parsedValue < MIN_VALUE) {
 
-                return { minValue: false };
+                return {
+                    minValue: {
+                        valid: false
+                    }
+                };
 
             } else if (parsedValue > MAX_VALUE) {
 
-                return { maxValue: false };
+                return {
+                    maxValue: {
+                        valid: false
+                    }
+                };
 
             }
 
@@ -58,7 +66,11 @@ export function validateLocaleNumber(locale: LocaleService, digits: string, MIN_
 
         } else {
 
-            return { format: false };
+            return {
+                format: {
+                    valid: false
+                }
+            };
 
         }
 

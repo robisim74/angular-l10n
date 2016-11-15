@@ -1,5 +1,5 @@
 # Angular 2 Localization library specification
-Library version: 1.1.1
+Library version: 1.2.0
 
 ## Table of contents
 * [1 The library structure](#1)
@@ -22,7 +22,8 @@ Library version: 1.1.1
         * [3.2.2 Asynchronous loading of json files](#3.2.2)
         * [3.2.3 Asynchronous loading through a Web API](#3.2.3)
         * [3.2.4 Special characters](#3.2.4)
-        * [3.2.5 Changing language](#3.2.5)
+        * [3.2.5 Handling missing keys](#3.2.5)
+        * [3.2.6 Changing language](#3.2.6)        
     * [3.3 Third scenario: you need to translate messages, dates and numbers](#3.3)
         * [3.3.1 Changing locale and currency](#3.3.1)
         * [3.3.2 Option: using locale as language](#3.3.2)
@@ -378,7 +379,28 @@ Because strings must be written within quotes, use the `\` escape character to i
 "\"What's happened to me?\" he thought."
 ```
 
-#### <a name="3.2.5"/>3.2.5 Changing language
+#### <a name="3.2.5"/>3.2.5 Handling missing keys
+By default, if a key is not present in the `json`, the same key is returned.
+
+When you initialize the `LocalizationService`, you can set a friendly value to use for these keys:
+```TypeScript
+localization.translationProvider('./resources/locale-');
+localization.setMissingValue("No key");
+```
+Alternatively, you can set a key to use for the missing keys, so that even this is translated:
+```TypeScript
+localization.translationProvider('./resources/locale-');
+localization.setMissingKey("MISSING");
+```
+and in the `json`:
+```
+{
+    "MISSING": "No key",
+    ...
+}
+```
+
+#### <a name="3.2.6"/>3.2.6 Changing language
 To change language at runtime, call the following method:
 ```TypeScript
 this.locale.setCurrentLanguage(language);
@@ -678,6 +700,7 @@ Method | Function
 ------ | --------
 `addLanguage(language: string): void;` | Adds a new language
 `addLanguages(languages: Array<string>): void;` | Adds languages
+`getAvailableLanguages(): Array<string>;` | Gets all available languages
 `useLocalStorage(): void;` | Sets Local Storage as default
 `definePreferredLanguage(defaultLanguage: string, expiry?: number): void;` | Defines the preferred language. Selects the current language of the browser/user if it has been added, else the default language
 `definePreferredLocale(defaultLanguage: string, defaultCountry: string, expiry?: number, script?: string, numberingSystem?: string, calendar?: string): void;` | Defines preferred languange and country, regardless of the browser language
@@ -711,6 +734,8 @@ Method | Function
 `translateAsync(key: string, args?: any, lang?: string): Observable<string>;` | Translates a key
 `useLocaleAsLanguage(): void;` | Sets the use of locale as language for the service
 `updateTranslation(language?: string): void;` | Gets language code and loads the translation data for the asynchronous loading
+`setMissingValue(value: string): void;` | Sets the value to use for missing keys
+`setMissingKey(key: string): void;` | Sets the key to use for missing keys
 `compare(key1: string, key2: string, extension?: string, options?: any): number;` | Compares two keys by the value of translation & the current language code
 `sort(list: Array<any>, keyName: any, order?: string, extension?: string, options?: any): Array<any>;` | Sorts an array of objects or an array of arrays by the current language code
 `sortAsync(list: Array<any>, keyName: any, order?: string, extension?: string, options?: any): Observable<Array<any>>;` | Sorts an array of objects or an array of arrays by the current language code
