@@ -70,6 +70,16 @@ import { IntlSupport } from './Intl-support';
     private missingKey: string;
 
     /**
+     * Option for composed key.
+     */
+    private composedKey: boolean = true;
+
+    /**
+     * Separator for composed key.
+     */
+    private keySeparator: string = ".";
+
+    /**
      * Requests counter.
      */
     private counter: number;
@@ -154,13 +164,15 @@ import { IntlSupport } from './Intl-support';
             var translation: any = this.translationData[lang];
 
             // Checks for composed key (see issue #21).
-            var keys: string[] = key.split(".");
-            do {
-                key = keys.shift();
-                if (translation[key] != null && (typeof translation[key] == "object")) {
-                    translation = translation[key];
-                }
-            } while (keys.length > 0);
+            if (this.composedKey) {
+                var keys: string[] = key.split(this.keySeparator);
+                do {
+                    key = keys.shift();
+                    if (translation[key] != null && (typeof translation[key] == "object")) {
+                        translation = translation[key];
+                    }
+                } while (keys.length > 0);
+            }
 
             // Gets the value of translation by key.   
             value = translation[key];
@@ -276,6 +288,19 @@ import { IntlSupport } from './Intl-support';
     public setMissingKey(key: string): void {
 
         this.missingKey = key;
+
+    }
+
+    /**
+     * Sets composed key option.
+     * 
+     * @param composedKey False to disable composed key. Default is true
+     * @param keySeparator Composed key separator. Default is the point '.'
+     */
+    public setComposedKey(composedKey?: boolean, keySeparator?: string): void {
+
+        this.composedKey = composedKey;
+        this.keySeparator = keySeparator;
 
     }
 
