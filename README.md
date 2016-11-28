@@ -65,12 +65,15 @@ No need to set up anything, just import it in your code.
 #### Ionic 2
 [Using Ionic 2](https://github.com/robisim74/angular2localization/blob/master/doc/spec.md#Appendix%20A) with this library.
 
+#### Angular 2 Meteor
+[Using Angular 2 Meteor](https://github.com/robisim74/angular2localization/blob/master/doc/spec.md#Appendix%20B) with this library.
+
 #### Plain JavaScript
 If you build apps in Angular 2 using ES5, you can include the `umd` bundle in your `index.html`:
 ```Html
 <script src="node_modules/angular2localization/bundles/angular2localization.umd.min.js"></script>
 ```
-and using global `ng.angular2localization` namespace. For a basic usage, see this [ES5 example](https://github.com/robisim74/angular2localization/blob/master/doc/spec.md#Appendix%20B).
+and using global `ng.angular2localization` namespace. For a basic usage, see this [ES5 example](https://github.com/robisim74/angular2localization/blob/master/doc/spec.md#Appendix%20C).
 
 ## AoT compilation
 This library is compatible with AoT compilation, just import it in your code.

@@ -41,7 +41,8 @@ Library version: 1.2.0
     * [7.3 LocaleParser](#7.3)
     * [7.4 IntlSupport](#7.4)
 * [Appendix A - Using Ionic 2](#Appendix A)
-* [Appendix B - ES5 example](#Appendix B)
+* [Appendix B - Using Angular 2 Meteor](#Appendix B)
+* [Appendix C - ES5 example](#Appendix C)
 
 ## <a name="1"/>1 The library structure
 This library has the following classes:
@@ -301,7 +302,7 @@ export class AppComponent {
         // Add a new language here.
 
         // Required: default language and expiry (No days). If the expiry is omitted, the cookie becomes a session cookie.
-        // Selects the current language of the browser/user if it has been added, else the default language.
+        // Selects the current language of the browser if it has been added, else the default language.
         this.locale.definePreferredLanguage('en', 30);
 
     }
@@ -702,7 +703,7 @@ Method | Function
 `addLanguages(languages: Array<string>): void;` | Adds languages
 `getAvailableLanguages(): Array<string>;` | Gets all available languages
 `useLocalStorage(): void;` | Sets Local Storage as default
-`definePreferredLanguage(defaultLanguage: string, expiry?: number): void;` | Defines the preferred language. Selects the current language of the browser/user if it has been added, else the default language
+`definePreferredLanguage(defaultLanguage: string, expiry?: number): void;` | Defines the preferred language. Selects the current language of the browser if it has been added, else the default language
 `definePreferredLocale(defaultLanguage: string, defaultCountry: string, expiry?: number, script?: string, numberingSystem?: string, calendar?: string): void;` | Defines preferred languange and country, regardless of the browser language
 `definePreferredCurrency(defaultCurrency: string): void;` | Defines the preferred currency
 `getCurrentLanguage(): string;` | Gets the current language
@@ -800,7 +801,7 @@ export class MyApp {
             this.locale.useLocalStorage(); // To store the user's chosen language, prefer Local Storage.
 
             // Required: default language.
-            // Selects the current language of the browser/user if it has been added, else the default language.
+            // Selects the current language of the browser if it has been added, else the default language.
             this.locale.definePreferredLanguage('en');
 
             // Initializes LocalizationService: asynchronous loading.
@@ -812,7 +813,58 @@ export class MyApp {
 ```
 and add the `json` files of the translations such as `locale-en.json` in `wwww/i18n` folder.
 
-## <a name="Appendix B"/>Appendix B - ES5 example
+## <a name="Appendix B"/>Appendix B - Using Angular 2 Meteor
+Install the library:
+```Shell
+meteor npm install --save angular2localization
+```
+In the client, import the modules you need in `app.module.ts`:
+```TypeScript
+...
+import { HttpModule } from '@angular/http';
+// Angular 2 Localization.
+import { LocaleModule, LocalizationModule } from 'angular2localization';
+
+@NgModule({
+    ...
+    imports: [
+        ...
+        HttpModule,
+        LocaleModule.forRoot(), // New instance of LocaleService.
+        LocalizationModule.forRoot() // New instance of LocalizationService.
+    ],
+    ...
+})
+
+export class AppModule { }
+```
+Initialize the services of the library in `app.component.ts` file. This in an example for the [Second scenario](#3.2):
+```TypeScript
+...
+import { LocaleService, LocalizationService } from 'angular2localization';
+...
+export class AppComponent {
+    ...
+    constructor(public locale: LocaleService, public localization: LocalizationService) {
+        // Adds a new language (ISO 639 two-letter or three-letter code).
+        this.locale.addLanguage('en');
+        // Add a new language here.
+
+        // Required: default language.
+        // Selects the current language of the browser if it has been added, else the default language.
+        this.locale.definePreferredLanguage('en');
+
+        // Initializes LocalizationService: asynchronous loading.
+        this.localization.translationProvider('./assets/locale-'); // Required: initializes the translation provider with the given path prefix.      
+        this.localization.updateTranslation(); // Need to update the translation.
+    }
+}
+```
+and add the `json` files of the translations such as `locale-en.json` in `public/assets` folder.
+
+*N.B. You must create `public` folder at the root of your app. In this way, `assets` folder is copied directly into your application’s bundle.*
+
+## <a name="Appendix C"/>Appendix C - ES5 example
 This is an example in ES5 for the [First scenario](#3.1). The `AppModule`:
 ```JavaScript
 (function (app) {
