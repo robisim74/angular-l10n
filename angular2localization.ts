@@ -4,9 +4,13 @@ export { LocaleService } from './src/services/locale.service';
 export { Locale } from './src/services/locale';
 export { IntlSupport } from './src/services/Intl-support';
 export { LocaleParser, NumberCode } from './src/services/locale-parser';
+export { LocaleDirective, I18nPlural } from './src/services/i18n'
 export { TranslatePipe } from './src/pipes/translate.pipe';
 export { LocaleDatePipe } from './src/pipes/locale-date.pipe';
 export { LocaleDecimalPipe, LocalePercentPipe, LocaleCurrencyPipe } from './src/pipes/locale-number.pipe';
+export { TranslateDirective } from './src/directives/translate.directive';
+export { LocaleDateDirective } from './src/directives/locale-date.directive';
+export { LocaleDecimalDirective, LocalePercentDirective, LocaleCurrencyDirective } from './src/directives/locale-number.directive';
 export { LocaleNumberValidator, validateLocaleNumber } from './src/directives/locale-number-validator.directive';
 
 // Modules.
@@ -19,6 +23,9 @@ import { TranslatePipe } from './src/pipes/translate.pipe';
 import { LocaleDatePipe } from './src/pipes/locale-date.pipe';
 import { LocaleDecimalPipe, LocalePercentPipe, LocaleCurrencyPipe } from './src/pipes/locale-number.pipe';
 // Directives.
+import { TranslateDirective } from './src/directives/translate.directive';
+import { LocaleDateDirective } from './src/directives/locale-date.directive';
+import { LocaleDecimalDirective, LocalePercentDirective, LocaleCurrencyDirective } from './src/directives/locale-number.directive';
 import { LocaleNumberValidator } from './src/directives/locale-number-validator.directive';
 
 @NgModule({
@@ -27,6 +34,10 @@ import { LocaleNumberValidator } from './src/directives/locale-number-validator.
         LocaleDecimalPipe,
         LocalePercentPipe,
         LocaleCurrencyPipe,
+        LocaleDateDirective,
+        LocaleDecimalDirective,
+        LocalePercentDirective,
+        LocaleCurrencyDirective,
         LocaleNumberValidator
     ],
     exports: [
@@ -34,6 +45,10 @@ import { LocaleNumberValidator } from './src/directives/locale-number-validator.
         LocaleDecimalPipe,
         LocalePercentPipe,
         LocaleCurrencyPipe,
+        LocaleDateDirective,
+        LocaleDecimalDirective,
+        LocalePercentDirective,
+        LocaleCurrencyDirective,
         LocaleNumberValidator
     ]
 })
@@ -58,10 +73,12 @@ export class LocaleModule {
 
 @NgModule({
     declarations: [
-        TranslatePipe
+        TranslatePipe,
+        TranslateDirective
     ],
     exports: [
-        TranslatePipe
+        TranslatePipe,
+        TranslateDirective
     ]
 })
 
