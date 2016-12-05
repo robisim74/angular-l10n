@@ -14,7 +14,7 @@ import { LocalizationService } from './localization.service';
  * Locale superclass.
  * Provides the updates for localization.
  * 
- * Extend this class in components to provide the necessary methods for localization.
+ * Extend this class in components to provide lang, defaultLocale & currency to the pipes.
  * 
  * @author Roberto Simonetti
  */
@@ -23,17 +23,17 @@ export class Locale {
     /**
      * Language code of the LocalizationService.
      */
-    lang: string;
+    public lang: string;
 
     /**
      * The default locale.
      */
-    defaultLocale: string;
+    public defaultLocale: string;
 
     /**
      * The current currency.
      */
-    currency: string;
+    public currency: string;
 
     constructor(public locale?: LocaleService, public localization?: LocalizationService) {
 
