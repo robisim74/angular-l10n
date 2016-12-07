@@ -64,12 +64,12 @@ Module | Class | Type | Contract
 ## <a name="2"/>2 Getting the translation
 To get the translation, this library uses pure pipes. To know the advantages over impure pipes, please see [here](https://angular.io/docs/ts/latest/guide/pipes.html). 
 
-Type | Format | Syntax
----- | ------ | ------
+Type | Format | Pipe syntax
+---- | ------ | -----------
 Message | String | `expression | translate:lang`
-Date | Date/Number | `expression | localeDate[:defaultLocale[:format]]`
-Number | Decimal | `expression | localeDecimal[:defaultLocale:[digitInfo]]`
-Number | Percentage | `expression | localePercent[:defaultLocale:[digitInfo]]`
+Date | Date/Number/ISO string | `expression | localeDate[:defaultLocale[:format]]`
+Number | Decimal | `expression | localeDecimal[:defaultLocale[:digitInfo]]`
+Number | Percentage | `expression | localePercent[:defaultLocale[:digitInfo]]`
 Number | Currency | `expression | localeCurrency[:defaultLocale[:currency[:symbolDisplay[:digitInfo]]]]`
 
 ### <a name="2.1"/>2.1 Messages
@@ -105,13 +105,13 @@ export class HomeComponent extends Locale {
 ```
 
 #### <a name="2.1.1"/>2.1.1 Gender
-With Angular 2 [I18nSelectPipe](https://angular.io/docs/ts/latest/api/common/index/I18nSelectPipe-class.html) that displays the string that matches the current value:
+With Angular 2 [I18nSelectPipe](https://angular.io/docs/ts/latest/api/common/index/I18nSelectPipe-pipe.html) that displays the string that matches the current value:
 ```Html
 {{ expression | i18nSelect:mapping | translate:lang }}
 ```
 
 #### <a name="2.1.2"/>2.1.2 Plural
-With Angular 2 [I18nPluralPipe](https://angular.io/docs/ts/latest/api/common/index/I18nPluralPipe-class.html) that pluralizes the value properly:
+With Angular 2 [I18nPluralPipe](https://angular.io/docs/ts/latest/api/common/index/I18nPluralPipe-pipe.html) that pluralizes the value properly:
 ```Html
 {{ expression | i18nPlural:mapping | translate:lang }}
 ```
@@ -132,7 +132,7 @@ When specifying the `features`, you have to specify what locale, or locales to l
 expression | localeDate[:defaultLocale[:format]]
 ```
 where `expression` is a date object or a number (milliseconds since UTC epoch) and `format` indicates which date/time components to include. 
-See Angular 2 [DatePipe](https://angular.io/docs/ts/latest/api/common/index/DatePipe-class.html) for further information.
+See Angular 2 [DatePipe](https://angular.io/docs/ts/latest/api/common/index/DatePipe-pipe.html) for further information.
 
 For example, to get the local date, add in the template:
 ```Html
@@ -157,7 +157,7 @@ export class HomeComponent extends Locale {
 expression | localeDecimal[:defaultLocale:[digitInfo]]
 ```
 where `expression` is a number and `digitInfo` has the following format: `{minIntegerDigits}.{minFractionDigits}-{maxFractionDigits}`. 
-See Angular 2 [DecimalPipe](https://angular.io/docs/ts/latest/api/common/index/DecimalPipe-class.html) for further information.
+See Angular 2 [DecimalPipe](https://angular.io/docs/ts/latest/api/common/index/DecimalPipe-pipe.html) for further information.
 
 For example, to get the local decimal, add in the template:
 ```Html
