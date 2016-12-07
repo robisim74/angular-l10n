@@ -10,8 +10,6 @@ import { Directive, ElementRef, Input, Renderer, AfterViewInit } from '@angular/
 
 // Services.
 import { LocalizationService } from '../services/localization.service';
-import { LocaleService } from '../services/locale.service';
-import { I18nPlural } from '../services/i18n';
 
 @Directive({
     selector: '[translate]'
@@ -23,21 +21,16 @@ import { I18nPlural } from '../services/i18n';
  * 
  * @author Roberto Simonetti
  */
-export class TranslateDirective extends I18nPlural implements AfterViewInit {
+export class TranslateDirective implements AfterViewInit {
 
     @Input('translate') params: string;
 
-    constructor(public localization: LocalizationService, public locale: LocaleService, private el: ElementRef, private renderer: Renderer) {
-        super(locale);
-    }
+    constructor(public localization: LocalizationService, private el: ElementRef, private renderer: Renderer) { }
 
     ngAfterViewInit(): void {
 
         let renderNode: any = this.el.nativeElement.childNodes[0];
         let key: string = <string>renderNode.nodeValue;
-
-        // Looks for a number at the beginning of the key. 
-        key = this.translateNumber(key);
 
         this.translate(renderNode, key);
 
@@ -51,9 +44,9 @@ export class TranslateDirective extends I18nPlural implements AfterViewInit {
 
     private translate(renderNode: any, key: string): void {
 
-        this.localization.translateAsync(this.keyStr, this.params).subscribe(
+        this.localization.translateAsync(key, this.params).subscribe(
             (value: string) => {
-                this.renderer.setText(renderNode, key.replace(this.keyStr, value));
+                this.renderer.setText(renderNode, value);
             }
         );
 
