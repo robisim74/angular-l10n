@@ -1,5 +1,5 @@
 # Angular 2 Localization library specification
-Library version: 1.2.0
+Library version: 1.3.0
 
 ## Table of contents
 * [1 The library structure](#1)
@@ -14,7 +14,8 @@ Library version: 1.2.0
         * [2.2.4 Currencies](#2.2.4)
     * [2.3 List](#2.3)
         * [2.3.1 Sorting & search](#2.3.1)
-    * [2.4 Getting the translation in component class](#2.4)
+    * [2.4 Getting the translation using Html attributes](#2.4)
+    * [2.5 Getting the translation in component class](#2.5)
 * [3 Scenarios](#3)
     * [3.1 First scenario: you need to localize dates and numbers, but no messages](#3.1)
     * [3.2 Second scenario: you only need to translate messages](#3.2)
@@ -54,15 +55,19 @@ Module | Class | Type | Contract
 `LocaleModule` | `LocaleDecimalPipe` | Pipe | Localizes decimal numbers
 `LocaleModule` | `LocalePercentPipe` | Pipe | Localizes percent numbers
 `LocaleModule` | `LocaleCurrencyPipe` | Pipe | Localizes currencies
+`LocaleModule` | `LocaleDecimalDirective` | Directive | Localizes decimal numbers
+`LocaleModule` | `LocalePercentDirective` | Directive | Localizes percent numbers
+`LocaleModule` | `LocaleCurrencyDirective` | Directive | Localizes currencies
 `LocaleModule` | `LocaleNumberValidator` | Directive | Validates a number by default locale
 `LocalizationModule` | `LocalizationService` | Service | Gets the translation data and performs operations
 `LocalizationModule` | `TranslatePipe` | Pipe | Translates messages
+`LocalizationModule` | `TranslateDirective` | Directive | Translates messages
  | `Locale` | Service | Provides the updates for localization
  | `LocaleParser` | Service | Parses a string and returns a number by default locale
  | `IntlSupport` | Service | Provides the methods to check if Intl is supported
 
 ## <a name="2"/>2 Getting the translation
-To get the translation, this library uses pure pipes. To know the advantages over impure pipes, please see [here](https://angular.io/docs/ts/latest/guide/pipes.html). 
+To get the translation, this library uses _pure pipes_ (see [here](https://angular.io/docs/ts/latest/guide/pipes.html)) or _Html attributes_. 
 
 Type | Format | Pipe syntax
 ---- | ------ | -----------
@@ -71,6 +76,14 @@ Date | Date/Number/ISO string | `expression | localeDate[:defaultLocale[:format]
 Number | Decimal | `expression | localeDecimal[:defaultLocale[:digitInfo]]`
 Number | Percentage | `expression | localePercent[:defaultLocale[:digitInfo]]`
 Number | Currency | `expression | localeCurrency[:defaultLocale[:currency[:symbolDisplay[:digitInfo]]]]`
+
+Type | Format | Html syntax
+---- | ------ | -----------
+Message | String | `<tagname translate>expression</tagname>`
+Date | Date/Number/ISO string | `<tagname localeDate="[format]">expression</tagname>`
+Number | Decimal | `<tagname localeDecimal="[digitInfo]">expression</tagname>`
+Number | Percentage | `<tagname localePercent="[digitInfo]">expression</tagname>`
+Number | Currency | `<tagname localeCurrency="[digitInfo]" [symbol]="[symbolDisplay]">expression</tagname>`
 
 ### <a name="2.1"/>2.1 Messages
 ```
@@ -215,12 +228,41 @@ These methods use the [Intl.Collator](https://developer.mozilla.org/en-US/docs/W
 
 *N.B. This feature is not supported by all browsers, even with the use of `Intl.js`.*
 
-### <a name="2.4"/>2.4 Getting the translation in component class
+### <a name="2.4"/>2.4 Getting the translation using Html attributes
+Examples for translating messages:
+```Html
+<h1 translate>TITLE</h1>
+```
+If you want to use parameters:
+```Html
+<p [translate]="{ user: username, NoMessages: messages.length }">USER_NOTIFICATIONS</p>
+```
+
+Examples for localization of dates & numbers:
+```Html
+<p localeDate>{{ today }}</p> 
+<p localeDate="fullDate">{{ today }}</p>
+
+<p localeDecimal>{{ pi }}</p>      
+<p localeDecimal="1.5-5">{{ pi }}</p>
+
+<p localePercent>{{ a }}</p>      
+<p localePercent="1.1-1">{{ a }}</p>
+
+<p localeCurrency>{{ value }}</p>
+<p localeCurrency="1.2-2" [symbol]="true">{{ value }}</p>
+```
+If you use in the component only the _HTML attributes_ and not the _pipes_, 
+you don't need to import services and extend `Locale` class.
+
+*N.B. With the attributes, it is not possible to dynamically change the value of the key or parameters.*
+
+### <a name="2.5"/>2.5 Getting the translation in component class
 If you need to get the translation in component class, [LocalizationService](#7.2) has the following methods:
 * `translate(key: string, args?: any, lang?: string): string;`
 * `translateAsync(key: string, args?: any, lang?: string): Observable<string>;`
 
-But if you need to get the translation when the selected language changes, you must subscribe to the following event:
+But if you need to get the translation when the selected language changes, you must _also_ subscribe to the following event:
 * `translationChanged: EventEmitter<string>;`
 
 For example:
@@ -737,6 +779,7 @@ Method | Function
 `updateTranslation(language?: string): void;` | Gets language code and loads the translation data for the asynchronous loading
 `setMissingValue(value: string): void;` | Sets the value to use for missing keys
 `setMissingKey(key: string): void;` | Sets the key to use for missing keys
+`setComposedKey(composedKey?: boolean, keySeparator?: string): void;` | Sets composed key option
 `compare(key1: string, key2: string, extension?: string, options?: any): number;` | Compares two keys by the value of translation & the current language code
 `sort(list: Array<any>, keyName: any, order?: string, extension?: string, options?: any): Array<any>;` | Sorts an array of objects or an array of arrays by the current language code
 `sortAsync(list: Array<any>, keyName: any, order?: string, extension?: string, options?: any): Observable<Array<any>>;` | Sorts an array of objects or an array of arrays by the current language code

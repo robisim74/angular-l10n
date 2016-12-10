@@ -142,6 +142,55 @@ Finally, to extend support for all browsers, add the following script tag in `in
 ```
 For more details and other scenarios see [library specification](https://github.com/robisim74/angular2localization/blob/master/doc/spec.md).
 
+### Using Html attributes
+In addition to the _pipes_, you can use _Html attributes_. Try to change in `app.component.ts`:
+```Html
+<h1>{{ 'TITLE' | translate:lang }}</h1>
+```
+into:
+```Html
+<h1 translate>TITLE</h1>
+```
+Then change `home.component.ts`:
+```TypeScript
+import { Component } from '@angular/core';
+
+@Component({
+    selector: 'home-component',
+    template: `
+        <p localeDate>{{ today }}</p> 
+        <p localeDate="fullDate">{{ today }}</p>
+
+        <p localeDecimal>{{ pi }}</p>      
+        <p localeDecimal="1.5-5">{{ pi }}</p>
+        
+        <p localePercent>0.1</p>      
+        <p localePercent="1.1-1">0.1</p>
+
+        <p localeCurrency>{{ value }}</p>
+        <p localeCurrency="1.2-2" [symbol]="true">{{ value }}</p>
+    `
+})
+
+export class HomeComponent {
+
+    today: number;
+    pi: number;
+    value: number;
+
+    constructor() {
+
+        this.today = Date.now();
+        this.pi = 3.14159;
+        this.value = Math.round(Math.random() * 1000000) / 100;
+
+    }
+
+}
+```
+Note that if you use in the component only the _HTML attributes_ and not the _pipes_, 
+you don't need to import services and extend `Locale` class. 
+
 ### Appendix - Advanced initialization
 If you want the app to be rendered only after the translation file is loaded, you can use these settings in `app.module.ts`:
 ```TypeScript
