@@ -5,3 +5,4 @@ $ cat .gitignore
 
 *.log
 *.ngfactory.ts
+*.ngsummary.json

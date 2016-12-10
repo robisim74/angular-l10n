@@ -125,7 +125,8 @@ export class LocaleCurrencyPipe implements PipeTransform {
      * @param digits The format of the number
      * @return The locale currency
      */
-    public transform(value: any,
+    public transform(
+        value: any,
         defaultLocale: string,
         currency: string,
         symbolDisplay: boolean = false,
