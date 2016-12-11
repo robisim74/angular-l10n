@@ -79,8 +79,8 @@ describe('TranslatePipe', () => {
                     pipe = new TranslatePipe(localization, locale);
 
                     localization.translationChanged.subscribe(
-                        () => {
-                            if (locale.getCurrentLanguage() == 'en') {
+                        (lang: string) => {
+                            if (lang == 'en') {
 
                                 expect(pipe.transform('TITLE', localization.languageCode)).toEqual("Angular 2 Localization");
 
@@ -135,8 +135,8 @@ describe('TranslatePipe', () => {
                     };
 
                     localization.translationChanged.subscribe(
-                        () => {
-                            if (locale.getCurrentLanguage() == 'en') {
+                        (lang: string) => {
+                            if (lang == 'en') {
 
                                 expect(pipe.transform('HOME.TITLE', localization.languageCode)).toEqual("Angular 2 Localization");
                                 expect(pipe.transform('SUBTITLE', localization.languageCode)).toEqual("It's a small word");
@@ -155,69 +155,6 @@ describe('TranslatePipe', () => {
                     );
 
                     localization.updateTranslation();
-
-                })
-        ));
-
-        // Change language.
-        it('should change language', async(
-            inject([LocaleService, LocalizationService, MockBackend],
-                (locale: LocaleService, localization: LocalizationService, backend: MockBackend) => {
-
-                    // Mock backend for testing the Http service.
-                    expectURL(backend, responses);
-
-                    locale.enableCookie = false;
-                    locale.addLanguages(['en', 'it']);
-                    // Selects the current language of the browser if it has been added, else the preferred language.
-                    locale.definePreferredLanguage('en');
-
-                    localization.translationProvider('./resources/locale-');
-                    localization.setMissingKey("MISSING");
-
-                    localization.updateTranslation();
-
-                    pipe = new TranslatePipe(localization, locale);
-
-                    var username: string = "robisim74";
-                    var messages: string[] = [];
-                    messages.push("Test1");
-                    messages.push("Test2");
-
-                    const params = {
-                        user: username,
-                        NoMessages: messages.length
-                    };
-
-                    localization.translationChanged.subscribe(
-                        () => {
-                            if (locale.getCurrentLanguage() == 'en') {
-
-                                expect(pipe.transform('HOME.TITLE', localization.languageCode)).toEqual("Angular 2 Localization");
-                                expect(pipe.transform('SUBTITLE', localization.languageCode)).toEqual("It's a small word");
-                                expect(pipe.transform('USER_NOTIFICATIONS', localization.languageCode, params)).toEqual("robisim74, you have 2 new messages");
-                                expect(pipe.transform('TEST', localization.languageCode)).toEqual("No key");
-
-                            } else {
-
-                                expect(pipe.transform('HOME.TITLE', localization.languageCode)).toEqual("Localizzazione in Angular 2");
-                                expect(pipe.transform('SUBTITLE', localization.languageCode)).toEqual("Il mondo è piccolo");
-                                expect(pipe.transform('USER_NOTIFICATIONS', localization.languageCode, params)).toEqual("robisim74, tu hai 2 nuovi messaggi");
-                                expect(pipe.transform('TEST', localization.languageCode)).toEqual("Nessuna chiave");
-
-                            }
-                        }
-                    );
-
-                    if (locale.getCurrentLanguage() == 'en') {
-
-                        locale.setCurrentLanguage('it');
-
-                    } else {
-
-                        locale.setCurrentLanguage('en');
-
-                    }
 
                 })
         ));
@@ -286,8 +223,8 @@ describe('TranslatePipe', () => {
                     pipe = new TranslatePipe(localization, locale);
 
                     localization.translationChanged.subscribe(
-                        () => {
-                            if (locale.getCurrentLanguage() == 'en') {
+                        (lang: string) => {
+                            if (lang == 'en') {
 
                                 expect(pipe.transform('SUBTITLE', localization.languageCode)).toEqual("It's a small word");
                                 expect(pipe.transform('SAVE', localization.languageCode)).toEqual("Save");

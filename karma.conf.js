@@ -32,7 +32,7 @@ module.exports = function (config) {
         // preprocess matching files before serving them to the browser
         // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
         preprocessors: {
-            'spec.bundle.js': ['webpack', 'sourcemap']
+            'spec.bundle.js': ['webpack']
         },
 
         // webpack
@@ -40,7 +40,6 @@ module.exports = function (config) {
             resolve: {
                 extensions: ['.ts', '.js']
             },
-            devtool: 'source-map',
             module: {
                 rules: [
                     {
