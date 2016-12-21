@@ -1,5 +1,5 @@
 # Angular 2 Localization library specification
-Library version: 1.3.0
+Library version: 1.4.0
 
 ## Table of contents
 * [1 The library structure](#1)
@@ -67,7 +67,7 @@ Module | Class | Type | Contract
  | `IntlSupport` | Service | Provides the methods to check if Intl is supported
 
 ## <a name="2"/>2 Getting the translation
-To get the translation, this library uses _pure pipes_ (see [here](https://angular.io/docs/ts/latest/guide/pipes.html)) or _Html attributes_. 
+To get the translation, this library uses _pure pipes_ (to know the difference between _pure_ and _impure pipes_ see [here](https://angular.io/docs/ts/latest/guide/pipes.html)) or [Html attributes](#2.4). 
 
 Type | Format | Pipe syntax
 ---- | ------ | -----------
@@ -76,14 +76,6 @@ Date | Date/Number/ISO string | `expression | localeDate[:defaultLocale[:format]
 Number | Decimal | `expression | localeDecimal[:defaultLocale[:digitInfo]]`
 Number | Percentage | `expression | localePercent[:defaultLocale[:digitInfo]]`
 Number | Currency | `expression | localeCurrency[:defaultLocale[:currency[:symbolDisplay[:digitInfo]]]]`
-
-Type | Format | Html syntax
----- | ------ | -----------
-Message | String | `<tagname translate>expression</tagname>`
-Date | Date/Number/ISO string | `<tagname localeDate="[format]">expression</tagname>`
-Number | Decimal | `<tagname localeDecimal="[digitInfo]">expression</tagname>`
-Number | Percentage | `<tagname localePercent="[digitInfo]">expression</tagname>`
-Number | Currency | `<tagname localeCurrency="[digitInfo]" [symbol]="[symbolDisplay]">expression</tagname>`
 
 ### <a name="2.1"/>2.1 Messages
 ```
@@ -229,7 +221,15 @@ These methods use the [Intl.Collator](https://developer.mozilla.org/en-US/docs/W
 *N.B. This feature is not supported by all browsers, even with the use of `Intl.js`.*
 
 ### <a name="2.4"/>2.4 Getting the translation using Html attributes
-Examples for translating messages:
+Type | Format | Html syntax
+---- | ------ | -----------
+Message | String | `<tagname translate>expression</tagname>`
+Date | Date/Number/ISO string | `<tagname localeDate="[format]">expression</tagname>`
+Number | Decimal | `<tagname localeDecimal="[digitInfo]">expression</tagname>`
+Number | Percentage | `<tagname localePercent="[digitInfo]">expression</tagname>`
+Number | Currency | `<tagname localeCurrency="[digitInfo]" [symbol]="[symbolDisplay]">expression</tagname>`
+
+For example:
 ```Html
 <h1 translate>TITLE</h1>
 ```
@@ -238,7 +238,7 @@ If you want to use parameters:
 <p [translate]="{ user: username, NoMessages: messages.length }">USER_NOTIFICATIONS</p>
 ```
 
-Examples for localization of dates & numbers:
+Examples of localization of dates & numbers:
 ```Html
 <p localeDate>{{ today }}</p> 
 <p localeDate="fullDate">{{ today }}</p>
