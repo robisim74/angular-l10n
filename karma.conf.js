@@ -49,7 +49,8 @@ module.exports = function (config) {
                     }
                 ],
                 exprContextCritical: false
-            }
+            },
+            performance: { hints: false }
         },
 
         webpackServer: {

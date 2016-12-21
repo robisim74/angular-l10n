@@ -1,8 +1,7 @@
 $ cat .gitignore
 /node_modules
 /dist
-/typings
+/aot
 
 *.log
-*.ngfactory.ts
-*.ngsummary.json
+*.tgz
