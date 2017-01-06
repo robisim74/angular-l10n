@@ -11,6 +11,7 @@ import { Http, Response } from '@angular/http';
 import { Observer } from 'rxjs/Observer';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
+import 'rxjs/add/observable/merge';
 
 // Services.
 import { LocaleService } from './locale.service';
@@ -78,11 +79,6 @@ import { IntlSupport } from './Intl-support';
      * Separator for composed key.
      */
     private keySeparator: string = ".";
-
-    /**
-     * Requests counter.
-     */
-    private counter: number;
 
     constructor(public http: Http, public locale: LocaleService) {
 
@@ -219,7 +215,7 @@ import { IntlSupport } from './Intl-support';
      */
     public translateAsync(key: string, args?: any, lang: string = this.languageCode): Observable<string> {
 
-        return new Observable<string>((observer: Observer<string>) => {
+        return Observable.create((observer: Observer<string>) => {
 
             // Gets the value of translation for the key.
             var value: string = this.translate(key, args, lang);
@@ -402,7 +398,7 @@ import { IntlSupport } from './Intl-support';
      */
     public sortAsync(list: Array<any>, keyName: any, order?: string, extension?: string, options?: any): Observable<Array<any>> {
 
-        return new Observable<any>((observer: Observer<Array<any>>) => {
+        return Observable.create((observer: Observer<Array<any>>) => {
 
             // Gets the sorted list.
             observer.next(this.sort(list, keyName, order, extension, options));
@@ -500,7 +496,7 @@ import { IntlSupport } from './Intl-support';
 
         if (keyNames == null || s == "" || IntlSupport.Collator(this.locale.getCurrentLanguage()) == false) {
 
-            return new Observable<any>((observer: Observer<any>) => {
+            return Observable.create((observer: Observer<any>) => {
 
                 for (let item of list) {
 
@@ -514,7 +510,7 @@ import { IntlSupport } from './Intl-support';
 
         }
 
-        return new Observable<any>((observer: Observer<any>) => {
+        return Observable.create((observer: Observer<any>) => {
 
             // Gets the value of translation for the each column.
             var translated: Array<string> = new Array<string>();
@@ -591,7 +587,7 @@ import { IntlSupport } from './Intl-support';
      * 
      * @param v The value
      * @param s The string to search
-     * return True if match, otherwise false
+     * @return True if match, otherwise false
      */
     private match(v: string, s: string, collator: Intl.Collator): boolean {
 
@@ -633,8 +629,7 @@ import { IntlSupport } from './Intl-support';
         this.translationData = {};
         this.serviceState = ServiceState.isLoading;
 
-        // Gets translation data for all providers.
-        this.counter = this.providers.length;
+        var observableSequencesOfTranslationData: Array<Observable<any>> = [];
 
         for (let provider of this.providers) {
 
@@ -653,41 +648,40 @@ import { IntlSupport } from './Intl-support';
 
             }
 
-            // Angular 2 Http module.
-            this.http.get(url)
-                .map((res: Response) => res.json())
-                .subscribe(
-
-                // Observer or next.
-                (res: any) => {
-
-                    // Adds response to the translation data.
-                    this.addData(res, language);
-
-                },
-
-                // Error.
-                (error: any) => {
-
-                    console.error("Localization service:", error);
-
-                },
-
-                // Complete.
-                () => {
-
-                    this.counter--;
-
-                    // Checks for the last one request.
-                    if (this.counter <= 0) {
-
-                        this.translationComplete(language);
-
-                    }
-
-                });
+            observableSequencesOfTranslationData.push(this.getTranslationByProvider(url));
 
         }
+
+        // Merges all the observable sequences into a single observable sequence.
+        Observable.merge(...observableSequencesOfTranslationData).subscribe(
+            // Next.
+            (data: any) => {
+
+                // Adds response to the translation data.
+                this.addData(data, language);
+
+            },
+            // Error.
+            (error: any) => {
+
+                console.error("Localization service:", error);
+
+            },
+            // Complete.
+            () => {
+
+                this.translationComplete(language);
+
+            }
+
+        );
+
+    }
+
+    private getTranslationByProvider(url: string): Observable<any> {
+
+        return this.http.get(url)
+            .map((res: Response) => res.json());
 
     }
 
@@ -701,7 +695,7 @@ import { IntlSupport } from './Intl-support';
     }
 
     /**
-     * Merges two translation data.
+     * Merges objects.
      */
     private extend(...args: Array<any>): any {
 
