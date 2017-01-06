@@ -1,5 +1,5 @@
 # Angular 2 Localization library specification
-Library version: 1.4.0
+Library version: 1.4.1
 
 ## Table of contents
 * [1 The library structure](#1)
@@ -594,11 +594,11 @@ where `digitInfo` has the following format: `{minIntegerDigits}.{minFractionDigi
 
 For example, to validate a decimal number, add in the template:
 ```Html
-<md-input validateLocaleNumber="1.2-2" [minValue]="0" [maxValue]="1000" name="decimal" #decimal="ngModel" ngModel></md-input>
+<input validateLocaleNumber="1.2-2" [minValue]="0" [maxValue]="1000" name="decimal" #decimal="ngModel" ngModel>
 ```
 or, if you use variables:
 ```Html
-<md-input [validateLocaleNumber]="digits" [minValue]="minValue" [maxValue]="maxValue" name="decimal" #decimal="ngModel" ngModel></md-input>
+<input [validateLocaleNumber]="digits" [minValue]="minValue" [maxValue]="maxValue" name="decimal" #decimal="ngModel" ngModel>
 ```
 and declare `LocaleNumberValidator` in `AppModule`.
 
@@ -652,8 +652,9 @@ This is the view:
     <md-card-content>
         <form [formGroup]="numberForm" (ngSubmit)="onSubmit(numberForm.value)">
             <div>
-                <md-input placeholder="{{ 0 | localeDecimal:defaultLocale:digits }}" [formControl]="decimal" (keyup)="decimal.valid ? parsedValue : parsedValue = null"
-                    style="width: 100%"></md-input>
+                <md-input-container style="width: 100%">
+                    <input md-input placeholder="{{ 0 | localeDecimal:defaultLocale:digits }}" [formControl]="decimal" (keyup)="decimal.valid ? parsedValue : parsedValue = null">
+                </md-input-container>
 
                 <div *ngIf="decimal.hasError('format') && decimal.value != ''" style="color: #D32F2F;">
                     {{ 'NUMBER_IS_INVALID' | translate:lang }} {{ 0 | localeDecimal:defaultLocale:digits }}
