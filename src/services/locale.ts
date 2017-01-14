@@ -6,6 +6,8 @@
  * https://github.com/robisim74/angular2localization
  */
 
+import { ChangeDetectorRef } from '@angular/core';
+
 // Services.
 import { LocaleService } from './locale.service';
 import { LocalizationService } from './localization.service';
@@ -35,7 +37,7 @@ export class Locale {
      */
     public currency: string;
 
-    constructor(public locale?: LocaleService, public localization?: LocalizationService) {
+    constructor(public locale?: LocaleService, public localization?: LocalizationService, public changeDetectorRef?: ChangeDetectorRef) {
 
         if (this.localization != null) {
 
@@ -45,7 +47,10 @@ export class Locale {
             this.localization.translationChanged.subscribe(
 
                 // Generator or next.
-                (language: string) => { this.lang = language; }
+                (language: string) => {
+                    this.lang = language;
+                    if (this.changeDetectorRef) { this.changeDetectorRef.markForCheck(); }; // OnPush Change Detection strategy.
+                }
 
             );
 
@@ -59,7 +64,10 @@ export class Locale {
             this.locale.defaultLocaleChanged.subscribe(
 
                 // Generator or next.
-                (defaultLocale: string) => { this.defaultLocale = defaultLocale; }
+                (defaultLocale: string) => {
+                    this.defaultLocale = defaultLocale;
+                    if (this.changeDetectorRef) { this.changeDetectorRef.markForCheck(); }; // OnPush Change Detection strategy.
+                }
 
             );
 
@@ -69,7 +77,10 @@ export class Locale {
             this.locale.currencyCodeChanged.subscribe(
 
                 // Generator or next.
-                (currency: string) => { this.currency = currency; }
+                (currency: string) => {
+                    this.currency = currency;
+                    if (this.changeDetectorRef) { this.changeDetectorRef.markForCheck(); }; // OnPush Change Detection strategy.
+                }
 
             );
 
