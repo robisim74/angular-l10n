@@ -12,7 +12,8 @@ export default {
         '@angular/http',
         'rxjs/Observable',
         'rxjs/Observer',
-        'rxjs/add/operator/map'
+        'rxjs/add/operator/map',
+        'rxjs/add/observable/merge'
     ],
     globals: {
         '@angular/core': 'ng.core',
@@ -21,7 +22,8 @@ export default {
         '@angular/http': 'ng.http',
         'rxjs/Observable': 'Rx',
         'rxjs/Observer': 'Rx',
-        'rxjs/add/operator/map': 'Rx'
+        'rxjs/add/operator/map': 'Rx',
+        'rxjs/add/observable/merge': 'Rx'
     },
     onwarn: () => { return }
 }
