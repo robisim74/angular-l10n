@@ -69,18 +69,19 @@ export abstract class LocaleDirective implements AfterViewInit {
     ngAfterViewInit(): void {
 
         let renderNode: any = this.el.nativeElement.childNodes[0];
-        let value: string = <string>renderNode.nodeValue;
+        let nodeValue: string = <string>renderNode.nodeValue;
+        let value: string = nodeValue.trim();
 
-        this.localize(renderNode, value);
+        this.localize(renderNode, nodeValue, value);
 
         this.locale.defaultLocaleChanged.subscribe(
             () => {
-                this.localize(renderNode, value);
+                this.localize(renderNode, nodeValue, value);
             }
         );
 
     }
 
-    protected abstract localize(renderNode: any, value: string): void;
+    protected abstract localize(renderNode: any, nodeValue: string, value: string): void;
 
 }

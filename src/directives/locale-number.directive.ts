@@ -34,7 +34,7 @@ export class LocaleDecimalDirective extends LocaleDirective {
         super(locale, el, renderer);
     }
 
-    localize(renderNode: any, value: string): void {
+    localize(renderNode: any, nodeValue: string, value: string): void {
 
         let defaultLocale: string = this.locale.getDefaultLocale();
 
@@ -43,7 +43,7 @@ export class LocaleDecimalDirective extends LocaleDirective {
 
             let localeDecimal: DecimalPipe = new DecimalPipe(defaultLocale);
 
-            this.renderer.setText(renderNode, localeDecimal.transform(value, this.digits || this.defaultDigits));
+            this.renderer.setText(renderNode, nodeValue.replace(value, localeDecimal.transform(value, this.digits || this.defaultDigits)));
 
         }
 
@@ -71,7 +71,7 @@ export class LocalePercentDirective extends LocaleDirective {
         super(locale, el, renderer);
     }
 
-    localize(renderNode: any, value: string): void {
+    localize(renderNode: any, nodeValue: string, value: string): void {
 
         let defaultLocale: string = this.locale.getDefaultLocale();
 
@@ -80,7 +80,7 @@ export class LocalePercentDirective extends LocaleDirective {
 
             let localePercent: PercentPipe = new PercentPipe(defaultLocale);
 
-            this.renderer.setText(renderNode, localePercent.transform(value, this.digits || this.defaultDigits));
+            this.renderer.setText(renderNode, nodeValue.replace(value, localePercent.transform(value, this.digits || this.defaultDigits)));
 
         }
 
@@ -114,7 +114,7 @@ export class LocaleCurrencyDirective extends LocaleDirective {
         super(locale, el, renderer);
     }
 
-    localize(renderNode: any, value: string): void {
+    localize(renderNode: any, nodeValue: string, value: string): void {
 
         let defaultLocale: string = this.locale.getDefaultLocale();
         let currency: string = this.locale.getCurrentCurrency();
@@ -124,7 +124,7 @@ export class LocaleCurrencyDirective extends LocaleDirective {
 
             let localeCurrency: CurrencyPipe = new CurrencyPipe(defaultLocale);
 
-            this.renderer.setText(renderNode, localeCurrency.transform(value, currency, this.symbolDisplay, this.digits || this.defaultDigits));
+            this.renderer.setText(renderNode, nodeValue.replace(value, localeCurrency.transform(value, currency, this.symbolDisplay, this.digits || this.defaultDigits)));
 
         }
 

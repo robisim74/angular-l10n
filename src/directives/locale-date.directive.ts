@@ -32,9 +32,9 @@ export class LocaleDateDirective extends LocaleDirective {
 
     constructor(public locale: LocaleService, el: ElementRef, renderer: Renderer) {
         super(locale, el, renderer);
-     }
+    }
 
-    localize(renderNode: any, value: string): void {
+    localize(renderNode: any, nodeValue: string, value: string): void {
 
         let defaultLocale: string = this.locale.getDefaultLocale();
 
@@ -43,7 +43,7 @@ export class LocaleDateDirective extends LocaleDirective {
 
             let localeDate: DatePipe = new DatePipe(defaultLocale);
 
-            this.renderer.setText(renderNode, localeDate.transform(value, this.pattern || this.defaultPattern));
+            this.renderer.setText(renderNode, nodeValue.replace(value, localeDate.transform(value, this.pattern || this.defaultPattern)));
 
         }
 

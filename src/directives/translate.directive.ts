@@ -30,23 +30,24 @@ export class TranslateDirective implements AfterViewInit {
     ngAfterViewInit(): void {
 
         let renderNode: any = this.el.nativeElement.childNodes[0];
-        let key: string = <string>renderNode.nodeValue;
+        let nodeValue: string = <string>renderNode.nodeValue;
+        let key: string = nodeValue.trim();
 
-        this.translate(renderNode, key);
+        this.translate(renderNode, nodeValue, key);
 
         this.localization.translationChanged.subscribe(
             () => {
-                this.translate(renderNode, key);
+                this.translate(renderNode, nodeValue, key);
             }
         );
 
     }
 
-    private translate(renderNode: any, key: string): void {
+    private translate(renderNode: any, nodeValue: string, key: string): void {
 
         this.localization.translateAsync(key, this.params).subscribe(
             (value: string) => {
-                this.renderer.setText(renderNode, value);
+                this.renderer.setText(renderNode, nodeValue.replace(key, value));
             }
         );
 
