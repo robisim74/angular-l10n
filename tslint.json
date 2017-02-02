@@ -10,8 +10,8 @@
         "component-selector": [
             false
         ],
-        "use-input-property-decorator": false,
-        "use-output-property-decorator": false,
+        "use-input-property-decorator": true,
+        "use-output-property-decorator": true,
         "use-host-property-decorator": true,
         "no-attribute-parameter-decorator": true,
         "no-input-rename": false,
@@ -19,31 +19,21 @@
         "no-forward-ref": false,
         "use-life-cycle-interface": true,
         "use-pipe-transform-interface": true,
-        "pipe-naming": [
-            true,
-            "camelCase"
+        "component-class-suffix": [
+            false
         ],
-        "component-class-suffix": false,
-        "directive-class-suffix": false,
+        "directive-class-suffix": [
+            true,
+            "Directive"
+        ],
         "import-destructuring-spacing": true,
         "templates-use-public": true,
         "no-access-missing-member": true,
         "invoke-injectable": true,
-        "array-type": [
-            false
-        ],
         "forin": false,
-        "interface-name": [
-            true,
-            "never-prefix"
-        ],
         "max-classes-per-file": [
             false
         ],
-        "max-line-length": [
-            false
-        ],
-        "member-access": false,
         "member-ordering": [
             true,
             {
@@ -64,11 +54,6 @@
                 ]
             }
         ],
-        "no-shadowed-variable": false,
-        "no-string-literal": false,
-        "no-switch-case-fall-through": true,
-        "no-use-before-declare": true,
-        "no-var-keyword": false,
         "object-literal-sort-keys": false,
         "ordered-imports": [
             false
@@ -76,7 +61,7 @@
         "quotemark": [
             false
         ],
-        "switch-default": false,
+        "radix": false,
         "trailing-comma": [
             false
         ],
@@ -95,7 +80,8 @@
         "variable-name": [
             true,
             "ban-keywords",
-            "check-format"
+            "check-format",
+            "allow-leading-underscore"
         ],
         "whitespace": [
             true,

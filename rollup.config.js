@@ -1,10 +1,8 @@
-// Rollup config file.
-
 export default {
-    entry: './dist/angular2localization.js',
-    dest: './dist/bundles/angular2localization.umd.js',
+    entry: './dist/index.js',
+    dest: './dist/bundles/angular-l10n.umd.js',
     format: 'umd',
-    moduleName: 'ng.angular2localization',
+    moduleName: 'ng.l10n',
     external: [
         '@angular/core',
         '@angular/common',

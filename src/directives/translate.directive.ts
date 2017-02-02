@@ -1,56 +1,70 @@
-/**
- * ANGULAR 2 LOCALIZATION
- * An Angular 2 library to translate messages, dates and numbers.
- * Written by Roberto Simonetti.
- * MIT license.
- * https://github.com/robisim74/angular2localization
- */
-
 import { Directive, ElementRef, Input, Renderer, AfterViewInit } from '@angular/core';
 
-// Services.
-import { LocalizationService } from '../services/localization.service';
+import { TranslationService } from '../services/translation.service';
 
 @Directive({
     selector: '[translate]'
 })
-
-/**
- * TranslateDirective class.
- * Translate by an attribute directive.
- * 
- * @author Roberto Simonetti
- */
 export class TranslateDirective implements AfterViewInit {
 
-    @Input('translate') params: string;
+    @Input('translate') public params: string;
 
-    constructor(public localization: LocalizationService, private el: ElementRef, private renderer: Renderer) { }
+    private key: string;
+    private renderNode: any;
+    private nodeValue: string = "";
 
-    ngAfterViewInit(): void {
+    constructor(public translation: TranslationService, private el: ElementRef, private renderer: Renderer) { }
 
-        let renderNode: any = this.el.nativeElement.childNodes[0];
-        let nodeValue: string = <string>renderNode.nodeValue;
-        let key: string = nodeValue.trim();
+    public ngAfterViewInit(): void {
+        if (this.el.nativeElement.hasAttribute("value")) {
+            this.key = this.el.nativeElement.getAttribute("value");
+        } else if (this.el.nativeElement.hasChildNodes()) {
+            this.key = this.getKey();
+        }
 
-        this.translate(renderNode, nodeValue, key);
-
-        this.localization.translationChanged.subscribe(
-            () => {
-                this.translate(renderNode, nodeValue, key);
-            }
-        );
-
+        if (!!this.key) {
+            this.replace();
+            this.translation.translationChanged.subscribe(
+                () => {
+                    this.replace();
+                }
+            );
+        }
     }
 
-    private translate(renderNode: any, nodeValue: string, key: string): void {
-
-        this.localization.translateAsync(key, this.params).subscribe(
+    protected replace(): void {
+        this.translation.translateAsync(this.key, this.params).subscribe(
             (value: string) => {
-                this.renderer.setText(renderNode, nodeValue.replace(key, value));
+                if (this.renderNode) {
+                    this.renderer.setText(this.renderNode, this.nodeValue.replace(this.key, value));
+                } else {
+                    this.renderer.setElementAttribute(this.el.nativeElement, "value", value);
+                }
             }
         );
+    }
 
+    private getKey(): string {
+        let element: any = this.el.nativeElement;
+        for (let child1st of element.childNodes) {
+            if (typeof child1st !== "undefined" && child1st.nodeValue != null) {
+                this.assignNode(child1st);
+                break;
+            } else {
+                for (let child2nd of child1st.childNodes) {
+                    if (typeof child2nd !== "undefined" && child2nd.nodeValue != null) {
+                        this.assignNode(child2nd);
+                        break;
+                    }
+                }
+            }
+        }
+        return this.nodeValue.trim();
+    }
+
+    private assignNode(node: any): void {
+        this.renderNode = node;
+        this.nodeValue = <string>node.nodeValue;
     }
 
 }

@@ -1,32 +1,16 @@
-/**
- * ANGULAR 2 LOCALIZATION
- * An Angular 2 library to translate messages, dates and numbers.
- * Written by Roberto Simonetti.
- * MIT license.
- * https://github.com/robisim74/angular2localization
- */
-
 import { Directive, ElementRef, Input, Renderer } from '@angular/core';
 import { DecimalPipe, PercentPipe, CurrencyPipe } from '@angular/common';
 
-// Services.
-import { LocaleDirective } from '../services/i18n';
+import { LocaleDirective } from '../models/localization/locale-directive';
 import { LocaleService } from '../services/locale.service';
-import { IntlSupport } from '../services/Intl-support';
+import { IntlAPI } from '../services/intl-api';
 
 @Directive({
     selector: '[localeDecimal]'
 })
-
-/**
- * LocaleDecimalDirective class.
- * Localizes decimal numbers by an attribute directive.
- * 
- * @author Roberto Simonetti
- */
 export class LocaleDecimalDirective extends LocaleDirective {
 
-    @Input('localeDecimal') digits: string;
+    @Input('localeDecimal') public digits: string;
 
     private defaultDigits: string = null;
 
@@ -34,19 +18,17 @@ export class LocaleDecimalDirective extends LocaleDirective {
         super(locale, el, renderer);
     }
 
-    localize(renderNode: any, nodeValue: string, value: string): void {
-
-        let defaultLocale: string = this.locale.getDefaultLocale();
-
-        // Checks for support for Intl.
-        if (IntlSupport.NumberFormat(defaultLocale) == true) {
-
-            let localeDecimal: DecimalPipe = new DecimalPipe(defaultLocale);
-
-            this.renderer.setText(renderNode, nodeValue.replace(value, localeDecimal.transform(value, this.digits || this.defaultDigits)));
-
+    protected replace(): void {
+        if (IntlAPI.HasNumberFormat()) {
+            let localeDecimal: DecimalPipe = new DecimalPipe(this.locale.getDefaultLocale());
+            this.renderer.setText(
+                this.renderNode,
+                this.nodeValue.replace(
+                    this.value,
+                    localeDecimal.transform(this.value, this.digits || this.defaultDigits)
+                )
+            );
         }
-
     }
 
 }
@@ -54,16 +36,9 @@ export class LocaleDecimalDirective extends LocaleDirective {
 @Directive({
     selector: '[localePercent]'
 })
-
-/**
- * LocalePercentDirective class.
- * Localizes percent numbers by an attribute directive.
- * 
- * @author Roberto Simonetti
- */
 export class LocalePercentDirective extends LocaleDirective {
 
-    @Input('localePercent') digits: string;
+    @Input('localePercent') public digits: string;
 
     private defaultDigits: string = null;
 
@@ -71,19 +46,17 @@ export class LocalePercentDirective extends LocaleDirective {
         super(locale, el, renderer);
     }
 
-    localize(renderNode: any, nodeValue: string, value: string): void {
-
-        let defaultLocale: string = this.locale.getDefaultLocale();
-
-        // Checks for support for Intl.
-        if (IntlSupport.NumberFormat(defaultLocale) == true) {
-
-            let localePercent: PercentPipe = new PercentPipe(defaultLocale);
-
-            this.renderer.setText(renderNode, nodeValue.replace(value, localePercent.transform(value, this.digits || this.defaultDigits)));
-
+    protected replace(): void {
+        if (IntlAPI.HasNumberFormat()) {
+            let localePercent: PercentPipe = new PercentPipe(this.locale.getDefaultLocale());
+            this.renderer.setText(
+                this.renderNode,
+                this.nodeValue.replace(
+                    this.value,
+                    localePercent.transform(this.value, this.digits || this.defaultDigits)
+                )
+            );
         }
-
     }
 
 }
@@ -91,16 +64,9 @@ export class LocalePercentDirective extends LocaleDirective {
 @Directive({
     selector: '[localeCurrency]'
 })
-
-/**
- * LocaleCurrencyDirective class.
- * Localizes currencies by an attribute directive.
- * 
- * @author Roberto Simonetti
- */
 export class LocaleCurrencyDirective extends LocaleDirective {
 
-    @Input('localeCurrency') digits: string;
+    @Input('localeCurrency') public digits: string;
 
     @Input() set symbol(symbolDisplay: boolean) {
         this.symbolDisplay = symbolDisplay || this.symbolDisplay;
@@ -114,20 +80,22 @@ export class LocaleCurrencyDirective extends LocaleDirective {
         super(locale, el, renderer);
     }
 
-    localize(renderNode: any, nodeValue: string, value: string): void {
-
-        let defaultLocale: string = this.locale.getDefaultLocale();
-        let currency: string = this.locale.getCurrentCurrency();
-
-        // Checks for support for Intl.
-        if (IntlSupport.NumberFormat(defaultLocale) == true) {
-
-            let localeCurrency: CurrencyPipe = new CurrencyPipe(defaultLocale);
-
-            this.renderer.setText(renderNode, nodeValue.replace(value, localeCurrency.transform(value, currency, this.symbolDisplay, this.digits || this.defaultDigits)));
-
+    protected replace(): void {
+        if (IntlAPI.HasNumberFormat()) {
+            let localeCurrency: CurrencyPipe = new CurrencyPipe(this.locale.getDefaultLocale());
+            this.renderer.setText(
+                this.renderNode,
+                this.nodeValue.replace(
+                    this.value,
+                    localeCurrency.transform(
+                        this.value,
+                        this.locale.getCurrentCurrency(),
+                        this.symbolDisplay,
+                        this.digits || this.defaultDigits
+                    )
+                )
+            );
         }
-
     }
 
 }
