@@ -10,7 +10,7 @@ It allows, in addition to translation, to localize numbers and dates of your app
 Get the changelog by [releases](https://github.com/robisim74/angular-l10n/releases).
 
 ## Angular i18n solutions
-| _Feature_ | [Angular](https://angular.io/docs/ts/latest/cookbook/i18n.html) _Native_ | [ng2-translate](https://github.com/ocombe/ng2-translate) _External library_ | [angular-l10n](https://github.com/robisim74/angular-l10n/blob/master/doc/spec.md) _External library_ |
+| _Feature_ | [Angular](https://angular.io/docs/ts/latest/cookbook/i18n.html) _Native_ | [ngx-translate](https://github.com/ngx-translate/core) _External library_ | [angular-l10n](https://github.com/robisim74/angular-l10n/blob/master/doc/spec.md) _External library_ |
 | --------- | ------------------------------------------------------------------------ | --------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------- |
 _Messages_ | attribute, message ID | directive, impure pipe | directive, pure pipe
 _File formats_ | XLIFF, XMB/XTB | JSON | JSON
@@ -63,7 +63,7 @@ npm run build
 ```
 To test locally the npm package:
 ```Shell
-npm run pack
+npm run pack-lib
 ```
 Then you can install it in your app to test it:
 ```Shell
