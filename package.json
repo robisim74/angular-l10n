@@ -7,8 +7,7 @@
     "scripts": {
         "build": "node build.js",
         "test": "karma start",
-        "pack": "npm pack ./dist",
-        "publish": "npm publish ./dist"
+        "pack": "npm pack ./dist"
     },
     "typings": "index.d.ts",
     "author": "Roberto Simonetti",
