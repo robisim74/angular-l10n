@@ -52,7 +52,7 @@ and use global `ng.l10n` namespace.
 See [quick start](https://github.com/robisim74/angular-l10n/blob/master/doc/quick-start.md) and [library specification](https://github.com/robisim74/angular-l10n/blob/master/doc/spec.md).
 
 ## Related projects
-[Angular 2 Localization with an ASP.NET CORE MVC Service](https://damienbod.com/2016/04/29/angular-2-localization-with-an-asp-net-core-mvc-service/) @damienbod
+[Angular Localization with an ASP.NET CORE MVC Service](https://damienbod.com/2016/04/29/angular-2-localization-with-an-asp-net-core-mvc-service/) @damienbod
 
 ## Building
 In order to build the library if you want to contribute to it:
@@ -63,7 +63,7 @@ npm run build
 ```
 To test locally the npm package:
 ```Shell
-npm pack ./dist
+npm run pack
 ```
 Then you can install it in your app to test it:
 ```Shell

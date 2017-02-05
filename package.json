@@ -1,12 +1,14 @@
 {
     "name": "angular-l10n",
-    "version": "2.0.0",
+    "version": "2.0.1",
     "description": "An Angular library to translate messages, dates and numbers",
     "main": "bundles/angular-l10n.umd.js",
     "module": "index.js",
     "scripts": {
         "build": "node build.js",
-        "test": "karma start"
+        "test": "karma start",
+        "pack": "npm pack ./dist",
+        "publish": "npm publish ./dist"
     },
     "typings": "index.d.ts",
     "author": "Roberto Simonetti",
@@ -31,10 +33,10 @@
     ],
     "license": "MIT",
     "peerDependencies": {
-        "@angular/common": "2.4.5",
-        "@angular/core": "2.4.5",
-        "@angular/forms": "2.4.5",
-        "@angular/http": "2.4.5"
+        "@angular/common": "^2.4.5",
+        "@angular/core": "^2.4.5",
+        "@angular/forms": "^2.4.5",
+        "@angular/http": "^2.4.5"
     },
     "devDependencies": {
         "@angular/common": "2.4.5",
