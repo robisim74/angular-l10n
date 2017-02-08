@@ -24,6 +24,8 @@ export function validateLocaleNumber(
     let NUMBER_REGEXP: RegExp;
 
     return (formControl: FormControl): { [key: string]: any } => {
+        if (formControl.value == null || formControl.value == "") { return null; }
+
         if (defaultLocale != locale.getDefaultLocale()) {
             let regExpFactory: RegExpFactory = new RegExpFactory();
             NUMBER_REGEXP = regExpFactory.number(locale.getDefaultLocale(), digits);
