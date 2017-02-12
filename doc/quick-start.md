@@ -1,6 +1,4 @@
 ## Angular localization - Quick start
-Library version: 2.0.0
-
 > The samples are based on [Angular QuickStart](https://github.com/angular/quickstart).
 
 * [1 First scenario: you only need to translate texts](#1)

@@ -12,7 +12,7 @@ Get the changelog by [releases](https://github.com/robisim74/angular-l10n/releas
 ## Angular i18n solutions
 | _Feature_ | [Angular](https://angular.io/docs/ts/latest/cookbook/i18n.html) _Native_ | [ngx-translate](https://github.com/ngx-translate/core) _External library_ | [angular-l10n](https://github.com/robisim74/angular-l10n/blob/master/doc/spec.md) _External library_ |
 | --------- | ------------------------------------------------------------------------ | --------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------- |
-_Messages_ | attribute, message ID | directive, impure pipe | directive, pure pipe
+_Messages_ | Html attribute, message ID | directive, impure pipe | directive, pure pipe
 _File formats_ | XLIFF, XMB/XTB | JSON | JSON
 _No bootstrap (when language changes)_ | no | yes | yes
 _Getting the translation in component class_ | not yet | yes | yes

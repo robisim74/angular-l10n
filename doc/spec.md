@@ -1,5 +1,5 @@
 # Angular localization library specification
-Library version: 2.0.2
+Library version: 2.0.3
 
 ## Table of contents
 * [1 Library structure](#1)
@@ -207,7 +207,7 @@ _Json_:
 ```
 
 #### <a name="3.1.2"/>3.1.2 Dates & Numbers
-Extend `Localization` class in the component to provide _defaultLocale_ to the locale pipes:
+Extend `Localization` class in the component to provide _defaultLocale_ & _currency_ to the locale pipes:
 ```TypeScript
 export class HomeComponent extends Localization {
 
@@ -292,7 +292,8 @@ To get the translation in component class, `TranslationService` has the followin
 * `translate(key: string, args?: any, lang?: string): string;`
 * `translateAsync(key: string, args?: any, lang?: string): Observable<string>;`
 
-But to get the translation when the current language changes, you must _also_ subscribe to the following event:
+But to get the translation _when the component is loaded_ and _when the current language changes_, 
+_you must also_ subscribe to the following event:
 * `translationChanged: EventEmitter<string>;`
 
 ```TypeScript
