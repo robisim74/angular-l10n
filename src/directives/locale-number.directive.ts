@@ -1,33 +1,37 @@
 import { Directive, ElementRef, Input, Renderer } from '@angular/core';
 import { DecimalPipe, PercentPipe, CurrencyPipe } from '@angular/common';
 
-import { LocaleDirective } from '../models/localization/locale-directive';
 import { LocaleService } from '../services/locale.service';
 import { IntlAPI } from '../services/intl-api';
+import { BaseDirective } from '../models/utils/base-directive';
 
 @Directive({
     selector: '[localeDecimal]'
 })
-export class LocaleDecimalDirective extends LocaleDirective {
+export class LocaleDecimalDirective extends BaseDirective {
 
     @Input('localeDecimal') public digits: string;
 
     private defaultDigits: string = null;
 
-    constructor(public locale: LocaleService, el: ElementRef, renderer: Renderer) {
-        super(locale, el, renderer);
+    constructor(public locale: LocaleService, protected el: ElementRef, protected renderer: Renderer) {
+        super(el, renderer);
+    }
+
+    protected setup(): void {
+        this.replace();
+        this.locale.defaultLocaleChanged.subscribe(
+            () => {
+                this.replace();
+            }
+        );
     }
 
     protected replace(): void {
         if (IntlAPI.HasNumberFormat()) {
             let localeDecimal: DecimalPipe = new DecimalPipe(this.locale.getDefaultLocale());
-            this.renderer.setText(
-                this.renderNode,
-                this.nodeValue.replace(
-                    this.value,
-                    localeDecimal.transform(this.value, this.digits || this.defaultDigits)
-                )
-            );
+            let value: string = localeDecimal.transform(this.key, this.digits || this.defaultDigits);
+            this.setText(value);
         }
     }
 
@@ -36,26 +40,30 @@ export class LocaleDecimalDirective extends LocaleDirective {
 @Directive({
     selector: '[localePercent]'
 })
-export class LocalePercentDirective extends LocaleDirective {
+export class LocalePercentDirective extends BaseDirective {
 
     @Input('localePercent') public digits: string;
 
     private defaultDigits: string = null;
 
-    constructor(public locale: LocaleService, el: ElementRef, renderer: Renderer) {
-        super(locale, el, renderer);
+    constructor(public locale: LocaleService, protected el: ElementRef, protected renderer: Renderer) {
+        super(el, renderer);
+    }
+
+    protected setup(): void {
+        this.replace();
+        this.locale.defaultLocaleChanged.subscribe(
+            () => {
+                this.replace();
+            }
+        );
     }
 
     protected replace(): void {
         if (IntlAPI.HasNumberFormat()) {
             let localePercent: PercentPipe = new PercentPipe(this.locale.getDefaultLocale());
-            this.renderer.setText(
-                this.renderNode,
-                this.nodeValue.replace(
-                    this.value,
-                    localePercent.transform(this.value, this.digits || this.defaultDigits)
-                )
-            );
+            let value: string = localePercent.transform(this.key, this.digits || this.defaultDigits);
+            this.setText(value);
         }
     }
 
@@ -64,7 +72,7 @@ export class LocalePercentDirective extends LocaleDirective {
 @Directive({
     selector: '[localeCurrency]'
 })
-export class LocaleCurrencyDirective extends LocaleDirective {
+export class LocaleCurrencyDirective extends BaseDirective {
 
     @Input('localeCurrency') public digits: string;
 
@@ -76,25 +84,34 @@ export class LocaleCurrencyDirective extends LocaleDirective {
 
     private defaultDigits: string = null;
 
-    constructor(public locale: LocaleService, el: ElementRef, renderer: Renderer) {
-        super(locale, el, renderer);
+    constructor(public locale: LocaleService, protected el: ElementRef, protected renderer: Renderer) {
+        super(el, renderer);
+    }
+
+    protected setup(): void {
+        this.replace();
+        this.locale.defaultLocaleChanged.subscribe(
+            () => {
+                this.replace();
+            }
+        );
+        this.locale.currencyCodeChanged.subscribe(
+            () => {
+                this.replace();
+            }
+        );
     }
 
     protected replace(): void {
         if (IntlAPI.HasNumberFormat()) {
             let localeCurrency: CurrencyPipe = new CurrencyPipe(this.locale.getDefaultLocale());
-            this.renderer.setText(
-                this.renderNode,
-                this.nodeValue.replace(
-                    this.value,
-                    localeCurrency.transform(
-                        this.value,
-                        this.locale.getCurrentCurrency(),
-                        this.symbolDisplay,
-                        this.digits || this.defaultDigits
-                    )
-                )
+            let value: string = localeCurrency.transform(
+                this.key,
+                this.locale.getCurrentCurrency(),
+                this.symbolDisplay,
+                this.digits || this.defaultDigits
             );
+            this.setText(value);
         }
     }
 
