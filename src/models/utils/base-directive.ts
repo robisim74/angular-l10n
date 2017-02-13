@@ -10,13 +10,11 @@ export abstract class BaseDirective implements AfterViewInit {
     private renderNode: any;
     private nodeValue: any;
 
-    private breadthFirstSearch: BFS = new BFS();
-
     constructor(protected el: ElementRef, protected renderer: Renderer) { }
 
     public ngAfterViewInit(): void {
         this.element = this.el.nativeElement;
-        this.renderNode = this.breadthFirstSearch.getTargetNode(this.element);
+        this.renderNode = BFS.getTargetNode(this.element);
         this.nodeValue = this.renderNode != null ? <string>this.renderNode.nodeValue : null;
 
         if (this.element.hasChildNodes()) {

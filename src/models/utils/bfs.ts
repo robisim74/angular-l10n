@@ -8,11 +8,11 @@ export class BFS {
     /**
      * Target node is a non empty text node.
      */
-    public getTargetNode(rootNode: any): any {
+    public static getTargetNode(rootNode: any): any {
         return this.walk(rootNode);
     }
 
-    private walk(rootNode: any): any {
+    private static walk(rootNode: any): any {
         let queue: any[] = [];
         let iNode: any;
 
@@ -30,7 +30,7 @@ export class BFS {
         return null;
     }
 
-    private isTargetNode(node: any): boolean {
+    private static isTargetNode(node: any): boolean {
         return typeof node !== "undefined" &&
             node.nodeValue != null &&
             node.nodeValue.trim() != "" &&
