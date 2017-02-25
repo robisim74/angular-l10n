@@ -11,7 +11,9 @@ export class Browser {
     private hasLocalStorage: boolean;
 
     constructor(public locale: LocaleService) {
-        this.hasCookie = typeof navigator.cookieEnabled !== "undefined" && navigator.cookieEnabled;
+        this.hasCookie = typeof navigator !== "undefined" &&
+            typeof navigator.cookieEnabled !== "undefined" &&
+            navigator.cookieEnabled;
         this.hasLocalStorage = typeof Storage !== "undefined";
     }
 
@@ -39,7 +41,7 @@ export class Browser {
 
     public getBrowserLanguage(): string {
         let browserLanguage: string;
-        if (typeof navigator.language !== "undefined") {
+        if (typeof navigator !== "undefined" && typeof navigator.language !== "undefined") {
             browserLanguage = navigator.language;
         }
         if (browserLanguage != null) {

@@ -17,10 +17,10 @@ export abstract class BaseDirective implements AfterViewInit {
         this.renderNode = BFS.getTargetNode(this.element);
         this.nodeValue = this.renderNode != null ? <string>this.renderNode.nodeValue : null;
 
-        if (this.element.hasChildNodes()) {
+        if (this.element.childNodes.length > 0) {
             this.key = this.getText();
-        } else if (this.element.hasAttribute("value")) {
-            this.key = this.element.getAttribute("value");
+        } else if (this.element.value !== "undefined") {
+            this.key = this.element.value;
         }
 
         if (!!this.key) {
