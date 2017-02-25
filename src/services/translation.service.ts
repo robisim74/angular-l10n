@@ -18,6 +18,7 @@ import { ServiceState } from '../models/translation/service-state';
 @Injectable() export class TranslationService {
 
     @Output() public translationChanged: EventEmitter<string> = new EventEmitter<string>(true);
+    @Output() public translationError: EventEmitter<any> = new EventEmitter<any>(true);
 
     public get configuration(): Config {
         return this._configuration;
@@ -190,7 +191,9 @@ import { ServiceState } from '../models/translation/service-state';
                 this.addData(data, language);
             },
             (error: any) => {
-                console.error("Translation service:", error);
+                // Sends an event for custom actions.
+                this.translationError.emit(error);
+                this.releaseTranslation(language);
             },
             () => {
                 this.releaseTranslation(language);
