@@ -23,7 +23,7 @@ export class BFS {
             if (this.isTargetNode(iNode)) {
                 return iNode;
             }
-            if (iNode.childNodes) {
+            if (iNode.childNodes != null) {
                 for (let child of iNode.childNodes) {
                     queue.push(child);
                 }

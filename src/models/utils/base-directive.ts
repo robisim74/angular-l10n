@@ -8,7 +8,7 @@ export abstract class BaseDirective implements AfterViewInit {
 
     private element: any;
     private renderNode: any;
-    private nodeValue: any;
+    private nodeValue: string;
 
     constructor(protected el: ElementRef, protected renderer: Renderer) { }
 
@@ -35,7 +35,7 @@ export abstract class BaseDirective implements AfterViewInit {
     protected setText(value: string): void {
         if (!!this.nodeValue) {
             this.renderer.setText(this.renderNode, this.nodeValue.replace(this.key, value));
-        } else if (this.element.hasAttribute("value")) {
+        } else if (this.element.value !== "undefined") {
             this.renderer.setElementAttribute(this.element, "value", value);
         }
     }

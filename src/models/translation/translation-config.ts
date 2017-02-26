@@ -17,19 +17,20 @@ export class TranslationConfig {
     /**
      * Asynchronous loading: adds a translation provider.
      * @param prefix The path prefix of the json files
+     * @param dataFormat Data format: default & supported value is 'json'
      */
-    public AddProvider(prefix: string): TranslationConfig {
-        this.translation.configuration.providers.push({ prefix: prefix, dataFormat: "json", webAPI: false });
+    public AddProvider(prefix: string, dataFormat: string = "json"): TranslationConfig {
+        this.translation.configuration.providers.push({ path: prefix, dataFormat: "json", webAPI: false });
         return this;
     }
 
     /**
      * Asynchronous loading: adds a Web API provider.
-     * @param path TranslationService adds to the URL provided the language code as parameter
+     * @param path [path]/{languageCode} will be the URL used by the Http GET requests
      * @param dataFormat Data format: default & supported value is 'json'
      */
     public AddWebAPIProvider(path: string, dataFormat: string = "json"): TranslationConfig {
-        this.translation.configuration.providers.push({ prefix: path, dataFormat: dataFormat, webAPI: true });
+        this.translation.configuration.providers.push({ path: path, dataFormat: dataFormat, webAPI: true });
         return this;
     }
 

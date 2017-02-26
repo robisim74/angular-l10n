@@ -1,6 +1,6 @@
 export type Provider = {
 
-    prefix: string;
+    path: string;
     dataFormat: string;
     webAPI: boolean;
 

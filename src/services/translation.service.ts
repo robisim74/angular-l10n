@@ -176,7 +176,7 @@ import { ServiceState } from '../models/translation/service-state';
         let observableSequencesOfTranslationData: Array<Observable<any>> = [];
 
         for (let provider of this.configuration.providers) {
-            let url: string = provider.prefix;
+            let url: string = provider.path;
             if (provider.webAPI) {
                 url += language;
             } else {
