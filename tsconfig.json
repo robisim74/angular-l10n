@@ -7,9 +7,7 @@
         "inlineSources": true,
         "emitDecoratorMetadata": true,
         "experimentalDecorators": true,
-        "removeComments": false,
         "noImplicitAny": true,
-        "declaration": true,
         "skipLibCheck": true,
         "lib": [
             "es2015",

@@ -1,13 +1,14 @@
 # Angular localization library specification
-Library version: 2.0.3
+Library version: 2.0.4
 
 ## Table of contents
 * [1 Library structure](#1)
 * [2 Configuration](#2)
     * [2.1 First scenario: you only need to translate messages](#2.1)
     * [2.2 Second scenario: you need to translate messages, dates & numbers](#2.2)
-    * [2.3 Default locale](#2.3)
-    * [2.4 Intl API](#2.4)
+    * [2.3 Loading the translation data](#2.3)
+    * [2.4 Default locale](#2.4)
+    * [2.5 Intl API](#2.5)
 * [3 Getting the translation](#3)
     * [3.1 Pure pipes](#3.1)
         * [3.1.1 Messages](#3.1.1)
@@ -116,13 +117,54 @@ Method | Function
 Method | Function
 ------ | --------
 `AddTranslation(languageCode: string, translation: any);` | Direct loading: adds translation data
-`AddProvider(prefix: string, dataFormat?: string, webAPI?: boolean);` |  Asynchronous loading: adds a translation provider
+`AddProvider(prefix: string, dataFormat?: string);` |  Asynchronous loading: adds a translation provider
+`AddWebAPIProvider(path: string, dataFormat?: string);` |  Asynchronous loading: adds a Web API provider
 `UseLocaleAsLanguage();` | Sets the use of locale (`languageCode-countryCode`) as language
 `SetMissingValue(value: string);` | Sets the value to use for missing keys
 `SetMissingKey(key: string);` | Sets the key to use for missing keys
 `SetComposedKeySeparator(keySeparator: string);` | Sets composed key separator. Default is the point '.'
 
-### <a name="2.3"/>2.3 Default locale
+### <a name="2.3"/>2.3 Loading the translation data
+#### Direct loading
+You can use `AddTranslation` when you configure the service, 
+adding all the translation data:
+```TypeScript
+var translationEN = {
+    "Title": "Angular localization"
+}
+var translationIT = {
+     Title: 'Localizzazione in Angular'
+}
+
+this.translation.AddConfiguration()
+    .AddTranslation('en', translationEN)
+    .AddTranslation('it', translationIT);
+```
+
+#### Asynchronous loading of json files
+You can add all the providers you need:
+```TypeScript
+this.translation.AddConfiguration()
+    .AddProvider('./assets/locale-')
+    .AddProvider('./assets/global-')
+    ...
+```
+
+#### Asynchronous loading through a Web API
+You can also load the data through a Web API:
+```TypeScript
+this.translation.AddConfiguration()
+    .AddWebAPIProvider('http://localhost:54703/api/values/');
+
+this.translation.translationError.subscribe((error: any) => console.log(error));
+
+this.translation.init();
+```
+`[path]{languageCode}` will be the URL used by the Http GET requests. So the example URL will be something like: `http://localhost:54703/api/values/en`.
+
+The example above also showed as you can perform a custom action if you get a bad response.
+
+### <a name="2.4"/>2.4 Default locale
 The default locale contains the current language and culture. It consists of:
 * `language code`: ISO 639 two-letter or three-letter code of the language;
 * `country code`: ISO 3166 two-letter, uppercase code of the country;
@@ -134,7 +176,7 @@ and optionally:
 
 For more information see [Intl API](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl).
 
-### <a name="2.4"/>2.4 Intl API
+### <a name="2.5"/>2.5 Intl API
 To localize dates and numbers, this library uses [Intl API](https://developer.mozilla.org/it/docs/Web/JavaScript/Reference/Global_Objects/Intl), through Angular. 
 All modern browsers, except Safari, have implemented this API. You can use [Intl.js](https://github.com/andyearnshaw/Intl.js) to extend support to all browsers. 
 Just add one script tag in your `index.html`:
@@ -439,6 +481,7 @@ Method | Function
 Property | Value
 ---------- | -----
 `translationChanged: EventEmitter<string>;` |
+`translationError: EventEmitter<any>;` |
 `readonly configuration: Config` |
 `serviceState: ServiceState;` |
 

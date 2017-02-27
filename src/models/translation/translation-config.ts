@@ -26,7 +26,7 @@ export class TranslationConfig {
 
     /**
      * Asynchronous loading: adds a Web API provider.
-     * @param path [path]/{languageCode} will be the URL used by the Http GET requests
+     * @param path [path]{languageCode} will be the URL used by the Http GET requests
      * @param dataFormat Data format: default & supported value is 'json'
      */
     public AddWebAPIProvider(path: string, dataFormat: string = "json"): TranslationConfig {
