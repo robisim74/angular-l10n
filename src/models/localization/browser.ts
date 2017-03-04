@@ -58,9 +58,10 @@ export class Browser {
     }
 
     private getCookie(name: string): string {
-        let result: RegExpExecArray = new RegExp("(?:^|; )" +
-            encodeURIComponent(name) +
-            "=([^;]*)").exec(document.cookie);
+        let result: RegExpExecArray;
+        if (typeof document !== "undefined") {
+            result = new RegExp("(?:^|; )" + encodeURIComponent(name) + "=([^;]*)").exec(document.cookie);
+        }
         return result ? result[1] : null;
     }
 
@@ -78,7 +79,9 @@ export class Browser {
             );
             expires = "; expires=" + expirationDate.toUTCString();
         }
-        document.cookie = name + "=" + value + expires + "; path=/";
+        if (typeof document !== "undefined") {
+            document.cookie = name + "=" + value + expires + "; path=/";
+        }
     }
 
 }

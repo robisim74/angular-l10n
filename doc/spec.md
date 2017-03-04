@@ -178,7 +178,7 @@ For more information see [Intl API](https://developer.mozilla.org/en-US/docs/Web
 
 ### <a name="2.5"/>2.5 Intl API
 To localize dates and numbers, this library uses [Intl API](https://developer.mozilla.org/it/docs/Web/JavaScript/Reference/Global_Objects/Intl), through Angular. 
-All modern browsers, except Safari, have implemented this API. You can use [Intl.js](https://github.com/andyearnshaw/Intl.js) to extend support to all browsers. 
+All modern browsers have implemented this API. You can use [Intl.js](https://github.com/andyearnshaw/Intl.js) to extend support to all browsers. 
 Just add one script tag in your `index.html`:
 ```Html
 <script src="https://cdn.polyfill.io/v2/polyfill.min.js?features=Intl.~locale.en-US"></script>

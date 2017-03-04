@@ -39,14 +39,15 @@ System.config({
 No need to set up anything, just import it in your code.
 #### Rollup or webpack
 No need to set up anything, just import it in your code.
-#### AoT compilation
-This library is compatible with AoT compilation, just import it in your code.
 #### Plain JavaScript
 If you build apps in Angular using ES5, you can include the `umd` bundle in your `index.html`:
 ```Html
 <script src="node_modules/angular-l10n/bundles/angular-l10n.umd.js"></script>
 ```
 and use global `ng.l10n` namespace.
+
+## AoT compilation & Server-side prerendering
+This library is compatible with AoT compilation & Server-side prerendering.
 
 ## Usage
 See [quick start](https://github.com/robisim74/angular-l10n/blob/master/doc/quick-start.md) and [library specification](https://github.com/robisim74/angular-l10n/blob/master/doc/spec.md).
