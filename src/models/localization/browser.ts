@@ -1,7 +1,7 @@
 import { LocaleService } from '../../services/locale.service';
 
 /**
- * Manages the browser for storage, navigator and Intl.
+ * Manages the browser for cookie, local storage & navigator.
  */
 export class Browser {
 
