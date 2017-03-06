@@ -13,6 +13,7 @@ Library version: 2.0.4
     * [3.1 Pure pipes](#3.1)
         * [3.1.1 Messages](#3.1.1)
         * [3.1.2 Dates & Numbers](#3.1.2)
+        * [3.1.3 OnPush ChangeDetectionStrategy](#3.1.3)
     * [3.2 Directives](#3.2)
     * [3.3 Getting the translation in component class](#3.3)
 * [4 Changing language, default locale or currency at runtime](#4)
@@ -293,6 +294,19 @@ expression | localeCurrency[:defaultLocale[:currency[:symbolDisplay[:digitInfo]]
 where `symbolDisplay` is a boolean indicating whether to use the currency symbol (e.g. $) or the currency code (e.g. USD) in the output. 
 ```Html
 {{ value | localeCurrency:defaultLocale:currency:true:'1.2-2' }}
+```
+
+#### <a name="3.1.3"/>3.1.3 OnPush ChangeDetectionStrategy
+_Pure pipes_ don't need to set `ChangeDetectionStrategy` to `OnPush`: if into your components you need to use it for working with other _impure pipes_, when you extend `Translation` or `Localization` classes you have also to pass `ChangeDetectorRef`:
+```TypeScript
+export class HomeComponent extends Localization {
+
+    constructor(public locale: LocaleService, public translation: TranslationService, public cd: ChangeDetectorRef) {
+        super(locale, translation, cd);
+        ...
+    }
+
+} 
 ```
 
 ### <a name="3.2"/>3.2 Directives
