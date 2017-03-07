@@ -11,8 +11,6 @@ import { Browser } from '../models/localization/browser';
  */
 @Injectable() export class LocaleService {
 
-    private static referenceCounter: number = 0;
-
     @Output() public languageCodeChanged: EventEmitter<string> = new EventEmitter<string>(true);
     @Output() public defaultLocaleChanged: EventEmitter<string> = new EventEmitter<string>(true);
     @Output() public currencyCodeChanged: EventEmitter<string> = new EventEmitter<string>(true);
@@ -29,10 +27,6 @@ import { Browser } from '../models/localization/browser';
     private currencyCode: string;
 
     private browser: Browser = new Browser(this);
-
-    constructor() {
-        LocaleService.referenceCounter++;
-    }
 
     /**
      * Configure the service in the application root module or bootstrap component.
@@ -140,12 +134,7 @@ import { Browser } from '../models/localization/browser';
     }
 
     private initStorage(): void {
-        // Avoids overwriting of the storage.
-        if (LocaleService.referenceCounter > 1) {
-            this.browser.storageIsDisabled = true;
-        } else {
-            this.browser.storageIsDisabled = this.configuration.storageIsDisabled;
-        }
+        this.browser.storageIsDisabled = this.configuration.storageIsDisabled;
 
         // Tries to retrieve default locale & currency from the browser storage.
         this.defaultLocale.value = this.browser.readStorage("locale");
