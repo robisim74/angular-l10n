@@ -19,7 +19,7 @@ export abstract class BaseDirective implements AfterViewInit {
 
         if (this.element.childNodes.length > 0) {
             this.key = this.getText();
-        } else if (this.element.value !== "undefined") {
+        } else if (typeof this.element.value !== "undefined") {
             this.key = this.element.value;
         }
 
@@ -35,7 +35,7 @@ export abstract class BaseDirective implements AfterViewInit {
     protected setText(value: string): void {
         if (!!this.nodeValue) {
             this.renderer.setText(this.renderNode, this.nodeValue.replace(this.key, value));
-        } else if (this.element.value !== "undefined") {
+        } else if (typeof this.element.value !== "undefined") {
             this.renderer.setElementAttribute(this.element, "value", value);
         }
     }
