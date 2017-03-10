@@ -74,6 +74,7 @@ import { ServiceState } from '../models/translation/service-state';
     }
 
     public translate(key: string, args: any = null, lang: string = this.language): string {
+        if (key == null || key == "") { return ""; }
         // I18n plural.
         if (/^\d+\b/.exec(key)) {
             return this.translateI18nPlural(key, args, lang);
