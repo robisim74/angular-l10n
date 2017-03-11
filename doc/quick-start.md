@@ -227,13 +227,15 @@ and create the _json_ files of the translations such as `locale-en.json` and `lo
 ```Json
 {
     "Title": "Angular localization",
-    "Change country": "Change country"
+    "Change country": "Change country",
+    "Change": "Change"
 }
 ```
 ```Json
 {
     "Title": "Localizzazione in Angular",
-    "Change country": "Cambia Paese"
+    "Change country": "Cambia Paese",
+    "Change": "Cambia"
 }
 ```
 Add `home.component.ts`:
@@ -248,6 +250,8 @@ import { Localization, LocaleService, TranslationService } from 'angular-l10n';
         <p>{{ today | localeDate:defaultLocale:'fullDate' }}</p>       
         <p>{{ pi | localeDecimal:defaultLocale:'1.5-5' }}</p>
         <p>{{ value | localeCurrency:defaultLocale:currency:true:'1.2-2' }}</p>
+
+        <button (click)="change()">{{ 'Change' | translate:lang }}</button>
     `
 })
 export class HomeComponent extends Localization {
@@ -261,6 +265,10 @@ export class HomeComponent extends Localization {
 
         this.today = Date.now();
         this.pi = 3.14159;
+        this.value = Math.round(Math.random() * 1000000) / 100;
+    }
+
+    change() {
         this.value = Math.round(Math.random() * 1000000) / 100;
     }
 
@@ -289,6 +297,8 @@ import { Component } from '@angular/core';
         <p localeDate="fullDate">{{ today }}</p>    
         <p localeDecimal="1.5-5">{{ pi }}</p>
         <p localeCurrency="1.2-2" [symbol]="true">{{ value }}</p>
+
+        <button (click)="change()" translate>Change</button>
     `
 })
 export class HomeComponent {
@@ -300,6 +310,10 @@ export class HomeComponent {
     constructor() {
         this.today = Date.now();
         this.pi = 3.14159;
+        this.value = Math.round(Math.random() * 1000000) / 100;
+    }
+
+    change() {
         this.value = Math.round(Math.random() * 1000000) / 100;
     }
 

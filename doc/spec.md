@@ -1,5 +1,5 @@
 # Angular localization library specification
-Library version: 2.0.5
+Library version: 2.0.6
 
 ## Table of contents
 * [1 Library structure](#1)
@@ -295,6 +295,7 @@ where `symbolDisplay` is a boolean indicating whether to use the currency symbol
 ```Html
 {{ value | localeCurrency:defaultLocale:currency:true:'1.2-2' }}
 ```
+*N.B. You can dynamically change parameters and expressions values.*
 
 #### <a name="3.1.3"/>3.1.3 OnPush ChangeDetectionStrategy
 _Pure pipes_ don't need to set `ChangeDetectionStrategy` to `OnPush`: if into your components you need to use it for working with other _impure pipes_, when you extend `Translation` or `Localization` classes you have also to pass `ChangeDetectorRef`:
@@ -340,7 +341,8 @@ Parameters:
 <p localeCurrency>{{ value }}</p>
 <p localeCurrency="1.2-2" [symbol]="true">{{ value }}</p>
 ```
-*N.B. If you use in the component only the directives and not the pipes, 
+*N.B. You can dynamically change attributes, parameters and expressions values. 
+If you use in the component only the directives and not the pipes, 
 you don't need to import services and extend `Translation` or `Localization` class.*
 
 ### <a name="3.3"/>3.3 Getting the translation in component class
