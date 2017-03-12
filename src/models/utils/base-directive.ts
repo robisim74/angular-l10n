@@ -44,7 +44,7 @@ export abstract class BaseDirective implements AfterViewInit, OnChanges, OnDestr
 
     public ngOnChanges(changes: SimpleChanges): void {
         if (!!this.key) {
-            if (!!this.valueAttribute) {
+            if (this.element.childNodes.length == 0 && !!this.valueAttribute) {
                 this.key = this.valueAttribute;
             }
             this.replace();
