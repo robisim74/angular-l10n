@@ -4,9 +4,9 @@
 * [1 First scenario: you only need to translate texts](#1)
 * [2 Second scenario: you need to translate texts, dates & numbers](#2)
 * [3 Advanced initialization](#3)
-* [Appendix A - Using Angular-CLI](#Appendix A)
-* [Appendix B - Using Ionic 2](#Appendix B)
-* [Appendix C - Using Angular 2 Meteor](#Appendix C)
+* [Appendix A - Using Angular-CLI](#AppendixA)
+* [Appendix B - Using Ionic 2](#AppendixB)
+* [Appendix C - Using Angular 2 Meteor](#AppendixC)
 
 ## <a name="1"/>1 First scenario: you only need to translate texts
 Install the library:
@@ -393,7 +393,7 @@ export class AppModule { }
 ```
 See also the [sample app](https://github.com/robisim74/angular-l10n-sample).
 
-## <a name="Appendix A"/>Appendix A - Using Angular-CLI
+## <a name="AppendixA"/>Appendix A - Using Angular-CLI
 If you are using _Angular-CLI_, you have to add the _json_ files in `src/assets` folder, 
 copied as-is when building your project. 
 Always configure your provider in this way:
@@ -402,7 +402,7 @@ this.translation.AddConfiguration()
     .AddProvider('./assets/locale-');
 ```
 
-## <a name="Appendix B"/>Appendix B - Using Ionic 2
+## <a name="AppendixB"/>Appendix B - Using Ionic 2
 You have to add the _json_ files in `www/assets` folder. 
 Always configure your provider in this way:
 ```TypeScript
@@ -410,7 +410,7 @@ this.translation.AddConfiguration()
     .AddProvider('./assets/locale-');
 ```
 
-## <a name="Appendix C"/>Appendix C - Using Angular 2 Meteor
+## <a name="AppendixC"/>Appendix C - Using Angular 2 Meteor
 You must create `public/assets` folder at the root of your app. 
 In this way, `assets` folder is copied directly into your application bundle. 
 Always configure your provider in this way:
