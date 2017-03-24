@@ -128,7 +128,7 @@ import { ServiceState } from '../models/translation/service-state';
     }
 
     private parseValue(key: string, value: string, args: any, lang: string): string {
-        if (value == null || value == "") {
+        if (value == null) {
             return this.handleMissingValue(key, args, lang);
         } else if (args) {
             return this.handleArgs(value, args);
