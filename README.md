@@ -71,5 +71,5 @@ Then you can install it in your app to test it:
 npm install [path]angular-l10n-[version].tgz
 ```
 
-##License
+## License
 MIT
