@@ -70,14 +70,14 @@ export class AppComponent extends Translation {
     constructor(public locale: LocaleService, public translation: TranslationService) {
         super(translation);
 
-        this.locale.AddConfiguration()
-            .AddLanguages(['en', 'it'])
-            .SetCookieExpiration(30)
-            .DefineLanguage('en');
+        this.locale.addConfiguration()
+            .addLanguages(['en', 'it'])
+            .setCookieExpiration(30)
+            .defineLanguage('en');
         this.locale.init();
 
-        this.translation.AddConfiguration()
-            .AddProvider('./assets/locale-');
+        this.translation.addConfiguration()
+            .addProvider('./assets/locale-');
         this.translation.init();
     }
 
@@ -204,15 +204,15 @@ export class AppComponent extends Localization {
     constructor(public locale: LocaleService, public translation: TranslationService) {
         super(locale, translation);
 
-        this.locale.AddConfiguration()
-            .AddLanguages(['en', 'it'])
-            .SetCookieExpiration(30)
-            .DefineDefaultLocale('en', 'US')
-            .DefineCurrency('USD');
+        this.locale.addConfiguration()
+            .addLanguages(['en', 'it'])
+            .setCookieExpiration(30)
+            .defineDefaultLocale('en', 'US')
+            .defineCurrency('USD');
         this.locale.init();
 
-        this.translation.AddConfiguration()
-            .AddProvider('./assets/locale-');
+        this.translation.addConfiguration()
+            .addProvider('./assets/locale-');
         this.translation.init();
     }
 
@@ -343,14 +343,14 @@ export class LocalizationConfig {
     constructor(public locale: LocaleService, public translation: TranslationService) { }
 
     load(): Promise<any> {
-        this.locale.AddConfiguration()
-            .AddLanguages(['en', 'it'])
-            .SetCookieExpiration(30)
-            .DefineLanguage('en');
+        this.locale.addConfiguration()
+            .addLanguages(['en', 'it'])
+            .setCookieExpiration(30)
+            .defineLanguage('en');
         this.locale.init();
 
-        this.translation.AddConfiguration()
-            .AddProvider('./assets/locale-');
+        this.translation.addConfiguration()
+            .addProvider('./assets/locale-');
 
         let promise: Promise<any> = new Promise((resolve: any) => {
             this.translation.translationChanged.subscribe(() => {
@@ -398,16 +398,16 @@ If you are using _Angular-CLI_, you have to add the _json_ files in `src/assets`
 copied as-is when building your project. 
 Always configure your provider in this way:
 ```TypeScript
-this.translation.AddConfiguration()
-    .AddProvider('./assets/locale-');
+this.translation.addConfiguration()
+    .addProvider('./assets/locale-');
 ```
 
 ## <a name="AppendixB"/>Appendix B - Using Ionic 2
 You have to add the _json_ files in `www/assets` folder. 
 Always configure your provider in this way:
 ```TypeScript
-this.translation.AddConfiguration()
-    .AddProvider('./assets/locale-');
+this.translation.addConfiguration()
+    .addProvider('./assets/locale-');
 ```
 
 ## <a name="AppendixC"/>Appendix C - Using Angular 2 Meteor
@@ -415,7 +415,7 @@ You must create `public/assets` folder at the root of your app.
 In this way, `assets` folder is copied directly into your application bundle. 
 Always configure your provider in this way:
 ```TypeScript
-this.translation.AddConfiguration()
-    .AddProvider('./assets/locale-');
+this.translation.addConfiguration()
+    .addProvider('./assets/locale-');
 ```
 

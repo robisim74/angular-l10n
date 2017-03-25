@@ -1,5 +1,5 @@
 # Angular localization library specification
-Library version: 2.0.7
+Library version: 3.0.0
 
 ## Table of contents
 * [1 Library structure](#1)
@@ -61,14 +61,14 @@ export class AppModule { }
 Configure the services in the application root module or bootstrap component:
 ```TypeScript
 constructor(public locale: LocaleService, public translation: TranslationService) {
-    this.locale.AddConfiguration()
-        .AddLanguages(['en', 'it'])
-        .SetCookieExpiration(30)
-        .DefineLanguage('en');
+    this.locale.addConfiguration()
+        .addLanguages(['en', 'it'])
+        .setCookieExpiration(30)
+        .defineLanguage('en');
     this.locale.init();
 
-    this.translation.AddConfiguration()
-        .AddProvider('./assets/locale-');
+    this.translation.addConfiguration()
+        .addProvider('./assets/locale-');
     this.translation.init();
 }
 ```
@@ -89,45 +89,45 @@ export class AppModule { }
 Configure the services in the application root module or bootstrap component:
 ```TypeScript
 constructor(public locale: LocaleService, public translation: TranslationService) {
-    this.locale.AddConfiguration()
-        .AddLanguages(['en', 'it'])
-        .SetCookieExpiration(30)
-        .DefineDefaultLocale('en', 'US')
-        .DefineCurrency('USD');
+    this.locale.addConfiguration()
+        .addLanguages(['en', 'it'])
+        .setCookieExpiration(30)
+        .defineDefaultLocale('en', 'US')
+        .defineCurrency('USD');
     this.locale.init();
 
-    this.translation.AddConfiguration()
-        .AddProvider('./assets/locale-');
+    this.translation.addConfiguration()
+        .addProvider('./assets/locale-');
     this.translation.init();
 }
 ```
 
-#### LocaleService: AddConfiguration APIs 
+#### LocaleService: addConfiguration APIs 
 Method | Function
 ------ | --------
-`AddLanguage(languageCode: string, textDirection?: string);` | Adds a language to use in the app, specifying the layout direction
-`AddLanguages(languageCodes: string[]);` | Adds the languages to use in the app
-`DisableStorage();` | Disables the browser storage for language, default locale & currency
-`SetCookieExpiration(days?: number);` | If the cookie expiration is omitted, the cookie becomes a session cookie
-`UseLocalStorage();` | Sets browser LocalStorage as default for language, default locale & currency
-`DefineLanguage(languageCode: string);` | Defines the language to be used
-`DefineDefaultLocale(languageCode: string, countryCode: string, scriptCode?: string, numberingSystem?: string, calendar?: string);` | Defines the default locale to be used, regardless of the browser language
-`DefineCurrency(currencyCode: string);` | Defines the currency to be used
+`addLanguage(languageCode: string, textDirection?: string);` | Adds a language to use in the app, specifying the layout direction
+`addLanguages(languageCodes: string[]);` | Adds the languages to use in the app
+`disableStorage();` | Disables the browser storage for language, default locale & currency
+`setCookieExpiration(days?: number);` | If the cookie expiration is omitted, the cookie becomes a session cookie
+`useLocalStorage();` | Sets browser LocalStorage as default for language, default locale & currency
+`defineLanguage(languageCode: string);` | Defines the language to be used
+`defineDefaultLocale(languageCode: string, countryCode: string, scriptCode?: string, numberingSystem?: string, calendar?: string);` | Defines the default locale to be used, regardless of the browser language
+`defineCurrency(currencyCode: string);` | Defines the currency to be used
 
-#### TranslationService: AddConfiguration APIs
+#### TranslationService: addConfiguration APIs
 Method | Function
 ------ | --------
-`AddTranslation(languageCode: string, translation: any);` | Direct loading: adds translation data
-`AddProvider(prefix: string, dataFormat?: string);` |  Asynchronous loading: adds a translation provider
-`AddWebAPIProvider(path: string, dataFormat?: string);` |  Asynchronous loading: adds a Web API provider
-`UseLocaleAsLanguage();` | Sets the use of locale (`languageCode-countryCode`) as language
-`SetMissingValue(value: string);` | Sets the value to use for missing keys
-`SetMissingKey(key: string);` | Sets the key to use for missing keys
-`SetComposedKeySeparator(keySeparator: string);` | Sets composed key separator. Default is the point '.'
+`addTranslation(languageCode: string, translation: any);` | Direct loading: adds translation data
+`addProvider(prefix: string, dataFormat?: string);` |  Asynchronous loading: adds a translation provider
+`addWebAPIProvider(path: string, dataFormat?: string);` |  Asynchronous loading: adds a Web API provider
+`useLocaleAsLanguage();` | Sets the use of locale (`languageCode-countryCode`) as language
+`setMissingValue(value: string);` | Sets the value to use for missing keys
+`setMissingKey(key: string);` | Sets the key to use for missing keys
+`setComposedKeySeparator(keySeparator: string);` | Sets composed key separator. Default is the point '.'
 
 ### <a name="2.3"/>2.3 Loading the translation data
 #### Direct loading
-You can use `AddTranslation` when you configure the service, 
+You can use `addTranslation` when you configure the service, 
 adding all the translation data:
 ```TypeScript
 var translationEN = {
@@ -137,25 +137,25 @@ var translationIT = {
      Title: 'Localizzazione in Angular'
 }
 
-this.translation.AddConfiguration()
-    .AddTranslation('en', translationEN)
-    .AddTranslation('it', translationIT);
+this.translation.addConfiguration()
+    .addTranslation('en', translationEN)
+    .addTranslation('it', translationIT);
 ```
 
 #### Asynchronous loading of json files
 You can add all the providers you need:
 ```TypeScript
-this.translation.AddConfiguration()
-    .AddProvider('./assets/locale-')
-    .AddProvider('./assets/global-')
+this.translation.addConfiguration()
+    .addProvider('./assets/locale-')
+    .addProvider('./assets/global-')
     ...
 ```
 
 #### Asynchronous loading through a Web API
 You can also load the data through a Web API:
 ```TypeScript
-this.translation.AddConfiguration()
-    .AddWebAPIProvider('http://localhost:54703/api/values/');
+this.translation.addConfiguration()
+    .addWebAPIProvider('http://localhost:54703/api/values/');
 
 this.translation.translationError.subscribe((error: any) => console.log(error));
 
@@ -398,8 +398,8 @@ then you have to configure the service in the component with the new provider:
 export class ListComponent {
 
     constructor(public translation: TranslationService) {
-        this.translation.AddConfiguration()
-            .AddProvider('./assets/locale-list-');
+        this.translation.addConfiguration()
+            .addProvider('./assets/locale-list-');
         this.translation.init();
     }
 
@@ -478,7 +478,7 @@ Property | Value
 
 Method | Function
 ------ | --------
-`AddConfiguration(): LocaleConfig;` | Configure the service in the application root module or bootstrap component
+`addConfiguration(): LocaleConfig;` | Configure the service in the application root module or bootstrap component
 `init(): void;` | Call this method after the configuration to initialize the service
 `getAvailableLanguages(): string[];` |
 `getLanguageDirection(languageCode: string): string;` |
@@ -503,7 +503,7 @@ Property | Value
 
 Method | Function
 ------ | --------
-`AddConfiguration(): TranslationConfig;` | Configure the service in the application root module or bootstrap component
+`addConfiguration(): TranslationConfig;` | Configure the service in the application root module or bootstrap component
 `init(): void;` | Call this method after the configuration to initialize the service
 `getLanguage(): string;` | The language of the translation service is updated when the translation data has been loaded
 `translate(key: string, args?: any, lang?: string): string;` |
