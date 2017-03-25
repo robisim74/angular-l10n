@@ -10,7 +10,7 @@ export class LocaleConfig {
      * @param languageCode ISO 639 two-letter or three-letter code of the language
      * @param textDirection Default is ltr (left to right)
      */
-    public AddLanguage(languageCode: string, textDirection: string = "LTR"): LocaleConfig {
+    public addLanguage(languageCode: string, textDirection: string = "LTR"): LocaleConfig {
         let language: Language = { code: languageCode, direction: textDirection };
         this.locale.configuration.languageCodes.push(language);
         return this;
@@ -20,7 +20,7 @@ export class LocaleConfig {
      * Adds the languages to use in the app.
      * @param languageCodes Array of ISO 639 two-letter or three-letter codes of the languages
      */
-    public AddLanguages(languageCodes: string[]): LocaleConfig {
+    public addLanguages(languageCodes: string[]): LocaleConfig {
         for (let languageCode of languageCodes) {
             let language: Language = { code: languageCode, direction: "ltr" };
             this.locale.configuration.languageCodes.push(language);
@@ -31,7 +31,7 @@ export class LocaleConfig {
     /**
      * Disables the browser storage for language, default locale & currency.
      */
-    public DisableStorage(): LocaleConfig {
+    public disableStorage(): LocaleConfig {
         this.locale.configuration.storageIsDisabled = true;
         return this;
     }
@@ -39,7 +39,7 @@ export class LocaleConfig {
     /**
      * If the cookie expiration is omitted, the cookie becomes a session cookie.
      */
-    public SetCookieExpiration(days: number = null): LocaleConfig {
+    public setCookieExpiration(days: number = null): LocaleConfig {
         this.locale.configuration.cookiesExpirationDays = days;
         return this;
     }
@@ -47,7 +47,7 @@ export class LocaleConfig {
     /**
      * Sets browser LocalStorage as default for language, default locale & currency.
      */
-    public UseLocalStorage(): LocaleConfig {
+    public useLocalStorage(): LocaleConfig {
         this.locale.configuration.localStorage = true;
         return this;
     }
@@ -59,7 +59,7 @@ export class LocaleConfig {
      *  - otherwise gets the parameter language.
      * @param languageCode ISO 639 two-letter or three-letter code of the language
      */
-    public DefineLanguage(languageCode: string): LocaleConfig {
+    public defineLanguage(languageCode: string): LocaleConfig {
         this.locale.configuration.languageCode = languageCode;
         return this;
     }
@@ -72,7 +72,7 @@ export class LocaleConfig {
      * @param numberingSystem Optional numbering system
      * @param calendar Optional calendar
      */
-    public DefineDefaultLocale(
+    public defineDefaultLocale(
         languageCode: string,
         countryCode: string,
         scriptCode?: string,
@@ -91,7 +91,7 @@ export class LocaleConfig {
      * Defines the currency to be used.
      * @param defaultCurrency ISO 4217 three-letter code of the currency
      */
-    public DefineCurrency(currencyCode: string): LocaleConfig {
+    public defineCurrency(currencyCode: string): LocaleConfig {
         this.locale.configuration.currencyCode = currencyCode;
         return this;
     }

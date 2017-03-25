@@ -1,7 +1,7 @@
-import { Directive, ElementRef, Input, Renderer } from '@angular/core';
+import { Directive, ElementRef, Input, Renderer2 } from '@angular/core';
 
 import { TranslationService } from '../services/translation.service';
-import { BaseDirective } from '../models/utils/base-directive';
+import { BaseDirective } from '../models/base-directive';
 
 @Directive({
     selector: '[translate]'
@@ -10,7 +10,7 @@ export class TranslateDirective extends BaseDirective {
 
     @Input('translate') public params: string;
 
-    constructor(public translation: TranslationService, protected el: ElementRef, protected renderer: Renderer) {
+    constructor(public translation: TranslationService, protected el: ElementRef, protected renderer: Renderer2) {
         super(el, renderer);
     }
 

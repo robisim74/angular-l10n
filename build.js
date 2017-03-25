@@ -1,58 +1,61 @@
 "use strict";
 
-// ShellJS.
 require('shelljs/global');
-
-// Colors.
 const chalk = require('chalk');
 
+const PACKAGE = `angular-l10n`;
+const NPM_DIR = `dist`;
+const MODULES_DIR = `${NPM_DIR}/modules`;
+const BUNDLES_DIR = `${NPM_DIR}/bundles`;
 
 echo('Start building...');
 
-
-/* Cleans aot & dist folders */
-rm('-Rf', 'aot/*');
-rm('-Rf', 'dist/*');
-
+rm(`-Rf`, `${NPM_DIR}/*`);
+mkdir(`-p`, `./${MODULES_DIR}`);
+mkdir(`-p`, `./${BUNDLES_DIR}`);
 
 /* TSLint with Codelyzer */
 // https://github.com/palantir/tslint/blob/master/src/configs/recommended.ts
 // https://github.com/mgechev/codelyzer
-echo('Start TSLint');
+echo(`Start TSLint`);
+exec(`tslint --project ./tsconfig.json --type-check ./src/**/*.ts`);
+echo(chalk.green(`TSLint completed`));
 
-exec('tslint ./src/**/**/*.ts -e ./src/**/**/*.ngfactory.ts');
+/* Aot compilation: ES2015 sources */
+echo(`Start AoT compilation`);
+exec(`ngc -p tsconfig-build.json`);
+echo(chalk.green(`AoT compilation completed`));
 
-echo(chalk.green('TSLint completed'));
+/* Creates bundles: ESM/ES5 and UMD bundles */
+echo(`Start bundling`);
+echo(`Rollup package`);
+exec(`rollup -i ${NPM_DIR}/index.js -o ${MODULES_DIR}/${PACKAGE}.js --sourcemap`, {silent: true});
+exec(`node scripts/map-sources -f ${MODULES_DIR}/${PACKAGE}.js`);
 
+echo(`Downleveling ES2015 to ESM/ES5`);
+cp(`${MODULES_DIR}/${PACKAGE}.js`, `${MODULES_DIR}/${PACKAGE}.es5.ts`);
+exec(`tsc ${MODULES_DIR}/${PACKAGE}.es5.ts --target es5 --module es2015 --noLib --sourceMap`, {silent: true});
+exec(`node scripts/map-sources -f ${MODULES_DIR}/${PACKAGE}.es5.js`);
+rm(`-f`, `${MODULES_DIR}/${PACKAGE}.es5.ts`);
 
-/* Aot compilation */
-echo('Start AoT compilation');
-echo('ngc -p tsconfig-build.json');
+echo(`Run Rollup conversion on package`);
+exec(`rollup -c rollup.config.js --sourcemap`, {silent: true});
+exec(`node scripts/map-sources -f ${BUNDLES_DIR}/${PACKAGE}.umd.js`);
 
-exec('ngc -p tsconfig-build.json');
+echo(`Minifying`);
+cd(`${BUNDLES_DIR}`);
+exec(`uglifyjs -c --screw-ie8 --comments -o ${PACKAGE}.umd.min.js --source-map ${PACKAGE}.umd.min.js.map --source-map-include-sources ${PACKAGE}.umd.js`, {silent: true});
+exec(`node ../../scripts/map-sources -f ${PACKAGE}.umd.min.js`);
+cd(`..`);
+cd(`..`);
 
-echo(chalk.green('AoT compilation completed'));
+echo(chalk.green(`Bundling completed`));
 
+rm(`-Rf`, `${NPM_DIR}/*.js`);
+rm(`-Rf`, `${NPM_DIR}/*.js.map`);
+rm(`-Rf`, `${NPM_DIR}/src/**/*.js`);
+rm(`-Rf`, `${NPM_DIR}/src/**/*.js.map`);
 
-/* Creates umd bundle */
-echo('Start bundling');
-echo('rollup -c rollup.config.js');
+cp(`-Rf`, [`package.json`, `LICENSE`, `README.md`], `${NPM_DIR}`);
 
-exec('rollup -c rollup.config.js');
-
-echo(chalk.green('Bundling completed'));
-
-
-/* Minimizes umd bundle */
-echo('Start minification');
-
-exec('uglifyjs ./dist/bundles/angular-l10n.umd.js -o ./dist/bundles/angular-l10n.umd.min.js');
-
-echo(chalk.green('Minification completed'));
-
-
-/* Copies files */
-cp('-Rf', ['package.json', 'LICENSE', 'README.md'], 'dist');
-
-
-echo('End building');
+echo(chalk.green(`End building`));

@@ -47,10 +47,10 @@ describe('TranslatePipe', () => {
         it('should translate through direct loading', async(
             inject([LocaleService, TranslationService],
                 (locale: LocaleService, translation: TranslationService) => {
-                    locale.AddConfiguration()
-                        .DisableStorage()
-                        .AddLanguages(['en', 'it'])
-                        .DefineLanguage('en');
+                    locale.addConfiguration()
+                        .disableStorage()
+                        .addLanguages(['en', 'it'])
+                        .defineLanguage('en');
                     locale.init();
 
                     const translationEN = {
@@ -59,9 +59,9 @@ describe('TranslatePipe', () => {
                     const translationIT = {
                         Title: 'Localizzazione in Angular'
                     }
-                    translation.AddConfiguration()
-                        .AddTranslation('en', translationEN)
-                        .AddTranslation('it', translationIT);
+                    translation.addConfiguration()
+                        .addTranslation('en', translationEN)
+                        .addTranslation('it', translationIT);
 
                     pipe = new TranslatePipe(translation);
 
@@ -94,15 +94,15 @@ describe('TranslatePipe', () => {
                     // Mock backend for testing the Http service.
                     expectURL(backend, responses);
 
-                    locale.AddConfiguration()
-                        .DisableStorage()
-                        .AddLanguages(['en', 'it'])
-                        .DefineLanguage('en');
+                    locale.addConfiguration()
+                        .disableStorage()
+                        .addLanguages(['en', 'it'])
+                        .defineLanguage('en');
                     locale.init();
 
-                    translation.AddConfiguration()
-                        .AddProvider('./assets/locale-')
-                        .SetMissingKey("Missing");
+                    translation.addConfiguration()
+                        .addProvider('./assets/locale-')
+                        .setMissingKey("Missing");
 
                     pipe = new TranslatePipe(translation);
                     let username: string = "robisim74";
@@ -146,14 +146,14 @@ describe('TranslatePipe', () => {
                 (locale: LocaleService, translation: TranslationService, backend: MockBackend) => {
                     expectURL(backend, responses);
 
-                    locale.AddConfiguration()
-                        .DisableStorage()
-                        .AddLanguage('ar')
-                        .DefineLanguage('ar');
+                    locale.addConfiguration()
+                        .disableStorage()
+                        .addLanguage('ar')
+                        .defineLanguage('ar');
                     locale.init();
 
-                    translation.AddConfiguration()
-                        .AddProvider('./assets/locale-');
+                    translation.addConfiguration()
+                        .addProvider('./assets/locale-');
 
                     pipe = new TranslatePipe(translation);
 
@@ -180,15 +180,15 @@ describe('TranslatePipe', () => {
                 (locale: LocaleService, translation: TranslationService, backend: MockBackend) => {
                     expectURL(backend, responses);
 
-                    locale.AddConfiguration()
-                        .DisableStorage()
-                        .AddLanguages(['en', 'it'])
-                        .DefineLanguage('en');
+                    locale.addConfiguration()
+                        .disableStorage()
+                        .addLanguages(['en', 'it'])
+                        .defineLanguage('en');
                     locale.init();
 
-                    translation.AddConfiguration()
-                        .AddProvider('./assets/locale-')
-                        .AddProvider('./assets/global-');
+                    translation.addConfiguration()
+                        .addProvider('./assets/locale-')
+                        .addProvider('./assets/global-');
 
                     pipe = new TranslatePipe(translation);
 
@@ -220,15 +220,15 @@ describe('TranslatePipe', () => {
                 (locale: LocaleService, translation: TranslationService, backend: MockBackend) => {
                     expectURL(backend, responses);
 
-                    locale.AddConfiguration()
-                        .DisableStorage()
-                        .AddLanguage('en')
-                        .DefineDefaultLocale('en', 'US');
+                    locale.addConfiguration()
+                        .disableStorage()
+                        .addLanguage('en')
+                        .defineDefaultLocale('en', 'US');
                     locale.init();
 
-                    translation.AddConfiguration()
-                        .AddProvider('./assets/locale-')
-                        .UseLocaleAsLanguage();
+                    translation.addConfiguration()
+                        .addProvider('./assets/locale-')
+                        .useLocaleAsLanguage();
 
                     pipe = new TranslatePipe(translation);
 

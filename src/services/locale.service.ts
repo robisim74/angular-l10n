@@ -31,7 +31,7 @@ import { Browser } from '../models/localization/browser';
     /**
      * Configure the service in the application root module or bootstrap component.
      */
-    public AddConfiguration(): LocaleConfig {
+    public addConfiguration(): LocaleConfig {
         return new LocaleConfig(this);
     }
 

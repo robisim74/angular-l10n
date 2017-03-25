@@ -25,9 +25,9 @@ describe('Locale number pipes', () => {
         it('should localize a decimal number',
             inject([LocaleService],
                 (locale: LocaleService) => {
-                    locale.AddConfiguration()
-                        .DisableStorage()
-                        .DefineDefaultLocale('en', 'US');
+                    locale.addConfiguration()
+                        .disableStorage()
+                        .defineDefaultLocale('en', 'US');
                     locale.init();
 
                     pipe = new LocaleDecimalPipe();
@@ -53,9 +53,9 @@ describe('Locale number pipes', () => {
         it('should localize a percent number',
             inject([LocaleService],
                 (locale: LocaleService) => {
-                    locale.AddConfiguration()
-                        .DisableStorage()
-                        .DefineDefaultLocale('en', 'US');
+                    locale.addConfiguration()
+                        .disableStorage()
+                        .defineDefaultLocale('en', 'US');
                     locale.init();
 
                     pipe = new LocalePercentPipe();
@@ -81,10 +81,10 @@ describe('Locale number pipes', () => {
         it('should localize a currency',
             inject([LocaleService],
                 (locale: LocaleService) => {
-                    locale.AddConfiguration()
-                        .DisableStorage()
-                        .DefineDefaultLocale('en', 'US')
-                        .DefineCurrency('USD');
+                    locale.addConfiguration()
+                        .disableStorage()
+                        .defineDefaultLocale('en', 'US')
+                        .defineCurrency('USD');
                     locale.init();
 
                     pipe = new LocaleCurrencyPipe();

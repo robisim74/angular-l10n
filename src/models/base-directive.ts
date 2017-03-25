@@ -1,7 +1,7 @@
 import {
     ElementRef,
     Input,
-    Renderer,
+    Renderer2,
     AfterViewInit,
     OnChanges,
     SimpleChanges,
@@ -28,7 +28,7 @@ export abstract class BaseDirective implements AfterViewInit, OnChanges, OnDestr
 
     private readonly MUTATION_CONFIG: any = { subtree: true, characterData: true };
 
-    constructor(protected el: ElementRef, protected renderer: Renderer) { }
+    constructor(protected el: ElementRef, protected renderer: Renderer2) { }
 
     public ngAfterViewInit(): void {
         this.element = this.el.nativeElement;
@@ -62,10 +62,10 @@ export abstract class BaseDirective implements AfterViewInit, OnChanges, OnDestr
     protected setText(value: string): void {
         if (!!this.nodeValue) {
             this.removeTextListener();
-            this.renderer.setText(this.renderNode, this.nodeValue.replace(this.key, value));
+            this.renderer.setValue(this.renderNode, this.nodeValue.replace(this.key, value));
             this.addTextListener();
         } else if (!!this.valueAttribute) {
-            this.renderer.setElementAttribute(this.element, "value", value);
+            this.renderer.setAttribute(this.element, "value", value);
         }
     }
 

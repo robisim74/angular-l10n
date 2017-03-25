@@ -1,7 +1,8 @@
 export default {
-    entry: './dist/index.js',
+    entry: './dist/modules/angular-l10n.es5.js',
     dest: './dist/bundles/angular-l10n.umd.js',
     format: 'umd',
+    exports: 'named',
     moduleName: 'ng.l10n',
     external: [
         '@angular/core',

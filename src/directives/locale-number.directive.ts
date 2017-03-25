@@ -1,9 +1,9 @@
-import { Directive, ElementRef, Input, Renderer } from '@angular/core';
+import { Directive, ElementRef, Input, Renderer2 } from '@angular/core';
 import { DecimalPipe, PercentPipe, CurrencyPipe } from '@angular/common';
 
 import { LocaleService } from '../services/locale.service';
 import { IntlAPI } from '../services/intl-api';
-import { BaseDirective } from '../models/utils/base-directive';
+import { BaseDirective } from '../models/base-directive';
 
 @Directive({
     selector: '[localeDecimal]'
@@ -14,7 +14,7 @@ export class LocaleDecimalDirective extends BaseDirective {
 
     private defaultDigits: string = null;
 
-    constructor(public locale: LocaleService, protected el: ElementRef, protected renderer: Renderer) {
+    constructor(public locale: LocaleService, protected el: ElementRef, protected renderer: Renderer2) {
         super(el, renderer);
     }
 
@@ -46,7 +46,7 @@ export class LocalePercentDirective extends BaseDirective {
 
     private defaultDigits: string = null;
 
-    constructor(public locale: LocaleService, protected el: ElementRef, protected renderer: Renderer) {
+    constructor(public locale: LocaleService, protected el: ElementRef, protected renderer: Renderer2) {
         super(el, renderer);
     }
 
@@ -84,7 +84,7 @@ export class LocaleCurrencyDirective extends BaseDirective {
 
     private defaultDigits: string = null;
 
-    constructor(public locale: LocaleService, protected el: ElementRef, protected renderer: Renderer) {
+    constructor(public locale: LocaleService, protected el: ElementRef, protected renderer: Renderer2) {
         super(el, renderer);
     }
 

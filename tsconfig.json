@@ -1,21 +1,27 @@
 {
     "compilerOptions": {
-        "target": "es5",
-        "module": "commonjs",
-        "moduleResolution": "node",
-        "sourceMap": true,
-        "inlineSources": true,
+        "baseUrl": ".",
         "emitDecoratorMetadata": true,
         "experimentalDecorators": true,
+        "module": "commonjs",
+        "moduleResolution": "node",
         "noImplicitAny": true,
-        "skipLibCheck": true,
+        "noFallthroughCasesInSwitch": true,
+        "sourceMap": true,
+        "rootDir": ".",
+        "inlineSources": true,
         "lib": [
-            "es2015",
+            "es6",
             "dom"
         ],
+        "target": "es5",
+        "skipLibCheck": true,
         "types": [
             "jasmine",
             "node"
         ]
-    }
+    },
+    "exclude": [
+        "node_modules"
+    ]
 }

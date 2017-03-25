@@ -13,6 +13,7 @@ export {
     LocalePercentPipe,
     LocaleCurrencyPipe
 } from './pipes/locale-number.pipe';
+export { BaseDirective } from './models/base-directive';
 export { TranslateDirective } from './directives/translate.directive';
 export { LocaleDateDirective } from './directives/locale-date.directive';
 export {

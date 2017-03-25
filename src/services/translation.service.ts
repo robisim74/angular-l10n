@@ -49,7 +49,7 @@ import { ServiceState } from '../models/translation/service-state';
     /**
      * Configure the service in the application root module or bootstrap component.
      */
-    public AddConfiguration(): TranslationConfig {
+    public addConfiguration(): TranslationConfig {
         return new TranslationConfig(this);
     }
 
@@ -213,14 +213,10 @@ import { ServiceState } from '../models/translation/service-state';
             : data;
     }
 
-    private extend(...args: any[]): any {
-        const newObj: any = {};
-        for (let obj of args) {
-            for (let key in obj) {
-                newObj[key] = obj[key];
-            }
-        }
-        return newObj;
+    private extend(obj1: any, obj2: any): any {
+        // Object spread.
+        let merged: any = { ...obj1, ...obj2 };
+        return merged;
     }
 
     private releaseTranslation(language: string): void {

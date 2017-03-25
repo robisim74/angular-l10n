@@ -23,9 +23,9 @@ describe('LocaleDatePipe', () => {
     it('should localize a date',
         inject([LocaleService],
             (locale: LocaleService) => {
-                locale.AddConfiguration()
-                    .DisableStorage()
-                    .DefineDefaultLocale('en', 'US');
+                locale.addConfiguration()
+                    .disableStorage()
+                    .defineDefaultLocale('en', 'US');
                 locale.init();
 
                 pipe = new LocaleDatePipe();

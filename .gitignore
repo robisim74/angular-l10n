@@ -1,7 +1,6 @@
 $ cat .gitignore
 /node_modules
 /dist
-/aot
 
 *.log
 *.tgz
