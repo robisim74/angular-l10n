@@ -10,7 +10,7 @@ export class TranslationConfig {
      * @param translation Translation data of the language
      */
     public AddTranslation(languageCode: string, translation: any): TranslationConfig {
-        this.translation.configuration.translationData[languageCode] = translation;
+        this.translation.addData(translation, languageCode);
         return this;
     }
 

@@ -59,9 +59,18 @@ describe('TranslatePipe', () => {
                     const translationIT = {
                         Title: 'Localizzazione in Angular'
                     }
+                    const translationGlobalEN = {
+                        Save: 'Save'
+                    }
+                    const translationGlobalIT = {
+                        Save: 'Salva'
+                    }
+
                     translation.AddConfiguration()
                         .AddTranslation('en', translationEN)
-                        .AddTranslation('it', translationIT);
+                        .AddTranslation('it', translationIT)
+                        .AddTranslation('en', translationGlobalEN)
+                        .AddTranslation('it', translationGlobalIT);
 
                     pipe = new TranslatePipe(translation);
 
@@ -69,8 +78,10 @@ describe('TranslatePipe', () => {
                         (lang: string) => {
                             if (lang == 'en') {
                                 expect(pipe.transform('Title', translation.getLanguage())).toEqual("Angular localization");
+                                expect(pipe.transform('Save', translation.getLanguage())).toEqual("Save");
                             } else {
                                 expect(pipe.transform('Title', translation.getLanguage())).toEqual("Localizzazione in Angular");
+                                expect(pipe.transform('Save', translation.getLanguage())).toEqual("Salva");
                             }
                         }
                     );

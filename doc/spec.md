@@ -1,5 +1,5 @@
 # Angular localization library specification
-Library version: 2.0.7
+Library version: 2.0.8
 
 ## Table of contents
 * [1 Library structure](#1)
@@ -130,10 +130,10 @@ Method | Function
 You can use `AddTranslation` when you configure the service, 
 adding all the translation data:
 ```TypeScript
-var translationEN = {
-    "Title": "Angular localization"
+const translationEN = {
+     Title: 'Angular localization'
 }
-var translationIT = {
+const translationIT = {
      Title: 'Localizzazione in Angular'
 }
 
@@ -150,6 +150,7 @@ this.translation.AddConfiguration()
     .AddProvider('./assets/global-')
     ...
 ```
+*N.B. You can't use Direct and Asynchronous loading at the same time.*
 
 #### Asynchronous loading through a Web API
 You can also load the data through a Web API:
@@ -508,6 +509,7 @@ Method | Function
 `getLanguage(): string;` | The language of the translation service is updated when the translation data has been loaded
 `translate(key: string, args?: any, lang?: string): string;` |
 `translateAsync(key: string, args?: any, lang?: string): Observable<string>;` |
+`addData(data: any, languageCode: string): void;` | Direct loading: adds other data to the translation at runtime
 
 ### <a name="8.3"/>8.3 LocaleValidation
 Method | Function
