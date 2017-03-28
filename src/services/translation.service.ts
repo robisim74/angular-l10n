@@ -60,7 +60,6 @@ import { ServiceState } from '../models/translation/service-state';
         if (this.configuration.providers.length > 0) {
             this.loadingMode = LoadingMode.Async;
         } else {
-            this.translationData = this.configuration.translationData;
             this.loadingMode = LoadingMode.Direct;
         }
         this.loadTranslation();
@@ -88,6 +87,17 @@ import { ServiceState } from '../models/translation/service-state';
             observer.next(value);
             observer.complete();
         });
+    }
+
+    /**
+     * Direct loading: adds other data to the translation at runtime.
+     * @param data Other translation data
+     * @param languageCode ISO 639 two-letter or three-letter code of the language
+     */
+    public addData(data: any, languageCode: string): void {
+        this.translationData[languageCode] = typeof this.translationData[languageCode] !== "undefined"
+            ? this.extend(this.translationData[languageCode], data)
+            : data;
     }
 
     private translateI18nPlural(key: string, args: any, lang: string): string {
@@ -205,12 +215,6 @@ import { ServiceState } from '../models/translation/service-state';
     private getTranslationByProvider(url: string): Observable<any> {
         return this.http.get(url)
             .map((res: Response) => res.json());
-    }
-
-    private addData(data: any, language: string): void {
-        this.translationData[language] = typeof this.translationData[language] !== "undefined"
-            ? this.extend(this.translationData[language], data)
-            : data;
     }
 
     private extend(obj1: any, obj2: any): any {
