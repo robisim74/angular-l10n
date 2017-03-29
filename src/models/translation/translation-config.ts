@@ -10,7 +10,10 @@ export class TranslationConfig {
      * @param translation Translation data of the language
      */
     public addTranslation(languageCode: string, translation: any): TranslationConfig {
-        this.translation.addData(translation, languageCode);
+        this.translation.configuration.translationData[languageCode] =
+            typeof this.translation.configuration.translationData[languageCode] !== "undefined"
+                ? { ...this.translation.configuration.translationData[languageCode], ...translation } // Object spread.
+                : translation;
         return this;
     }
 

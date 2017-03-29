@@ -89,17 +89,6 @@ import { ServiceState } from '../models/translation/service-state';
         });
     }
 
-    /**
-     * Direct loading: adds other data to the translation at runtime.
-     * @param data Other translation data
-     * @param languageCode ISO 639 two-letter or three-letter code of the language
-     */
-    public addData(data: any, languageCode: string): void {
-        this.translationData[languageCode] = typeof this.translationData[languageCode] !== "undefined"
-            ? this.extend(this.translationData[languageCode], data)
-            : data;
-    }
-
     private translateI18nPlural(key: string, args: any, lang: string): string {
         let keyText: string = key.replace(/^\d+\b/, "");
         keyText = keyText.trim();
@@ -175,6 +164,8 @@ import { ServiceState } from '../models/translation/service-state';
             if (this.loadingMode == LoadingMode.Async) {
                 this.getTranslation(language);
             } else {
+                this.translationData = {};
+                this.translationData[language] = this.configuration.translationData[language];
                 this.releaseTranslation(language);
             }
         }
@@ -217,10 +208,10 @@ import { ServiceState } from '../models/translation/service-state';
             .map((res: Response) => res.json());
     }
 
-    private extend(obj1: any, obj2: any): any {
-        // Object spread.
-        let merged: any = { ...obj1, ...obj2 };
-        return merged;
+    private addData(data: any, language: string): void {
+        this.translationData[language] = typeof this.translationData[language] !== "undefined"
+            ? { ...this.translationData[language], ...data } // Object spread.
+            : data;
     }
 
     private releaseTranslation(language: string): void {
