@@ -1,5 +1,5 @@
 # Angular localization library specification
-Library version: 3.0.1
+Library version: 3.0.2
 
 ## Table of contents
 * [1 Library structure](#1)
@@ -482,7 +482,7 @@ Method | Function
 `addConfiguration(): LocaleConfig;` | Configure the service in the application root module or bootstrap component
 `init(): void;` | Call this method after the configuration to initialize the service
 `getAvailableLanguages(): string[];` |
-`getLanguageDirection(languageCode: string): string;` |
+`getLanguageDirection(languageCode?: string): string;` |
 `getCurrentLanguage(): string;` |
 `getCurrentCountry(): string;` |
 `getCurrentScript(): string;` |
@@ -509,7 +509,6 @@ Method | Function
 `getLanguage(): string;` | The language of the translation service is updated when the translation data has been loaded
 `translate(key: string, args?: any, lang?: string): string;` |
 `translateAsync(key: string, args?: any, lang?: string): Observable<string>;` |
-`addData(data: any, languageCode: string): void;` | Direct loading: adds other data to the translation at runtime
 
 ### <a name="8.3"/>8.3 LocaleValidation
 Method | Function
