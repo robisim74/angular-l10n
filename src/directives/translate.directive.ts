@@ -16,7 +16,7 @@ export class TranslateDirective extends BaseDirective {
 
     protected setup(): void {
         this.replace();
-        this.translation.translationChanged.subscribe(
+        this.translationSubscription = this.translation.translationChanged.subscribe(
             () => {
                 this.replace();
             }
@@ -24,7 +24,7 @@ export class TranslateDirective extends BaseDirective {
     }
 
     protected replace(): void {
-        this.translation.translateAsync(this.key, this.params).subscribe(
+        this.translateSubscription = this.translation.translateAsync(this.key, this.params).subscribe(
             (value: string) => {
                 this.setText(value);
             }

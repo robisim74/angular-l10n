@@ -7,6 +7,7 @@ import {
     SimpleChanges,
     OnDestroy
 } from '@angular/core';
+import { ISubscription } from 'rxjs/Subscription';
 
 import { BFS } from './bfs';
 
@@ -17,6 +18,11 @@ export abstract class BaseDirective implements AfterViewInit, OnChanges, OnDestr
     }
 
     protected key: string;
+
+    protected translationSubscription: ISubscription;
+    protected translateSubscription: ISubscription;
+    protected defaultLocaleSubscription: ISubscription;
+    protected currencySubscription: ISubscription;
 
     private element: any;
     private renderNode: any;
@@ -53,6 +59,7 @@ export abstract class BaseDirective implements AfterViewInit, OnChanges, OnDestr
 
     public ngOnDestroy(): void {
         this.removeTextListener();
+        this.removeSubscriptions();
     }
 
     protected abstract setup(): void;
@@ -80,7 +87,7 @@ export abstract class BaseDirective implements AfterViewInit, OnChanges, OnDestr
     }
 
     private removeTextListener(): void {
-        if (typeof this.textObserver != "undefined") {
+        if (typeof this.textObserver !== "undefined") {
             this.textObserver.disconnect();
         }
     }
@@ -95,6 +102,21 @@ export abstract class BaseDirective implements AfterViewInit, OnChanges, OnDestr
             this.key = this.getText();
         } else if (!!this.valueAttribute) {
             this.key = this.valueAttribute;
+        }
+    }
+
+    private removeSubscriptions(): void {
+        if (typeof this.translationSubscription !== "undefined") {
+            this.translationSubscription.unsubscribe();
+        }
+        if (typeof this.translateSubscription !== "undefined") {
+            this.translateSubscription.unsubscribe();
+        }
+        if (typeof this.defaultLocaleSubscription !== "undefined") {
+            this.defaultLocaleSubscription.unsubscribe();
+        }
+        if (typeof this.currencySubscription !== "undefined") {
+            this.currencySubscription.unsubscribe();
         }
     }
 
