@@ -16,19 +16,19 @@ export class TranslateDirective extends BaseDirective {
 
     protected setup(): void {
         this.replace();
-        this.translationSubscription = this.translation.translationChanged.subscribe(
+        this.subscriptions.push(this.translation.translationChanged.subscribe(
             () => {
                 this.replace();
             }
-        );
+        ));
     }
 
     protected replace(): void {
-        this.translateSubscription = this.translation.translateAsync(this.key, this.params).subscribe(
+        this.subscriptions.push(this.translation.translateAsync(this.key, this.params).subscribe(
             (value: string) => {
                 this.setText(value);
             }
-        );
+        ));
     }
 
 }

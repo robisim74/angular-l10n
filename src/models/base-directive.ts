@@ -19,10 +19,7 @@ export abstract class BaseDirective implements AfterViewInit, OnChanges, OnDestr
 
     protected key: string;
 
-    protected translationSubscription: ISubscription;
-    protected translateSubscription: ISubscription;
-    protected defaultLocaleSubscription: ISubscription;
-    protected currencySubscription: ISubscription;
+    protected subscriptions: ISubscription[] = [];
 
     private element: any;
     private renderNode: any;
@@ -59,7 +56,7 @@ export abstract class BaseDirective implements AfterViewInit, OnChanges, OnDestr
 
     public ngOnDestroy(): void {
         this.removeTextListener();
-        this.removeSubscriptions();
+        this.cancelSubscriptions();
     }
 
     protected abstract setup(): void;
@@ -105,19 +102,12 @@ export abstract class BaseDirective implements AfterViewInit, OnChanges, OnDestr
         }
     }
 
-    private removeSubscriptions(): void {
-        if (typeof this.translationSubscription !== "undefined") {
-            this.translationSubscription.unsubscribe();
-        }
-        if (typeof this.translateSubscription !== "undefined") {
-            this.translateSubscription.unsubscribe();
-        }
-        if (typeof this.defaultLocaleSubscription !== "undefined") {
-            this.defaultLocaleSubscription.unsubscribe();
-        }
-        if (typeof this.currencySubscription !== "undefined") {
-            this.currencySubscription.unsubscribe();
-        }
+    private cancelSubscriptions(): void {
+        this.subscriptions.forEach((subscription: ISubscription) => {
+            if (typeof subscription !== "undefined") {
+                subscription.unsubscribe();
+            }
+        });
     }
 
 }
