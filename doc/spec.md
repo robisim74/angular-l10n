@@ -1,5 +1,5 @@
 # Angular localization library specification
-Library version: 3.0.2
+Library version: 3.0.3
 
 ## Table of contents
 * [1 Library structure](#1)
@@ -14,6 +14,7 @@ Library version: 3.0.2
         * [3.1.1 Messages](#3.1.1)
         * [3.1.2 Dates & Numbers](#3.1.2)
         * [3.1.3 OnPush ChangeDetectionStrategy](#3.1.3)
+        * [3.1.4 ngOnDestroy method](#3.1.4)
     * [3.2 Directives](#3.2)
     * [3.3 Getting the translation in component class](#3.3)
 * [4 Changing language, default locale or currency at runtime](#4)
@@ -311,6 +312,24 @@ export class HomeComponent extends Localization {
 } 
 ```
 
+#### <a name="3.1.4"/>3.1.4 ngOnDestroy method
+When you extend `Translation` or `Localization` classes, the component inherits 
+`ngOnDestroy` method that cancels the subscriptions to update the pipes parameters. 
+If you override the `ngOnDestroy` method in your component to cancel its subscriptions, 
+you should call also `cancelPipesSubscriptions`:
+```TypeScript
+ngOnDestroy() {
+    // Cancels the subscriptions of the component.
+    this.subscriptions.forEach((subscription: ISubscription) => {
+        if (typeof subscription !== "undefined") {
+            subscription.unsubscribe();
+        }
+    });
+
+    this.cancelPipesSubscriptions();
+}
+```
+
 ### <a name="3.2"/>3.2 Directives
 Type | Format | Html syntax
 ---- | ------ | -----------
@@ -344,7 +363,7 @@ Parameters:
 ```
 *N.B. You can dynamically change attributes, parameters and expressions values. 
 If you use in the component only the directives and not the pipes, 
-you don't need to import services and extend `Translation` or `Localization` class.*
+you don't need to import services and extend `Translation` or `Localization` classes.*
 
 ### <a name="3.3"/>3.3 Getting the translation in component class
 To get the translation in component class, `TranslationService` has the following methods:
