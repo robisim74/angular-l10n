@@ -74,13 +74,15 @@ export abstract class BaseDirective implements AfterViewInit, OnChanges, OnDestr
     }
 
     private addTextListener(): void {
-        this.textObserver = new MutationObserver((mutations: any) => {
-            this.getKey();
-            if (!!this.key) {
-                this.replace();
-            }
-        });
-        this.textObserver.observe(this.renderNode, this.MUTATION_CONFIG);
+        if (typeof MutationObserver !== "undefined") {
+            this.textObserver = new MutationObserver((mutations: any) => {
+                this.getKey();
+                if (!!this.key) {
+                    this.replace();
+                }
+            });
+            this.textObserver.observe(this.renderNode, this.MUTATION_CONFIG);
+        }
     }
 
     private removeTextListener(): void {
