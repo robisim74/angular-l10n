@@ -56,7 +56,7 @@ import { Browser } from '../models/localization/browser';
         return this.configuration.languageCodes.map((language: Language) => language.code);
     }
 
-    public getLanguageDirection(languageCode: string): string {
+    public getLanguageDirection(languageCode: string = this.defaultLocale.languageCode): string {
         let matchedLanguages: Language[] = this.matchLanguage(languageCode);
         return matchedLanguages[0].direction;
     }

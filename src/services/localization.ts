@@ -21,23 +21,23 @@ export class Localization extends Translation {
 
         this.defaultLocale = this.locale.getDefaultLocale();
         // When the default locale changes, subscribes to the event & updates defaultLocale property.
-        this.locale.defaultLocaleChanged.subscribe(
+        this.pipesSubscriptions.push(this.locale.defaultLocaleChanged.subscribe(
             (defaultLocale: string) => {
                 this.defaultLocale = defaultLocale;
                 // OnPush Change Detection strategy.
                 if (this.changeDetectorRef) { this.changeDetectorRef.markForCheck(); };
             }
-        );
+        ));
 
         this.currency = this.locale.getCurrentCurrency();
         // When the currency changes, subscribes to the event & updates currency property.
-        this.locale.currencyCodeChanged.subscribe(
+        this.pipesSubscriptions.push(this.locale.currencyCodeChanged.subscribe(
             (currency: string) => {
                 this.currency = currency;
                 // OnPush Change Detection strategy.
                 if (this.changeDetectorRef) { this.changeDetectorRef.markForCheck(); };
             }
-        );
+        ));
     }
 
 }

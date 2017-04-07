@@ -7,6 +7,7 @@ import {
     SimpleChanges,
     OnDestroy
 } from '@angular/core';
+import { ISubscription } from 'rxjs/Subscription';
 
 import { BFS } from './bfs';
 
@@ -17,6 +18,8 @@ export abstract class BaseDirective implements AfterViewInit, OnChanges, OnDestr
     }
 
     protected key: string;
+
+    protected subscriptions: ISubscription[] = [];
 
     private element: any;
     private renderNode: any;
@@ -53,6 +56,7 @@ export abstract class BaseDirective implements AfterViewInit, OnChanges, OnDestr
 
     public ngOnDestroy(): void {
         this.removeTextListener();
+        this.cancelSubscriptions();
     }
 
     protected abstract setup(): void;
@@ -70,17 +74,19 @@ export abstract class BaseDirective implements AfterViewInit, OnChanges, OnDestr
     }
 
     private addTextListener(): void {
-        this.textObserver = new MutationObserver((mutations: any) => {
-            this.getKey();
-            if (!!this.key) {
-                this.replace();
-            }
-        });
-        this.textObserver.observe(this.renderNode, this.MUTATION_CONFIG);
+        if (typeof MutationObserver !== "undefined") {
+            this.textObserver = new MutationObserver((mutations: any) => {
+                this.getKey();
+                if (!!this.key) {
+                    this.replace();
+                }
+            });
+            this.textObserver.observe(this.renderNode, this.MUTATION_CONFIG);
+        }
     }
 
     private removeTextListener(): void {
-        if (typeof this.textObserver != "undefined") {
+        if (typeof this.textObserver !== "undefined") {
             this.textObserver.disconnect();
         }
     }
@@ -96,6 +102,14 @@ export abstract class BaseDirective implements AfterViewInit, OnChanges, OnDestr
         } else if (!!this.valueAttribute) {
             this.key = this.valueAttribute;
         }
+    }
+
+    private cancelSubscriptions(): void {
+        this.subscriptions.forEach((subscription: ISubscription) => {
+            if (typeof subscription !== "undefined") {
+                subscription.unsubscribe();
+            }
+        });
     }
 
 }

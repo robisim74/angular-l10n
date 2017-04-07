@@ -20,11 +20,11 @@ export class LocaleDateDirective extends BaseDirective {
 
     protected setup(): void {
         this.replace();
-        this.locale.defaultLocaleChanged.subscribe(
+        this.subscriptions.push(this.locale.defaultLocaleChanged.subscribe(
             () => {
                 this.replace();
             }
-        );
+        ));
     }
 
     protected replace(): void {

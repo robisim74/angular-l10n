@@ -20,11 +20,11 @@ export class LocaleDecimalDirective extends BaseDirective {
 
     protected setup(): void {
         this.replace();
-        this.locale.defaultLocaleChanged.subscribe(
+        this.subscriptions.push(this.locale.defaultLocaleChanged.subscribe(
             () => {
                 this.replace();
             }
-        );
+        ));
     }
 
     protected replace(): void {
@@ -52,11 +52,11 @@ export class LocalePercentDirective extends BaseDirective {
 
     protected setup(): void {
         this.replace();
-        this.locale.defaultLocaleChanged.subscribe(
+        this.subscriptions.push(this.locale.defaultLocaleChanged.subscribe(
             () => {
                 this.replace();
             }
-        );
+        ));
     }
 
     protected replace(): void {
@@ -90,16 +90,16 @@ export class LocaleCurrencyDirective extends BaseDirective {
 
     protected setup(): void {
         this.replace();
-        this.locale.defaultLocaleChanged.subscribe(
+        this.subscriptions.push(this.locale.defaultLocaleChanged.subscribe(
             () => {
                 this.replace();
             }
-        );
-        this.locale.currencyCodeChanged.subscribe(
+        ));
+        this.subscriptions.push(this.locale.currencyCodeChanged.subscribe(
             () => {
                 this.replace();
             }
-        );
+        ));
     }
 
     protected replace(): void {

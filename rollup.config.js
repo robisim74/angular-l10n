@@ -10,6 +10,7 @@ export default {
         '@angular/http',
         'rxjs/Observable',
         'rxjs/Observer',
+        'rxjs/Subscription',
         'rxjs/add/operator/map',
         'rxjs/add/observable/merge'
     ],
@@ -20,6 +21,7 @@ export default {
         '@angular/http': 'ng.http',
         'rxjs/Observable': 'Rx',
         'rxjs/Observer': 'Rx',
+        'rxjs/Subscription': 'Rx',
         'rxjs/add/operator/map': 'Rx',
         'rxjs/add/observable/merge': 'Rx'
     },
