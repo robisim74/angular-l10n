@@ -69,4 +69,12 @@ export class TranslationConfig {
         return this;
     }
 
+    /**
+     * Disables the translation of numbers that are contained at the beginning of the keys.
+     */
+    public disableI18nPlural(): TranslationConfig {
+        this.translation.configuration.i18nPlural = false;
+        return this;
+    }
+
 }

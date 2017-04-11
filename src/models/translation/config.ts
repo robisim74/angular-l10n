@@ -8,5 +8,6 @@ export class Config {
     public missingValue: string;
     public missingKey: string;
     public keySeparator: string = ".";
+    public i18nPlural: boolean = true;
 
 }

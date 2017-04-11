@@ -57,8 +57,8 @@ export abstract class BaseDirective implements AfterViewInit, OnChanges, OnDestr
                 } else if (!!this.innerHTMLProperty) {
                     this.key = this.innerHTMLProperty;
                 }
-                this.replace();
             }
+            this.replace();
         }
     }
 
