@@ -16,6 +16,9 @@ export abstract class BaseDirective implements AfterViewInit, OnChanges, OnDestr
     @Input() set value(valueAttribute: string) {
         this.valueAttribute = valueAttribute;
     }
+    @Input() set innerHTML(innerHTMLProperty: string) {
+        this.innerHTMLProperty = innerHTMLProperty;
+    }
 
     protected key: string;
 
@@ -28,6 +31,7 @@ export abstract class BaseDirective implements AfterViewInit, OnChanges, OnDestr
     private textObserver: MutationObserver;
 
     private valueAttribute: string;
+    private innerHTMLProperty: string;
 
     private readonly MUTATION_CONFIG: any = { subtree: true, characterData: true };
 
@@ -47,10 +51,14 @@ export abstract class BaseDirective implements AfterViewInit, OnChanges, OnDestr
 
     public ngOnChanges(changes: SimpleChanges): void {
         if (!!this.key) {
-            if (this.element.childNodes.length == 0 && !!this.valueAttribute) {
-                this.key = this.valueAttribute;
+            if (this.nodeValue == null) {
+                if (!!this.valueAttribute) {
+                    this.key = this.valueAttribute;
+                } else if (!!this.innerHTMLProperty) {
+                    this.key = this.innerHTMLProperty;
+                }
+                this.replace();
             }
-            this.replace();
         }
     }
 
@@ -70,6 +78,8 @@ export abstract class BaseDirective implements AfterViewInit, OnChanges, OnDestr
             this.addTextListener();
         } else if (!!this.valueAttribute) {
             this.renderer.setAttribute(this.element, "value", value);
+        } else if (!!this.innerHTMLProperty) {
+            this.renderer.setProperty(this.element, "innerHTML", value);
         }
     }
 
@@ -101,6 +111,8 @@ export abstract class BaseDirective implements AfterViewInit, OnChanges, OnDestr
             this.key = this.getText();
         } else if (!!this.valueAttribute) {
             this.key = this.valueAttribute;
+        } else if (!!this.innerHTMLProperty) {
+            this.key = this.innerHTMLProperty;
         }
     }
 
