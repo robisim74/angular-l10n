@@ -381,7 +381,7 @@ _you must also_ subscribe to the following event:
 export class HomeComponent {
 
     // Initializes 'title' with the current translation at the time of the component loading.
-    public title: string = this.translation.translate('Title');
+    title: string = this.translation.translate('Title');
 
     constructor(public translation: TranslationService) {
         this.translation.translationChanged.subscribe(
@@ -393,8 +393,33 @@ export class HomeComponent {
 }
 ```
 
+To get the translation of dates and numbers, you have the `getDefaultLocale` method of `LocaleService`, and the `defaultLocaleChanged` event to know when `defaultLocale` changes. You can use the `transform` method of the corresponding pipe to get the translation, but you could use also the Intl APIs directly (or also use other specific libraries). 
+For example:
+```TypeScript
+@Component({
+    template: '<p>{{ value }}</p>'
+})
+export class HomeComponent {
+
+    value: number;
+
+    constructor(public locale: LocaleService,) {
+        let pipe = new LocaleDecimalPipe();
+
+        this.value = pipe.transform(1234.5, this.locale.getDefaultLocale(), '1.2-2');
+
+        this.locale.defaultLocaleChanged.subscribe(
+            () => {
+                this.value = pipe.transform(1234.5, this.locale.getDefaultLocale(), '1.2-2');
+            }
+        );
+    }
+
+}
+```
+
 ## <a name="4"/>4 Changing language, default locale or currency at runtime
-To change language, default locale or currency at runtime at runtime, `LocaleService` has the following methods:
+To change language, default locale or currency at runtime, `LocaleService` has the following methods:
 * `setCurrentLanguage(languageCode: string): void;`
 * `setDefaultLocale(languageCode: string, countryCode: string, scriptCode?: string, numberingSystem?: string, calendar?: string): void;`
 * `setCurrentCurrency(currencyCode: string): void;`
