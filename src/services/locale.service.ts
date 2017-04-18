@@ -1,4 +1,5 @@
 import { Injectable, EventEmitter, Output } from '@angular/core';
+import { Subject } from 'rxjs/Subject';
 
 import { LocaleConfig } from '../models/localization/locale-config';
 import { Config } from '../models/localization/config';
@@ -14,7 +15,8 @@ import { Browser } from '../models/localization/browser';
     @Output() public languageCodeChanged: EventEmitter<string> = new EventEmitter<string>(true);
     @Output() public defaultLocaleChanged: EventEmitter<string> = new EventEmitter<string>(true);
     @Output() public currencyCodeChanged: EventEmitter<string> = new EventEmitter<string>(true);
-    @Output() public loadTranslation: EventEmitter<any> = new EventEmitter<any>(true);
+
+    public loadTranslation: Subject<any> = new Subject();
 
     public get configuration(): Config {
         return this._configuration;
@@ -199,7 +201,7 @@ import { Browser } from '../models/localization/browser';
 
     private sendTranslationEvents(): void {
         // This event is subscribed by TranslationService to load the translation data.
-        this.loadTranslation.emit(null);
+        this.loadTranslation.next();
     }
 
 }
