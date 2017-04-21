@@ -1,5 +1,5 @@
 # Angular localization library specification
-Library version: 3.0.3
+Library version: 3.0.4
 
 ## Table of contents
 * [1 Library structure](#1)
@@ -16,7 +16,8 @@ Library version: 3.0.3
         * [3.1.3 OnPush ChangeDetectionStrategy](#3.1.3)
         * [3.1.4 ngOnDestroy method](#3.1.4)
     * [3.2 Directives](#3.2)
-    * [3.3 Getting the translation in component class](#3.3)
+    * [3.3 Using Html tags in translation](#3.3)
+    * [3.4 Getting the translation in component class](#3.4)
 * [4 Changing language, default locale or currency at runtime](#4)
 * [5 Lazy loading](#5)
 * [6 Validation by locales](#6)
@@ -125,6 +126,7 @@ Method | Function
 `setMissingValue(value: string);` | Sets the value to use for missing keys
 `setMissingKey(key: string);` | Sets the key to use for missing keys
 `setComposedKeySeparator(keySeparator: string);` | Sets composed key separator. Default is the point '.'
+`disableI18nPlural();` | Disables the translation of numbers that are contained at the beginning of the keys
 
 ### <a name="2.3"/>2.3 Loading the translation data
 #### Direct loading
@@ -132,10 +134,10 @@ You can use `addTranslation` when you configure the service,
 adding all the translation data:
 ```TypeScript
 const translationEN = {
-    Title: 'Angular localization'
+    "Title": "Angular localization"
 }
 const translationIT = {
-    Title: 'Localizzazione in Angular'
+    "Title": "Localizzazione in Angular"
 }
 
 this.translation.addConfiguration()
@@ -197,11 +199,11 @@ You can also get the translation in component class.
 ### <a name="3.1"/>3.1 Pure pipes
 Type | Format | Pipe syntax
 ---- | ------ | -----------
-Message | String | `expression | translate:lang`
-Date | Date/Number/ISO string | `expression | localeDate[:defaultLocale[:format]]`
-Number | Decimal | `expression | localeDecimal[:defaultLocale[:digitInfo]]`
-Number | Percentage | `expression | localePercent[:defaultLocale[:digitInfo]]`
-Number | Currency | `expression | localeCurrency[:defaultLocale[:currency[:symbolDisplay[:digitInfo]]]]`
+Message | String | `expression \| translate:lang`
+Date | Date/Number/ISO string | `expression \| localeDate[:defaultLocale[:format]]`
+Number | Decimal | `expression \| localeDecimal[:defaultLocale[:digitInfo]]`
+Number | Percentage | `expression \| localePercent[:defaultLocale[:digitInfo]]`
+Number | Currency | `expression \| localeCurrency[:defaultLocale[:currency[:symbolDisplay[:digitInfo]]]]`
 
 #### <a name="3.1.1"/>3.1.1 Messages
 ```
@@ -300,7 +302,7 @@ where `symbolDisplay` is a boolean indicating whether to use the currency symbol
 *N.B. You can dynamically change parameters and expressions values.*
 
 #### <a name="3.1.3"/>3.1.3 OnPush ChangeDetectionStrategy
-_Pure pipes_ don't need to set `ChangeDetectionStrategy` to `OnPush`: if into your components you need to use it for working with other _impure pipes_, when you extend `Translation` or `Localization` classes you have also to pass `ChangeDetectorRef`:
+_Pure pipes_ don't need to set `ChangeDetectionStrategy` to `OnPush`: if into your components you need to use it, when you extend `Translation` or `Localization` classes you have also to pass `ChangeDetectorRef`:
 ```TypeScript
 export class HomeComponent extends Localization {
 
@@ -365,7 +367,23 @@ Parameters:
 If you use in the component only the directives and not the pipes, 
 you don't need to import services and extend `Translation` or `Localization` classes.*
 
-### <a name="3.3"/>3.3 Getting the translation in component class
+### <a name="3.3"/>3.3 Using Html tags in translation
+If you have Html tags in translation like this:
+```
+"Strong subtitle": "<strong>It's a small world</strong>"
+```
+you have to use `innerHTML` attribute.
+
+Using pipes:
+```Html
+<p [innerHTML]="'Strong subtitle' | translate:lang"></p>
+```
+Using directives:
+```Html
+<p [innerHTML]="'Strong subtitle'" translate></p>
+```
+
+### <a name="3.4"/>3.4 Getting the translation in component class
 To get the translation in component class, `TranslationService` has the following methods:
 * `translate(key: string, args?: any, lang?: string): string;`
 * `translateAsync(key: string, args?: any, lang?: string): Observable<string>;`
@@ -393,8 +411,7 @@ export class HomeComponent {
 }
 ```
 
-To get the translation of dates and numbers, you have the `getDefaultLocale` method of `LocaleService`, and the `defaultLocaleChanged` event to know when `defaultLocale` changes. You can use the `transform` method of the corresponding pipe to get the translation, but you could use also the Intl APIs directly (or also use other specific libraries). 
-For example:
+To get the translation of dates and numbers, you have the `getDefaultLocale` method of `LocaleService`, and the `defaultLocaleChanged` event to know when `defaultLocale` changes. You can use the `transform` method of the corresponding pipe to get the translation, but you could use also the Intl APIs directly (or also use other specific libraries):
 ```TypeScript
 @Component({
     template: '<p>{{ value }}</p>'
@@ -453,12 +470,12 @@ export class ListComponent {
 In this way, application performance and memory usage are optimized.
 
 ## <a name="6"/>6 Validation by locales
-Import the module you need in the application root module:
+Import the modules you need in the application root module:
 ```TypeScript
 @NgModule({
     imports: [
         ...
-        Localization.forRoot(),
+        LocalizationModule.forRoot(),
         LocaleValidationModule.forRoot()
     ],
     declarations: [AppComponent],
@@ -472,13 +489,13 @@ Directive | Validator | Options | Errors
 --------- | --------- | ------- | ------
 `LocaleNumberValidator` | `validateLocaleNumber=[digitInfo]` | `[minValue]` `[maxValue]` | `format` or `minValue` or `maxValue`
 
-where `digitInfo` has the following format: `{minIntegerDigits}.{minFractionDigits}-{maxFractionDigits}`, and `minValue` and `maxValue` attributes are optional.
+where `digitInfo` has the following format: `{minIntegerDigits}.{minFractionDigits}-{maxFractionDigits}`, and `minValue` and `maxValue` attributes are optional:
 ```Html
-<input validateLocaleNumber="1.2-2" [minValue]="0" [maxValue]="1000" name="decimal" #decimal="ngModel" ngModel>
+<input validateLocaleNumber="1.2-2" [minValue]="0" [maxValue]="1000" name="decimal" [(ngModel)]="decimal">
 ```
 or, if you use variables:
 ```Html
-<input [validateLocaleNumber]="digits" [minValue]="minValue" [maxValue]="maxValue" name="decimal" #decimal="ngModel" ngModel>
+<input [validateLocaleNumber]="digits" [minValue]="minValue" [maxValue]="maxValue" name="decimal" [(ngModel)]="decimal">
 ```
 
 #### <a name="6.1.1"/>6.1.1 Parsing a number
@@ -518,7 +535,7 @@ Property | Value
 `languageCodeChanged: EventEmitter<string>;` |
 `defaultLocaleChanged: EventEmitter<string>;` |
 `currencyCodeChanged: EventEmitter<string>;` |
-`loadTranslation: EventEmitter<any>;` |
+`loadTranslation: Subject<any>;` |
 `readonly configuration: Config;` |
 
 Method | Function
