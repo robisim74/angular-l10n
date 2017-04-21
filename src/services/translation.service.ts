@@ -100,6 +100,7 @@ import { ServiceState } from '../models/translation/service-state';
     }
 
     private getValue(key: string, args: any, lang: string): string {
+        let path: string = key;
         let value: string;
         if (this.translationData[lang]) {
             let translation: any = this.translationData[lang];
@@ -115,7 +116,7 @@ import { ServiceState } from '../models/translation/service-state';
 
             value = translation[key];
         }
-        return this.parseValue(key, value, args, lang);
+        return this.parseValue(path, key, value, args, lang);
     }
 
     private translateNumber(keyNumber: number): string {
@@ -126,23 +127,23 @@ import { ServiceState } from '../models/translation/service-state';
         return keyNumber.toString();
     }
 
-    private parseValue(key: string, value: string, args: any, lang: string): string {
+    private parseValue(path: string, key: string, value: string, args: any, lang: string): string {
         if (value == null) {
-            return this.handleMissingValue(key, args, lang);
+            return this.handleMissingValue(path, args, lang);
         } else if (args) {
             return this.handleArgs(value, args);
         }
         return value;
     }
 
-    private handleMissingValue(key: string, args: any, lang: string): string {
+    private handleMissingValue(path: string, args: any, lang: string): string {
         if (this.configuration.missingKey != null) {
             return this.translate(this.configuration.missingKey, args, lang);
         } else if (this.configuration.missingValue != null) {
             return this.configuration.missingValue;
         }
-        // The same key is returned.
-        return key;
+        // The same path is returned.
+        return path;
     }
 
     private handleArgs(value: string, args: any): string {
