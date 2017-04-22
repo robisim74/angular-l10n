@@ -1,5 +1,5 @@
 # Angular localization
-[![Build Status](https://travis-ci.org/robisim74/angular-l10n.svg?branch=master)](https://travis-ci.org/robisim74/angular-l10n) [![npm version](https://badge.fury.io/js/angular-l10n.svg)](https://badge.fury.io/js/angular-l10n)
+[![Build Status](https://travis-ci.org/robisim74/angular-l10n.svg?branch=angular_v2)](https://travis-ci.org/robisim74/angular-l10n) [![npm version](https://badge.fury.io/js/angular-l10n.svg)](https://badge.fury.io/js/angular-l10n)
 > An Angular library to translate messages, dates and numbers.
 
 This library is for localization of **Angular 2+** apps written in TypeScript, ES6 or ES5. 
@@ -10,7 +10,7 @@ It allows, in addition to translation, to localize numbers and dates of your app
 Get the changelog by [releases](https://github.com/robisim74/angular-l10n/releases).
 
 ## Angular i18n solutions
-| _Feature_ | [Angular](https://angular.io/docs/ts/latest/cookbook/i18n.html) _Native_ | [ngx-translate](https://github.com/ngx-translate/core) _External library_ | [angular-l10n](https://github.com/robisim74/angular-l10n/blob/master/doc/spec.md) _External library_ |
+| _Feature_ | [Angular](https://angular.io/docs/ts/latest/cookbook/i18n.html) _Native_ | [ngx-translate](https://github.com/ngx-translate/core) _External library_ | [angular-l10n](https://github.com/robisim74/angular-l10n/blob/angular_v2/doc/spec.md) _External library_ |
 | --------- | ------------------------------------------------------------------------ | --------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------- |
 _Messages_ | Html attribute, message ID | directive, impure pipe | directive, pure pipe
 _File formats_ | XLIFF, XMB/XTB | JSON | JSON
@@ -50,7 +50,7 @@ and use global `ng.l10n` namespace.
 This library is compatible with AoT compilation & Server-side prerendering.
 
 ## Usage
-See [quick start](https://github.com/robisim74/angular-l10n/blob/master/doc/quick-start.md) and [library specification](https://github.com/robisim74/angular-l10n/blob/master/doc/spec.md).
+See [quick start](https://github.com/robisim74/angular-l10n/blob/angular_v2/doc/quick-start.md) and [library specification](https://github.com/robisim74/angular-l10n/blob/angular_v2/doc/spec.md).
 
 ## Related projects
 [Angular Localization with an ASP.NET CORE MVC Service](https://damienbod.com/2016/04/29/angular-2-localization-with-an-asp-net-core-mvc-service/) @damienbod

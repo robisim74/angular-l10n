@@ -414,7 +414,7 @@ Import the module you need in the application root module:
 @NgModule({
     imports: [
         ...
-        Localization.forRoot(),
+        LocalizationModule.forRoot(),
         LocaleValidationModule.forRoot()
     ],
     declarations: [AppComponent],
