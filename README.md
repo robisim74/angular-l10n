@@ -50,9 +50,9 @@ and use global `ng.l10n` namespace.
 This library is compatible with AoT compilation & Server-side prerendering.
 
 ## Usage
-See [quick start](https://github.com/robisim74/angular-l10n/blob/master/doc/quick-start.md) and [library specification](https://github.com/robisim74/angular-l10n/blob/master/doc/spec.md).
+**Angular v4**: [quick start](https://github.com/robisim74/angular-l10n/blob/master/doc/quick-start.md) and [library specification](https://github.com/robisim74/angular-l10n/blob/master/doc/spec.md).
 
-For **Angular v2**, you can see the old branch: [quick start](https://github.com/robisim74/angular-l10n/blob/angular_v2/doc/quick-start.md) and [library specification](https://github.com/robisim74/angular-l10n/blob/angular_v2/doc/spec.md).
+**Angular v2**: [branch](https://github.com/robisim74/angular-l10n/tree/angular_v2).
 
 ## Related projects
 [Angular Localization with an ASP.NET CORE MVC Service](https://damienbod.com/2016/04/29/angular-2-localization-with-an-asp-net-core-mvc-service/) @damienbod
