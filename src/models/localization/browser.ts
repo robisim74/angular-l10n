@@ -1,4 +1,4 @@
-import { LocaleService } from '../../services/locale.service';
+import { LocaleConfig } from './locale-config';
 
 /**
  * Manages the browser for cookie, local storage & navigator.
@@ -10,7 +10,7 @@ export class Browser {
     private hasCookie: boolean;
     private hasLocalStorage: boolean;
 
-    constructor(public locale: LocaleService) {
+    constructor(private configuration: LocaleConfig) {
         this.hasCookie = typeof navigator !== "undefined" &&
             typeof navigator.cookieEnabled !== "undefined" &&
             navigator.cookieEnabled;
@@ -20,7 +20,7 @@ export class Browser {
     public readStorage(name: string): string {
         let value: string;
         if (!this.storageIsDisabled) {
-            if (this.locale.configuration.localStorage && this.hasLocalStorage) {
+            if (this.configuration.localStorage && this.hasLocalStorage) {
                 value = this.getLocalStorage(name);
             } else if (this.hasCookie) {
                 value = this.getCookie(name);
@@ -31,7 +31,7 @@ export class Browser {
 
     public writeStorage(name: string, value: string): void {
         if (!this.storageIsDisabled) {
-            if (this.locale.configuration.localStorage && this.hasLocalStorage) {
+            if (this.configuration.localStorage && this.hasLocalStorage) {
                 this.setLocalStorage(name, value);
             } else if (this.hasCookie) {
                 this.setCookie(name, value);
@@ -71,11 +71,11 @@ export class Browser {
 
     private setCookie(name: string, value: string): void {
         let expires: string = "";
-        if (this.locale.configuration.cookiesExpirationDays != null) {
+        if (this.configuration.cookiesExpirationDays != null) {
             let expirationDate: Date = new Date();
             expirationDate.setTime(
                 expirationDate.getTime() +
-                (this.locale.configuration.cookiesExpirationDays * 24 * 60 * 60 * 1000)
+                (this.configuration.cookiesExpirationDays * 24 * 60 * 60 * 1000)
             );
             expires = "; expires=" + expirationDate.toUTCString();
         }

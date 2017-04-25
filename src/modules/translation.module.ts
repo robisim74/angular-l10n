@@ -1,5 +1,7 @@
 import { NgModule, ModuleWithProviders } from '@angular/core';
 
+import { LocaleConfig } from '../models/localization/locale-config';
+import { TranslationConfig } from '../models/translation/translation-config';
 import { LocaleService } from '../services/locale.service';
 import { TranslationService } from '../services/translation.service';
 import { TranslatePipe } from '../pipes/translate.pipe';
@@ -23,7 +25,12 @@ export class TranslationModule {
     public static forRoot(): ModuleWithProviders {
         return {
             ngModule: TranslationModule,
-            providers: [LocaleService, TranslationService]
+            providers: [
+                LocaleConfig,
+                TranslationConfig,
+                LocaleService,
+                TranslationService
+            ]
         };
     }
 
@@ -33,7 +40,7 @@ export class TranslationModule {
     public static forChild(): ModuleWithProviders {
         return {
             ngModule: TranslationModule,
-            providers: [TranslationService]
+            providers: [TranslationConfig, TranslationService]
         };
     }
 

@@ -1,4 +1,8 @@
+export { DefaultLocaleCodes } from './models/localization/default-locale-codes';
+export { Codes } from './models/localization/codes';
+export { LocaleConfig } from './models/localization/locale-config';
 export { LocaleService } from './services/locale.service';
+export { TranslationConfig } from './models/translation/translation-config';
 export { TranslationService } from './services/translation.service';
 export { Translation } from './services/translation';
 export { Localization } from './services/localization';

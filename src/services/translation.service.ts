@@ -8,7 +8,7 @@ import 'rxjs/add/observable/merge';
 import { LocaleService } from './locale.service';
 import { IntlAPI } from './intl-api';
 import { TranslationConfig } from '../models/translation/translation-config';
-import { Config } from '../models/translation/config';
+import { TranslationConfigAPI } from '../models/translation/translation-config-api';
 import { LoadingMode } from '../models/translation/loading-mode';
 import { ServiceState } from '../models/translation/service-state';
 
@@ -20,15 +20,9 @@ import { ServiceState } from '../models/translation/service-state';
     @Output() public translationChanged: EventEmitter<string> = new EventEmitter<string>(true);
     @Output() public translationError: EventEmitter<any> = new EventEmitter<any>(true);
 
-    public get configuration(): Config {
-        return this._configuration;
-    }
-
     public serviceState: ServiceState;
 
     private loadingMode: LoadingMode;
-
-    private _configuration: Config = new Config();
 
     private language: string;
 
@@ -37,7 +31,7 @@ import { ServiceState } from '../models/translation/service-state';
      */
     private translationData: any = {};
 
-    constructor(public locale: LocaleService, private http: Http) {
+    constructor(public locale: LocaleService, private configuration: TranslationConfig, private http: Http) {
         this.serviceState = ServiceState.isWaiting;
 
         // When the language changes, loads translation data.
@@ -49,8 +43,12 @@ import { ServiceState } from '../models/translation/service-state';
     /**
      * Configure the service in the application root module or bootstrap component.
      */
-    public addConfiguration(): TranslationConfig {
-        return new TranslationConfig(this);
+    public addConfiguration(): TranslationConfigAPI {
+        return new TranslationConfigAPI(this.configuration);
+    }
+
+    public getConfiguration(): TranslationConfig {
+        return this.configuration;
     }
 
     /**

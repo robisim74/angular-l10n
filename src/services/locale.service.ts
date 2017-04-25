@@ -2,7 +2,7 @@ import { Injectable, EventEmitter, Output } from '@angular/core';
 import { Subject } from 'rxjs/Subject';
 
 import { LocaleConfig } from '../models/localization/locale-config';
-import { Config } from '../models/localization/config';
+import { LocaleConfigAPI } from '../models/localization/locale-config-api';
 import { Language } from '../models/localization/language';
 import { DefaultLocale } from '../models/localization/default-locale';
 import { Browser } from '../models/localization/browser';
@@ -18,23 +18,23 @@ import { Browser } from '../models/localization/browser';
 
     public loadTranslation: Subject<any> = new Subject();
 
-    public get configuration(): Config {
-        return this._configuration;
-    }
-
-    private _configuration: Config = new Config();
-
     private defaultLocale: DefaultLocale = new DefaultLocale();
 
     private currencyCode: string;
 
-    private browser: Browser = new Browser(this);
+    private browser: Browser = new Browser(this.configuration);
+
+    constructor(private configuration: LocaleConfig) { }
 
     /**
      * Configure the service in the application root module or bootstrap component.
      */
-    public addConfiguration(): LocaleConfig {
-        return new LocaleConfig(this);
+    public addConfiguration(): LocaleConfigAPI {
+        return new LocaleConfigAPI(this.configuration);
+    }
+
+    public getConfiguration(): LocaleConfig {
+        return this.configuration;
     }
 
     /**

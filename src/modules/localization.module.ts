@@ -1,6 +1,8 @@
 import { NgModule, ModuleWithProviders } from '@angular/core';
 
 import { TranslationModule } from './translation.module';
+import { LocaleConfig } from '../models/localization/locale-config';
+import { TranslationConfig } from '../models/translation/translation-config';
 import { LocaleService } from '../services/locale.service';
 import { TranslationService } from '../services/translation.service';
 import { LocaleDatePipe } from '../pipes/locale-date.pipe';
@@ -46,7 +48,12 @@ export class LocalizationModule {
     public static forRoot(): ModuleWithProviders {
         return {
             ngModule: LocalizationModule,
-            providers: [LocaleService, TranslationService]
+            providers: [
+                LocaleConfig,
+                TranslationConfig,
+                LocaleService,
+                TranslationService
+            ]
         };
     }
 
@@ -56,7 +63,7 @@ export class LocalizationModule {
     public static forChild(): ModuleWithProviders {
         return {
             ngModule: LocalizationModule,
-            providers: [TranslationService]
+            providers: [TranslationConfig, TranslationService]
         };
     }
 
