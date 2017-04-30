@@ -53,6 +53,14 @@ export class LocaleConfigAPI {
     }
 
     /**
+     * Sets browser SessionStorage as default for language, default locale & currency.
+     */
+    public useSessionStorage(): LocaleConfigAPI {
+        this.configuration.sessionStorage = true;
+        return this;
+    }
+
+    /**
      * Defines the language to be used:
      *  - tries to get the language from the browser storage;
      *  - tries to get the language of the browser if it has been added;

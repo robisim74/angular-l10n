@@ -9,6 +9,7 @@ import { Language } from './language';
 
     public storageIsDisabled: boolean = false;
     public localStorage: boolean = false;
+    public sessionStorage: boolean = false;
     public cookiesExpirationDays: number;
 
 }

@@ -8,20 +8,22 @@ export class Browser {
     public storageIsDisabled: boolean;
 
     private hasCookie: boolean;
-    private hasLocalStorage: boolean;
+    private hasStorage: boolean;
 
     constructor(private configuration: LocaleConfig) {
         this.hasCookie = typeof navigator !== "undefined" &&
             typeof navigator.cookieEnabled !== "undefined" &&
             navigator.cookieEnabled;
-        this.hasLocalStorage = typeof Storage !== "undefined";
+        this.hasStorage = typeof Storage !== "undefined";
     }
 
     public readStorage(name: string): string {
         let value: string;
         if (!this.storageIsDisabled) {
-            if (this.configuration.localStorage && this.hasLocalStorage) {
+            if (this.configuration.localStorage && this.hasStorage) {
                 value = this.getLocalStorage(name);
+            } else if (this.configuration.sessionStorage && this.hasStorage) {
+                value = this.getSessionStorage(name);
             } else if (this.hasCookie) {
                 value = this.getCookie(name);
             }
@@ -31,8 +33,10 @@ export class Browser {
 
     public writeStorage(name: string, value: string): void {
         if (!this.storageIsDisabled) {
-            if (this.configuration.localStorage && this.hasLocalStorage) {
+            if (this.configuration.localStorage && this.hasStorage) {
                 this.setLocalStorage(name, value);
+            } else if (this.configuration.sessionStorage && this.hasStorage) {
+                this.setSessionStorage(name, value);
             } else if (this.hasCookie) {
                 this.setCookie(name, value);
             }
@@ -57,6 +61,10 @@ export class Browser {
         return localStorage.getItem(name);
     }
 
+    private getSessionStorage(name: string): string {
+        return sessionStorage.getItem(name);
+    }
+
     private getCookie(name: string): string {
         let result: RegExpExecArray;
         if (typeof document !== "undefined") {
@@ -67,6 +75,10 @@ export class Browser {
 
     private setLocalStorage(name: string, value: string): void {
         localStorage.setItem(name, value);
+    }
+
+    private setSessionStorage(name: string, value: string): void {
+        sessionStorage.setItem(name, value);
     }
 
     private setCookie(name: string, value: string): void {
