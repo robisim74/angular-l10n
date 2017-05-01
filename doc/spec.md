@@ -1,5 +1,5 @@
 # Angular localization library specification
-Library version: 3.0.4
+Library version: 3.1.0
 
 ## Table of contents
 * [1 Library structure](#1)
@@ -112,6 +112,7 @@ Method | Function
 `disableStorage();` | Disables the browser storage for language, default locale & currency
 `setCookieExpiration(days?: number);` | If the cookie expiration is omitted, the cookie becomes a session cookie
 `useLocalStorage();` | Sets browser LocalStorage as default for language, default locale & currency
+`useSessionStorage();` | Sets browser SessionStorage as default for language, default locale & currency
 `defineLanguage(languageCode: string);` | Defines the language to be used
 `defineDefaultLocale(languageCode: string, countryCode: string, scriptCode?: string, numberingSystem?: string, calendar?: string);` | Defines the default locale to be used, regardless of the browser language
 `defineCurrency(currencyCode: string);` | Defines the currency to be used
@@ -133,11 +134,11 @@ Method | Function
 You can use `addTranslation` when you configure the service, 
 adding all the translation data:
 ```TypeScript
-const translationEN = {
-    "Title": "Angular localization"
+const translationEN: any = {
+    Title: "Angular localization"
 }
-const translationIT = {
-    "Title": "Localizzazione in Angular"
+const translationIT: any = {
+    Title: "Localizzazione in Angular"
 }
 
 this.translation.addConfiguration()
@@ -335,7 +336,7 @@ ngOnDestroy() {
 ### <a name="3.2"/>3.2 Directives
 Type | Format | Html syntax
 ---- | ------ | -----------
-Message | String | `<tagname translate>expression</tagname>`
+Message | String | `<tagname translate>expression</tagname>` or `<tagname l10nTranslate>expression</tagname>`
 Date | Date/Number/ISO string | `<tagname localeDate="[format]">expression</tagname>`
 Number | Decimal | `<tagname localeDecimal="[digitInfo]">expression</tagname>`
 Number | Percentage | `<tagname localePercent="[digitInfo]">expression</tagname>`
@@ -536,11 +537,11 @@ Property | Value
 `defaultLocaleChanged: EventEmitter<string>;` |
 `currencyCodeChanged: EventEmitter<string>;` |
 `loadTranslation: Subject<any>;` |
-`readonly configuration: Config;` |
 
 Method | Function
 ------ | --------
-`addConfiguration(): LocaleConfig;` | Configure the service in the application root module or bootstrap component
+`addConfiguration(): ILocaleConfigAPI;` | Configure the service in the application root module or bootstrap component
+`getConfiguration(): ILocaleConfig;` |
 `init(): void;` | Call this method after the configuration to initialize the service
 `getAvailableLanguages(): string[];` |
 `getLanguageDirection(languageCode?: string): string;` |
@@ -560,12 +561,12 @@ Property | Value
 ---------- | -----
 `translationChanged: EventEmitter<string>;` |
 `translationError: EventEmitter<any>;` |
-`readonly configuration: Config` |
 `serviceState: ServiceState;` |
 
 Method | Function
 ------ | --------
-`addConfiguration(): TranslationConfig;` | Configure the service in the application root module or bootstrap component
+`addConfiguration(): ITranslationConfigAPI;` | Configure the service in the application root module or bootstrap component
+`getConfiguration(): ITranslationConfig;` |
 `init(): void;` | Call this method after the configuration to initialize the service
 `getLanguage(): string;` | The language of the translation service is updated when the translation data has been loaded
 `translate(key: string, args?: any, lang?: string): string;` |
@@ -574,7 +575,7 @@ Method | Function
 ### <a name="8.3"/>8.3 LocaleValidation
 Method | Function
 ------ | --------
-`parseNumber(s: string): number;` | Converts a string to a number according to default locale
+`parseNumber(s: string): number | null;` | Converts a string to a number according to default locale
 
 ### <a name="8.4"/>8.4 Collator
 Method | Function

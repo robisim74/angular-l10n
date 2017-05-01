@@ -46,8 +46,8 @@ If you build apps in Angular using ES5, you can include the `umd` bundle in your
 ```
 and use global `ng.l10n` namespace.
 
-## AoT compilation & Server-side prerendering
-This library is compatible with AoT compilation & Server-side prerendering.
+## AoT compilation, Server-side prerendering & strict
+This library is compatible with AoT compilation & Server-side prerendering. It also supports the `strict` TypeScript compiler option.
 
 ## Usage
 **Angular v4**: [quick start](https://github.com/robisim74/angular-l10n/blob/master/doc/quick-start.md) and [library specification](https://github.com/robisim74/angular-l10n/blob/master/doc/spec.md).
