@@ -4,11 +4,18 @@ import { TranslationService } from '../services/translation.service';
 import { BaseDirective } from '../models/base-directive';
 
 @Directive({
-    selector: '[translate]'
+    selector: '[l10nTranslate],[translate]'
 })
 export class TranslateDirective extends BaseDirective {
 
-    @Input('translate') public params: string;
+    @Input() set l10nTranslate(params: string) {
+        this.params = params || this.params;
+    }
+    @Input() set translate(params: string) {
+        this.params = params || this.params;
+    }
+
+    private params: string;
 
     constructor(public translation: TranslationService, protected el: ElementRef, protected renderer: Renderer2) {
         super(el, renderer);

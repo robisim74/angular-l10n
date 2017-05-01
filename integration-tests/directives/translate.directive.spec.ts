@@ -154,25 +154,25 @@ describe('TranslateDirective', () => {
 @Component({
     template: `
         <p><em>should render translated text & trim spaces</em></p>
-        <p id="key" translate>
+        <p id="key" l10nTranslate>
             {{ key }}
         </p>
 
         <p><em>should render translated text using parameters</em></p>
-        <p [translate]="{ user: username, NoMessages: messages.length }">User notifications</p>
+        <p [l10nTranslate]="{ user: username, NoMessages: messages.length }">User notifications</p>
 
         <p><em>should search the key</em></p>
-        <p translate>
-            <em translate>Title</em>
+        <p l10nTranslate>
+            <em l10nTranslate>Title</em>
             <span>&nbsp;</span>
             Subtitle
         </p>
-        <p translate>
+        <p l10nTranslate>
             Subtitle
             <span>&nbsp;</span>
-            <em translate>Title</em>
+            <em l10nTranslate>Title</em>
         </p>
-        <a translate>
+        <a l10nTranslate>
             <div>
                 <div></div>
                 Title
@@ -180,11 +180,11 @@ describe('TranslateDirective', () => {
         </a>
 
         <p><em>should use value attribute</em></p>
-        <input type="button" [value]="value" translate>
+        <input type="button" [value]="value" l10nTranslate>
 
         <p><em>should not use value attribute</em></p>
         <select>
-            <option [value]="value" translate>Select</option>
+            <option [value]="value" l10nTranslate>Select</option>
             <option value="10">10</option>
             <option value="20">20</option>
             <option value="50">50</option>
@@ -192,7 +192,7 @@ describe('TranslateDirective', () => {
         </select>
 
         <p><em>should use innerHTML attribute</em></p>
-        <p [innerHTML]="innerHTML" translate></p>
+        <p [innerHTML]="innerHTML" l10nTranslate></p>
     `
 })
 class TranslateComponent {
