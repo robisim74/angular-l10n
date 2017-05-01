@@ -1,9 +1,5 @@
 import { DecimalCode } from './decimal-code';
 
-export function isPresent(obj: any): boolean {
-    return typeof obj !== "undefined" && obj != null;
-}
-
 export class RegExpFactory {
 
     /**
@@ -14,17 +10,19 @@ export class RegExpFactory {
         let minFraction: number = 0;
         let maxFraction: number = 3;
 
-        if (isPresent(digits)) {
+        if (!!digits) {
             const NUMBER_FORMAT_REGEXP: RegExp = /^(\d+)?\.((\d+)(\-(\d+))?)?$/;
             let parts: RegExpMatchArray = digits.match(NUMBER_FORMAT_REGEXP);
-            if (isPresent(parts[1])) {  // Min integer digits.
-                minInt = parseInt(parts[1]);
-            }
-            if (isPresent(parts[3])) {  // Min fraction digits.
-                minFraction = parseInt(parts[3]);
-            }
-            if (isPresent(parts[5])) {  // Max fraction digits.
-                maxFraction = parseInt(parts[5]);
+            if (parts != null) {
+                if (parts[1] != null) {  // Min integer digits.
+                    minInt = parseInt(parts[1]);
+                }
+                if (parts[3] != null) {  // Min fraction digits.
+                    minFraction = parseInt(parts[3]);
+                }
+                if (parts[5] != null) {  // Max fraction digits.
+                    maxFraction = parseInt(parts[5]);
+                }
             }
         }
 
