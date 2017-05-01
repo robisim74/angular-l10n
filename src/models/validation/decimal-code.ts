@@ -27,21 +27,25 @@ export class DecimalCode extends NumberCode {
             const value: number = -0.9; // Reference value.
             const localeValue: string = new Intl.NumberFormat(defaultLocale).format(value);
 
-            // Checks Unicode character 'RIGHT-TO-LEFT MARK' (U+200F).
-            if (this.Unicode(localeValue.charAt(0)) == "\\u200F") {
+            const unicodeChars: string[] = [];
+            unicodeChars.push(this.Unicode(localeValue.charAt(0)));
+            unicodeChars.push(this.Unicode(localeValue.charAt(1)));
+            unicodeChars.push(this.Unicode(localeValue.charAt(2)));
+            unicodeChars.push(this.Unicode(localeValue.charAt(3)));
+
+            // Checks Unicode characters 'RIGHT-TO-LEFT MARK' (U+200F) & 'Arabic Letter Mark (U+061C)'.
+            if (unicodeChars[0] == "\\u200F" || unicodeChars[0] == "\\u061C") {
                 // Right to left.
-                this.minusSignCode = this.Unicode(localeValue.charAt(1));
-                this.decimalSeparatorCode = this.Unicode(localeValue.charAt(3));
-            } else if (this.Unicode(localeValue.charAt(0)) == this.Unicode(
-                new Intl.NumberFormat(defaultLocale).format(0)
-            )) {
-                // IE & Edge reverse the order.
-                this.minusSignCode = this.Unicode(localeValue.charAt(3));
-                this.decimalSeparatorCode = this.Unicode(localeValue.charAt(1));
+                this.minusSignCode = unicodeChars[1];
+                this.decimalSeparatorCode = unicodeChars[3];
+            } else if (unicodeChars[0] == this.Unicode(new Intl.NumberFormat(defaultLocale).format(0))) {
+                // Some IE & Edge versions reverse the order.
+                this.minusSignCode = unicodeChars[3];
+                this.decimalSeparatorCode = unicodeChars[1];
             } else {
                 // Left to right.
-                this.minusSignCode = this.Unicode(localeValue.charAt(0));
-                this.decimalSeparatorCode = this.Unicode(localeValue.charAt(2));
+                this.minusSignCode = unicodeChars[0];
+                this.decimalSeparatorCode = unicodeChars[2];
             }
         }
     }
