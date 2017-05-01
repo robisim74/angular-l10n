@@ -122,6 +122,29 @@ describe('LocaleNumberValidatorDirective', () => {
         });
     }));
 
+    it('should validate right to left', async(() => {
+        locale.setDefaultLocale('ar', 'SA');
+
+        comp.decimal = "٣٫١٤";
+
+        fixture.detectChanges();
+        fixture.whenStable().then(() => {
+            fixture.detectChanges();
+
+            const form: NgForm = fixture.debugElement.children[0].injector.get(NgForm);
+            const control: AbstractControl | null = form.control.get('decimal');
+
+            if (control) {
+                expect(control.valid).toBe(true);
+                expect(control.hasError('format')).toBe(false);
+                expect(control.hasError('minValue')).toBe(false);
+                expect(control.hasError('maxValue')).toBe(false);
+            } else {
+                throw new Error("Control is null");
+            }
+        });
+    }));
+
 });
 
 @Component({
