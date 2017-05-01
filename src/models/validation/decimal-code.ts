@@ -24,8 +24,8 @@ export class DecimalCode extends NumberCode {
 
         // Tries to update Unicode for signs according to default locale.
         if (IntlAPI.HasNumberFormat()) {
-            let value: number = -0.9; // Reference value.
-            let localeValue: string = new Intl.NumberFormat(defaultLocale).format(value);
+            const value: number = -0.9; // Reference value.
+            const localeValue: string = new Intl.NumberFormat(defaultLocale).format(value);
 
             // Checks Unicode character 'RIGHT-TO-LEFT MARK' (U+200F).
             if (this.Unicode(localeValue.charAt(0)) == "\\u200F") {
@@ -47,11 +47,11 @@ export class DecimalCode extends NumberCode {
     }
 
     public parse(s: string): number {
-        let characters: string[] = s.split("");
+        const characters: string[] = s.split("");
         let value: string = "";
-        for (let char of characters) {
-            let charCode: string = this.Unicode(char);
-            let index: number = this.numbersCodes.indexOf(charCode);
+        for (const char of characters) {
+            const charCode: string = this.Unicode(char);
+            const index: number = this.numbersCodes.indexOf(charCode);
             if (index != -1) {
                 value += index;
             } else if (charCode == this.minusSignCode) {

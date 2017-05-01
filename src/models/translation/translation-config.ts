@@ -1,8 +1,20 @@
 import { Injectable } from '@angular/core';
 
-import { Provider } from './provider';
+import { Provider } from '../types';
 
-@Injectable() export class TranslationConfig {
+export interface ITranslationConfig {
+
+    translationData: any;
+    providers: Provider[];
+    localeAsLanguage: boolean;
+    missingValue: string;
+    missingKey: string;
+    keySeparator: string;
+    i18nPlural: boolean;
+
+}
+
+@Injectable() export class TranslationConfig implements ITranslationConfig {
 
     public translationData: any = {};
     public providers: Provider[] = [];

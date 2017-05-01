@@ -22,7 +22,7 @@ export class Translation implements OnDestroy {
             (language: string) => {
                 this.lang = language;
                 // OnPush Change Detection strategy.
-                if (this.changeDetectorRef) { this.changeDetectorRef.markForCheck(); };
+                if (this.changeDetectorRef) { this.changeDetectorRef.markForCheck(); }
             }
         ));
     }

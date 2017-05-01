@@ -10,9 +10,9 @@ import { BaseDirective } from '../models/base-directive';
 })
 export class LocaleDecimalDirective extends BaseDirective {
 
-    @Input('localeDecimal') public digits: string;
+    @Input('localeDecimal') public digits?: string;
 
-    private defaultDigits: string = null;
+    private defaultDigits: string;
 
     constructor(public locale: LocaleService, protected el: ElementRef, protected renderer: Renderer2) {
         super(el, renderer);
@@ -29,8 +29,8 @@ export class LocaleDecimalDirective extends BaseDirective {
 
     protected replace(): void {
         if (IntlAPI.HasNumberFormat()) {
-            let localeDecimal: DecimalPipe = new DecimalPipe(this.locale.getDefaultLocale());
-            let value: string = localeDecimal.transform(this.key, this.digits || this.defaultDigits);
+            const localeDecimal: DecimalPipe = new DecimalPipe(this.locale.getDefaultLocale());
+            const value: string | null = localeDecimal.transform(this.key, this.digits || this.defaultDigits);
             this.setText(value);
         }
     }
@@ -42,9 +42,9 @@ export class LocaleDecimalDirective extends BaseDirective {
 })
 export class LocalePercentDirective extends BaseDirective {
 
-    @Input('localePercent') public digits: string;
+    @Input('localePercent') public digits?: string;
 
-    private defaultDigits: string = null;
+    private defaultDigits: string;
 
     constructor(public locale: LocaleService, protected el: ElementRef, protected renderer: Renderer2) {
         super(el, renderer);
@@ -61,8 +61,8 @@ export class LocalePercentDirective extends BaseDirective {
 
     protected replace(): void {
         if (IntlAPI.HasNumberFormat()) {
-            let localePercent: PercentPipe = new PercentPipe(this.locale.getDefaultLocale());
-            let value: string = localePercent.transform(this.key, this.digits || this.defaultDigits);
+            const localePercent: PercentPipe = new PercentPipe(this.locale.getDefaultLocale());
+            const value: string | null = localePercent.transform(this.key, this.digits || this.defaultDigits);
             this.setText(value);
         }
     }
@@ -74,7 +74,7 @@ export class LocalePercentDirective extends BaseDirective {
 })
 export class LocaleCurrencyDirective extends BaseDirective {
 
-    @Input('localeCurrency') public digits: string;
+    @Input('localeCurrency') public digits?: string;
 
     @Input() set symbol(symbolDisplay: boolean) {
         this.symbolDisplay = symbolDisplay || this.symbolDisplay;
@@ -82,7 +82,7 @@ export class LocaleCurrencyDirective extends BaseDirective {
 
     private symbolDisplay: boolean = false;
 
-    private defaultDigits: string = null;
+    private defaultDigits: string;
 
     constructor(public locale: LocaleService, protected el: ElementRef, protected renderer: Renderer2) {
         super(el, renderer);
@@ -104,8 +104,8 @@ export class LocaleCurrencyDirective extends BaseDirective {
 
     protected replace(): void {
         if (IntlAPI.HasNumberFormat()) {
-            let localeCurrency: CurrencyPipe = new CurrencyPipe(this.locale.getDefaultLocale());
-            let value: string = localeCurrency.transform(
+            const localeCurrency: CurrencyPipe = new CurrencyPipe(this.locale.getDefaultLocale());
+            const value: string | null = localeCurrency.transform(
                 this.key,
                 this.locale.getCurrentCurrency(),
                 this.symbolDisplay,

@@ -1,3 +1,4 @@
+import { Pipe } from '@angular/core';
 import { inject, TestBed } from '@angular/core/testing';
 import { PipeResolver } from '@angular/compiler';
 
@@ -29,10 +30,13 @@ describe('Locale number pipes', () => {
 
     describe('LocaleDecimalPipe', () => {
 
-        let pipe: LocaleDecimalPipe = new LocaleDecimalPipe();
+        const pipe: LocaleDecimalPipe = new LocaleDecimalPipe();
 
         it('should be marked as pure', () => {
-            expect(new PipeResolver().resolve(LocaleDecimalPipe).pure).toEqual(true);
+            const pipeResolver: Pipe | null = new PipeResolver().resolve(LocaleDecimalPipe);
+            if (pipeResolver) {
+                expect(pipeResolver.pure).toEqual(true);
+            }
         });
 
         it('should localize a decimal number', () => {
@@ -46,10 +50,13 @@ describe('Locale number pipes', () => {
 
     describe('LocalePercentPipe', () => {
 
-        let pipe: LocalePercentPipe = new LocalePercentPipe();
+        const pipe: LocalePercentPipe = new LocalePercentPipe();
 
         it('should be marked as pure', () => {
-            expect(new PipeResolver().resolve(LocalePercentPipe).pure).toEqual(true);
+            const pipeResolver: Pipe | null = new PipeResolver().resolve(LocalePercentPipe);
+            if (pipeResolver) {
+                expect(pipeResolver.pure).toEqual(true);
+            }
         });
 
         it('should localize a percent number', () => {
@@ -63,10 +70,13 @@ describe('Locale number pipes', () => {
 
     describe('LocaleCurrencyPipe', () => {
 
-        let pipe: LocaleCurrencyPipe = new LocaleCurrencyPipe();
+        const pipe: LocaleCurrencyPipe = new LocaleCurrencyPipe();
 
         it('should be marked as pure', () => {
-            expect(new PipeResolver().resolve(LocaleDecimalPipe).pure).toEqual(true);
+            const pipeResolver: Pipe | null = new PipeResolver().resolve(LocaleCurrencyPipe);
+            if (pipeResolver) {
+                expect(pipeResolver.pure).toEqual(true);
+            }
         });
 
         it('should localize a currency', () => {
@@ -81,14 +91,16 @@ describe('Locale number pipes', () => {
             locale.setDefaultLocale('it', 'IT');
             locale.setCurrentCurrency('EUR');
 
-            let value: string = pipe.transform(
+            let value: string | null = pipe.transform(
                 1234.5,
                 locale.getDefaultLocale(),
                 locale.getCurrentCurrency(),
                 true,
                 '1.2-2'
-            ).replace(/\u00A0/, " "); // Intl returns Unicode Character 'NO-BREAK SPACE' (U+00A0).
-
+            );
+            if (!!value) {
+                value = value.replace(/\u00A0/, " "); // Intl returns Unicode Character 'NO-BREAK SPACE' (U+00A0).
+            }
             expect(value).toEqual('1.234,50 €');
         });
 

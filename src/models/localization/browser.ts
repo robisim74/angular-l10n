@@ -17,8 +17,8 @@ export class Browser {
         this.hasStorage = typeof Storage !== "undefined";
     }
 
-    public readStorage(name: string): string {
-        let value: string;
+    public readStorage(name: string): string | null {
+        let value: string | null = null;
         if (!this.storageIsDisabled) {
             if (this.configuration.localStorage && this.hasStorage) {
                 value = this.getLocalStorage(name);
@@ -43,13 +43,13 @@ export class Browser {
         }
     }
 
-    public getBrowserLanguage(): string {
-        let browserLanguage: string;
+    public getBrowserLanguage(): string | null {
+        let browserLanguage: string | null = null;
         if (typeof navigator !== "undefined" && typeof navigator.language !== "undefined") {
             browserLanguage = navigator.language;
         }
         if (browserLanguage != null) {
-            let index: number = browserLanguage.indexOf("-");
+            const index: number = browserLanguage.indexOf("-");
             if (index != -1) {
                 browserLanguage = browserLanguage.substring(0, index);
             }
@@ -57,16 +57,16 @@ export class Browser {
         return browserLanguage;
     }
 
-    private getLocalStorage(name: string): string {
+    private getLocalStorage(name: string): string | null {
         return localStorage.getItem(name);
     }
 
-    private getSessionStorage(name: string): string {
+    private getSessionStorage(name: string): string | null {
         return sessionStorage.getItem(name);
     }
 
-    private getCookie(name: string): string {
-        let result: RegExpExecArray;
+    private getCookie(name: string): string | null {
+        let result: RegExpExecArray | null = null;
         if (typeof document !== "undefined") {
             result = new RegExp("(?:^|; )" + encodeURIComponent(name) + "=([^;]*)").exec(document.cookie);
         }
@@ -84,7 +84,7 @@ export class Browser {
     private setCookie(name: string, value: string): void {
         let expires: string = "";
         if (this.configuration.cookiesExpirationDays != null) {
-            let expirationDate: Date = new Date();
+            const expirationDate: Date = new Date();
             expirationDate.setTime(
                 expirationDate.getTime() +
                 (this.configuration.cookiesExpirationDays * 24 * 60 * 60 * 1000)

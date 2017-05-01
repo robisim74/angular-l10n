@@ -1,16 +1,59 @@
 import { Injectable, EventEmitter, Output } from '@angular/core';
 import { Subject } from 'rxjs/Subject';
 
-import { LocaleConfig } from '../models/localization/locale-config';
-import { LocaleConfigAPI } from '../models/localization/locale-config-api';
-import { Language } from '../models/localization/language';
+import { ILocaleConfig, LocaleConfig } from '../models/localization/locale-config';
+import { ILocaleConfigAPI, LocaleConfigAPI } from '../models/localization/locale-config-api';
+import { Language } from '../models/types';
 import { DefaultLocale } from '../models/localization/default-locale';
 import { Browser } from '../models/localization/browser';
 
 /**
  * Manages language, default locale & currency.
  */
-@Injectable() export class LocaleService {
+export interface ILocaleService {
+
+    languageCodeChanged: EventEmitter<string>;
+    defaultLocaleChanged: EventEmitter<string>;
+    currencyCodeChanged: EventEmitter<string>;
+
+    loadTranslation: Subject<any>;
+
+    /**
+     * Configure the service in the application root module or bootstrap component.
+     */
+    addConfiguration(): ILocaleConfigAPI;
+    getConfiguration(): ILocaleConfig;
+
+    /**
+     * Call this method after the configuration to initialize the service.
+     */
+    init(): void;
+
+    getAvailableLanguages(): string[];
+
+    getLanguageDirection(languageCode?: string): string;
+
+    getCurrentLanguage(): string;
+    getCurrentCountry(): string;
+    getCurrentScript(): string;
+    getCurrentNumberingSystem(): string;
+    getCurrentCalendar(): string;
+    getDefaultLocale(): string;
+    getCurrentCurrency(): string;
+
+    setCurrentLanguage(languageCode: string): void;
+    setDefaultLocale(
+        languageCode: string,
+        countryCode: string,
+        scriptCode?: string,
+        numberingSystem?: string,
+        calendar?: string
+    ): void;
+    setCurrentCurrency(currencyCode: string): void;
+
+}
+
+@Injectable() export class LocaleService implements ILocaleService {
 
     @Output() public languageCodeChanged: EventEmitter<string> = new EventEmitter<string>(true);
     @Output() public defaultLocaleChanged: EventEmitter<string> = new EventEmitter<string>(true);
@@ -26,20 +69,14 @@ import { Browser } from '../models/localization/browser';
 
     constructor(private configuration: LocaleConfig) { }
 
-    /**
-     * Configure the service in the application root module or bootstrap component.
-     */
-    public addConfiguration(): LocaleConfigAPI {
+    public addConfiguration(): ILocaleConfigAPI {
         return new LocaleConfigAPI(this.configuration);
     }
 
-    public getConfiguration(): LocaleConfig {
+    public getConfiguration(): ILocaleConfig {
         return this.configuration;
     }
 
-    /**
-     * Call this method after the configuration to initialize the service.
-     */
     public init(): void {
         this.initStorage();
 
@@ -59,7 +96,7 @@ import { Browser } from '../models/localization/browser';
     }
 
     public getLanguageDirection(languageCode: string = this.defaultLocale.languageCode): string {
-        let matchedLanguages: Language[] = this.matchLanguage(languageCode);
+        const matchedLanguages: Language[] = this.matchLanguage(languageCode);
         return matchedLanguages[0].direction;
     }
 
@@ -68,19 +105,31 @@ import { Browser } from '../models/localization/browser';
     }
 
     public getCurrentCountry(): string {
-        return this.defaultLocale.countryCode;
+        if (!!this.defaultLocale.countryCode) {
+            return this.defaultLocale.countryCode;
+        }
+        return "";
     }
 
     public getCurrentScript(): string {
-        return this.defaultLocale.scriptCode;
+        if (!!this.defaultLocale.scriptCode) {
+            return this.defaultLocale.scriptCode;
+        }
+        return "";
     }
 
     public getCurrentNumberingSystem(): string {
-        return this.defaultLocale.numberingSystem;
+        if (!!this.defaultLocale.numberingSystem) {
+            return this.defaultLocale.numberingSystem;
+        }
+        return "";
     }
 
     public getCurrentCalendar(): string {
-        return this.defaultLocale.calendar;
+        if (!!this.defaultLocale.calendar) {
+            return this.defaultLocale.calendar;
+        }
+        return "";
     }
 
     public getDefaultLocale(): string {
@@ -139,15 +188,24 @@ import { Browser } from '../models/localization/browser';
         this.browser.storageIsDisabled = this.configuration.storageIsDisabled;
 
         // Tries to retrieve default locale & currency from the browser storage.
-        this.defaultLocale.value = this.browser.readStorage("locale");
-        this.currencyCode = this.browser.readStorage("currency");
+        const defaultLocale: string | null = this.browser.readStorage("locale");
+        if (!!defaultLocale) {
+            this.defaultLocale.value = defaultLocale;
+        }
+        const currencyCode: string | null = this.browser.readStorage("currency");
+        if (!!currencyCode) {
+            this.currencyCode = currencyCode;
+        }
     }
 
     private initLanguage(): void {
         if (this.defaultLocale.languageCode == null) {
-            let browserLanguage: string = this.browser.getBrowserLanguage();
-            let matchedLanguages: Language[] = this.matchLanguage(browserLanguage);
-            if (matchedLanguages.length > 0) {
+            const browserLanguage: string | null = this.browser.getBrowserLanguage();
+            let matchedLanguages: Language[] = [];
+            if (!!browserLanguage) {
+                matchedLanguages = this.matchLanguage(browserLanguage);
+            }
+            if (!!browserLanguage && matchedLanguages.length > 0) {
                 this.defaultLocale.build(browserLanguage);
             } else {
                 this.defaultLocale.build(this.configuration.languageCode);
@@ -158,7 +216,7 @@ import { Browser } from '../models/localization/browser';
     }
 
     private matchLanguage(languageCode: string): Language[] {
-        let matchedLanguages: Language[] = this.configuration.languageCodes.filter(
+        const matchedLanguages: Language[] = this.configuration.languageCodes.filter(
             (language: Language) => {
                 return language.code == languageCode;
             });

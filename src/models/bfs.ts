@@ -13,7 +13,7 @@ export class BFS {
     }
 
     private static walk(rootNode: any): any {
-        let queue: any[] = [];
+        const queue: any[] = [];
         let iNode: any;
 
         queue.push(rootNode);
@@ -24,7 +24,7 @@ export class BFS {
                 return iNode;
             }
             if (iNode.childNodes != null) {
-                for (let child of iNode.childNodes) {
+                for (const child of iNode.childNodes) {
                     queue.push(child);
                 }
             }

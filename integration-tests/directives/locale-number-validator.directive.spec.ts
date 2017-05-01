@@ -1,5 +1,5 @@
 import { TestBed, ComponentFixture, async } from '@angular/core/testing';
-import { FormsModule, NgForm } from '@angular/forms';
+import { FormsModule, NgForm, AbstractControl } from '@angular/forms';
 import { Component } from '@angular/core';
 
 import { LocaleNumberValidatorDirective } from './../../index';
@@ -45,13 +45,17 @@ describe('LocaleNumberValidatorDirective', () => {
         fixture.whenStable().then(() => {
             fixture.detectChanges();
 
-            let form: NgForm = fixture.debugElement.children[0].injector.get(NgForm);
-            let control = form.control.get('decimal');
+            const form: NgForm = fixture.debugElement.children[0].injector.get(NgForm);
+            const control: AbstractControl | null = form.control.get('decimal');
 
-            expect(control.valid).toBe(false);
-            expect(control.hasError('format')).toBe(true);
-            expect(control.hasError('minValue')).toBe(false);
-            expect(control.hasError('maxValue')).toBe(false);
+            if (control) {
+                expect(control.valid).toBe(false);
+                expect(control.hasError('format')).toBe(true);
+                expect(control.hasError('minValue')).toBe(false);
+                expect(control.hasError('maxValue')).toBe(false);
+            } else {
+                throw new Error("Control is null");
+            }
         });
     }));
 
@@ -62,13 +66,17 @@ describe('LocaleNumberValidatorDirective', () => {
         fixture.whenStable().then(() => {
             fixture.detectChanges();
 
-            let form: NgForm = fixture.debugElement.children[0].injector.get(NgForm);
-            let control = form.control.get('decimal');
+            const form: NgForm = fixture.debugElement.children[0].injector.get(NgForm);
+            const control: AbstractControl | null = form.control.get('decimal');
 
-            expect(control.valid).toBe(false);
-            expect(control.hasError('format')).toBe(false);
-            expect(control.hasError('minValue')).toBe(true);
-            expect(control.hasError('maxValue')).toBe(false);
+            if (control) {
+                expect(control.valid).toBe(false);
+                expect(control.hasError('format')).toBe(false);
+                expect(control.hasError('minValue')).toBe(true);
+                expect(control.hasError('maxValue')).toBe(false);
+            } else {
+                throw new Error("Control is null");
+            }
         });
     }));
 
@@ -79,13 +87,17 @@ describe('LocaleNumberValidatorDirective', () => {
         fixture.whenStable().then(() => {
             fixture.detectChanges();
 
-            let form: NgForm = fixture.debugElement.children[0].injector.get(NgForm);
-            let control = form.control.get('decimal');
+            const form: NgForm = fixture.debugElement.children[0].injector.get(NgForm);
+            const control: AbstractControl | null = form.control.get('decimal');
 
-            expect(control.valid).toBe(false);
-            expect(control.hasError('format')).toBe(false);
-            expect(control.hasError('minValue')).toBe(false);
-            expect(control.hasError('maxValue')).toBe(true);
+            if (control) {
+                expect(control.valid).toBe(false);
+                expect(control.hasError('format')).toBe(false);
+                expect(control.hasError('minValue')).toBe(false);
+                expect(control.hasError('maxValue')).toBe(true);
+            } else {
+                throw new Error("Control is null");
+            }
         });
     }));
 
@@ -96,13 +108,17 @@ describe('LocaleNumberValidatorDirective', () => {
         fixture.whenStable().then(() => {
             fixture.detectChanges();
 
-            let form: NgForm = fixture.debugElement.children[0].injector.get(NgForm);
-            let control = form.control.get('decimal');
+            const form: NgForm = fixture.debugElement.children[0].injector.get(NgForm);
+            const control: AbstractControl | null = form.control.get('decimal');
 
-            expect(control.valid).toBe(true);
-            expect(control.hasError('format')).toBe(false);
-            expect(control.hasError('minValue')).toBe(false);
-            expect(control.hasError('maxValue')).toBe(false);
+            if (control) {
+                expect(control.valid).toBe(true);
+                expect(control.hasError('format')).toBe(false);
+                expect(control.hasError('minValue')).toBe(false);
+                expect(control.hasError('maxValue')).toBe(false);
+            } else {
+                throw new Error("Control is null");
+            }
         });
     }));
 
@@ -111,7 +127,11 @@ describe('LocaleNumberValidatorDirective', () => {
 @Component({
     template: `
         <form>
-            <input [validateLocaleNumber]="digits" [minValue]="minValue" [maxValue]="maxValue" name="decimal" [(ngModel)]="decimal">
+            <input [validateLocaleNumber]="digits"
+                [minValue]="minValue"
+                [maxValue]="maxValue"
+                name="decimal"
+                [(ngModel)]="decimal">
         </form>
     `
 })
@@ -120,7 +140,7 @@ class LocaleNumberValidatorComponent {
     decimal: string;
 
     digits: string = "1.2-2";
-    minValue: number = -100
+    minValue: number = -100;
     maxValue: number = 100;
 
 }

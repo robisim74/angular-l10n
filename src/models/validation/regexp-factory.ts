@@ -12,7 +12,7 @@ export class RegExpFactory {
 
         if (!!digits) {
             const NUMBER_FORMAT_REGEXP: RegExp = /^(\d+)?\.((\d+)(\-(\d+))?)?$/;
-            let parts: RegExpMatchArray = digits.match(NUMBER_FORMAT_REGEXP);
+            const parts: RegExpMatchArray | null = digits.match(NUMBER_FORMAT_REGEXP);
             if (parts != null) {
                 if (parts[1] != null) {  // Min integer digits.
                     minInt = parseInt(parts[1]);
@@ -26,12 +26,12 @@ export class RegExpFactory {
             }
         }
 
-        let decimalCode: DecimalCode = new DecimalCode(defaultLocale);
+        const decimalCode: DecimalCode = new DecimalCode(defaultLocale);
 
-        let minusSign: string = decimalCode.minusSignCode;
-        let zero: string = decimalCode.numbersCodes[0];
-        let decimalSeparator: string = decimalCode.decimalSeparatorCode;
-        let nine: string = decimalCode.numbersCodes[9];
+        const minusSign: string = decimalCode.minusSignCode;
+        const zero: string = decimalCode.numbersCodes[0];
+        const decimalSeparator: string = decimalCode.decimalSeparatorCode;
+        const nine: string = decimalCode.numbersCodes[9];
 
         // Pattern for 1.2-2 digits: /^-?[0-9]{1,}\.[0-9]{2,2}$/
         // Unicode pattern = "^\u002d?[\u0030-\u0039]{1,}\\u002e[\u0030-\u0039]{2,2}$"
@@ -63,7 +63,7 @@ export class RegExpFactory {
                 + "]{" + minInt + ",}$";
         }
         pattern = decimalCode.UnicodeToChar(pattern);
-        let regExp: RegExp = new RegExp(pattern);
+        const regExp: RegExp = new RegExp(pattern);
         return regExp;
     }
 

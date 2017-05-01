@@ -9,9 +9,9 @@ import { IntlAPI } from '../services/intl-api';
 })
 export class LocaleDecimalPipe implements PipeTransform {
 
-    public transform(value: any, defaultLocale: string, digits: string = null): string {
+    public transform(value: any, defaultLocale: string, digits?: string): string | null {
         if (IntlAPI.HasNumberFormat()) {
-            let localeDecimal: DecimalPipe = new DecimalPipe(defaultLocale);
+            const localeDecimal: DecimalPipe = new DecimalPipe(defaultLocale);
             return localeDecimal.transform(value, digits);
         }
         // Returns the number without localization.
@@ -26,9 +26,9 @@ export class LocaleDecimalPipe implements PipeTransform {
 })
 export class LocalePercentPipe implements PipeTransform {
 
-    public transform(value: any, defaultLocale: string, digits: string = null): string {
+    public transform(value: any, defaultLocale: string, digits?: string): string | null {
         if (IntlAPI.HasNumberFormat()) {
-            let localePercent: PercentPipe = new PercentPipe(defaultLocale);
+            const localePercent: PercentPipe = new PercentPipe(defaultLocale);
             return localePercent.transform(value, digits);
         }
         // Returns the number without localization.
@@ -48,10 +48,10 @@ export class LocaleCurrencyPipe implements PipeTransform {
         defaultLocale: string,
         currency: string,
         symbolDisplay: boolean = false,
-        digits: string = null
-    ): string {
+        digits?: string
+    ): string | null {
         if (IntlAPI.HasNumberFormat()) {
-            let localeCurrency: CurrencyPipe = new CurrencyPipe(defaultLocale);
+            const localeCurrency: CurrencyPipe = new CurrencyPipe(defaultLocale);
             return localeCurrency.transform(value, currency, symbolDisplay, digits);
         }
         // Returns the number & currency without localization.

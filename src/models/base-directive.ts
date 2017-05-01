@@ -47,11 +47,11 @@ export abstract class BaseDirective implements AfterViewInit, OnChanges, OnDestr
         if (!!this.key) {
             this.setup();
         }
-    };
+    }
 
     public ngOnChanges(changes: SimpleChanges): void {
         if (!!this.key) {
-            if (this.nodeValue == null) {
+            if (this.nodeValue == null || this.nodeValue == "") {
                 if (!!this.valueAttribute) {
                     this.key = this.valueAttribute;
                 } else if (!!this.innerHTMLProperty) {
@@ -71,15 +71,17 @@ export abstract class BaseDirective implements AfterViewInit, OnChanges, OnDestr
 
     protected abstract replace(): void;
 
-    protected setText(value: string): void {
-        if (!!this.nodeValue) {
-            this.removeTextListener();
-            this.renderer.setValue(this.renderNode, this.nodeValue.replace(this.key, value));
-            this.addTextListener();
-        } else if (!!this.valueAttribute) {
-            this.renderer.setAttribute(this.element, "value", value);
-        } else if (!!this.innerHTMLProperty) {
-            this.renderer.setProperty(this.element, "innerHTML", value);
+    protected setText(value: string | null): void {
+        if (!!value) {
+            if (!!this.nodeValue && !!this.key) {
+                this.removeTextListener();
+                this.renderer.setValue(this.renderNode, this.nodeValue.replace(this.key, value));
+                this.addTextListener();
+            } else if (!!this.valueAttribute) {
+                this.renderer.setAttribute(this.element, "value", value);
+            } else if (!!this.innerHTMLProperty) {
+                this.renderer.setProperty(this.element, "innerHTML", value);
+            }
         }
     }
 
@@ -102,8 +104,8 @@ export abstract class BaseDirective implements AfterViewInit, OnChanges, OnDestr
     }
 
     private getText(): string {
-        this.nodeValue = this.renderNode != null ? <string>this.renderNode.nodeValue : null;
-        return this.nodeValue != null ? this.nodeValue.trim() : null;
+        this.nodeValue = this.renderNode != null ? this.renderNode.nodeValue as string : "";
+        return !!this.nodeValue ? this.nodeValue.trim() : "";
     }
 
     private getKey(): void {

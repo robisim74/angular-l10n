@@ -25,7 +25,7 @@ export class Localization extends Translation {
             (defaultLocale: string) => {
                 this.defaultLocale = defaultLocale;
                 // OnPush Change Detection strategy.
-                if (this.changeDetectorRef) { this.changeDetectorRef.markForCheck(); };
+                if (this.changeDetectorRef) { this.changeDetectorRef.markForCheck(); }
             }
         ));
 
@@ -35,7 +35,7 @@ export class Localization extends Translation {
             (currency: string) => {
                 this.currency = currency;
                 // OnPush Change Detection strategy.
-                if (this.changeDetectorRef) { this.changeDetectorRef.markForCheck(); };
+                if (this.changeDetectorRef) { this.changeDetectorRef.markForCheck(); }
             }
         ));
     }

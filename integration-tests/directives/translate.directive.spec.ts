@@ -40,7 +40,7 @@ describe('TranslateDirective', () => {
             .defineLanguage('en');
         locale.init();
 
-        const translationEN = {
+        const translationEN: any = {
             "Title": "Angular localization",
             "Subtitle": "It's a small world",
             "User notifications": "{{ user }}, you have {{ NoMessages }} new messages",
@@ -48,8 +48,8 @@ describe('TranslateDirective', () => {
             "Select": "Select",
             "Strong title": "<strong>Angular localization</strong>",
             "Strong subtitle": "<strong>It's a small world</strong>"
-        }
-        const translationIT = {
+        };
+        const translationIT: any = {
             "Title": "Localizzazione in Angular",
             "Subtitle": "Il mondo è piccolo",
             "User notifications": "{{ user }}, tu hai {{ NoMessages }} nuovi messaggi",
@@ -57,7 +57,7 @@ describe('TranslateDirective', () => {
             "Select": "Seleziona",
             "Strong title": "<strong>Localizzazione in Angular</strong>",
             "Strong subtitle": "<strong>Il mondo è piccolo</strong>"
-        }
+        };
 
         translation.addConfiguration()
             .addTranslation('en', translationEN)
@@ -69,7 +69,7 @@ describe('TranslateDirective', () => {
         fixture.detectChanges();
 
         des = fixture.debugElement.queryAll(By.directive(TranslateDirective));
-        for (let i = 0; i < des.length; i++) {
+        for (let i: number = 0; i < des.length; i++) {
             els.push(des[i].nativeElement);
         }
     });
@@ -110,7 +110,7 @@ describe('TranslateDirective', () => {
         fixture.detectChanges();
 
         els = [];
-        for (let i = 0; i < des.length; i++) {
+        for (let i: number = 0; i < des.length; i++) {
             els.push(des[i].nativeElement);
         }
         expect(els[0].textContent).toContain("Localizzazione in Angular");
@@ -137,7 +137,7 @@ describe('TranslateDirective', () => {
                 fixture.detectChanges();
 
                 els = [];
-                for (let i = 0; i < des.length; i++) {
+                for (let i: number = 0; i < des.length; i++) {
                     els.push(des[i].nativeElement);
                 }
                 expect(els[0].textContent).toContain("It's a small world");
@@ -201,7 +201,7 @@ class TranslateComponent {
     username: string = "robisim74";
     messages: string[] = ["Test1", "Test2"];
     value: string = "Insert";
-    innerHTML: string = "Strong title"
+    innerHTML: string = "Strong title";
 
     change() {
         this.key = "Subtitle";

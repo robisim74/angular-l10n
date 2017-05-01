@@ -5,7 +5,7 @@
         "experimentalDecorators": true,
         "module": "commonjs",
         "moduleResolution": "node",
-        "noImplicitAny": true,
+        "strict": true,
         "noFallthroughCasesInSwitch": true,
         "sourceMap": true,
         "rootDir": ".",

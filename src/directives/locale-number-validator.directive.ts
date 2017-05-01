@@ -23,26 +23,26 @@ export function validateLocaleNumber(
     let defaultLocale: string;
     let NUMBER_REGEXP: RegExp;
 
-    return (formControl: FormControl): { [key: string]: any } => {
+    return (formControl: FormControl): { [key: string]: any } | null => {
         if (formControl.value == null || formControl.value == "") { return null; }
 
         if (defaultLocale != locale.getDefaultLocale()) {
-            let regExpFactory: RegExpFactory = new RegExpFactory();
+            const regExpFactory: RegExpFactory = new RegExpFactory();
             NUMBER_REGEXP = regExpFactory.number(locale.getDefaultLocale(), digits);
             defaultLocale = locale.getDefaultLocale();
         }
 
         if (NUMBER_REGEXP.test(formControl.value)) {
-            let parsedValue: number;
-            let localeValidation: LocaleValidation = new LocaleValidation(locale);
+            let parsedValue: number | null;
+            const localeValidation: LocaleValidation = new LocaleValidation(locale);
             parsedValue = localeValidation.parseNumber(formControl.value);
-            if (parsedValue < MIN_VALUE) {
+            if (parsedValue != null && parsedValue < MIN_VALUE) {
                 return {
                     minValue: {
                         valid: false
                     }
                 };
-            } else if (parsedValue > MAX_VALUE) {
+            } else if (parsedValue != null && parsedValue > MAX_VALUE) {
                 return {
                     maxValue: {
                         valid: false

@@ -1,15 +1,12 @@
-export { DefaultLocaleCodes } from './models/localization/default-locale-codes';
-export { Codes } from './models/localization/codes';
-export { LocaleConfig } from './models/localization/locale-config';
-export { LocaleService } from './services/locale.service';
-export { TranslationConfig } from './models/translation/translation-config';
-export { TranslationService } from './services/translation.service';
+export { ILocaleConfig, LocaleConfig } from './models/localization/locale-config';
+export { ILocaleService, LocaleService } from './services/locale.service';
+export { ITranslationConfig, TranslationConfig } from './models/translation/translation-config';
+export { ITranslationService, TranslationService } from './services/translation.service';
 export { Translation } from './services/translation';
 export { Localization } from './services/localization';
-export { LocaleValidation } from './services/locale-validation';
-export { Collator } from './services/collator';
+export { ILocaleValidation, LocaleValidation } from './services/locale-validation';
+export { ICollator, Collator } from './services/collator';
 export { IntlAPI } from './services/intl-api';
-export { ServiceState } from './models/translation/service-state';
 export { TranslatePipe } from './pipes/translate.pipe';
 export { LocaleDatePipe } from './pipes/locale-date.pipe';
 export {

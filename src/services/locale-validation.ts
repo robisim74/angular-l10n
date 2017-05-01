@@ -6,19 +6,25 @@ import { DecimalCode } from '../models/validation/decimal-code';
 /**
  * Provides the methods to convert strings according to default locale.
  */
-@Injectable() export class LocaleValidation {
-
-    constructor(public locale: LocaleService) { }
+export interface ILocaleValidation {
 
     /**
      * Converts a string to a number according to default locale.
      * If the string cannot be converted to a number, returns NaN.
      */
-    public parseNumber(s: string): number {
+    parseNumber(s: string): number | null;
+
+}
+
+@Injectable() export class LocaleValidation implements ILocaleValidation {
+
+    constructor(public locale: LocaleService) { }
+
+    public parseNumber(s: string): number | null {
         if (s == "") {
             return null;
         }
-        let decimalCode: DecimalCode = new DecimalCode(this.locale.getDefaultLocale());
+        const decimalCode: DecimalCode = new DecimalCode(this.locale.getDefaultLocale());
         return decimalCode.parse(s);
     }
 

@@ -29,7 +29,10 @@
         "templates-use-public": true,
         "no-access-missing-member": true,
         "invoke-injectable": true,
+        "ban-types": false,
         "forin": false,
+        "interface-name": false,
+        "interface-over-type-literal": false,
         "max-classes-per-file": [
             false
         ],
@@ -55,13 +58,16 @@
         ],
         "object-literal-shorthand": false,
         "object-literal-sort-keys": false,
+        "only-arrow-functions": false,
         "ordered-imports": [
             false
         ],
+        "prefer-for-of": false,
         "quotemark": [
             false
         ],
         "radix": false,
+        "space-before-function-paren": false,
         "trailing-comma": [
             false
         ],

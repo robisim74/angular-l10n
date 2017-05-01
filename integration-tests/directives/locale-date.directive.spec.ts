@@ -37,7 +37,7 @@ describe('LocaleDateDirective', () => {
         fixture.detectChanges();
 
         des = fixture.debugElement.queryAll(By.directive(LocaleDateDirective));
-        for (let i = 0; i < des.length; i++) {
+        for (let i: number = 0; i < des.length; i++) {
             els.push(des[i].nativeElement);
         }
     });
@@ -54,7 +54,7 @@ describe('LocaleDateDirective', () => {
         fixture.detectChanges();
 
         els = [];
-        for (let i = 0; i < des.length; i++) {
+        for (let i: number = 0; i < des.length; i++) {
             els.push(des[i].nativeElement);
         }
         expect(els[0].textContent).toContain("19 apr 2017");

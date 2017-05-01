@@ -1,3 +1,4 @@
+import { Pipe } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { MockBackend, MockConnection } from '@angular/http/testing';
 import {
@@ -21,7 +22,10 @@ import {
 describe('TranslatePipe', () => {
 
     it('should be marked as pure', () => {
-        expect(new PipeResolver().resolve(TranslatePipe).pure).toEqual(true);
+        const pipeResolver: Pipe | null = new PipeResolver().resolve(TranslatePipe);
+        if (pipeResolver) {
+            expect(pipeResolver.pure).toEqual(true);
+        }
     });
 
     describe('Direct loading', () => {
@@ -48,18 +52,18 @@ describe('TranslatePipe', () => {
                 .defineLanguage('en');
             locale.init();
 
-            const translationEN = {
-                "Title": "Angular localization"
-            }
-            const translationIT = {
-                "Title": "Localizzazione in Angular"
-            }
-            const translationGlobalEN = {
-                "Save": "Save"
-            }
-            const translationGlobalIT = {
-                "Save": "Salva"
-            }
+            const translationEN: any = {
+                Title: "Angular localization"
+            };
+            const translationIT: any = {
+                Title: "Localizzazione in Angular"
+            };
+            const translationGlobalEN: any = {
+                Save: "Save"
+            };
+            const translationGlobalIT: any = {
+                Save: "Salva"
+            };
 
             translation.addConfiguration()
                 .addTranslation('en', translationEN)
@@ -92,9 +96,9 @@ describe('TranslatePipe', () => {
 
         let pipe: TranslatePipe;
 
-        function expectURL(backend: MockBackend, responses: any) {
+        function expectURL(backend: MockBackend, responses: any): void {
             backend.connections.subscribe((c: MockConnection) => {
-                let response: any = responses[c.request.url];
+                const response: any = responses[c.request.url];
                 c.mockRespond(response);
             });
         }
@@ -120,11 +124,19 @@ describe('TranslatePipe', () => {
 
             mockBackend = TestBed.get(MockBackend);
 
-            let responses: any = {};
-            responses['./assets/locale-en.json'] = new Response(new ResponseOptions({ body: '{"Title": "Angular localization"}' }));
-            responses['./assets/locale-it.json'] = new Response(new ResponseOptions({ body: '{"Title": "Localizzazione in Angular"}' }));
-            responses['./assets/global-en.json'] = new Response(new ResponseOptions({ body: '{"Save": "Save"}' }));
-            responses['./assets/global-it.json'] = new Response(new ResponseOptions({ body: '{"Save": "Salva"}' }));
+            const responses: any = {};
+            responses['./assets/locale-en.json'] = new Response(new ResponseOptions(
+                { body: '{"Title": "Angular localization"}' }
+            ));
+            responses['./assets/locale-it.json'] = new Response(new ResponseOptions(
+                { body: '{"Title": "Localizzazione in Angular"}' }
+            ));
+            responses['./assets/global-en.json'] = new Response(new ResponseOptions(
+                { body: '{"Save": "Save"}' }
+            ));
+            responses['./assets/global-it.json'] = new Response(new ResponseOptions(
+                { body: '{"Save": "Salva"}' }
+            ));
 
             expectURL(mockBackend, responses);
 
@@ -163,9 +175,9 @@ describe('TranslatePipe', () => {
 
         let pipe: TranslatePipe;
 
-        function expectURL(backend: MockBackend, responses: any) {
+        function expectURL(backend: MockBackend, responses: any): void {
             backend.connections.subscribe((c: MockConnection) => {
-                let response: any = responses[c.request.url];
+                const response: any = responses[c.request.url];
                 c.mockRespond(response);
             });
         }
@@ -191,11 +203,19 @@ describe('TranslatePipe', () => {
 
             mockBackend = TestBed.get(MockBackend);
 
-            let responses: any = {};
-            responses['http://localhost:54703/api/locales/en'] = new Response(new ResponseOptions({ body: '{"Title": "Angular localization"}' }));
-            responses['http://localhost:54703/api/locales/it'] = new Response(new ResponseOptions({ body: '{"Title": "Localizzazione in Angular"}' }));
-            responses['http://localhost:54703/api/global/en'] = new Response(new ResponseOptions({ body: '{"Save": "Save"}' }));
-            responses['http://localhost:54703/api/global/it'] = new Response(new ResponseOptions({ body: '{"Save": "Salva"}' }));
+            const responses: any = {};
+            responses['http://localhost:54703/api/locales/en'] = new Response(new ResponseOptions(
+                { body: '{"Title": "Angular localization"}' }
+            ));
+            responses['http://localhost:54703/api/locales/it'] = new Response(new ResponseOptions(
+                { body: '{"Title": "Localizzazione in Angular"}' }
+            ));
+            responses['http://localhost:54703/api/global/en'] = new Response(new ResponseOptions(
+                { body: '{"Save": "Save"}' }
+            ));
+            responses['http://localhost:54703/api/global/it'] = new Response(new ResponseOptions(
+                { body: '{"Save": "Salva"}' }
+            ));
 
             expectURL(mockBackend, responses);
 
@@ -234,9 +254,9 @@ describe('TranslatePipe', () => {
 
         let pipe: TranslatePipe;
 
-        function expectURL(backend: MockBackend, responses: any) {
+        function expectURL(backend: MockBackend, responses: any): void {
             backend.connections.subscribe((c: MockConnection) => {
-                let response: any = responses[c.request.url];
+                const response: any = responses[c.request.url];
                 c.mockRespond(response);
             });
         }
@@ -262,14 +282,22 @@ describe('TranslatePipe', () => {
 
             mockBackend = TestBed.get(MockBackend);
 
-            let responses: any = {};
+            const responses: any = {};
             responses['./assets/locale-en.json'] = new Response(new ResponseOptions(
-                { body: '{"Home": {"Title": "Angular localization"}, "User notifications": "{{ user }}, you have {{ NoMessages }} new messages"}' }
+                {
+                    body: '{"Home": {"Title": "Angular localization"}, ' +
+                    '"User notifications": "{{ user }}, you have {{ NoMessages }} new messages"}'
+                }
             ));
             responses['./assets/locale-it.json'] = new Response(new ResponseOptions(
-                { body: '{"Home": {"Title": "Localizzazione in Angular"}, "User notifications": "{{ user }}, tu hai {{ NoMessages }} nuovi messaggi"}' }
+                {
+                    body: '{"Home": {"Title": "Localizzazione in Angular"}, ' +
+                    '"User notifications": "{{ user }}, tu hai {{ NoMessages }} nuovi messaggi"}'
+                }
             ));
-            responses['./assets/locale-ar.json'] = new Response(new ResponseOptions({ body: '{"messages": "رسائل"}' }));
+            responses['./assets/locale-ar.json'] = new Response(new ResponseOptions(
+                { body: '{"messages": "رسائل"}' }
+            ));
 
             expectURL(mockBackend, responses);
 
@@ -295,18 +323,20 @@ describe('TranslatePipe', () => {
         }));
 
         it('should translate using parameters', (() => {
-            let username: string = "robisim74";
-            let messages: string[] = ["Test1", "Test2"];
-            const params = {
+            const username: string = "robisim74";
+            const messages: string[] = ["Test1", "Test2"];
+            const params: any = {
                 user: username,
                 NoMessages: messages.length
             };
 
             locale.setCurrentLanguage('en');
-            expect(pipe.transform('User notifications', translation.getLanguage(), params)).toEqual("robisim74, you have 2 new messages");
+            expect(pipe.transform('User notifications', translation.getLanguage(), params))
+                .toEqual("robisim74, you have 2 new messages");
 
             locale.setCurrentLanguage('it');
-            expect(pipe.transform('User notifications', translation.getLanguage(), params)).toEqual("robisim74, tu hai 2 nuovi messaggi");
+            expect(pipe.transform('User notifications', translation.getLanguage(), params))
+                .toEqual("robisim74, tu hai 2 nuovi messaggi");
         }));
 
         it('should return the key path if value is missing', (() => {
@@ -333,9 +363,9 @@ describe('TranslatePipe', () => {
 
         let pipe: TranslatePipe;
 
-        function expectURL(backend: MockBackend, responses: any) {
+        function expectURL(backend: MockBackend, responses: any): void {
             backend.connections.subscribe((c: MockConnection) => {
-                let response: any = responses[c.request.url];
+                const response: any = responses[c.request.url];
                 c.mockRespond(response);
             });
         }
@@ -361,7 +391,7 @@ describe('TranslatePipe', () => {
 
             mockBackend = TestBed.get(MockBackend);
 
-            let responses: any = {};
+            const responses: any = {};
             responses['./assets/locale-en.json'] = new Response(new ResponseOptions(
                 { body: '{"Home": {"Title": "Angular localization"}, "Missing": "No key"}' }
             ));
@@ -422,9 +452,9 @@ describe('TranslatePipe', () => {
 
         let pipe: TranslatePipe;
 
-        function expectURL(backend: MockBackend, responses: any) {
+        function expectURL(backend: MockBackend, responses: any): void {
             backend.connections.subscribe((c: MockConnection) => {
-                let response: any = responses[c.request.url];
+                const response: any = responses[c.request.url];
                 c.mockRespond(response);
             });
         }
@@ -449,9 +479,13 @@ describe('TranslatePipe', () => {
 
             mockBackend = TestBed.get(MockBackend);
 
-            let responses: any = {};
-            responses['./assets/locale-en-US.json'] = new Response(new ResponseOptions({ body: '{"Title": "Angular localization"}' }));
-            responses['./assets/locale-en-GB.json'] = new Response(new ResponseOptions({ body: '{"Title": "Angular localisation"}' }));
+            const responses: any = {};
+            responses['./assets/locale-en-US.json'] = new Response(new ResponseOptions(
+                { body: '{"Title": "Angular localization"}' }
+            ));
+            responses['./assets/locale-en-GB.json'] = new Response(new ResponseOptions(
+                { body: '{"Title": "Angular localisation"}' }
+            ));
 
             expectURL(mockBackend, responses);
 

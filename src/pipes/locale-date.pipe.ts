@@ -9,9 +9,9 @@ import { IntlAPI } from '../services/intl-api';
 })
 export class LocaleDatePipe implements PipeTransform {
 
-    public transform(value: any, defaultLocale: string, pattern: string = 'mediumDate'): string {
+    public transform(value: any, defaultLocale: string, pattern: string = 'mediumDate'): string | null {
         if (IntlAPI.HasDateTimeFormat()) {
-            let localeDate: DatePipe = new DatePipe(defaultLocale);
+            const localeDate: DatePipe = new DatePipe(defaultLocale);
             return localeDate.transform(value, pattern);
         }
         // Returns the date without localization.

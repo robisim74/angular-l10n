@@ -7,15 +7,43 @@ import 'rxjs/add/observable/merge';
 
 import { LocaleService } from './locale.service';
 import { IntlAPI } from './intl-api';
-import { TranslationConfig } from '../models/translation/translation-config';
-import { TranslationConfigAPI } from '../models/translation/translation-config-api';
-import { LoadingMode } from '../models/translation/loading-mode';
-import { ServiceState } from '../models/translation/service-state';
+import { ITranslationConfig, TranslationConfig } from '../models/translation/translation-config';
+import { ITranslationConfigAPI, TranslationConfigAPI } from '../models/translation/translation-config-api';
+import { LoadingMode, ServiceState } from '../models/types';
 
 /**
  * Manages the translation data.
  */
-@Injectable() export class TranslationService {
+export interface ITranslationService {
+
+    translationChanged: EventEmitter<string>;
+    translationError: EventEmitter<any>;
+
+    serviceState: ServiceState;
+
+    /**
+     * Configure the service in the application root module or bootstrap component.
+     */
+    addConfiguration(): ITranslationConfigAPI;
+    getConfiguration(): ITranslationConfig;
+
+    /**
+     * Call this method after the configuration to initialize the service.
+     */
+    init(): void;
+
+    /**
+     * The language of the translation service is updated when the translation data has been loaded.
+     */
+    getLanguage(): string;
+
+    translate(key: string, args?: any, lang?: string): string;
+
+    translateAsync(key: string, args?: any, lang?: string): Observable<string>;
+
+}
+
+@Injectable() export class TranslationService implements ITranslationService {
 
     @Output() public translationChanged: EventEmitter<string> = new EventEmitter<string>(true);
     @Output() public translationError: EventEmitter<any> = new EventEmitter<any>(true);
@@ -40,20 +68,14 @@ import { ServiceState } from '../models/translation/service-state';
         );
     }
 
-    /**
-     * Configure the service in the application root module or bootstrap component.
-     */
-    public addConfiguration(): TranslationConfigAPI {
+    public addConfiguration(): ITranslationConfigAPI {
         return new TranslationConfigAPI(this.configuration);
     }
 
-    public getConfiguration(): TranslationConfig {
+    public getConfiguration(): ITranslationConfig {
         return this.configuration;
     }
 
-    /**
-     * Call this method after the configuration to initialize the service.
-     */
     public init(): void {
         if (this.configuration.providers.length > 0) {
             this.loadingMode = LoadingMode.Async;
@@ -63,9 +85,6 @@ import { ServiceState } from '../models/translation/service-state';
         this.loadTranslation();
     }
 
-    /**
-     * The language of the translation service is updated when the translation data has been loaded.
-     */
     public getLanguage(): string {
         return this.language;
     }
@@ -81,7 +100,7 @@ import { ServiceState } from '../models/translation/service-state';
 
     public translateAsync(key: string, args?: any, lang: string = this.language): Observable<string> {
         return Observable.create((observer: Observer<string>) => {
-            let value: string = this.translate(key, args, lang);
+            const value: string = this.translate(key, args, lang);
             observer.next(value);
             observer.complete();
         });
@@ -91,22 +110,22 @@ import { ServiceState } from '../models/translation/service-state';
         let keyText: string = key.replace(/^\d+\b/, "");
         keyText = keyText.trim();
 
-        let keyNumber: number = parseFloat(key);
+        const keyNumber: number = parseFloat(key);
         key = key.replace(/^\d+/, this.translateNumber(keyNumber));
 
         return key.replace(keyText, this.getValue(keyText, args, lang));
     }
 
     private getValue(key: string, args: any, lang: string): string {
-        let path: string = key;
-        let value: string;
+        const path: string = key;
+        let value: string | null = null;
         if (this.translationData[lang]) {
             let translation: any = this.translationData[lang];
 
             // Composed key.
-            let keys: string[] = key.split(this.configuration.keySeparator);
+            const keys: string[] = key.split(this.configuration.keySeparator);
             do {
-                key = keys.shift();
+                key = keys.shift()!;
                 if (translation[key] && typeof translation[key] === "object") {
                     translation = translation[key];
                 }
@@ -119,13 +138,13 @@ import { ServiceState } from '../models/translation/service-state';
 
     private translateNumber(keyNumber: number): string {
         if (!isNaN(keyNumber) && IntlAPI.HasNumberFormat()) {
-            let localeNumber: string = new Intl.NumberFormat(this.language).format(keyNumber);
+            const localeNumber: string = new Intl.NumberFormat(this.language).format(keyNumber);
             return localeNumber;
         }
         return keyNumber.toString();
     }
 
-    private parseValue(path: string, key: string, value: string, args: any, lang: string): string {
+    private parseValue(path: string, key: string, value: string | null, args: any, lang: string): string {
         if (value == null) {
             return this.handleMissingValue(path, args, lang);
         } else if (args) {
@@ -147,13 +166,13 @@ import { ServiceState } from '../models/translation/service-state';
     private handleArgs(value: string, args: any): string {
         const TEMPLATE_REGEXP: RegExp = /{{\s?([^{}\s]*)\s?}}/g;
         return value.replace(TEMPLATE_REGEXP, (substring: string, parsedKey: string) => {
-            let replacer: string = <string>args[parsedKey];
+            const replacer: string = args[parsedKey] as string;
             return typeof replacer !== "undefined" ? replacer : substring;
         });
     }
 
     private loadTranslation(): void {
-        let language: string = !this.configuration.localeAsLanguage
+        const language: string = !this.configuration.localeAsLanguage
             ? this.locale.getCurrentLanguage()
             : this.locale.getCurrentLanguage()
             + "-"
@@ -174,9 +193,9 @@ import { ServiceState } from '../models/translation/service-state';
         this.translationData = {};
         this.serviceState = ServiceState.isLoading;
 
-        let observableSequencesOfTranslationData: Array<Observable<any>> = [];
+        const observableSequencesOfTranslationData: Array<Observable<any>> = [];
 
-        for (let provider of this.configuration.providers) {
+        for (const provider of this.configuration.providers) {
             let url: string = provider.path;
             if (provider.webAPI) {
                 url += language;

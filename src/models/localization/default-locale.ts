@@ -1,6 +1,12 @@
-import { DefaultLocaleCodes } from './default-locale-codes';
+import { DefaultLocaleCodes } from './locale-codes';
 
-export class DefaultLocale extends DefaultLocaleCodes {
+export class DefaultLocale implements DefaultLocaleCodes {
+
+    public languageCode: string;
+    public scriptCode?: string;
+    public countryCode?: string;
+    public numberingSystem?: string;
+    public calendar?: string;
 
     public get value(): string {
         return this._value;
@@ -26,7 +32,7 @@ export class DefaultLocale extends DefaultLocaleCodes {
         this.numberingSystem = numberingSystem;
         this.calendar = calendar;
 
-        let value: string[] = [];
+        const value: string[] = [];
         value.push(languageCode);
         value.push(!!scriptCode ? "-" + scriptCode : "");
         value.push(!!countryCode ? "-" + countryCode : "");
@@ -41,9 +47,9 @@ export class DefaultLocale extends DefaultLocaleCodes {
         if (!!this.value) {
             let value: string = this.value;
             // Looks for the 'u' (Unicode) extension.
-            let index: number = value.search("-u");
+            const index: number = value.search("-u");
             if (index != -1) {
-                let extensions: string[] = value.substring(index + 1).split("-");
+                const extensions: string[] = value.substring(index + 1).split("-");
                 switch (extensions.length) {
                     case 3:
                         if (extensions[1] == "nu") {
@@ -61,7 +67,7 @@ export class DefaultLocale extends DefaultLocaleCodes {
                 value = value.substring(0, index);
             }
 
-            let codes: string[] = value.split("-");
+            const codes: string[] = value.split("-");
             switch (codes.length) {
                 case 1:
                     this.languageCode = codes[0];

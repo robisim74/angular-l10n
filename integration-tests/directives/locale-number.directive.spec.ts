@@ -46,15 +46,15 @@ describe('Locale number directives', () => {
         fixture.detectChanges();
 
         decimalDes = fixture.debugElement.queryAll(By.directive(LocaleDecimalDirective));
-        for (let i = 0; i < decimalDes.length; i++) {
+        for (let i: number = 0; i < decimalDes.length; i++) {
             decimalEls.push(decimalDes[i].nativeElement);
         }
         percentDes = fixture.debugElement.queryAll(By.directive(LocalePercentDirective));
-        for (let i = 0; i < percentDes.length; i++) {
+        for (let i: number = 0; i < percentDes.length; i++) {
             percentEls.push(percentDes[i].nativeElement);
         }
         currencyDes = fixture.debugElement.queryAll(By.directive(LocaleCurrencyDirective));
-        for (let i = 0; i < currencyDes.length; i++) {
+        for (let i: number = 0; i < currencyDes.length; i++) {
             currencyEls.push(currencyDes[i].nativeElement);
         }
     });
@@ -82,25 +82,33 @@ describe('Locale number directives', () => {
         fixture.detectChanges();
 
         decimalEls = [];
-        for (let i = 0; i < decimalDes.length; i++) {
+        for (let i: number = 0; i < decimalDes.length; i++) {
             decimalEls.push(decimalDes[i].nativeElement);
         }
         expect(decimalEls[0].textContent).toContain("3,142");
         expect(decimalEls[1].textContent).toContain("3,14159");
 
         percentEls = [];
-        for (let i = 0; i < percentDes.length; i++) {
+        for (let i: number = 0; i < percentDes.length; i++) {
             percentEls.push(percentDes[i].nativeElement);
         }
         expect(percentEls[0].textContent).toContain("10%");
         expect(percentEls[1].textContent).toContain("10,0%");
 
         currencyEls = [];
-        for (let i = 0; i < currencyDes.length; i++) {
+        for (let i: number = 0; i < currencyDes.length; i++) {
             currencyEls.push(currencyDes[i].nativeElement);
         }
-        expect(currencyEls[0].textContent.replace(/\u00A0/, " ")).toContain("1.234,50 EUR");
-        expect(currencyEls[1].textContent.replace(/\u00A0/, " ")).toContain("1.234,50 €");
+        let value: string | null = currencyEls[0].textContent;
+        if (!!value) {
+            value = value.replace(/\u00A0/, " "); // Intl returns Unicode Character 'NO-BREAK SPACE' (U+00A0).
+        }
+        expect(value).toContain("1.234,50 EUR");
+        value = currencyEls[1].textContent;
+        if (!!value) {
+            value = value.replace(/\u00A0/, " "); // Intl returns Unicode Character 'NO-BREAK SPACE' (U+00A0).
+        }
+        expect(value).toContain("1.234,50 €");
     }));
 
     it('should change values & params dynamically', async(() => {
@@ -113,7 +121,7 @@ describe('Locale number directives', () => {
                 fixture.detectChanges();
 
                 currencyEls = [];
-                for (let i = 0; i < currencyDes.length; i++) {
+                for (let i: number = 0; i < currencyDes.length; i++) {
                     currencyEls.push(currencyDes[i].nativeElement);
                 }
                 expect(currencyEls[0].textContent).toContain("USD1,234.56");
@@ -146,7 +154,7 @@ class LocaleNumberComponent {
     digits: string = "1.2-2";
 
     change() {
-        this.value = 1234.56
+        this.value = 1234.56;
         this.digits = "1.3-3";
     }
 

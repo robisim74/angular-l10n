@@ -1,3 +1,4 @@
+import { Pipe } from '@angular/core';
 import { inject, TestBed } from '@angular/core/testing';
 import { PipeResolver } from '@angular/compiler';
 
@@ -31,14 +32,17 @@ describe('LocaleDatePipe', () => {
     });
 
     it('should be marked as pure', () => {
-        expect(new PipeResolver().resolve(LocaleDatePipe).pure).toEqual(true);
+        const pipeResolver: Pipe | null = new PipeResolver().resolve(LocaleDatePipe);
+        if (pipeResolver) {
+            expect(pipeResolver.pure).toEqual(true);
+        }
     });
 
     it('should localize a date', () => {
-        const date = new Date('7/19/2016');
+        const date: Date = new Date('7/19/2016');
 
         expect(pipe.transform(date, locale.getDefaultLocale(), 'shortDate')).toEqual('7/19/2016');
-        
+
         locale.setDefaultLocale('it', 'IT');
         expect(pipe.transform(date, locale.getDefaultLocale(), 'shortDate')).toEqual('19/7/2016');
     });
