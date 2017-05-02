@@ -33,17 +33,21 @@ export class DecimalCode extends NumberCode {
             unicodeChars.push(this.Unicode(localeValue.charAt(2)));
             unicodeChars.push(this.Unicode(localeValue.charAt(3)));
 
-            // Checks Unicode characters 'RIGHT-TO-LEFT MARK' (U+200F) & 'Arabic Letter Mark (U+061C)'.
+            // Right to left:
+            // checks Unicode characters 'RIGHT-TO-LEFT MARK' (U+200F) & 'Arabic Letter Mark' (U+061C),
+            // or the reverse order.
+            // Left to right:
+            // checks Unicode character 'LEFT-TO-RIGHT MARK' (U+200E).
             if (unicodeChars[0] == "\\u200F" || unicodeChars[0] == "\\u061C") {
-                // Right to left.
                 this.minusSignCode = unicodeChars[1];
                 this.decimalSeparatorCode = unicodeChars[3];
             } else if (unicodeChars[0] == this.Unicode(new Intl.NumberFormat(defaultLocale).format(0))) {
-                // Some IE & Edge versions reverse the order.
                 this.minusSignCode = unicodeChars[3];
                 this.decimalSeparatorCode = unicodeChars[1];
+            } else if (unicodeChars[0] == "\\u200E") {
+                this.minusSignCode = unicodeChars[1];
+                this.decimalSeparatorCode = unicodeChars[3];
             } else {
-                // Left to right.
                 this.minusSignCode = unicodeChars[0];
                 this.decimalSeparatorCode = unicodeChars[2];
             }
