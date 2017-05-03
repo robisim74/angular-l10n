@@ -26,10 +26,10 @@ Library version: 3.1.0
         * [6.1.2 FormBuilder](#6.1.2)
 * [7 Collator](#7)
 * [8 Services APIs](#8)
-    * [8.1 LocaleService](#8.1)
-    * [8.2 TranslationService](#8.2)
-    * [8.3 LocaleValidation](#8.3)
-    * [8.4 Collator](#8.4)
+    * [8.1 ILocaleService](#8.1)
+    * [8.2 ITranslationService](#8.2)
+    * [8.3 ILocaleValidation](#8.3)
+    * [8.4 ICollator](#8.4)
     * [8.5 IntlAPI](#8.5)
 
 ## <a name="1"/>1 Library structure
