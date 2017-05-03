@@ -104,30 +104,30 @@ constructor(public locale: LocaleService, public translation: TranslationService
 }
 ```
 
-#### LocaleService: addConfiguration APIs 
+#### ILocaleConfigAPI 
 Method | Function
 ------ | --------
-`addLanguage(languageCode: string, textDirection?: string);` | Adds a language to use in the app, specifying the layout direction
-`addLanguages(languageCodes: string[]);` | Adds the languages to use in the app
-`disableStorage();` | Disables the browser storage for language, default locale & currency
-`setCookieExpiration(days?: number);` | If the cookie expiration is omitted, the cookie becomes a session cookie
-`useLocalStorage();` | Sets browser LocalStorage as default for language, default locale & currency
-`useSessionStorage();` | Sets browser SessionStorage as default for language, default locale & currency
-`defineLanguage(languageCode: string);` | Defines the language to be used
-`defineDefaultLocale(languageCode: string, countryCode: string, scriptCode?: string, numberingSystem?: string, calendar?: string);` | Defines the default locale to be used, regardless of the browser language
-`defineCurrency(currencyCode: string);` | Defines the currency to be used
+`addLanguage(languageCode: string, textDirection?: string)` | Adds a language to use in the app, specifying the layout direction
+`addLanguages(languageCodes: string[])` | Adds the languages to use in the app
+`disableStorage()` | Disables the browser storage for language, default locale & currency
+`setCookieExpiration(days?: number)` | If the cookie expiration is omitted, the cookie becomes a session cookie
+`useLocalStorage()` | Sets browser LocalStorage as default for language, default locale & currency
+`useSessionStorage()` | Sets browser SessionStorage as default for language, default locale & currency
+`defineLanguage(languageCode: string)` | Defines the language to be used
+`defineDefaultLocale(languageCode: string, countryCode: string, scriptCode?: string, numberingSystem?: string, calendar?: string)` | Defines the default locale to be used, regardless of the browser language
+`defineCurrency(currencyCode: string)` | Defines the currency to be used
 
-#### TranslationService: addConfiguration APIs
+#### ITranslationConfigAPI
 Method | Function
 ------ | --------
-`addTranslation(languageCode: string, translation: any);` | Direct loading: adds translation data
-`addProvider(prefix: string, dataFormat?: string);` |  Asynchronous loading: adds a translation provider
-`addWebAPIProvider(path: string, dataFormat?: string);` |  Asynchronous loading: adds a Web API provider
-`useLocaleAsLanguage();` | Sets the use of locale (`languageCode-countryCode`) as language
-`setMissingValue(value: string);` | Sets the value to use for missing keys
-`setMissingKey(key: string);` | Sets the key to use for missing keys
-`setComposedKeySeparator(keySeparator: string);` | Sets composed key separator. Default is the point '.'
-`disableI18nPlural();` | Disables the translation of numbers that are contained at the beginning of the keys
+`addTranslation(languageCode: string, translation: any)` | Direct loading: adds translation data
+`addProvider(prefix: string, dataFormat?: string)` |  Asynchronous loading: adds a translation provider
+`addWebAPIProvider(path: string, dataFormat?: string)` |  Asynchronous loading: adds a Web API provider
+`useLocaleAsLanguage()` | Sets the use of locale (`languageCode-countryCode`) as language
+`setMissingValue(value: string)` | Sets the value to use for missing keys
+`setMissingKey(key: string)` | Sets the key to use for missing keys
+`setComposedKeySeparator(keySeparator: string)` | Sets composed key separator. Default is the point '.'
+`disableI18nPlural()` | Disables the translation of numbers that are contained at the beginning of the keys
 
 ### <a name="2.3"/>2.3 Loading the translation data
 #### Direct loading
@@ -386,12 +386,12 @@ Using directives:
 
 ### <a name="3.4"/>3.4 Getting the translation in component class
 To get the translation in component class, `TranslationService` has the following methods:
-* `translate(key: string, args?: any, lang?: string): string;`
-* `translateAsync(key: string, args?: any, lang?: string): Observable<string>;`
+* `translate(key: string, args?: any, lang?: string): string`
+* `translateAsync(key: string, args?: any, lang?: string): Observable<string>`
 
 But to get the translation _when the component is loaded_ and _when the current language changes_, 
 _you must also_ subscribe to the following event:
-* `translationChanged: EventEmitter<string>;`
+* `translationChanged: EventEmitter<string>`
 
 ```TypeScript
 @Component({
@@ -438,9 +438,9 @@ export class HomeComponent {
 
 ## <a name="4"/>4 Changing language, default locale or currency at runtime
 To change language, default locale or currency at runtime, `LocaleService` has the following methods:
-* `setCurrentLanguage(languageCode: string): void;`
-* `setDefaultLocale(languageCode: string, countryCode: string, scriptCode?: string, numberingSystem?: string, calendar?: string): void;`
-* `setCurrentCurrency(currencyCode: string): void;`
+* `setCurrentLanguage(languageCode: string): void`
+* `setDefaultLocale(languageCode: string, countryCode: string, scriptCode?: string, numberingSystem?: string, calendar?: string): void`
+* `setCurrentCurrency(currencyCode: string): void`
 
 ## <a name="5"/>5 Lazy loading
 If you use a `Router` in an extended application, you can create an instance of the `TranslationService` with its own translation data for every lazy loaded module/component, as shown:
@@ -519,10 +519,10 @@ export declare function validateLocaleNumber(locale: LocaleService, digits: stri
 
 ## <a name="7"/>7 Collator
 `Collator` class has the following methods for sorting and filtering a list by locales:
-* `sort(list: any[], keyName: any, order?: string, extension?: string, options?: any): any[];`
-* `sortAsync(list: any[], keyName: any, order?: string, extension?: string, options?: any): Observable<any[]>;`
-* `search(s: string, list: any[], keyNames: any[], options?: any): any[];`
-* `searchAsync(s: string, list: any[], keyNames: any[], options?: any): Observable<any[]>;`
+* `sort(list: any[], keyName: any, order?: string, extension?: string, options?: any): any[]`
+* `sortAsync(list: any[], keyName: any, order?: string, extension?: string, options?: any): Observable<any[]>`
+* `search(s: string, list: any[], keyNames: any[], options?: any): any[]`
+* `searchAsync(s: string, list: any[], keyNames: any[], options?: any): Observable<any[]>`
 
 These methods use the [Intl.Collator](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Collator) object, a constructor for collators, objects that enable language sensitive string comparison.
 
@@ -530,65 +530,65 @@ These methods use the [Intl.Collator](https://developer.mozilla.org/en-US/docs/W
 
 ## <a name="8"/>8 Services APIs
 
-### <a name="8.1"/>8.1 LocaleService
+### <a name="8.1"/>8.1 ILocaleService
 Property | Value
 ---------- | -----
-`languageCodeChanged: EventEmitter<string>;` |
-`defaultLocaleChanged: EventEmitter<string>;` |
-`currencyCodeChanged: EventEmitter<string>;` |
-`loadTranslation: Subject<any>;` |
+`languageCodeChanged: EventEmitter<string>` |
+`defaultLocaleChanged: EventEmitter<string>` |
+`currencyCodeChanged: EventEmitter<string>` |
+`loadTranslation: Subject<any>` |
 
 Method | Function
 ------ | --------
-`addConfiguration(): ILocaleConfigAPI;` | Configure the service in the application root module or bootstrap component
-`getConfiguration(): ILocaleConfig;` |
-`init(): void;` | Call this method after the configuration to initialize the service
-`getAvailableLanguages(): string[];` |
-`getLanguageDirection(languageCode?: string): string;` |
-`getCurrentLanguage(): string;` |
-`getCurrentCountry(): string;` |
-`getCurrentScript(): string;` |
-`getCurrentNumberingSystem(): string;` |
-`getCurrentCalendar(): string;` |
-`getDefaultLocale(): string;` |
-`getCurrentCurrency(): string;` |
-`setCurrentLanguage(languageCode: string): void;` |
-`setDefaultLocale(languageCode: string, countryCode: string, scriptCode?: string, numberingSystem?: string, calendar?: string): void;` |
-`setCurrentCurrency(currencyCode: string): void;` |
+`addConfiguration(): ILocaleConfigAPI` | Configure the service in the application root module or bootstrap component
+`getConfiguration(): ILocaleConfig` |
+`init(): void` | Call this method after the configuration to initialize the service
+`getAvailableLanguages(): string[]` |
+`getLanguageDirection(languageCode?: string): string` |
+`getCurrentLanguage(): string` |
+`getCurrentCountry(): string` |
+`getCurrentScript(): string` |
+`getCurrentNumberingSystem(): string` |
+`getCurrentCalendar(): string` |
+`getDefaultLocale(): string` |
+`getCurrentCurrency(): string` |
+`setCurrentLanguage(languageCode: string): void` |
+`setDefaultLocale(languageCode: string, countryCode: string, scriptCode?: string, numberingSystem?: string, calendar?: string): void` |
+`setCurrentCurrency(currencyCode: string): void` |
 
-### <a name="8.2"/>8.2 TranslationService
+### <a name="8.2"/>8.2 ITranslationService
 Property | Value
 ---------- | -----
-`translationChanged: EventEmitter<string>;` |
-`translationError: EventEmitter<any>;` |
-`serviceState: ServiceState;` |
+`translationChanged: EventEmitter<string>` |
+`translationError: EventEmitter<any>` |
+`serviceState: ServiceState` |
 
 Method | Function
 ------ | --------
-`addConfiguration(): ITranslationConfigAPI;` | Configure the service in the application root module or bootstrap component
-`getConfiguration(): ITranslationConfig;` |
-`init(): void;` | Call this method after the configuration to initialize the service
-`getLanguage(): string;` | The language of the translation service is updated when the translation data has been loaded
-`translate(key: string, args?: any, lang?: string): string;` |
-`translateAsync(key: string, args?: any, lang?: string): Observable<string>;` |
+`addConfiguration(): ITranslationConfigAPI` | Configure the service in the application root module or bootstrap component
+`getConfiguration(): ITranslationConfig` |
+`init(): void` | Call this method after the configuration to initialize the service
+`getLanguage(): string` | The language of the translation service is updated when the translation data has been loaded
+`translate(key: string, args?: any, lang?: string): string` |
+`translateAsync(key: string, args?: any, lang?: string): Observable<string>` |
 
-### <a name="8.3"/>8.3 LocaleValidation
+### <a name="8.3"/>8.3 ILocaleValidation
 Method | Function
 ------ | --------
-`parseNumber(s: string): number | null;` | Converts a string to a number according to default locale
+`parseNumber(s: string): number \| null` | Converts a string to a number according to default locale
 
-### <a name="8.4"/>8.4 Collator
+### <a name="8.4"/>8.4 ICollator
 Method | Function
 ------ | --------
-`compare(key1: string, key2: string, extension?: string, options?: any): number;` | Compares two keys by the value of translation according to the current language
-`sort(list: any[], keyName: any, order?: string, extension?: string, options?: any): any[];` | Sorts an array of objects or an array of arrays according to the current language
-`sortAsync(list: any[], keyName: any, order?: string, extension?: string, options?: any): Observable<any[]>;` | Sorts asynchronously an array of objects or an array of arrays according to the current language
-`search(s: string, list: any[], keyNames: any[], options?: any): any[];` | Matches a string into an array of objects or an array of arrays according to the current language
-`searchAsync(s: string, list: any[], keyNames: any[], options?: any): Observable<any[]>;` | Matches asynchronously a string into an array of objects or an array of arrays according to the current language
+`compare(key1: string, key2: string, extension?: string, options?: any): number` | Compares two keys by the value of translation according to the current language
+`sort(list: any[], keyName: any, order?: string, extension?: string, options?: any): any[]` | Sorts an array of objects or an array of arrays according to the current language
+`sortAsync(list: any[], keyName: any, order?: string, extension?: string, options?: any): Observable<any[]>` | Sorts asynchronously an array of objects or an array of arrays according to the current language
+`search(s: string, list: any[], keyNames: any[], options?: any): any[]` | Matches a string into an array of objects or an array of arrays according to the current language
+`searchAsync(s: string, list: any[], keyNames: any[], options?: any): Observable<any[]>` | Matches asynchronously a string into an array of objects or an array of arrays according to the current language
 
 ### <a name="8.5"/>8.5 IntlAPI
 Method | Function
 ------ | --------
-`static HasDateTimeFormat(): boolean;` |
-`static HasNumberFormat(): boolean;` |
-`static HasCollator(): boolean;` |
+`static HasDateTimeFormat(): boolean` |
+`static HasNumberFormat(): boolean` |
+`static HasCollator(): boolean` |
