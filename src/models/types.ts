@@ -27,3 +27,8 @@ export enum ServiceState {
     isWaiting
 
 }
+
+export interface PropertyDecorator {
+    <T extends Function>(type: T): T;
+    (target: Object, propertyKey?: string | symbol): void;
+}

@@ -5,7 +5,9 @@ import { LocaleService } from './locale.service';
 import { TranslationService } from './translation.service';
 
 /**
- * Extend this class in components to provide 'lang', 'defaultLocale' & 'currency' to the translate and locale pipes.
+ * Extend this class in components to provide 'lang', 'defaultLocale' & 'currency'
+ * to the LocaleDecimal, LocalePercent & LocaleCurrency pipes.
+ * @deprecated
  */
 export class Localization extends Translation {
 

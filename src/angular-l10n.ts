@@ -1,3 +1,4 @@
+export { ExtraInjector } from './models/extra-injector';
 export { ILocaleConfig, LocaleConfig } from './models/localization/locale-config';
 export { ILocaleService, LocaleService } from './services/locale.service';
 export { ITranslationConfig, TranslationConfig } from './models/translation/translation-config';
@@ -7,6 +8,9 @@ export { Localization } from './services/localization';
 export { ILocaleValidation, LocaleValidation } from './services/locale-validation';
 export { ICollator, Collator } from './services/collator';
 export { IntlAPI } from './services/intl-api';
+export { Language } from './decorators/language.decorator';
+export { DefaultLocale } from './decorators/default-locale.decorator';
+export { Currency } from './decorators/currency.decorator';
 export { TranslatePipe } from './pipes/translate.pipe';
 export { LocaleDatePipe } from './pipes/locale-date.pipe';
 export {

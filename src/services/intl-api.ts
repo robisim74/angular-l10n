@@ -3,6 +3,8 @@
  */
 export class IntlAPI {
 
+    private static readonly hasIntl: boolean = (typeof Intl === "object");
+
     public static HasDateTimeFormat(): boolean {
         return IntlAPI.hasIntl && Intl​.hasOwnProperty​("DateTimeFormat");
     }
@@ -14,7 +16,5 @@ export class IntlAPI {
     public static HasCollator(): boolean {
         return IntlAPI.hasIntl && Intl.hasOwnProperty​("Collator");
     }
-
-    private static readonly hasIntl: boolean = (typeof Intl === "object");
 
 }

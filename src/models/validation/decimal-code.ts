@@ -25,7 +25,7 @@ export class DecimalCode extends NumberCode {
         // Tries to update Unicode for signs according to default locale.
         if (IntlAPI.HasNumberFormat()) {
             const value: number = -0.9; // Reference value.
-            const localeValue: string = new Intl.NumberFormat(defaultLocale).format(value);
+            const localeValue: string = new Intl.NumberFormat(this.defaultLocale).format(value);
 
             const unicodeChars: string[] = [];
             unicodeChars.push(this.Unicode(localeValue.charAt(0)));
@@ -41,7 +41,7 @@ export class DecimalCode extends NumberCode {
             if (unicodeChars[0] == "\\u200F" || unicodeChars[0] == "\\u061C") {
                 this.minusSignCode = unicodeChars[1];
                 this.decimalSeparatorCode = unicodeChars[3];
-            } else if (unicodeChars[0] == this.Unicode(new Intl.NumberFormat(defaultLocale).format(0))) {
+            } else if (unicodeChars[0] == this.Unicode(new Intl.NumberFormat(this.defaultLocale).format(0))) {
                 this.minusSignCode = unicodeChars[3];
                 this.decimalSeparatorCode = unicodeChars[1];
             } else if (unicodeChars[0] == "\\u200E") {
