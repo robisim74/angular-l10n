@@ -11,8 +11,7 @@ export class Browser {
     private hasStorage: boolean;
 
     constructor(private configuration: LocaleConfig) {
-        this.hasCookie = typeof navigator !== "undefined" &&
-            typeof navigator.cookieEnabled !== "undefined" &&
+        this.hasCookie = typeof navigator !== "undefined" && typeof navigator.cookieEnabled !== "undefined" &&
             navigator.cookieEnabled;
         this.hasStorage = typeof Storage !== "undefined";
     }
