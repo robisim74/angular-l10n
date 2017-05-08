@@ -2,7 +2,7 @@ import { ChangeDetectorRef } from '@angular/core';
 import { ISubscription } from 'rxjs/Subscription';
 
 import { LocaleService } from '../services/locale.service';
-import { ExtraInjector } from '../models/extra-injector';
+import { InjectorRef } from '../models/injector-ref';
 import { PropertyDecorator } from '../models/types';
 
 /**
@@ -20,8 +20,8 @@ export function DefaultLocale(): PropertyDecorator {
         let subscription: ISubscription;
 
         target.ngOnInit = function (): void {
-            const locale: LocaleService = ExtraInjector.get(LocaleService);
-            const changeDetectorRef: ChangeDetectorRef = ExtraInjector.get(ChangeDetectorRef);
+            const locale: LocaleService = InjectorRef.get(LocaleService);
+            const changeDetectorRef: ChangeDetectorRef = InjectorRef.get(ChangeDetectorRef);
 
             defaultLocale = locale.getDefaultLocale();
             // When the default locale changes, subscribes to the event & updates defaultLocale property.

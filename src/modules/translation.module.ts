@@ -1,6 +1,6 @@
 import { NgModule, ModuleWithProviders } from '@angular/core';
 
-import { ExtraInjector } from '../models/extra-injector';
+import { InjectorRef } from '../models/injector-ref';
 import { LocaleConfig } from '../models/localization/locale-config';
 import { TranslationConfig } from '../models/translation/translation-config';
 import { LocaleService } from '../services/locale.service';
@@ -27,7 +27,7 @@ export class TranslationModule {
         return {
             ngModule: TranslationModule,
             providers: [
-                ExtraInjector,
+                InjectorRef,
                 LocaleConfig,
                 LocaleService,
                 TranslationConfig,
@@ -42,12 +42,12 @@ export class TranslationModule {
     public static forChild(): ModuleWithProviders {
         return {
             ngModule: TranslationModule,
-            providers: [ExtraInjector, TranslationConfig, TranslationService]
+            providers: [InjectorRef, TranslationConfig, TranslationService]
         };
     }
 
-    constructor(public injector: ExtraInjector) {
-        // Creates the instance of the ExtraInjector, so that module dependencies are available.
+    constructor(public injector: InjectorRef) {
+        // Creates the instance of the InjectorRef, so that module dependencies are available.
     }
 
 }

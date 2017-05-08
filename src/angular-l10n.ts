@@ -1,4 +1,4 @@
-export { ExtraInjector } from './models/extra-injector';
+export { InjectorRef } from './models/injector-ref';
 export { ILocaleConfig, LocaleConfig } from './models/localization/locale-config';
 export { ILocaleService, LocaleService } from './services/locale.service';
 export { ITranslationConfig, TranslationConfig } from './models/translation/translation-config';

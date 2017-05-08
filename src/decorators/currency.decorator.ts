@@ -2,7 +2,7 @@ import { ChangeDetectorRef } from '@angular/core';
 import { ISubscription } from 'rxjs/Subscription';
 
 import { LocaleService } from '../services/locale.service';
-import { ExtraInjector } from '../models/extra-injector';
+import { InjectorRef } from '../models/injector-ref';
 import { PropertyDecorator } from '../models/types';
 
 /**
@@ -19,8 +19,8 @@ export function Currency(): PropertyDecorator {
         let subscription: ISubscription;
 
         target.ngOnInit = function (): void {
-            const locale: LocaleService = ExtraInjector.get(LocaleService);
-            const changeDetectorRef: ChangeDetectorRef = ExtraInjector.get(ChangeDetectorRef);
+            const locale: LocaleService = InjectorRef.get(LocaleService);
+            const changeDetectorRef: ChangeDetectorRef = InjectorRef.get(ChangeDetectorRef);
 
             currency = locale.getCurrentCurrency();
             // When the currency changes, subscribes to the event & updates currency property.

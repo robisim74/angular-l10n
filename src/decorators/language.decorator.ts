@@ -2,7 +2,7 @@ import { ChangeDetectorRef } from '@angular/core';
 import { ISubscription } from 'rxjs/Subscription';
 
 import { TranslationService } from '../services/translation.service';
-import { ExtraInjector } from '../models/extra-injector';
+import { InjectorRef } from '../models/injector-ref';
 import { PropertyDecorator } from '../models/types';
 
 /**
@@ -19,8 +19,8 @@ export function Language(): PropertyDecorator {
         let subscription: ISubscription;
 
         target.ngOnInit = function (): void {
-            const translation: TranslationService = ExtraInjector.get(TranslationService);
-            const changeDetectorRef: ChangeDetectorRef = ExtraInjector.get(ChangeDetectorRef);
+            const translation: TranslationService = InjectorRef.get(TranslationService);
+            const changeDetectorRef: ChangeDetectorRef = InjectorRef.get(ChangeDetectorRef);
 
             language = translation.getLanguage();
             // When the language changes, subscribes to the event & updates language property.
