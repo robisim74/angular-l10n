@@ -6,13 +6,11 @@ import { InjectorRef } from '../models/injector-ref';
 import { PropertyDecorator } from '../models/types';
 
 /**
- * Language() Property decorator for components to provide parameter to the Translate pipe.
+ * Property decorator for components to provide the parameter to the translate pipe.
  */
 export function Language(): PropertyDecorator {
 
     return (target: any, propertyKey?: string): void => {
-        let language: string;
-
         const targetNgOnInit: Function = target.ngOnInit;
         const targetNgOnDestroy: Function = target.ngOnDestroy;
 
@@ -22,14 +20,16 @@ export function Language(): PropertyDecorator {
             const translation: TranslationService = InjectorRef.get(TranslationService);
             const changeDetectorRef: ChangeDetectorRef = InjectorRef.get(ChangeDetectorRef);
 
-            language = translation.getLanguage();
-            // When the language changes, subscribes to the event & updates language property.
-            subscription = translation.translationChanged.subscribe(
-                (value: string) => {
-                    language = value;
-                    // OnPush Change Detection strategy.
-                    if (changeDetectorRef) { changeDetectorRef.markForCheck(); }
-                });
+            if (typeof propertyKey !== "undefined") {
+                this[propertyKey] = translation.getLanguage();
+                // When the language changes, subscribes to the event & updates language property.
+                subscription = translation.translationChanged.subscribe(
+                    (value: string) => {
+                        this[propertyKey] = value;
+                        // OnPush Change Detection strategy.
+                        if (changeDetectorRef) { changeDetectorRef.markForCheck(); }
+                    });
+            }
 
             if (targetNgOnInit) {
                 targetNgOnInit.apply(this);
@@ -48,7 +48,8 @@ export function Language(): PropertyDecorator {
 
         if (typeof propertyKey !== "undefined") {
             Object.defineProperty(target, propertyKey, {
-                get: () => language
+                writable: true,
+                value: undefined
             });
         }
     };

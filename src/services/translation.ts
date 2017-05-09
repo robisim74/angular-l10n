@@ -4,7 +4,7 @@ import { ISubscription } from 'rxjs/Subscription';
 import { TranslationService } from './translation.service';
 
 /**
- * Extend this class in components to provide 'lang' to the Translate pipe.
+ * Extend this class in components to provide 'lang' to the translate pipe.
  */
 export class Translation implements OnDestroy {
 

@@ -6,14 +6,12 @@ import { InjectorRef } from '../models/injector-ref';
 import { PropertyDecorator } from '../models/types';
 
 /**
- * DefaultLocale() Property decorator for components to provide parameter
- * to the LocaleDecimal, LocalePercent & LocaleCurrency pipes.
+ * Property decorator for components to provide the parameter
+ * to localeDecimal, localePercent & localeCurrency pipes.
  */
 export function DefaultLocale(): PropertyDecorator {
 
     return (target: any, propertyKey?: string): void => {
-        let defaultLocale: string;
-
         const targetNgOnInit: Function = target.ngOnInit;
         const targetNgOnDestroy: Function = target.ngOnDestroy;
 
@@ -23,14 +21,16 @@ export function DefaultLocale(): PropertyDecorator {
             const locale: LocaleService = InjectorRef.get(LocaleService);
             const changeDetectorRef: ChangeDetectorRef = InjectorRef.get(ChangeDetectorRef);
 
-            defaultLocale = locale.getDefaultLocale();
-            // When the default locale changes, subscribes to the event & updates defaultLocale property.
-            subscription = locale.defaultLocaleChanged.subscribe(
-                (value: string) => {
-                    defaultLocale = value;
-                    // OnPush Change Detection strategy.
-                    if (changeDetectorRef) { changeDetectorRef.markForCheck(); }
-                });
+            if (typeof propertyKey !== "undefined") {
+                this[propertyKey] = locale.getDefaultLocale();
+                // When the default locale changes, subscribes to the event & updates defaultLocale property.
+                subscription = locale.defaultLocaleChanged.subscribe(
+                    (value: string) => {
+                        this[propertyKey] = value;
+                        // OnPush Change Detection strategy.
+                        if (changeDetectorRef) { changeDetectorRef.markForCheck(); }
+                    });
+            }
 
             if (targetNgOnInit) {
                 targetNgOnInit.apply(this);
@@ -49,7 +49,8 @@ export function DefaultLocale(): PropertyDecorator {
 
         if (typeof propertyKey !== "undefined") {
             Object.defineProperty(target, propertyKey, {
-                get: () => defaultLocale
+                writable: true,
+                value: undefined
             });
         }
     };

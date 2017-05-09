@@ -6,13 +6,11 @@ import { InjectorRef } from '../models/injector-ref';
 import { PropertyDecorator } from '../models/types';
 
 /**
- * Currency() Property decorator for components to provide parameter to the LocaleCurrency pipe.
+ * Property decorator for components to provide the parameter to the localeCurrency pipe.
  */
 export function Currency(): PropertyDecorator {
 
     return (target: any, propertyKey?: string): void => {
-        let currency: string;
-
         const targetNgOnInit: Function = target.ngOnInit;
         const targetNgOnDestroy: Function = target.ngOnDestroy;
 
@@ -22,14 +20,16 @@ export function Currency(): PropertyDecorator {
             const locale: LocaleService = InjectorRef.get(LocaleService);
             const changeDetectorRef: ChangeDetectorRef = InjectorRef.get(ChangeDetectorRef);
 
-            currency = locale.getCurrentCurrency();
-            // When the currency changes, subscribes to the event & updates currency property.
-            subscription = locale.currencyCodeChanged.subscribe(
-                (value: string) => {
-                    currency = value;
-                    // OnPush Change Detection strategy.
-                    if (changeDetectorRef) { changeDetectorRef.markForCheck(); }
-                });
+            if (typeof propertyKey !== "undefined") {
+                this[propertyKey] = locale.getCurrentCurrency();
+                // When the currency changes, subscribes to the event & updates currency property.
+                subscription = locale.currencyCodeChanged.subscribe(
+                    (value: string) => {
+                        this[propertyKey] = value;
+                        // OnPush Change Detection strategy.
+                        if (changeDetectorRef) { changeDetectorRef.markForCheck(); }
+                    });
+            }
 
             if (targetNgOnInit) {
                 targetNgOnInit.apply(this);
@@ -48,7 +48,8 @@ export function Currency(): PropertyDecorator {
 
         if (typeof propertyKey !== "undefined") {
             Object.defineProperty(target, propertyKey, {
-                get: () => currency
+                writable: true,
+                value: undefined
             });
         }
     };

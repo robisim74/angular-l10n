@@ -6,7 +6,7 @@ import { TranslationService } from './translation.service';
 
 /**
  * Extend this class in components to provide 'lang', 'defaultLocale' & 'currency'
- * to the LocaleDecimal, LocalePercent & LocaleCurrency pipes.
+ * to localeDecimal, localePercent & localeCurrency pipes.
  */
 export class Localization extends Translation {
 
