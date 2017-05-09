@@ -10,13 +10,13 @@ import { PropertyDecorator } from '../models/types';
  */
 export function Language(): PropertyDecorator {
 
-    return (target: any, propertyKey?: string): void => {
+    function DecoratorFactory(target: any, propertyKey?: string): void {
         const targetNgOnInit: Function = target.ngOnInit;
         const targetNgOnDestroy: Function = target.ngOnDestroy;
 
         let subscription: ISubscription;
 
-        target.ngOnInit = function (): void {
+        function ngOnInit(this: any): void {
             const translation: TranslationService = InjectorRef.get(TranslationService);
             const changeDetectorRef: ChangeDetectorRef = InjectorRef.get(ChangeDetectorRef);
 
@@ -34,9 +34,11 @@ export function Language(): PropertyDecorator {
             if (targetNgOnInit) {
                 targetNgOnInit.apply(this);
             }
-        };
+        }
 
-        target.ngOnDestroy = function (): void {
+        target.ngOnInit = ngOnInit;
+
+        function ngOnDestroy(this: any): void {
             if (typeof subscription !== "undefined") {
                 subscription.unsubscribe();
             }
@@ -44,7 +46,9 @@ export function Language(): PropertyDecorator {
             if (targetNgOnDestroy) {
                 targetNgOnDestroy.apply(this);
             }
-        };
+        }
+
+        target.ngOnDestroy = ngOnDestroy;
 
         if (typeof propertyKey !== "undefined") {
             Object.defineProperty(target, propertyKey, {
@@ -52,6 +56,8 @@ export function Language(): PropertyDecorator {
                 value: undefined
             });
         }
-    };
+    }
+
+    return DecoratorFactory;
 
 }
