@@ -11,14 +11,12 @@ import { PropertyDecorator } from '../models/types';
 export function Currency(): PropertyDecorator {
 
     function DecoratorFactory(target: any, propertyKey?: string): void {
-        const targetNgOnInit: Function = target.ngOnInit;
-        const targetNgOnDestroy: Function = target.ngOnDestroy;
-
         let subscription: ISubscription;
 
+        const targetNgOnInit: Function = target.ngOnInit;
         function ngOnInit(this: any): void {
-            const locale: LocaleService = InjectorRef.get(LocaleService);
-            const changeDetectorRef: ChangeDetectorRef = InjectorRef.get(ChangeDetectorRef);
+            const locale: LocaleService = InjectorRef.Get(LocaleService);
+            const changeDetectorRef: ChangeDetectorRef = InjectorRef.Get(ChangeDetectorRef);
 
             if (typeof propertyKey !== "undefined") {
                 this[propertyKey] = locale.getCurrentCurrency();
@@ -35,9 +33,9 @@ export function Currency(): PropertyDecorator {
                 targetNgOnInit.apply(this);
             }
         }
-
         target.ngOnInit = ngOnInit;
 
+        const targetNgOnDestroy: Function = target.ngOnDestroy;
         function ngOnDestroy(this: any): void {
             if (typeof subscription !== "undefined") {
                 subscription.unsubscribe();
@@ -47,7 +45,6 @@ export function Currency(): PropertyDecorator {
                 targetNgOnDestroy.apply(this);
             }
         }
-
         target.ngOnDestroy = ngOnDestroy;
 
         if (typeof propertyKey !== "undefined") {

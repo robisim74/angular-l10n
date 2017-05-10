@@ -10,6 +10,8 @@ import { IntlAPI } from '../services/intl-api';
 export class LocaleDecimalPipe implements PipeTransform {
 
     public transform(value: any, defaultLocale: string, digits?: string): string | null {
+        if (typeof defaultLocale === "undefined") return null;
+
         if (IntlAPI.HasNumberFormat()) {
             const localeDecimal: DecimalPipe = new DecimalPipe(defaultLocale);
             return localeDecimal.transform(value, digits);
@@ -27,6 +29,8 @@ export class LocaleDecimalPipe implements PipeTransform {
 export class LocalePercentPipe implements PipeTransform {
 
     public transform(value: any, defaultLocale: string, digits?: string): string | null {
+        if (typeof defaultLocale === "undefined") return null;
+
         if (IntlAPI.HasNumberFormat()) {
             const localePercent: PercentPipe = new PercentPipe(defaultLocale);
             return localePercent.transform(value, digits);
@@ -50,6 +54,8 @@ export class LocaleCurrencyPipe implements PipeTransform {
         symbolDisplay: boolean = false,
         digits?: string
     ): string | null {
+        if (typeof defaultLocale === "undefined" || typeof currency === "undefined") return null;
+
         if (IntlAPI.HasNumberFormat()) {
             const localeCurrency: CurrencyPipe = new CurrencyPipe(defaultLocale);
             return localeCurrency.transform(value, currency, symbolDisplay, digits);

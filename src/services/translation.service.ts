@@ -235,8 +235,12 @@ export interface ITranslationService {
     private releaseTranslation(language: string): void {
         this.serviceState = ServiceState.isReady;
         this.language = language;
+        this.sendEvents();
+    }
+
+    private sendEvents(): void {
         // Sends an event for the components.
-        this.translationChanged.emit(language);
+        this.translationChanged.emit(this.language);
     }
 
 }

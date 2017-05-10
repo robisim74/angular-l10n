@@ -30,6 +30,10 @@
         "no-access-missing-member": true,
         "invoke-injectable": true,
         "ban-types": false,
+        "curly": [
+            true,
+            "ignore-same-line"
+        ],
         "forin": false,
         "interface-name": false,
         "interface-over-type-literal": false,
@@ -87,7 +91,8 @@
             true,
             "ban-keywords",
             "check-format",
-            "allow-leading-underscore"
+            "allow-leading-underscore",
+            "allow-pascal-case"
         ],
         "whitespace": [
             true,
