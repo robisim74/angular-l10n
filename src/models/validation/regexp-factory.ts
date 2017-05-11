@@ -5,7 +5,7 @@ export class RegExpFactory {
     /**
      * Builds the regular expression for a number according to default locale.
      */
-    public number(defaultLocale: string, digits: string): RegExp {
+    public static Number(defaultLocale: string, digits: string): RegExp {
         let minInt: number = 1;
         let minFraction: number = 0;
         let maxFraction: number = 3;

@@ -1,28 +1,29 @@
-import { ChangeDetectorRef } from '@angular/core';
+import { Injectable, ChangeDetectorRef } from '@angular/core';
 
 import { Translation } from './translation';
 import { LocaleService } from './locale.service';
 import { TranslationService } from './translation.service';
+import { InjectorRef } from '../models/injector-ref';
 
 /**
  * Extend this class in components to provide 'lang', 'defaultLocale' & 'currency'
  * to localeDecimal, localePercent & localeCurrency pipes.
  */
-export class Localization extends Translation {
+@Injectable() export class Localization extends Translation {
 
     public defaultLocale: string;
     public currency: string;
 
     constructor(
-        public locale: LocaleService,
-        public translation: TranslationService,
-        public changeDetectorRef?: ChangeDetectorRef
+        public locale: LocaleService = InjectorRef.Get(LocaleService),
+        public translation: TranslationService = InjectorRef.Get(TranslationService),
+        public changeDetectorRef: ChangeDetectorRef = InjectorRef.Get(ChangeDetectorRef)
     ) {
         super(translation, changeDetectorRef);
 
         this.defaultLocale = this.locale.getDefaultLocale();
         // When the default locale changes, subscribes to the event & updates defaultLocale property.
-        this.pipesSubscriptions.push(this.locale.defaultLocaleChanged.subscribe(
+        this.paramSubscriptions.push(this.locale.defaultLocaleChanged.subscribe(
             (defaultLocale: string) => {
                 this.defaultLocale = defaultLocale;
                 // OnPush Change Detection strategy.
@@ -32,7 +33,7 @@ export class Localization extends Translation {
 
         this.currency = this.locale.getCurrentCurrency();
         // When the currency changes, subscribes to the event & updates currency property.
-        this.pipesSubscriptions.push(this.locale.currencyCodeChanged.subscribe(
+        this.paramSubscriptions.push(this.locale.currencyCodeChanged.subscribe(
             (currency: string) => {
                 this.currency = currency;
                 // OnPush Change Detection strategy.

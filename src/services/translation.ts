@@ -1,24 +1,25 @@
-import { ChangeDetectorRef, OnDestroy } from '@angular/core';
+import { Injectable, ChangeDetectorRef, OnDestroy } from '@angular/core';
 import { ISubscription } from 'rxjs/Subscription';
 
 import { TranslationService } from './translation.service';
+import { InjectorRef } from '../models/injector-ref';
 
 /**
  * Extend this class in components to provide 'lang' to the translate pipe.
  */
-export class Translation implements OnDestroy {
+@Injectable() export class Translation implements OnDestroy {
 
     public lang: string;
 
-    protected pipesSubscriptions: ISubscription[] = [];
+    protected paramSubscriptions: ISubscription[] = [];
 
     constructor(
-        public translation: TranslationService,
-        public changeDetectorRef?: ChangeDetectorRef
+        public translation: TranslationService = InjectorRef.Get(TranslationService),
+        public changeDetectorRef: ChangeDetectorRef = InjectorRef.Get(ChangeDetectorRef)
     ) {
         this.lang = this.translation.getLanguage();
         // When the language changes, subscribes to the event & updates lang property.
-        this.pipesSubscriptions.push(this.translation.translationChanged.subscribe(
+        this.paramSubscriptions.push(this.translation.translationChanged.subscribe(
             (language: string) => {
                 this.lang = language;
                 // OnPush Change Detection strategy.
@@ -28,11 +29,11 @@ export class Translation implements OnDestroy {
     }
 
     public ngOnDestroy(): void {
-        this.cancelPipesSubscriptions();
+        this.cancelParamSubscriptions();
     }
 
-    protected cancelPipesSubscriptions(): void {
-        this.pipesSubscriptions.forEach((subscription: ISubscription) => {
+    protected cancelParamSubscriptions(): void {
+        this.paramSubscriptions.forEach((subscription: ISubscription) => {
             if (typeof subscription !== "undefined") {
                 subscription.unsubscribe();
             }
