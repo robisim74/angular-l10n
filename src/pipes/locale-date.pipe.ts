@@ -12,7 +12,7 @@ export class LocaleDatePipe implements PipeTransform {
     public transform(value: any, defaultLocale: string, pattern: string = 'mediumDate'): string | null {
         if (typeof defaultLocale === "undefined") return null;
 
-        if (IntlAPI.HasDateTimeFormat()) {
+        if (IntlAPI.hasDateTimeFormat()) {
             const localeDate: DatePipe = new DatePipe(defaultLocale);
             return localeDate.transform(value, pattern);
         }

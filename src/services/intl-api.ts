@@ -5,15 +5,15 @@ export class IntlAPI {
 
     private static readonly hasIntl: boolean = Intl && typeof Intl === "object";
 
-    public static HasDateTimeFormat(): boolean {
+    public static hasDateTimeFormat(): boolean {
         return IntlAPI.hasIntl && Intl​.hasOwnProperty​("DateTimeFormat");
     }
 
-    public static HasNumberFormat(): boolean {
+    public static hasNumberFormat(): boolean {
         return IntlAPI.hasIntl && Intl.hasOwnProperty​("NumberFormat");
     }
 
-    public static HasCollator(): boolean {
+    public static hasCollator(): boolean {
         return IntlAPI.hasIntl && Intl.hasOwnProperty​("Collator");
     }
 

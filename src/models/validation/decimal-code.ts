@@ -23,7 +23,7 @@ export class DecimalCode extends NumberCode {
         this.decimalSeparatorCode = this.Unicode(".");
 
         // Tries to update Unicode for signs according to default locale.
-        if (IntlAPI.HasNumberFormat()) {
+        if (IntlAPI.hasNumberFormat()) {
             const value: number = -0.9; // Reference value.
             const localeValue: string = new Intl.NumberFormat(this.defaultLocale).format(value);
 

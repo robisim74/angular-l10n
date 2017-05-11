@@ -28,7 +28,7 @@ export class LocaleDateDirective extends BaseDirective {
     }
 
     protected replace(): void {
-        if (IntlAPI.HasDateTimeFormat()) {
+        if (IntlAPI.hasDateTimeFormat()) {
             const localeDate: DatePipe = new DatePipe(this.locale.getDefaultLocale());
             const value: string | null = localeDate.transform(this.key, this.pattern || this.defaultPattern);
             this.setText(value);

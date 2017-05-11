@@ -105,7 +105,7 @@ export interface ICollator {
         extension?: string,
         options: any = { usage: 'sort', sensitivity: 'variant' }
     ): number {
-        if (!IntlAPI.HasCollator()) {
+        if (!IntlAPI.hasCollator()) {
             return 0;
         }
 
@@ -123,7 +123,7 @@ export interface ICollator {
         extension?: string,
         options: any = { usage: 'sort', sensitivity: 'variant' }
     ): any[] {
-        if (!list || !keyName || !IntlAPI.HasCollator()) {
+        if (!list || !keyName || !IntlAPI.hasCollator()) {
             return list;
         }
 
@@ -156,7 +156,7 @@ export interface ICollator {
         keyNames: any[],
         options: any = { usage: 'search' }
     ): any[] {
-        if (!list || !keyNames || s == "" || s == null || !IntlAPI.HasCollator()) {
+        if (!list || !keyNames || s == "" || s == null || !IntlAPI.hasCollator()) {
             return list;
         }
 

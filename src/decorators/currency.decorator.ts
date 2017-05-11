@@ -15,8 +15,8 @@ export function Currency(): PropertyDecorator {
 
         const targetNgOnInit: Function = target.ngOnInit;
         function ngOnInit(this: any): void {
-            const locale: LocaleService = InjectorRef.Get(LocaleService);
-            const changeDetectorRef: ChangeDetectorRef = InjectorRef.Get(ChangeDetectorRef);
+            const locale: LocaleService = InjectorRef.get(LocaleService);
+            const changeDetectorRef: ChangeDetectorRef = InjectorRef.get(ChangeDetectorRef);
 
             if (typeof propertyKey !== "undefined") {
                 this[propertyKey] = locale.getCurrentCurrency();

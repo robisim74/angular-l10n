@@ -15,8 +15,8 @@ export function Language(): PropertyDecorator {
 
         const targetNgOnInit: Function = target.ngOnInit;
         function ngOnInit(this: any): void {
-            const translation: TranslationService = InjectorRef.Get(TranslationService);
-            const changeDetectorRef: ChangeDetectorRef = InjectorRef.Get(ChangeDetectorRef);
+            const translation: TranslationService = InjectorRef.get(TranslationService);
+            const changeDetectorRef: ChangeDetectorRef = InjectorRef.get(ChangeDetectorRef);
 
             if (typeof propertyKey !== "undefined") {
                 this[propertyKey] = translation.getLanguage();

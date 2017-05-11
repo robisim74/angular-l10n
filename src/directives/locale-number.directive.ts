@@ -28,7 +28,7 @@ export class LocaleDecimalDirective extends BaseDirective {
     }
 
     protected replace(): void {
-        if (IntlAPI.HasNumberFormat()) {
+        if (IntlAPI.hasNumberFormat()) {
             const localeDecimal: DecimalPipe = new DecimalPipe(this.locale.getDefaultLocale());
             const value: string | null = localeDecimal.transform(this.key, this.digits || this.defaultDigits);
             this.setText(value);
@@ -60,7 +60,7 @@ export class LocalePercentDirective extends BaseDirective {
     }
 
     protected replace(): void {
-        if (IntlAPI.HasNumberFormat()) {
+        if (IntlAPI.hasNumberFormat()) {
             const localePercent: PercentPipe = new PercentPipe(this.locale.getDefaultLocale());
             const value: string | null = localePercent.transform(this.key, this.digits || this.defaultDigits);
             this.setText(value);
@@ -103,7 +103,7 @@ export class LocaleCurrencyDirective extends BaseDirective {
     }
 
     protected replace(): void {
-        if (IntlAPI.HasNumberFormat()) {
+        if (IntlAPI.hasNumberFormat()) {
             const localeCurrency: CurrencyPipe = new CurrencyPipe(this.locale.getDefaultLocale());
             const value: string | null = localeCurrency.transform(
                 this.key,

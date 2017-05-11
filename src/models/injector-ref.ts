@@ -5,16 +5,16 @@ import { Injectable, Injector } from "@angular/core";
  */
 @Injectable() export class InjectorRef {
 
-    private static Injector: Injector;
+    private static injector: Injector;
 
-    public static Get(token: any): any {
-        if (InjectorRef.Injector) {
-            return InjectorRef.Injector.get(token, null);
+    public static get(token: any): any {
+        if (this.injector) {
+            return this.injector.get(token, null);
         }
     }
 
     constructor(public injector: Injector) {
-        InjectorRef.Injector = injector;
+        InjectorRef.injector = injector;
     }
 
 }

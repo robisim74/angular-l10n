@@ -137,7 +137,7 @@ export interface ITranslationService {
     }
 
     private translateNumber(keyNumber: number): string {
-        if (!isNaN(keyNumber) && IntlAPI.HasNumberFormat()) {
+        if (!isNaN(keyNumber) && IntlAPI.hasNumberFormat()) {
             const localeNumber: string = new Intl.NumberFormat(this.language).format(keyNumber);
             return localeNumber;
         }

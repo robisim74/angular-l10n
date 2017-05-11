@@ -16,7 +16,7 @@ export abstract class NumberCode {
         }
 
         // Tries to update Unicode for numbers according to default locale.
-        if (IntlAPI.HasNumberFormat()) {
+        if (IntlAPI.hasNumberFormat()) {
             for (let num: number = 0; num <= 9; num++) {
                 this.numbersCodes[num] = this.Unicode(
                     new Intl.NumberFormat(defaultLocale).format(num)

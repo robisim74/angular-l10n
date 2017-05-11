@@ -19,8 +19,8 @@ export function validateLocaleNumber(
     MAX_VALUE: number = Number.MAX_VALUE
 ): Function {
 
-    const locale: LocaleService = InjectorRef.Get(LocaleService);
-    const localeValidation: LocaleValidation = InjectorRef.Get(LocaleValidation);
+    const locale: LocaleService = InjectorRef.get(LocaleService);
+    const localeValidation: LocaleValidation = InjectorRef.get(LocaleValidation);
 
     let defaultLocale: string;
     let NUMBER_REGEXP: RegExp;
@@ -29,7 +29,7 @@ export function validateLocaleNumber(
         if (formControl.value == null || formControl.value == "") return null;
 
         if (defaultLocale != locale.getDefaultLocale()) {
-            NUMBER_REGEXP = RegExpFactory.Number(locale.getDefaultLocale(), digits);
+            NUMBER_REGEXP = RegExpFactory.number(locale.getDefaultLocale(), digits);
             defaultLocale = locale.getDefaultLocale();
         }
 

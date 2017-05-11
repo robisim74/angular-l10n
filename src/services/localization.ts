@@ -15,9 +15,9 @@ import { InjectorRef } from '../models/injector-ref';
     public currency: string;
 
     constructor(
-        public locale: LocaleService = InjectorRef.Get(LocaleService),
-        public translation: TranslationService = InjectorRef.Get(TranslationService),
-        public changeDetectorRef: ChangeDetectorRef = InjectorRef.Get(ChangeDetectorRef)
+        public locale: LocaleService = InjectorRef.get(LocaleService),
+        public translation: TranslationService = InjectorRef.get(TranslationService),
+        public changeDetectorRef: ChangeDetectorRef = InjectorRef.get(ChangeDetectorRef)
     ) {
         super(translation, changeDetectorRef);
 

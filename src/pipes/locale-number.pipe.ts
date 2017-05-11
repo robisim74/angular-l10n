@@ -12,7 +12,7 @@ export class LocaleDecimalPipe implements PipeTransform {
     public transform(value: any, defaultLocale: string, digits?: string): string | null {
         if (typeof defaultLocale === "undefined") return null;
 
-        if (IntlAPI.HasNumberFormat()) {
+        if (IntlAPI.hasNumberFormat()) {
             const localeDecimal: DecimalPipe = new DecimalPipe(defaultLocale);
             return localeDecimal.transform(value, digits);
         }
@@ -31,7 +31,7 @@ export class LocalePercentPipe implements PipeTransform {
     public transform(value: any, defaultLocale: string, digits?: string): string | null {
         if (typeof defaultLocale === "undefined") return null;
 
-        if (IntlAPI.HasNumberFormat()) {
+        if (IntlAPI.hasNumberFormat()) {
             const localePercent: PercentPipe = new PercentPipe(defaultLocale);
             return localePercent.transform(value, digits);
         }
@@ -56,7 +56,7 @@ export class LocaleCurrencyPipe implements PipeTransform {
     ): string | null {
         if (typeof defaultLocale === "undefined" || typeof currency === "undefined") return null;
 
-        if (IntlAPI.HasNumberFormat()) {
+        if (IntlAPI.hasNumberFormat()) {
             const localeCurrency: CurrencyPipe = new CurrencyPipe(defaultLocale);
             return localeCurrency.transform(value, currency, symbolDisplay, digits);
         }

@@ -14,8 +14,8 @@ import { InjectorRef } from '../models/injector-ref';
     protected paramSubscriptions: ISubscription[] = [];
 
     constructor(
-        public translation: TranslationService = InjectorRef.Get(TranslationService),
-        public changeDetectorRef: ChangeDetectorRef = InjectorRef.Get(ChangeDetectorRef)
+        public translation: TranslationService = InjectorRef.get(TranslationService),
+        public changeDetectorRef: ChangeDetectorRef = InjectorRef.get(ChangeDetectorRef)
     ) {
         this.lang = this.translation.getLanguage();
         // When the language changes, subscribes to the event & updates lang property.
