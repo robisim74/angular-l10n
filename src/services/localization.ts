@@ -17,7 +17,7 @@ import { InjectorRef } from '../models/injector-ref';
     constructor(
         public locale: LocaleService = InjectorRef.get(LocaleService),
         public translation: TranslationService = InjectorRef.get(TranslationService),
-        public changeDetectorRef: ChangeDetectorRef = InjectorRef.get(ChangeDetectorRef)
+        public changeDetectorRef?: ChangeDetectorRef
     ) {
         super(translation, changeDetectorRef);
 

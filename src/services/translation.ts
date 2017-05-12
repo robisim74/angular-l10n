@@ -15,7 +15,7 @@ import { InjectorRef } from '../models/injector-ref';
 
     constructor(
         public translation: TranslationService = InjectorRef.get(TranslationService),
-        public changeDetectorRef: ChangeDetectorRef = InjectorRef.get(ChangeDetectorRef)
+        public changeDetectorRef?: ChangeDetectorRef
     ) {
         this.lang = this.translation.getLanguage();
         // When the language changes, subscribes to the event & updates lang property.

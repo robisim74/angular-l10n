@@ -32,3 +32,7 @@ export interface PropertyDecorator {
     <T extends Function>(type: T): T;
     (target: Object, propertyKey?: string | symbol): void;
 }
+
+export interface Type<T> extends Function {
+    new (...args: any[]): T;
+}

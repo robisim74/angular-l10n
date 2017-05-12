@@ -1,4 +1,3 @@
-import { ChangeDetectorRef } from '@angular/core';
 import { ISubscription } from 'rxjs/Subscription';
 
 import { LocaleService } from '../services/locale.service';
@@ -17,7 +16,6 @@ export function DefaultLocale(): PropertyDecorator {
         const targetNgOnInit: Function = target.ngOnInit;
         function ngOnInit(this: any): void {
             const locale: LocaleService = InjectorRef.get(LocaleService);
-            const changeDetectorRef: ChangeDetectorRef = InjectorRef.get(ChangeDetectorRef);
 
             if (typeof propertyKey !== "undefined") {
                 this[propertyKey] = locale.getDefaultLocale();
@@ -25,8 +23,6 @@ export function DefaultLocale(): PropertyDecorator {
                 subscription = locale.defaultLocaleChanged.subscribe(
                     (value: string) => {
                         this[propertyKey] = value;
-                        // OnPush Change Detection strategy.
-                        if (changeDetectorRef) { changeDetectorRef.markForCheck(); }
                     });
             }
 

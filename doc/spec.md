@@ -13,8 +13,8 @@ Library version: 3.2.0
     * [3.1 Pure pipes](#3.1)
         * [3.1.1 Messages](#3.1.1)
         * [3.1.2 Dates & Numbers](#3.1.2)
-        * [3.1.3 OnPush ChangeDetectionStrategy](#3.1.3)
-        * [3.1.4 Translation & Localization classes](#3.1.4)
+        * [3.1.3 Translation & Localization classes](#3.1.3)
+        * [3.1.4 OnPush ChangeDetectionStrategy](#3.1.4)
     * [3.2 Directives](#3.2)
     * [3.3 Using Html tags in translation](#3.3)
     * [3.4 Getting the translation in component class](#3.4)
@@ -304,32 +304,7 @@ where `symbolDisplay` is a boolean indicating whether to use the currency symbol
 ```
 *You can dynamically change parameters and expressions values.*
 
-#### <a name="3.1.3"/>3.1.3 OnPush ChangeDetectionStrategy
-_Pure pipes_ don't need to set `ChangeDetectionStrategy` to `OnPush`. If into your components you need to use it, you have to provide `InjectorRef`:
-```TypeScript
-import { Component, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
-
-import { Language, InjectorRef } from './src/angular-l10n'
-
-@Component({
-    ...
-    viewProviders: [InjectorRef],
-    changeDetection: ChangeDetectionStrategy.OnPush
-})
-export class HomeComponent {
-
-    @Language() lang: string;
-
-    constructor(public injector: InjectorRef) { }
-
-    ngOnInit(): void {
-        //
-    }
-
-}
-```
-
-#### <a name="3.1.4"/>3.1.4 Translation & Localization classes
+#### <a name="3.1.3"/>3.1.3 Translation & Localization classes
 When using _pipes_, alternatively to _decorators_ you could 
 extend `Translation` or `Localization` classes.
 
@@ -342,6 +317,28 @@ to the _localeDecimal_, _localePercent_ & _localeCurrency_ pipes.
 ```TypeScript
 export class HomeComponent extends Localization { } 
 ```
+
+#### <a name="3.1.4"/>3.1.4 OnPush ChangeDetectionStrategy
+_Pure pipes_ don't need to set `ChangeDetectionStrategy` to `OnPush`. If into your components you need to use it, you have to extend `Translation` or `Localization` class and pass `ChangeDetectorRef`:
+```TypeScript
+import { Component, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
+
+import { Translation, TranslationService } from './src/angular-l10n'
+
+@Component({
+    ...
+    changeDetection: ChangeDetectionStrategy.OnPush
+})
+export class HomeComponent extends Translation {
+
+    constructor(public translation: TranslationService, public ref: ChangeDetectorRef) {
+        super(translation, ref);
+        ...
+    }
+
+} 
+```
+That's because we need to know the component reference that implements the `OnPush` strategy.
 
 ### <a name="3.2"/>3.2 Directives
 Type | Format | Html syntax

@@ -1,4 +1,3 @@
-import { ChangeDetectorRef } from '@angular/core';
 import { ISubscription } from 'rxjs/Subscription';
 
 import { TranslationService } from '../services/translation.service';
@@ -16,7 +15,6 @@ export function Language(): PropertyDecorator {
         const targetNgOnInit: Function = target.ngOnInit;
         function ngOnInit(this: any): void {
             const translation: TranslationService = InjectorRef.get(TranslationService);
-            const changeDetectorRef: ChangeDetectorRef = InjectorRef.get(ChangeDetectorRef);
 
             if (typeof propertyKey !== "undefined") {
                 this[propertyKey] = translation.getLanguage();
@@ -24,8 +22,6 @@ export function Language(): PropertyDecorator {
                 subscription = translation.translationChanged.subscribe(
                     (value: string) => {
                         this[propertyKey] = value;
-                        // OnPush Change Detection strategy.
-                        if (changeDetectorRef) { changeDetectorRef.markForCheck(); }
                     });
             }
 

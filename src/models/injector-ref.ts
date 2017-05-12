@@ -1,5 +1,7 @@
 import { Injectable, Injector } from "@angular/core";
 
+import { Type } from './types';
+
 /**
  * Allows to get the dependencies at the module level or component.
  */
@@ -7,9 +9,9 @@ import { Injectable, Injector } from "@angular/core";
 
     private static injector: Injector;
 
-    public static get(token: any): any {
+    public static get<T>(token: Type<T>): any {
         if (this.injector) {
-            return this.injector.get(token, null);
+            return this.injector.get(token, undefined);
         }
     }
 
