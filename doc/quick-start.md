@@ -24,7 +24,7 @@ System.config({
     ...
 });
 ```
-Import the modules and the components you need in `app.module.ts`:
+Import the modules you need and configure the services in `app.module.ts`:
 ```TypeScript
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
@@ -33,7 +33,7 @@ import { HttpModule } from '@angular/http';
 import { AppComponent } from './app.component';
 import { HomeComponent } from './home.component';
 
-import { TranslationModule } from 'angular-l10n';
+import { TranslationModule, LocaleService, TranslationService } from 'angular-l10n';
 
 @NgModule({
     imports: [
@@ -44,13 +44,27 @@ import { TranslationModule } from 'angular-l10n';
     declarations: [AppComponent, HomeComponent],
     bootstrap: [AppComponent]
 })
-export class AppModule { }
-```
-Add to `app.component.ts` the initialization of the services:
-```TypeScript
-import { Component } from '@angular/core';
+export class AppModule {
 
-import { Translation, LocaleService, TranslationService } from 'angular-l10n';
+    constructor(public locale: LocaleService, public translation: TranslationService) {
+        this.locale.addConfiguration()
+            .addLanguages(['en', 'it'])
+            .setCookieExpiration(30)
+            .defineLanguage('en');
+        this.locale.init();
+
+        this.translation.addConfiguration()
+            .addProvider('./assets/locale-');
+        this.translation.init();
+    }
+
+}
+```
+Add to `app.component.ts`:
+```TypeScript
+import { Component, OnInit } from '@angular/core';
+
+import { LocaleService, Language } from 'angular-l10n';
 
 @Component({
     selector: 'my-app',
@@ -65,20 +79,14 @@ import { Translation, LocaleService, TranslationService } from 'angular-l10n';
         <home-component></home-component>
     `
 })
-export class AppComponent extends Translation {
+export class AppComponent implements OnInit {
 
-    constructor(public locale: LocaleService, public translation: TranslationService) {
-        super(translation);
+    @Language() lang: string;
 
-        this.locale.addConfiguration()
-            .addLanguages(['en', 'it'])
-            .setCookieExpiration(30)
-            .defineLanguage('en');
-        this.locale.init();
+    constructor(public locale: LocaleService) { }
 
-        this.translation.addConfiguration()
-            .addProvider('./assets/locale-');
-        this.translation.init();
+    ngOnInit(): void {
+        //
     }
 
     selectLanguage(language: string): void {
@@ -86,13 +94,12 @@ export class AppComponent extends Translation {
     }
 
 }
-
 ```
 Add `home.component.ts`:
 ```TypeScript
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 
-import { Translation, TranslationService } from 'angular-l10n';
+import { Language } from 'angular-l10n';
 
 @Component({
     selector: 'home-component',
@@ -100,15 +107,17 @@ import { Translation, TranslationService } from 'angular-l10n';
         <p>{{ 'Greeting' | translate:lang }}</p>
     `
 })
-export class HomeComponent extends Translation {
+export class HomeComponent implements OnInit {
 
-    constructor(public translation: TranslationService) {
-        super(translation);
+    @Language() lang: string;
+
+    ngOnInit(): void {
+        //
     }
 
 }
 ```
-and create the _json_ files of the translations such as `locale-en.json` and `locale-it.json` in `assets` folder:
+and create the _json_ files of the translations such as `locale-en.json` and `locale-it.json` in `src/assets` folder:
 ```Json
 {
     "Title": "Angular localization",
@@ -137,7 +146,7 @@ import { Component } from '@angular/core';
 export class HomeComponent { }
 ```
 Note that if you use in the component only the _directives_ and not the _pipes_, 
-you don't need to import the services and extend `Translation` class. 
+you don't need to use `@Language()` _decorator_. 
 
 For more details, see [library specification](https://github.com/robisim74/angular-l10n/blob/master/doc/spec.md).
 
@@ -157,7 +166,7 @@ System.config({
     ...
 });
 ```
-Import the modules and the components you need in `app.module.ts`:
+Import the modules you need and configure the services in `app.module.ts`:
 ```TypeScript
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
@@ -166,7 +175,7 @@ import { HttpModule } from '@angular/http';
 import { AppComponent } from './app.component';
 import { HomeComponent } from './home.component';
 
-import { LocalizationModule } from 'angular-l10n';
+import { LocalizationModule, LocaleService, TranslationService } from 'angular-l10n';
 
 @NgModule({
     imports: [
@@ -177,13 +186,28 @@ import { LocalizationModule } from 'angular-l10n';
     declarations: [AppComponent, HomeComponent],
     bootstrap: [AppComponent]
 })
-export class AppModule { }
-```
-Add to `app.component.ts` the initialization of the services:
-```TypeScript
-import { Component } from '@angular/core';
+export class AppModule {
 
-import { Localization, LocaleService, TranslationService } from 'angular-l10n';
+    constructor(public locale: LocaleService, public translation: TranslationService) {
+        this.locale.addConfiguration()
+            .addLanguages(['en', 'it'])
+            .setCookieExpiration(30)
+            .defineDefaultLocale('en', 'US')
+            .defineCurrency('USD');
+        this.locale.init();
+
+        this.translation.addConfiguration()
+            .addProvider('./assets/locale-');
+        this.translation.init();
+    }
+
+}
+```
+Add to `app.component.ts`:
+```TypeScript
+import { Component, OnInit } from '@angular/core';
+
+import { LocaleService, Language } from 'angular-l10n';
 
 @Component({
     selector: 'my-app',
@@ -199,21 +223,14 @@ import { Localization, LocaleService, TranslationService } from 'angular-l10n';
         <home-component></home-component>
     `
 })
-export class AppComponent extends Localization {
+export class AppComponent implements OnInit {
 
-    constructor(public locale: LocaleService, public translation: TranslationService) {
-        super(locale, translation);
+    @Language() lang: string;
 
-        this.locale.addConfiguration()
-            .addLanguages(['en', 'it'])
-            .setCookieExpiration(30)
-            .defineDefaultLocale('en', 'US')
-            .defineCurrency('USD');
-        this.locale.init();
+    constructor(public locale: LocaleService) { }
 
-        this.translation.addConfiguration()
-            .addProvider('./assets/locale-');
-        this.translation.init();
+    ngOnInit(): void {
+        //
     }
 
     selectLocale(language: string, country: string, currency: string): void {
@@ -223,7 +240,7 @@ export class AppComponent extends Localization {
 
 }
 ```
-and create the _json_ files of the translations such as `locale-en.json` and `locale-it.json` in `assets` folder:
+and create the _json_ files of the translations such as `locale-en.json` and `locale-it.json` in `src/assets` folder:
 ```Json
 {
     "Title": "Angular localization",
@@ -240,9 +257,9 @@ and create the _json_ files of the translations such as `locale-en.json` and `lo
 ```
 Add `home.component.ts`:
 ```TypeScript
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 
-import { Localization, LocaleService, TranslationService } from 'angular-l10n';
+import { Language, DefaultLocale, Currency } from 'angular-l10n';
 
 @Component({
     selector: 'home-component',
@@ -254,21 +271,23 @@ import { Localization, LocaleService, TranslationService } from 'angular-l10n';
         <button (click)="change()">{{ 'Change' | translate:lang }}</button>
     `
 })
-export class HomeComponent extends Localization {
+export class HomeComponent implements OnInit {
+
+    @Language() lang: string;
+    @DefaultLocale() defaultLocale: string;
+    @Currency() currency: string;
 
     today: number;
     pi: number;
     value: number;
 
-    constructor(public locale: LocaleService, public translation: TranslationService) {
-        super(locale, translation);
-
+    ngOnInit(): void {
         this.today = Date.now();
         this.pi = 3.14159;
         this.value = Math.round(Math.random() * 1000000) / 100;
     }
 
-    change() {
+    change(): void {
         this.value = Math.round(Math.random() * 1000000) / 100;
     }
 
@@ -279,17 +298,9 @@ Finally, to extend the support to all browsers, add the following script tag in 
 <script src="https://cdn.polyfill.io/v2/polyfill.min.js?features=Intl.~locale.en-US,Intl.~locale.en-GB,Intl.~locale.it-IT"></script>
 ```
 #### Using directives
-In addition to the _pipes_, you can use _directives_. Try to change in `app.component.ts`:
-```Html
-<h1>{{ 'TITLE' | translate:lang }}</h1>
-```
-into:
-```Html
-<h1 translate>Title</h1>
-```
-Then change `home.component.ts`:
+In addition to the _pipes_, you can use _directives_. Try to change `home.component.ts`:
 ```TypeScript
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 
 @Component({
     selector: 'home-component',
@@ -301,26 +312,26 @@ import { Component } from '@angular/core';
         <button (click)="change()" translate>Change</button>
     `
 })
-export class HomeComponent {
+export class HomeComponent implements OnInit {
 
     today: number;
     pi: number;
     value: number;
 
-    constructor() {
+    ngOnInit(): void {
         this.today = Date.now();
         this.pi = 3.14159;
         this.value = Math.round(Math.random() * 1000000) / 100;
     }
 
-    change() {
+    change(): void {
         this.value = Math.round(Math.random() * 1000000) / 100;
     }
 
 }
 ```
 Note that if you use in the component only the _directives_ and not the _pipes_, 
-you don't need to import the services and extend `Localization` class. 
+you don't need to use _decorators_. 
 
 For more details, see [library specification](https://github.com/robisim74/angular-l10n/blob/master/doc/spec.md).
 
@@ -418,4 +429,3 @@ Always configure your provider in this way:
 this.translation.addConfiguration()
     .addProvider('./assets/locale-');
 ```
-

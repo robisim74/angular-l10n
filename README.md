@@ -18,7 +18,7 @@ _No bootstrap (when language changes)_ | no | yes | yes
 _Getting the translation in component class_ | not yet | yes | yes
 _Numbers_ | pure pipe via Intl | - | directive & pure pipe via Intl
 _Dates_ | pure pipe via Intl | - | directive & pure pipe via Intl
-_Validation_ | - | - | numbers validation 
+_Validation_ | - | - | number validation
 
 ## Installing
 You can add `angular-l10n` to your project using `npm`:
@@ -50,9 +50,80 @@ and use global `ng.l10n` namespace.
 This library is compatible with AoT compilation & Server-side prerendering. It also supports the `strict` TypeScript compiler option.
 
 ## Usage
-**Angular v4**: [quick start](https://github.com/robisim74/angular-l10n/blob/master/doc/quick-start.md) and [library specification](https://github.com/robisim74/angular-l10n/blob/master/doc/spec.md).
+**_Configuration_**
+```TypeScript
+@NgModule({
+    imports: [
+        ...
+        HttpModule,
+        LocalizationModule.forRoot()
+    ],
+    ...
+})
+export class AppModule {
 
-**Angular v2**: [branch](https://github.com/robisim74/angular-l10n/tree/angular_v2).
+    constructor(public locale: LocaleService, public translation: TranslationService) {
+        this.locale.addConfiguration()
+            .addLanguages(['en', 'it'])
+            .setCookieExpiration(30)
+            .defineDefaultLocale('en', 'US')
+            .defineCurrency('USD');
+        this.locale.init();
+
+        this.translation.addConfiguration()
+            .addProvider('./assets/locale-');
+        this.translation.init();
+    }
+
+}
+```
+**_Pure pipes with Decorators_**
+```TypeScript
+@Component({
+    ...
+    template: `
+        <p>{{ 'Greeting' | translate:lang }}</p>
+
+        <p>{{ today | localeDate:defaultLocale:'fullDate' }}</p>       
+        <p>{{ pi | localeDecimal:defaultLocale:'1.5-5' }}</p>
+        <p>{{ value | localeCurrency:defaultLocale:currency:true:'1.2-2' }}</p>
+    `
+})
+export class HomeComponent implements OnInit {
+
+    @Language() lang: string;
+    @DefaultLocale() defaultLocale: string;
+    @Currency() currency: string;
+
+    ...
+    
+    ngOnInit(): void {
+        //
+    }
+
+}
+```
+**_Directives_**
+```TypeScript
+@Component({
+    ...
+    template: `
+        <p translate>Greeting</p>
+
+        <p localeDate="fullDate">{{ today }}</p>    
+        <p localeDecimal="1.5-5">{{ pi }}</p>
+        <p localeCurrency="1.2-2" [symbol]="true">{{ value }}</p>
+    `
+})
+export class HomeComponent {
+    ...
+}
+```
+See the following documentation to learn more about all the features:
+
+- **Angular v4**: [quick start](https://github.com/robisim74/angular-l10n/blob/master/doc/quick-start.md) and [library specification](https://github.com/robisim74/angular-l10n/blob/master/doc/spec.md)
+
+- **Angular v2**: [branch](https://github.com/robisim74/angular-l10n/tree/angular_v2)
 
 ## Related projects
 [Angular Localization with an ASP.NET CORE MVC Service](https://damienbod.com/2016/04/29/angular-2-localization-with-an-asp-net-core-mvc-service/) @damienbod

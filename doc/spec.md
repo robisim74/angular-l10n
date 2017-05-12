@@ -1,5 +1,5 @@
 # Angular localization library specification
-Library version: 3.1.0
+Library version: 3.2.0
 
 ## Table of contents
 * [1 Library structure](#1)
@@ -14,7 +14,7 @@ Library version: 3.1.0
         * [3.1.1 Messages](#3.1.1)
         * [3.1.2 Dates & Numbers](#3.1.2)
         * [3.1.3 OnPush ChangeDetectionStrategy](#3.1.3)
-        * [3.1.4 ngOnDestroy method](#3.1.4)
+        * [3.1.4 Translation & Localization classes](#3.1.4)
     * [3.2 Directives](#3.2)
     * [3.3 Using Html tags in translation](#3.3)
     * [3.4 Getting the translation in component class](#3.4)
@@ -39,15 +39,13 @@ Class | Contract
 ----- | --------
 `LocaleService` | Manages language, default locale & currency
 `TranslationService` | Manages the translation data
-`Translation` | Extend this class in components to provide _lang_ to the _translate_ pipe
-`Localization` | Extend this class in components to provide _lang_, _defaultLocale_ & _currency_ to the translate and locale pipes
 `LocaleValidation` | Provides the methods to convert strings according to default locale
 `Collator` | Intl.Collator APIs
 `IntlAPI` | Provides the methods to check if Intl APIs are supported
 
 ## <a name="2"/>2 Configuration
 ### <a name="2.1"/>2.1 First scenario: you only need to translate messages
-Import the modules you need in the application root module:
+Import the modules you need and configure the services in the application root module:
 ```TypeScript
 @NgModule({
     imports: [
@@ -58,24 +56,24 @@ Import the modules you need in the application root module:
     declarations: [AppComponent],
     bootstrap: [AppComponent]
 })
-export class AppModule { }
-```
-Configure the services in the application root module or bootstrap component:
-```TypeScript
-constructor(public locale: LocaleService, public translation: TranslationService) {
-    this.locale.addConfiguration()
-        .addLanguages(['en', 'it'])
-        .setCookieExpiration(30)
-        .defineLanguage('en');
-    this.locale.init();
+export class AppModule {
 
-    this.translation.addConfiguration()
-        .addProvider('./assets/locale-');
-    this.translation.init();
+    constructor(public locale: LocaleService, public translation: TranslationService) {
+        this.locale.addConfiguration()
+            .addLanguages(['en', 'it'])
+            .setCookieExpiration(30)
+            .defineLanguage('en');
+        this.locale.init();
+
+        this.translation.addConfiguration()
+            .addProvider('./assets/locale-');
+        this.translation.init();
+    }
+
 }
 ```
 ### <a name="2.2"/>2.2 Second scenario: you need to translate messages, dates & numbers
-Import the modules you need in the application root module:
+Import the modules you need and configure the services in the application root module:
 ```TypeScript
 @NgModule({
     imports: [
@@ -86,21 +84,21 @@ Import the modules you need in the application root module:
     declarations: [AppComponent],
     bootstrap: [AppComponent]
 })
-export class AppModule { }
-```
-Configure the services in the application root module or bootstrap component:
-```TypeScript
-constructor(public locale: LocaleService, public translation: TranslationService) {
-    this.locale.addConfiguration()
-        .addLanguages(['en', 'it'])
-        .setCookieExpiration(30)
-        .defineDefaultLocale('en', 'US')
-        .defineCurrency('USD');
-    this.locale.init();
+export class AppModule {
 
-    this.translation.addConfiguration()
-        .addProvider('./assets/locale-');
-    this.translation.init();
+    constructor(public locale: LocaleService, public translation: TranslationService) {
+        this.locale.addConfiguration()
+            .addLanguages(['en', 'it'])
+            .setCookieExpiration(30)
+            .defineDefaultLocale('en', 'US')
+            .defineCurrency('USD');
+        this.locale.init();
+
+        this.translation.addConfiguration()
+            .addProvider('./assets/locale-');
+        this.translation.init();
+    }
+
 }
 ```
 
@@ -151,10 +149,9 @@ You can add all the providers you need:
 ```TypeScript
 this.translation.addConfiguration()
     .addProvider('./assets/locale-')
-    .addProvider('./assets/global-')
-    ...
+    .addProvider('./assets/global-');
 ```
-*N.B. You can't use Direct and Asynchronous loading at the same time.*
+*You can't use Direct and Asynchronous loading at the same time.*
 
 #### Asynchronous loading through a Web API
 You can also load the data through a Web API:
@@ -166,19 +163,19 @@ this.translation.translationError.subscribe((error: any) => console.log(error));
 
 this.translation.init();
 ```
-`[path]{languageCode}` will be the URL used by the Http GET requests. So the example URL will be something like: `http://localhost:54703/api/values/en`.
+`[path]{languageCode}` will be the URL used by the Http GET requests. So the example URI will be something like: `http://localhost:54703/api/values/en`.
 
 The example above also showed as you can perform a custom action if you get a bad response.
 
 ### <a name="2.4"/>2.4 Default locale
 The default locale contains the current language and culture. It consists of:
-* `language code`: ISO 639 two-letter or three-letter code of the language;
-* `country code`: ISO 3166 two-letter, uppercase code of the country;
+* `language code`: ISO 639 two-letter or three-letter code of the language
+* `country code`: ISO 3166 two-letter, uppercase code of the country
 
 and optionally:
-- `script code`: used to indicate the script or writing system variations that distinguish the written forms of a language or its dialects. It consists of four letters and was defined according to the assignments found in ISO 15924;
-- `numbering system`: possible values include: "arab", "arabext", "bali", "beng", "deva", "fullwide", "gujr", "guru", "hanidec", "khmr", "knda", "laoo", "latn", "limb", "mlym", "mong", "mymr", "orya", "tamldec", "telu", "thai", "tibt";
-- `calendar`: possible values include: "buddhist", "chinese", "coptic", "ethioaa", "ethiopic", "gregory", "hebrew", "indian", "islamic", "islamicc", "iso8601", "japanese", "persian", "roc".
+- `script code`: used to indicate the script or writing system variations that distinguish the written forms of a language or its dialects. It consists of four letters and was defined according to the assignments found in ISO 15924
+- `numbering system`: possible values include: "arab", "arabext", "bali", "beng", "deva", "fullwide", "gujr", "guru", "hanidec", "khmr", "knda", "laoo", "latn", "limb", "mlym", "mong", "mymr", "orya", "tamldec", "telu", "thai", "tibt"
+- `calendar`: possible values include: "buddhist", "chinese", "coptic", "ethioaa", "ethiopic", "gregory", "hebrew", "indian", "islamic", "islamicc", "iso8601", "japanese", "persian", "roc"
 
 For more information see [Intl API](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl).
 
@@ -191,10 +188,10 @@ Just add one script tag in your `index.html`:
 ```
 When specifying the `features`, you have to specify what locale, or locales to load.
 
-*N.B. When a feature is not supported, however, for example in older browsers, Angular localization does not generate an error in the browser, but returns the value without performing operations.*
+*When a feature is not supported, however, for example in older browsers, Angular localization does not generate an error in the browser, but returns the value without performing operations.*
 
 ## <a name="3"/>3 Getting the translation
-To get the translation, this library uses _pure pipes_ (to know the difference between _pure_ and _impure pipes_ see [here](https://angular.io/docs/ts/latest/guide/pipes.html)) or directives. 
+To get the translation, this library uses _pure pipes_ (to know the difference between _pure_ and _impure pipes_ see [here](https://angular.io/docs/ts/latest/guide/pipes.html)) or _directives_. 
 You can also get the translation in component class.
 
 ### <a name="3.1"/>3.1 Pure pipes
@@ -207,6 +204,19 @@ Number | Percentage | `expression \| localePercent[:defaultLocale[:digitInfo]]`
 Number | Currency | `expression \| localeCurrency[:defaultLocale[:currency[:symbolDisplay[:digitInfo]]]]`
 
 #### <a name="3.1.1"/>3.1.1 Messages
+Implement _Language_ decorator in the component to provide the parameter to the _translate_ pipe:
+```TypeScript
+export class HomeComponent implements OnInit {
+
+    @Language() lang: string;
+
+    ngOnInit(): void {
+        //
+    }
+
+}
+```
+*To use AoT compilation you have to implement OnInit and it would be better also OnDestroy, even if they are empty.*
 ```
 expression | translate:lang
 ```
@@ -219,17 +229,6 @@ _Json_:
 {
     "Title": "Angular localization"
 }
-```
-Extend `Translation` class in the component to provide _lang_ to the _translate_ pipe:
-```TypeScript
-export class HomeComponent extends Translation {
-
-    constructor(public translation: TranslationService) {
-        super(translation);
-        ...
-    }
-
-} 
 ```
 ##### Composed keys
 ```Html
@@ -255,17 +254,20 @@ _Json_:
 ```
 
 #### <a name="3.1.2"/>3.1.2 Dates & Numbers
-Extend `Localization` class in the component to provide _defaultLocale_ & _currency_ to the locale pipes:
+Implement _DefaultLocale_ & _Currency_ decorators in the component to provide the parameters to _localeDecimal_, _localePercent_ & _localeCurrency_ pipes.
 ```TypeScript
-export class HomeComponent extends Localization {
+export class HomeComponent implements OnInit {
 
-    constructor(public locale: LocaleService, public translation: TranslationService) {
-        super(locale, translation);
-        ...
+    @DefaultLocale() defaultLocale: string;
+    @Currency() currency: string;
+
+    ngOnInit(): void {
+        //
     }
 
-} 
+}
 ```
+*To use AoT compilation you have to implement OnInit and it would be better also OnDestroy, even if they are empty.*
 ##### Dates
 ```
 expression | localeDate[:defaultLocale[:format]]
@@ -300,37 +302,45 @@ where `symbolDisplay` is a boolean indicating whether to use the currency symbol
 ```Html
 {{ value | localeCurrency:defaultLocale:currency:true:'1.2-2' }}
 ```
-*N.B. You can dynamically change parameters and expressions values.*
+*You can dynamically change parameters and expressions values.*
 
 #### <a name="3.1.3"/>3.1.3 OnPush ChangeDetectionStrategy
-_Pure pipes_ don't need to set `ChangeDetectionStrategy` to `OnPush`: if into your components you need to use it, when you extend `Translation` or `Localization` classes you have also to pass `ChangeDetectorRef`:
+_Pure pipes_ don't need to set `ChangeDetectionStrategy` to `OnPush`. If into your components you need to use it, you have to provide `InjectorRef`:
 ```TypeScript
-export class HomeComponent extends Localization {
+import { Component, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 
-    constructor(public locale: LocaleService, public translation: TranslationService, public cd: ChangeDetectorRef) {
-        super(locale, translation, cd);
-        ...
+import { Language, InjectorRef } from './src/angular-l10n'
+
+@Component({
+    ...
+    viewProviders: [InjectorRef],
+    changeDetection: ChangeDetectionStrategy.OnPush
+})
+export class HomeComponent {
+
+    @Language() lang: string;
+
+    constructor(public injector: InjectorRef) { }
+
+    ngOnInit(): void {
+        //
     }
 
-} 
+}
 ```
 
-#### <a name="3.1.4"/>3.1.4 ngOnDestroy method
-When you extend `Translation` or `Localization` classes, the component inherits 
-`ngOnDestroy` method that cancels the subscriptions to update the pipes parameters. 
-If you override the `ngOnDestroy` method in your component to cancel its subscriptions, 
-you should call also `cancelPipesSubscriptions`:
-```TypeScript
-ngOnDestroy() {
-    // Cancels the subscriptions of the component.
-    this.subscriptions.forEach((subscription: ISubscription) => {
-        if (typeof subscription !== "undefined") {
-            subscription.unsubscribe();
-        }
-    });
+#### <a name="3.1.4"/>3.1.4 Translation & Localization classes
+When using _pipes_, alternatively to _decorators_ you could 
+extend `Translation` or `Localization` classes.
 
-    this.cancelPipesSubscriptions();
-}
+Extend `Translation` class in the component to provide _lang_ to the _translate_ pipe:
+```TypeScript
+export class HomeComponent extends Translation { }
+```
+Extend `Localization` class in the component to provide _lang_, _defaultLocale_ & _currency_ 
+to the _localeDecimal_, _localePercent_ & _localeCurrency_ pipes.
+```TypeScript
+export class HomeComponent extends Localization { } 
 ```
 
 ### <a name="3.2"/>3.2 Directives
@@ -364,9 +374,22 @@ Parameters:
 <p localeCurrency>{{ value }}</p>
 <p localeCurrency="1.2-2" [symbol]="true">{{ value }}</p>
 ```
-*N.B. You can dynamically change attributes, parameters and expressions values. 
-If you use in the component only the directives and not the pipes, 
-you don't need to import services and extend `Translation` or `Localization` classes.*
+*You can dynamically change attributes, parameters and expressions values, as with pipes.*
+
+*You can properly translate UI components like Angular material:*
+```Html
+<a routerLinkActive="active-link" md-list-item routerLink="/home" translate>App.Home</a>
+```
+rendered as:
+```Html
+<a md-list-item="" role="listitem" routerlink="/home" routerlinkactive="active-link" translate="" href="#/home" class="active-link">
+    <div class="md-list-item">
+        <div class="md-list-text"></div>
+        App.Home
+    </div>
+</a>
+```
+*If you use in the component only the directives and not the pipes, you don't need to use decorators.*
 
 ### <a name="3.3"/>3.3 Using Html tags in translation
 If you have Html tags in translation like this:
@@ -375,11 +398,11 @@ If you have Html tags in translation like this:
 ```
 you have to use `innerHTML` attribute.
 
-Using pipes:
+Using _pipes_:
 ```Html
 <p [innerHTML]="'Strong subtitle' | translate:lang"></p>
 ```
-Using directives:
+Using _directives_:
 ```Html
 <p [innerHTML]="'Strong subtitle'" translate></p>
 ```
@@ -397,12 +420,14 @@ _you must also_ subscribe to the following event:
 @Component({
     template: '<h1>{{ title }}</h1>'
 })
-export class HomeComponent {
+export class HomeComponent implements OnInit {
 
     // Initializes 'title' with the current translation at the time of the component loading.
     title: string = this.translation.translate('Title');
 
-    constructor(public translation: TranslationService) {
+    constructor(public translation: TranslationService) { }
+
+    ngOnInit(): void {
         this.translation.translationChanged.subscribe(
             // When the language changes, refreshes 'title' with the new translation.
             () => { this.title = this.translation.translate('Title'); }
@@ -418,14 +443,13 @@ To get the translation of dates and numbers, you have the `getDefaultLocale` met
     template: '<p>{{ value }}</p>'
 })
 export class HomeComponent {
+  
+    pipe: LocaleDecimalPipe = new LocaleDecimalPipe();
+    value: number = pipe.transform(1234.5, this.locale.getDefaultLocale(), '1.2-2');
 
-    value: number;
+    constructor(public locale: LocaleService,) { }
 
-    constructor(public locale: LocaleService,) {
-        let pipe = new LocaleDecimalPipe();
-
-        this.value = pipe.transform(1234.5, this.locale.getDefaultLocale(), '1.2-2');
-
+    ngOnInit(): void {
         this.locale.defaultLocaleChanged.subscribe(
             () => {
                 this.value = pipe.transform(1234.5, this.locale.getDefaultLocale(), '1.2-2');
@@ -445,7 +469,9 @@ To change language, default locale or currency at runtime, `LocaleService` has t
 ## <a name="5"/>5 Lazy loading
 If you use a `Router` in an extended application, you can create an instance of the `TranslationService` with its own translation data for every lazy loaded module/component, as shown:
 ![LazyLoading](images/LazyLoading.png)
-You can create a new instance of `TranslationService` calling the `forChild` method of the module you are using:
+You can create a new instance of `TranslationService` calling the `forChild` method of the module you are using, 
+and configure the service in the component with the new provider:
+
 ```TypeScript
 @NgModule({
     imports: [
@@ -454,11 +480,7 @@ You can create a new instance of `TranslationService` calling the `forChild` met
     ],
     declarations: [ListComponent]
 })
-export class ListModule { }
-```
-then you have to configure the service in the component with the new provider:
-```TypeScript
-export class ListComponent {
+export class ListModule {
 
     constructor(public translation: TranslationService) {
         this.translation.addConfiguration()
@@ -514,7 +536,7 @@ onSubmit(value: string): void {
 #### <a name="6.1.2"/>6.1.2 FormBuilder
 If you use `validateLocaleNumber` with `FormBuilder`, you have to invoke the following function:
 ```TypeScript
-export declare function validateLocaleNumber(locale: LocaleService, digits: string, MIN_VALUE?: number, MAX_VALUE?: number): Function;
+validateLocaleNumber(digits: string, MIN_VALUE?: number, MAX_VALUE?: number): Function
 ```
 
 ## <a name="7"/>7 Collator
@@ -526,7 +548,7 @@ export declare function validateLocaleNumber(locale: LocaleService, digits: stri
 
 These methods use the [Intl.Collator](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Collator) object, a constructor for collators, objects that enable language sensitive string comparison.
 
-*N.B. This feature is not supported by all browsers, even with the use of `Intl.js`.*
+*This feature is not supported by all browsers, even with the use of `Intl.js`.*
 
 ## <a name="8"/>8 Services APIs
 
@@ -589,6 +611,6 @@ Method | Function
 ### <a name="8.5"/>8.5 IntlAPI
 Method | Function
 ------ | --------
-`static HasDateTimeFormat(): boolean` |
-`static HasNumberFormat(): boolean` |
-`static HasCollator(): boolean` |
+`static hasDateTimeFormat(): boolean` |
+`static hasNumberFormat(): boolean` |
+`static hasCollator(): boolean` |
