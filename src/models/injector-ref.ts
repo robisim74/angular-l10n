@@ -9,14 +9,12 @@ import { Type } from './types';
 
     private static injector: Injector;
 
-    public static get<T>(token: Type<T>): any {
-        if (this.injector) {
-            return this.injector.get(token, undefined);
-        }
+    public static get<T>(token: Type<T>): T {
+        return this.injector.get(token);
     }
 
     constructor(public injector: Injector) {
-        InjectorRef.injector = injector;
+        InjectorRef.injector = this.injector;
     }
 
 }
