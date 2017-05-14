@@ -9,10 +9,11 @@ import { BaseDirective } from '../models/base-directive';
 export class TranslateDirective extends BaseDirective {
 
     @Input() set l10nTranslate(params: string) {
-        this.params = params || this.params;
+        this.params = params;
     }
+
     @Input() set translate(params: string) {
-        this.params = params || this.params;
+        this.params = params;
     }
 
     private params: string;

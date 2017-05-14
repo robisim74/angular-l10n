@@ -13,12 +13,9 @@ import { BFS } from './bfs';
 
 export abstract class BaseDirective implements AfterViewInit, OnChanges, OnDestroy {
 
-    @Input() set value(valueAttribute: string) {
-        this.valueAttribute = valueAttribute;
-    }
-    @Input() set innerHTML(innerHTMLProperty: string) {
-        this.innerHTMLProperty = innerHTMLProperty;
-    }
+    @Input('value') public valueAttribute: string;
+
+    @Input('innerHTML') public innerHTMLProperty: string;
 
     protected key: string;
 
@@ -29,9 +26,6 @@ export abstract class BaseDirective implements AfterViewInit, OnChanges, OnDestr
     private nodeValue: string;
 
     private textObserver: MutationObserver;
-
-    private valueAttribute: string;
-    private innerHTMLProperty: string;
 
     private readonly MUTATION_CONFIG: any = { subtree: true, characterData: true };
 
