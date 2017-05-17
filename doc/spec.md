@@ -409,24 +409,46 @@ To get the translation in component class, `TranslationService` has the followin
 * `translate(key: string, args?: any, lang?: string): string`
 * `translateAsync(key: string, args?: any, lang?: string): Observable<string>`
 
-But to get the translation _when the component is loaded_ and _when the current language changes_, 
+When you use those methods, _you must be sure that the Http request is completed_, and the translation file has been loaded:
+
+```TypeScript
+@Component({
+    ...
+    template: `
+        <h1>{{ title }}</h1>
+        <button (click)="getTranslation()">Translate</button>
+    `
+})
+export class HomeComponent {
+
+    title: string;
+
+    constructor(public translation: TranslationService) { }
+
+    getTranslation(): void {
+        this.title = this.translation.translate('Title');
+    }
+
+}
+```
+
+To get the translation _when the component is loaded_ and _when the current language changes_, 
 _you must also_ subscribe to the following event:
 * `translationChanged: EventEmitter<string>`
 
 ```TypeScript
 @Component({
-    template: '<h1>{{ title }}</h1>'
+    ...
+    template: `<h1>{{ title }}</h1>`
 })
 export class HomeComponent implements OnInit {
 
-    // Initializes 'title' with the current translation at the time of the component loading.
     title: string = this.translation.translate('Title');
 
     constructor(public translation: TranslationService) { }
 
     ngOnInit(): void {
         this.translation.translationChanged.subscribe(
-            // When the language changes, refreshes 'title' with the new translation.
             () => { this.title = this.translation.translate('Title'); }
         );
     }
@@ -434,10 +456,11 @@ export class HomeComponent implements OnInit {
 }
 ```
 
-To get the translation of dates and numbers, you have the `getDefaultLocale` method of `LocaleService`, and the `defaultLocaleChanged` event to know when `defaultLocale` changes. You can use the `transform` method of the corresponding pipe to get the translation, but you could use also the Intl APIs directly (or also use other specific libraries):
+To get the translation of dates and numbers, you have the `getDefaultLocale` method of `LocaleService`, and the `defaultLocaleChanged` event to know when `defaultLocale` changes. You can use the `transform` method of the corresponding pipe to get the translation, but you could use the _Intl APIs_ directly (or also use other specific libraries):
 ```TypeScript
 @Component({
-    template: '<p>{{ value }}</p>'
+    ...
+    template: `<p>{{ value }}</p>`
 })
 export class HomeComponent {
   
