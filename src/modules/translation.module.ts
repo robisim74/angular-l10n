@@ -5,8 +5,10 @@ import { LocaleConfig } from '../models/localization/locale-config';
 import { TranslationConfig } from '../models/translation/translation-config';
 import { LocaleService } from '../services/locale.service';
 import { TranslationService } from '../services/translation.service';
+import { TranslationProvider, HttpTranslationProvider } from '../services/translation-provider';
 import { TranslatePipe } from '../pipes/translate.pipe';
 import { TranslateDirective } from '../directives/translate.directive';
+import { Token } from '../models/types';
 
 @NgModule({
     declarations: [
@@ -23,7 +25,7 @@ export class TranslationModule {
     /**
      * Use in AppModule: new instances of LocaleService & TranslationService.
      */
-    public static forRoot(): ModuleWithProviders {
+    public static forRoot(token: Token = {}): ModuleWithProviders {
         return {
             ngModule: TranslationModule,
             providers: [
@@ -31,7 +33,11 @@ export class TranslationModule {
                 LocaleConfig,
                 LocaleService,
                 TranslationConfig,
-                TranslationService
+                TranslationService,
+                {
+                    provide: TranslationProvider,
+                    useClass: token.translationProvider || HttpTranslationProvider
+                }
             ]
         };
     }
@@ -39,10 +45,18 @@ export class TranslationModule {
     /**
      * Use in features modules with lazy loading: new instance of TranslationService.
      */
-    public static forChild(): ModuleWithProviders {
+    public static forChild(token: Token = {}): ModuleWithProviders {
         return {
             ngModule: TranslationModule,
-            providers: [InjectorRef, TranslationConfig, TranslationService]
+            providers: [
+                InjectorRef,
+                TranslationConfig,
+                TranslationService,
+                {
+                    provide: TranslationProvider,
+                    useClass: token.translationProvider || HttpTranslationProvider
+                }
+            ]
         };
     }
 

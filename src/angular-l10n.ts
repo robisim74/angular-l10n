@@ -3,6 +3,7 @@ export { ILocaleConfig, LocaleConfig } from './models/localization/locale-config
 export { ILocaleService, LocaleService } from './services/locale.service';
 export { ITranslationConfig, TranslationConfig } from './models/translation/translation-config';
 export { ITranslationService, TranslationService } from './services/translation.service';
+export { TranslationProvider, HttpTranslationProvider } from './services/translation-provider';
 export { Translation } from './services/translation';
 export { Localization } from './services/localization';
 export { ILocaleValidation, LocaleValidation } from './services/locale-validation';

@@ -1,4 +1,4 @@
-import { Pipe } from '@angular/core';
+import { Pipe, Injectable } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { MockBackend, MockConnection } from '@angular/http/testing';
 import {
@@ -10,14 +10,29 @@ import {
     ResponseOptions
 } from '@angular/http';
 import { PipeResolver } from '@angular/compiler';
+import { Observable } from 'rxjs/Observable';
 
 import { TranslatePipe } from './../../index';
 import {
     TranslationModule,
     LocalizationModule,
     LocaleService,
-    TranslationService
+    TranslationService,
+    TranslationProvider
 } from './../../index';
+
+@Injectable() export class CustomTranslationProvider implements TranslationProvider {
+
+    constructor(private http: Http) { }
+
+    public getTranslation(language: string, args: any): Observable<any> {
+        const url: string = args.path + language + ".json";
+
+        return this.http.get(url)
+            .map((res: Response) => res.json());
+    }
+
+}
 
 describe('TranslatePipe', () => {
 
@@ -241,6 +256,76 @@ describe('TranslatePipe', () => {
             locale.setCurrentLanguage('it');
             expect(pipe.transform('Title', translation.getLanguage())).toEqual("Localizzazione in Angular");
             expect(pipe.transform('Save', translation.getLanguage())).toEqual("Salva");
+        }));
+
+    });
+
+    describe('Custom provider', () => {
+
+        let locale: LocaleService;
+        let translation: TranslationService;
+
+        let mockBackend: MockBackend;
+
+        let pipe: TranslatePipe;
+
+        function expectURL(backend: MockBackend, responses: any): void {
+            backend.connections.subscribe((c: MockConnection) => {
+                const response: any = responses[c.request.url];
+                c.mockRespond(response);
+            });
+        }
+
+        beforeEach(() => {
+            TestBed.configureTestingModule({
+                imports: [
+                    TranslationModule.forRoot({ translationProvider: CustomTranslationProvider })
+                ],
+                providers: [
+                    BaseRequestOptions,
+                    MockBackend,
+                    {
+                        provide: Http, useFactory: (backend: ConnectionBackend, defaultOptions: BaseRequestOptions) => {
+                            return new Http(backend, defaultOptions);
+                        }, deps: [MockBackend, BaseRequestOptions]
+                    }
+                ]
+            });
+
+            locale = TestBed.get(LocaleService);
+            translation = TestBed.get(TranslationService);
+
+            mockBackend = TestBed.get(MockBackend);
+
+            const responses: any = {};
+            responses['./assets/locale-en.json'] = new Response(new ResponseOptions(
+                { body: '{"Title": "Angular localization"}' }
+            ));
+            responses['./assets/locale-it.json'] = new Response(new ResponseOptions(
+                { body: '{"Title": "Localizzazione in Angular"}' }
+            ));
+
+            expectURL(mockBackend, responses);
+
+            locale.addConfiguration()
+                .disableStorage()
+                .addLanguages(['en', 'it'])
+                .defineLanguage('en');
+            locale.init();
+
+            translation.addConfiguration()
+                .addCustomProvider({ path: './assets/locale-' });
+            translation.init();
+
+            pipe = new TranslatePipe(translation);
+        });
+
+        it('should translate using a custom provider', (() => {
+            locale.setCurrentLanguage('en');
+            expect(pipe.transform('Title', translation.getLanguage())).toEqual("Angular localization");
+
+            locale.setCurrentLanguage('it');
+            expect(pipe.transform('Title', translation.getLanguage())).toEqual("Localizzazione in Angular");
         }));
 
     });

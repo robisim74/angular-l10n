@@ -11,9 +11,9 @@ export class TranslatePipe implements PipeTransform {
 
     constructor(public translation: TranslationService) { }
 
-    public transform(key: string, lang: string, ...args: any[]): string {
+    public transform(key: string, lang: string, args?: any): string {
         if (this.translation.serviceState == ServiceState.isReady) {
-            return this.translation.translate(key, args[0], lang);
+            return this.translation.translate(key, args, lang);
         }
         // If the service is not ready, returns an empty string.
         return "";

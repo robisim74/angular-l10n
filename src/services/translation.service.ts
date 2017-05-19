@@ -1,5 +1,4 @@
 import { Injectable, EventEmitter, Output } from '@angular/core';
-import { Http, Response } from '@angular/http';
 import { Observer } from 'rxjs/Observer';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
@@ -9,6 +8,7 @@ import { LocaleService } from './locale.service';
 import { IntlAPI } from './intl-api';
 import { ITranslationConfig, TranslationConfig } from '../models/translation/translation-config';
 import { ITranslationConfigAPI, TranslationConfigAPI } from '../models/translation/translation-config-api';
+import { TranslationProvider } from './translation-provider';
 import { LoadingMode, ServiceState } from '../models/types';
 
 /**
@@ -59,7 +59,11 @@ export interface ITranslationService {
      */
     private translationData: any = {};
 
-    constructor(public locale: LocaleService, private configuration: TranslationConfig, private http: Http) {
+    constructor(
+        public locale: LocaleService,
+        private configuration: TranslationConfig,
+        private translationProvider: TranslationProvider
+    ) {
         this.serviceState = ServiceState.isWaiting;
 
         // When the language changes, loads translation data.
@@ -196,13 +200,9 @@ export interface ITranslationService {
         const observableSequencesOfTranslationData: Array<Observable<any>> = [];
 
         for (const provider of this.configuration.providers) {
-            let url: string = provider.path;
-            if (provider.webAPI) {
-                url += language;
-            } else {
-                url += language + "." + provider.dataFormat;
-            }
-            observableSequencesOfTranslationData.push(this.getTranslationByProvider(url));
+            observableSequencesOfTranslationData.push(
+                this.translationProvider.getTranslation(language, provider.args)
+            );
         }
 
         // Merges all the observable sequences into a single observable sequence.
@@ -219,11 +219,6 @@ export interface ITranslationService {
                 this.releaseTranslation(language);
             }
         );
-    }
-
-    private getTranslationByProvider(url: string): Observable<any> {
-        return this.http.get(url)
-            .map((res: Response) => res.json());
     }
 
     private addData(data: any, language: string): void {

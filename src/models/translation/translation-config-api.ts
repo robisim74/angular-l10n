@@ -21,6 +21,10 @@ export interface ITranslationConfigAPI {
      */
     addWebAPIProvider(path: string, dataFormat?: string): ITranslationConfigAPI;
     /**
+     * Asynchronous loading: adds a custom provider.
+     */
+    addCustomProvider(args: any): ITranslationConfigAPI;
+    /**
      * Sets the use of locale (languageCode-countryCode) as language.
      */
     useLocaleAsLanguage(): ITranslationConfigAPI;
@@ -56,12 +60,17 @@ export class TranslationConfigAPI {
     }
 
     public addProvider(prefix: string, dataFormat: string = "json"): ITranslationConfigAPI {
-        this.configuration.providers.push({ path: prefix, dataFormat: "json", webAPI: false });
+        this.configuration.providers.push({ args: { type: "Static", prefix: prefix, dataFormat: dataFormat } });
         return this;
     }
 
     public addWebAPIProvider(path: string, dataFormat: string = "json"): ITranslationConfigAPI {
-        this.configuration.providers.push({ path: path, dataFormat: dataFormat, webAPI: true });
+        this.configuration.providers.push({ args: { type: "WebAPI", path: path, dataFormat: dataFormat } });
+        return this;
+    }
+
+    public addCustomProvider(args?: any): ITranslationConfigAPI {
+        this.configuration.providers.push({ args: args });
         return this;
     }
 

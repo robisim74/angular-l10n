@@ -7,9 +7,7 @@ export type Language = {
 
 export type Provider = {
 
-    path: string;
-    dataFormat: string;
-    webAPI: boolean;
+    args: any;
 
 };
 
@@ -29,10 +27,20 @@ export enum ServiceState {
 }
 
 export interface PropertyDecorator {
+
     <T extends Function>(type: T): T;
     (target: Object, propertyKey?: string | symbol): void;
+
 }
 
 export interface Type<T> extends Function {
+
     new (...args: any[]): T;
+
+}
+
+export interface Token {
+
+    translationProvider?: Type<any>;
+
 }
