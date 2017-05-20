@@ -1,4 +1,4 @@
-import { Injectable, ChangeDetectorRef, OnDestroy } from '@angular/core';
+import { Injectable, ChangeDetectorRef } from '@angular/core';
 import { ISubscription } from 'rxjs/Subscription';
 
 import { TranslationService } from './translation.service';
@@ -7,7 +7,7 @@ import { InjectorRef } from '../models/injector-ref';
 /**
  * Extend this class in components to provide 'lang' to the translate pipe.
  */
-@Injectable() export class Translation implements OnDestroy {
+@Injectable() export class Translation {
 
     public lang: string;
 
@@ -26,10 +26,6 @@ import { InjectorRef } from '../models/injector-ref';
                 if (this.changeDetectorRef) { this.changeDetectorRef.markForCheck(); }
             }
         ));
-    }
-
-    public ngOnDestroy(): void {
-        this.cancelParamSubscriptions();
     }
 
     protected cancelParamSubscriptions(): void {
