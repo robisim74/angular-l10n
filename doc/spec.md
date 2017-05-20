@@ -1,5 +1,5 @@
 # Angular localization library specification
-Library version: 3.2.1
+Library version: 3.3.0
 
 ## Table of contents
 * [1 Library structure](#1)
@@ -7,8 +7,9 @@ Library version: 3.2.1
     * [2.1 First scenario: you only need to translate messages](#2.1)
     * [2.2 Second scenario: you need to translate messages, dates & numbers](#2.2)
     * [2.3 Loading the translation data](#2.3)
-    * [2.4 Default locale](#2.4)
-    * [2.5 Intl API](#2.5)
+    * [2.4 Using a custom provider](#2.4)
+    * [2.5 Default locale](#2.5)
+    * [2.6 Intl API](#2.6)
 * [3 Getting the translation](#3)
     * [3.1 Pure pipes](#3.1)
         * [3.1.1 Messages](#3.1.1)
@@ -33,7 +34,7 @@ Library version: 3.2.1
     * [8.5 IntlAPI](#8.5)
 
 ## <a name="1"/>1 Library structure
-This library has the following classes:
+Main classes of the library:
 
 Class | Contract
 ----- | --------
@@ -121,6 +122,7 @@ Method | Function
 `addTranslation(languageCode: string, translation: any)` | Direct loading: adds translation data
 `addProvider(prefix: string, dataFormat?: string)` |  Asynchronous loading: adds a translation provider
 `addWebAPIProvider(path: string, dataFormat?: string)` |  Asynchronous loading: adds a Web API provider
+`addCustomProvider(args: any)` |  Asynchronous loading: adds a custom provider
 `useLocaleAsLanguage()` | Sets the use of locale (`languageCode-countryCode`) as language
 `setMissingValue(value: string)` | Sets the value to use for missing keys
 `setMissingKey(key: string)` | Sets the key to use for missing keys
@@ -167,7 +169,46 @@ this.translation.init();
 
 The example above also showed as you can perform a custom action if you get a bad response.
 
-### <a name="2.4"/>2.4 Default locale
+### <a name="2.4"/>2.4 Using a custom provider
+If you need, you can create a custom provider to load translation data.
+
+Use the `addCustomProvider(args: any)` method during the configuration of the service:
+```TypeScript
+this.translation.addConfiguration()
+    .addCustomProvider({ ... });
+this.translation.init();
+```
+Implement `TranslationProvider` class-interface and the `getTranslation` method with the logic to retrieve the data:
+```TypeScript
+@Injectable() export class CustomTranslationProvider implements TranslationProvider {
+
+    /**
+     * This method must contain the logic of data access.
+     * @param language The current language
+     * @param args The parameter of addCustomProvider method
+     * @return An observable of an object of translation data: {key: value}
+     */
+    public getTranslation(language: string, args: any): Observable<any> {
+        // Custom data access.
+        return ...
+    }
+
+}
+```
+Note that the method must return an _observable_ of an _object_. Then provide the class in the module:
+```TypeScript
+@NgModule({
+    imports: [
+        ...
+        HttpModule,
+        TranslationModule.forRoot({ translationProvider: CustomTranslationProvider })
+    ],
+    ...
+})
+```
+As you can see from the example above, you can pass any object to the `addCustomProvider` method: it will be returned to `getTranslation` method along with the current language. In this way, you can call the `addCustomProvider` method several times with different parameters. All the data retrieved will be merged by the `TranslationService`.
+
+### <a name="2.5"/>2.5 Default locale
 The default locale contains the current language and culture. It consists of:
 * `language code`: ISO 639 two-letter or three-letter code of the language
 * `country code`: ISO 3166 two-letter, uppercase code of the country
@@ -179,7 +220,7 @@ and optionally:
 
 For more information see [Intl API](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl).
 
-### <a name="2.5"/>2.5 Intl API
+### <a name="2.6"/>2.6 Intl API
 To localize dates and numbers, this library uses [Intl API](https://developer.mozilla.org/it/docs/Web/JavaScript/Reference/Global_Objects/Intl), through Angular. 
 All modern browsers have implemented this API. You can use [Intl.js](https://github.com/andyearnshaw/Intl.js) to extend support to all browsers. 
 Just add one script tag in your `index.html`:
@@ -216,7 +257,7 @@ export class HomeComponent implements OnInit {
 
 }
 ```
-*To use AoT compilation you have to implement OnInit and it would be better also OnDestroy, even if they are empty.*
+*To use AoT compilation you have to implement OnInit, and to cancel subscriptions OnDestroy, even if they are empty.*
 ```
 expression | translate:lang
 ```
@@ -267,7 +308,7 @@ export class HomeComponent implements OnInit {
 
 }
 ```
-*To use AoT compilation you have to implement OnInit and it would be better also OnDestroy, even if they are empty.*
+*To use AoT compilation you have to implement OnInit, and to cancel subscriptions OnDestroy, even if they are empty.*
 ##### Dates
 ```
 expression | localeDate[:defaultLocale[:format]]
@@ -317,6 +358,7 @@ to the _localeDecimal_, _localePercent_ & _localeCurrency_ pipes.
 ```TypeScript
 export class HomeComponent extends Localization { } 
 ```
+To cancel subscriptions for the params, you can call the `cancelParamSubscriptions` method into `ngOnDestroy`.
 
 #### <a name="3.1.4"/>3.1.4 OnPush ChangeDetectionStrategy
 _Pure pipes_ don't need to set `ChangeDetectionStrategy` to `OnPush`. If into your components you need to use it, you have to extend `Translation` or `Localization` class and pass `ChangeDetectorRef`:
@@ -487,7 +529,7 @@ To change language, default locale or currency at runtime, `LocaleService` has t
 * `setCurrentCurrency(currencyCode: string): void`
 
 ## <a name="5"/>5 Lazy loading
-If you use a `Router` in an extended application, you can create an instance of the `TranslationService` with its own translation data for every lazy loaded module/component, as shown:
+You can create an instance of the `TranslationService` with its own translation data for every _lazy loaded_ module, as shown:
 ![LazyLoading](images/LazyLoading.png)
 You can create a new instance of `TranslationService` calling the `forChild` method of the module you are using, 
 and configure the service in the component with the new provider:
