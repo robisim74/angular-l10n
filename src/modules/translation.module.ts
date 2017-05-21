@@ -2,8 +2,8 @@ import { NgModule, ModuleWithProviders } from '@angular/core';
 
 import { InjectorRef } from '../models/injector-ref';
 import { LocaleConfig } from '../models/localization/locale-config';
-import { TranslationConfig } from '../models/translation/translation-config';
 import { LocaleService } from '../services/locale.service';
+import { TranslationConfig } from '../models/translation/translation-config';
 import { TranslationService } from '../services/translation.service';
 import { TranslationProvider, HttpTranslationProvider } from '../services/translation-provider';
 import { TranslatePipe } from '../pipes/translate.pipe';

@@ -75,11 +75,9 @@ export class LocaleNumberValidatorDirective implements Validator, OnInit {
     @Input('validateLocaleNumber') public digits: string;
 
     @Input() public minValue: number;
-
     @Input() public maxValue: number;
 
     private readonly MIN_VALUE: number = Number.MIN_VALUE;
-
     private readonly MAX_VALUE: number = Number.MAX_VALUE;
 
     private validator: Function;

@@ -8,38 +8,46 @@ export interface ITranslationConfigAPI {
      * @param translation Translation data of the language
      */
     addTranslation(languageCode: string, translation: any): ITranslationConfigAPI;
+
     /**
      * Asynchronous loading: adds a translation provider.
      * @param prefix The path prefix of the json files
      * @param dataFormat Data format: default & supported value is 'json'
      */
     addProvider(prefix: string, dataFormat?: string): ITranslationConfigAPI;
+
     /**
      * Asynchronous loading: adds a Web API provider.
      * @param path [path]{languageCode} will be the URL used by the Http GET requests
      * @param dataFormat Data format: default & supported value is 'json'
      */
     addWebAPIProvider(path: string, dataFormat?: string): ITranslationConfigAPI;
+
     /**
      * Asynchronous loading: adds a custom provider.
      */
     addCustomProvider(args: any): ITranslationConfigAPI;
+
     /**
      * Sets the use of locale (languageCode-countryCode) as language.
      */
     useLocaleAsLanguage(): ITranslationConfigAPI;
+
     /**
      * Sets the value to use for missing keys.
      */
     setMissingValue(value: string): ITranslationConfigAPI;
+
     /**
      * Sets the key to use for missing keys.
      */
     setMissingKey(key: string): ITranslationConfigAPI;
+
     /**
      * Sets composed key separator. Default is the point '.'.
      */
     setComposedKeySeparator(keySeparator: string): ITranslationConfigAPI;
+
     /**
      * Disables the translation of numbers that are contained at the beginning of the keys.
      */

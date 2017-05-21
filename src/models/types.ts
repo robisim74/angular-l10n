@@ -29,6 +29,7 @@ export enum ServiceState {
 export interface PropertyDecorator {
 
     <T extends Function>(type: T): T;
+
     (target: Object, propertyKey?: string | symbol): void;
 
 }

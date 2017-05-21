@@ -5,6 +5,7 @@ import { Provider } from '../types';
 export interface ITranslationConfig {
 
     translationData: any;
+
     providers: Provider[];
     localeAsLanguage: boolean;
     missingValue: string;
@@ -17,6 +18,7 @@ export interface ITranslationConfig {
 @Injectable() export class TranslationConfig implements ITranslationConfig {
 
     public translationData: any = {};
+
     public providers: Provider[] = [];
     public localeAsLanguage: boolean = false;
     public missingValue: string;

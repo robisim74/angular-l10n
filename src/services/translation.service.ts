@@ -25,6 +25,7 @@ export interface ITranslationService {
      * Configure the service in the application root module or bootstrap component.
      */
     addConfiguration(): ITranslationConfigAPI;
+
     getConfiguration(): ITranslationConfig;
 
     /**

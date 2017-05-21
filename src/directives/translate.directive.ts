@@ -11,7 +11,6 @@ export class TranslateDirective extends BaseDirective {
     @Input() set l10nTranslate(params: string) {
         this.params = params;
     }
-
     @Input() set translate(params: string) {
         this.params = params;
     }

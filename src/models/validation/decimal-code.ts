@@ -10,7 +10,6 @@ export class DecimalCode extends NumberCode {
      * Unicode for minus sign.
      */
     public minusSignCode: string;
-
     /**
      * Unicode for decimal separator.
      */

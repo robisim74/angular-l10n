@@ -9,27 +9,33 @@ export interface ILocaleConfigAPI {
      * @param textDirection Default is ltr (left to right)
      */
     addLanguage(languageCode: string, textDirection?: string): ILocaleConfigAPI;
+
     /**
      * Adds the languages to use in the app.
      * @param languageCodes Array of ISO 639 two-letter or three-letter codes of the languages
      */
     addLanguages(languageCodes: string[]): ILocaleConfigAPI;
+
     /**
      * Disables the browser storage for language, default locale & currency.
      */
     disableStorage(): ILocaleConfigAPI;
+
     /**
      * If the cookie expiration is omitted, the cookie becomes a session cookie.
      */
     setCookieExpiration(days?: number): ILocaleConfigAPI;
+
     /**
      * Sets browser LocalStorage as default for language, default locale & currency.
      */
     useLocalStorage(): ILocaleConfigAPI;
+
     /**
      * Sets browser SessionStorage as default for language, default locale & currency.
      */
     useSessionStorage(): ILocaleConfigAPI;
+
     /**
      * Defines the language to be used:
      *  - tries to get the language from the browser storage;
@@ -38,6 +44,7 @@ export interface ILocaleConfigAPI {
      * @param languageCode ISO 639 two-letter or three-letter code of the language
      */
     defineLanguage(languageCode: string): ILocaleConfigAPI;
+
     /**
      * Defines the default locale to be used, regardless of the browser language.
      * @param languageCode ISO 639 two-letter or three-letter code of the language
@@ -53,6 +60,7 @@ export interface ILocaleConfigAPI {
         numberingSystem?: string,
         calendar?: string
     ): ILocaleConfigAPI;
+
     /**
      * Defines the currency to be used.
      * @param defaultCurrency ISO 4217 three-letter code of the currency

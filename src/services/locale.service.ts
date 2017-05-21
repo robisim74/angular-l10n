@@ -3,9 +3,9 @@ import { Subject } from 'rxjs/Subject';
 
 import { ILocaleConfig, LocaleConfig } from '../models/localization/locale-config';
 import { ILocaleConfigAPI, LocaleConfigAPI } from '../models/localization/locale-config-api';
-import { Language } from '../models/types';
 import { DefaultLocale } from '../models/localization/default-locale';
 import { Browser } from '../models/localization/browser';
+import { Language } from '../models/types';
 
 /**
  * Manages language, default locale & currency.
@@ -22,6 +22,7 @@ export interface ILocaleService {
      * Configure the service in the application root module or bootstrap component.
      */
     addConfiguration(): ILocaleConfigAPI;
+
     getConfiguration(): ILocaleConfig;
 
     /**
@@ -34,14 +35,21 @@ export interface ILocaleService {
     getLanguageDirection(languageCode?: string): string;
 
     getCurrentLanguage(): string;
+
     getCurrentCountry(): string;
+
     getCurrentScript(): string;
+
     getCurrentNumberingSystem(): string;
+
     getCurrentCalendar(): string;
+
     getDefaultLocale(): string;
+
     getCurrentCurrency(): string;
 
     setCurrentLanguage(languageCode: string): void;
+
     setDefaultLocale(
         languageCode: string,
         countryCode: string,
@@ -49,6 +57,7 @@ export interface ILocaleService {
         numberingSystem?: string,
         calendar?: string
     ): void;
+
     setCurrentCurrency(currencyCode: string): void;
 
 }

@@ -26,6 +26,7 @@ export interface ICollator {
         extension?: string,
         options?: any
     ): number;
+
     /**
      * Sorts an array of objects or an array of arrays according to the current language.
      * @param list The array to be sorted
@@ -43,6 +44,7 @@ export interface ICollator {
         extension?: string,
         options?: any
     ): any[];
+
     /**
      * Sorts asynchronously an array of objects or an array of arrays according to the current language.
      * @param list The array to be sorted
@@ -60,6 +62,7 @@ export interface ICollator {
         extension?: string,
         options?: any
     ): Observable<any[]>;
+
     /**
      * Matches a string into an array of objects or an array of arrays
      * according to the current language.
@@ -76,6 +79,7 @@ export interface ICollator {
         keyNames: any[],
         options?: any
     ): any[];
+
     /**
      * Matches asynchronously a string into an array of objects or an array of arrays
      * according to the current language.

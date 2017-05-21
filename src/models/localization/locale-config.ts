@@ -21,6 +21,7 @@ export interface ILocaleConfig extends LocaleCodes {
     public countryCode?: string;
     public numberingSystem?: string;
     public calendar?: string;
+
     public currencyCode: string;
 
     public languageCodes: Language[] = [];
