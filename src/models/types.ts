@@ -11,6 +11,13 @@ export type Provider = {
 
 };
 
+export type Decimal = {
+
+    minusSign: string;
+    decimalSeparator: string;
+
+};
+
 export enum LoadingMode {
 
     Direct,

@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 
-import { LocaleService } from '../services/locale.service';
 import { DecimalCode } from '../models/validation/decimal-code';
 
 /**
@@ -18,14 +17,13 @@ export interface ILocaleValidation {
 
 @Injectable() export class LocaleValidation implements ILocaleValidation {
 
-    constructor(public locale: LocaleService) { }
+    constructor(private decimalCode: DecimalCode) { }
 
     public parseNumber(s: string): number | null {
         if (s == "") {
             return null;
         }
-        const decimalCode: DecimalCode = new DecimalCode(this.locale.getDefaultLocale());
-        return decimalCode.parse(s);
+        return this.decimalCode.parse(s);
     }
 
 }

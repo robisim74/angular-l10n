@@ -2,9 +2,8 @@ import { Directive, forwardRef, Input, OnInit } from '@angular/core';
 import { NG_VALIDATORS, FormControl, Validator } from '@angular/forms';
 
 import { LocaleService } from '../services/locale.service';
-import { LocaleValidation } from '../services/locale-validation';
+import { DecimalCode } from '../models/validation/decimal-code';
 import { InjectorRef } from '../models/injector-ref';
-import { RegExpFactory } from '../models/validation/regexp-factory';
 
 /**
  * Function that takes a control and returns either null when it’s valid, or an error object if it’s not.
@@ -20,7 +19,7 @@ export function validateLocaleNumber(
 ): Function {
 
     const locale: LocaleService = InjectorRef.get(LocaleService);
-    const localeValidation: LocaleValidation = InjectorRef.get(LocaleValidation);
+    const decimalCode: DecimalCode = InjectorRef.get(DecimalCode);
 
     let defaultLocale: string;
     let NUMBER_REGEXP: RegExp;
@@ -29,13 +28,12 @@ export function validateLocaleNumber(
         if (formControl.value == null || formControl.value == "") return null;
 
         if (defaultLocale != locale.getDefaultLocale()) {
-            NUMBER_REGEXP = RegExpFactory.number(locale.getDefaultLocale(), digits);
+            NUMBER_REGEXP = decimalCode.getRegExp(digits);
             defaultLocale = locale.getDefaultLocale();
         }
 
         if (NUMBER_REGEXP.test(formControl.value)) {
-            let parsedValue: number | null;
-            parsedValue = localeValidation.parseNumber(formControl.value);
+            const parsedValue: number = decimalCode.parse(formControl.value);
             if (parsedValue != null && parsedValue < MIN_VALUE) {
                 return {
                     minValue: {

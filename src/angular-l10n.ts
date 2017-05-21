@@ -6,6 +6,8 @@ export { ITranslationService, TranslationService } from './services/translation.
 export { TranslationProvider, HttpTranslationProvider } from './services/translation-provider';
 export { Translation } from './services/translation';
 export { Localization } from './services/localization';
+export { NumberCode } from './models/validation/number-code';
+export { DecimalCode } from './models/validation/decimal-code';
 export { ILocaleValidation, LocaleValidation } from './services/locale-validation';
 export { ICollator, Collator } from './services/collator';
 export { IntlAPI } from './services/intl-api';
