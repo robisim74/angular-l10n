@@ -22,7 +22,7 @@ export interface ITranslationService {
     serviceState: ServiceState;
 
     /**
-     * Configure the service in the application root module or bootstrap component.
+     * Configure the service in the application root module or in a feature module with lazy loading.
      */
     addConfiguration(): ITranslationConfigAPI;
 
@@ -34,7 +34,7 @@ export interface ITranslationService {
     init(): void;
 
     /**
-     * The language of the translation service is updated when the translation data has been loaded.
+     * The language of TranslationService is updated when the translation data has been loaded.
      */
     getLanguage(): string;
 

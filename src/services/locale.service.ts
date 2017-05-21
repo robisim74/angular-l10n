@@ -19,7 +19,7 @@ export interface ILocaleService {
     loadTranslation: Subject<any>;
 
     /**
-     * Configure the service in the application root module or bootstrap component.
+     * Configure the service in the application root module or in a feature module with lazy loading.
      */
     addConfiguration(): ILocaleConfigAPI;
 

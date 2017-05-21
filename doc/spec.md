@@ -658,7 +658,7 @@ Property | Value
 
 Method | Function
 ------ | --------
-`addConfiguration(): ILocaleConfigAPI` | Configure the service in the application root module or bootstrap component
+`addConfiguration(): ILocaleConfigAPI` | Configure the service in the application root module or in a feature module with lazy loading
 `getConfiguration(): ILocaleConfig` |
 `init(): void` | Call this method after the configuration to initialize the service
 `getAvailableLanguages(): string[]` |
@@ -683,10 +683,10 @@ Property | Value
 
 Method | Function
 ------ | --------
-`addConfiguration(): ITranslationConfigAPI` | Configure the service in the application root module or bootstrap component
+`addConfiguration(): ITranslationConfigAPI` | Configure the service in the application root module or in a feature module with lazy loading
 `getConfiguration(): ITranslationConfig` |
 `init(): void` | Call this method after the configuration to initialize the service
-`getLanguage(): string` | The language of the translation service is updated when the translation data has been loaded
+`getLanguage(): string` | The language of `TranslationService` is updated when the translation data has been loaded
 `translate(key: string, args?: any, lang?: string): string` |
 `translateAsync(key: string, args?: any, lang?: string): Observable<string>` |
 
