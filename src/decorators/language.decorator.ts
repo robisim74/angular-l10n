@@ -20,8 +20,8 @@ export function Language(): PropertyDecorator {
                 this[propertyKey] = translation.getLanguage();
                 // When the language changes, subscribes to the event & updates language property.
                 subscription = translation.translationChanged.subscribe(
-                    (value: string) => {
-                        this[propertyKey] = value;
+                    (language: string) => {
+                        this[propertyKey] = language;
                     });
             }
 

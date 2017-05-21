@@ -20,8 +20,8 @@ export function Currency(): PropertyDecorator {
                 this[propertyKey] = locale.getCurrentCurrency();
                 // When the currency changes, subscribes to the event & updates currency property.
                 subscription = locale.currencyCodeChanged.subscribe(
-                    (value: string) => {
-                        this[propertyKey] = value;
+                    (currency: string) => {
+                        this[propertyKey] = currency;
                     });
             }
 

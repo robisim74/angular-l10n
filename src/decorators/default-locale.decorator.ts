@@ -21,8 +21,8 @@ export function DefaultLocale(): PropertyDecorator {
                 this[propertyKey] = locale.getDefaultLocale();
                 // When the default locale changes, subscribes to the event & updates defaultLocale property.
                 subscription = locale.defaultLocaleChanged.subscribe(
-                    (value: string) => {
-                        this[propertyKey] = value;
+                    (defaultLocale: string) => {
+                        this[propertyKey] = defaultLocale;
                     });
             }
 
