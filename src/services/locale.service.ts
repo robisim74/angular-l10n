@@ -38,6 +38,8 @@ export interface ILocaleService {
 
     getCurrentCountry(): string;
 
+    getCurrentLocale(): string;
+
     getCurrentScript(): string;
 
     getCurrentNumberingSystem(): string;
@@ -125,6 +127,13 @@ export interface ILocaleService {
             return this.defaultLocale.scriptCode;
         }
         return "";
+    }
+
+    public getCurrentLocale(): string {
+        const locale: string = !!this.defaultLocale.countryCode
+            ? this.defaultLocale.languageCode + "-" + this.defaultLocale.countryCode
+            : this.defaultLocale.languageCode;
+        return locale;
     }
 
     public getCurrentNumberingSystem(): string {

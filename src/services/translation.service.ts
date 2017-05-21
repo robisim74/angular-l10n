@@ -179,9 +179,7 @@ export interface ITranslationService {
     private loadTranslation(): void {
         const language: string = !this.configuration.localeAsLanguage
             ? this.locale.getCurrentLanguage()
-            : this.locale.getCurrentLanguage()
-            + "-"
-            + this.locale.getCurrentCountry();
+            : this.locale.getCurrentLocale();
 
         if (language != null && language != this.language) {
             if (this.loadingMode == LoadingMode.Async) {

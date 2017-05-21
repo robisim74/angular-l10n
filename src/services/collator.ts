@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Observer } from 'rxjs/Observer';
 import { Observable } from 'rxjs/Observable';
 
+import { LocaleService } from './locale.service';
 import { TranslationService } from './translation.service';
 import { IntlAPI } from './intl-api';
 
@@ -101,7 +102,7 @@ export interface ICollator {
 
 @Injectable() export class Collator implements ICollator {
 
-    constructor(private translation: TranslationService) { }
+    constructor(private locale: LocaleService, private translation: TranslationService) { }
 
     public compare(
         key1: string,
@@ -116,7 +117,10 @@ export interface ICollator {
         const value1: string = this.translation.translate(key1);
         const value2: string = this.translation.translate(key2);
 
-        const locale: string = this.addExtension(this.translation.getLanguage(), extension);
+        const locale: string = this.addExtension(
+            this.locale.getCurrentLocale(),
+            extension
+        );
         return new Intl.Collator(locale, options).compare(value1, value2);
     }
 
@@ -164,7 +168,7 @@ export interface ICollator {
             return list;
         }
 
-        const locale: string = this.translation.getLanguage();
+        const locale: string = this.locale.getCurrentLocale();
         const collator: Intl.Collator = new Intl.Collator(locale, options);
 
         const matches: any[] = list.filter((key: any) => {
