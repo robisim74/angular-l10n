@@ -17,6 +17,9 @@ import {
 } from '../directives/locale-number.directive';
 import { Token } from '../models/types';
 
+/**
+ * Provides dependencies, pipes & directives for translating messages, dates & numbers.
+ */
 @NgModule({
     declarations: [
         LocaleDatePipe,
@@ -66,7 +69,7 @@ export class LocalizationModule {
     }
 
     /**
-     * Use in features modules with lazy loading: new instance of TranslationService.
+     * Use in feature modules with lazy loading: new instance of TranslationService.
      */
     public static forChild(token: Token = {}): ModuleWithProviders {
         return {

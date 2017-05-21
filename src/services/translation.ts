@@ -5,7 +5,7 @@ import { TranslationService } from './translation.service';
 import { InjectorRef } from '../models/injector-ref';
 
 /**
- * Extend this class in components to provide 'lang' to the translate pipe.
+ * Provides 'lang' to the translate pipe.
  */
 @Injectable() export class Translation {
 

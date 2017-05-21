@@ -10,6 +10,9 @@ import { TranslatePipe } from '../pipes/translate.pipe';
 import { TranslateDirective } from '../directives/translate.directive';
 import { Token } from '../models/types';
 
+/**
+ * Provides dependencies, pipes & directives for translating messages.
+ */
 @NgModule({
     declarations: [
         TranslatePipe,
@@ -43,7 +46,7 @@ export class TranslationModule {
     }
 
     /**
-     * Use in features modules with lazy loading: new instance of TranslationService.
+     * Use in feature modules with lazy loading: new instance of TranslationService.
      */
     public static forChild(token: Token = {}): ModuleWithProviders {
         return {

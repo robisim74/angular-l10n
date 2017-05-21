@@ -6,8 +6,8 @@ import { TranslationService } from './translation.service';
 import { InjectorRef } from '../models/injector-ref';
 
 /**
- * Extend this class in components to provide 'lang', 'defaultLocale' & 'currency'
- * to localeDecimal, localePercent & localeCurrency pipes.
+ * Provides 'lang' to the translate pipe,
+ * 'defaultLocale' & 'currency' to localeDecimal, localePercent & localeCurrency pipes.
  */
 @Injectable() export class Localization extends Translation {
 

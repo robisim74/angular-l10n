@@ -27,19 +27,36 @@ Library version: 3.3.0
         * [6.1.2 FormBuilder](#6.1.2)
 * [7 Collator](#7)
 * [8 Services APIs](#8)
-    * [8.1 ILocaleService](#8.1)
-    * [8.2 ITranslationService](#8.2)
-    * [8.3 ILocaleValidation](#8.3)
-    * [8.4 ICollator](#8.4)
-    * [8.5 IntlAPI](#8.5)
+    * [8.1 TranslationModule](#8.1)
+    * [8.2 LocalizationModule](#8.2)
+    * [8.3 LocaleValidationModule](#8.3)
+    * [8.4 ILocaleService](#8.4)
+    * [8.5 ITranslationService](#8.5)
+    * [8.6 TranslationProvider](#8.6)
+    * [8.7 Translation](#8.7)
+    * [8.8 Localization](#8.8)
+    * [8.9 ILocaleValidation](#8.9)
+    * [8.10 ICollator](#8.10)
+    * [8.11 IntlAPI](#8.11)
 
 ## <a name="1"/>1 Library structure
-Main classes of the library:
+Main modules of the library:
+
+Class | Contract
+----- | --------
+`TranslationModule` | Provides dependencies, pipes & directives for translating messages
+`LocalizationModule` | Provides dependencies, pipes & directives for translating messages, dates & numbers
+`LocaleValidationModule` | Provides dependencies & directives for locale validation
+
+Main services of the library:
 
 Class | Contract
 ----- | --------
 `LocaleService` | Manages language, default locale & currency
 `TranslationService` | Manages the translation data
+`TranslationProvider` | Class-interface to create a custom provider for translation data
+`Translation` | Provides _lang_ to the _translate_ pipe
+`Localization` | Provides _lang_ to the _translate_ pipe, _defaultLocale_ & _currency_ to _localeDecimal_, _localePercent_ & _localeCurrency_ pipes
 `LocaleValidation` | Provides the methods to convert strings according to default locale
 `Collator` | Intl.Collator APIs
 `IntlAPI` | Provides the methods to check if Intl APIs are supported
@@ -346,14 +363,14 @@ where `symbolDisplay` is a boolean indicating whether to use the currency symbol
 *You can dynamically change parameters and expressions values.*
 
 #### <a name="3.1.3"/>3.1.3 Translation & Localization classes
-When using _pipes_, alternatively to _decorators_ you could 
+When using _pipes_, alternatively to _decorators_ you can 
 extend `Translation` or `Localization` classes.
 
 Extend `Translation` class in the component to provide _lang_ to the _translate_ pipe:
 ```TypeScript
 export class HomeComponent extends Translation { }
 ```
-Extend `Localization` class in the component to provide _lang_, _defaultLocale_ & _currency_ 
+Extend `Localization` class in the component to provide _lang_ to the _translate_ pipe, _defaultLocale_ & _currency_ 
 to the _localeDecimal_, _localePercent_ & _localeCurrency_ pipes.
 ```TypeScript
 export class HomeComponent extends Localization { } 
@@ -509,7 +526,7 @@ export class HomeComponent {
     pipe: LocaleDecimalPipe = new LocaleDecimalPipe();
     value: number = pipe.transform(1234.5, this.locale.getDefaultLocale(), '1.2-2');
 
-    constructor(public locale: LocaleService,) { }
+    constructor(public locale: LocaleService) { }
 
     ngOnInit(): void {
         this.locale.defaultLocaleChanged.subscribe(
@@ -529,10 +546,10 @@ To change language, default locale or currency at runtime, `LocaleService` has t
 * `setCurrentCurrency(currencyCode: string): void`
 
 ## <a name="5"/>5 Lazy loading
-You can create an instance of the `TranslationService` with its own translation data for every _lazy loaded_ module, as shown:
+You can create an instance of `TranslationService` with its own translation data for every _lazy loaded_ module, as shown:
 ![LazyLoading](images/LazyLoading.png)
 You can create a new instance of `TranslationService` calling the `forChild` method of the module you are using, 
-and configure the service in the component with the new provider:
+and configure the service with the new providers:
 
 ```TypeScript
 @NgModule({
@@ -614,7 +631,24 @@ These methods use the [Intl.Collator](https://developer.mozilla.org/en-US/docs/W
 
 ## <a name="8"/>8 Services APIs
 
-### <a name="8.1"/>8.1 ILocaleService
+### <a name="8.1"/>8.1 TranslationModule
+Method | Function
+------ | --------
+`static forRoot(token?: Token): ModuleWithProviders` | Use in `AppModule`: new instances of `LocaleService` & `TranslationService`
+`static forChild(token?: Token): ModuleWithProviders` | Use in feature modules with lazy loading: new instance of `TranslationService`
+
+### <a name="8.2"/>8.2 LocalizationModule
+Method | Function
+------ | --------
+`static forRoot(token?: Token): ModuleWithProviders` | Use in `AppModule`: new instances of `LocaleService` & `TranslationService`
+`static forChild(token?: Token): ModuleWithProviders` | Use in feature modules with lazy loading: new instance of `TranslationService`
+
+### <a name="8.3"/>8.3 LocaleValidationModule
+Method | Function
+------ | --------
+`static forRoot(): ModuleWithProviders` | Use in `AppModule`: new instance of `LocaleValidation`
+
+### <a name="8.4"/>8.4 ILocaleService
 Property | Value
 ---------- | -----
 `languageCodeChanged: EventEmitter<string>` |
@@ -640,7 +674,7 @@ Method | Function
 `setDefaultLocale(languageCode: string, countryCode: string, scriptCode?: string, numberingSystem?: string, calendar?: string): void` |
 `setCurrentCurrency(currencyCode: string): void` |
 
-### <a name="8.2"/>8.2 ITranslationService
+### <a name="8.5"/>8.5 ITranslationService
 Property | Value
 ---------- | -----
 `translationChanged: EventEmitter<string>` |
@@ -656,12 +690,33 @@ Method | Function
 `translate(key: string, args?: any, lang?: string): string` |
 `translateAsync(key: string, args?: any, lang?: string): Observable<string>` |
 
-### <a name="8.3"/>8.3 ILocaleValidation
+### <a name="8.6"/>8.6 TranslationProvider
+Method | Function
+------ | --------
+`abstract getTranslation(language: string, args: any): Observable<any>` | This method must contain the logic of data access
+
+### <a name="8.7"/>8.7 Translation
+Property | Value
+---------- | -----
+`lang: string` |
+`protected paramSubscriptions: ISubscription[]` |
+
+Method | Function
+------ | --------
+`protected cancelParamSubscriptions(): void` |
+
+### <a name="8.8"/>8.8 Localization
+Property | Value
+---------- | -----
+`defaultLocale: string` |
+`currency: string` |
+
+### <a name="8.9"/>8.9 ILocaleValidation
 Method | Function
 ------ | --------
 `parseNumber(s: string): number \| null` | Converts a string to a number according to default locale
 
-### <a name="8.4"/>8.4 ICollator
+### <a name="8.10"/>8.10 ICollator
 Method | Function
 ------ | --------
 `compare(key1: string, key2: string, extension?: string, options?: any): number` | Compares two keys by the value of translation according to the current language
@@ -670,7 +725,7 @@ Method | Function
 `search(s: string, list: any[], keyNames: any[], options?: any): any[]` | Matches a string into an array of objects or an array of arrays according to the current language
 `searchAsync(s: string, list: any[], keyNames: any[], options?: any): Observable<any[]>` | Matches asynchronously a string into an array of objects or an array of arrays according to the current language
 
-### <a name="8.5"/>8.5 IntlAPI
+### <a name="8.11"/>8.11 IntlAPI
 Method | Function
 ------ | --------
 `static hasDateTimeFormat(): boolean` |
