@@ -101,7 +101,7 @@ export interface ICollator {
 
 @Injectable() export class Collator implements ICollator {
 
-    constructor(public translation: TranslationService) { }
+    constructor(private translation: TranslationService) { }
 
     public compare(
         key1: string,

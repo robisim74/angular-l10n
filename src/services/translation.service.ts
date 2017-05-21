@@ -61,7 +61,7 @@ export interface ITranslationService {
     private translationData: any = {};
 
     constructor(
-        public locale: LocaleService,
+        private locale: LocaleService,
         private configuration: TranslationConfig,
         private translationProvider: TranslationProvider
     ) {

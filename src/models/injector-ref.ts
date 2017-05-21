@@ -13,7 +13,7 @@ import { Type } from './types';
         return this.injector.get(token);
     }
 
-    constructor(public injector: Injector) {
+    constructor(private injector: Injector) {
         InjectorRef.injector = this.injector;
     }
 

@@ -9,7 +9,7 @@ import { ServiceState } from '../models/types';
 })
 export class TranslatePipe implements PipeTransform {
 
-    constructor(public translation: TranslationService) { }
+    constructor(protected translation: TranslationService) { }
 
     public transform(key: string, lang: string, args?: any): string {
         if (this.translation.serviceState == ServiceState.isReady) {

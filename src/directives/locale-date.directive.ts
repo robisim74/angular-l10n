@@ -14,7 +14,7 @@ export class LocaleDateDirective extends BaseDirective {
 
     private defaultPattern: string = 'mediumDate';
 
-    constructor(public locale: LocaleService, protected el: ElementRef, protected renderer: Renderer2) {
+    constructor(protected locale: LocaleService, protected el: ElementRef, protected renderer: Renderer2) {
         super(el, renderer);
     }
 

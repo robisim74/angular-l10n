@@ -15,9 +15,9 @@ import { InjectorRef } from '../models/injector-ref';
     public currency: string;
 
     constructor(
-        public locale: LocaleService = InjectorRef.get(LocaleService),
-        public translation: TranslationService = InjectorRef.get(TranslationService),
-        public changeDetectorRef?: ChangeDetectorRef
+        protected locale: LocaleService = InjectorRef.get(LocaleService),
+        protected translation: TranslationService = InjectorRef.get(TranslationService),
+        protected changeDetectorRef?: ChangeDetectorRef
     ) {
         super(translation, changeDetectorRef);
 

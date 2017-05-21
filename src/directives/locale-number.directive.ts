@@ -12,7 +12,7 @@ export class LocaleDecimalDirective extends BaseDirective {
 
     @Input('localeDecimal') public digits: string;
 
-    constructor(public locale: LocaleService, protected el: ElementRef, protected renderer: Renderer2) {
+    constructor(protected locale: LocaleService, protected el: ElementRef, protected renderer: Renderer2) {
         super(el, renderer);
     }
 
@@ -42,7 +42,7 @@ export class LocalePercentDirective extends BaseDirective {
 
     @Input('localePercent') public digits: string;
 
-    constructor(public locale: LocaleService, protected el: ElementRef, protected renderer: Renderer2) {
+    constructor(protected locale: LocaleService, protected el: ElementRef, protected renderer: Renderer2) {
         super(el, renderer);
     }
 
@@ -74,7 +74,7 @@ export class LocaleCurrencyDirective extends BaseDirective {
 
     @Input() public symbol: boolean;
 
-    constructor(public locale: LocaleService, protected el: ElementRef, protected renderer: Renderer2) {
+    constructor(protected locale: LocaleService, protected el: ElementRef, protected renderer: Renderer2) {
         super(el, renderer);
     }
 

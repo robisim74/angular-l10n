@@ -60,7 +60,7 @@ export class TranslationModule {
         };
     }
 
-    constructor(public injector: InjectorRef) {
+    constructor(private injector: InjectorRef) {
         // Creates the instance of the InjectorRef, so that module dependencies are available.
     }
 
