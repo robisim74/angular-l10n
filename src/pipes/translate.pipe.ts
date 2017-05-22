@@ -12,7 +12,7 @@ export class TranslatePipe implements PipeTransform {
     constructor(protected translation: TranslationService) { }
 
     public transform(key: string, lang: string, args?: any): string {
-        if (this.translation.serviceState == ServiceState.isReady) {
+        if (this.translation.getServiceState() == ServiceState.isReady) {
             return this.translation.translate(key, args, lang);
         }
         // If the service is not ready, returns an empty string.

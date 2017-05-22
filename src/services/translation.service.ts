@@ -19,8 +19,6 @@ export interface ITranslationService {
     translationChanged: EventEmitter<string>;
     translationError: EventEmitter<any>;
 
-    serviceState: ServiceState;
-
     /**
      * Configure the service in the application root module or in a feature module with lazy loading.
      */
@@ -33,9 +31,8 @@ export interface ITranslationService {
      */
     init(): void;
 
-    /**
-     * The language of TranslationService is updated when the translation data has been loaded.
-     */
+    getServiceState(): ServiceState;
+
     getLanguage(): string;
 
     translate(key: string, args?: any, lang?: string): string;
@@ -49,7 +46,7 @@ export interface ITranslationService {
     @Output() public translationChanged: EventEmitter<string> = new EventEmitter<string>(true);
     @Output() public translationError: EventEmitter<any> = new EventEmitter<any>(true);
 
-    public serviceState: ServiceState;
+    private serviceState: ServiceState;
 
     private loadingMode: LoadingMode;
 
@@ -88,6 +85,10 @@ export interface ITranslationService {
             this.loadingMode = LoadingMode.Direct;
         }
         this.loadTranslation();
+    }
+
+    public getServiceState(): ServiceState {
+        return this.serviceState;
     }
 
     public getLanguage(): string {

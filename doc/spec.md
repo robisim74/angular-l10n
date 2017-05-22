@@ -686,7 +686,7 @@ Method | Function
 `addConfiguration(): ITranslationConfigAPI` | Configure the service in the application root module or in a feature module with lazy loading
 `getConfiguration(): ITranslationConfig` |
 `init(): void` | Call this method after the configuration to initialize the service
-`getLanguage(): string` | The language of `TranslationService` is updated when the translation data has been loaded
+`getLanguage(): string` |
 `translate(key: string, args?: any, lang?: string): string` |
 `translateAsync(key: string, args?: any, lang?: string): Observable<string>` |
 
