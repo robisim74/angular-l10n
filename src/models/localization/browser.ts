@@ -5,8 +5,6 @@ import { LocaleConfig } from './locale-config';
  */
 export class Browser {
 
-    public storageIsDisabled: boolean;
-
     private hasCookie: boolean;
     private hasStorage: boolean;
 
@@ -18,7 +16,7 @@ export class Browser {
 
     public readStorage(name: string): string | null {
         let value: string | null = null;
-        if (!this.storageIsDisabled) {
+        if (!this.configuration.storageIsDisabled) {
             if (this.configuration.localStorage && this.hasStorage) {
                 value = this.getLocalStorage(name);
             } else if (this.configuration.sessionStorage && this.hasStorage) {
@@ -31,7 +29,7 @@ export class Browser {
     }
 
     public writeStorage(name: string, value: string): void {
-        if (!this.storageIsDisabled) {
+        if (!this.configuration.storageIsDisabled) {
             if (this.configuration.localStorage && this.hasStorage) {
                 this.setLocalStorage(name, value);
             } else if (this.configuration.sessionStorage && this.hasStorage) {

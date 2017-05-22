@@ -203,8 +203,6 @@ export interface ILocaleService {
     }
 
     private initStorage(): void {
-        this.browser.storageIsDisabled = this.configuration.storageIsDisabled;
-
         // Tries to retrieve default locale & currency from the browser storage.
         const defaultLocale: string | null = this.browser.readStorage("locale");
         if (!!defaultLocale) {
