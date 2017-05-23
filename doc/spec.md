@@ -6,8 +6,8 @@ Library version: 3.3.0
 * [2 Configuration](#2)
     * [2.1 First scenario: you only need to translate messages](#2.1)
     * [2.2 Second scenario: you need to translate messages, dates & numbers](#2.2)
-    * [2.3 Loading the translation data](#2.3)
-    * [2.4 Using a custom provider](#2.4)
+    * [2.3 Configuration APIs](#2.3)
+    * [2.4 Loading the translation data](#2.4)
     * [2.5 Default locale](#2.5)
     * [2.6 Intl API](#2.6)
 * [3 Getting the translation](#3)
@@ -20,24 +20,15 @@ Library version: 3.3.0
     * [3.3 Using Html tags in translation](#3.3)
     * [3.4 Getting the translation in component class](#3.4)
 * [4 Changing language, default locale or currency at runtime](#4)
-* [5 Lazy loading](#5)
+* [5 Lazy loaded modules & Shared modules](#5)
+    * [5.1 Lazy loaded modules with the router](#5.1)
+    * [5.2 Shared modules](#5.2)
 * [6 Validation by locales](#6)
     * [6.1 Validating a number](#6.1)
         * [6.1.1 Parsing a number](#6.1.1)
         * [6.1.2 FormBuilder](#6.1.2)
 * [7 Collator](#7)
 * [8 Services APIs](#8)
-    * [8.1 TranslationModule](#8.1)
-    * [8.2 LocalizationModule](#8.2)
-    * [8.3 LocaleValidationModule](#8.3)
-    * [8.4 ILocaleService](#8.4)
-    * [8.5 ITranslationService](#8.5)
-    * [8.6 TranslationProvider](#8.6)
-    * [8.7 Translation](#8.7)
-    * [8.8 Localization](#8.8)
-    * [8.9 ILocaleValidation](#8.9)
-    * [8.10 ICollator](#8.10)
-    * [8.11 IntlAPI](#8.11)
 
 ## <a name="1"/>1 Library structure
 Main modules of the library:
@@ -120,6 +111,7 @@ export class AppModule {
 }
 ```
 
+### <a name="2.3"/>2.3 Configuration APIs
 #### ILocaleConfigAPI 
 Method | Function
 ------ | --------
@@ -146,7 +138,7 @@ Method | Function
 `setComposedKeySeparator(keySeparator: string)` | Sets composed key separator. Default is the point '.'
 `disableI18nPlural()` | Disables the translation of numbers that are contained at the beginning of the keys
 
-### <a name="2.3"/>2.3 Loading the translation data
+### <a name="2.4"/>2.4 Loading the translation data
 #### Direct loading
 You can use `addTranslation` when you configure the service, 
 adding all the translation data:
@@ -186,7 +178,7 @@ this.translation.init();
 
 The example above also showed as you can perform a custom action if you get a bad response.
 
-### <a name="2.4"/>2.4 Using a custom provider
+#### Using a custom provider
 If you need, you can create a custom provider to load translation data.
 
 Use the `addCustomProvider(args: any)` method during the configuration of the service:
@@ -545,7 +537,8 @@ To change language, default locale or currency at runtime, `LocaleService` has t
 * `setDefaultLocale(languageCode: string, countryCode: string, scriptCode?: string, numberingSystem?: string, calendar?: string): void`
 * `setCurrentCurrency(currencyCode: string): void`
 
-## <a name="5"/>5 Lazy loading
+## <a name="5"/>5 Lazy loaded modules & Shared modules
+### <a name="5.1"/>5.1 Lazy loaded modules with the router
 You can create an instance of `TranslationService` with its own translation data for every _lazy loaded_ module, as shown:
 ![LazyLoading](images/LazyLoading.png)
 You can create a new instance of `TranslationService` calling the `forChild` method of the module you are using, 
@@ -570,6 +563,46 @@ export class ListModule {
 }
 ```
 In this way, application performance and memory usage are optimized.
+
+### <a name="5.2"/>5.2 Shared modules
+If you don't want a new instance of `TranslationService` with its own translation data for each feature module, but you want it to be _singleton_ and shared by other modules, you have to call `forRoot` method of the module you are using once in `AppModule`:
+```TypeScript
+@NgModule({
+    imports: [
+        ...
+        SharedModule,
+        TranslationModule.forRoot()
+    ],
+    ...
+})
+export class AppModule { }
+```
+Import/export `TranslationModule` or `LocalizationModule` _without methods_ in a shared module: 
+```TypeScript
+const sharedModules: any[] = [
+    ...
+    TranslationModule
+];
+
+@NgModule({
+    imports: sharedModules,
+    exports: sharedModules
+})
+
+export class SharedModule { }
+```
+Then in the feature module (also if it is _lazy loaded_):
+```TypeScript
+@NgModule({
+    imports: [
+        ...
+        SharedModule
+    ],
+    ...
+})
+export class ListModule { }
+```
+You must provide the configuration of the services only in `AppModule`.
 
 ## <a name="6"/>6 Validation by locales
 Import the modules you need in the application root module:
@@ -631,24 +664,24 @@ These methods use the [Intl.Collator](https://developer.mozilla.org/en-US/docs/W
 
 ## <a name="8"/>8 Services APIs
 
-### <a name="8.1"/>8.1 TranslationModule
+#### TranslationModule
 Method | Function
 ------ | --------
 `static forRoot(token?: Token): ModuleWithProviders` | Use in `AppModule`: new instances of `LocaleService` & `TranslationService`
 `static forChild(token?: Token): ModuleWithProviders` | Use in feature modules with lazy loading: new instance of `TranslationService`
 
-### <a name="8.2"/>8.2 LocalizationModule
+#### LocalizationModule
 Method | Function
 ------ | --------
 `static forRoot(token?: Token): ModuleWithProviders` | Use in `AppModule`: new instances of `LocaleService` & `TranslationService`
 `static forChild(token?: Token): ModuleWithProviders` | Use in feature modules with lazy loading: new instance of `TranslationService`
 
-### <a name="8.3"/>8.3 LocaleValidationModule
+#### LocaleValidationModule
 Method | Function
 ------ | --------
 `static forRoot(): ModuleWithProviders` | Use in `AppModule`: new instance of `LocaleValidation`
 
-### <a name="8.4"/>8.4 ILocaleService
+#### ILocaleService
 Property | Value
 ---------- | -----
 `languageCodeChanged: EventEmitter<string>` |
@@ -674,7 +707,7 @@ Method | Function
 `setDefaultLocale(languageCode: string, countryCode: string, scriptCode?: string, numberingSystem?: string, calendar?: string): void` |
 `setCurrentCurrency(currencyCode: string): void` |
 
-### <a name="8.5"/>8.5 ITranslationService
+#### ITranslationService
 Property | Value
 ---------- | -----
 `translationChanged: EventEmitter<string>` |
@@ -690,12 +723,12 @@ Method | Function
 `translate(key: string, args?: any, lang?: string): string` |
 `translateAsync(key: string, args?: any, lang?: string): Observable<string>` |
 
-### <a name="8.6"/>8.6 TranslationProvider
+#### TranslationProvider
 Method | Function
 ------ | --------
 `abstract getTranslation(language: string, args: any): Observable<any>` | This method must contain the logic of data access
 
-### <a name="8.7"/>8.7 Translation
+#### Translation
 Property | Value
 ---------- | -----
 `lang: string` |
@@ -705,18 +738,18 @@ Method | Function
 ------ | --------
 `protected cancelParamSubscriptions(): void` |
 
-### <a name="8.8"/>8.8 Localization
+#### Localization
 Property | Value
 ---------- | -----
 `defaultLocale: string` |
 `currency: string` |
 
-### <a name="8.9"/>8.9 ILocaleValidation
+#### ILocaleValidation
 Method | Function
 ------ | --------
 `parseNumber(s: string): number \| null` | Converts a string to a number according to default locale
 
-### <a name="8.10"/>8.10 ICollator
+#### ICollator
 Method | Function
 ------ | --------
 `compare(key1: string, key2: string, extension?: string, options?: any): number` | Compares two keys by the value of translation according to the current language
@@ -725,7 +758,7 @@ Method | Function
 `search(s: string, list: any[], keyNames: any[], options?: any): any[]` | Matches a string into an array of objects or an array of arrays according to the current language
 `searchAsync(s: string, list: any[], keyNames: any[], options?: any): Observable<any[]>` | Matches asynchronously a string into an array of objects or an array of arrays according to the current language
 
-### <a name="8.11"/>8.11 IntlAPI
+#### IntlAPI
 Method | Function
 ------ | --------
 `static hasDateTimeFormat(): boolean` |
