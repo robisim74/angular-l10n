@@ -29,15 +29,19 @@ describe('Currency decorator', () => {
         }).createComponent(CurrencyComponent);
 
         comp = fixture.componentInstance;
+    });
 
+    beforeEach((done) => {
         locale = TestBed.get(LocaleService);
 
         locale.addConfiguration()
             .disableStorage()
             .defineDefaultLocale('en', 'US')
             .defineCurrency('USD');
-        locale.init();
+        locale.init().then(() => done());
+    });
 
+    beforeEach(() => {
         fixture.detectChanges();
 
         des = fixture.debugElement.queryAll(By.css("p"));

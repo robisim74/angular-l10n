@@ -18,6 +18,7 @@ export abstract class BaseDirective implements AfterViewInit, OnChanges, OnDestr
     @Input('innerHTML') public innerHTMLProperty: string;
 
     protected key: string;
+    protected attributes: any[] = [];
 
     protected subscriptions: ISubscription[] = [];
 
@@ -29,6 +30,8 @@ export abstract class BaseDirective implements AfterViewInit, OnChanges, OnDestr
 
     private readonly MUTATION_CONFIG: any = { subtree: true, characterData: true };
 
+    private readonly SELECTOR: RegExp = /^l10n-/;
+
     constructor(protected el: ElementRef, protected renderer: Renderer2) { }
 
     public ngAfterViewInit(): void {
@@ -38,9 +41,9 @@ export abstract class BaseDirective implements AfterViewInit, OnChanges, OnDestr
         this.renderNode = BFS.getTargetNode(this.element);
 
         this.getKey();
-        if (!!this.key) {
-            this.setup();
-        }
+        this.getAttributes();
+
+        this.setup();
     }
 
     public ngOnChanges(changes: SimpleChanges): void {
@@ -52,7 +55,7 @@ export abstract class BaseDirective implements AfterViewInit, OnChanges, OnDestr
                     this.key = this.innerHTMLProperty;
                 }
             }
-            this.replace();
+            this.replaceText();
         }
     }
 
@@ -65,7 +68,26 @@ export abstract class BaseDirective implements AfterViewInit, OnChanges, OnDestr
 
     protected abstract replace(): void;
 
-    protected setText(value: string | null): void {
+    protected abstract replaceText(): void;
+
+    protected abstract replaceAttributes(): void;
+
+    protected getAttributesData(): any {
+        const keys: string[] = this.getAttributesKeys();
+        const data: any = {};
+        for (const key of keys) {
+            data[key] = this.getValues(key);
+        }
+        return data;
+    }
+
+    protected getAttributesKeys(): string[] {
+        return this.attributes.map((attr: any) => attr.key);
+    }
+
+    protected abstract getValues(keys: string | string[]): string | any;
+
+    protected setText(value: string): void {
         if (!!value) {
             if (!!this.nodeValue && !!this.key) {
                 this.removeTextListener();
@@ -79,12 +101,18 @@ export abstract class BaseDirective implements AfterViewInit, OnChanges, OnDestr
         }
     }
 
+    protected setAttributes(data: any): void {
+        for (const attr of this.attributes) {
+            this.renderer.setAttribute(this.element, attr.name, data[attr.key]);
+        }
+    }
+
     private addTextListener(): void {
         if (typeof MutationObserver !== "undefined") {
             this.textObserver = new MutationObserver((mutations: any) => {
                 this.getKey();
                 if (!!this.key) {
-                    this.replace();
+                    this.replaceText();
                 }
             });
             this.textObserver.observe(this.renderNode, this.MUTATION_CONFIG);
@@ -109,6 +137,19 @@ export abstract class BaseDirective implements AfterViewInit, OnChanges, OnDestr
             this.key = this.valueAttribute;
         } else if (!!this.innerHTMLProperty) {
             this.key = this.innerHTMLProperty;
+        }
+    }
+
+    private getAttributes(): void {
+        for (const attr of this.element.attributes) {
+            if (this.SELECTOR.test(attr.name)) {
+                const name: string = attr.name.substr(5);
+                for (const targetAttr of this.element.attributes) {
+                    if (new RegExp("^" + name + "$").test(targetAttr.name)) {
+                        this.attributes.push({ name: name, key: targetAttr.value });
+                    }
+                }
+            }
         }
     }
 

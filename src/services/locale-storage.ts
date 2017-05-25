@@ -1,20 +1,39 @@
-import { LocaleConfig } from './locale-config';
+import { Injectable } from '@angular/core';
+
+import { LocaleConfig } from '../models/localization/locale-config';
 
 /**
- * Manages the browser for cookie, local storage & navigator.
+ * Implement this class-interface to create a custom storage for default locale & currency.
  */
-export class Browser {
+@Injectable() export abstract class LocaleStorage {
+
+    /**
+     * This method must contain the logic to read the storage.
+     * @param name 'defaultLocale' or 'currency'
+     * @return A promise with the value of the given name
+     */
+    public abstract async read(name: string): Promise<string | null>;
+
+    /**
+     * This method must contain the logic to write the storage.
+     * @param name 'defaultLocale' or 'currency'
+     * @param value The value for the given name
+     */
+    public abstract async write(name: string, value: string): Promise<void>;
+
+}
+
+@Injectable() export class BrowserStorage implements LocaleStorage {
 
     private hasCookie: boolean;
     private hasStorage: boolean;
 
     constructor(private configuration: LocaleConfig) {
-        this.hasCookie = typeof navigator !== "undefined" && typeof navigator.cookieEnabled !== "undefined" &&
-            navigator.cookieEnabled;
+        this.hasCookie = typeof navigator !== "undefined" && navigator.cookieEnabled;
         this.hasStorage = typeof Storage !== "undefined";
     }
 
-    public readStorage(name: string): string | null {
+    public async read(name: string): Promise<string | null> {
         let value: string | null = null;
         if (!this.configuration.storageIsDisabled) {
             if (this.configuration.localStorage && this.hasStorage) {
@@ -28,7 +47,7 @@ export class Browser {
         return value;
     }
 
-    public writeStorage(name: string, value: string): void {
+    public async write(name: string, value: string): Promise<void> {
         if (!this.configuration.storageIsDisabled) {
             if (this.configuration.localStorage && this.hasStorage) {
                 this.setLocalStorage(name, value);
@@ -38,20 +57,6 @@ export class Browser {
                 this.setCookie(name, value);
             }
         }
-    }
-
-    public getBrowserLanguage(): string | null {
-        let browserLanguage: string | null = null;
-        if (typeof navigator !== "undefined" && typeof navigator.language !== "undefined") {
-            browserLanguage = navigator.language;
-        }
-        if (browserLanguage != null) {
-            const index: number = browserLanguage.indexOf("-");
-            if (index != -1) {
-                browserLanguage = browserLanguage.substring(0, index);
-            }
-        }
-        return browserLanguage;
     }
 
     private getLocalStorage(name: string): string | null {

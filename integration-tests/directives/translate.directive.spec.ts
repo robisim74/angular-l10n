@@ -30,7 +30,9 @@ describe('TranslateDirective', () => {
         }).createComponent(TranslateComponent);
 
         comp = fixture.componentInstance;
+    });
 
+    beforeEach((done) => {
         locale = TestBed.get(LocaleService);
         translation = TestBed.get(TranslationService);
 
@@ -38,7 +40,6 @@ describe('TranslateDirective', () => {
             .disableStorage()
             .addLanguages(['en', 'it'])
             .defineLanguage('en');
-        locale.init();
 
         const translationEN: any = {
             "Title": "Angular localization",
@@ -62,8 +63,10 @@ describe('TranslateDirective', () => {
         translation.addConfiguration()
             .addTranslation('en', translationEN)
             .addTranslation('it', translationIT);
-        translation.init();
+        translation.init().then(() => done());
+    });
 
+    beforeEach(() => {
         locale.setCurrentLanguage('en');
 
         fixture.detectChanges();

@@ -12,7 +12,7 @@ describe('Locale number pipes', () => {
 
     let locale: LocaleService;
 
-    beforeEach(() => {
+    beforeEach((done) => {
         TestBed.configureTestingModule({
             imports: [
                 LocalizationModule.forRoot()
@@ -25,7 +25,7 @@ describe('Locale number pipes', () => {
             .disableStorage()
             .defineDefaultLocale('en', 'US')
             .defineCurrency('USD');
-        locale.init();
+        locale.init().then(() => done());
     });
 
     describe('LocaleDecimalPipe', () => {

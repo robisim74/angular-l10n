@@ -14,7 +14,7 @@ describe('LocaleDatePipe', () => {
 
     let pipe: LocaleDatePipe;
 
-    beforeEach(() => {
+    beforeEach((done) => {
         TestBed.configureTestingModule({
             imports: [
                 LocalizationModule.forRoot()
@@ -22,13 +22,13 @@ describe('LocaleDatePipe', () => {
         });
 
         locale = TestBed.get(LocaleService);
+        
+        pipe = new LocaleDatePipe();
 
         locale.addConfiguration()
             .disableStorage()
             .defineDefaultLocale('en', 'US');
-        locale.init();
-
-        pipe = new LocaleDatePipe();
+        locale.init().then(() => done());       
     });
 
     it('should be marked as pure', () => {

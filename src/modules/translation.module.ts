@@ -3,9 +3,11 @@ import { NgModule, ModuleWithProviders } from '@angular/core';
 import { InjectorRef } from '../models/injector-ref';
 import { LocaleConfig } from '../models/localization/locale-config';
 import { LocaleService } from '../services/locale.service';
+import { LocaleStorage, BrowserStorage } from '../services/locale-storage';
 import { TranslationConfig } from '../models/translation/translation-config';
 import { TranslationService } from '../services/translation.service';
 import { TranslationProvider, HttpTranslationProvider } from '../services/translation-provider';
+import { TranslationHandler, DefaultTranslationHandler } from '../services/translation-handler';
 import { TranslatePipe } from '../pipes/translate.pipe';
 import { TranslateDirective } from '../directives/translate.directive';
 import { Token } from '../models/types';
@@ -35,11 +37,19 @@ export class TranslationModule {
                 InjectorRef,
                 LocaleConfig,
                 LocaleService,
+                {
+                    provide: LocaleStorage,
+                    useClass: token.localeStorage || BrowserStorage
+                },
                 TranslationConfig,
                 TranslationService,
                 {
                     provide: TranslationProvider,
                     useClass: token.translationProvider || HttpTranslationProvider
+                },
+                {
+                    provide: TranslationHandler,
+                    useClass: token.translationHandler || DefaultTranslationHandler
                 }
             ]
         };
@@ -58,6 +68,10 @@ export class TranslationModule {
                 {
                     provide: TranslationProvider,
                     useClass: token.translationProvider || HttpTranslationProvider
+                },
+                {
+                    provide: TranslationHandler,
+                    useClass: token.translationHandler || DefaultTranslationHandler
                 }
             ]
         };

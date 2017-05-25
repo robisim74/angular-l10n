@@ -14,6 +14,7 @@ export default {
         'rxjs/Subscription',
         'rxjs/Subject',
         'rxjs/add/operator/map',
+        'rxjs/add/operator/toPromise',
         'rxjs/add/observable/merge'
     ],
     globals: {
@@ -26,6 +27,7 @@ export default {
         'rxjs/Subscription': 'Rx',
         'rxjs/Subject': 'Rx',
         'rxjs/add/operator/map': 'Rx',
+        'rxjs/add/operator/toPromise': 'Rx',
         'rxjs/add/observable/merge': 'Rx'
     },
     onwarn: () => { return }

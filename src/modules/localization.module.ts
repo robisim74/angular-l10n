@@ -4,9 +4,11 @@ import { InjectorRef } from '../models/injector-ref';
 import { TranslationModule } from './translation.module';
 import { LocaleConfig } from '../models/localization/locale-config';
 import { LocaleService } from '../services/locale.service';
+import { LocaleStorage, BrowserStorage } from '../services/locale-storage';
 import { TranslationConfig } from '../models/translation/translation-config';
 import { TranslationService } from '../services/translation.service';
 import { TranslationProvider, HttpTranslationProvider } from '../services/translation-provider';
+import { TranslationHandler, DefaultTranslationHandler } from '../services/translation-handler';
 import { LocaleDatePipe } from '../pipes/locale-date.pipe';
 import { LocaleDecimalPipe, LocalePercentPipe, LocaleCurrencyPipe } from '../pipes/locale-number.pipe';
 import { LocaleDateDirective } from '../directives/locale-date.directive';
@@ -58,11 +60,19 @@ export class LocalizationModule {
                 InjectorRef,
                 LocaleConfig,
                 LocaleService,
+                {
+                    provide: LocaleStorage,
+                    useClass: token.localeStorage || BrowserStorage
+                },
                 TranslationConfig,
                 TranslationService,
                 {
                     provide: TranslationProvider,
                     useClass: token.translationProvider || HttpTranslationProvider
+                },
+                {
+                    provide: TranslationHandler,
+                    useClass: token.translationHandler || DefaultTranslationHandler
                 }
             ]
         };
@@ -81,6 +91,10 @@ export class LocalizationModule {
                 {
                     provide: TranslationProvider,
                     useClass: token.translationProvider || HttpTranslationProvider
+                },
+                {
+                    provide: TranslationHandler,
+                    useClass: token.translationHandler || DefaultTranslationHandler
                 }
             ]
         };

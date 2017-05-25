@@ -1,9 +1,11 @@
 export { InjectorRef } from './models/injector-ref';
 export { ILocaleConfig, LocaleConfig } from './models/localization/locale-config';
 export { ILocaleService, LocaleService } from './services/locale.service';
+export { LocaleStorage, BrowserStorage } from './services/locale-storage';
 export { ITranslationConfig, TranslationConfig } from './models/translation/translation-config';
 export { ITranslationService, TranslationService } from './services/translation.service';
 export { TranslationProvider, HttpTranslationProvider } from './services/translation-provider';
+export { TranslationHandler, DefaultTranslationHandler } from './services/translation-handler';
 export { Translation } from './services/translation';
 export { Localization } from './services/localization';
 export { NumberCode } from './models/validation/number-code';

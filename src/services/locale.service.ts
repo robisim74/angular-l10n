@@ -3,8 +3,8 @@ import { Subject } from 'rxjs/Subject';
 
 import { ILocaleConfig, LocaleConfig } from '../models/localization/locale-config';
 import { ILocaleConfigAPI, LocaleConfigAPI } from '../models/localization/locale-config-api';
+import { LocaleStorage } from './locale-storage';
 import { DefaultLocale } from '../models/localization/default-locale';
-import { Browser } from '../models/localization/browser';
 import { Language } from '../models/types';
 
 /**
@@ -25,9 +25,6 @@ export interface ILocaleService {
 
     getConfiguration(): ILocaleConfig;
 
-    /**
-     * Call this method after the configuration to initialize the service.
-     */
     init(): void;
 
     getAvailableLanguages(): string[];
@@ -76,9 +73,7 @@ export interface ILocaleService {
 
     private currencyCode: string;
 
-    private browser: Browser = new Browser(this.configuration);
-
-    constructor(private configuration: LocaleConfig) { }
+    constructor(private configuration: LocaleConfig, private storage: LocaleStorage) { }
 
     public addConfiguration(): ILocaleConfigAPI {
         return new LocaleConfigAPI(this.configuration);
@@ -88,8 +83,8 @@ export interface ILocaleService {
         return this.configuration;
     }
 
-    public init(): void {
-        this.initStorage();
+    public async init(): Promise<void> {
+        await this.initStorage();
 
         if (!!this.configuration.languageCode && !!this.configuration.countryCode) {
             this.initDefaultLocale();
@@ -161,7 +156,7 @@ export interface ILocaleService {
     public setCurrentLanguage(languageCode: string): void {
         if (this.defaultLocale.languageCode != languageCode) {
             this.defaultLocale.build(languageCode);
-            this.browser.writeStorage("locale", this.defaultLocale.value);
+            this.storage.write("defaultLocale", this.defaultLocale.value);
             this.sendLanguageEvents();
             this.sendTranslationEvents();
         }
@@ -188,7 +183,7 @@ export interface ILocaleService {
                 calendar
             );
 
-            this.browser.writeStorage("locale", this.defaultLocale.value);
+            this.storage.write("defaultLocale", this.defaultLocale.value);
             this.sendDefaultLocaleEvents();
             this.sendTranslationEvents();
         }
@@ -197,26 +192,26 @@ export interface ILocaleService {
     public setCurrentCurrency(currencyCode: string): void {
         if (this.currencyCode != currencyCode) {
             this.currencyCode = currencyCode;
-            this.browser.writeStorage("currency", this.currencyCode);
+            this.storage.write("currency", this.currencyCode);
             this.sendCurrencyEvents();
         }
     }
 
-    private initStorage(): void {
+    private async initStorage(): Promise<void> {
         // Tries to retrieve default locale & currency from the browser storage.
-        const defaultLocale: string | null = this.browser.readStorage("locale");
+        const defaultLocale: string | null = await this.storage.read("defaultLocale");
         if (!!defaultLocale) {
             this.defaultLocale.value = defaultLocale;
         }
-        const currencyCode: string | null = this.browser.readStorage("currency");
+        const currencyCode: string | null = await this.storage.read("currency");
         if (!!currencyCode) {
             this.currencyCode = currencyCode;
         }
     }
 
     private initLanguage(): void {
-        if (this.defaultLocale.languageCode == null) {
-            const browserLanguage: string | null = this.browser.getBrowserLanguage();
+        if (!this.defaultLocale.languageCode) {
+            const browserLanguage: string | null = this.getBrowserLanguage();
             let matchedLanguages: Language[] = [];
             if (!!browserLanguage) {
                 matchedLanguages = this.matchLanguage(browserLanguage);
@@ -226,9 +221,45 @@ export interface ILocaleService {
             } else {
                 this.defaultLocale.build(this.configuration.languageCode);
             }
-            this.browser.writeStorage("locale", this.defaultLocale.value);
+            this.storage.write("defaultLocale", this.defaultLocale.value);
         }
         this.sendLanguageEvents();
+    }
+
+    private initDefaultLocale(): void {
+        if (!this.defaultLocale.value) {
+            this.defaultLocale.build(
+                this.configuration.languageCode,
+                this.configuration.countryCode,
+                this.configuration.scriptCode,
+                this.configuration.numberingSystem,
+                this.configuration.calendar
+            );
+            this.storage.write("defaultLocale", this.defaultLocale.value);
+        }
+        this.sendDefaultLocaleEvents();
+    }
+
+    private initCurrency(): void {
+        if (this.currencyCode == null) {
+            this.currencyCode = this.configuration.currencyCode;
+            this.storage.write("currency", this.currencyCode);
+        }
+        this.sendCurrencyEvents();
+    }
+
+    private getBrowserLanguage(): string | null {
+        let browserLanguage: string | null = null;
+        if (typeof navigator !== "undefined" && navigator.language) {
+            browserLanguage = navigator.language;
+        }
+        if (browserLanguage != null) {
+            const index: number = browserLanguage.indexOf("-");
+            if (index != -1) {
+                browserLanguage = browserLanguage.substring(0, index);
+            }
+        }
+        return browserLanguage;
     }
 
     private matchLanguage(languageCode: string): Language[] {
@@ -237,28 +268,6 @@ export interface ILocaleService {
                 return language.code == languageCode;
             });
         return matchedLanguages;
-    }
-
-    private initDefaultLocale(): void {
-        if (this.defaultLocale.value == null) {
-            this.defaultLocale.build(
-                this.configuration.languageCode,
-                this.configuration.countryCode,
-                this.configuration.scriptCode,
-                this.configuration.numberingSystem,
-                this.configuration.calendar
-            );
-            this.browser.writeStorage("locale", this.defaultLocale.value);
-        }
-        this.sendDefaultLocaleEvents();
-    }
-
-    private initCurrency(): void {
-        if (this.currencyCode == null) {
-            this.currencyCode = this.configuration.currencyCode;
-            this.browser.writeStorage("currency", this.currencyCode);
-        }
-        this.sendCurrencyEvents();
     }
 
     private sendLanguageEvents(): void {

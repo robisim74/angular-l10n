@@ -1,16 +1,24 @@
 import { Directive, ElementRef, Input, Renderer2 } from '@angular/core';
-import { DecimalPipe, PercentPipe, CurrencyPipe } from '@angular/common';
 
 import { LocaleService } from '../services/locale.service';
-import { IntlAPI } from '../services/intl-api';
 import { BaseDirective } from '../models/base-directive';
+import { LocaleDecimalPipe, LocalePercentPipe, LocaleCurrencyPipe } from '../pipes/locale-number.pipe';
 
 @Directive({
-    selector: '[localeDecimal]'
+    selector: '[l10nDecimal],[localeDecimal]'
 })
 export class LocaleDecimalDirective extends BaseDirective {
 
-    @Input('localeDecimal') public digits: string;
+    @Input() set l10nDecimal(digits: string) {
+        this.digits = digits;
+    }
+    @Input() set localeDecimal(digits: string) {
+        this.digits = digits;
+    }
+
+    private digits: string;
+
+    private localeDecimalPipe: LocaleDecimalPipe = new LocaleDecimalPipe();
 
     constructor(protected locale: LocaleService, protected el: ElementRef, protected renderer: Renderer2) {
         super(el, renderer);
@@ -19,28 +27,48 @@ export class LocaleDecimalDirective extends BaseDirective {
     protected setup(): void {
         this.replace();
         this.subscriptions.push(this.locale.defaultLocaleChanged.subscribe(
-            () => {
-                this.replace();
-            }
+            () => { this.replace(); }
         ));
     }
 
     protected replace(): void {
-        if (IntlAPI.hasNumberFormat()) {
-            const localeDecimal: DecimalPipe = new DecimalPipe(this.locale.getDefaultLocale());
-            const value: string | null = localeDecimal.transform(this.key, this.digits);
-            this.setText(value);
-        }
+        this.replaceText();
+        this.replaceAttributes();
+    }
+
+    protected replaceText(): void {
+        this.setText(this.getValues(this.key));
+    }
+
+    protected replaceAttributes(): void {
+        this.setAttributes(this.getAttributesData());
+    }
+
+    protected getValues(keys: string | string[]): string | any {
+        return this.localeDecimalPipe.transform(
+            keys,
+            this.locale.getDefaultLocale(),
+            this.digits
+        );
     }
 
 }
 
 @Directive({
-    selector: '[localePercent]'
+    selector: '[l10nPercent],[localePercent]'
 })
 export class LocalePercentDirective extends BaseDirective {
 
-    @Input('localePercent') public digits: string;
+    @Input() set l10nPercent(digits: string) {
+        this.digits = digits;
+    }
+    @Input() set localePercent(digits: string) {
+        this.digits = digits;
+    }
+
+    private digits: string;
+
+    private localePercentPipe: LocalePercentPipe = new LocalePercentPipe();
 
     constructor(protected locale: LocaleService, protected el: ElementRef, protected renderer: Renderer2) {
         super(el, renderer);
@@ -49,30 +77,50 @@ export class LocalePercentDirective extends BaseDirective {
     protected setup(): void {
         this.replace();
         this.subscriptions.push(this.locale.defaultLocaleChanged.subscribe(
-            () => {
-                this.replace();
-            }
+            () => { this.replace(); }
         ));
     }
 
     protected replace(): void {
-        if (IntlAPI.hasNumberFormat()) {
-            const localePercent: PercentPipe = new PercentPipe(this.locale.getDefaultLocale());
-            const value: string | null = localePercent.transform(this.key, this.digits);
-            this.setText(value);
-        }
+        this.replaceText();
+        this.replaceAttributes();
+    }
+
+    protected replaceText(): void {
+        this.setText(this.getValues(this.key));
+    }
+
+    protected replaceAttributes(): void {
+        this.setAttributes(this.getAttributesData());
+    }
+
+    protected getValues(keys: string | string[]): string | any {
+        return this.localePercentPipe.transform(
+            keys,
+            this.locale.getDefaultLocale(),
+            this.digits
+        );
     }
 
 }
 
 @Directive({
-    selector: '[localeCurrency]'
+    selector: '[l10nCurrency],[localeCurrency]'
 })
 export class LocaleCurrencyDirective extends BaseDirective {
 
-    @Input('localeCurrency') public digits: string;
+    @Input() set l10nCurrency(digits: string) {
+        this.digits = digits;
+    }
+    @Input() set localeCurrency(digits: string) {
+        this.digits = digits;
+    }
 
     @Input() public symbol: boolean;
+
+    private digits: string;
+
+    private localeCurrencyPipe: LocaleCurrencyPipe = new LocaleCurrencyPipe();
 
     constructor(protected locale: LocaleService, protected el: ElementRef, protected renderer: Renderer2) {
         super(el, renderer);
@@ -81,28 +129,34 @@ export class LocaleCurrencyDirective extends BaseDirective {
     protected setup(): void {
         this.replace();
         this.subscriptions.push(this.locale.defaultLocaleChanged.subscribe(
-            () => {
-                this.replace();
-            }
+            () => { this.replace(); }
         ));
         this.subscriptions.push(this.locale.currencyCodeChanged.subscribe(
-            () => {
-                this.replace();
-            }
+            () => { this.replace(); }
         ));
     }
 
     protected replace(): void {
-        if (IntlAPI.hasNumberFormat()) {
-            const localeCurrency: CurrencyPipe = new CurrencyPipe(this.locale.getDefaultLocale());
-            const value: string | null = localeCurrency.transform(
-                this.key,
-                this.locale.getCurrentCurrency(),
-                this.symbol,
-                this.digits
-            );
-            this.setText(value);
-        }
+        this.replaceText();
+        this.replaceAttributes();
+    }
+
+    protected replaceText(): void {
+        this.setText(this.getValues(this.key));
+    }
+
+    protected replaceAttributes(): void {
+        this.setAttributes(this.getAttributesData());
+    }
+
+    protected getValues(keys: string | string[]): string | any {
+        return this.localeCurrencyPipe.transform(
+            keys,
+            this.locale.getDefaultLocale(),
+            this.locale.getCurrentCurrency(),
+            this.symbol,
+            this.digits
+        );
     }
 
 }

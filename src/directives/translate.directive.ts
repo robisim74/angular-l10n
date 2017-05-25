@@ -24,18 +24,26 @@ export class TranslateDirective extends BaseDirective {
     protected setup(): void {
         this.replace();
         this.subscriptions.push(this.translation.translationChanged.subscribe(
-            () => {
-                this.replace();
-            }
+            () => { this.replace(); }
         ));
     }
 
     protected replace(): void {
-        this.subscriptions.push(this.translation.translateAsync(this.key, this.params).subscribe(
-            (value: string) => {
-                this.setText(value);
-            }
-        ));
+        this.replaceText();
+        this.replaceAttributes();
+    }
+
+    protected replaceText(): void {
+        this.setText(this.getValues(this.key));
+    }
+
+    protected replaceAttributes(): void {
+        const keys: string[] = this.getAttributesKeys();
+        this.setAttributes(this.getValues(keys));
+    }
+
+    protected getValues(keys: string | string[]): string | any {
+        return this.translation.translate(keys, this.params);
     }
 
 }

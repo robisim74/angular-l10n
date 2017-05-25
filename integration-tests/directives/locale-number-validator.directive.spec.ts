@@ -27,18 +27,20 @@ describe('LocaleNumberValidatorDirective', () => {
         }).createComponent(LocaleNumberValidatorComponent);
 
         comp = fixture.componentInstance;
+    });
 
+    beforeEach((done) => {
         locale = TestBed.get(LocaleService);
 
         locale.addConfiguration()
             .disableStorage()
             .defineDefaultLocale('it', 'IT');
-        locale.init();
-
-        fixture.detectChanges();
+        locale.init().then(() => done());
     });
 
     it('should validate format', async(() => {
+        fixture.detectChanges();
+
         comp.decimal = "12.34";
 
         fixture.detectChanges();
@@ -150,7 +152,7 @@ describe('LocaleNumberValidatorDirective', () => {
 @Component({
     template: `
         <form>
-            <input [validateLocaleNumber]="digits"
+            <input [l10nValidateNumber]="digits"
                 [minValue]="minValue"
                 [maxValue]="maxValue"
                 name="decimal"

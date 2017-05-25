@@ -26,14 +26,18 @@ describe('LocaleDateDirective', () => {
         }).createComponent(LocaleDateComponent);
 
         comp = fixture.componentInstance;
+    });
 
+    beforeEach((done) => {
         locale = TestBed.get(LocaleService);
 
         locale.addConfiguration()
             .disableStorage()
             .defineDefaultLocale('en', 'US');
-        locale.init();
+        locale.init().then(() => done());
+    });
 
+    beforeEach(() => {
         fixture.detectChanges();
 
         des = fixture.debugElement.queryAll(By.directive(LocaleDateDirective));
@@ -66,8 +70,8 @@ describe('LocaleDateDirective', () => {
 @Component({
     template: `
         <p><em>should render localized date</em></p>
-        <p localeDate>{{ day }}</p>
-        <p localeDate="shortDate">{{ day }}</p>
+        <p l10nDate>{{ day }}</p>
+        <p l10nDate="shortDate">{{ day }}</p>
     `
 })
 class LocaleDateComponent {

@@ -49,6 +49,8 @@ export interface Type<T> extends Function {
 
 export interface Token {
 
+    localeStorage?: Type<any>;
     translationProvider?: Type<any>;
+    translationHandler?: Type<any>;
 
 }

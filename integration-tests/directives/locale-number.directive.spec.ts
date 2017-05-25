@@ -34,15 +34,19 @@ describe('Locale number directives', () => {
         }).createComponent(LocaleNumberComponent);
 
         comp = fixture.componentInstance;
+    });
 
+    beforeEach((done) => {
         locale = TestBed.get(LocaleService);
 
         locale.addConfiguration()
             .disableStorage()
             .defineDefaultLocale('en', 'US')
             .defineCurrency('USD');
-        locale.init();
+        locale.init().then(() => done());
+    });
 
+    beforeEach(() => {
         fixture.detectChanges();
 
         decimalDes = fixture.debugElement.queryAll(By.directive(LocaleDecimalDirective));
@@ -135,16 +139,16 @@ describe('Locale number directives', () => {
 @Component({
     template: `
         <p><em>should render localized decimal number</em></p>
-        <p localeDecimal>{{ pi }}</p>
-        <p localeDecimal="1.5-5">{{ pi }}</p>
+        <p l10nDecimal>{{ pi }}</p>
+        <p l10nDecimal="1.5-5">{{ pi }}</p>
 
         <p><em>should render localized percent number</em></p>
-        <p localePercent>0.1</p>
-        <p localePercent="1.1-1">0.1</p>
+        <p l10nPercent>0.1</p>
+        <p l10nPercent="1.1-1">0.1</p>
 
         <p><em>should render localized currency</em></p>
-        <p localeCurrency>{{ value }}</p>
-        <p [localeCurrency]="digits" [symbol]="true">{{ value }}</p>
+        <p l10nCurrency>{{ value }}</p>
+        <p [l10nCurrency]="digits" [symbol]="true">{{ value }}</p>
     `
 })
 class LocaleNumberComponent {

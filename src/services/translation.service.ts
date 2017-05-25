@@ -2,6 +2,7 @@ import { Injectable, EventEmitter, Output } from '@angular/core';
 import { Observer } from 'rxjs/Observer';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
+import 'rxjs/add/operator/toPromise';
 import 'rxjs/add/observable/merge';
 
 import { LocaleService } from './locale.service';
@@ -9,6 +10,7 @@ import { IntlAPI } from './intl-api';
 import { ITranslationConfig, TranslationConfig } from '../models/translation/translation-config';
 import { ITranslationConfigAPI, TranslationConfigAPI } from '../models/translation/translation-config-api';
 import { TranslationProvider } from './translation-provider';
+import { TranslationHandler } from './translation-handler';
 import { LoadingMode, ServiceState } from '../models/types';
 
 /**
@@ -31,13 +33,21 @@ export interface ITranslationService {
      */
     init(): void;
 
-    getServiceState(): ServiceState;
-
+    /**
+     * Gets the current language of the service.
+     */
     getLanguage(): string;
 
-    translate(key: string, args?: any, lang?: string): string;
+    /**
+     * Translates a key or an array of keys.
+     * @param keys The key or an array of keys to be translated
+     * @param args Optional parameters contained in the key
+     * @param lang The current language of the service is used by default
+     * @return The translated value or an object: {key: value}
+     */
+    translate(keys: string | string[], args?: any, lang?: string): string | any;
 
-    translateAsync(key: string, args?: any, lang?: string): Observable<string>;
+    translateAsync(keys: string | string[], args?: any, lang?: string): Observable<string | any>;
 
 }
 
@@ -60,14 +70,10 @@ export interface ITranslationService {
     constructor(
         private locale: LocaleService,
         private configuration: TranslationConfig,
-        private translationProvider: TranslationProvider
+        private translationProvider: TranslationProvider,
+        private translationHandler: TranslationHandler
     ) {
         this.serviceState = ServiceState.isWaiting;
-
-        // When the language changes, loads translation data.
-        this.locale.loadTranslation.subscribe(
-            () => { this.loadTranslation(); }
-        );
     }
 
     public addConfiguration(): ITranslationConfigAPI {
@@ -78,48 +84,60 @@ export interface ITranslationService {
         return this.configuration;
     }
 
-    public init(): void {
+    public async init(): Promise<void> {
+        // Waiting for LocaleService initialization.
+        await this.locale.init();
+
         if (this.configuration.providers.length > 0) {
             this.loadingMode = LoadingMode.Async;
         } else {
             this.loadingMode = LoadingMode.Direct;
         }
-        this.loadTranslation();
-    }
 
-    public getServiceState(): ServiceState {
-        return this.serviceState;
+        // When the language changes, loads translation data.
+        this.locale.loadTranslation.subscribe(
+            () => { this.loadTranslation(); }
+        );
+
+        await this.loadTranslation();
     }
 
     public getLanguage(): string {
         return this.language;
     }
 
-    public translate(key: string, args: any = null, lang: string = this.language): string {
+    public translate(keys: string | string[], args: any = null, lang: string = this.language): string | any {
+        // If the service is not ready, returns the keys.
+        if (this.serviceState != ServiceState.isReady) return keys;
+
+        if (typeof keys === "string") return this.translateKey(keys, args, lang);
+
+        const data: any = {};
+        for (const key of keys) {
+            data[key] = this.translateKey(key, args, lang);
+        }
+        return data;
+    }
+
+    public translateAsync(
+        keys: string | string[],
+        args?: any,
+        lang: string = this.language
+    ): Observable<string | any> {
+        return Observable.create((observer: Observer<string | any>) => {
+            const values: string | any = this.translate(keys, args, lang);
+            observer.next(values);
+            observer.complete();
+        });
+    }
+
+    private translateKey(key: string, args: any, lang: string): string {
         if (key == null || key == "") { return ""; }
         // I18n plural.
         if (this.configuration.i18nPlural && /^\d+\b/.exec(key)) {
             return this.translateI18nPlural(key, args, lang);
         }
         return this.getValue(key, args, lang);
-    }
-
-    public translateAsync(key: string, args?: any, lang: string = this.language): Observable<string> {
-        return Observable.create((observer: Observer<string>) => {
-            const value: string = this.translate(key, args, lang);
-            observer.next(value);
-            observer.complete();
-        });
-    }
-
-    private translateI18nPlural(key: string, args: any, lang: string): string {
-        let keyText: string = key.replace(/^\d+\b/, "");
-        keyText = keyText.trim();
-
-        const keyNumber: number = parseFloat(key);
-        key = key.replace(/^\d+/, this.translateNumber(keyNumber));
-
-        return key.replace(keyText, this.getValue(keyText, args, lang));
     }
 
     private getValue(key: string, args: any, lang: string): string {
@@ -139,7 +157,17 @@ export interface ITranslationService {
 
             value = translation[key];
         }
-        return this.parseValue(path, key, value, args, lang);
+        return this.translationHandler.parseValue(path, key, value, args, lang);
+    }
+
+    private translateI18nPlural(key: string, args: any, lang: string): string {
+        let keyText: string = key.replace(/^\d+\b/, "");
+        keyText = keyText.trim();
+
+        const keyNumber: number = parseFloat(key);
+        key = key.replace(/^\d+/, this.translateNumber(keyNumber));
+
+        return key.replace(keyText, this.getValue(keyText, args, lang));
     }
 
     private translateNumber(keyNumber: number): string {
@@ -150,41 +178,14 @@ export interface ITranslationService {
         return keyNumber.toString();
     }
 
-    private parseValue(path: string, key: string, value: string | null, args: any, lang: string): string {
-        if (value == null) {
-            return this.handleMissingValue(path, args, lang);
-        } else if (args) {
-            return this.handleArgs(value, args);
-        }
-        return value;
-    }
-
-    private handleMissingValue(path: string, args: any, lang: string): string {
-        if (this.configuration.missingKey != null) {
-            return this.translate(this.configuration.missingKey, args, lang);
-        } else if (this.configuration.missingValue != null) {
-            return this.configuration.missingValue;
-        }
-        // The same path is returned.
-        return path;
-    }
-
-    private handleArgs(value: string, args: any): string {
-        const TEMPLATE_REGEXP: RegExp = /{{\s?([^{}\s]*)\s?}}/g;
-        return value.replace(TEMPLATE_REGEXP, (substring: string, parsedKey: string) => {
-            const replacer: string = args[parsedKey] as string;
-            return typeof replacer !== "undefined" ? replacer : substring;
-        });
-    }
-
-    private loadTranslation(): void {
+    private async loadTranslation(): Promise<void> {
         const language: string = !this.configuration.localeAsLanguage
             ? this.locale.getCurrentLanguage()
             : this.locale.getCurrentLocale();
 
         if (language != null && language != this.language) {
             if (this.loadingMode == LoadingMode.Async) {
-                this.getTranslation(language);
+                await this.getTranslation(language).toPromise();
             } else {
                 this.translationData = {};
                 this.translationData[language] = this.configuration.translationData[language];
@@ -193,32 +194,39 @@ export interface ITranslationService {
         }
     }
 
-    private getTranslation(language: string): void {
-        this.translationData = {};
-        this.serviceState = ServiceState.isLoading;
+    private getTranslation(language: string): Observable<any> {
 
-        const observableSequencesOfTranslationData: Array<Observable<any>> = [];
+        return Observable.create((observer: Observer<any>) => {
+            this.translationData = {};
+            this.serviceState = ServiceState.isLoading;
 
-        for (const provider of this.configuration.providers) {
-            observableSequencesOfTranslationData.push(
-                this.translationProvider.getTranslation(language, provider.args)
-            );
-        }
+            const sequencesOfTranslationData: Array<Observable<any>> = [];
 
-        // Merges all the observable sequences into a single observable sequence.
-        Observable.merge(...observableSequencesOfTranslationData).subscribe(
-            (data: any) => {
-                this.addData(data, language);
-            },
-            (error: any) => {
-                // Sends an event for custom actions.
-                this.translationError.emit(error);
-                this.releaseTranslation(language);
-            },
-            () => {
-                this.releaseTranslation(language);
+            for (const provider of this.configuration.providers) {
+                sequencesOfTranslationData.push(
+                    this.translationProvider.getTranslation(language, provider.args)
+                );
             }
-        );
+
+            // Merges all the sequences into a single observable sequence.
+            Observable.merge(...sequencesOfTranslationData).subscribe(
+                (data: any) => {
+                    this.addData(data, language);
+                },
+                (error: any) => {
+                    // Sends an event for custom actions.
+                    this.translationError.emit(error);
+                    this.releaseTranslation(language);
+                    observer.next(null);
+                    observer.complete();
+                },
+                () => {
+                    this.releaseTranslation(language);
+                    observer.next(null);
+                    observer.complete();
+                }
+            );
+        });
     }
 
     private addData(data: any, language: string): void {

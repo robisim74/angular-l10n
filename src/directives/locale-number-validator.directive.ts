@@ -60,7 +60,8 @@ export function validateLocaleNumber(
 }
 
 @Directive({
-    selector: '[validateLocaleNumber][ngModel],[validateLocaleNumber][formControl]',
+    selector: '[l10nValidateNumber][ngModel],[l10nValidateNumber][formControl],' +
+    '[validateLocaleNumber][ngModel],[validateLocaleNumber][formControl]',
     providers: [
         { provide: NG_VALIDATORS, useExisting: forwardRef(() => LocaleNumberValidatorDirective), multi: true }
     ]
@@ -70,10 +71,17 @@ export class LocaleNumberValidatorDirective implements Validator, OnInit {
     /**
      * Format: {minIntegerDigits}.{minFractionDigits}-{maxFractionDigits}.
      */
-    @Input('validateLocaleNumber') public digits: string;
+    @Input() set l10nValidateNumber(digits: string) {
+        this.digits = digits;
+    }
+    @Input() set validateLocaleNumber(digits: string) {
+        this.digits = digits;
+    }
 
     @Input() public minValue: number;
     @Input() public maxValue: number;
+
+    private digits: string;
 
     private readonly MIN_VALUE: number = Number.MIN_VALUE;
     private readonly MAX_VALUE: number = Number.MAX_VALUE;

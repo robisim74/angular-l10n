@@ -26,14 +26,18 @@ describe('DefaultLocale decorator', () => {
         }).createComponent(DefaultLocaleComponent);
 
         comp = fixture.componentInstance;
+    });
 
+    beforeEach((done) => {
         locale = TestBed.get(LocaleService);
 
         locale.addConfiguration()
             .disableStorage()
             .defineDefaultLocale('en', 'US');
-        locale.init();
+        locale.init().then(() => done());
+    });
 
+    beforeEach(() => {
         fixture.detectChanges();
 
         des = fixture.debugElement.queryAll(By.css("p"));

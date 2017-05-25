@@ -50,7 +50,7 @@ describe('TranslatePipe', () => {
 
         let pipe: TranslatePipe;
 
-        beforeEach(() => {
+        beforeEach((done) => {
             TestBed.configureTestingModule({
                 imports: [
                     HttpModule,
@@ -61,11 +61,12 @@ describe('TranslatePipe', () => {
             locale = TestBed.get(LocaleService);
             translation = TestBed.get(TranslationService);
 
+            pipe = new TranslatePipe(translation);
+
             locale.addConfiguration()
                 .disableStorage()
                 .addLanguages(['en', 'it'])
                 .defineLanguage('en');
-            locale.init();
 
             const translationEN: any = {
                 Title: "Angular localization"
@@ -85,9 +86,7 @@ describe('TranslatePipe', () => {
                 .addTranslation('it', translationIT)
                 .addTranslation('en', translationGlobalEN)
                 .addTranslation('it', translationGlobalIT);
-            translation.init();
-
-            pipe = new TranslatePipe(translation);
+            translation.init().then(() => done());
         });
 
         it('should translate using more than one translation', (() => {
@@ -118,7 +117,7 @@ describe('TranslatePipe', () => {
             });
         }
 
-        beforeEach(() => {
+        beforeEach((done) => {
             TestBed.configureTestingModule({
                 imports: [
                     TranslationModule.forRoot()
@@ -136,6 +135,8 @@ describe('TranslatePipe', () => {
 
             locale = TestBed.get(LocaleService);
             translation = TestBed.get(TranslationService);
+
+            pipe = new TranslatePipe(translation);
 
             mockBackend = TestBed.get(MockBackend);
 
@@ -159,14 +160,11 @@ describe('TranslatePipe', () => {
                 .disableStorage()
                 .addLanguages(['en', 'it'])
                 .defineLanguage('en');
-            locale.init();
 
             translation.addConfiguration()
                 .addProvider('./assets/locale-')
                 .addProvider('./assets/global-');
-            translation.init();
-
-            pipe = new TranslatePipe(translation);
+            translation.init().then(() => done());
         });
 
         it('should translate using more than one provider for each translation', (() => {
@@ -197,7 +195,7 @@ describe('TranslatePipe', () => {
             });
         }
 
-        beforeEach(() => {
+        beforeEach((done) => {
             TestBed.configureTestingModule({
                 imports: [
                     TranslationModule.forRoot()
@@ -215,6 +213,8 @@ describe('TranslatePipe', () => {
 
             locale = TestBed.get(LocaleService);
             translation = TestBed.get(TranslationService);
+
+            pipe = new TranslatePipe(translation);
 
             mockBackend = TestBed.get(MockBackend);
 
@@ -238,14 +238,11 @@ describe('TranslatePipe', () => {
                 .disableStorage()
                 .addLanguages(['en', 'it'])
                 .defineLanguage('en');
-            locale.init();
 
             translation.addConfiguration()
                 .addWebAPIProvider('http://localhost:54703/api/locales/')
                 .addWebAPIProvider('http://localhost:54703/api/global/');
-            translation.init();
-
-            pipe = new TranslatePipe(translation);
+            translation.init().then(() => done());
         });
 
         it('should translate using more than one Web API provider for each translation', (() => {
@@ -276,7 +273,7 @@ describe('TranslatePipe', () => {
             });
         }
 
-        beforeEach(() => {
+        beforeEach((done) => {
             TestBed.configureTestingModule({
                 imports: [
                     TranslationModule.forRoot({ translationProvider: CustomTranslationProvider })
@@ -295,6 +292,8 @@ describe('TranslatePipe', () => {
             locale = TestBed.get(LocaleService);
             translation = TestBed.get(TranslationService);
 
+            pipe = new TranslatePipe(translation);
+
             mockBackend = TestBed.get(MockBackend);
 
             const responses: any = {};
@@ -311,13 +310,10 @@ describe('TranslatePipe', () => {
                 .disableStorage()
                 .addLanguages(['en', 'it'])
                 .defineLanguage('en');
-            locale.init();
 
             translation.addConfiguration()
                 .addCustomProvider({ path: './assets/locale-' });
-            translation.init();
-
-            pipe = new TranslatePipe(translation);
+            translation.init().then(() => done());
         });
 
         it('should translate using a custom provider', (() => {
@@ -346,7 +342,7 @@ describe('TranslatePipe', () => {
             });
         }
 
-        beforeEach(() => {
+        beforeEach((done) => {
             TestBed.configureTestingModule({
                 imports: [
                     TranslationModule.forRoot()
@@ -364,6 +360,8 @@ describe('TranslatePipe', () => {
 
             locale = TestBed.get(LocaleService);
             translation = TestBed.get(TranslationService);
+
+            pipe = new TranslatePipe(translation);
 
             mockBackend = TestBed.get(MockBackend);
 
@@ -390,13 +388,10 @@ describe('TranslatePipe', () => {
                 .disableStorage()
                 .addLanguages(['en', 'it', 'ar'])
                 .defineLanguage('en');
-            locale.init();
 
             translation.addConfiguration()
                 .addProvider('./assets/locale-');
-            translation.init();
-
-            pipe = new TranslatePipe(translation);
+            translation.init().then(() => done());
         });
 
         it('should translate using composed keys', (() => {
@@ -455,7 +450,7 @@ describe('TranslatePipe', () => {
             });
         }
 
-        beforeEach(() => {
+        beforeEach((done) => {
             TestBed.configureTestingModule({
                 imports: [
                     TranslationModule.forRoot()
@@ -474,17 +469,19 @@ describe('TranslatePipe', () => {
             locale = TestBed.get(LocaleService);
             translation = TestBed.get(TranslationService);
 
+            pipe = new TranslatePipe(translation);
+
             mockBackend = TestBed.get(MockBackend);
 
             const responses: any = {};
             responses['./assets/locale-en.json'] = new Response(new ResponseOptions(
-                { body: '{"Home": {"Title": "Angular localization"}, "Missing": "No key"}' }
+                { body: '{"Home": {"Title": "Angular localization"}}' }
             ));
             responses['./assets/locale-it.json'] = new Response(new ResponseOptions(
-                { body: '{"Home": {"Title": "Localizzazione in Angular"}, "Missing": "Nessuna chiave"}' }
+                { body: '{"Home": {"Title": "Localizzazione in Angular"}}' }
             ));
             responses['./assets/locale-ar.json'] = new Response(new ResponseOptions(
-                { body: '{"messages": "رسائل", "Missing": "لا مفتاح"}' }
+                { body: '{"messages": "رسائل"}' }
             ));
 
             expectURL(mockBackend, responses);
@@ -493,16 +490,13 @@ describe('TranslatePipe', () => {
                 .disableStorage()
                 .addLanguages(['en', 'it', 'ar'])
                 .defineLanguage('en');
-            locale.init();
 
             translation.addConfiguration()
                 .addProvider('./assets/locale-')
                 .setComposedKeySeparator('@')
-                .setMissingKey("Missing")
+                .setMissingValue("No key")
                 .disableI18nPlural();
-            translation.init();
-
-            pipe = new TranslatePipe(translation);
+            translation.init().then(() => done());
         });
 
         it('should translate using a different separator for composed keys', (() => {
@@ -513,12 +507,12 @@ describe('TranslatePipe', () => {
             expect(pipe.transform('Home@Title', translation.getLanguage())).toEqual("Localizzazione in Angular");
         }));
 
-        it('should return the missing key', (() => {
+        it('should return the missing value', (() => {
             locale.setCurrentLanguage('en');
             expect(pipe.transform('Subtitle', translation.getLanguage())).toEqual("No key");
 
             locale.setCurrentLanguage('it');
-            expect(pipe.transform('Subtitle', translation.getLanguage())).toEqual("Nessuna chiave");
+            expect(pipe.transform('Subtitle', translation.getLanguage())).toEqual("No key");
         }));
 
         it('should disable i18n plural', (() => {
@@ -544,7 +538,7 @@ describe('TranslatePipe', () => {
             });
         }
 
-        beforeEach(() => {
+        beforeEach((done) => {
             TestBed.configureTestingModule({
                 imports: [
                     LocalizationModule.forRoot()
@@ -559,8 +553,11 @@ describe('TranslatePipe', () => {
                     }
                 ]
             });
+
             locale = TestBed.get(LocaleService);
             translation = TestBed.get(TranslationService);
+
+            pipe = new TranslatePipe(translation);
 
             mockBackend = TestBed.get(MockBackend);
 
@@ -578,14 +575,11 @@ describe('TranslatePipe', () => {
                 .disableStorage()
                 .addLanguage('en')
                 .defineDefaultLocale('en', 'US');
-            locale.init();
 
             translation.addConfiguration()
                 .addProvider('./assets/locale-')
                 .useLocaleAsLanguage();
-            translation.init();
-
-            pipe = new TranslatePipe(translation);
+            translation.init().then(() => done());
         });
 
         it('should translate using locale as language', (() => {
