@@ -9,12 +9,12 @@ import { TranslationConfig } from '../models/translation/translation-config';
 
     /**
      * This method must contain the logic to parse the translated value.
-     * @param path The path of composed key
-     * @param key The key to be translated
+     * @param path The path of the key
+     * @param key The key that has been requested
      * @param value The translated value
      * @param args The parameters passed along with the key
      * @param lang The current language
-     * @return The translated value of the key
+     * @return The parsed value
      */
     public abstract parseValue(path: string, key: string, value: string | null, args: any, lang: string): string;
 

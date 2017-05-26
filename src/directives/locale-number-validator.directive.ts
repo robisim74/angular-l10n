@@ -60,8 +60,8 @@ export function validateLocaleNumber(
 }
 
 @Directive({
-    selector: '[l10nValidateNumber][ngModel],[l10nValidateNumber][formControl],' +
-    '[validateLocaleNumber][ngModel],[validateLocaleNumber][formControl]',
+    selector: '[l10nValidateNumber][ngModel],[l10nValidateNumber][formControl], \
+        [validateLocaleNumber][ngModel],[validateLocaleNumber][formControl]',
     providers: [
         { provide: NG_VALIDATORS, useExisting: forwardRef(() => LocaleNumberValidatorDirective), multi: true }
     ]

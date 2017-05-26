@@ -25,7 +25,7 @@ export interface ILocaleService {
 
     getConfiguration(): ILocaleConfig;
 
-    init(): void;
+    init(): Promise<void>;
 
     getAvailableLanguages(): string[];
 
@@ -199,13 +199,17 @@ export interface ILocaleService {
 
     private async initStorage(): Promise<void> {
         // Tries to retrieve default locale & currency from the browser storage.
-        const defaultLocale: string | null = await this.storage.read("defaultLocale");
-        if (!!defaultLocale) {
-            this.defaultLocale.value = defaultLocale;
+        if (!this.defaultLocale.value) {
+            const defaultLocale: string | null = await this.storage.read("defaultLocale");
+            if (!!defaultLocale) {
+                this.defaultLocale.value = defaultLocale;
+            }
         }
-        const currencyCode: string | null = await this.storage.read("currency");
-        if (!!currencyCode) {
-            this.currencyCode = currencyCode;
+        if (this.currencyCode == null) {
+            const currencyCode: string | null = await this.storage.read("currency");
+            if (!!currencyCode) {
+                this.currencyCode = currencyCode;
+            }
         }
     }
 

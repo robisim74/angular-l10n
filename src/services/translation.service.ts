@@ -1,7 +1,6 @@
 import { Injectable, EventEmitter, Output } from '@angular/core';
 import { Observer } from 'rxjs/Observer';
 import { Observable } from 'rxjs/Observable';
-import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/toPromise';
 import 'rxjs/add/observable/merge';
 
@@ -31,7 +30,7 @@ export interface ITranslationService {
     /**
      * Call this method after the configuration to initialize the service.
      */
-    init(): void;
+    init(): Promise<void>;
 
     /**
      * Gets the current language of the service.
@@ -110,13 +109,15 @@ export interface ITranslationService {
         // If the service is not ready, returns the keys.
         if (this.serviceState != ServiceState.isReady) return keys;
 
-        if (typeof keys === "string") return this.translateKey(keys, args, lang);
-
-        const data: any = {};
-        for (const key of keys) {
-            data[key] = this.translateKey(key, args, lang);
+        if (Array.isArray(keys)) {
+            const data: any = {};
+            for (const key of keys) {
+                data[key] = this.translateKey(key, args, lang);
+            }
+            return data;
         }
-        return data;
+
+        return this.translateKey(keys, args, lang);
     }
 
     public translateAsync(
@@ -131,8 +132,8 @@ export interface ITranslationService {
         });
     }
 
-    private translateKey(key: string, args: any, lang: string): string {
-        if (key == null || key == "") { return ""; }
+    private translateKey(key: string, args: any, lang: string): string | null {
+        if (key == null || key == "") return null;
         // I18n plural.
         if (this.configuration.i18nPlural && /^\d+\b/.exec(key)) {
             return this.translateI18nPlural(key, args, lang);
