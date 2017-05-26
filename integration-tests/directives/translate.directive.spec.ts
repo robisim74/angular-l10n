@@ -48,7 +48,8 @@ describe('TranslateDirective', () => {
             "Insert": "Insert",
             "Select": "Select",
             "Strong title": "<strong>Angular localization</strong>",
-            "Strong subtitle": "<strong>It's a small world</strong>"
+            "Strong subtitle": "<strong>It's a small world</strong>",
+            "Greeting": "Hi {{ user }}"
         };
         const translationIT: any = {
             "Title": "Localizzazione in Angular",
@@ -57,12 +58,14 @@ describe('TranslateDirective', () => {
             "Insert": "Inserisci",
             "Select": "Seleziona",
             "Strong title": "<strong>Localizzazione in Angular</strong>",
-            "Strong subtitle": "<strong>Il mondo è piccolo</strong>"
+            "Strong subtitle": "<strong>Il mondo è piccolo</strong>",
+            "Greeting": "Ciao {{ user }}"
         };
 
         translation.addConfiguration()
             .addTranslation('en', translationEN)
             .addTranslation('it', translationIT);
+
         translation.init().then(() => done());
     });
 
@@ -106,6 +109,12 @@ describe('TranslateDirective', () => {
         expect(els[9].childNodes[0].nodeName.toLowerCase()).toBe("strong");
     }));
 
+    it('should render translated attributes', (() => {
+        expect(els[10].getAttribute('title')).toContain("Angular localization");
+        expect(els[11].textContent).toContain("robisim74, you have 2 new messages");
+        expect(els[11].getAttribute('title')).toContain("Hi robisim74");
+    }));
+
     it('should render translated texts when language changes', fakeAsync(() => {
         locale.setCurrentLanguage('it');
 
@@ -128,9 +137,13 @@ describe('TranslateDirective', () => {
 
         expect(els[9].textContent).toContain("Localizzazione in Angular");
         expect(els[9].childNodes[0].nodeName.toLowerCase()).toBe("strong");
+
+        expect(els[10].getAttribute('title')).toContain("Localizzazione in Angular");
+        expect(els[11].textContent).toContain("robisim74, tu hai 2 nuovi messaggi");
+        expect(els[11].getAttribute('title')).toContain("Ciao robisim74");
     }));
 
-    it('should change keys, params & attributes dynamically', async(() => {
+    it('should change keys & params dynamically', async(() => {
         comp.change();
 
         fixture.detectChanges();
@@ -196,6 +209,10 @@ describe('TranslateDirective', () => {
 
         <p><em>should use innerHTML attribute</em></p>
         <p [innerHTML]="innerHTML" l10nTranslate></p>
+
+        <p><em>should render translated attributes/p>
+        <p l10n-title title="Title" l10nTranslate>Title</p>
+        <p l10n-title title="Greeting" [l10nTranslate]="{ user: username, NoMessages: messages.length }">User notifications</p>
     `
 })
 class TranslateComponent {

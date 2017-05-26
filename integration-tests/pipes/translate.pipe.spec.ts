@@ -86,6 +86,7 @@ describe('TranslatePipe', () => {
                 .addTranslation('it', translationIT)
                 .addTranslation('en', translationGlobalEN)
                 .addTranslation('it', translationGlobalIT);
+
             translation.init().then(() => done());
         });
 
@@ -164,6 +165,7 @@ describe('TranslatePipe', () => {
             translation.addConfiguration()
                 .addProvider('./assets/locale-')
                 .addProvider('./assets/global-');
+
             translation.init().then(() => done());
         });
 
@@ -242,6 +244,7 @@ describe('TranslatePipe', () => {
             translation.addConfiguration()
                 .addWebAPIProvider('http://localhost:54703/api/locales/')
                 .addWebAPIProvider('http://localhost:54703/api/global/');
+
             translation.init().then(() => done());
         });
 
@@ -313,6 +316,7 @@ describe('TranslatePipe', () => {
 
             translation.addConfiguration()
                 .addCustomProvider({ path: './assets/locale-' });
+
             translation.init().then(() => done());
         });
 
@@ -391,6 +395,7 @@ describe('TranslatePipe', () => {
 
             translation.addConfiguration()
                 .addProvider('./assets/locale-');
+
             translation.init().then(() => done());
         });
 
@@ -496,6 +501,7 @@ describe('TranslatePipe', () => {
                 .setComposedKeySeparator('@')
                 .setMissingValue("No key")
                 .disableI18nPlural();
+
             translation.init().then(() => done());
         });
 
@@ -579,6 +585,7 @@ describe('TranslatePipe', () => {
             translation.addConfiguration()
                 .addProvider('./assets/locale-')
                 .useLocaleAsLanguage();
+
             translation.init().then(() => done());
         });
 

@@ -51,6 +51,7 @@ describe('Language decorator', () => {
         translation.addConfiguration()
             .addTranslation('en', translationEN)
             .addTranslation('it', translationIT);
+
         translation.init().then(() => done());
     });
 
