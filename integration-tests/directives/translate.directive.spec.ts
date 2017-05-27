@@ -111,8 +111,10 @@ describe('TranslateDirective', () => {
 
     it('should render translated attributes', (() => {
         expect(els[10].getAttribute('title')).toContain("Angular localization");
-        expect(els[11].textContent).toContain("robisim74, you have 2 new messages");
+        expect(els[10].textContent).toContain("Angular localization");
         expect(els[11].getAttribute('title')).toContain("Hi robisim74");
+        expect(els[11].textContent).toContain("robisim74, you have 2 new messages");
+   
     }));
 
     it('should render translated texts when language changes', fakeAsync(() => {
@@ -139,8 +141,9 @@ describe('TranslateDirective', () => {
         expect(els[9].childNodes[0].nodeName.toLowerCase()).toBe("strong");
 
         expect(els[10].getAttribute('title')).toContain("Localizzazione in Angular");
-        expect(els[11].textContent).toContain("robisim74, tu hai 2 nuovi messaggi");
+        expect(els[10].textContent).toContain("Localizzazione in Angular");
         expect(els[11].getAttribute('title')).toContain("Ciao robisim74");
+        expect(els[11].textContent).toContain("robisim74, tu hai 2 nuovi messaggi");
     }));
 
     it('should change keys & params dynamically', async(() => {
