@@ -480,10 +480,10 @@ describe('TranslatePipe', () => {
 
             const responses: any = {};
             responses['./assets/locale-en.json'] = new Response(new ResponseOptions(
-                { body: '{"Home": {"Title": "Angular localization"}}' }
+                { body: '{"Home": {"Title": "Angular localization"}, "Missing": "No key"}' }
             ));
             responses['./assets/locale-it.json'] = new Response(new ResponseOptions(
-                { body: '{"Home": {"Title": "Localizzazione in Angular"}}' }
+                { body: '{"Home": {"Title": "Localizzazione in Angular"}, "Missing": "Nessuna chiave"}' }
             ));
             responses['./assets/locale-ar.json'] = new Response(new ResponseOptions(
                 { body: '{"messages": "رسائل"}' }
@@ -499,6 +499,7 @@ describe('TranslatePipe', () => {
             translation.addConfiguration()
                 .addProvider('./assets/locale-')
                 .setComposedKeySeparator('@')
+                .setMissingKey("Missing")
                 .setMissingValue("No key")
                 .disableI18nPlural();
 
@@ -513,11 +514,16 @@ describe('TranslatePipe', () => {
             expect(pipe.transform('Home@Title', translation.getLanguage())).toEqual("Localizzazione in Angular");
         }));
 
-        it('should return the missing value', (() => {
+        it('should return the missing key', (() => {
             locale.setCurrentLanguage('en');
             expect(pipe.transform('Subtitle', translation.getLanguage())).toEqual("No key");
 
             locale.setCurrentLanguage('it');
+            expect(pipe.transform('Subtitle', translation.getLanguage())).toEqual("Nessuna chiave");
+        }));
+
+        it('should return the missing value', (() => {
+            locale.setCurrentLanguage('ar');
             expect(pipe.transform('Subtitle', translation.getLanguage())).toEqual("No key");
         }));
 

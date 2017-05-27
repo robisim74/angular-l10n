@@ -9,6 +9,7 @@ export interface ITranslationConfig {
     providers: Provider[];
     localeAsLanguage: boolean;
     missingValue: string;
+    missingKey: string;
     keySeparator: string;
     i18nPlural: boolean;
 
@@ -21,6 +22,7 @@ export interface ITranslationConfig {
     public providers: Provider[] = [];
     public localeAsLanguage: boolean = false;
     public missingValue: string;
+    public missingKey: string;
     public keySeparator: string = ".";
     public i18nPlural: boolean = true;
 

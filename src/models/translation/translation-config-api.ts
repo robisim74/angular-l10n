@@ -39,6 +39,11 @@ export interface ITranslationConfigAPI {
     setMissingValue(value: string): ITranslationConfigAPI;
 
     /**
+     * Sets the key to use for missing keys.
+     */
+    setMissingKey(key: string): ITranslationConfigAPI;
+
+    /**
      * Sets composed key separator. Default is the point '.'.
      */
     setComposedKeySeparator(keySeparator: string): ITranslationConfigAPI;
@@ -84,6 +89,11 @@ export class TranslationConfigAPI {
 
     public setMissingValue(value: string): ITranslationConfigAPI {
         this.configuration.missingValue = value;
+        return this;
+    }
+
+    public setMissingKey(key: string): ITranslationConfigAPI {
+        this.configuration.missingKey = key;
         return this;
     }
 

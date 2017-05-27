@@ -148,15 +148,15 @@ export interface ITranslationService {
             let translation: any = this.translationData[lang];
 
             // Composed key.
-            const keys: string[] = key.split(this.configuration.keySeparator);
+            const sequences: string[] = key.split(this.configuration.keySeparator);
             do {
-                key = keys.shift()!;
+                key = sequences.shift()!;
                 if (translation[key] && typeof translation[key] === "object") {
                     translation = translation[key];
                 }
-            } while (keys.length > 0);
+            } while (sequences.length > 0);
 
-            value = translation[key];
+            value = translation[key] || translation[this.configuration.missingKey];
         }
         return this.translationHandler.parseValue(path, key, value, args, lang);
     }
