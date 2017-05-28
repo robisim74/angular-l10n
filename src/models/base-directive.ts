@@ -57,6 +57,9 @@ export abstract class BaseDirective implements AfterViewInit, OnChanges, OnDestr
             }
             this.replaceText();
         }
+        if (this.attributes.length > 0) {
+            this.replaceAttributes();
+        }
     }
 
     public ngOnDestroy(): void {

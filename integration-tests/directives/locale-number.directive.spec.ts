@@ -78,6 +78,12 @@ describe('Locale number directives', () => {
         expect(currencyEls[1].textContent).toContain("$1,234.50");
     }));
 
+    it('should render localized attributes', (() => {
+        expect(decimalEls[2].getAttribute('title')).toContain("3.14159");
+        expect(percentEls[2].getAttribute('title')).toContain("10.0%");
+        expect(currencyEls[2].getAttribute('title')).toContain("$1,234.50");
+    }));
+
     it('should render localized numbers when default locale changes', fakeAsync(() => {
         locale.setDefaultLocale('it', 'IT');
         locale.setCurrentCurrency('EUR');
@@ -109,6 +115,14 @@ describe('Locale number directives', () => {
         }
         expect(value).toContain("1.234,50 EUR");
         value = currencyEls[1].textContent;
+        if (!!value) {
+            value = value.replace(/\u00A0/, " "); // Intl returns Unicode Character 'NO-BREAK SPACE' (U+00A0).
+        }
+        expect(value).toContain("1.234,50 €");
+
+        expect(decimalEls[2].getAttribute('title')).toContain("3,14159");
+        expect(percentEls[2].getAttribute('title')).toContain("10,0%");
+        value = currencyEls[2].getAttribute('title');
         if (!!value) {
             value = value.replace(/\u00A0/, " "); // Intl returns Unicode Character 'NO-BREAK SPACE' (U+00A0).
         }
@@ -149,6 +163,11 @@ describe('Locale number directives', () => {
         <p><em>should render localized currency</em></p>
         <p l10nCurrency>{{ value }}</p>
         <p [l10nCurrency]="digits" [symbol]="true">{{ value }}</p>
+
+        <p><em>should render localized attributes/p>
+        <p l10n-title title="{{ pi }}" l10nDecimal="1.5-5"></p>
+        <p l10n-title title="0.1" l10nPercent="1.1-1"></p>
+        <p l10n-title title="{{ value }}" [l10nCurrency]="digits" [symbol]="true"></p>
     `
 })
 class LocaleNumberComponent {

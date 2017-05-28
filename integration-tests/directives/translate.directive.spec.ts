@@ -48,8 +48,7 @@ describe('TranslateDirective', () => {
             "Insert": "Insert",
             "Select": "Select",
             "Strong title": "<strong>Angular localization</strong>",
-            "Strong subtitle": "<strong>It's a small world</strong>",
-            "Greeting": "Hi {{ user }}"
+            "Strong subtitle": "<strong>It's a small world</strong>"
         };
         const translationIT: any = {
             "Title": "Localizzazione in Angular",
@@ -58,8 +57,7 @@ describe('TranslateDirective', () => {
             "Insert": "Inserisci",
             "Select": "Seleziona",
             "Strong title": "<strong>Localizzazione in Angular</strong>",
-            "Strong subtitle": "<strong>Il mondo è piccolo</strong>",
-            "Greeting": "Ciao {{ user }}"
+            "Strong subtitle": "<strong>Il mondo è piccolo</strong>"
         };
 
         translation.addConfiguration()
@@ -111,10 +109,7 @@ describe('TranslateDirective', () => {
 
     it('should render translated attributes', (() => {
         expect(els[10].getAttribute('title')).toContain("Angular localization");
-        expect(els[10].textContent).toContain("Angular localization");
-        expect(els[11].getAttribute('title')).toContain("Hi robisim74");
-        expect(els[11].textContent).toContain("robisim74, you have 2 new messages");
-   
+        expect(els[11].getAttribute('title')).toContain("robisim74, you have 2 new messages");
     }));
 
     it('should render translated texts when language changes', fakeAsync(() => {
@@ -141,9 +136,7 @@ describe('TranslateDirective', () => {
         expect(els[9].childNodes[0].nodeName.toLowerCase()).toBe("strong");
 
         expect(els[10].getAttribute('title')).toContain("Localizzazione in Angular");
-        expect(els[10].textContent).toContain("Localizzazione in Angular");
-        expect(els[11].getAttribute('title')).toContain("Ciao robisim74");
-        expect(els[11].textContent).toContain("robisim74, tu hai 2 nuovi messaggi");
+        expect(els[11].getAttribute('title')).toContain("robisim74, tu hai 2 nuovi messaggi");
     }));
 
     it('should change keys & params dynamically', async(() => {
@@ -164,6 +157,7 @@ describe('TranslateDirective', () => {
                 expect(els[7].getAttribute('value')).toContain("Select");
                 expect(els[9].textContent).toContain("It's a small world");
                 expect(els[9].childNodes[0].nodeName.toLowerCase()).toBe('strong');
+                expect(els[11].getAttribute('title')).toContain("robisim74, you have 3 new messages");
             }, 1000);
         });
     }));
@@ -214,8 +208,8 @@ describe('TranslateDirective', () => {
         <p [innerHTML]="innerHTML" l10nTranslate></p>
 
         <p><em>should render translated attributes/p>
-        <p l10n-title title="Title" l10nTranslate>Title</p>
-        <p l10n-title title="Greeting" [l10nTranslate]="{ user: username, NoMessages: messages.length }">User notifications</p>
+        <p l10n-title title="Title" l10nTranslate></p>
+        <p l10n-title title="User notifications" [l10nTranslate]="{ user: username, NoMessages: messages.length }"></p>
     `
 })
 class TranslateComponent {

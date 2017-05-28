@@ -51,6 +51,10 @@ describe('LocaleDateDirective', () => {
         expect(els[1].textContent).toContain("4/19/2017");
     }));
 
+    it('should render localized attributes', (() => {
+        expect(els[2].getAttribute('title')).toContain("4/19/2017");
+    }));
+
     it('should render localized dates when default locale changes', fakeAsync(() => {
         locale.setDefaultLocale('it', 'IT');
 
@@ -63,6 +67,8 @@ describe('LocaleDateDirective', () => {
         }
         expect(els[0].textContent).toContain("19 apr 2017");
         expect(els[1].textContent).toContain("19/4/2017");
+
+        expect(els[2].getAttribute('title')).toContain("19/4/2017");
     }));
 
 });
@@ -72,6 +78,9 @@ describe('LocaleDateDirective', () => {
         <p><em>should render localized date</em></p>
         <p l10nDate>{{ day }}</p>
         <p l10nDate="shortDate">{{ day }}</p>
+
+        <p><em>should render localized attributes/p>
+        <p l10n-title title="{{ day }}" l10nDate="shortDate"></p>
     `
 })
 class LocaleDateComponent {
