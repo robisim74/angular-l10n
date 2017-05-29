@@ -164,7 +164,7 @@ describe('Locale number directives', () => {
         <p l10nCurrency>{{ value }}</p>
         <p [l10nCurrency]="digits" [symbol]="true">{{ value }}</p>
 
-        <p><em>should render localized attributes/p>
+        <p><em>should render localized attributes</em></p>
         <p l10n-title title="{{ pi }}" l10nDecimal="1.5-5"></p>
         <p l10n-title title="0.1" l10nPercent="1.1-1"></p>
         <p l10n-title title="{{ value }}" [l10nCurrency]="digits" [symbol]="true"></p>

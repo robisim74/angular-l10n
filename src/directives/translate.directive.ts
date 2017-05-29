@@ -34,12 +34,16 @@ export class TranslateDirective extends BaseDirective {
     }
 
     protected replaceText(): void {
-        this.setText(this.getValues(this.key));
+        if (!!this.key) {
+            this.setText(this.getValues(this.key));
+        }
     }
 
     protected replaceAttributes(): void {
-        const keys: string[] = this.getAttributesKeys();
-        this.setAttributes(this.getValues(keys));
+        if (this.attributes.length > 0) {
+            const keys: string[] = this.getAttributesKeys();
+            this.setAttributes(this.getValues(keys));
+        }
     }
 
     protected getValues(keys: string | string[]): string | any {

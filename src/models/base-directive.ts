@@ -28,22 +28,25 @@ export abstract class BaseDirective implements AfterViewInit, OnChanges, OnDestr
 
     private textObserver: MutationObserver;
 
-    private readonly MUTATION_CONFIG: any = { subtree: true, characterData: true };
+    private readonly TEXT_MUTATION_CONFIG: any = { subtree: true, characterData: true };
 
     private readonly SELECTOR: RegExp = /^l10n-/;
 
     constructor(protected el: ElementRef, protected renderer: Renderer2) { }
 
     public ngAfterViewInit(): void {
-        this.element = this.el.nativeElement;
+        if (this.el && this.el.nativeElement) {
+            this.element = this.el.nativeElement;
 
-        // Target node is a text type node.
-        this.renderNode = BFS.getTargetNode(this.element);
+            this.renderNode = BFS.getTargetNode(this.element);
 
-        this.getKey();
-        this.getAttributes();
+            this.getKey();
+            this.getAttributes();
 
-        this.setup();
+            this.addTextListener();
+
+            this.setup();
+        }
     }
 
     public ngOnChanges(changes: SimpleChanges): void {
@@ -112,13 +115,12 @@ export abstract class BaseDirective implements AfterViewInit, OnChanges, OnDestr
 
     private addTextListener(): void {
         if (typeof MutationObserver !== "undefined") {
-            this.textObserver = new MutationObserver((mutations: any) => {
+            this.textObserver = new MutationObserver((mutations: MutationRecord[]) => {
+                this.renderNode = BFS.getTargetNode(this.element);
                 this.getKey();
-                if (!!this.key) {
-                    this.replaceText();
-                }
+                this.replaceText();
             });
-            this.textObserver.observe(this.renderNode, this.MUTATION_CONFIG);
+            this.textObserver.observe(this.renderNode, this.TEXT_MUTATION_CONFIG);
         }
     }
 
@@ -144,12 +146,14 @@ export abstract class BaseDirective implements AfterViewInit, OnChanges, OnDestr
     }
 
     private getAttributes(): void {
-        for (const attr of this.element.attributes) {
-            if (this.SELECTOR.test(attr.name)) {
-                const name: string = attr.name.substr(5);
-                for (const targetAttr of this.element.attributes) {
-                    if (new RegExp("^" + name + "$").test(targetAttr.name)) {
-                        this.attributes.push({ name: name, key: targetAttr.value });
+        if (this.element.attributes) {
+            for (const attr of this.element.attributes) {
+                if (this.SELECTOR.test(attr.name)) {
+                    const name: string = attr.name.substr(5);
+                    for (const targetAttr of this.element.attributes) {
+                        if (new RegExp("^" + name + "$").test(targetAttr.name)) {
+                            this.attributes.push({ name: name, key: targetAttr.value });
+                        }
                     }
                 }
             }

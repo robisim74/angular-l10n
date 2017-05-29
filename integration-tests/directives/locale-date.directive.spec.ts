@@ -79,7 +79,7 @@ describe('LocaleDateDirective', () => {
         <p l10nDate>{{ day }}</p>
         <p l10nDate="shortDate">{{ day }}</p>
 
-        <p><em>should render localized attributes/p>
+        <p><em>should render localized attributes</em></p>
         <p l10n-title title="{{ day }}" l10nDate="shortDate"></p>
     `
 })

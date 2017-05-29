@@ -5,6 +5,8 @@
  */
 export class BFS {
 
+    private static readonly SELECTOR: RegExp = /^l10n|translate|locale/;
+
     /**
      * Target node is a non empty text node.
      */
@@ -25,18 +27,32 @@ export class BFS {
             }
             if (iNode.childNodes != null) {
                 for (const child of iNode.childNodes) {
-                    queue.push(child);
+                    if (this.isValidNode(child)) {
+                        queue.push(child);
+                    }
                 }
             }
         }
-        return null;
+        return rootNode;
     }
 
     private static isTargetNode(node: any): boolean {
         return typeof node !== "undefined" &&
             node.nodeValue != null &&
             node.nodeValue.trim() != "" &&
-            node.nodeType == 3;
+            node.nodeType == Node.TEXT_NODE;
+    }
+
+    /**
+     * A valid node is not marked for translation.
+     */
+    private static isValidNode(node: any): boolean {
+        if (node.nodeType == Node.ELEMENT_NODE && node.attributes) {
+            for (const attr of node.attributes) {
+                if (this.SELECTOR.test(attr.name)) return false;
+            }
+        }
+        return true;
     }
 
 }

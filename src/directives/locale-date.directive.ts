@@ -38,11 +38,15 @@ export class LocaleDateDirective extends BaseDirective {
     }
 
     protected replaceText(): void {
-        this.setText(this.getValues(this.key));
+        if (!!this.key) {
+            this.setText(this.getValues(this.key));
+        }
     }
 
     protected replaceAttributes(): void {
-        this.setAttributes(this.getAttributesData());
+        if (this.attributes.length > 0) {
+            this.setAttributes(this.getAttributesData());
+        }
     }
 
     protected getValues(keys: string | string[]): string | any {
