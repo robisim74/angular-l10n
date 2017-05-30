@@ -7,6 +7,8 @@ export class BFS {
 
     private static readonly SELECTOR: RegExp = /^l10n|translate|locale/;
 
+    private static readonly MAX_DEPTH: number = 3;
+
     /**
      * Target node is a non empty text node.
      */
@@ -16,31 +18,36 @@ export class BFS {
 
     private static walk(rootNode: any): any {
         const queue: any[] = [];
+
         let iNode: any;
+        let depth: number = 0;
+        let nodeToDepthIncrease: number = 1;
 
         queue.push(rootNode);
-
-        while (queue.length > 0) {
+        while (queue.length > 0 && depth <= this.MAX_DEPTH) {
             iNode = queue.shift();
             if (this.isTargetNode(iNode)) {
                 return iNode;
             }
-            if (iNode.childNodes != null) {
+            if (depth < this.MAX_DEPTH && iNode.childNodes != null) {
                 for (const child of iNode.childNodes) {
                     if (this.isValidNode(child)) {
                         queue.push(child);
                     }
                 }
             }
+            if (--nodeToDepthIncrease == 0) {
+                depth++;
+                nodeToDepthIncrease = queue.length;
+            }
         }
         return rootNode;
     }
 
     private static isTargetNode(node: any): boolean {
-        return typeof node !== "undefined" &&
+        return node.nodeType == Node.TEXT_NODE &&
             node.nodeValue != null &&
-            node.nodeValue.trim() != "" &&
-            node.nodeType == Node.TEXT_NODE;
+            node.nodeValue.trim() != "";
     }
 
     /**

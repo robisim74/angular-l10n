@@ -37,14 +37,10 @@ export abstract class BaseDirective implements AfterViewInit, OnChanges, OnDestr
     public ngAfterViewInit(): void {
         if (this.el && this.el.nativeElement) {
             this.element = this.el.nativeElement;
-
             this.renderNode = BFS.getTargetNode(this.element);
-
             this.getKey();
             this.getAttributes();
-
             this.addTextListener();
-
             this.setup();
         }
     }
