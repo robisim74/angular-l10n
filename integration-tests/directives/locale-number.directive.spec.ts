@@ -48,7 +48,6 @@ describe('Locale number directives', () => {
 
     beforeEach(() => {
         fixture.detectChanges();
-
         decimalDes = fixture.debugElement.queryAll(By.directive(LocaleDecimalDirective));
         for (let i: number = 0; i < decimalDes.length; i++) {
             decimalEls.push(decimalDes[i].nativeElement);
@@ -74,7 +73,7 @@ describe('Locale number directives', () => {
     }));
 
     it('should render localized currency', (() => {
-        expect(currencyEls[0].textContent).toContain("USD1,234.50");
+        expect(currencyEls[0].textContent).not.toContain("USD1,234.50");
         expect(currencyEls[1].textContent).toContain("$1,234.50");
     }));
 
@@ -90,36 +89,33 @@ describe('Locale number directives', () => {
 
         tick();
         fixture.detectChanges();
-
         decimalEls = [];
         for (let i: number = 0; i < decimalDes.length; i++) {
             decimalEls.push(decimalDes[i].nativeElement);
         }
-        expect(decimalEls[0].textContent).toContain("3,142");
-        expect(decimalEls[1].textContent).toContain("3,14159");
-
         percentEls = [];
         for (let i: number = 0; i < percentDes.length; i++) {
             percentEls.push(percentDes[i].nativeElement);
         }
-        expect(percentEls[0].textContent).toContain("10%");
-        expect(percentEls[1].textContent).toContain("10,0%");
-
         currencyEls = [];
         for (let i: number = 0; i < currencyDes.length; i++) {
             currencyEls.push(currencyDes[i].nativeElement);
         }
+
+        expect(decimalEls[0].textContent).toContain("3,142");
+        expect(decimalEls[1].textContent).toContain("3,14159");
+        expect(percentEls[0].textContent).toContain("10%");
+        expect(percentEls[1].textContent).toContain("10,0%");
         let value: string | null = currencyEls[0].textContent;
         if (!!value) {
             value = value.replace(/\u00A0/, " "); // Intl returns Unicode Character 'NO-BREAK SPACE' (U+00A0).
         }
-        expect(value).toContain("1.234,50 EUR");
+        expect(value).not.toContain("1.234,50 EUR");
         value = currencyEls[1].textContent;
         if (!!value) {
             value = value.replace(/\u00A0/, " "); // Intl returns Unicode Character 'NO-BREAK SPACE' (U+00A0).
         }
         expect(value).toContain("1.234,50 €");
-
         expect(decimalEls[2].getAttribute('title')).toContain("3,14159");
         expect(percentEls[2].getAttribute('title')).toContain("10,0%");
         value = currencyEls[2].getAttribute('title');
@@ -133,18 +129,16 @@ describe('Locale number directives', () => {
         comp.change();
 
         fixture.detectChanges();
+        currencyEls = [];
+        for (let i: number = 0; i < currencyDes.length; i++) {
+            currencyEls.push(currencyDes[i].nativeElement);
+        }
         fixture.whenStable().then(() => {
-            // Waits for Mutation Observer in the directive is fired.
-            setTimeout(() => {
-                fixture.detectChanges();
-
-                currencyEls = [];
-                for (let i: number = 0; i < currencyDes.length; i++) {
-                    currencyEls.push(currencyDes[i].nativeElement);
-                }
+            // By using process.nextTick() we guarantee that it runs after MutationObserver event is fired.
+            process.nextTick(() => {
                 expect(currencyEls[0].textContent).toContain("USD1,234.56");
                 expect(currencyEls[1].textContent).toContain("$1,234.560");
-            }, 1000);
+            });
         });
     }));
 
@@ -161,7 +155,7 @@ describe('Locale number directives', () => {
         <p l10nPercent="1.1-1">0.1</p>
 
         <p><em>should render localized currency</em></p>
-        <p l10nCurrency>{{ value }}</p>
+        <p l10nCurrency>{{ asyncValue }}</p>
         <p [l10nCurrency]="digits" [symbol]="true">{{ value }}</p>
 
         <p><em>should render localized attributes</em></p>
@@ -173,10 +167,12 @@ describe('Locale number directives', () => {
 class LocaleNumberComponent {
 
     pi: number = 3.14159;
+    asyncValue: number;
     value: number = 1234.5;
     digits: string = "1.2-2";
 
     change() {
+        this.asyncValue = 1234.56;
         this.value = 1234.56;
         this.digits = "1.3-3";
     }

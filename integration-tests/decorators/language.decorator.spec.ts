@@ -1,4 +1,4 @@
-import { TestBed, ComponentFixture, fakeAsync, async, tick } from '@angular/core/testing';
+import { TestBed, ComponentFixture, fakeAsync, tick } from '@angular/core/testing';
 import { HttpModule } from '@angular/http';
 import { By } from '@angular/platform-browser';
 import { Component, DebugElement } from '@angular/core';
@@ -59,7 +59,6 @@ describe('Language decorator', () => {
         locale.setCurrentLanguage('en');
 
         fixture.detectChanges();
-
         des = fixture.debugElement.queryAll(By.css("p"));
         for (let i: number = 0; i < des.length; i++) {
             els.push(des[i].nativeElement);
@@ -75,11 +74,11 @@ describe('Language decorator', () => {
 
         tick();
         fixture.detectChanges();
-
         els = [];
         for (let i: number = 0; i < des.length; i++) {
             els.push(des[i].nativeElement);
         }
+
         expect(els[0].textContent).toContain("Localizzazione in Angular");
     }));
 

@@ -71,7 +71,6 @@ describe('TranslateDirective', () => {
         locale.setCurrentLanguage('en');
 
         fixture.detectChanges();
-
         des = fixture.debugElement.queryAll(By.directive(TranslateDirective));
         for (let i: number = 0; i < des.length; i++) {
             els.push(des[i].nativeElement);
@@ -117,11 +116,11 @@ describe('TranslateDirective', () => {
 
         tick();
         fixture.detectChanges();
-
         els = [];
         for (let i: number = 0; i < des.length; i++) {
             els.push(des[i].nativeElement);
         }
+
         expect(els[0].textContent).toContain("Localizzazione in Angular");
         expect(els[1].textContent).toContain("robisim74, tu hai 2 nuovi messaggi");
         expect(els[2].textContent).toContain("Il mondo è piccolo");
@@ -141,23 +140,20 @@ describe('TranslateDirective', () => {
         comp.change();
 
         fixture.detectChanges();
+        els = [];
+        for (let i: number = 0; i < des.length; i++) {
+            els.push(des[i].nativeElement);
+        }
         fixture.whenStable().then(() => {
-            // Waits for Mutation Observer in the directive is fired.
-            setTimeout(() => {
-                fixture.detectChanges();
-
-                els = [];
-                for (let i: number = 0; i < des.length; i++) {
-                    els.push(des[i].nativeElement);
-                }
+            // By using process.nextTick() we guarantee that it runs after MutationObserver event is fired.
+            process.nextTick(() => {
                 expect(els[0].textContent).toContain("It's a small world");
                 expect(els[1].textContent).toContain("robisim74, you have 3 new messages");
                 expect(els[7].getAttribute('value')).toContain("Select");
                 expect(els[9].textContent).toContain("It's a small world");
                 expect(els[9].childNodes[0].nodeName.toLowerCase()).toBe('strong');
                 expect(els[11].getAttribute('title')).toContain("robisim74, you have 3 new messages");
-                expect(els[12].textContent).toContain("It's a small world");
-            }, 1000);
+            });
         });
     }));
 
@@ -166,7 +162,7 @@ describe('TranslateDirective', () => {
 @Component({
     template: `
         <p><em>should render translated text & trim spaces</em></p>
-        <p id="key" l10nTranslate>
+        <p l10nTranslate>
             {{ key }}
         </p>
 
@@ -209,18 +205,10 @@ describe('TranslateDirective', () => {
         <p><em>should render translated attributes</em></p>
         <p l10n-title title="Title" l10nTranslate></p>
         <p l10n-title title="User notifications" [l10nTranslate]="{ user: username, NoMessages: messages.length }"></p>
-
-        <p><em>should use async key</em></p>
-        <p l10nTranslate>
-            <em l10nTranslate>Title</em>
-            <span>&nbsp;</span>
-            {{ asyncKey }}
-        </p>
     `
 })
 class TranslateComponent {
 
-    asyncKey: string;
     key: string = "Title";
     username: string = "robisim74";
     messages: string[] = ["Test1", "Test2"];
@@ -228,7 +216,6 @@ class TranslateComponent {
     innerHTML: string = "Strong title";
 
     change() {
-        this.asyncKey = "Subtitle";
         this.key = "Subtitle";
         this.messages.push("Test3");
         this.value = "Select";

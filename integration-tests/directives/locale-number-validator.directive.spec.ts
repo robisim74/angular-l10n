@@ -45,8 +45,6 @@ describe('LocaleNumberValidatorDirective', () => {
 
         fixture.detectChanges();
         fixture.whenStable().then(() => {
-            fixture.detectChanges();
-
             const form: NgForm = fixture.debugElement.children[0].injector.get(NgForm);
             const control: AbstractControl | null = form.control.get('decimal');
 
@@ -66,8 +64,6 @@ describe('LocaleNumberValidatorDirective', () => {
 
         fixture.detectChanges();
         fixture.whenStable().then(() => {
-            fixture.detectChanges();
-
             const form: NgForm = fixture.debugElement.children[0].injector.get(NgForm);
             const control: AbstractControl | null = form.control.get('decimal');
 
@@ -87,8 +83,6 @@ describe('LocaleNumberValidatorDirective', () => {
 
         fixture.detectChanges();
         fixture.whenStable().then(() => {
-            fixture.detectChanges();
-
             const form: NgForm = fixture.debugElement.children[0].injector.get(NgForm);
             const control: AbstractControl | null = form.control.get('decimal');
 
@@ -108,8 +102,6 @@ describe('LocaleNumberValidatorDirective', () => {
 
         fixture.detectChanges();
         fixture.whenStable().then(() => {
-            fixture.detectChanges();
-
             const form: NgForm = fixture.debugElement.children[0].injector.get(NgForm);
             const control: AbstractControl | null = form.control.get('decimal');
 
@@ -131,8 +123,6 @@ describe('LocaleNumberValidatorDirective', () => {
 
         fixture.detectChanges();
         fixture.whenStable().then(() => {
-            fixture.detectChanges();
-
             const form: NgForm = fixture.debugElement.children[0].injector.get(NgForm);
             const control: AbstractControl | null = form.control.get('decimal');
 

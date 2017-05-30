@@ -39,7 +39,6 @@ describe('DefaultLocale decorator', () => {
 
     beforeEach(() => {
         fixture.detectChanges();
-
         des = fixture.debugElement.queryAll(By.css("p"));
         for (let i: number = 0; i < des.length; i++) {
             els.push(des[i].nativeElement);
@@ -55,11 +54,11 @@ describe('DefaultLocale decorator', () => {
 
         tick();
         fixture.detectChanges();
-
         els = [];
         for (let i: number = 0; i < des.length; i++) {
             els.push(des[i].nativeElement);
         }
+
         expect(els[0].textContent).toContain("8 mag 2017");
     }));
 

@@ -1,4 +1,4 @@
-import { TestBed, ComponentFixture, fakeAsync, async, tick } from '@angular/core/testing';
+import { TestBed, ComponentFixture, fakeAsync, tick } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { Component, DebugElement } from '@angular/core';
 
@@ -43,7 +43,6 @@ describe('Currency decorator', () => {
 
     beforeEach(() => {
         fixture.detectChanges();
-
         des = fixture.debugElement.queryAll(By.css("p"));
         for (let i: number = 0; i < des.length; i++) {
             els.push(des[i].nativeElement);
@@ -60,11 +59,11 @@ describe('Currency decorator', () => {
 
         tick();
         fixture.detectChanges();
-
         els = [];
         for (let i: number = 0; i < des.length; i++) {
             els.push(des[i].nativeElement);
         }
+
         let value: string | null = els[0].textContent;
         if (!!value) {
             value = value.replace(/\u00A0/, " "); // Intl returns Unicode Character 'NO-BREAK SPACE' (U+00A0).
