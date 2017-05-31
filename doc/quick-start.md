@@ -1,4 +1,4 @@
-## Angular localization - Quick start
+# Angular localization - Quick start
 > The samples are based on [Angular QuickStart](https://github.com/angular/quickstart).
 
 * [1 First scenario: you only need to translate texts](#1)
@@ -19,7 +19,7 @@ System.config({
     ...
     map: {
         ...
-        'angular-l10n': 'node_modules/angular-l10n/bundles/angular-l10n.umd.js'
+        'angular-l10n': 'npm:angular-l10n/bundles/angular-l10n.umd.js'
     },
     ...
 });
@@ -51,10 +51,10 @@ export class AppModule {
             .addLanguages(['en', 'it'])
             .setCookieExpiration(30)
             .defineLanguage('en');
-        this.locale.init();
 
         this.translation.addConfiguration()
             .addProvider('./assets/locale-');
+
         this.translation.init();
     }
 
@@ -85,9 +85,7 @@ export class AppComponent implements OnInit {
 
     constructor(public locale: LocaleService) { }
 
-    ngOnInit(): void {
-        //
-    }
+    ngOnInit(): void { }
 
     selectLanguage(language: string): void {
         this.locale.setCurrentLanguage(language);
@@ -105,15 +103,15 @@ import { Language } from 'angular-l10n';
     selector: 'home-component',
     template: `
         <p>{{ 'Greeting' | translate:lang }}</p>
+
+        <p title="{{ 'Greeting' | translate:lang }}">{{ 'Title' | translate:lang }}</p>
     `
 })
 export class HomeComponent implements OnInit {
 
     @Language() lang: string;
 
-    ngOnInit(): void {
-        //
-    }
+    ngOnInit(): void { }
 
 }
 ```
@@ -140,7 +138,9 @@ import { Component } from '@angular/core';
 @Component({
     selector: 'home-component',
     template: `
-        <p translate>Greeting</p>
+        <p l10nTranslate>Greeting</p>
+
+        <p l10n-title title="Greeting" l10nTranslate>Title</p>
     `
 })
 export class HomeComponent { }
@@ -161,7 +161,7 @@ System.config({
     ...
     map: {
         ...
-        'angular-l10n': 'node_modules/angular-l10n/bundles/angular-l10n.umd.js'
+        'angular-l10n': 'npm:angular-l10n/bundles/angular-l10n.umd.js'
     },
     ...
 });
@@ -194,10 +194,10 @@ export class AppModule {
             .setCookieExpiration(30)
             .defineDefaultLocale('en', 'US')
             .defineCurrency('USD');
-        this.locale.init();
 
         this.translation.addConfiguration()
             .addProvider('./assets/locale-');
+
         this.translation.init();
     }
 
@@ -229,9 +229,7 @@ export class AppComponent implements OnInit {
 
     constructor(public locale: LocaleService) { }
 
-    ngOnInit(): void {
-        //
-    }
+    ngOnInit(): void { }
 
     selectLocale(language: string, country: string, currency: string): void {
         this.locale.setDefaultLocale(language, country);
@@ -245,6 +243,7 @@ and create the _json_ files of the translations such as `locale-en.json` and `lo
 {
     "Title": "Angular localization",
     "Change country": "Change country",
+    "Greeting": "Hi!",
     "Change": "Change"
 }
 ```
@@ -252,6 +251,7 @@ and create the _json_ files of the translations such as `locale-en.json` and `lo
 {
     "Title": "Localizzazione in Angular",
     "Change country": "Cambia Paese",
+    "Greeting": "Ciao!",
     "Change": "Cambia"
 }
 ```
@@ -264,6 +264,10 @@ import { Language, DefaultLocale, Currency } from 'angular-l10n';
 @Component({
     selector: 'home-component',
     template: `
+        <p>{{ 'Greeting' | translate:lang }}</p>
+
+        <p title="{{ 'Greeting' | translate:lang }}">{{ 'Title' | translate:lang }}</p>
+
         <p>{{ today | localeDate:defaultLocale:'fullDate' }}</p>       
         <p>{{ pi | localeDecimal:defaultLocale:'1.5-5' }}</p>
         <p>{{ value | localeCurrency:defaultLocale:currency:true:'1.2-2' }}</p>
@@ -305,11 +309,15 @@ import { Component, OnInit } from '@angular/core';
 @Component({
     selector: 'home-component',
     template: `
-        <p localeDate="fullDate">{{ today }}</p>    
-        <p localeDecimal="1.5-5">{{ pi }}</p>
-        <p localeCurrency="1.2-2" [symbol]="true">{{ value }}</p>
+        <p l10nTranslate>Greeting</p>
 
-        <button (click)="change()" translate>Change</button>
+        <p l10n-title title="Greeting" l10nTranslate>Title</p>
+
+        <p l10nDate="fullDate">{{ today }}</p>    
+        <p l10nDecimal="1.5-5">{{ pi }}</p>
+        <p l10nCurrency="1.2-2" [symbol]="true">{{ value }}</p>
+
+        <button (click)="change()" l10nTranslate>Change</button>
     `
 })
 export class HomeComponent implements OnInit {
@@ -348,30 +356,20 @@ import { HomeComponent } from './home.component';
 
 import { TranslationModule, LocaleService, TranslationService } from 'angular-l10n';
 
-@Injectable()
-export class LocalizationConfig {
+@Injectable() export class LocalizationConfig {
 
     constructor(public locale: LocaleService, public translation: TranslationService) { }
 
-    load(): Promise<any> {
+    load(): Promise<void> {
         this.locale.addConfiguration()
             .addLanguages(['en', 'it'])
             .setCookieExpiration(30)
             .defineLanguage('en');
-        this.locale.init();
 
         this.translation.addConfiguration()
             .addProvider('./assets/locale-');
 
-        const promise: Promise<any> = new Promise((resolve: any) => {
-            this.translation.translationChanged.subscribe(() => {
-                resolve(true);
-            });
-        });
-
-        this.translation.init();
-
-        return promise;
+        return this.translation.init();
     }
 
 }

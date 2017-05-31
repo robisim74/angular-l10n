@@ -68,10 +68,10 @@ export class AppModule {
             .setCookieExpiration(30)
             .defineDefaultLocale('en', 'US')
             .defineCurrency('USD');
-        this.locale.init();
 
         this.translation.addConfiguration()
             .addProvider('./assets/locale-');
+
         this.translation.init();
     }
 
@@ -84,6 +84,8 @@ export class AppModule {
     template: `
         <p>{{ 'Greeting' | translate:lang }}</p>
 
+        <p title="{{ 'Greeting' | translate:lang }}">{{ 'Title' | translate:lang }}</p>
+
         <p>{{ today | localeDate:defaultLocale:'fullDate' }}</p>       
         <p>{{ pi | localeDecimal:defaultLocale:'1.5-5' }}</p>
         <p>{{ value | localeCurrency:defaultLocale:currency:true:'1.2-2' }}</p>
@@ -94,12 +96,8 @@ export class HomeComponent implements OnInit {
     @Language() lang: string;
     @DefaultLocale() defaultLocale: string;
     @Currency() currency: string;
-
-    ...
     
-    ngOnInit(): void {
-        //
-    }
+    ngOnInit(): void { }
 
 }
 ```
@@ -108,22 +106,26 @@ export class HomeComponent implements OnInit {
 @Component({
     ...
     template: `
-        <p translate>Greeting</p>
+        <p l10nTranslate>Greeting</p>
 
-        <p localeDate="fullDate">{{ today }}</p>    
-        <p localeDecimal="1.5-5">{{ pi }}</p>
-        <p localeCurrency="1.2-2" [symbol]="true">{{ value }}</p>
+        <p l10n-title title="Greeting" l10nTranslate>Title</p>
+
+        <p l10nDate="fullDate">{{ today }}</p>    
+        <p l10nDecimal="1.5-5">{{ pi }}</p>
+        <p l10nCurrency="1.2-2" [symbol]="true">{{ value }}</p>
     `
 })
-export class HomeComponent {
-    ...
-}
+export class HomeComponent {}
 ```
 See the following documentation to learn more about all the features:
 
-- **Angular v4**: [quick start](https://github.com/robisim74/angular-l10n/blob/master/doc/quick-start.md) and [library specification](https://github.com/robisim74/angular-l10n/blob/master/doc/spec.md)
+- **Angular v4**
+    - [Quick start](https://github.com/robisim74/angular-l10n/blob/master/doc/quick-start.md)
+    - [Library specification](https://github.com/robisim74/angular-l10n/blob/master/doc/spec.md)
+    - [Snippets](https://github.com/robisim74/angular-l10n/wiki/Snippets)
 
-- **Angular v2**: [branch](https://github.com/robisim74/angular-l10n/tree/angular_v2)
+- **Angular v2**
+    - [Branch](https://github.com/robisim74/angular-l10n/tree/angular_v2)
 
 ## Related projects
 [Angular Localization with an ASP.NET CORE MVC Service](https://damienbod.com/2016/04/29/angular-2-localization-with-an-asp-net-core-mvc-service/) @damienbod
