@@ -45,7 +45,8 @@ export class BFS {
     }
 
     private static isTargetNode(node: any): boolean {
-        return node.nodeType == Node.TEXT_NODE &&
+        return typeof node !== "undefined" &&
+            node.nodeType == 3 &&
             node.nodeValue != null &&
             node.nodeValue.trim() != "";
     }
@@ -54,7 +55,7 @@ export class BFS {
      * A valid node is not marked for translation.
      */
     private static isValidNode(node: any): boolean {
-        if (node.nodeType == Node.ELEMENT_NODE && node.attributes) {
+        if (typeof node !== "undefined" && node.nodeType == 1 && node.attributes) {
             for (const attr of node.attributes) {
                 if (this.SELECTOR.test(attr.name)) return false;
             }

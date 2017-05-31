@@ -8,7 +8,10 @@ const globals = {
     'rxjs/Observable': 'Rx',
     'rxjs/Observer': 'Rx',
     'rxjs/Subscription': 'Rx',
-    'rxjs/Subject': 'Rx'
+    'rxjs/Subject': 'Rx',
+    'rxjs/add/operator/map': 'Rx',
+    'rxjs/add/operator/toPromise': 'Rx',
+    'rxjs/add/observable/merge': 'Rx'
 };
 
 export default {
