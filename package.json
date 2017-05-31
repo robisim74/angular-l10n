@@ -1,6 +1,6 @@
 {
     "name": "angular-l10n",
-    "version": "3.4.0",
+    "version": "3.4.1",
     "description": "An Angular library to translate messages, dates and numbers",
     "main": "./bundles/angular-l10n.umd.js",
     "module": "./modules/angular-l10n.es5.js",
