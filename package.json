@@ -1,6 +1,6 @@
 {
     "name": "angular-l10n",
-    "version": "3.3.0",
+    "version": "3.4.0",
     "description": "An Angular library to translate messages, dates and numbers",
     "main": "./bundles/angular-l10n.umd.js",
     "module": "./modules/angular-l10n.es5.js",
@@ -67,7 +67,7 @@
         "ts-helpers": "1.1.2",
         "ts-loader": "2.1.0",
         "tslint": "5.3.2",
-        "typescript": "2.3.3",
+        "typescript": "2.3.4",
         "webpack": "2.6.1",
         "zone.js": "0.8.11",
         "shelljs": "0.7.7",
