@@ -7,7 +7,7 @@ export class BFS {
 
     private static readonly SELECTOR: RegExp = /^l10n|translate|locale/;
 
-    private static readonly MAX_DEPTH: number = 3;
+    private static readonly MAX_DEPTH: number = 10;
 
     /**
      * Target node is a non empty text node.
