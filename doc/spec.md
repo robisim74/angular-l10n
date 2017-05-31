@@ -1,5 +1,5 @@
 # Angular localization library specification
-Library version: 3.4.0
+Library version: 3.4.1
 
 ## Table of contents
 * [1 Library structure](#1)
@@ -546,7 +546,7 @@ rendered as:
 </a>
 ```
 
->How does it work? The algorithm searches the text in the subtree up to a level depth 3. If there is a higher depth, we recommend using pipes.
+>How does it work? The algorithm searches the text in the subtree up to a level depth 10. If there is a depth higher than 4 (in the example above the text to translate has a depth 2), we recommend using pipes.
 
 ### <a name="3.3"/>3.3 Using Html tags in translation
 If you have Html tags in translation like this:
