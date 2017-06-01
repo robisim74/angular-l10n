@@ -327,13 +327,13 @@ To get the translation, this library uses _pure pipes_ (to know the difference b
 You can also get the translation in component class.
 
 ### <a name="3.1"/>3.1 Pure pipes
-Type | Format | Pipe syntax
----- | ------ | -----------
-Message | String | `expression \| translate:lang`
-Date | Date/Number/ISO string | `expression \| localeDate[:defaultLocale[:format]]`
-Number | Decimal | `expression \| localeDecimal[:defaultLocale[:digitInfo]]`
-Number | Percentage | `expression \| localePercent[:defaultLocale[:digitInfo]]`
-Number | Currency | `expression \| localeCurrency[:defaultLocale[:currency[:symbolDisplay[:digitInfo]]]]`
+Pipe | Type | Format | Pipe syntax
+---- | ---- | ------ | -----------
+Translate | Message | String | `expression \| translate:lang`
+LocaleDate | Date | Date/Number/ISO string | `expression \| localeDate[:defaultLocale[:format]]`
+LocaleDecimal | Number | Decimal | `expression \| localeDecimal[:defaultLocale[:digitInfo]]`
+LocalePercent | Number | Percentage | `expression \| localePercent[:defaultLocale[:digitInfo]]`
+LocaleCurrency | Number | Currency | `expression \| localeCurrency[:defaultLocale[:currency[:symbolDisplay[:digitInfo]]]]`
 
 >You can dynamically change parameters and expressions values.
 
@@ -475,13 +475,21 @@ export class HomeComponent extends Translation {
 That's because we need to know the component reference that implements the `OnPush` strategy.
 
 ### <a name="3.2"/>3.2 Directives
-Type | Format | Html syntax
----- | ------ | -----------
-Message | String | `<tag l10n-attribute attribute="expression" l10nTranslate>expression</tag>`
-Date | Date/Number/ISO string | `<tag l10n-attribute attribute="expression" l10nDate="[format]">expression</tag>`
-Number | Decimal | `<tag l10n-attribute attribute="expression" l10nDecimal="[digitInfo]">expression</tag>`
-Number | Percentage | `<tag l10n-attribute attribute="expression" l10nPercent="[digitInfo]">expression</tag>`
-Number | Currency | `<tag l10n-attribute attribute="expression" l10nCurrency="[digitInfo]" [symbol]="[symbolDisplay]">expression</tag>`
+Directive | Selectors
+--------- | ---------
+Translate | `l10nTranslate`, `translate`
+LocaleDate | `l10nDate`, `localeDate`
+LocaleDecimal | `l10nDecimal`, `localeDecimal`
+LocalePercent | `l10nPercent`, `localePercent`
+LocaleCurrency | `l10nCurrency`, `localeCurrency`
+
+Directive | Type | Format | Html syntax
+--------- | ---- | ------ | -----------
+Translate | Message | String | `<tag l10n-attribute attribute="expr1" l10nTranslate>expr2</tag>`
+LocaleDate | Date | Date/Number/ISO string | `<tag l10n-attribute attribute="expr1" l10nDate="[format]">expr2</tag>`
+LocaleDecimal | Number | Decimal | `<tag l10n-attribute attribute="expr1" l10nDecimal="[digitInfo]">expr2</tag>`
+LocalePercent | Number | Percentage | `<tag l10n-attribute attribute="expr1" l10nPercent="[digitInfo]">expr2</tag>`
+LocaleCurrency | Number | Currency | `<tag l10n-attribute attribute="expr1" l10nCurrency="[digitInfo]" [symbol]="[symbolDisplay]">expr2</tag>`
 
 >You can dynamically change parameters and expressions values as with pipes. How does it work? To observe the expression change (not the parameters), a `MutationObserver` is used: the observer is added only if detected in the browser. If you want to use this feature also reaching older browsers, we recommend using pipes.
 
@@ -546,7 +554,7 @@ rendered as:
 </a>
 ```
 
->How does it work? The algorithm searches the text in the subtree up to a level depth 10. If there is a depth higher than 4 (in the example above the text to translate has a depth 2), we recommend using pipes.
+>How does it work? The algorithm searches the text in the subtree. If there is a depth higher than 4 (in the example above the text to translate has a depth 2), we recommend using pipes.
 
 ### <a name="3.3"/>3.3 Using Html tags in translation
 If you have Html tags in translation like this:
@@ -768,6 +776,10 @@ export class AppModule { }
 ```
 
 ### <a name="6.1"/>6.1 Validating a number
+Directive | Selectors
+--------- | ---------
+`LocaleNumberValidator` | `l10nValidateNumber`, `validateLocaleNumber`
+
 Directive | Validator | Options | Errors
 --------- | --------- | ------- | ------
 `LocaleNumberValidator` | `l10nValidateNumber=[digitInfo]` | `[minValue]` `[maxValue]` | `format` or `minValue` or `maxValue`
@@ -889,7 +901,7 @@ Method | Function
 
 #### ILocaleService
 Property | Value
----------- | -----
+-------- | -----
 `languageCodeChanged: EventEmitter<string>` |
 `defaultLocaleChanged: EventEmitter<string>` |
 `currencyCodeChanged: EventEmitter<string>` |
@@ -916,7 +928,7 @@ Method | Function
 
 #### ITranslationService
 Property | Value
----------- | -----
+-------- | -----
 `translationChanged: EventEmitter<string>` |
 `translationError: EventEmitter<any>` |
 
@@ -931,7 +943,7 @@ Method | Function
 
 #### Translation
 Property | Value
----------- | -----
+-------- | -----
 `lang: string` |
 `protected paramSubscriptions: ISubscription[]` |
 
@@ -941,7 +953,7 @@ Method | Function
 
 #### Localization
 Property | Value
----------- | -----
+-------- | -----
 `defaultLocale: string` |
 `currency: string` |
 `protected paramSubscriptions: ISubscription[]` |
