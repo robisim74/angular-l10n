@@ -104,7 +104,7 @@ import { Language } from 'angular-l10n';
     template: `
         <p>{{ 'Greeting' | translate:lang }}</p>
 
-        <p title="{{ 'Greeting' | translate:lang }}">{{ 'Title' | translate:lang }}</p>
+        <p title="{{ 'Greeting' | translate:lang }}">{{ 'Subtitle' | translate:lang }}</p>
     `
 })
 export class HomeComponent implements OnInit {
@@ -119,6 +119,7 @@ and create the _json_ files of the translations such as `locale-en.json` and `lo
 ```Json
 {
     "Title": "Angular localization",
+    "Subtitle": "It's a small world",
     "Change language": "Change language",
     "Greeting": "Hi!"
 }
@@ -126,6 +127,7 @@ and create the _json_ files of the translations such as `locale-en.json` and `lo
 ```Json
 {
     "Title": "Localizzazione in Angular",
+    "Subtitle": "Il mondo è piccolo",
     "Change language": "Cambia lingua",
     "Greeting": "Ciao!"
 }
@@ -140,7 +142,7 @@ import { Component } from '@angular/core';
     template: `
         <p l10nTranslate>Greeting</p>
 
-        <p l10n-title title="Greeting" l10nTranslate>Title</p>
+        <p l10n-title title="Greeting" l10nTranslate>Subtitle</p>
     `
 })
 export class HomeComponent { }
@@ -242,6 +244,7 @@ and create the _json_ files of the translations such as `locale-en.json` and `lo
 ```Json
 {
     "Title": "Angular localization",
+    "Subtitle": "It's a small world",
     "Change country": "Change country",
     "Greeting": "Hi!",
     "Change": "Change"
@@ -250,6 +253,7 @@ and create the _json_ files of the translations such as `locale-en.json` and `lo
 ```Json
 {
     "Title": "Localizzazione in Angular",
+    "Subtitle": "Il mondo è piccolo",
     "Change country": "Cambia Paese",
     "Greeting": "Ciao!",
     "Change": "Cambia"
@@ -266,7 +270,7 @@ import { Language, DefaultLocale, Currency } from 'angular-l10n';
     template: `
         <p>{{ 'Greeting' | translate:lang }}</p>
 
-        <p title="{{ 'Greeting' | translate:lang }}">{{ 'Title' | translate:lang }}</p>
+        <p title="{{ 'Greeting' | translate:lang }}">{{ 'Subtitle' | translate:lang }}</p>
 
         <p>{{ today | localeDate:defaultLocale:'fullDate' }}</p>       
         <p>{{ pi | localeDecimal:defaultLocale:'1.5-5' }}</p>
@@ -311,7 +315,7 @@ import { Component, OnInit } from '@angular/core';
     template: `
         <p l10nTranslate>Greeting</p>
 
-        <p l10n-title title="Greeting" l10nTranslate>Title</p>
+        <p l10n-title title="Greeting" l10nTranslate>Subtitle</p>
 
         <p l10nDate="fullDate">{{ today }}</p>    
         <p l10nDecimal="1.5-5">{{ pi }}</p>

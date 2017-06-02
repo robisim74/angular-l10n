@@ -131,7 +131,8 @@ See the following documentation to learn more about all the features:
 [Angular Localization with an ASP.NET CORE MVC Service](https://damienbod.com/2016/04/29/angular-2-localization-with-an-asp-net-core-mvc-service/) @damienbod
 
 ## Contributing
-[Contributing](https://github.com/robisim74/angular-l10n/blob/master/CONTRIBUTING.md)
+- [Contributing](https://github.com/robisim74/angular-l10n/blob/master/CONTRIBUTING.md)
+- [Plunker template](http://embed.plnkr.co/UdKFunQFnD3TOkXp2v06/)
 
 ## License
 MIT

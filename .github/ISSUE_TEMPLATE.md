@@ -11,4 +11,6 @@
 
 **Steps to reproduce the behavior**
 
+Plunker template: http://embed.plnkr.co/UdKFunQFnD3TOkXp2v06/
+
 **Specifications: Angular version, library version, environment, browser**

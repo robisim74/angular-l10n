@@ -4,7 +4,7 @@
  - [Pull Requests](#pr)
 
 ## <a name="issue"></a> Issues
-Just follow the issue template.
+Follow the issue template and use the [plunker template](http://embed.plnkr.co/UdKFunQFnD3TOkXp2v06/) for repo.
 
 ## <a name="pr"></a> Pull Requests
 Principles:
