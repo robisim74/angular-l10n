@@ -130,21 +130,8 @@ See the following documentation to learn more about all the features:
 ## Related projects
 [Angular Localization with an ASP.NET CORE MVC Service](https://damienbod.com/2016/04/29/angular-2-localization-with-an-asp-net-core-mvc-service/) @damienbod
 
-## Building
-In order to build the library if you want to contribute to it:
-```Shell
-npm install
-npm test
-npm run build
-```
-To test locally the npm package:
-```Shell
-npm run pack-lib
-```
-Then you can install it in your app to test it:
-```Shell
-npm install [path]angular-l10n-[version].tgz
-```
+## Contributing
+[Contributing](https://github.com/robisim74/angular-l10n/blob/master/CONTRIBUTING.md)
 
 ## License
 MIT

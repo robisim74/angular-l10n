@@ -64,7 +64,6 @@
         "rollup": "0.41.6",
         "rollup-plugin-node-resolve": "3.0.0",
         "rxjs": "5.4.0",
-        "ts-helpers": "1.1.2",
         "ts-loader": "2.1.0",
         "tslint": "5.3.2",
         "typescript": "2.3.4",
