@@ -11,7 +11,7 @@
         "rootDir": ".",
         "inlineSources": true,
         "lib": [
-            "es6",
+            "es2015",
             "dom"
         ],
         "target": "es5",

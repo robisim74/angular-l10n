@@ -18,7 +18,7 @@ mkdir(`-p`, `./${BUNDLES_DIR}`);
 // https://github.com/palantir/tslint/blob/master/src/configs/recommended.ts
 // https://github.com/mgechev/codelyzer
 echo(`Start TSLint`);
-exec(`tslint --project ./tsconfig.json --type-check ./src/**/*.ts`);
+exec(`tslint ./src/**/*.ts`);
 echo(chalk.green(`TSLint completed`));
 
 /* AoT compilation: ES2015 sources */
@@ -42,7 +42,10 @@ exec(`node scripts/map-sources -f ${MODULES_DIR}/${PACKAGE}.es5.js`);
 rm(`-f`, `${MODULES_DIR}/${PACKAGE}.es5.ts`);
 
 echo(`Run Rollup conversion on package`);
-exec(`rollup -c rollup.config.js --sourcemap`, { silent: true });
+if (exec(`rollup -c rollup.config.js --sourcemap`).code !== 0) {
+    echo(chalk.red(`Error: Rollup conversion failed`));
+    exit(1);
+}
 exec(`node scripts/map-sources -f ${BUNDLES_DIR}/${PACKAGE}.umd.js`);
 
 echo(`Minifying`);
