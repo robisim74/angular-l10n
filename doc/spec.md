@@ -323,7 +323,7 @@ When specifying the `features`, you have to specify what locale, or locales to l
 >When a feature is not supported, however, for example in older browsers, Angular localization does not generate an error in the browser, but returns the value without performing operations.
 
 ## <a name="3"/>3 Getting the translation
-To get the translation, this library uses _pure pipes_ (to know the difference between _pure_ and _impure pipes_ see [here](https://angular.io/docs/ts/latest/guide/pipes.html)) or _directives_. 
+To get the translation, this library uses _pure pipes_ (to know the difference between _pure_ and _impure pipes_ see [here](https://angular.io/guide/pipes#pure-and-impure-pipes)) or _directives_. 
 You can also get the translation in component class.
 
 ### <a name="3.1"/>3.1 Pure pipes
@@ -407,7 +407,7 @@ export class HomeComponent implements OnInit {
 expression | localeDate[:defaultLocale[:format]]
 ```
 where `expression` is a date object or a number (milliseconds since UTC epoch) or an ISO string, and `format` indicates which date/time components to include. 
-See Angular [DatePipe](https://angular.io/docs/ts/latest/api/common/index/DatePipe-pipe.html) for further information.
+See Angular [DatePipe](https://angular.io/api/common/DatePipe) for further information.
 ```Html
 {{ today | localeDate:defaultLocale:'fullDate' }}
 ```
@@ -416,7 +416,7 @@ See Angular [DatePipe](https://angular.io/docs/ts/latest/api/common/index/DatePi
 expression | localeDecimal[:defaultLocale:[digitInfo]]
 ```
 where `expression` is a number and `digitInfo` has the following format: `{minIntegerDigits}.{minFractionDigits}-{maxFractionDigits}`. 
-See Angular [DecimalPipe](https://angular.io/docs/ts/latest/api/common/index/DecimalPipe-pipe.html) for further information.
+See Angular [DecimalPipe](https://angular.io/api/common/DecimalPipe) for further information.
 
 ```Html
 {{ value | localeDecimal:defaultLocale:'1.5-5' }}
@@ -693,6 +693,8 @@ To change language, default locale or currency at runtime, `LocaleService` has t
 * `setCurrentCurrency(currencyCode: string): void`
 
 ## <a name="5"/>5 Lazy loaded modules & Shared modules
+Before you start using this configuration, you need to know how _lazy-loading_ works: [Lazy-loading modules with the router](https://angular.io/guide/ngmodule#lazy-loading-modules-with-the-router).
+
 ### <a name="5.1"/>5.1 Lazy loaded modules with the router
 You can create an instance of `TranslationService` with its own translation data for every _lazy loaded_ module, as shown:
 ![LazyLoading](images/LazyLoading.png)
