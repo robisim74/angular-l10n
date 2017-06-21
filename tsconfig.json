@@ -3,22 +3,20 @@
         "baseUrl": ".",
         "emitDecoratorMetadata": true,
         "experimentalDecorators": true,
+        "strict": true,
         "module": "commonjs",
         "moduleResolution": "node",
-        "strict": true,
-        "noFallthroughCasesInSwitch": true,
-        "sourceMap": true,
         "rootDir": ".",
+        "sourceMap": true,
         "inlineSources": true,
+        "target": "es5",
+        "skipLibCheck": true,
         "lib": [
             "es2015",
             "dom"
         ],
-        "target": "es5",
-        "skipLibCheck": true,
-        "types": [
-            "jasmine",
-            "node"
+        "typeRoots": [
+            "./node_modules/@types/"
         ]
     },
     "exclude": [

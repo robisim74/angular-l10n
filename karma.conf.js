@@ -1,6 +1,6 @@
 module.exports = function (config) {
 
-    var configuration = {
+    const configuration = {
 
         // base path that will be used to resolve all patterns (eg. files, exclude)
         basePath: '',
@@ -8,6 +8,14 @@ module.exports = function (config) {
         // frameworks to use
         // available frameworks: https://npmjs.org/browse/keyword/karma-adapter
         frameworks: ['jasmine'],
+
+        plugins: [
+            require('karma-jasmine'),
+            require('karma-chrome-launcher'),
+            require('karma-webpack'),
+            require('karma-sourcemap-loader'),
+            require('karma-spec-reporter')
+        ],
 
         // list of files / patterns to load in the browser
         files: [
@@ -21,7 +29,7 @@ module.exports = function (config) {
         // preprocess matching files before serving them to the browser
         // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
         preprocessors: {
-            'spec.bundle.js': ['webpack']
+            'spec.bundle.js': ['webpack', 'sourcemap']
         },
 
         // webpack
@@ -33,12 +41,13 @@ module.exports = function (config) {
                 rules: [
                     {
                         test: /\.ts/,
-                        loaders: ['ts-loader'],
+                        loaders: ['ts-loader', 'source-map-loader'],
                         exclude: /node_modules/
                     }
                 ],
                 exprContextCritical: false
             },
+            devtool: 'inline-source-map',
             performance: { hints: false }
         },
 
