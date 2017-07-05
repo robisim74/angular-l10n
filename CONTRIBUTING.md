@@ -4,13 +4,9 @@
  - [Pull Requests](#pr)
 
 ## <a name="issue"></a> Issues
-Follow the issue template and use the [plunker template](http://embed.plnkr.co/UdKFunQFnD3TOkXp2v06/) for repo.
+Follow the issue template and use the [plunker template](http://embed.plnkr.co/UdKFunQFnD3TOkXp2v06/) for repro.
 
 ## <a name="pr"></a> Pull Requests
-Principles:
-- _Clean code_
-- _KISS_
-
 In order to build the library:
 ```Shell
 npm install
