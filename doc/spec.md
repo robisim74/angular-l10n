@@ -29,7 +29,7 @@ Library version: 3.4.1
         * [3.2.4 UI components](#3.2.4)
     * [3.3 Using Html tags in translation](#3.3)
     * [3.4 Getting the translation in component class](#3.4)
-    * [3.5 Handler the translation](#3.5)
+    * [3.5 Handle the translation](#3.5)
 * [4 Changing language, default locale or currency at runtime](#4)
 * [5 Lazy loaded modules & Shared modules](#5)
     * [5.1 Lazy loaded modules with the router](#5.1)
@@ -649,7 +649,7 @@ export class HomeComponent {
 }
 ```
 
-### <a name="3.5"/>3.5 Handler the translation
+### <a name="3.5"/>3.5 Handle the translation
 The default translation handler does not perform operations on the translated values: it handles the missing keys returning the path of the key or the value set by `setMissingValue` method during the configuration of `TranslationService`, and replaces parameters.
 
 To perform custom operations, you can implement `TranslationHandler` class-interface and the `parseValue` method:
