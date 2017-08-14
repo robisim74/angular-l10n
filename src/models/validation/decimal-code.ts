@@ -10,11 +10,12 @@ import { Decimal } from '../types';
     protected get decimalCodes(): Decimal {
         let decimalCodes: Decimal = {
             minusSign: this.toUnicode("-"),
-            decimalSeparator: this.toUnicode(".")
+            decimalSeparator: this.toUnicode("."),
+            thousandSeparator: this.toUnicode(",")
         };
 
         if (IntlAPI.hasNumberFormat()) {
-            const value: number = -0.9; // Reference value.
+            const value: number = -1000.9; // Reference value.
             const localeValue: string = new Intl.NumberFormat(this.locale.getDefaultLocale()).format(value);
 
             const unicodeChars: string[] = [];
@@ -22,6 +23,10 @@ import { Decimal } from '../types';
             unicodeChars.push(this.toUnicode(localeValue.charAt(1)));
             unicodeChars.push(this.toUnicode(localeValue.charAt(2)));
             unicodeChars.push(this.toUnicode(localeValue.charAt(3)));
+            unicodeChars.push(this.toUnicode(localeValue.charAt(4)));
+            unicodeChars.push(this.toUnicode(localeValue.charAt(5)));
+            unicodeChars.push(this.toUnicode(localeValue.charAt(6)));
+            unicodeChars.push(this.toUnicode(localeValue.charAt(7)));
 
             // Right to left:
             // checks Unicode characters 'RIGHT-TO-LEFT MARK' (U+200F) & 'Arabic Letter Mark' (U+061C),
@@ -31,24 +36,28 @@ import { Decimal } from '../types';
             if (unicodeChars[0] == "\\u200F" || unicodeChars[0] == "\\u061C") {
                 decimalCodes = {
                     minusSign: unicodeChars[1],
-                    decimalSeparator: unicodeChars[3]
+                    decimalSeparator: unicodeChars[7],
+                    thousandSeparator: unicodeChars[3]
                 };
             } else if (unicodeChars[0] == this.toUnicode(
-                new Intl.NumberFormat(this.locale.getDefaultLocale()).format(0))
+                new Intl.NumberFormat(this.locale.getDefaultLocale()).format(1))
             ) {
                 decimalCodes = {
-                    minusSign: unicodeChars[3],
-                    decimalSeparator: unicodeChars[1]
+                    minusSign: unicodeChars[7],
+                    decimalSeparator: unicodeChars[5],
+                    thousandSeparator: unicodeChars[1]
                 };
             } else if (unicodeChars[0] == "\\u200E") {
                 decimalCodes = {
                     minusSign: unicodeChars[1],
-                    decimalSeparator: unicodeChars[3]
+                    decimalSeparator: unicodeChars[7],
+                    thousandSeparator: unicodeChars[3]
                 };
             } else {
                 decimalCodes = {
                     minusSign: unicodeChars[0],
-                    decimalSeparator: unicodeChars[2]
+                    decimalSeparator: unicodeChars[6],
+                    thousandSeparator: unicodeChars[2]
                 };
             }
         }
@@ -74,7 +83,10 @@ import { Decimal } from '../types';
                 value += "-";
             } else if (charCode == decimalCodes.decimalSeparator) {
                 value += ".";
-            } else { return NaN; }
+            } else if (charCode == decimalCodes.thousandSeparator) {
+                continue;
+            } 
+            else { return NaN; }
         }
         return parseFloat(value);
     }
@@ -103,15 +115,16 @@ import { Decimal } from '../types';
         const minusSign: string = this.decimalCodes.minusSign;
         const zero: string = this.numberCodes[0];
         const decimalSeparator: string = this.decimalCodes.decimalSeparator;
+        const thousandSeparator: string = this.decimalCodes.thousandSeparator;
         const nine: string = this.numberCodes[9];
 
-        // Pattern for 1.2-2 digits: /^-?[0-9]{1,}\.[0-9]{2,2}$/
-        // Unicode pattern = "^\u002d?[\u0030-\u0039]{1,}\\u002e[\u0030-\u0039]{2,2}$"
+        // Pattern for 1.2-2 digits: /^-?[0-9,]{1,}\.[0-9]{2,2}$/
+        // Unicode pattern = "^\u002d?[\u0030-\u0039,\u002c]{1,}\\u002e[\u0030-\u0039]{2,2}$"
         let pattern: string;
         if (minFraction > 0 && maxFraction > 0) {
             pattern = "^"
                 + minusSign
-                + "?[" + zero + "-" + nine
+                + "?[" + zero + "-" + nine + thousandSeparator
                 + "]{" + minInt + ",}\\"
                 + decimalSeparator
                 + "[" + zero + "-" + nine
@@ -121,7 +134,7 @@ import { Decimal } from '../types';
             // Decimal separator is optional.
             pattern = "^"
                 + minusSign
-                + "?[" + zero + "-" + nine
+                + "?[" + zero + "-" + nine + thousandSeparator
                 + "]{" + minInt + ",}\\"
                 + decimalSeparator
                 + "?[" + zero + "-" + nine
@@ -131,7 +144,7 @@ import { Decimal } from '../types';
             // Integer number.
             pattern = "^"
                 + minusSign
-                + "?[" + zero + "-" + nine
+                + "?[" + zero + "-" + nine + thousandSeparator
                 + "]{" + minInt + ",}$";
         }
         pattern = this.toChar(pattern);

@@ -116,6 +116,27 @@ describe('LocaleNumberValidatorDirective', () => {
         });
     }));
 
+    it('should validate with thousand separator', async(() => {
+        comp.decimal = "1.012,34";
+        comp.maxValue = 1100;
+        comp.digits = "4.2-2";
+        
+        fixture.detectChanges();
+        fixture.whenStable().then(() => {
+            const form: NgForm = fixture.debugElement.children[0].injector.get(NgForm);
+            const control: AbstractControl | null = form.control.get('decimal');
+
+            if (control) {
+                expect(control.valid).toBe(true);
+                expect(control.hasError('format')).toBe(false);
+                expect(control.hasError('minValue')).toBe(false);
+                expect(control.hasError('maxValue')).toBe(false);
+            } else {
+                throw new Error("Control is null");
+            }
+        });
+    }));
+
     it('should validate right to left', async(() => {
         locale.setDefaultLocale('ar', 'SA');
 
