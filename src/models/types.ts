@@ -15,7 +15,7 @@ export type Decimal = {
 
     minusSign: string;
     decimalSeparator: string;
-
+    thousandSeparator: string;
 };
 
 export enum LoadingMode {
