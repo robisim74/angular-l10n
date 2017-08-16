@@ -1,5 +1,5 @@
 # Angular localization library specification
-Library version: 3.4.1
+Library version: 3.5.0
 
 ## Table of contents
 * [1 Library structure](#1)
@@ -794,6 +794,8 @@ or, if you use variables:
 ```Html
 <input [l10nValidateNumber]="digits" [minValue]="minValue" [maxValue]="maxValue" name="decimal" [(ngModel)]="decimal">
 ```
+
+The number can be entered with or without the thousands separator.
 
 #### <a name="6.1.1"/>6.1.1 Parsing a number
 When the number is valid, you can get its value by the `parseNumber` method of `LocaleValidation`:
