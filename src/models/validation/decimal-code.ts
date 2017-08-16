@@ -19,14 +19,9 @@ import { Decimal } from '../types';
             const localeValue: string = new Intl.NumberFormat(this.locale.getDefaultLocale()).format(value);
 
             const unicodeChars: string[] = [];
-            unicodeChars.push(this.toUnicode(localeValue.charAt(0)));
-            unicodeChars.push(this.toUnicode(localeValue.charAt(1)));
-            unicodeChars.push(this.toUnicode(localeValue.charAt(2)));
-            unicodeChars.push(this.toUnicode(localeValue.charAt(3)));
-            unicodeChars.push(this.toUnicode(localeValue.charAt(4)));
-            unicodeChars.push(this.toUnicode(localeValue.charAt(5)));
-            unicodeChars.push(this.toUnicode(localeValue.charAt(6)));
-            unicodeChars.push(this.toUnicode(localeValue.charAt(7)));
+            for (let i: number = 0; i <= 7; i++) {
+                unicodeChars.push(this.toUnicode(localeValue.charAt(i)));
+            }
 
             // Right to left:
             // checks Unicode characters 'RIGHT-TO-LEFT MARK' (U+200F) & 'Arabic Letter Mark' (U+061C),
@@ -85,8 +80,7 @@ import { Decimal } from '../types';
                 value += ".";
             } else if (charCode == decimalCodes.thousandSeparator) {
                 continue;
-            } 
-            else { return NaN; }
+            } else { return NaN; }
         }
         return parseFloat(value);
     }

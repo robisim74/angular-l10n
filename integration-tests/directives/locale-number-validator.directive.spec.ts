@@ -120,7 +120,7 @@ describe('LocaleNumberValidatorDirective', () => {
         comp.decimal = "1.012,34";
         comp.maxValue = 1100;
         comp.digits = "4.2-2";
-        
+
         fixture.detectChanges();
         fixture.whenStable().then(() => {
             const form: NgForm = fixture.debugElement.children[0].injector.get(NgForm);
