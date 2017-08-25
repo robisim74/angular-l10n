@@ -1,13 +1,16 @@
 import { TestBed, ComponentFixture, fakeAsync, tick } from '@angular/core/testing';
-import { HttpModule } from '@angular/http';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { By } from '@angular/platform-browser';
 import { Component, DebugElement } from '@angular/core';
 
 import { Language } from './../../index';
 import {
+    L10nConfig,
+    L10nLoader,
     TranslationModule,
     LocaleService,
-    TranslationService
+    StorageStrategy,
+    ProviderType
 } from './../../index';
 
 describe('Language decorator', () => {
@@ -17,15 +20,39 @@ describe('Language decorator', () => {
     let des: DebugElement[];
     let els: HTMLElement[] = [];
 
+    let l10nLoader: L10nLoader;
     let locale: LocaleService;
-    let translation: TranslationService;
+
+    const translationEN: any = {
+        "Title": "Angular localization"
+    };
+    const translationIT: any = {
+        "Title": "Localizzazione in Angular"
+    };
+
+    const l10nConfig: L10nConfig = {
+        locale: {
+            languages: [
+                { code: 'en', dir: 'ltr' },
+                { code: 'it', dir: 'ltr' }
+            ],
+            language: 'en',
+            storage: StorageStrategy.Disabled
+        },
+        translation: {
+            translationData: [
+                { languageCode: 'en', data: translationEN },
+                { languageCode: 'it', data: translationIT }
+            ]
+        }
+    };
 
     beforeEach(() => {
         fixture = TestBed.configureTestingModule({
             declarations: [LanguageComponent],
             imports: [
-                HttpModule,
-                TranslationModule.forRoot()
+                HttpClientTestingModule,
+                TranslationModule.forRoot(l10nConfig)
             ]
         }).createComponent(LanguageComponent);
 
@@ -33,26 +60,10 @@ describe('Language decorator', () => {
     });
 
     beforeEach((done) => {
+        l10nLoader = TestBed.get(L10nLoader);
         locale = TestBed.get(LocaleService);
-        translation = TestBed.get(TranslationService);
-
-        locale.addConfiguration()
-            .disableStorage()
-            .addLanguages(['en', 'it'])
-            .defineLanguage('en');
-
-        const translationEN: any = {
-            "Title": "Angular localization"
-        };
-        const translationIT: any = {
-            "Title": "Localizzazione in Angular"
-        };
-
-        translation.addConfiguration()
-            .addTranslation('en', translationEN)
-            .addTranslation('it', translationIT);
-
-        translation.init().then(() => done());
+        
+        l10nLoader.load().then(() => done());
     });
 
     beforeEach(() => {

@@ -1,7 +1,10 @@
-import { Injectable } from '@angular/core';
-import { Http, Response } from '@angular/http';
+import { Injectable, Inject } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs/Observable';
-import 'rxjs/add/operator/map';
+import { ReplaySubject } from 'rxjs/ReplaySubject';
+
+import { TRANSLATION_CONFIG, TranslationConfig } from '../models/l10n-config';
+import { ProviderType } from '../models/types';
 
 /**
  * Implement this class-interface to create a custom provider for translation data.
@@ -20,21 +23,42 @@ import 'rxjs/add/operator/map';
 
 @Injectable() export class HttpTranslationProvider implements TranslationProvider {
 
-    constructor(private http: Http) { }
+    private cache: { [key: string]: Observable<any> } = {};
+
+    constructor( @Inject(TRANSLATION_CONFIG) private configuration: TranslationConfig, private http: HttpClient) { }
 
     public getTranslation(language: string, args: any): Observable<any> {
         let url: string = "";
 
         switch (args.type) {
-            case "WebAPI":
+            case ProviderType.WebAPI:
                 url += args.path + language;
                 break;
             default:
-                url += args.prefix + language + "." + args.dataFormat;
+                url += args.prefix + language + ".json";
         }
 
-        return this.http.get(url)
-            .map((res: Response) => res.json());
+        if (this.configuration.caching) {
+            return this.caching(url, this.http.get(url));
+        }
+        return this.http.get(url);
+    }
+
+    private caching(key: string, request: Observable<any>): Observable<any> {
+        if (this.cache[key]) {
+            return this.cache[key];
+        }
+
+        const buffer: ReplaySubject<any> = new ReplaySubject<any>(1);
+        request.subscribe(
+            (value: any) => buffer.next(value),
+            (error: any) => buffer.error(error),
+            () => buffer.complete()
+        );
+
+        const response: Observable<any> = buffer.asObservable();
+        this.cache[key] = response;
+        return response;
     }
 
 }

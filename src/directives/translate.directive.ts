@@ -23,7 +23,7 @@ export class TranslateDirective extends BaseDirective {
 
     protected setup(): void {
         this.replace();
-        this.subscriptions.push(this.translation.translationChanged.subscribe(
+        this.subscriptions.push(this.translation.translationChanged().subscribe(
             () => { this.replace(); }
         ));
     }

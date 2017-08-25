@@ -1,45 +1,56 @@
 import { TestBed, ComponentFixture, fakeAsync, tick } from '@angular/core/testing';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { By } from '@angular/platform-browser';
 import { Component, DebugElement } from '@angular/core';
 
-import { LocaleDateDirective } from './../../index';
+import { L10nDateDirective } from './../../index';
 import {
+    L10nConfig,
+    L10nLoader,
     LocalizationModule,
-    LocaleService
+    LocaleService,
+    StorageStrategy
 } from './../../index';
 
-describe('LocaleDateDirective', () => {
+describe('L10nDateDirective', () => {
 
-    let comp: LocaleDateComponent;
-    let fixture: ComponentFixture<LocaleDateComponent>;
+    let comp: L10nDateComponent;
+    let fixture: ComponentFixture<L10nDateComponent>;
     let des: DebugElement[];
     let els: HTMLElement[] = [];
 
+    let l10nLoader: L10nLoader;
     let locale: LocaleService;
+
+    const l10nConfig: L10nConfig = {
+        locale: {
+            defaultLocale: { languageCode: 'en', countryCode: 'US' },
+            storage: StorageStrategy.Disabled
+        }
+    };
 
     beforeEach(() => {
         fixture = TestBed.configureTestingModule({
-            declarations: [LocaleDateComponent],
+            declarations: [L10nDateComponent],
             imports: [
-                LocalizationModule.forRoot()
+                HttpClientTestingModule,
+                LocalizationModule.forRoot(l10nConfig)
             ]
-        }).createComponent(LocaleDateComponent);
+        }).createComponent(L10nDateComponent);
 
         comp = fixture.componentInstance;
     });
 
     beforeEach((done) => {
+        l10nLoader = TestBed.get(L10nLoader);
         locale = TestBed.get(LocaleService);
-
-        locale.addConfiguration()
-            .disableStorage()
-            .defineDefaultLocale('en', 'US');
-        locale.init().then(() => done());
+        
+        l10nLoader.load().then(() => done());
     });
 
     beforeEach(() => {
         fixture.detectChanges();
-        des = fixture.debugElement.queryAll(By.directive(LocaleDateDirective));
+        des = fixture.debugElement.queryAll(By.directive(L10nDateDirective));
         for (let i: number = 0; i < des.length; i++) {
             els.push(des[i].nativeElement);
         }
@@ -81,7 +92,7 @@ describe('LocaleDateDirective', () => {
         <p l10n-title title="{{ day }}" l10nDate="shortDate"></p>
     `
 })
-class LocaleDateComponent {
+class L10nDateComponent {
 
     day: Date = new Date('4/19/2017');
 

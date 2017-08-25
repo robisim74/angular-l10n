@@ -11,15 +11,16 @@ import { InjectorRef } from '../models/injector-ref';
 
     public lang: string;
 
+    protected translation: TranslationService;
+
     protected paramSubscriptions: ISubscription[] = [];
 
     constructor(
-        protected translation: TranslationService = InjectorRef.get(TranslationService),
         protected changeDetectorRef?: ChangeDetectorRef
     ) {
-        this.lang = this.translation.getLanguage();
+        this.translation = InjectorRef.get(TranslationService);
         // When the language changes, subscribes to the event & updates lang property.
-        this.paramSubscriptions.push(this.translation.translationChanged.subscribe(
+        this.paramSubscriptions.push(this.translation.translationChanged().subscribe(
             (language: string) => {
                 this.lang = language;
                 // OnPush Change Detection strategy.

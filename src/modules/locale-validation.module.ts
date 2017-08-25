@@ -1,18 +1,18 @@
 import { NgModule, ModuleWithProviders } from '@angular/core';
 
-import { DecimalCode } from '../models/validation/decimal-code';
+import { DecimalCode } from '../models/decimal-code';
 import { LocaleValidation } from '../services/locale-validation';
-import { LocaleNumberValidatorDirective } from '../directives/locale-number-validator.directive';
+import { L10nNumberValidatorDirective } from '../directives/l10n-number-validator.directive';
 
 /**
  * Provides dependencies & directives for locale validation.
  */
 @NgModule({
     declarations: [
-        LocaleNumberValidatorDirective
+        L10nNumberValidatorDirective
     ],
     exports: [
-        LocaleNumberValidatorDirective
+        L10nNumberValidatorDirective
     ]
 })
 export class LocaleValidationModule {

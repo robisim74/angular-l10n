@@ -1,11 +1,15 @@
 import { TestBed, ComponentFixture, fakeAsync, tick } from '@angular/core/testing';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { By } from '@angular/platform-browser';
 import { Component, DebugElement } from '@angular/core';
 
 import { DefaultLocale } from './../../index';
 import {
+    L10nConfig,
+    L10nLoader,
     LocalizationModule,
-    LocaleService
+    LocaleService,
+    StorageStrategy
 } from './../../index';
 
 describe('DefaultLocale decorator', () => {
@@ -15,13 +19,22 @@ describe('DefaultLocale decorator', () => {
     let des: DebugElement[];
     let els: HTMLElement[] = [];
 
+    let l10nLoader: L10nLoader;
     let locale: LocaleService;
+
+    const l10nConfig: L10nConfig = {
+        locale: {
+            defaultLocale: { languageCode: 'en', countryCode: 'US' },
+            storage: StorageStrategy.Disabled
+        }
+    };
 
     beforeEach(() => {
         fixture = TestBed.configureTestingModule({
             declarations: [DefaultLocaleComponent],
             imports: [
-                LocalizationModule.forRoot()
+                HttpClientTestingModule,
+                LocalizationModule.forRoot(l10nConfig)
             ]
         }).createComponent(DefaultLocaleComponent);
 
@@ -29,12 +42,10 @@ describe('DefaultLocale decorator', () => {
     });
 
     beforeEach((done) => {
+        l10nLoader = TestBed.get(L10nLoader);
         locale = TestBed.get(LocaleService);
-
-        locale.addConfiguration()
-            .disableStorage()
-            .defineDefaultLocale('en', 'US');
-        locale.init().then(() => done());
+        
+        l10nLoader.load().then(() => done());
     });
 
     beforeEach(() => {
@@ -66,7 +77,7 @@ describe('DefaultLocale decorator', () => {
 
 @Component({
     template: `
-        <p>{{ day | localeDate:defaultLocale }}</p>
+        <p>{{ day | l10nDate:defaultLocale }}</p>
     `
 })
 class DefaultLocaleComponent {

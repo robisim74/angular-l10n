@@ -1,6 +1,7 @@
-import { Injectable } from '@angular/core';
+import { Injectable, Inject } from '@angular/core';
 
-import { LocaleConfig } from '../models/localization/locale-config';
+import { LOCALE_CONFIG, LocaleConfig } from '../models/l10n-config';
+import { StorageStrategy } from '../models/types';
 
 /**
  * Implement this class-interface to create a custom storage for default locale & currency.
@@ -28,19 +29,19 @@ import { LocaleConfig } from '../models/localization/locale-config';
     private hasCookie: boolean;
     private hasStorage: boolean;
 
-    constructor(private configuration: LocaleConfig) {
+    constructor( @Inject(LOCALE_CONFIG) private configuration: LocaleConfig) {
         this.hasCookie = typeof navigator !== "undefined" && navigator.cookieEnabled;
         this.hasStorage = typeof Storage !== "undefined";
     }
 
     public async read(name: string): Promise<string | null> {
         let value: string | null = null;
-        if (!this.configuration.storageIsDisabled) {
-            if (this.configuration.localStorage && this.hasStorage) {
+        if (this.configuration.storage != StorageStrategy.Disabled) {
+            if (this.configuration.storage == StorageStrategy.Local && this.hasStorage) {
                 value = this.getLocalStorage(name);
-            } else if (this.configuration.sessionStorage && this.hasStorage) {
+            } else if (this.configuration.storage == StorageStrategy.Session && this.hasStorage) {
                 value = this.getSessionStorage(name);
-            } else if (this.hasCookie) {
+            } else if (this.configuration.storage == StorageStrategy.Cookie && this.hasCookie) {
                 value = this.getCookie(name);
             }
         }
@@ -48,12 +49,12 @@ import { LocaleConfig } from '../models/localization/locale-config';
     }
 
     public async write(name: string, value: string): Promise<void> {
-        if (!this.configuration.storageIsDisabled) {
-            if (this.configuration.localStorage && this.hasStorage) {
+        if (this.configuration.storage != StorageStrategy.Disabled) {
+            if (this.configuration.storage == StorageStrategy.Local && this.hasStorage) {
                 this.setLocalStorage(name, value);
-            } else if (this.configuration.sessionStorage && this.hasStorage) {
+            } else if (this.configuration.storage == StorageStrategy.Session && this.hasStorage) {
                 this.setSessionStorage(name, value);
-            } else if (this.hasCookie) {
+            } else if (this.configuration.storage == StorageStrategy.Cookie && this.hasCookie) {
                 this.setCookie(name, value);
             }
         }
@@ -85,11 +86,11 @@ import { LocaleConfig } from '../models/localization/locale-config';
 
     private setCookie(name: string, value: string): void {
         let expires: string = "";
-        if (this.configuration.cookiesExpirationDays != null) {
+        if (this.configuration.cookieExpiration != null) {
             const expirationDate: Date = new Date();
             expirationDate.setTime(
                 expirationDate.getTime() +
-                (this.configuration.cookiesExpirationDays * 24 * 60 * 60 * 1000)
+                (this.configuration.cookieExpiration * 24 * 60 * 60 * 1000)
             );
             expires = "; expires=" + expirationDate.toUTCString();
         }

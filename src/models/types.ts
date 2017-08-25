@@ -1,23 +1,73 @@
+export interface PropertyDecorator {
+
+    <T extends Function>(type: T): T;
+
+    (target: Object, propertyKey?: string | symbol): void;
+
+}
+
+export interface Type<T> extends Function {
+
+    new(...args: any[]): T;
+
+}
+
+export interface DefaultLocaleCodes {
+    /**
+     * ISO 639 two-letter or three-letter code.
+     */
+    languageCode: string;
+
+    /**
+     * ISO 3166 two-letter, uppercase code.
+     */
+    countryCode?: string;
+
+    /**
+     * ISO 15924 four-letter script code.
+     */
+    scriptCode?: string;
+
+    numberingSystem?: string;
+    calendar?: string;
+}
+
 export type Language = {
-
+    /**
+     * ISO 639 two-letter or three-letter code.
+     */
     code: string;
-    direction: string;
 
+    /**
+     * 'ltr' or 'rtl'.
+     */
+    dir: string;
 };
 
-export type Provider = {
+export enum StorageStrategy {
 
-    args: any;
+    Session,
+    Local,
+    Cookie,
+    Disabled
 
-};
+}
 
-export type Decimal = {
+export enum ProviderType {
 
-    minusSign: string;
-    decimalSeparator: string;
-    thousandSeparator: string;
+    Fallback,
+    Static,
+    WebAPI
 
-};
+}
+
+export enum ISOCode {
+
+    Language,
+    Country,
+    Script
+
+}
 
 export enum LoadingMode {
 
@@ -34,24 +84,16 @@ export enum ServiceState {
 
 }
 
-export interface PropertyDecorator {
-
-    <T extends Function>(type: T): T;
-
-    (target: Object, propertyKey?: string | symbol): void;
-
+export enum NumberFormatStyle {
+    Decimal,
+    Percent,
+    Currency
 }
 
-export interface Type<T> extends Function {
+export type Decimal = {
 
-    new (...args: any[]): T;
+    minusSign: string;
+    decimalSeparator: string;
+    thousandSeparator: string;
 
-}
-
-export interface Token {
-
-    localeStorage?: Type<any>;
-    translationProvider?: Type<any>;
-    translationHandler?: Type<any>;
-
-}
+};

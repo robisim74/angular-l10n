@@ -1,16 +1,15 @@
 import { NgModule, ModuleWithProviders } from '@angular/core';
 
 import { InjectorRef } from '../models/injector-ref';
-import { LocaleConfig } from '../models/localization/locale-config';
+import { LOCALE_CONFIG, TRANSLATION_CONFIG, L10nConfig, Token } from '../models/l10n-config';
+import { L10nLoader } from '../services/l10n-loader';
 import { LocaleService } from '../services/locale.service';
 import { LocaleStorage, BrowserStorage } from '../services/locale-storage';
-import { TranslationConfig } from '../models/translation/translation-config';
 import { TranslationService } from '../services/translation.service';
 import { TranslationProvider, HttpTranslationProvider } from '../services/translation-provider';
 import { TranslationHandler, DefaultTranslationHandler } from '../services/translation-handler';
 import { TranslatePipe } from '../pipes/translate.pipe';
 import { TranslateDirective } from '../directives/translate.directive';
-import { Token } from '../models/types';
 
 /**
  * Provides dependencies, pipes & directives for translating messages.
@@ -30,18 +29,18 @@ export class TranslationModule {
     /**
      * Use in AppModule: new instances of LocaleService & TranslationService.
      */
-    public static forRoot(token: Token = {}): ModuleWithProviders {
+    public static forRoot(l10nConfig: L10nConfig, token: Token = {}): ModuleWithProviders {
         return {
             ngModule: TranslationModule,
             providers: [
                 InjectorRef,
-                LocaleConfig,
+                { provide: LOCALE_CONFIG, useValue: l10nConfig.locale || {} },
+                { provide: TRANSLATION_CONFIG, useValue: l10nConfig.translation || {} },
                 LocaleService,
                 {
                     provide: LocaleStorage,
                     useClass: token.localeStorage || BrowserStorage
                 },
-                TranslationConfig,
                 TranslationService,
                 {
                     provide: TranslationProvider,
@@ -50,7 +49,8 @@ export class TranslationModule {
                 {
                     provide: TranslationHandler,
                     useClass: token.translationHandler || DefaultTranslationHandler
-                }
+                },
+                L10nLoader
             ]
         };
     }
@@ -58,21 +58,14 @@ export class TranslationModule {
     /**
      * Use in feature modules with lazy loading: new instance of TranslationService.
      */
-    public static forChild(token: Token = {}): ModuleWithProviders {
+    public static forChild(l10nConfig: L10nConfig, token: Token = {}): ModuleWithProviders {
         return {
             ngModule: TranslationModule,
             providers: [
                 InjectorRef,
-                TranslationConfig,
+                { provide: TRANSLATION_CONFIG, useValue: l10nConfig.translation || {} },
                 TranslationService,
-                {
-                    provide: TranslationProvider,
-                    useClass: token.translationProvider || HttpTranslationProvider
-                },
-                {
-                    provide: TranslationHandler,
-                    useClass: token.translationHandler || DefaultTranslationHandler
-                }
+                L10nLoader
             ]
         };
     }

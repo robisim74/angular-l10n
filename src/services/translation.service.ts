@@ -1,41 +1,34 @@
-import { Injectable, EventEmitter, Output } from '@angular/core';
+import { Injectable, Inject } from '@angular/core';
 import { Observer } from 'rxjs/Observer';
 import { Observable } from 'rxjs/Observable';
+import { Subject } from 'rxjs/Subject';
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import 'rxjs/add/operator/toPromise';
 import 'rxjs/add/observable/merge';
+import 'rxjs/add/observable/concat';
 
+import { TRANSLATION_CONFIG, TranslationConfig } from '../models/l10n-config';
 import { LocaleService } from './locale.service';
-import { IntlAPI } from './intl-api';
-import { ITranslationConfig, TranslationConfig } from '../models/translation/translation-config';
-import { ITranslationConfigAPI, TranslationConfigAPI } from '../models/translation/translation-config-api';
 import { TranslationProvider } from './translation-provider';
 import { TranslationHandler } from './translation-handler';
-import { LoadingMode, ServiceState } from '../models/types';
+import { IntlAPI } from './intl-api';
+import { LoadingMode, ServiceState, ProviderType, ISOCode } from '../models/types';
 
 /**
  * Manages the translation data.
  */
 export interface ITranslationService {
 
-    translationChanged: EventEmitter<string>;
-    translationError: EventEmitter<any>;
+    translationError: Subject<any>;
 
-    /**
-     * Configure the service in the application root module or in a feature module with lazy loading.
-     */
-    addConfiguration(): ITranslationConfigAPI;
+    getConfiguration(): TranslationConfig;
 
-    getConfiguration(): ITranslationConfig;
-
-    /**
-     * Call this method after the configuration to initialize the service.
-     */
     init(): Promise<void>;
 
     /**
-     * Gets the current language of the service.
+     * Fired when the translation data has been loaded. Returns the translation language.
      */
-    getLanguage(): string;
+    translationChanged(): Observable<string>;
 
     /**
      * Translates a key or an array of keys.
@@ -52,14 +45,13 @@ export interface ITranslationService {
 
 @Injectable() export class TranslationService implements ITranslationService {
 
-    @Output() public translationChanged: EventEmitter<string> = new EventEmitter<string>(true);
-    @Output() public translationError: EventEmitter<any> = new EventEmitter<any>(true);
+    public translationError: Subject<any> = new Subject();
 
     private serviceState: ServiceState;
 
     private loadingMode: LoadingMode;
 
-    private language: string;
+    private translation: BehaviorSubject<string> = new BehaviorSubject<string>('');
 
     /**
      * The translation data: {language: {key: value}}.
@@ -67,30 +59,29 @@ export interface ITranslationService {
     private translationData: any = {};
 
     constructor(
+        @Inject(TRANSLATION_CONFIG) private configuration: TranslationConfig,
         private locale: LocaleService,
-        private configuration: TranslationConfig,
         private translationProvider: TranslationProvider,
         private translationHandler: TranslationHandler
     ) {
         this.serviceState = ServiceState.isWaiting;
     }
 
-    public addConfiguration(): ITranslationConfigAPI {
-        return new TranslationConfigAPI(this.configuration);
-    }
-
-    public getConfiguration(): ITranslationConfig {
+    public getConfiguration(): TranslationConfig {
         return this.configuration;
     }
 
     public async init(): Promise<void> {
-        // Waiting for LocaleService initialization.
-        await this.locale.init();
-
-        if (this.configuration.providers.length > 0) {
+        if (this.configuration.providers) {
             this.loadingMode = LoadingMode.Async;
         } else {
             this.loadingMode = LoadingMode.Direct;
+            if (this.configuration.translationData) {
+                const translations: any[] = this.configuration.translationData;
+                for (const translation of translations) {
+                    this.addData(translation.data, translation.languageCode);
+                }
+            }
         }
 
         // When the language changes, loads translation data.
@@ -101,11 +92,15 @@ export interface ITranslationService {
         await this.loadTranslation();
     }
 
-    public getLanguage(): string {
-        return this.language;
+    public translationChanged(): Observable<string> {
+        return this.translation.asObservable();
     }
 
-    public translate(keys: string | string[], args: any = null, lang: string = this.language): string | any {
+    public translate(
+        keys: string | string[],
+        args: any = null,
+        lang: string = this.translation.getValue()
+    ): string | any {
         // If the service is not ready, returns the keys.
         if (this.serviceState != ServiceState.isReady) return keys;
 
@@ -123,7 +118,7 @@ export interface ITranslationService {
     public translateAsync(
         keys: string | string[],
         args?: any,
-        lang: string = this.language
+        lang: string = this.translation.getValue()
     ): Observable<string | any> {
         return Observable.create((observer: Observer<string | any>) => {
             const values: string | any = this.translate(keys, args, lang);
@@ -148,15 +143,17 @@ export interface ITranslationService {
             let translation: any = this.translationData[lang];
 
             // Composed key.
-            const sequences: string[] = key.split(this.configuration.keySeparator);
-            do {
-                key = sequences.shift()!;
-                if (translation[key] && typeof translation[key] === "object") {
-                    translation = translation[key];
-                }
-            } while (sequences.length > 0);
+            if (this.configuration.composedKeySeparator) {
+                const sequences: string[] = key.split(this.configuration.composedKeySeparator);
+                do {
+                    key = sequences.shift()!;
+                    if (translation[key] && typeof translation[key] === "object") {
+                        translation = translation[key];
+                    }
+                } while (sequences.length > 0);
+            }
 
-            value = translation[key] || translation[this.configuration.missingKey];
+            value = translation[key] || translation[this.configuration.missingKey || ""];
         }
         return this.translationHandler.parseValue(path, key, value, args, lang);
     }
@@ -173,26 +170,49 @@ export interface ITranslationService {
 
     private translateNumber(keyNumber: number): string {
         if (!isNaN(keyNumber) && IntlAPI.hasNumberFormat()) {
-            const localeNumber: string = new Intl.NumberFormat(this.language).format(keyNumber);
+            const localeNumber: string = new Intl.NumberFormat(this.translation.getValue()).format(keyNumber);
             return localeNumber;
         }
         return keyNumber.toString();
     }
 
     private async loadTranslation(): Promise<void> {
-        const language: string = !this.configuration.localeAsLanguage
-            ? this.locale.getCurrentLanguage()
-            : this.locale.getCurrentLocale();
+        let language: string;
+        if (this.configuration.composedLanguage) {
+            language = this.composeLanguage(this.configuration.composedLanguage);
+        } else {
+            language = this.locale.getCurrentLanguage();
+        }
 
-        if (language != null && language != this.language) {
+        if (language != null && language != this.translation.getValue()) {
             if (this.loadingMode == LoadingMode.Async) {
                 await this.getTranslation(language).toPromise();
             } else {
-                this.translationData = {};
-                this.translationData[language] = this.configuration.translationData[language];
                 this.releaseTranslation(language);
             }
         }
+    }
+
+    private composeLanguage(composedLanguage: ISOCode[]): string {
+        let language: string = "";
+        if (composedLanguage.length > 0) {
+            for (let i: number = 0; i <= composedLanguage.length - 1; i++) {
+                switch (composedLanguage[i]) {
+                    case ISOCode.Script:
+                        language += this.locale.getCurrentScript();
+                        break;
+                    case ISOCode.Country:
+                        language += this.locale.getCurrentCountry();
+                        break;
+                    default:
+                        language += this.locale.getCurrentLanguage();
+                }
+                if (i < composedLanguage.length - 1) {
+                    language += "-";
+                }
+            }
+        }
+        return language;
     }
 
     private getTranslation(language: string): Observable<any> {
@@ -201,22 +221,37 @@ export interface ITranslationService {
             this.translationData = {};
             this.serviceState = ServiceState.isLoading;
 
+            const sequencesOfOrderedTranslationData: Array<Observable<any>> = [];
             const sequencesOfTranslationData: Array<Observable<any>> = [];
 
-            for (const provider of this.configuration.providers) {
-                sequencesOfTranslationData.push(
-                    this.translationProvider.getTranslation(language, provider.args)
-                );
+            for (const provider of this.configuration.providers!) {
+                if (typeof provider.type !== "undefined" && provider.type == ProviderType.Fallback) {
+                    let fallbackLanguage: string = language;
+                    if (provider.fallbackLanguage) {
+                        fallbackLanguage = this.composeLanguage(provider.fallbackLanguage);
+                    }
+                    sequencesOfOrderedTranslationData.push(
+                        this.translationProvider.getTranslation(fallbackLanguage, provider)
+                    );
+                } else {
+                    sequencesOfTranslationData.push(
+                        this.translationProvider.getTranslation(language, provider)
+                    );
+                }
             }
 
             // Merges all the sequences into a single observable sequence.
-            Observable.merge(...sequencesOfTranslationData).subscribe(
+            const mergedSequencesOfTranslationData: Observable<any> = Observable.merge(...sequencesOfTranslationData);
+
+            sequencesOfOrderedTranslationData.push(mergedSequencesOfTranslationData);
+
+            Observable.concat(...sequencesOfOrderedTranslationData).subscribe(
                 (data: any) => {
                     this.addData(data, language);
                 },
                 (error: any) => {
                     // Sends an event for custom actions.
-                    this.translationError.emit(error);
+                    this.translationError.next(error);
                     this.releaseTranslation(language);
                     observer.next(null);
                     observer.complete();
@@ -238,13 +273,12 @@ export interface ITranslationService {
 
     private releaseTranslation(language: string): void {
         this.serviceState = ServiceState.isReady;
-        this.language = language;
-        this.sendEvents();
+        this.sendEvents(language);
     }
 
-    private sendEvents(): void {
-        // Sends an event for the components.
-        this.translationChanged.emit(this.language);
+    private sendEvents(language: string): void {
+        // Sends an event for the services.
+        this.translation.next(language);
     }
 
 }

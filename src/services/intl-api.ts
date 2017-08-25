@@ -3,18 +3,21 @@
  */
 export class IntlAPI {
 
-    private static readonly hasIntl: boolean = Intl && typeof Intl === "object";
+    public static hasIntl(): boolean {
+        const hasIntl: boolean = Intl && typeof Intl === "object";
+        return hasIntl;
+    }
 
     public static hasDateTimeFormat(): boolean {
-        return this.hasIntl && Intl​.hasOwnProperty​("DateTimeFormat");
+        return IntlAPI.hasIntl && Intl​.hasOwnProperty​("DateTimeFormat");
     }
 
     public static hasNumberFormat(): boolean {
-        return this.hasIntl && Intl.hasOwnProperty​("NumberFormat");
+        return IntlAPI.hasIntl && Intl.hasOwnProperty​("NumberFormat");
     }
 
     public static hasCollator(): boolean {
-        return this.hasIntl && Intl.hasOwnProperty​("Collator");
+        return IntlAPI.hasIntl && Intl.hasOwnProperty​("Collator");
     }
 
 }

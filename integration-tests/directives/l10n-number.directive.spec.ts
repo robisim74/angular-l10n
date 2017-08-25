@@ -1,21 +1,25 @@
 import { TestBed, ComponentFixture, fakeAsync, async, tick } from '@angular/core/testing';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { By } from '@angular/platform-browser';
 import { Component, DebugElement } from '@angular/core';
 
 import {
-    LocaleDecimalDirective,
-    LocalePercentDirective,
-    LocaleCurrencyDirective
+    L10nDecimalDirective,
+    L10nPercentDirective,
+    L10nCurrencyDirective
 } from './../../index';
 import {
+    L10nConfig,
+    L10nLoader,
     LocalizationModule,
-    LocaleService
+    LocaleService,
+    StorageStrategy
 } from './../../index';
 
-describe('Locale number directives', () => {
+describe('L10n number directives', () => {
 
-    let comp: LocaleNumberComponent;
-    let fixture: ComponentFixture<LocaleNumberComponent>;
+    let comp: L10nNumberComponent;
+    let fixture: ComponentFixture<L10nNumberComponent>;
     let decimalDes: DebugElement[];
     let percentDes: DebugElement[];
     let currencyDes: DebugElement[];
@@ -23,40 +27,47 @@ describe('Locale number directives', () => {
     let percentEls: HTMLElement[] = [];
     let currencyEls: HTMLElement[] = [];
 
+    let l10nLoader: L10nLoader;
     let locale: LocaleService;
+
+    const l10nConfig: L10nConfig = {
+        locale: {
+            defaultLocale: { languageCode: 'en', countryCode: 'US' },
+            currency: 'USD',
+            storage: StorageStrategy.Disabled
+        }
+    };
 
     beforeEach(() => {
         fixture = TestBed.configureTestingModule({
-            declarations: [LocaleNumberComponent],
+            declarations: [L10nNumberComponent],
             imports: [
-                LocalizationModule.forRoot()
+                HttpClientTestingModule,
+                LocalizationModule.forRoot(l10nConfig)
             ]
-        }).createComponent(LocaleNumberComponent);
+        }).createComponent(L10nNumberComponent);
 
         comp = fixture.componentInstance;
     });
 
     beforeEach((done) => {
+        l10nLoader = TestBed.get(L10nLoader);
         locale = TestBed.get(LocaleService);
-
-        locale.addConfiguration()
-            .disableStorage()
-            .defineDefaultLocale('en', 'US')
-            .defineCurrency('USD');
-        locale.init().then(() => done());
+        
+        l10nLoader.load().then(() => done());
     });
 
     beforeEach(() => {
         fixture.detectChanges();
-        decimalDes = fixture.debugElement.queryAll(By.directive(LocaleDecimalDirective));
+        decimalDes = fixture.debugElement.queryAll(By.directive(L10nDecimalDirective));
         for (let i: number = 0; i < decimalDes.length; i++) {
             decimalEls.push(decimalDes[i].nativeElement);
         }
-        percentDes = fixture.debugElement.queryAll(By.directive(LocalePercentDirective));
+        percentDes = fixture.debugElement.queryAll(By.directive(L10nPercentDirective));
         for (let i: number = 0; i < percentDes.length; i++) {
             percentEls.push(percentDes[i].nativeElement);
         }
-        currencyDes = fixture.debugElement.queryAll(By.directive(LocaleCurrencyDirective));
+        currencyDes = fixture.debugElement.queryAll(By.directive(L10nCurrencyDirective));
         for (let i: number = 0; i < currencyDes.length; i++) {
             currencyEls.push(currencyDes[i].nativeElement);
         }
@@ -136,7 +147,7 @@ describe('Locale number directives', () => {
         fixture.whenStable().then(() => {
             // By using process.nextTick() we guarantee that it runs after MutationObserver event is fired.
             process.nextTick(() => {
-                expect(currencyEls[0].textContent).toContain("USD1,234.56");
+                expect(currencyEls[0].textContent).toContain("$1,234.56");
                 expect(currencyEls[1].textContent).toContain("$1,234.560");
             });
         });
@@ -156,15 +167,15 @@ describe('Locale number directives', () => {
 
         <p><em>should render localized currency</em></p>
         <p l10nCurrency>{{ asyncValue }}</p>
-        <p [l10nCurrency]="digits" [symbol]="true">{{ value }}</p>
+        <p [l10nCurrency]="digits" [currencyDisplay]="'symbol'">{{ value }}</p>
 
         <p><em>should render localized attributes</em></p>
         <p l10n-title title="{{ pi }}" l10nDecimal="1.5-5"></p>
         <p l10n-title title="0.1" l10nPercent="1.1-1"></p>
-        <p l10n-title title="{{ value }}" [l10nCurrency]="digits" [symbol]="true"></p>
+        <p l10n-title title="{{ value }}" [l10nCurrency]="digits" [currencyDisplay]="'symbol'"></p>
     `
 })
-class LocaleNumberComponent {
+class L10nNumberComponent {
 
     pi: number = 3.14159;
     asyncValue: number;

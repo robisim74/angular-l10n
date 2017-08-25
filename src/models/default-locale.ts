@@ -1,4 +1,4 @@
-import { DefaultLocaleCodes } from './locale-codes';
+import { DefaultLocaleCodes } from './types';
 
 export class DefaultLocale implements DefaultLocaleCodes {
 

@@ -2,23 +2,20 @@ import { Directive, ElementRef, Input, Renderer2 } from '@angular/core';
 
 import { LocaleService } from '../services/locale.service';
 import { BaseDirective } from '../models/base-directive';
-import { LocaleDecimalPipe, LocalePercentPipe, LocaleCurrencyPipe } from '../pipes/locale-number.pipe';
+import { L10nDecimalPipe, L10nPercentPipe, L10nCurrencyPipe } from '../pipes/l10n-number.pipe';
 
 @Directive({
-    selector: '[l10nDecimal],[localeDecimal]'
+    selector: '[l10nDecimal]'
 })
-export class LocaleDecimalDirective extends BaseDirective {
+export class L10nDecimalDirective extends BaseDirective {
 
     @Input() set l10nDecimal(digits: string) {
         this.digits = digits;
     }
-    @Input() set localeDecimal(digits: string) {
-        this.digits = digits;
-    }
 
     private digits: string;
 
-    private localeDecimalPipe: LocaleDecimalPipe = new LocaleDecimalPipe();
+    private l10nDecimalPipe: L10nDecimalPipe = new L10nDecimalPipe();
 
     constructor(protected locale: LocaleService, protected el: ElementRef, protected renderer: Renderer2) {
         super(el, renderer);
@@ -49,7 +46,7 @@ export class LocaleDecimalDirective extends BaseDirective {
     }
 
     protected getValues(keys: string | string[]): string | any {
-        return this.localeDecimalPipe.transform(
+        return this.l10nDecimalPipe.transform(
             keys,
             this.locale.getDefaultLocale(),
             this.digits
@@ -59,20 +56,17 @@ export class LocaleDecimalDirective extends BaseDirective {
 }
 
 @Directive({
-    selector: '[l10nPercent],[localePercent]'
+    selector: '[l10nPercent]'
 })
-export class LocalePercentDirective extends BaseDirective {
+export class L10nPercentDirective extends BaseDirective {
 
     @Input() set l10nPercent(digits: string) {
         this.digits = digits;
     }
-    @Input() set localePercent(digits: string) {
-        this.digits = digits;
-    }
 
     private digits: string;
 
-    private localePercentPipe: LocalePercentPipe = new LocalePercentPipe();
+    private l10nPercentPipe: L10nPercentPipe = new L10nPercentPipe();
 
     constructor(protected locale: LocaleService, protected el: ElementRef, protected renderer: Renderer2) {
         super(el, renderer);
@@ -103,7 +97,7 @@ export class LocalePercentDirective extends BaseDirective {
     }
 
     protected getValues(keys: string | string[]): string | any {
-        return this.localePercentPipe.transform(
+        return this.l10nPercentPipe.transform(
             keys,
             this.locale.getDefaultLocale(),
             this.digits
@@ -113,22 +107,19 @@ export class LocalePercentDirective extends BaseDirective {
 }
 
 @Directive({
-    selector: '[l10nCurrency],[localeCurrency]'
+    selector: '[l10nCurrency]'
 })
-export class LocaleCurrencyDirective extends BaseDirective {
+export class L10nCurrencyDirective extends BaseDirective {
 
     @Input() set l10nCurrency(digits: string) {
         this.digits = digits;
     }
-    @Input() set localeCurrency(digits: string) {
-        this.digits = digits;
-    }
 
-    @Input() public symbol: boolean;
+    @Input() public currencyDisplay: 'code' | 'symbol' | 'name';
 
     private digits: string;
 
-    private localeCurrencyPipe: LocaleCurrencyPipe = new LocaleCurrencyPipe();
+    private l10nCurrencyPipe: L10nCurrencyPipe = new L10nCurrencyPipe();
 
     constructor(protected locale: LocaleService, protected el: ElementRef, protected renderer: Renderer2) {
         super(el, renderer);
@@ -162,11 +153,11 @@ export class LocaleCurrencyDirective extends BaseDirective {
     }
 
     protected getValues(keys: string | string[]): string | any {
-        return this.localeCurrencyPipe.transform(
+        return this.l10nCurrencyPipe.transform(
             keys,
             this.locale.getDefaultLocale(),
             this.locale.getCurrentCurrency(),
-            this.symbol,
+            this.currencyDisplay,
             this.digits
         );
     }

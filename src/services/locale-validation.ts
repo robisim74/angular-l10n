@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 
-import { DecimalCode } from '../models/validation/decimal-code';
+import { DecimalCode } from '../models/decimal-code';
 
 /**
  * Provides the methods to convert strings according to default locale.

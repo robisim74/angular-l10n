@@ -1,10 +1,9 @@
-import { Injectable, EventEmitter, Output } from '@angular/core';
+import { Injectable, Inject, EventEmitter, Output } from '@angular/core';
 import { Subject } from 'rxjs/Subject';
 
-import { ILocaleConfig, LocaleConfig } from '../models/localization/locale-config';
-import { ILocaleConfigAPI, LocaleConfigAPI } from '../models/localization/locale-config-api';
+import { LOCALE_CONFIG, LocaleConfig } from '../models/l10n-config';
 import { LocaleStorage } from './locale-storage';
-import { DefaultLocale } from '../models/localization/default-locale';
+import { DefaultLocale } from '../models/default-locale';
 import { Language } from '../models/types';
 
 /**
@@ -18,14 +17,11 @@ export interface ILocaleService {
 
     loadTranslation: Subject<any>;
 
-    /**
-     * Configure the service in the application root module or in a feature module with lazy loading.
-     */
-    addConfiguration(): ILocaleConfigAPI;
-
-    getConfiguration(): ILocaleConfig;
+    getConfiguration(): LocaleConfig;
 
     init(): Promise<void>;
+
+    getBrowserLanguage(): string | null;
 
     getAvailableLanguages(): string[];
 
@@ -73,37 +69,54 @@ export interface ILocaleService {
 
     private currencyCode: string;
 
-    constructor(private configuration: LocaleConfig, private storage: LocaleStorage) { }
+    constructor( @Inject(LOCALE_CONFIG) private configuration: LocaleConfig, private storage: LocaleStorage) { }
 
-    public addConfiguration(): ILocaleConfigAPI {
-        return new LocaleConfigAPI(this.configuration);
-    }
-
-    public getConfiguration(): ILocaleConfig {
+    public getConfiguration(): LocaleConfig {
         return this.configuration;
     }
 
     public async init(): Promise<void> {
         await this.initStorage();
 
-        if (!!this.configuration.languageCode && !!this.configuration.countryCode) {
-            this.initDefaultLocale();
-        } else if (!!this.configuration.languageCode) {
+        if (this.configuration.defaultLocale) {
+            if (!!this.configuration.defaultLocale.languageCode &&
+                !!this.configuration.defaultLocale.countryCode) {
+                this.initDefaultLocale();
+            }
+        } else if (!!this.configuration.language) {
             this.initLanguage();
         }
 
-        if (!!this.configuration.currencyCode) {
+        if (!!this.configuration.currency) {
             this.initCurrency();
         }
     }
 
+    public getBrowserLanguage(): string | null {
+        let browserLanguage: string | null = null;
+        if (typeof navigator !== "undefined" && navigator.language) {
+            browserLanguage = navigator.language;
+        }
+        if (browserLanguage != null) {
+            const index: number = browserLanguage.indexOf("-");
+            if (index != -1) {
+                browserLanguage = browserLanguage.substring(0, index);
+            }
+        }
+        return browserLanguage;
+    }
+
     public getAvailableLanguages(): string[] {
-        return this.configuration.languageCodes.map((language: Language) => language.code);
+        let languages: string[] = [];
+        if (this.configuration.languages) {
+            languages = this.configuration.languages.map((language: Language) => language.code);
+        }
+        return languages;
     }
 
     public getLanguageDirection(languageCode: string = this.defaultLocale.languageCode): string {
         const matchedLanguages: Language[] = this.matchLanguage(languageCode);
-        return matchedLanguages[0].direction;
+        return matchedLanguages[0].dir;
     }
 
     public getCurrentLanguage(): string {
@@ -222,8 +235,8 @@ export interface ILocaleService {
             }
             if (!!browserLanguage && matchedLanguages.length > 0) {
                 this.defaultLocale.build(browserLanguage);
-            } else {
-                this.defaultLocale.build(this.configuration.languageCode);
+            } else if (this.configuration.language) {
+                this.defaultLocale.build(this.configuration.language);
             }
             this.storage.write("defaultLocale", this.defaultLocale.value);
         }
@@ -232,45 +245,38 @@ export interface ILocaleService {
 
     private initDefaultLocale(): void {
         if (!this.defaultLocale.value) {
-            this.defaultLocale.build(
-                this.configuration.languageCode,
-                this.configuration.countryCode,
-                this.configuration.scriptCode,
-                this.configuration.numberingSystem,
-                this.configuration.calendar
-            );
-            this.storage.write("defaultLocale", this.defaultLocale.value);
+            if (this.configuration.defaultLocale) {
+                this.defaultLocale.build(
+                    this.configuration.defaultLocale.languageCode,
+                    this.configuration.defaultLocale.countryCode,
+                    this.configuration.defaultLocale.scriptCode,
+                    this.configuration.defaultLocale.numberingSystem,
+                    this.configuration.defaultLocale.calendar
+                );
+                this.storage.write("defaultLocale", this.defaultLocale.value);
+            }
         }
         this.sendDefaultLocaleEvents();
     }
 
     private initCurrency(): void {
         if (this.currencyCode == null) {
-            this.currencyCode = this.configuration.currencyCode;
-            this.storage.write("currency", this.currencyCode);
+            if (this.configuration.currency) {
+                this.currencyCode = this.configuration.currency;
+                this.storage.write("currency", this.currencyCode);
+            }
         }
         this.sendCurrencyEvents();
     }
 
-    private getBrowserLanguage(): string | null {
-        let browserLanguage: string | null = null;
-        if (typeof navigator !== "undefined" && navigator.language) {
-            browserLanguage = navigator.language;
-        }
-        if (browserLanguage != null) {
-            const index: number = browserLanguage.indexOf("-");
-            if (index != -1) {
-                browserLanguage = browserLanguage.substring(0, index);
-            }
-        }
-        return browserLanguage;
-    }
-
     private matchLanguage(languageCode: string): Language[] {
-        const matchedLanguages: Language[] = this.configuration.languageCodes.filter(
-            (language: Language) => {
-                return language.code == languageCode;
-            });
+        let matchedLanguages: Language[] = [];
+        if (this.configuration.languages) {
+            matchedLanguages = this.configuration.languages.filter(
+                (language: Language) => {
+                    return language.code == languageCode;
+                });
+        }
         return matchedLanguages;
     }
 

@@ -7,10 +7,10 @@ import { Type } from './types';
  */
 @Injectable() export class InjectorRef {
 
-    private static injector: Injector;
+    private static injector: any = null;
 
     public static get<T>(token: Type<T>): T {
-        return this.injector.get(token);
+        return InjectorRef.injector.get(token);
     }
 
     constructor(private injector: Injector) {

@@ -1,13 +1,16 @@
 import { TestBed, ComponentFixture, fakeAsync, async, tick } from '@angular/core/testing';
-import { HttpModule } from '@angular/http';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { By } from '@angular/platform-browser';
 import { Component, DebugElement } from '@angular/core';
 
 import { TranslateDirective } from './../../index';
 import {
+    L10nConfig,
+    L10nLoader,
     TranslationModule,
     LocaleService,
-    TranslationService
+    StorageStrategy,
+    ProviderType
 } from './../../index';
 
 describe('TranslateDirective', () => {
@@ -17,15 +20,51 @@ describe('TranslateDirective', () => {
     let des: DebugElement[];
     let els: HTMLElement[] = [];
 
+    let l10nLoader: L10nLoader;
     let locale: LocaleService;
-    let translation: TranslationService;
+
+    const translationEN: any = {
+        "Title": "Angular localization",
+        "Subtitle": "It's a small world",
+        "User notifications": "{{ user }}, you have {{ NoMessages }} new messages",
+        "Insert": "Insert",
+        "Select": "Select",
+        "Strong title": "<strong>Angular localization</strong>",
+        "Strong subtitle": "<strong>It's a small world</strong>"
+    };
+    const translationIT: any = {
+        "Title": "Localizzazione in Angular",
+        "Subtitle": "Il mondo è piccolo",
+        "User notifications": "{{ user }}, tu hai {{ NoMessages }} nuovi messaggi",
+        "Insert": "Inserisci",
+        "Select": "Seleziona",
+        "Strong title": "<strong>Localizzazione in Angular</strong>",
+        "Strong subtitle": "<strong>Il mondo è piccolo</strong>"
+    };
+
+    const l10nConfig: L10nConfig = {
+        locale: {
+            languages: [
+                { code: 'en', dir: 'ltr' },
+                { code: 'it', dir: 'ltr' }
+            ],
+            language: 'en',
+            storage: StorageStrategy.Disabled
+        },
+        translation: {
+            translationData: [
+                { languageCode: 'en', data: translationEN },
+                { languageCode: 'it', data: translationIT }
+            ]
+        }
+    };
 
     beforeEach(() => {
         fixture = TestBed.configureTestingModule({
             declarations: [TranslateComponent],
             imports: [
-                HttpModule,
-                TranslationModule.forRoot()
+                HttpClientTestingModule,
+                TranslationModule.forRoot(l10nConfig)
             ]
         }).createComponent(TranslateComponent);
 
@@ -33,38 +72,10 @@ describe('TranslateDirective', () => {
     });
 
     beforeEach((done) => {
+        l10nLoader = TestBed.get(L10nLoader);
         locale = TestBed.get(LocaleService);
-        translation = TestBed.get(TranslationService);
-
-        locale.addConfiguration()
-            .disableStorage()
-            .addLanguages(['en', 'it'])
-            .defineLanguage('en');
-
-        const translationEN: any = {
-            "Title": "Angular localization",
-            "Subtitle": "It's a small world",
-            "User notifications": "{{ user }}, you have {{ NoMessages }} new messages",
-            "Insert": "Insert",
-            "Select": "Select",
-            "Strong title": "<strong>Angular localization</strong>",
-            "Strong subtitle": "<strong>It's a small world</strong>"
-        };
-        const translationIT: any = {
-            "Title": "Localizzazione in Angular",
-            "Subtitle": "Il mondo è piccolo",
-            "User notifications": "{{ user }}, tu hai {{ NoMessages }} nuovi messaggi",
-            "Insert": "Inserisci",
-            "Select": "Seleziona",
-            "Strong title": "<strong>Localizzazione in Angular</strong>",
-            "Strong subtitle": "<strong>Il mondo è piccolo</strong>"
-        };
-
-        translation.addConfiguration()
-            .addTranslation('en', translationEN)
-            .addTranslation('it', translationIT);
-
-        translation.init().then(() => done());
+        
+        l10nLoader.load().then(() => done());
     });
 
     beforeEach(() => {

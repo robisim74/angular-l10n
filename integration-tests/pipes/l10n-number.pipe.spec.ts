@@ -1,43 +1,46 @@
 import { Pipe } from '@angular/core';
 import { inject, TestBed } from '@angular/core/testing';
-import { PipeResolver } from '@angular/compiler';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 
-import { LocaleDecimalPipe, LocalePercentPipe, LocaleCurrencyPipe } from './../../index';
+import { L10nDecimalPipe, L10nPercentPipe, L10nCurrencyPipe } from './../../index';
 import {
+    L10nConfig,
+    L10nLoader,
     LocalizationModule,
-    LocaleService
+    LocaleService,
+    StorageStrategy
 } from './../../index';
 
-describe('Locale number pipes', () => {
+describe('L10n number pipes', () => {
 
+    let l10nLoader: L10nLoader;
     let locale: LocaleService;
+
+    const l10nConfig: L10nConfig = {
+        locale: {
+            defaultLocale: { languageCode: 'en', countryCode: 'US' },
+            currency: 'USD',
+            storage: StorageStrategy.Disabled
+        }
+    };
 
     beforeEach((done) => {
         TestBed.configureTestingModule({
             imports: [
-                LocalizationModule.forRoot()
+                HttpClientTestingModule,
+                LocalizationModule.forRoot(l10nConfig)
             ]
         });
 
+        l10nLoader = TestBed.get(L10nLoader);
         locale = TestBed.get(LocaleService);
-
-        locale.addConfiguration()
-            .disableStorage()
-            .defineDefaultLocale('en', 'US')
-            .defineCurrency('USD');
-        locale.init().then(() => done());
+        
+        l10nLoader.load().then(() => done());
     });
 
-    describe('LocaleDecimalPipe', () => {
+    describe('L10nDecimalPipe', () => {
 
-        const pipe: LocaleDecimalPipe = new LocaleDecimalPipe();
-
-        it('should be marked as pure', () => {
-            const pipeResolver: Pipe | null = new PipeResolver().resolve(LocaleDecimalPipe);
-            if (pipeResolver) {
-                expect(pipeResolver.pure).toEqual(true);
-            }
-        });
+        const pipe: L10nDecimalPipe = new L10nDecimalPipe();
 
         it('should localize a decimal number', () => {
             expect(pipe.transform(1234.5, locale.getDefaultLocale(), '1.2-2')).toEqual('1,234.50');
@@ -48,16 +51,9 @@ describe('Locale number pipes', () => {
 
     });
 
-    describe('LocalePercentPipe', () => {
+    describe('L10nPercentPipe', () => {
 
-        const pipe: LocalePercentPipe = new LocalePercentPipe();
-
-        it('should be marked as pure', () => {
-            const pipeResolver: Pipe | null = new PipeResolver().resolve(LocalePercentPipe);
-            if (pipeResolver) {
-                expect(pipeResolver.pure).toEqual(true);
-            }
-        });
+        const pipe: L10nPercentPipe = new L10nPercentPipe();
 
         it('should localize a percent number', () => {
             expect(pipe.transform(1.23, locale.getDefaultLocale(), '1.0-0')).toEqual('123%');
@@ -68,23 +64,16 @@ describe('Locale number pipes', () => {
 
     });
 
-    describe('LocaleCurrencyPipe', () => {
+    describe('L10nCurrencyPipe', () => {
 
-        const pipe: LocaleCurrencyPipe = new LocaleCurrencyPipe();
-
-        it('should be marked as pure', () => {
-            const pipeResolver: Pipe | null = new PipeResolver().resolve(LocaleCurrencyPipe);
-            if (pipeResolver) {
-                expect(pipeResolver.pure).toEqual(true);
-            }
-        });
+        const pipe: L10nCurrencyPipe = new L10nCurrencyPipe();
 
         it('should localize a currency', () => {
             expect(pipe.transform(
                 1234.5,
                 locale.getDefaultLocale(),
                 locale.getCurrentCurrency(),
-                true,
+                'symbol',
                 '1.2-2')
             ).toEqual('$1,234.50');
 
@@ -95,7 +84,7 @@ describe('Locale number pipes', () => {
                 1234.5,
                 locale.getDefaultLocale(),
                 locale.getCurrentCurrency(),
-                true,
+                'symbol',
                 '1.2-2'
             );
             if (!!value) {

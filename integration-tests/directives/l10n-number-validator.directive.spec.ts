@@ -1,41 +1,52 @@
 import { TestBed, ComponentFixture, async } from '@angular/core/testing';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { FormsModule, NgForm, AbstractControl } from '@angular/forms';
 import { Component } from '@angular/core';
 
-import { LocaleNumberValidatorDirective } from './../../index';
+import { L10nNumberValidatorDirective } from './../../index';
 import {
+    L10nConfig,
+    L10nLoader,
     LocalizationModule,
     LocaleValidationModule,
-    LocaleService
+    LocaleService,
+    StorageStrategy
 } from './../../index';
 
-describe('LocaleNumberValidatorDirective', () => {
+describe('L10nNumberValidatorDirective', () => {
 
-    let comp: LocaleNumberValidatorComponent;
-    let fixture: ComponentFixture<LocaleNumberValidatorComponent>;
+    let comp: L10nNumberValidatorComponent;
+    let fixture: ComponentFixture<L10nNumberValidatorComponent>;
 
+    let l10nLoader: L10nLoader;
     let locale: LocaleService;
+
+    const l10nConfig: L10nConfig = {
+        locale: {
+            defaultLocale: { languageCode: 'it', countryCode: 'IT' },
+            storage: StorageStrategy.Disabled
+        }
+    };
 
     beforeEach(() => {
         fixture = TestBed.configureTestingModule({
-            declarations: [LocaleNumberValidatorComponent],
+            declarations: [L10nNumberValidatorComponent],
             imports: [
                 FormsModule,
-                LocalizationModule.forRoot(),
+                HttpClientTestingModule,
+                LocalizationModule.forRoot(l10nConfig),
                 LocaleValidationModule.forRoot()
             ]
-        }).createComponent(LocaleNumberValidatorComponent);
+        }).createComponent(L10nNumberValidatorComponent);
 
         comp = fixture.componentInstance;
     });
 
     beforeEach((done) => {
+        l10nLoader = TestBed.get(L10nLoader);
         locale = TestBed.get(LocaleService);
-
-        locale.addConfiguration()
-            .disableStorage()
-            .defineDefaultLocale('it', 'IT');
-        locale.init().then(() => done());
+        
+        l10nLoader.load().then(() => done());
     });
 
     it('should validate format', async(() => {
@@ -171,7 +182,7 @@ describe('LocaleNumberValidatorDirective', () => {
         </form>
     `
 })
-class LocaleNumberValidatorComponent {
+class L10nNumberValidatorComponent {
 
     decimal: string;
 

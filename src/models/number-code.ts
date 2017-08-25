@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 
-import { LocaleService } from '../../services/locale.service';
-import { IntlAPI } from '../../services/intl-api';
+import { LocaleService } from '../services/locale.service';
+import { IntlAPI } from '../services/intl-api';
 
 @Injectable() export abstract class NumberCode {
 

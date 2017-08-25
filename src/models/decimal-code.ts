@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 
 import { NumberCode } from './number-code';
-import { LocaleService } from '../../services/locale.service';
-import { IntlAPI } from '../../services/intl-api';
-import { Decimal } from '../types';
+import { LocaleService } from '../services/locale.service';
+import { IntlAPI } from '../services/intl-api';
+import { Decimal } from './types';
 
 @Injectable() export class DecimalCode extends NumberCode {
 

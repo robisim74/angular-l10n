@@ -1,51 +1,50 @@
 import { NgModule, ModuleWithProviders } from '@angular/core';
 
-import { InjectorRef } from '../models/injector-ref';
 import { TranslationModule } from './translation.module';
-import { LocaleConfig } from '../models/localization/locale-config';
+import { InjectorRef } from '../models/injector-ref';
+import { LOCALE_CONFIG, TRANSLATION_CONFIG, L10nConfig, Token } from '../models/l10n-config';
+import { L10nLoader } from '../services/l10n-loader';
 import { LocaleService } from '../services/locale.service';
 import { LocaleStorage, BrowserStorage } from '../services/locale-storage';
-import { TranslationConfig } from '../models/translation/translation-config';
 import { TranslationService } from '../services/translation.service';
 import { TranslationProvider, HttpTranslationProvider } from '../services/translation-provider';
 import { TranslationHandler, DefaultTranslationHandler } from '../services/translation-handler';
-import { LocaleDatePipe } from '../pipes/locale-date.pipe';
-import { LocaleDecimalPipe, LocalePercentPipe, LocaleCurrencyPipe } from '../pipes/locale-number.pipe';
-import { LocaleDateDirective } from '../directives/locale-date.directive';
+import { L10nDatePipe } from '../pipes/l10n-date.pipe';
+import { L10nDecimalPipe, L10nPercentPipe, L10nCurrencyPipe } from '../pipes/l10n-number.pipe';
+import { L10nDateDirective } from '../directives/l10n-date.directive';
 import {
-    LocaleDecimalDirective,
-    LocalePercentDirective,
-    LocaleCurrencyDirective
-} from '../directives/locale-number.directive';
-import { Token } from '../models/types';
+    L10nDecimalDirective,
+    L10nPercentDirective,
+    L10nCurrencyDirective
+} from '../directives/l10n-number.directive';
 
 /**
  * Provides dependencies, pipes & directives for translating messages, dates & numbers.
  */
 @NgModule({
     declarations: [
-        LocaleDatePipe,
-        LocaleDecimalPipe,
-        LocalePercentPipe,
-        LocaleCurrencyPipe,
-        LocaleDateDirective,
-        LocaleDecimalDirective,
-        LocalePercentDirective,
-        LocaleCurrencyDirective
+        L10nDatePipe,
+        L10nDecimalPipe,
+        L10nPercentPipe,
+        L10nCurrencyPipe,
+        L10nDateDirective,
+        L10nDecimalDirective,
+        L10nPercentDirective,
+        L10nCurrencyDirective
     ],
     imports: [
         TranslationModule
     ],
     exports: [
         TranslationModule,
-        LocaleDatePipe,
-        LocaleDecimalPipe,
-        LocalePercentPipe,
-        LocaleCurrencyPipe,
-        LocaleDateDirective,
-        LocaleDecimalDirective,
-        LocalePercentDirective,
-        LocaleCurrencyDirective
+        L10nDatePipe,
+        L10nDecimalPipe,
+        L10nPercentPipe,
+        L10nCurrencyPipe,
+        L10nDateDirective,
+        L10nDecimalDirective,
+        L10nPercentDirective,
+        L10nCurrencyDirective
     ]
 })
 export class LocalizationModule {
@@ -53,18 +52,18 @@ export class LocalizationModule {
     /**
      * Use in AppModule: new instances of LocaleService & TranslationService.
      */
-    public static forRoot(token: Token = {}): ModuleWithProviders {
+    public static forRoot(l10nConfig: L10nConfig, token: Token = {}): ModuleWithProviders {
         return {
             ngModule: LocalizationModule,
             providers: [
                 InjectorRef,
-                LocaleConfig,
+                { provide: LOCALE_CONFIG, useValue: l10nConfig.locale || {} },
+                { provide: TRANSLATION_CONFIG, useValue: l10nConfig.translation || {} },
                 LocaleService,
                 {
                     provide: LocaleStorage,
                     useClass: token.localeStorage || BrowserStorage
                 },
-                TranslationConfig,
                 TranslationService,
                 {
                     provide: TranslationProvider,
@@ -73,7 +72,8 @@ export class LocalizationModule {
                 {
                     provide: TranslationHandler,
                     useClass: token.translationHandler || DefaultTranslationHandler
-                }
+                },
+                L10nLoader
             ]
         };
     }
@@ -81,21 +81,14 @@ export class LocalizationModule {
     /**
      * Use in feature modules with lazy loading: new instance of TranslationService.
      */
-    public static forChild(token: Token = {}): ModuleWithProviders {
+    public static forChild(l10nConfig: L10nConfig, token: Token = {}): ModuleWithProviders {
         return {
             ngModule: LocalizationModule,
             providers: [
                 InjectorRef,
-                TranslationConfig,
+                { provide: TRANSLATION_CONFIG, useValue: l10nConfig.translation || {} },
                 TranslationService,
-                {
-                    provide: TranslationProvider,
-                    useClass: token.translationProvider || HttpTranslationProvider
-                },
-                {
-                    provide: TranslationHandler,
-                    useClass: token.translationHandler || DefaultTranslationHandler
-                }
+                L10nLoader
             ]
         };
     }

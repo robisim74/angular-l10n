@@ -1,41 +1,43 @@
 import { Pipe } from '@angular/core';
 import { inject, TestBed } from '@angular/core/testing';
-import { PipeResolver } from '@angular/compiler';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 
-import { LocaleDatePipe } from './../../index';
+import { L10nDatePipe } from './../../index';
 import {
+    L10nConfig,
+    L10nLoader,
     LocalizationModule,
-    LocaleService
+    LocaleService,
+    StorageStrategy
 } from './../../index';
 
-describe('LocaleDatePipe', () => {
+describe('L10nDatePipe', () => {
 
+    let l10nLoader: L10nLoader;
     let locale: LocaleService;
 
-    let pipe: LocaleDatePipe;
+    const l10nConfig: L10nConfig = {
+        locale: {
+            defaultLocale: { languageCode: 'en', countryCode: 'US' },
+            storage: StorageStrategy.Disabled
+        }
+    };
+
+    let pipe: L10nDatePipe;
 
     beforeEach((done) => {
         TestBed.configureTestingModule({
             imports: [
-                LocalizationModule.forRoot()
+                HttpClientTestingModule,
+                LocalizationModule.forRoot(l10nConfig)
             ]
         });
 
+        l10nLoader = TestBed.get(L10nLoader);
         locale = TestBed.get(LocaleService);
+        pipe = new L10nDatePipe();
         
-        pipe = new LocaleDatePipe();
-
-        locale.addConfiguration()
-            .disableStorage()
-            .defineDefaultLocale('en', 'US');
-        locale.init().then(() => done());       
-    });
-
-    it('should be marked as pure', () => {
-        const pipeResolver: Pipe | null = new PipeResolver().resolve(LocaleDatePipe);
-        if (pipeResolver) {
-            expect(pipeResolver.pure).toEqual(true);
-        }
+        l10nLoader.load().then(() => done());
     });
 
     it('should localize a date', () => {

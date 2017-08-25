@@ -1,6 +1,6 @@
-import { Injectable } from '@angular/core';
+import { Injectable, Inject } from '@angular/core';
 
-import { TranslationConfig } from '../models/translation/translation-config';
+import { TRANSLATION_CONFIG, TranslationConfig } from '../models/l10n-config';
 
 /**
  * Implement this class-interface to create a custom handler for translated values.
@@ -22,7 +22,7 @@ import { TranslationConfig } from '../models/translation/translation-config';
 
 @Injectable() export class DefaultTranslationHandler implements TranslationHandler {
 
-    constructor(private configuration: TranslationConfig) { }
+    constructor( @Inject(TRANSLATION_CONFIG) private configuration: TranslationConfig) { }
 
     public parseValue(path: string, key: string, value: string | null, args: any, lang: string): string {
         if (value == null) {
@@ -34,7 +34,7 @@ import { TranslationConfig } from '../models/translation/translation-config';
     }
 
     private handleMissingValue(path: string): string {
-        if (this.configuration.missingValue != null) {
+        if (this.configuration.missingValue) {
             return this.configuration.missingValue;
         }
         // The same path is returned.

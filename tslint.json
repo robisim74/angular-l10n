@@ -85,6 +85,11 @@
                 ]
             }
         ],
+        "no-conditional-assignment": false,
+        "object-literal-key-quotes": [
+            true,
+            "consistent"
+        ],
         "object-literal-shorthand": false,
         "object-literal-sort-keys": false,
         "only-arrow-functions": false,

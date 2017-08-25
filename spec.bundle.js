@@ -20,7 +20,7 @@ getTestBed().initTestEnvironment(
     platformBrowserDynamicTesting()
 );
 
-const testContext = require.context('./integration-tests', true, /\.spec\.ts/);
+const testContext = require.context('./integration-tests/', true, /\.spec\.ts/);
 
 function requireAll(requireContext) {
     return requireContext.keys().map(requireContext);

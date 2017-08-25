@@ -2,7 +2,7 @@ import { Directive, forwardRef, Input, OnInit } from '@angular/core';
 import { NG_VALIDATORS, FormControl, Validator } from '@angular/forms';
 
 import { LocaleService } from '../services/locale.service';
-import { DecimalCode } from '../models/validation/decimal-code';
+import { DecimalCode } from '../models/decimal-code';
 import { InjectorRef } from '../models/injector-ref';
 
 /**
@@ -12,7 +12,7 @@ import { InjectorRef } from '../models/injector-ref';
  * @param MAX_VALUE The maximum value for the number
  * @return An error object: 'format', 'minValue' or 'maxValue'; null in case the value is valid
  */
-export function validateLocaleNumber(
+export function l10nValidateNumber(
     digits: string,
     MIN_VALUE: number = Number.MIN_VALUE,
     MAX_VALUE: number = Number.MAX_VALUE
@@ -60,21 +60,17 @@ export function validateLocaleNumber(
 }
 
 @Directive({
-    selector: '[l10nValidateNumber][ngModel],[l10nValidateNumber][formControl], \
-        [validateLocaleNumber][ngModel],[validateLocaleNumber][formControl]',
+    selector: '[l10nValidateNumber][ngModel],[l10nValidateNumber][formControl]',
     providers: [
-        { provide: NG_VALIDATORS, useExisting: forwardRef(() => LocaleNumberValidatorDirective), multi: true }
+        { provide: NG_VALIDATORS, useExisting: forwardRef(() => L10nNumberValidatorDirective), multi: true }
     ]
 })
-export class LocaleNumberValidatorDirective implements Validator, OnInit {
+export class L10nNumberValidatorDirective implements Validator, OnInit {
 
     /**
      * Format: {minIntegerDigits}.{minFractionDigits}-{maxFractionDigits}.
      */
     @Input() set l10nValidateNumber(digits: string) {
-        this.digits = digits;
-    }
-    @Input() set validateLocaleNumber(digits: string) {
         this.digits = digits;
     }
 
@@ -89,7 +85,7 @@ export class LocaleNumberValidatorDirective implements Validator, OnInit {
     private validator: Function;
 
     public ngOnInit(): void {
-        this.validator = validateLocaleNumber(
+        this.validator = l10nValidateNumber(
             this.digits,
             this.minValue || this.MIN_VALUE,
             this.maxValue || this.MAX_VALUE

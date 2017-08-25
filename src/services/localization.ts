@@ -14,13 +14,14 @@ import { InjectorRef } from '../models/injector-ref';
     public defaultLocale: string;
     public currency: string;
 
+    protected locale: LocaleService;
+
     constructor(
-        protected locale: LocaleService = InjectorRef.get(LocaleService),
-        protected translation: TranslationService = InjectorRef.get(TranslationService),
         protected changeDetectorRef?: ChangeDetectorRef
     ) {
-        super(translation, changeDetectorRef);
+        super();
 
+        this.locale = InjectorRef.get(LocaleService);
         this.defaultLocale = this.locale.getDefaultLocale();
         // When the default locale changes, subscribes to the event & updates defaultLocale property.
         this.paramSubscriptions.push(this.locale.defaultLocaleChanged.subscribe(

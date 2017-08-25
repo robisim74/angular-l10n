@@ -17,9 +17,8 @@ export function Language(): PropertyDecorator {
             const translation: TranslationService = InjectorRef.get(TranslationService);
 
             if (typeof propertyKey !== "undefined") {
-                this[propertyKey] = translation.getLanguage();
                 // When the language changes, subscribes to the event & updates language property.
-                subscription = translation.translationChanged.subscribe(
+                subscription = translation.translationChanged().subscribe(
                     (language: string) => {
                         this[propertyKey] = language;
                     });

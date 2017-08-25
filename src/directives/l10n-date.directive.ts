@@ -2,24 +2,21 @@ import { Directive, ElementRef, Input, Renderer2 } from '@angular/core';
 
 import { LocaleService } from '../services/locale.service';
 import { BaseDirective } from '../models/base-directive';
-import { LocaleDatePipe } from '../pipes/locale-date.pipe';
+import { L10nDatePipe } from '../pipes/l10n-date.pipe';
 
 @Directive({
-    selector: '[l10nDate],[localeDate]'
+    selector: '[l10nDate]'
 })
-export class LocaleDateDirective extends BaseDirective {
+export class L10nDateDirective extends BaseDirective {
 
     @Input() set l10nDate(pattern: string) {
-        this.pattern = pattern;
-    }
-    @Input() set localeDate(pattern: string) {
         this.pattern = pattern;
     }
 
     private pattern: string;
     private defaultPattern: string = 'mediumDate';
 
-    private localeDatePipe: LocaleDatePipe = new LocaleDatePipe();
+    private l10nDatePipe: L10nDatePipe = new L10nDatePipe();
 
     constructor(protected locale: LocaleService, protected el: ElementRef, protected renderer: Renderer2) {
         super(el, renderer);
@@ -50,7 +47,7 @@ export class LocaleDateDirective extends BaseDirective {
     }
 
     protected getValues(keys: string | string[]): string | any {
-        return this.localeDatePipe.transform(
+        return this.l10nDatePipe.transform(
             keys,
             this.locale.getDefaultLocale(),
             this.pattern || this.defaultPattern
