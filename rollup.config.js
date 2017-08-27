@@ -3,8 +3,8 @@ import resolve from 'rollup-plugin-node-resolve';
 const globals = {
     '@angular/core': 'ng.core',
     '@angular/common': 'ng.common',
+    '@angular/common/http': 'ng.commmon.http',
     '@angular/forms': 'ng.forms',
-    '@angular/http': 'ng.http',
     'rxjs/Observable': 'Rx',
     'rxjs/Observer': 'Rx',
     'rxjs/Subscription': 'Rx',
@@ -13,12 +13,7 @@ const globals = {
     'rxjs/ReplaySubject': 'Rx',
     'rxjs/add/observable/merge': 'Rx.Observable',
     'rxjs/add/observable/concat': 'Rx.Observable',
-    'rxjs/add/operator/toPromise': 'Rx.Observable.prototype',
-    // Fixes @angular/common/http rollup.
-    'rxjs/observable/of': 'Rx.Observable',
-    'rxjs/operator/concatMap': 'Rx.Observable.prototype',
-    'rxjs/operator/filter': 'Rx.Observable.prototype',
-    'rxjs/operator/map': 'Rx.Observable.prototype'
+    'rxjs/add/operator/toPromise': 'Rx.Observable.prototype'
 };
 
 export default {

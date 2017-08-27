@@ -1,6 +1,6 @@
 {
     "name": "angular-l10n",
-    "version": "4.0.0-beta.0",
+    "version": "4.0.0-beta.1",
     "description": "An Angular library to translate messages, dates and numbers",
     "main": "./bundles/angular-l10n.umd.js",
     "module": "./modules/angular-l10n.es5.js",
@@ -37,8 +37,7 @@
     "peerDependencies": {
         "@angular/common": ">= 5.0.0-beta.3",
         "@angular/core": ">= 5.0.0-beta.3",
-        "@angular/forms": ">= 5.0.0-beta.3",
-        "@angular/http": ">= 5.0.0-beta.3"
+        "@angular/forms": ">= 5.0.0-beta.3"
     },
     "devDependencies": {
         "@angular/animations": "5.0.0-beta.3",
@@ -47,7 +46,6 @@
         "@angular/compiler-cli": "5.0.0-beta.3",
         "@angular/core": "5.0.0-beta.3",
         "@angular/forms": "5.0.0-beta.3",
-        "@angular/http": "5.0.0-beta.3",
         "@angular/platform-browser": "5.0.0-beta.3",
         "@angular/platform-browser-dynamic": "5.0.0-beta.3",
         "@angular/platform-server": "5.0.0-beta.3",
