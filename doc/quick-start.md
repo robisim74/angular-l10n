@@ -74,12 +74,12 @@ Add to `app.component.ts`:
 ```TypeScript
 import { Component, OnInit } from '@angular/core';
 
-import { LocaleService, Language } from 'angular-l10n';
+import { LocaleService, TranslationService, Language } from 'angular-l10n';
 
 @Component({
     selector: 'my-app',
     template: `
-        <h1>{{ 'Title' | translate:lang }}</h1>
+        <h1>{{ title }}</h1>
 
         <h3>{{ 'Change language' | translate:lang }}</h3>
         
@@ -92,10 +92,16 @@ import { LocaleService, Language } from 'angular-l10n';
 export class AppComponent implements OnInit {
 
     @Language() lang: string;
+    
+    title: string;
 
-    constructor(public locale: LocaleService) { }
+    constructor(public locale: LocaleService, public translation: TranslationService) { }
 
-    ngOnInit(): void { }
+    ngOnInit(): void {
+        this.translation.translationChanged().subscribe(
+            () => { this.title = this.translation.translate('Title'); }
+        );
+    }
 
     selectLanguage(language: string): void {
         this.locale.setCurrentLanguage(language);
@@ -229,12 +235,12 @@ Add to `app.component.ts`:
 ```TypeScript
 import { Component, OnInit } from '@angular/core';
 
-import { LocaleService, Language } from 'angular-l10n';
+import { LocaleService, TranslationService, Language } from 'angular-l10n';
 
 @Component({
     selector: 'my-app',
     template: `
-        <h1>{{ 'Title' | translate:lang }}</h1>
+        <h1>{{ title }}</h1>
 
         <h3>{{ 'Change country' | translate:lang }}</h3>
         
@@ -248,10 +254,16 @@ import { LocaleService, Language } from 'angular-l10n';
 export class AppComponent implements OnInit {
 
     @Language() lang: string;
+    
+    title: string;
 
-    constructor(public locale: LocaleService) { }
+    constructor(public locale: LocaleService, public translation: TranslationService) { }
 
-    ngOnInit(): void { }
+    ngOnInit(): void {
+        this.translation.translationChanged().subscribe(
+            () => { this.title = this.translation.translate('Title'); }
+        );
+    }
 
     selectLocale(language: string, country: string, currency: string): void {
         this.locale.setDefaultLocale(language, country);

@@ -131,6 +131,28 @@ export class HomeComponent implements OnInit {
 })
 export class HomeComponent {}
 ```
+**_In component class_**
+```TypeScript
+@Component({
+    ...
+    template: `
+        <h1>{{ title }}</h1>
+    `
+})
+export class AppComponent implements OnInit {
+
+    title: string;
+
+    constructor(public translation: TranslationService) { }
+
+    ngOnInit(): void {
+        this.translation.translationChanged().subscribe(
+            () => { this.title = this.translation.translate('Title'); }
+        );
+    }
+
+}
+```
 See the following documentation to learn more about all the features:
 
 - **Angular v5**
