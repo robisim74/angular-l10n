@@ -4,9 +4,9 @@
 * [1 First scenario: you only need to translate texts](#1)
 * [2 Second scenario: you need to translate texts, dates & numbers](#2)
 * [3 Advanced initialization](#3)
-* [Appendix A - Using Angular-CLI](#AppendixA)
-* [Appendix B - Using Ionic 2](#AppendixB)
-* [Appendix C - Using Angular 2 Meteor](#AppendixC)
+* [Appendix A - Using Angular CLI](#AppendixA)
+* [Appendix B - Using Ionic](#AppendixB)
+* [Appendix C - Using Angular Meteor](#AppendixC)
 
 ## <a name="1"/>1 First scenario: you only need to translate texts
 Install the library:
@@ -24,38 +24,48 @@ System.config({
     ...
 });
 ```
-Import the modules you need and configure the services in `app.module.ts`:
+Import the modules you need and configure the library in `app.module.ts`:
 ```TypeScript
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { HttpModule } from '@angular/http';
+import { HttpClientModule } from '@angular/common/http';
 
 import { AppComponent } from './app.component';
 import { HomeComponent } from './home.component';
 
-import { TranslationModule, LocaleService, TranslationService } from 'angular-l10n';
+import { L10nConfig, L10nLoader, TranslationModule, StorageStrategy, ProviderType } from 'angular-l10n';
+
+const l10nConfig: L10nConfig = {
+    locale: {
+        languages: [
+            { code: 'en', dir: 'ltr' },
+            { code: 'it', dir: 'ltr' }
+        ],
+        language: 'en',
+        storage: StorageStrategy.Cookie
+    },
+    translation: {
+        providers: [
+            { type: ProviderType.Static, prefix: './assets/locale-' }
+        ],
+        caching: true,
+        missingValue: 'No key'
+    }
+};
 
 @NgModule({
     imports: [
         BrowserModule,
-        HttpModule,
-        TranslationModule.forRoot()
+        HttpClientModule,
+        TranslationModule.forRoot(l10nConfig)
     ],
     declarations: [AppComponent, HomeComponent],
     bootstrap: [AppComponent]
 })
 export class AppModule {
 
-    constructor(public locale: LocaleService, public translation: TranslationService) {
-        this.locale.addConfiguration()
-            .addLanguages(['en', 'it'])
-            .setCookieExpiration(30)
-            .defineLanguage('en');
-
-        this.translation.addConfiguration()
-            .addProvider('./assets/locale-');
-
-        this.translation.init();
+    constructor(public l10nLoader: L10nLoader) {
+        this.l10nLoader.load();
     }
 
 }
@@ -168,39 +178,49 @@ System.config({
     ...
 });
 ```
-Import the modules you need and configure the services in `app.module.ts`:
+Import the modules you need and configure the library in `app.module.ts`:
 ```TypeScript
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { HttpModule } from '@angular/http';
+import { HttpClientModule } from '@angular/common/http';
 
 import { AppComponent } from './app.component';
 import { HomeComponent } from './home.component';
 
-import { LocalizationModule, LocaleService, TranslationService } from 'angular-l10n';
+import { L10nConfig, L10nLoader, LocalizationModule, StorageStrategy, ProviderType } from 'angular-l10n';
+
+const l10nConfig: L10nConfig = {
+    locale: {
+        languages: [
+            { code: 'en', dir: 'ltr' },
+            { code: 'it', dir: 'ltr' }
+        ],
+        defaultLocale: { languageCode: 'en', countryCode: 'US' },
+        currency: 'USD',
+        storage: StorageStrategy.Cookie
+    },
+    translation: {
+        providers: [
+            { type: ProviderType.Static, prefix: './assets/locale-' }
+        ],
+        caching: true,
+        missingValue: 'No key'
+    }
+};
 
 @NgModule({
     imports: [
         BrowserModule,
-        HttpModule,
-        LocalizationModule.forRoot()
+        HttpClientModule,
+        LocalizationModule.forRoot(l10nConfig)
     ],
     declarations: [AppComponent, HomeComponent],
     bootstrap: [AppComponent]
 })
 export class AppModule {
 
-    constructor(public locale: LocaleService, public translation: TranslationService) {
-        this.locale.addConfiguration()
-            .addLanguages(['en', 'it'])
-            .setCookieExpiration(30)
-            .defineDefaultLocale('en', 'US')
-            .defineCurrency('USD');
-
-        this.translation.addConfiguration()
-            .addProvider('./assets/locale-');
-
-        this.translation.init();
+    constructor(public l10nLoader: L10nLoader) {
+        this.l10nLoader.load();
     }
 
 }
@@ -272,9 +292,9 @@ import { Language, DefaultLocale, Currency } from 'angular-l10n';
 
         <p title="{{ 'Greeting' | translate:lang }}">{{ 'Subtitle' | translate:lang }}</p>
 
-        <p>{{ today | localeDate:defaultLocale:'fullDate' }}</p>       
-        <p>{{ pi | localeDecimal:defaultLocale:'1.5-5' }}</p>
-        <p>{{ value | localeCurrency:defaultLocale:currency:true:'1.2-2' }}</p>
+        <p>{{ today | l10nDate:defaultLocale:'fullDate' }}</p>       
+        <p>{{ pi | l10nDecimal:defaultLocale:'1.5-5' }}</p>
+        <p>{{ value | l10nCurrency:defaultLocale:currency:'symbol':'1.2-2' }}</p>
 
         <button (click)="change()">{{ 'Change' | translate:lang }}</button>
     `
@@ -301,7 +321,7 @@ export class HomeComponent implements OnInit {
 
 }
 ```
-Finally, to extend the support to all browsers, add the following script tag in `index.html`:
+Finally, to extend the support to old browsers, add the following script tag in `index.html`:
 ```Html
 <script src="https://cdn.polyfill.io/v2/polyfill.min.js?features=Intl.~locale.en-US,Intl.~locale.en-GB,Intl.~locale.it-IT"></script>
 ```
@@ -319,7 +339,7 @@ import { Component, OnInit } from '@angular/core';
 
         <p l10nDate="fullDate">{{ today }}</p>    
         <p l10nDecimal="1.5-5">{{ pi }}</p>
-        <p l10nCurrency="1.2-2" [symbol]="true">{{ value }}</p>
+        <p l10nCurrency="1.2-2" [currencyDisplay]="'symbol'">{{ value }}</p>
 
         <button (click)="change()" l10nTranslate>Change</button>
     `
@@ -351,52 +371,51 @@ For more details, see [library specification](https://github.com/robisim74/angul
 If you want the app to be rendered only after the translation file is loaded, 
 you can use these settings in `app.module.ts`:
 ```TypeScript
-import { NgModule, APP_INITIALIZER, Injectable } from '@angular/core';
+import { NgModule, APP_INITIALIZER } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { HttpModule } from '@angular/http';
+import { HttpClientModule } from '@angular/common/http';
 
 import { AppComponent } from './app.component';
 import { HomeComponent } from './home.component';
 
-import { TranslationModule, LocaleService, TranslationService } from 'angular-l10n';
+import { L10nConfig, L10nLoader, TranslationModule, StorageStrategy, ProviderType } from 'angular-l10n';
 
-@Injectable() export class LocalizationConfig {
-
-    constructor(public locale: LocaleService, public translation: TranslationService) { }
-
-    load(): Promise<void> {
-        this.locale.addConfiguration()
-            .addLanguages(['en', 'it'])
-            .setCookieExpiration(30)
-            .defineLanguage('en');
-
-        this.translation.addConfiguration()
-            .addProvider('./assets/locale-');
-
-        return this.translation.init();
+const l10nConfig: L10nConfig = {
+    locale: {
+        languages: [
+            { code: 'en', dir: 'ltr' },
+            { code: 'it', dir: 'ltr' }
+        ],
+        language: 'en',
+        storage: StorageStrategy.Cookie
+    },
+    translation: {
+        providers: [
+            { type: ProviderType.Static, prefix: './assets/locale-' }
+        ],
+        caching: true,
+        missingValue: 'No key'
     }
+};
 
-}
-
-// AoT compilation requires a reference to an exported function.
-export function initLocalization(localizationConfig: LocalizationConfig): Function {
-    return () => localizationConfig.load();
+// Advanced initialization.
+export function initL10n(l10nLoader: L10nLoader): Function {
+    return () => l10nLoader.load();
 }
 
 // APP_INITIALIZER will execute the function when the app is initialized and delay what it provides.
 @NgModule({
     imports: [
         BrowserModule,
-        HttpModule,
-        TranslationModule.forRoot()
+        HttpClientModule,
+        TranslationModule.forRoot(l10nConfig)
     ],
     declarations: [AppComponent, HomeComponent],
     providers: [
-        LocalizationConfig,
         {
             provide: APP_INITIALIZER,
-            useFactory: initLocalization,
-            deps: [LocalizationConfig],
+            useFactory: initL10n,
+            deps: [L10nLoader],
             multi: true
         }
     ],
@@ -406,28 +425,37 @@ export class AppModule { }
 ```
 See also the [sample app](https://github.com/robisim74/angular-l10n-sample).
 
-## <a name="AppendixA"/>Appendix A - Using Angular-CLI
-If you are using _Angular-CLI_, you have to add the _json_ files in `src/assets` folder, 
+## <a name="AppendixA"/>Appendix A - Using Angular CLI
+If you are using _Angular CLI_, you have to add the _json_ files in `src/assets` folder, 
 copied as-is when building your project. 
 Always configure your provider in this way:
 ```TypeScript
-this.translation.addConfiguration()
-    .addProvider('./assets/locale-');
+...
+    providers: [
+        { type: ProviderType.Static, prefix: './assets/locale-' }
+    ],
+...
 ```
 
-## <a name="AppendixB"/>Appendix B - Using Ionic 2
+## <a name="AppendixB"/>Appendix B - Using Ionic
 You have to add the _json_ files in `www/assets` folder. 
 Always configure your provider in this way:
 ```TypeScript
-this.translation.addConfiguration()
-    .addProvider('./assets/locale-');
+...
+    providers: [
+        { type: ProviderType.Static, prefix: './assets/locale-' }
+    ],
+...
 ```
 
-## <a name="AppendixC"/>Appendix C - Using Angular 2 Meteor
+## <a name="AppendixC"/>Appendix C - Using Angular Meteor
 You must create `public/assets` folder at the root of your app. 
 In this way, `assets` folder is copied directly into your application bundle. 
 Always configure your provider in this way:
 ```TypeScript
-this.translation.addConfiguration()
-    .addProvider('./assets/locale-');
+...
+    providers: [
+        { type: ProviderType.Static, prefix: './assets/locale-' }
+    ],
+...
 ```

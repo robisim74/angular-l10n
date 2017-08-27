@@ -10,20 +10,24 @@ It allows, in addition to translation, to localize numbers and dates of your app
 Get the changelog by [releases](https://github.com/robisim74/angular-l10n/releases).
 
 ## Angular i18n solutions
-| _Feature_ | [Angular](https://angular.io/guide/i18n) _Native_ | [ngx-translate](https://github.com/ngx-translate/core) _External library_ | [angular-l10n](https://github.com/robisim74/angular-l10n/blob/master/doc/spec.md) _External library_ |
+| _Feature_ | [Angular](https://angular.io/guide/i18n) _Official_ | [ngx-translate](https://github.com/ngx-translate/core) _External library_ | [angular-l10n](https://github.com/robisim74/angular-l10n/blob/master/doc/spec.md) _External library_ |
 | --------- | ------------------------------------------------------------------------ | --------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------- |
-_Messages_ | Html attribute, message ID | directive, impure pipe | directive, pure pipe
+_Messages_ | Html attributes, message IDs | directives, impure pipes | directives, pure pipes
 _File formats_ | XLIFF, XMB/XTB | JSON | JSON
 _No bootstrap (when language changes)_ | no | yes | yes
 _Getting the translation in component class_ | not yet | yes | yes
-_Numbers_ | pure pipe via Intl | - | directive & pure pipe via Intl
-_Dates_ | pure pipe via Intl | - | directive & pure pipe via Intl
-_Validation_ | - | - | number validation
+_Numbers_ | pure pipes using CLDR | - | directives & pure pipes via Intl
+_Dates_ | pure pipes using CLDR | - | directives & pure pipes via Intl
+_Validation_ | - | - | numbers validation
 
 ## Installing
 You can add `angular-l10n` to your project using `npm`:
 ```Shell
 npm install angular-l10n --save 
+```
+To install the prerelease package:
+```Shell
+npm install --save angular-l10n@next
 ```
 
 ## Loading
@@ -35,7 +39,7 @@ System.config({
     }
 });
 ```
-#### Angular-CLI
+#### Angular CLI
 No need to set up anything, just import it in your code.
 #### Rollup or webpack
 No need to set up anything, just import it in your code.
@@ -46,33 +50,43 @@ If you build apps in Angular using ES5, you can include the `umd` bundle in your
 ```
 and use global `ng.l10n` namespace.
 
-## AoT compilation, Server-side prerendering & strict
-This library is compatible with AoT compilation & Server-side prerendering. It also supports the `strict` TypeScript compiler option.
+## AoT compilation, Server Side Rendering & strict
+This library is compatible with AoT compilation & Server Side Rendering. It also supports the `strict` TypeScript compiler option.
 
 ## Usage
 **_Configuration_**
 ```TypeScript
+const l10nConfig: L10nConfig = {
+    locale: {
+        languages: [
+            { code: 'en', dir: 'ltr' },
+            { code: 'it', dir: 'ltr' }
+        ],
+        defaultLocale: { languageCode: 'en', countryCode: 'US' },
+        currency: 'USD',
+        storage: StorageStrategy.Cookie
+    },
+    translation: {
+        providers: [
+            { type: ProviderType.Static, prefix: './assets/locale-' }
+        ],
+        caching: true,
+        missingValue: 'No key'
+    }
+};
+
 @NgModule({
     imports: [
         ...
-        HttpModule,
-        LocalizationModule.forRoot()
+        HttpClientModule,
+        LocalizationModule.forRoot(l10nConfig)
     ],
     ...
 })
 export class AppModule {
 
-    constructor(public locale: LocaleService, public translation: TranslationService) {
-        this.locale.addConfiguration()
-            .addLanguages(['en', 'it'])
-            .setCookieExpiration(30)
-            .defineDefaultLocale('en', 'US')
-            .defineCurrency('USD');
-
-        this.translation.addConfiguration()
-            .addProvider('./assets/locale-');
-
-        this.translation.init();
+    constructor(public l10nLoader: L10nLoader) {
+        this.l10nLoader.load();
     }
 
 }
@@ -86,9 +100,9 @@ export class AppModule {
 
         <p title="{{ 'Greeting' | translate:lang }}">{{ 'Title' | translate:lang }}</p>
 
-        <p>{{ today | localeDate:defaultLocale:'fullDate' }}</p>       
-        <p>{{ pi | localeDecimal:defaultLocale:'1.5-5' }}</p>
-        <p>{{ value | localeCurrency:defaultLocale:currency:true:'1.2-2' }}</p>
+        <p>{{ today | l10nDate:defaultLocale:'fullDate' }}</p>       
+        <p>{{ pi | l10nDecimal:defaultLocale:'1.5-5' }}</p>
+        <p>{{ value | l10nCurrency:defaultLocale:currency:'symbol':'1.2-2' }}</p>
     `
 })
 export class HomeComponent implements OnInit {
@@ -112,17 +126,20 @@ export class HomeComponent implements OnInit {
 
         <p l10nDate="fullDate">{{ today }}</p>    
         <p l10nDecimal="1.5-5">{{ pi }}</p>
-        <p l10nCurrency="1.2-2" [symbol]="true">{{ value }}</p>
+        <p l10nCurrency="1.2-2" [currencyDisplay]="'symbol'">{{ value }}</p>
     `
 })
 export class HomeComponent {}
 ```
 See the following documentation to learn more about all the features:
 
-- **Angular v4**
+- **Angular v5**
     - [Quick start](https://github.com/robisim74/angular-l10n/blob/master/doc/quick-start.md)
     - [Library specification](https://github.com/robisim74/angular-l10n/blob/master/doc/spec.md)
     - [Snippets](https://github.com/robisim74/angular-l10n/wiki/Snippets)
+
+- **Angular v4**
+    - [Branch](https://github.com/robisim74/angular-l10n/tree/angular_v4)
 
 - **Angular v2**
     - [Branch](https://github.com/robisim74/angular-l10n/tree/angular_v2)

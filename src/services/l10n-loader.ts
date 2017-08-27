@@ -4,6 +4,9 @@ import { LOCALE_CONFIG, TRANSLATION_CONFIG, LocaleConfig, TranslationConfig } fr
 import { LocaleService } from '../services/locale.service';
 import { TranslationService } from '../services/translation.service';
 
+/**
+ * Initializes the services.
+ */
 @Injectable() export class L10nLoader {
 
     constructor(

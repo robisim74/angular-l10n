@@ -1,14 +1,5 @@
 /**
- * Angular l10n
- * An Angular library to translate messages, dates and numbers
- * Copyright Roberto Simonetti
- * MIT license
- * https://github.com/robisim74/angular-l10n
- *
- * Copyright Google Inc. All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
+ * Original code by Google Inc.
  */
 
 import { Pipe, PipeTransform } from '@angular/core';

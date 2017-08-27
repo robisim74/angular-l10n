@@ -1,21 +1,23 @@
 # Angular localization library specification
-Library version: 3.5.0
+Library version: 4.0.0-beta.0
 
 ## Table of contents
 * [1 Library structure](#1)
 * [2 Configuration](#2)
     * [2.1 First scenario: you only need to translate messages](#2.1)
     * [2.2 Second scenario: you need to translate messages, dates & numbers](#2.2)
-    * [2.3 Configuration APIs](#2.3)
+    * [2.3 Configuration settings](#2.3)
     * [2.4 Loading the translation data](#2.4)
         * [2.4.1 Direct loading](#2.4.1)
         * [2.4.2 Asynchronous loading of json files](#2.4.2)
         * [2.4.3 Asynchronous loading through a Web API](#2.4.3)
-        * [2.4.4 Using a custom provider](#2.4.4)
-    * [2.5 Using locale as language](#2.5)
+        * [2.4.4 Using fallback providers](#2.4.4)
+        * [2.4.5 Using a custom provider](#2.4.5)
+    * [2.5 Using a composed language](#2.5)
     * [2.6 Default locale](#2.6)
     * [2.7 Storage](#2.7)
-    * [2.8 Intl API](#2.8)
+    * [2.8 Chaching](#2.8)
+    * [2.9 Intl API](#2.9)
 * [3 Getting the translation](#3)
     * [3.1 Pure pipes](#3.1)
         * [3.1.1 Messages](#3.1.1)
@@ -53,6 +55,7 @@ Class | Contract
 ##### Main services
 Class | Contract
 ----- | --------
+`L10nLoader` | Initializes the services
 `LocaleService` | Manages language, default locale & currency
 `TranslationService` | Manages the translation data
 `Translation` | Provides _lang_ to the _translate_ pipe
@@ -70,117 +73,144 @@ Class | Contract
 
 ## <a name="2"/>2 Configuration
 ### <a name="2.1"/>2.1 First scenario: you only need to translate messages
-Import the modules you need and configure the services in the application root module:
+Import the modules you need and configure the library in the application root module:
 ```TypeScript
+const l10nConfig: L10nConfig = {
+    locale: {
+        languages: [
+            { code: 'en', dir: 'ltr' },
+            { code: 'it', dir: 'ltr' }
+        ],
+        language: 'en',
+        storage: StorageStrategy.Cookie
+    },
+    translation: {
+        providers: [
+            { type: ProviderType.Static, prefix: './assets/locale-' }
+        ],
+        caching: true,
+        missingValue: 'No key'
+    }
+};
+
 @NgModule({
     imports: [
-        ...
-        HttpModule,
-        TranslationModule.forRoot()
+        BrowserModule,
+        HttpClientModule,
+        TranslationModule.forRoot(l10nConfig)
     ],
-    declarations: [AppComponent],
+    declarations: [AppComponent, HomeComponent],
     bootstrap: [AppComponent]
 })
 export class AppModule {
 
-    constructor(public locale: LocaleService, public translation: TranslationService) {
-        this.locale.addConfiguration()
-            .addLanguages(['en', 'it'])
-            .setCookieExpiration(30)
-            .defineLanguage('en');
-
-        this.translation.addConfiguration()
-            .addProvider('./assets/locale-');
-
-        this.translation.init();
+    constructor(public l10nLoader: L10nLoader) {
+        this.l10nLoader.load();
     }
 
 }
 ```
 ### <a name="2.2"/>2.2 Second scenario: you need to translate messages, dates & numbers
-Import the modules you need and configure the services in the application root module:
+Import the modules you need and configure the library in the application root module:
 ```TypeScript
+const l10nConfig: L10nConfig = {
+    locale: {
+        languages: [
+            { code: 'en', dir: 'ltr' },
+            { code: 'it', dir: 'ltr' }
+        ],
+        defaultLocale: { languageCode: 'en', countryCode: 'US' },
+        currency: 'USD',
+        storage: StorageStrategy.Cookie
+    },
+    translation: {
+        providers: [
+            { type: ProviderType.Static, prefix: './assets/locale-' }
+        ],
+        caching: true,
+        missingValue: 'No key'
+    }
+};
+
 @NgModule({
     imports: [
-        ...
-        HttpModule,
-        LocalizationModule.forRoot()
+        BrowserModule,
+        HttpClientModule,
+        LocalizationModule.forRoot(l10nConfig)
     ],
-    declarations: [AppComponent],
+    declarations: [AppComponent, HomeComponent],
     bootstrap: [AppComponent]
 })
 export class AppModule {
 
-    constructor(public locale: LocaleService, public translation: TranslationService) {
-        this.locale.addConfiguration()
-            .addLanguages(['en', 'it'])
-            .setCookieExpiration(30)
-            .defineDefaultLocale('en', 'US')
-            .defineCurrency('USD');
-
-        this.translation.addConfiguration()
-            .addProvider('./assets/locale-');
-
-        this.translation.init();
+    constructor(public l10nLoader: L10nLoader) {
+        this.l10nLoader.load();
     }
 
 }
 ```
 
-### <a name="2.3"/>2.3 Configuration APIs
-#### ILocaleConfigAPI 
-Method | Function
------- | --------
-`addLanguage(languageCode: string, textDirection?: string)` | Adds a language to use in the app, specifying the layout direction
-`addLanguages(languageCodes: string[])` | Adds the languages to use in the app
-`disableStorage()` | Disables the browser storage for language, default locale & currency
-`setCookieExpiration(days?: number)` | If the cookie expiration is omitted, the cookie becomes a session cookie
-`useLocalStorage()` | Sets browser _LocalStorage_ as default for language, default locale & currency
-`useSessionStorage()` | Sets browser _SessionStorage_ as default for language, default locale & currency
-`defineLanguage(languageCode: string)` | Defines the language to be used
-`defineDefaultLocale(languageCode: string, countryCode: string, scriptCode?: string, numberingSystem?: string, calendar?: string)` | Defines the default locale to be used, regardless of the browser language
-`defineCurrency(currencyCode: string)` | Defines the currency to be used
+### <a name="2.3"/>2.3 Configuration settings
+The `L10nConfig` interface contains an interface to configure `LocaleService` and one to configure `TranslationService`.
+#### LocaleConfig 
+Property | Value
+-------- | -----
+`languages?: Language[]` | Adds the languages to use in the app
+`language?: string` | Defines the language ISO 639 two-letter or three-letter code to be used, if the language is not found in the browser
+`defaultLocale?: DefaultLocaleCodes` |Defines the default locale to be used, regardless of the browser language
+`currency?: string` | Defines the currency ISO 4217 three-letter code to be used
+`storage?: StorageStrategy` | Defines the storage to be used for language, default locale & currency
+`cookieExpiration?: number` | If the cookie expiration is omitted, the cookie becomes a session cookie
 
-#### ITranslationConfigAPI
-Method | Function
------- | --------
-`addTranslation(languageCode: string, translation: any)` | Direct loading: adds translation data
-`addProvider(prefix: string, dataFormat?: string)` |  Asynchronous loading: adds a translation provider
-`addWebAPIProvider(path: string, dataFormat?: string)` |  Asynchronous loading: adds a Web API provider
-`addCustomProvider(args: any)` |  Asynchronous loading: adds a custom provider
-`useLocaleAsLanguage()` | Sets the use of _locale_ (`languageCode-countryCode`) as language
-`setMissingValue(value: string)` | Sets the value to use for missing keys
-`setMissingKey(key: string)` | Sets the key to use for missing keys
-`setComposedKeySeparator(keySeparator: string)` | Sets composed key separator. Default is the point '.'
-`disableI18nPlural()` | Disables the translation of numbers that are contained at the beginning of the keys
+#### TranslationConfig
+Property | Value
+-------- | -----
+`translationData?: Array<{ languageCode: string; languageCode: string; }>` | Direct loading: adds translation data
+`providers?: any[]` |  Asynchronous loading: adds translation providers
+`caching?: Boolean` |  Asynchronous loading: disables/enables the cache for translation providers
+`composedLanguage?: ISOCode[]` |  Sets a composed language for translations
+`missingValue?: string` | Sets the value to use for missing keys
+`missingKey?: string` | Sets the key to use for missing keys
+`composedKeySeparator?: string` | Sets composed key separator
+`i18nPlural?: boolean` | Disables/enables the translation of numbers that are contained at the beginning of the keys
+
+>There aren't default values: you must explicitly set each parameter you need.
 
 ### <a name="2.4"/>2.4 Loading the translation data
 #### <a name="2.4.1"/>2.4.1 Direct loading
-You can use `addTranslation` method when you configure the service, 
+You can use `translationData` setting when you configure the service, 
 adding all the translation data:
 ```TypeScript
 const translationEN: any = {
     Title: "Angular localization"
-}
+};
 const translationIT: any = {
     Title: "Localizzazione in Angular"
-}
+};
 
-this.translation.addConfiguration()
-    .addTranslation('en', translationEN)
-    .addTranslation('it', translationIT);
-
-this.translation.init();
+const l10nConfig: L10nConfig = {
+    ...
+    translation: {
+        translationData: [
+            { languageCode: 'en', data: translationEN },
+            { languageCode: 'it', data: translationIT }
+        ]
+    }
+};
 ```
 
 #### <a name="2.4.2"/>2.4.2 Asynchronous loading of json files
 You can add all the providers you need:
 ```TypeScript
-this.translation.addConfiguration()
-    .addProvider('./assets/locale-')
-    .addProvider('./assets/global-');
-
-this.translation.init();
+const l10nConfig: L10nConfig = {
+    ...
+    translation: {
+        providers: [
+            { type: ProviderType.Static, prefix: './assets/global-' },
+            { type: ProviderType.Static, prefix: './assets/locale-' }
+        ]
+    }
+};
 ```
 
 >You can't use Direct and Asynchronous loading at the same time.
@@ -188,27 +218,45 @@ this.translation.init();
 #### <a name="2.4.3"/>2.4.3 Asynchronous loading through a Web API
 You can also load the data through a Web API:
 ```TypeScript
-this.translation.addConfiguration()
-    .addWebAPIProvider('http://localhost:54703/api/values/');
-
-this.translation.translationError.subscribe((error: any) => console.log(error));
-
-this.translation.init();
+const l10nConfig: L10nConfig = {
+    ...
+    translation: {
+        providers: [
+            { type: ProviderType.WebAPI, path: 'http://localhost:54703/api/values/' }
+        ]
+    }
+};
+...
+export class AppModule {
+    constructor(private translation: TranslationService) {
+        this.translation.translationError.subscribe((error: any) => console.log(error));
+    }
+}
 ```
 `[path]{languageCode}` will be the URL used by the Http GET requests. So the example URI will be something like: `http://localhost:54703/api/values/en`.
 
 The example above also showed as you can perform a custom action if you get a bad response.
 
-#### <a name="2.4.4"/>2.4.4 Using a custom provider
+#### <a name="2.4.4"/>2.4.4 Using fallback providers
+if you need a cascade fallback when the key is not found, you can use fallback providers:
+```TypeScript
+const l10nConfig: L10nConfig = {
+    ...
+    translation: {
+        providers: [
+            { type: ProviderType.Fallback, prefix: './assets/global', fallbackLanguage: [] },
+            { type: ProviderType.Fallback, prefix: './assets/locale-', fallbackLanguage: [ISOCode.Language] },
+            { type: ProviderType.Static, prefix: './assets/locale-' }
+        ],
+        composedLanguage: [ISOCode.Language, ISOCode.Country]
+    }
+};
+```
+and create the _json_ files such as `global.json`, `locale-en.json`, `locale-en-US.json`. When you set a fallback provider, _the translation data will be merged in order_: if a key is found in the _en-US_ file, it is used, otherwise the key in _en_ file and finally the key in _global_ file.
+
+#### <a name="2.4.5"/>2.4.5 Using a custom provider
 If you need, you can create a custom provider to load translation data.
 
-Use the `addCustomProvider(args: any)` method during the configuration of the service:
-```TypeScript
-this.translation.addConfiguration()
-    .addCustomProvider({ ... });
-
-this.translation.init();
-```
 Implement `TranslationProvider` class-interface and the `getTranslation` method with the logic to retrieve the data:
 ```TypeScript
 @Injectable() export class CustomTranslationProvider implements TranslationProvider {
@@ -231,30 +279,37 @@ Note that the method must return an _observable_ of an _object_. Then provide th
 @NgModule({
     imports: [
         ...
-        HttpModule,
-        TranslationModule.forRoot({ translationProvider: CustomTranslationProvider })
+        TranslationModule.forRoot(
+            l10nConfig,
+            { translationProvider: CustomTranslationProvider }
+        )
     ],
     ...
 })
 ```
-As you can see from the example above, you can pass any object to the `addCustomProvider` method: it will be returned to `getTranslation` method along with the current language. In this way, you can call the `addCustomProvider` method several times with different parameters. All the data retrieved will be merged by the `TranslationService`.
+`args` will be the object set during the configuration of `providers`.
 
 See also [TranslationProvider](https://github.com/robisim74/angular-l10n/blob/master/src/services/translation-provider.ts) code.
 
-### <a name="2.5"/>2.5 Using locale as language
-By default, the `languageCode` is added as extension to the translation files. If you set `useLocaleAsLanguage` method during the configuration of `TranslationService`, the _locale_ (`languageCode-countryCode`) will be used by the service as language:
+### <a name="2.5"/>2.5 Using a composed language
+By default, the `languageCode` is added as extension to the translation files. If you set `composedLanguage` during the configuration, the combination of supplied codes will be used as language:
 ```TypeScript
-this.locale.addConfiguration()
-    .addLanguage('en')
-    .defineDefaultLocale('en', 'US');
-
-this.translation.addConfiguration()
-    .addProvider('./assets/locale-')
-    .useLocaleAsLanguage();
-
-this.translation.init();
+const l10nConfig: L10nConfig = {
+    locale: {
+        languages: [
+            { code: 'en', dir: 'ltr' }
+        ],
+        defaultLocale: { languageCode: 'en', countryCode: 'US' }
+    },
+    translation: {
+        providers: [
+            { type: ProviderType.Static, prefix: './assets/locale-' }
+        ],
+        composedLanguage: [ISOCode.Language, ISOCode.Country]
+    }
+};
 ```
-Your _json_ files should be something like: `./assets/locale-en-US.json` and so on.
+Your _json_ files should be something like: `./assets/locale-en-US.json` and so on. The available ISO codes are: _language_, _country_, _script_.
 
 ### <a name="2.6"/>2.6 Default locale
 The default locale contains the current language and culture. It consists of:
@@ -269,7 +324,7 @@ and optionally:
 For more information see [Intl API](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl).
 
 ### <a name="2.7"/>2.7 Storage
-The `defaultLocale` and the `currency` chosen by the user are stored, and retrieved at the next access. By default, they are stored in a session cookie, if you don't provide a different expiration or a different storage during the configuration of `LocaleService`: `setCookieExpiration`, `useLocaleStorage`,`useSessionStorage` or `disableStorage`.
+The `defaultLocale` and the `currency` chosen by the user are stored, and retrieved at the next access. During the configuration, you can choose your `StorageStrategy`: _Session_, _Local_, _Cookie_, _Disabled_. If you don't provide a different expiration using `cookieExpiration`, the cookie becomes a session cookie.
 
 You can also create a custom storage.
 
@@ -303,17 +358,37 @@ Note that the `read` method must return a _promise_. Then provide the class in t
 @NgModule({
     imports: [
         ...
-        HttpModule,
-        TranslationModule.forRoot({ localeStorage: CustomStorage })
+        TranslationModule.forRoot(
+            l10nConfig,
+            { localeStorage: CustomStorage }
+        )
     ],
     ...
 })
 ```
 See also [LocaleStorage](https://github.com/robisim74/angular-l10n/blob/master/src/services/locale-storage.ts) code.
 
-### <a name="2.8"/>2.8 Intl API
-To localize dates and numbers, this library uses [Intl API](https://developer.mozilla.org/it/docs/Web/JavaScript/Reference/Global_Objects/Intl), through Angular. 
-All modern browsers have implemented this API. You can use [Intl.js](https://github.com/andyearnshaw/Intl.js) to extend support to all browsers. 
+### <a name="2.8"/>2.8 Caching
+You can enable the cache during configuration:
+```TypeScript
+const l10nConfig: L10nConfig = {
+    ...
+    translation: {
+        providers: [
+            { type: ProviderType.Static, prefix: './assets/global-' },
+            { type: ProviderType.Static, prefix: './assets/locale-' }
+        ],
+        caching: true
+    }
+};
+```
+The next time a translation file will be required, will be taken from the cache without making a new _http request_, with a significant performance improvement:
+- if the user returns to a language already selected;
+- if you use a global file shared across _lazy loaded modules_.
+
+### <a name="2.9"/>2.9 Intl API
+To localize dates and numbers, this library uses the [Intl API](https://developer.mozilla.org/it/docs/Web/JavaScript/Reference/Global_Objects/Intl). 
+_All modern browsers have implemented this API_. You can use [Intl.js](https://github.com/andyearnshaw/Intl.js) to extend support to old browsers. 
 Just add one script tag in your `index.html`:
 ```Html
 <script src="https://cdn.polyfill.io/v2/polyfill.min.js?features=Intl.~locale.en-US"></script>
@@ -330,10 +405,10 @@ You can also get the translation in component class.
 Pipe | Type | Format | Pipe syntax
 ---- | ---- | ------ | -----------
 Translate | Message | String | `expression \| translate:lang`
-LocaleDate | Date | Date/Number/ISO string | `expression \| localeDate[:defaultLocale[:format]]`
-LocaleDecimal | Number | Decimal | `expression \| localeDecimal[:defaultLocale[:digitInfo]]`
-LocalePercent | Number | Percentage | `expression \| localePercent[:defaultLocale[:digitInfo]]`
-LocaleCurrency | Number | Currency | `expression \| localeCurrency[:defaultLocale[:currency[:symbolDisplay[:digitInfo]]]]`
+L10nDate | Date | Date/Number/ISO string | `expression \| L10nDate[:defaultLocale[:format]]`
+L10nDecimal | Number | Decimal | `expression \| L10nDecimal[:defaultLocale[:digitInfo]]`
+L10nPercent | Number | Percentage | `expression \| L10nPercent[:defaultLocale[:digitInfo]]`
+L10nCurrency | Number | Currency | `expression \| L10nCurrency[:defaultLocale[:currency[:currencyDisplay[:digitInfo]]]]`
 
 >You can dynamically change parameters and expressions values.
 
@@ -365,6 +440,7 @@ _Json_:
 }
 ```
 ##### Composed keys
+Set `composedKeySeparator` during the configuration, e.g. to `'.'`:
 ```Html
 {{ 'Home.Title' | translate:lang }}
 ```
@@ -404,37 +480,63 @@ export class HomeComponent implements OnInit {
 
 ##### Dates
 ```
-expression | localeDate[:defaultLocale[:format]]
+expression | L10nDate[:defaultLocale[:format]]
 ```
-where `expression` is a date object or a number (milliseconds since UTC epoch) or an ISO string, and `format` indicates which date/time components to include. 
-See Angular [DatePipe](https://angular.io/api/common/DatePipe) for further information.
+Where:
+- `expression` is a date object or a number (milliseconds since UTC epoch) or an ISO string: https://www.w3.org/TR/NOTE-datetime.
+- `format` indicates which date/time components to include. The format can be predefined as
+  shown below or custom as shown in the table.
+  - `'medium'`: equivalent to `'yMMMdjms'` (e.g. `Sep 3, 2010, 12:05:08 PM` for `en-US`)
+  - `'short'`: equivalent to `'yMdjm'` (e.g. `9/3/2010, 12:05 PM` for `en-US`)
+  - `'fullDate'`: equivalent to `'yMMMMEEEEd'` (e.g. `Friday, September 3, 2010` for `en-US`)
+  - `'longDate'`: equivalent to `'yMMMMd'` (e.g. `September 3, 2010` for `en-US`)
+  - `'mediumDate'`: equivalent to `'yMMMd'` (e.g. `Sep 3, 2010` for `en-US`)
+  - `'shortDate'`: equivalent to `'yMd'` (e.g. `9/3/2010` for `en-US`)
+  - `'mediumTime'`: equivalent to `'jms'` (e.g. `12:05:08 PM` for `en-US`)
+  - `'shortTime'`: equivalent to `'jm'` (e.g. `12:05 PM` for `en-US`)
+
+| Component | Symbol | Narrow | Short Form   | Long Form                 | Numeric   | 2-digit    |
+|-----------|:------:|--------|--------------|---------------------------|-----------|------------|
+| era       |   G    | G (A)  | GGG (AD)     | GGGG (Anno Domini)        | -         | -          |
+| year      |   y    | -      | -            | -                         | y (2015)  | yy (15)    |
+| month     |   M    | L (S)  | MMM (Sep)    | MMMM (September)          | M (9)     | MM (09)    |
+| day       |   d    | -      | -            | -                         | d (3)     | dd (03)    |
+| weekday   |   E    | E (S)  | EEE (Sun)    | EEEE (Sunday)             | -         | -          |
+| hour      |   j    | -      | -            | -                         | j (13)    | jj (13)    |
+| hour12    |   h    | -      | -            | -                         | h (1 PM)  | hh (01 PM) |
+| hour24    |   H    | -      | -            | -                         | H (13)    | HH (13)    |
+| minute    |   m    | -      | -            | -                         | m (5)     | mm (05)    |
+| second    |   s    | -      | -            | -                         | s (9)     | ss (09)    |
+| timezone  |   z    | -      | -            | z (Pacific Standard Time) | -         | -          |
+| timezone  |   Z    | -      | Z (GMT-8:00) | -                         | -         | -          |
+| timezone  |   a    | -      | a (PM)       | -                         | -         | -          |
+
 ```Html
-{{ today | localeDate:defaultLocale:'fullDate' }}
+{{ today | L10nDate:defaultLocale:'fullDate' }}
 ```
 ##### Decimals
 ```
-expression | localeDecimal[:defaultLocale:[digitInfo]]
+expression | L10nDecimal[:defaultLocale:[digitInfo]]
 ```
-where `expression` is a number and `digitInfo` has the following format: `{minIntegerDigits}.{minFractionDigits}-{maxFractionDigits}`. 
-See Angular [DecimalPipe](https://angular.io/api/common/DecimalPipe) for further information.
+where `expression` is a number and `digitInfo` has the following format: `{minIntegerDigits}.{minFractionDigits}-{maxFractionDigits}`.
 
 ```Html
-{{ value | localeDecimal:defaultLocale:'1.5-5' }}
+{{ value | L10nDecimal:defaultLocale:'1.5-5' }}
 ```
 ##### Percentages
 ```
-expression | localePercent[:defaultLocale:[digitInfo]]
+expression | L10nPercent[:defaultLocale:[digitInfo]]
 ```
 ```Html
-{{ value | localePercent:defaultLocale:'1.1-1' }}
+{{ value | L10nPercent:defaultLocale:'1.1-1' }}
 ```
 ##### Currencies
 ```
-expression | localeCurrency[:defaultLocale[:currency[:symbolDisplay[:digitInfo]]]]
+expression | L10nCurrency[:defaultLocale[:currency[:currencyDisplay[:digitInfo]]]]
 ```
-where `symbolDisplay` is a boolean indicating whether to use the currency symbol (e.g. $) or the currency code (e.g. USD) in the output. 
+where `currencyDisplay` is the currency formatting. Possible values are _'symbol'_ to use a localized currency symbol such as _€_, _'code'_ to use the ISO currency code, _'name'_ to use a localized currency name such as _dollar_; the default is _'symbol'_. 
 ```Html
-{{ value | localeCurrency:defaultLocale:currency:true:'1.2-2' }}
+{{ value | L10nCurrency:defaultLocale:currency:'symbol':'1.2-2' }}
 ```
 
 #### <a name="3.1.3"/>3.1.3 Translation & Localization classes
@@ -457,7 +559,7 @@ _Pure pipes_ don't need to set `ChangeDetectionStrategy` to `OnPush`. If into yo
 ```TypeScript
 import { Component, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 
-import { Translation, TranslationService } from './src/angular-l10n'
+import { Translation } from 'angular-l10n'
 
 @Component({
     ...
@@ -465,8 +567,8 @@ import { Translation, TranslationService } from './src/angular-l10n'
 })
 export class HomeComponent extends Translation {
 
-    constructor(public translation: TranslationService, public ref: ChangeDetectorRef) {
-        super(translation, ref);
+    constructor(public ref: ChangeDetectorRef) {
+        super(ref);
         ...
     }
 
@@ -478,18 +580,18 @@ That's because we need to know the component reference that implements the `OnPu
 Directive | Selectors
 --------- | ---------
 Translate | `l10nTranslate`, `translate`
-LocaleDate | `l10nDate`, `localeDate`
-LocaleDecimal | `l10nDecimal`, `localeDecimal`
-LocalePercent | `l10nPercent`, `localePercent`
-LocaleCurrency | `l10nCurrency`, `localeCurrency`
+L10nDate | `l10nDate`
+L10nDecimal | `l10nDecimal`
+L10nPercent | `l10nPercent`
+L10nCurrency | `l10nCurrency`
 
 Directive | Type | Format | Html syntax
 --------- | ---- | ------ | -----------
 Translate | Message | String | `<tag l10n-attribute attribute="expr1" l10nTranslate>expr2</tag>`
-LocaleDate | Date | Date/Number/ISO string | `<tag l10n-attribute attribute="expr1" l10nDate="[format]">expr2</tag>`
-LocaleDecimal | Number | Decimal | `<tag l10n-attribute attribute="expr1" l10nDecimal="[digitInfo]">expr2</tag>`
-LocalePercent | Number | Percentage | `<tag l10n-attribute attribute="expr1" l10nPercent="[digitInfo]">expr2</tag>`
-LocaleCurrency | Number | Currency | `<tag l10n-attribute attribute="expr1" l10nCurrency="[digitInfo]" [symbol]="[symbolDisplay]">expr2</tag>`
+L10nDate | Date | Date/Number/ISO string | `<tag l10n-attribute attribute="expr1" l10nDate="[format]">expr2</tag>`
+L10nDecimal | Number | Decimal | `<tag l10n-attribute attribute="expr1" l10nDecimal="[digitInfo]">expr2</tag>`
+L10nPercent | Number | Percentage | `<tag l10n-attribute attribute="expr1" l10nPercent="[digitInfo]">expr2</tag>`
+L10nCurrency | Number | Currency | `<tag l10n-attribute attribute="expr1" l10nCurrency="[digitInfo]" [currencyDisplay]="[currencyDisplay]">expr2</tag>`
 
 >You can dynamically change parameters and expressions values as with pipes. How does it work? To observe the expression change (not the parameters), a `MutationObserver` is used: the observer is added only if detected in the browser. If you want to use this feature also reaching older browsers, we recommend using pipes.
 
@@ -516,7 +618,7 @@ LocaleCurrency | Number | Currency | `<tag l10n-attribute attribute="expr1" l10n
 <p l10nPercent="1.1-1">{{ value }}</p>
 
 <p l10nCurrency>{{ value }}</p>
-<p l10nCurrency="1.2-2" [symbol]="true">{{ value }}</p>
+<p l10nCurrency="1.2-2" [currencyDisplay]="'symbol'">{{ value }}</p>
 ```
 
 #### <a name="3.2.3"/>3.2.3 Attributes
@@ -540,7 +642,7 @@ _Json_:
 ```
 
 #### <a name="3.2.4"/>3.2.4 UI components
-You can properly translate UI components like Angular material:
+You can properly translate UI components like Angular material or Ionic:
 ```Html
 <a routerLinkActive="active-link" md-list-item routerLink="/home" l10nTranslate>App.Home</a>
 ```
@@ -602,8 +704,8 @@ export class HomeComponent {
 ```
 
 To get the translation _when the component is loaded_ and _when the current language changes_, 
-_you must also_ subscribe to the following event:
-* `translationChanged: EventEmitter<string>`
+_you must_ subscribe to the following method:
+* `translationChanged(): Observable<string>`
 
 ```TypeScript
 @Component({
@@ -612,12 +714,12 @@ _you must also_ subscribe to the following event:
 })
 export class HomeComponent implements OnInit {
 
-    title: string = this.translation.translate('Title');
+    title: string;
 
     constructor(public translation: TranslationService) { }
 
     ngOnInit(): void {
-        this.translation.translationChanged.subscribe(
+        this.translation.translationChanged().subscribe(
             () => { this.title = this.translation.translate('Title'); }
         );
     }
@@ -633,8 +735,8 @@ To get the translation of dates and numbers, you have the `getDefaultLocale` met
 })
 export class HomeComponent {
   
-    pipe: LocaleDecimalPipe = new LocaleDecimalPipe();
-    value: number = pipe.transform(1234.5, this.locale.getDefaultLocale(), '1.2-2');
+    pipe: L10nDecimalPipe = new L10nDecimalPipe();
+    value: number;
 
     constructor(public locale: LocaleService) { }
 
@@ -650,7 +752,7 @@ export class HomeComponent {
 ```
 
 ### <a name="3.5"/>3.5 Handle the translation
-The default translation handler does not perform operations on the translated values: it handles the missing keys returning the path of the key or the value set by `setMissingValue` method during the configuration of `TranslationService`, and replaces parameters.
+The default translation handler does not perform operations on the translated values: it handles the missing keys returning the path of the key or the value set by `missingValue` during the configuration, and replaces parameters.
 
 To perform custom operations, you can implement `TranslationHandler` class-interface and the `parseValue` method:
 ```TypeScript
@@ -677,8 +779,10 @@ Then provide the class in the module:
 @NgModule({
     imports: [
         ...
-        HttpModule,
-        TranslationModule.forRoot({ translationHandler: CustomTranslationHandler })
+        TranslationModule.forRoot(
+            l10nConfig,
+            { translationHandler: CustomTranslationHandler }
+        )
     ],
     ...
 })
@@ -702,24 +806,33 @@ You can create a new instance of `TranslationService` calling the `forChild` met
 and configure the service with the new providers:
 
 ```TypeScript
+const l10nConfig: L10nConfig = {
+    translation: {
+        providers: [
+            { type: ProviderType.Static, prefix: './src/assets/locale-' },
+            { type: ProviderType.Static, prefix: './src/assets/locale-list-' }
+        ],
+        ...
+    }
+};
+
 @NgModule({
     imports: [
         ...
-        TranslationModule.forChild() // New instance of TranslationService.
+        TranslationModule.forChild(l10nConfig) // New instance of TranslationService.
     ],
     declarations: [ListComponent]
 })
 export class ListModule {
 
-    constructor(public translation: TranslationService) {
-        this.translation.addConfiguration()
-            .addProvider('./assets/locale-list-');
-
-        this.translation.init();
+    constructor(public l10nLoader: L10nLoader) {
+        this.l10nLoader.load();
     }
 
 }
 ```
+>If you use a global file shared across _lazy loaded modules_, you can enable the `caching` during the configuration in `AppModule`.
+
 In this way, application performance and memory usage are optimized.
 
 ### <a name="5.2"/>5.2 Shared modules
@@ -729,7 +842,7 @@ If you don't want a new instance of `TranslationService` with its own translatio
     imports: [
         ...
         SharedModule,
-        TranslationModule.forRoot()
+        TranslationModule.forRoot(l10nConfig)
     ],
     ...
 })
@@ -760,7 +873,7 @@ Then in the feature module (also if it is _lazy loaded_):
 })
 export class ListModule { }
 ```
-You must provide the configuration of the services only in `AppModule`.
+You must provide the configuration only in `AppModule`.
 
 ## <a name="6"/>6 Validation by locales
 Import the modules you need in the application root module:
@@ -768,7 +881,7 @@ Import the modules you need in the application root module:
 @NgModule({
     imports: [
         ...
-        LocalizationModule.forRoot(),
+        LocalizationModule.forRoot(l10nConfig),
         LocaleValidationModule.forRoot()
     ],
     declarations: [AppComponent],
@@ -780,11 +893,11 @@ export class AppModule { }
 ### <a name="6.1"/>6.1 Validating a number
 Directive | Selectors
 --------- | ---------
-`LocaleNumberValidator` | `l10nValidateNumber`, `validateLocaleNumber`
+`L10nNumberValidator` | `l10nValidateNumber`
 
 Directive | Validator | Options | Errors
 --------- | --------- | ------- | ------
-`LocaleNumberValidator` | `l10nValidateNumber=[digitInfo]` | `[minValue]` `[maxValue]` | `format` or `minValue` or `maxValue`
+`L10nNumberValidator` | `l10nValidateNumber=[digitInfo]` | `[minValue]` `[maxValue]` | `format` or `minValue` or `maxValue`
 
 where `digitInfo` has the following format: `{minIntegerDigits}.{minFractionDigits}-{maxFractionDigits}`, and `minValue` and `maxValue` attributes are optional:
 ```Html
@@ -812,7 +925,7 @@ onSubmit(value: string): void {
 #### <a name="6.1.2"/>6.1.2 FormBuilder
 If you use `FormBuilder`, you have to invoke the following function:
 ```TypeScript
-validateLocaleNumber(digits: string, MIN_VALUE?: number, MAX_VALUE?: number): Function
+l10nValidateNumber(digits: string, MIN_VALUE?: number, MAX_VALUE?: number): Function
 ```
 
 ## <a name="7"/>7 Collator
@@ -824,7 +937,7 @@ validateLocaleNumber(digits: string, MIN_VALUE?: number, MAX_VALUE?: number): Fu
 
 These methods use the [Intl.Collator](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Collator) object, a constructor for collators, objects that enable language sensitive string comparison.
 
->This feature is not supported by all browsers, even with the use of `Intl.js`.
+>Only modern browsers support this API.
 
 ## <a name="8"/>8 Unit testing
 There are several ways to test an app that implements this library. To provide the data, you could use:
@@ -839,15 +952,32 @@ describe('Component: HomeComponent', () => {
     let fixture: ComponentFixture<HomeComponent>;
     let comp: HomeComponent;
 
-    let locale: LocaleService;
-    let translation: TranslationService;
+    let l10nLoader: L10nLoader;
+
+    const l10nConfig: L10nConfig = {
+        locale: {
+            languages: [
+                { code: 'en', dir: 'ltr' }
+            ],
+            defaultLocale: { languageCode: 'en', countryCode: 'US' },
+            currency: 'USD',
+            storage: StorageStrategy.Disabled
+        },
+        translation: {
+            providers: [
+                // Karma serves files from 'base' relative path.
+                { type: ProviderType.Static, prefix: 'base/src/assets/locale-' }
+            ],
+            ...
+        }
+    };
 
     beforeEach(async () => {
         TestBed.configureTestingModule({
             imports: [
                 ...
-                HttpModule,
-                LocalizationModule.forRoot()
+                HttpClientModule,
+                LocalizationModule.forRoot(l10nConfig)
             ],
             declarations: [HomeComponent]
         }).compileComponents();
@@ -857,20 +987,8 @@ describe('Component: HomeComponent', () => {
     });
 
     beforeEach((done: any) => {
-        locale = TestBed.get(LocaleService);
-        translation = TestBed.get(TranslationService);
-
-        locale.addConfiguration()
-            .disableStorage()
-            .addLanguages(['en'])
-            .defineDefaultLocale('en', 'US')
-            .defineCurrency('USD');
-
-        // Karma serves files from 'base' relative path.
-        translation.addConfiguration()
-            .addProvider('base/src/assets/locale-');
-
-        translation.init().then(() => done());
+        l10nLoader = TestBed.get(L10nLoader);
+        l10nLoader.load().then(() => done());
     });
 
     it('should render translated text', (() => {
@@ -883,25 +1001,30 @@ describe('Component: HomeComponent', () => {
 ```
 In this case the real services are injected, importing `LocalizationModule.forRoot` method.
 
-The configuration of the services is in a dedicated `beforeEach`, that will be released only when the _promise_ of the `init` method of `TranslationService` will be resolved.
+The loading of configuration is in a dedicated `beforeEach`, that will be released only when the _promise_ of the `load` method of `L10nLoader` will be resolved.
 
 ## <a name="9"/>9 Services APIs
 #### TranslationModule
 Method | Function
 ------ | --------
-`static forRoot(token?: Token): ModuleWithProviders` | Use in `AppModule`: new instances of `LocaleService` & `TranslationService`
-`static forChild(token?: Token): ModuleWithProviders` | Use in feature modules with lazy loading: new instance of `TranslationService`
+`static forRoot(l10nConfig: L10nConfig, token?: Token): ModuleWithProviders` | Use in `AppModule`: new instances of `LocaleService` & `TranslationService`
+`static forChild(l10nConfig: L10nConfig, token?: Token): ModuleWithProviders` | Use in feature modules with lazy loading: new instance of `TranslationService`
 
 #### LocalizationModule
 Method | Function
 ------ | --------
-`static forRoot(token?: Token): ModuleWithProviders` | Use in `AppModule`: new instances of `LocaleService` & `TranslationService`
-`static forChild(token?: Token): ModuleWithProviders` | Use in feature modules with lazy loading: new instance of `TranslationService`
+`static forRoot(l10nConfig: L10nConfig, token?: Token): ModuleWithProviders` | Use in `AppModule`: new instances of `LocaleService` & `TranslationService`
+`static forChild(l10nConfig: L10nConfig, token?: Token): ModuleWithProviders` | Use in feature modules with lazy loading: new instance of `TranslationService`
 
 #### LocaleValidationModule
 Method | Function
 ------ | --------
 `static forRoot(): ModuleWithProviders` | Use in `AppModule`: new instance of `LocaleValidation`
+
+#### L10nLoader
+Method | Function
+------ | --------
+`load(): Promise<void>` |
 
 #### ILocaleService
 Property | Value
@@ -913,9 +1036,9 @@ Property | Value
 
 Method | Function
 ------ | --------
-`addConfiguration(): ILocaleConfigAPI` | Configure the service in the application root module or in a feature module with lazy loading
-`getConfiguration(): ILocaleConfig` |
+`getConfiguration(): LocaleConfig` |
 `init(): Promise<void>` |
+`getBrowserLanguage(): string | null` |
 `getAvailableLanguages(): string[]` |
 `getLanguageDirection(languageCode?: string): string` |
 `getCurrentLanguage(): string` |
@@ -933,15 +1056,13 @@ Method | Function
 #### ITranslationService
 Property | Value
 -------- | -----
-`translationChanged: EventEmitter<string>` |
-`translationError: EventEmitter<any>` |
+`translationError: Subject<any>` |
 
 Method | Function
 ------ | --------
-`addConfiguration(): ITranslationConfigAPI` | Configure the service in the application root module or in a feature module with lazy loading
-`getConfiguration(): ITranslationConfig` |
-`init(): Promise<void>` | Call this method after the configuration to initialize the service
-`getLanguage(): string` | Gets the current language of the service
+`getConfiguration(): TranslationConfig` |
+`init(): Promise<void>` | 
+`translationChanged(): Observable<string>` | Fired when the translation data has been loaded. Returns the translation language
 `translate(keys: string \| string[], args?: any, lang?: string): string \| any` | Translates a key or an array of keys
 `translateAsync(keys: string \| string[], args?: any, lang?: string): Observable<string \| any>` |
 
@@ -983,6 +1104,7 @@ Method | Function
 #### IntlAPI
 Method | Function
 ------ | --------
+`static hasIntl(): boolean` |
 `static hasDateTimeFormat(): boolean` |
 `static hasNumberFormat(): boolean` |
 `static hasCollator(): boolean` |
