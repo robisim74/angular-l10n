@@ -1,6 +1,7 @@
 import { Injectable, Inject, EventEmitter, Output } from '@angular/core';
 import { Subject } from 'rxjs/Subject';
 
+import { IntlAPI } from '../services/intl-api';
 import { LOCALE_CONFIG, LocaleConfig } from '../models/l10n-config';
 import { LocaleStorage } from './locale-storage';
 import { DefaultLocale } from '../models/default-locale';
@@ -42,6 +43,12 @@ export interface ILocaleService {
     getDefaultLocale(): string;
 
     getCurrentCurrency(): string;
+
+    getCurrencySymbol(
+        currencyDisplay?: 'code' | 'symbol' | 'name',
+        defaultLocale?: string,
+        currency?: string
+    ): string;
 
     setCurrentLanguage(languageCode: string): void;
 
@@ -161,6 +168,32 @@ export interface ILocaleService {
 
     public getCurrentCurrency(): string {
         return this.currencyCode;
+    }
+
+    public getCurrencySymbol(
+        currencyDisplay: 'code' | 'symbol' | 'name' = 'symbol',
+        defaultLocale: string = this.defaultLocale.value,
+        currency: string = this.currencyCode
+    ): string {
+
+        let currencySymbol: string = this.currencyCode;
+        if (IntlAPI.hasNumberFormat()) {
+            const localeZero: string = new Intl.NumberFormat(defaultLocale).format(0);
+            const value: number = 0; // Reference value.
+            const localeValue: string = new Intl.NumberFormat(
+                defaultLocale,
+                {
+                    style: 'currency',
+                    currency: currency,
+                    currencyDisplay: currencyDisplay,
+                    minimumFractionDigits: 0,
+                    maximumFractionDigits: 0
+                }
+            ).format(value);
+            currencySymbol = localeValue.replace(localeZero, "");
+            currencySymbol = currencySymbol.trim();
+        }
+        return currencySymbol;
     }
 
     public setCurrentLanguage(languageCode: string): void {
