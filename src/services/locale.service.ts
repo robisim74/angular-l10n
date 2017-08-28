@@ -47,7 +47,7 @@ export interface ILocaleService {
 
     setDefaultLocale(
         languageCode: string,
-        countryCode: string,
+        countryCode?: string,
         scriptCode?: string,
         numberingSystem?: string,
         calendar?: string
@@ -79,15 +79,12 @@ export interface ILocaleService {
         await this.initStorage();
 
         if (this.configuration.defaultLocale) {
-            if (!!this.configuration.defaultLocale.languageCode &&
-                !!this.configuration.defaultLocale.countryCode) {
-                this.initDefaultLocale();
-            }
-        } else if (!!this.configuration.language) {
+            this.initDefaultLocale();
+        } else if (this.configuration.language) {
             this.initLanguage();
         }
 
-        if (!!this.configuration.currency) {
+        if (this.configuration.currency) {
             this.initCurrency();
         }
     }
@@ -177,7 +174,7 @@ export interface ILocaleService {
 
     public setDefaultLocale(
         languageCode: string,
-        countryCode: string,
+        countryCode?: string,
         scriptCode?: string,
         numberingSystem?: string,
         calendar?: string

@@ -104,7 +104,7 @@ describe('TranslatePipe', () => {
                     { code: 'en', dir: 'ltr' },
                     { code: 'it', dir: 'ltr' }
                 ],
-                defaultLocale: { languageCode: 'en', countryCode: 'US' },
+                defaultLocale: { languageCode: 'en' },
                 storage: StorageStrategy.Disabled
             },
             translation: {
@@ -143,7 +143,7 @@ describe('TranslatePipe', () => {
             expect(pipe.transform('Title', locale.getCurrentLanguage())).toEqual("Angular localization");
             expect(pipe.transform('Save', locale.getCurrentLanguage())).toEqual("Save");
 
-            locale.setDefaultLocale('it', 'IT');
+            locale.setDefaultLocale('it');
 
             const req3: TestRequest = httpMock.expectOne('./assets/global-it.json');
             req3.flush({ "Title": "Localizzazione in Angular" });
@@ -177,7 +177,7 @@ describe('TranslatePipe', () => {
                     { code: 'en', dir: 'ltr' },
                     { code: 'it', dir: 'ltr' }
                 ],
-                defaultLocale: { languageCode: 'en', countryCode: 'US' },
+                defaultLocale: { languageCode: 'en' },
                 storage: StorageStrategy.Disabled
             },
             translation: {
@@ -216,7 +216,7 @@ describe('TranslatePipe', () => {
             expect(pipe.transform('Title', locale.getCurrentLanguage())).toEqual("Angular localization");
             expect(pipe.transform('Save', locale.getCurrentLanguage())).toEqual("Save");
 
-            locale.setDefaultLocale('it', 'IT');
+            locale.setDefaultLocale('it');
 
             const req3: TestRequest = httpMock.expectOne('./assets/global.json');
             req3.flush({ "Title": "Angular localization", "Save": "Save" });
@@ -249,7 +249,7 @@ describe('TranslatePipe', () => {
                     { code: 'en', dir: 'ltr' },
                     { code: 'it', dir: 'ltr' }
                 ],
-                defaultLocale: { languageCode: 'en', countryCode: 'US' },
+                defaultLocale: { languageCode: 'en' },
                 storage: StorageStrategy.Disabled
             },
             translation: {
@@ -288,7 +288,7 @@ describe('TranslatePipe', () => {
             expect(pipe.transform('Title', locale.getCurrentLanguage())).toEqual("Angular localization");
             expect(pipe.transform('Save', locale.getCurrentLanguage())).toEqual("Save");
 
-            locale.setDefaultLocale('it', 'IT');
+            locale.setDefaultLocale('it');
 
             const req3: TestRequest = httpMock.expectOne('http://localhost:54703/api/global/it');
             const req4: TestRequest = httpMock.expectOne('http://localhost:54703/api/locales/it');
@@ -321,7 +321,7 @@ describe('TranslatePipe', () => {
                     { code: 'en', dir: 'ltr' },
                     { code: 'it', dir: 'ltr' }
                 ],
-                defaultLocale: { languageCode: 'en', countryCode: 'US' },
+                defaultLocale: { languageCode: 'en' },
                 storage: StorageStrategy.Disabled
             },
             translation: {
@@ -359,7 +359,7 @@ describe('TranslatePipe', () => {
 
             expect(pipe.transform('Title', locale.getCurrentLanguage())).toEqual("Angular localization");
 
-            locale.setDefaultLocale('it', 'IT');
+            locale.setDefaultLocale('it');
 
             const req2: TestRequest = httpMock.expectOne('./assets/locale-it.json');
             req2.flush({ "Title": "Localizzazione in Angular" });
@@ -389,7 +389,7 @@ describe('TranslatePipe', () => {
                     { code: 'en', dir: 'ltr' },
                     { code: 'it', dir: 'ltr' }
                 ],
-                defaultLocale: { languageCode: 'en', countryCode: 'US' },
+                defaultLocale: { languageCode: 'en' },
                 storage: StorageStrategy.Disabled
             },
             translation: {
@@ -434,7 +434,7 @@ describe('TranslatePipe', () => {
             expect(pipe.transform('User notifications', locale.getCurrentLanguage(), params))
                 .toEqual("robisim74, you have 2 new messages");
 
-            locale.setDefaultLocale('it', 'IT');
+            locale.setDefaultLocale('it');
 
             const req2: TestRequest = httpMock.expectOne('./assets/locale-it.json');
             req2.flush({
@@ -456,7 +456,7 @@ describe('TranslatePipe', () => {
 
             expect(pipe.transform('Home.Subtitle', locale.getCurrentLanguage())).toEqual("Home.Subtitle");
 
-            locale.setDefaultLocale('it', 'IT');
+            locale.setDefaultLocale('it');
 
             const req2: TestRequest = httpMock.expectOne('./assets/locale-it.json');
             req2.flush({
@@ -489,7 +489,7 @@ describe('TranslatePipe', () => {
                     { code: 'it', dir: 'ltr' },
                     { code: 'ar', dir: 'rtl' }
                 ],
-                defaultLocale: { languageCode: 'en', countryCode: 'US' },
+                defaultLocale: { languageCode: 'en' },
                 storage: StorageStrategy.Disabled
             },
             translation: {
@@ -530,7 +530,7 @@ describe('TranslatePipe', () => {
 
             expect(pipe.transform('Home.Title', locale.getCurrentLanguage())).toEqual("Angular localization");
 
-            locale.setDefaultLocale('it', 'IT');
+            locale.setDefaultLocale('it');
 
             const req2: TestRequest = httpMock.expectOne('./assets/locale-it.json');
             req2.flush({
@@ -552,7 +552,7 @@ describe('TranslatePipe', () => {
 
             expect(pipe.transform('Subtitle', locale.getCurrentLanguage())).toEqual("No key");
 
-            locale.setDefaultLocale('it', 'IT');
+            locale.setDefaultLocale('it');
 
             const req2: TestRequest = httpMock.expectOne('./assets/locale-it.json');
             req2.flush({
@@ -580,7 +580,7 @@ describe('TranslatePipe', () => {
             const req1: TestRequest = httpMock.expectOne('./assets/locale-en.json');
             req1.flush({ "messages": "10 messages" });
 
-            locale.setDefaultLocale('ar', 'SA');
+            locale.setDefaultLocale('ar');
 
             const req2: TestRequest = httpMock.expectOne('./assets/locale-ar.json');
             req2.flush({ "messages": "رسائل" });
