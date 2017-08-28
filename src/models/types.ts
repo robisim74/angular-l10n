@@ -90,6 +90,8 @@ export enum NumberFormatStyle {
     Currency
 }
 
+export type DateFormatterFn = (date: Date, defaultLocale: string) => string;
+
 export type Decimal = {
 
     minusSign: string;

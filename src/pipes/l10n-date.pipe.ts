@@ -5,34 +5,7 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
 import { IntlAPI } from '../services/intl-api';
-import { DateFormatter } from '../models/intl';
-
-const ISO8601_DATE_REGEX: RegExp =
-    /^(\d{4})-?(\d\d)-?(\d\d)(?:T(\d\d)(?::?(\d\d)(?::?(\d\d)(?:\.(\d+))?)?)?(Z|([+-])(\d\d):?(\d\d))?)?$/;
-
-function isDate(value: any): value is Date {
-    return value instanceof Date && !isNaN(value.valueOf());
-}
-
-function isoStringToDate(match: RegExpMatchArray): Date {
-    const date: Date = new Date(0);
-    let tzHour: number = 0;
-    let tzMin: number = 0;
-    const dateSetter: Function = match[8] ? date.setUTCFullYear : date.setFullYear;
-    const timeSetter: Function = match[8] ? date.setUTCHours : date.setHours;
-
-    if (match[9]) {
-        tzHour = +(match[9] + match[10]);
-        tzMin = +(match[9] + match[11]);
-    }
-    dateSetter.call(date, +(match[1]), +(match[2]) - 1, +(match[3]));
-    const h: number = +(match[4] || '0') - tzHour;
-    const m: number = +(match[5] || '0') - tzMin;
-    const s: number = +(match[6] || '0');
-    const ms: number = Math.round(parseFloat('0.' + (match[7] || 0)) * 1000);
-    timeSetter.call(date, h, m, s, ms);
-    return date;
-}
+import { IntlFormatter } from '../models/intl-formatter';
 
 /**
  * expression | l10nDate[:defaultLocale[:format]]
@@ -74,7 +47,7 @@ function isoStringToDate(match: RegExpMatchArray): Date {
 })
 export class L10nDatePipe implements PipeTransform {
 
-    public static _ALIASES: { [key: string]: string } = {
+    public static readonly ALIASES: { [key: string]: string } = {
         'medium': 'yMMMdjms',
         'short': 'yMdjm',
         'fullDate': 'yMMMMEEEEd',
@@ -84,6 +57,33 @@ export class L10nDatePipe implements PipeTransform {
         'mediumTime': 'jms',
         'shortTime': 'jm'
     };
+
+    private static readonly ISO8601_DATE_REGEX: RegExp =
+    /^(\d{4})-?(\d\d)-?(\d\d)(?:T(\d\d)(?::?(\d\d)(?::?(\d\d)(?:\.(\d+))?)?)?(Z|([+-])(\d\d):?(\d\d))?)?$/;
+
+    private static isDate(value: any): value is Date {
+        return value instanceof Date && !isNaN(value.valueOf());
+    }
+
+    private static isoStringToDate(match: RegExpMatchArray): Date {
+        const date: Date = new Date(0);
+        let tzHour: number = 0;
+        let tzMin: number = 0;
+        const dateSetter: Function = match[8] ? date.setUTCFullYear : date.setFullYear;
+        const timeSetter: Function = match[8] ? date.setUTCHours : date.setHours;
+
+        if (match[9]) {
+            tzHour = +(match[9] + match[10]);
+            tzMin = +(match[9] + match[11]);
+        }
+        dateSetter.call(date, +(match[1]), +(match[2]) - 1, +(match[3]));
+        const h: number = +(match[4] || '0') - tzHour;
+        const m: number = +(match[5] || '0') - tzMin;
+        const s: number = +(match[6] || '0');
+        const ms: number = Math.round(parseFloat('0.' + (match[7] || 0)) * 1000);
+        timeSetter.call(date, h, m, s, ms);
+        return date;
+    }
 
     public transform(value: any, defaultLocale: string, pattern: string = 'mediumDate'): string | null {
         if (value == null || value === "" || value !== value) return null;
@@ -96,7 +96,7 @@ export class L10nDatePipe implements PipeTransform {
                 value = value.trim();
             }
 
-            if (isDate(value)) {
+            if (L10nDatePipe.isDate(value)) {
                 date = value;
             } else if (!isNaN(value - parseFloat(value))) {
                 date = new Date(parseFloat(value));
@@ -107,14 +107,14 @@ export class L10nDatePipe implements PipeTransform {
                 date = new Date(value);
             }
 
-            if (!isDate(date)) {
+            if (!L10nDatePipe.isDate(date)) {
                 let match: RegExpMatchArray | null;
-                if ((typeof value === "string") && (match = value.match(ISO8601_DATE_REGEX))) {
-                    date = isoStringToDate(match);
+                if ((typeof value === "string") && (match = value.match(L10nDatePipe.ISO8601_DATE_REGEX))) {
+                    date = L10nDatePipe.isoStringToDate(match);
                 }
             }
 
-            return DateFormatter.format(date, defaultLocale, L10nDatePipe._ALIASES[pattern] || pattern);
+            return IntlFormatter.formatDate(date, defaultLocale, L10nDatePipe.ALIASES[pattern] || pattern);
         }
         // Returns the date without localization.
         return value;

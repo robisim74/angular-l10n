@@ -1,54 +1,8 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
 import { IntlAPI } from '../services/intl-api';
-import { NumberFormatter } from '../models/intl';
+import { IntlFormatter } from '../models/intl-formatter';
 import { NumberFormatStyle } from '../models/types';
-
-function formatNumber(
-    defaultLocale: string,
-    value: number,
-    style: NumberFormatStyle,
-    digits?: string,
-    currency?: string,
-    currencyDisplay?: string): string | null {
-
-    if (value == null) return null;
-
-    value = typeof value === "string" && !isNaN(+value - parseFloat(value)) ? +value : value;
-
-    let minInt: number | undefined;
-    let minFraction: number | undefined;
-    let maxFraction: number | undefined;
-    if (style !== NumberFormatStyle.Currency) {
-        minInt = 1;
-        minFraction = 0;
-        maxFraction = 3;
-    }
-
-    if (!!digits) {
-        const NUMBER_FORMAT_REGEXP: RegExp = /^(\d+)?\.((\d+)(\-(\d+))?)?$/;
-        const parts: RegExpMatchArray | null = digits.match(NUMBER_FORMAT_REGEXP);
-        if (parts != null) {
-            if (parts[1] != null) {  // Min integer digits.
-                minInt = parseInt(parts[1]);
-            }
-            if (parts[3] != null) {  // Min fraction digits.
-                minFraction = parseInt(parts[3]);
-            }
-            if (parts[5] != null) {  // Max fraction digits.
-                maxFraction = parseInt(parts[5]);
-            }
-        }
-    }
-
-    return NumberFormatter.format(value, defaultLocale, style, {
-        minimumIntegerDigits: minInt,
-        minimumFractionDigits: minFraction,
-        maximumFractionDigits: maxFraction,
-        currency: currency,
-        currencyDisplay: currencyDisplay
-    });
-}
 
 @Pipe({
     name: 'l10nDecimal',
@@ -57,10 +11,13 @@ function formatNumber(
 export class L10nDecimalPipe implements PipeTransform {
 
     public transform(value: any, defaultLocale: string, digits?: string): string | null {
+        if (value == null) return null;
         if (typeof defaultLocale === "undefined") return null;
 
         if (IntlAPI.hasNumberFormat()) {
-            return formatNumber(defaultLocale, value, NumberFormatStyle.Decimal, digits);
+            value = typeof value === "string" && !isNaN(+value - parseFloat(value)) ? +value : value;
+
+            return IntlFormatter.formatNumber(value, defaultLocale, NumberFormatStyle.Decimal, digits);
         }
         // Returns the number without localization.
         return value;
@@ -75,10 +32,13 @@ export class L10nDecimalPipe implements PipeTransform {
 export class L10nPercentPipe implements PipeTransform {
 
     public transform(value: any, defaultLocale: string, digits?: string): string | null {
+        if (value == null) return null;
         if (typeof defaultLocale === "undefined") return null;
 
         if (IntlAPI.hasNumberFormat()) {
-            return formatNumber(defaultLocale, value, NumberFormatStyle.Percent, digits);
+            value = typeof value === "string" && !isNaN(+value - parseFloat(value)) ? +value : value;
+
+            return IntlFormatter.formatNumber(value, defaultLocale, NumberFormatStyle.Percent, digits);
         }
         // Returns the number without localization.
         return value;
@@ -99,10 +59,21 @@ export class L10nCurrencyPipe implements PipeTransform {
         currencyDisplay: 'code' | 'symbol' | 'name' = 'symbol',
         digits?: string
     ): string | null {
+
+        if (value == null) return null;
         if (typeof defaultLocale === "undefined" || typeof currency === "undefined") return null;
 
         if (IntlAPI.hasNumberFormat()) {
-            return formatNumber(defaultLocale, value, NumberFormatStyle.Currency, digits, currency, currencyDisplay);
+            value = typeof value === "string" && !isNaN(+value - parseFloat(value)) ? +value : value;
+
+            return IntlFormatter.formatNumber(
+                value,
+                defaultLocale,
+                NumberFormatStyle.Currency,
+                digits,
+                currency,
+                currencyDisplay
+            );
         }
         // Returns the number & currency without localization.
         return value + " " + currency;
