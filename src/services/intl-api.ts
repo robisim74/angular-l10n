@@ -12,6 +12,15 @@ export class IntlAPI {
         return IntlAPI.hasIntl && Intl​.hasOwnProperty​("DateTimeFormat");
     }
 
+    public static hasTimezone(): boolean {
+        try {
+            new Intl.DateTimeFormat('en-US', { timeZone: 'America/Los_Angeles' }).format(new Date());
+        } catch (e) {
+            return false;
+        }
+        return true;
+    }
+
     public static hasNumberFormat(): boolean {
         return IntlAPI.hasIntl && Intl.hasOwnProperty​("NumberFormat");
     }

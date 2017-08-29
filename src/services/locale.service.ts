@@ -8,13 +8,14 @@ import { DefaultLocale } from '../models/default-locale';
 import { Language } from '../models/types';
 
 /**
- * Manages language, default locale & currency.
+ * Manages language, default locale, currency & timezone.
  */
 export interface ILocaleService {
 
     languageCodeChanged: EventEmitter<string>;
     defaultLocaleChanged: EventEmitter<string>;
     currencyCodeChanged: EventEmitter<string>;
+    timezoneChanged: EventEmitter<string>;
 
     loadTranslation: Subject<any>;
 
@@ -50,6 +51,8 @@ export interface ILocaleService {
         currency?: string
     ): string;
 
+    getCurrentTimezone(): string;
+
     setCurrentLanguage(languageCode: string): void;
 
     setDefaultLocale(
@@ -62,6 +65,8 @@ export interface ILocaleService {
 
     setCurrentCurrency(currencyCode: string): void;
 
+    setCurrentTimezone(zoneName: string): void;
+
 }
 
 @Injectable() export class LocaleService implements ILocaleService {
@@ -69,12 +74,14 @@ export interface ILocaleService {
     @Output() public languageCodeChanged: EventEmitter<string> = new EventEmitter<string>(true);
     @Output() public defaultLocaleChanged: EventEmitter<string> = new EventEmitter<string>(true);
     @Output() public currencyCodeChanged: EventEmitter<string> = new EventEmitter<string>(true);
+    @Output() public timezoneChanged: EventEmitter<string> = new EventEmitter<string>(true);
 
     public loadTranslation: Subject<any> = new Subject();
 
     private defaultLocale: DefaultLocale = new DefaultLocale();
 
     private currencyCode: string;
+    private timezone: string;
 
     constructor( @Inject(LOCALE_CONFIG) private configuration: LocaleConfig, private storage: LocaleStorage) { }
 
@@ -93,6 +100,10 @@ export interface ILocaleService {
 
         if (this.configuration.currency) {
             this.initCurrency();
+        }
+
+        if (this.configuration.timezone) {
+            this.initTimezone();
         }
     }
 
@@ -196,6 +207,10 @@ export interface ILocaleService {
         return currencySymbol;
     }
 
+    public getCurrentTimezone(): string {
+        return this.timezone;
+    }
+
     public setCurrentLanguage(languageCode: string): void {
         if (this.defaultLocale.languageCode != languageCode) {
             this.defaultLocale.build(languageCode);
@@ -240,6 +255,14 @@ export interface ILocaleService {
         }
     }
 
+    public setCurrentTimezone(zoneName: string): void {
+        if (this.timezone != zoneName) {
+            this.timezone = zoneName;
+            this.storage.write("timezone", this.timezone);
+            this.sendTimezoneEvents();
+        }
+    }
+
     private async initStorage(): Promise<void> {
         // Tries to retrieve default locale & currency from the browser storage.
         if (!this.defaultLocale.value) {
@@ -252,6 +275,12 @@ export interface ILocaleService {
             const currencyCode: string | null = await this.storage.read("currency");
             if (!!currencyCode) {
                 this.currencyCode = currencyCode;
+            }
+        }
+        if (this.timezone == null) {
+            const zoneName: string | null = await this.storage.read("timezone");
+            if (!!zoneName) {
+                this.timezone = zoneName;
             }
         }
     }
@@ -299,6 +328,16 @@ export interface ILocaleService {
         this.sendCurrencyEvents();
     }
 
+    private initTimezone(): void {
+        if (this.timezone == null) {
+            if (this.configuration.timezone) {
+                this.timezone = this.configuration.timezone;
+                this.storage.write("timezone", this.timezone);
+            }
+        }
+        this.sendCurrencyEvents();
+    }
+
     private matchLanguage(languageCode: string): Language[] {
         let matchedLanguages: Language[] = [];
         if (this.configuration.languages) {
@@ -320,6 +359,10 @@ export interface ILocaleService {
 
     private sendCurrencyEvents(): void {
         this.currencyCodeChanged.emit(this.currencyCode);
+    }
+
+    private sendTimezoneEvents(): void {
+        this.timezoneChanged.emit(this.timezone);
     }
 
     private sendTranslationEvents(): void {

@@ -405,10 +405,10 @@ You can also get the translation in component class.
 Pipe | Type | Format | Pipe syntax
 ---- | ---- | ------ | -----------
 Translate | Message | String | `expression \| translate:lang`
-L10nDate | Date | Date/Number/ISO string | `expression \| L10nDate[:defaultLocale[:format]]`
-L10nDecimal | Number | Decimal | `expression \| L10nDecimal[:defaultLocale[:digitInfo]]`
-L10nPercent | Number | Percentage | `expression \| L10nPercent[:defaultLocale[:digitInfo]]`
-L10nCurrency | Number | Currency | `expression \| L10nCurrency[:defaultLocale[:currency[:currencyDisplay[:digitInfo]]]]`
+L10nDate | Date | Date/Number/ISO string | `expression \| l10nDate[:defaultLocale[:format]]`
+L10nDecimal | Number | Decimal | `expression \| l10nDecimal[:defaultLocale[:digitInfo]]`
+L10nPercent | Number | Percentage | `expression \| l10nPercent[:defaultLocale[:digitInfo]]`
+L10nCurrency | Number | Currency | `expression \| l10nCurrency[:defaultLocale[:currency[:currencyDisplay[:digitInfo]]]]`
 
 >You can dynamically change parameters and expressions values.
 
@@ -480,63 +480,51 @@ export class HomeComponent implements OnInit {
 
 ##### Dates
 ```
-expression | L10nDate[:defaultLocale[:format]]
+expression | l10nDate[:defaultLocale[:format]]
 ```
 Where:
-- `expression` is a date object or a number (milliseconds since UTC epoch) or an ISO string: https://www.w3.org/TR/NOTE-datetime.
-- `format` indicates which date/time components to include. The format can be predefined as
-  shown below or custom as shown in the table.
-  - `'medium'`: equivalent to `'yMMMdjms'` (e.g. `Sep 3, 2010, 12:05:08 PM` for `en-US`)
-  - `'short'`: equivalent to `'yMdjm'` (e.g. `9/3/2010, 12:05 PM` for `en-US`)
-  - `'fullDate'`: equivalent to `'yMMMMEEEEd'` (e.g. `Friday, September 3, 2010` for `en-US`)
-  - `'longDate'`: equivalent to `'yMMMMd'` (e.g. `September 3, 2010` for `en-US`)
-  - `'mediumDate'`: equivalent to `'yMMMd'` (e.g. `Sep 3, 2010` for `en-US`)
-  - `'shortDate'`: equivalent to `'yMd'` (e.g. `9/3/2010` for `en-US`)
-  - `'mediumTime'`: equivalent to `'jms'` (e.g. `12:05:08 PM` for `en-US`)
-  - `'shortTime'`: equivalent to `'jm'` (e.g. `12:05 PM` for `en-US`)
+- `expression` is a date object or a number (milliseconds since UTC epoch) or an ISO string
+  (https://www.w3.org/TR/NOTE-datetime).
+- `format` indicates which date/time components to include.
 
-| Component | Symbol | Narrow | Short Form   | Long Form                 | Numeric   | 2-digit    |
-|-----------|:------:|--------|--------------|---------------------------|-----------|------------|
-| era       |   G    | G (A)  | GGG (AD)     | GGGG (Anno Domini)        | -         | -          |
-| year      |   y    | -      | -            | -                         | y (2015)  | yy (15)    |
-| month     |   M    | L (S)  | MMM (Sep)    | MMMM (September)          | M (9)     | MM (09)    |
-| day       |   d    | -      | -            | -                         | d (3)     | dd (03)    |
-| weekday   |   E    | E (S)  | EEE (Sun)    | EEEE (Sunday)             | -         | -          |
-| hour      |   j    | -      | -            | -                         | j (13)    | jj (13)    |
-| hour12    |   h    | -      | -            | -                         | h (1 PM)  | hh (01 PM) |
-| hour24    |   H    | -      | -            | -                         | H (13)    | HH (13)    |
-| minute    |   m    | -      | -            | -                         | m (5)     | mm (05)    |
-| second    |   s    | -      | -            | -                         | s (9)     | ss (09)    |
-| timezone  |   z    | -      | -            | z (Pacific Standard Time) | -         | -          |
-| timezone  |   Z    | -      | Z (GMT-8:00) | -                         | -         | -          |
-| timezone  |   a    | -      | a (PM)       | -                         | -         | -          |
+  The format can be predefined as shown below:
+  - `'short'`: equivalent to `'M/d/y, h:mm'` (e.g. `8/29/2017, 4:37 PM` for `en-US`)
+  - `'medium'`: equivalent to `'MMM d, y, h:mm:ss'` (e.g. `Aug 29, 2017, 4:32:43 PM` for `en-US`)
+
+  - `'shortDate'`: equivalent to `'M/d/y'` (e.g. `8/29/2017` for `en-US`)
+  - `'mediumDate'`: equivalent to `'MMM d, y'` (e.g. `Aug 29, 2017` for `en-US`)
+  - `'longDate'`: equivalent to `'MMMM d, y'` (e.g. `August 29, 2017` for `en-US`)
+  - `'fullDate'`: equivalent to `'EEEE, MMMM d, y'` (e.g. `Tuesday, August 29, 2017` for `en-US`)
+
+  - `'shortTime'`: equivalent to `'h:mm'` (e.g. `4:53 PM` for `en-US`)
+  - `'mediumTime'`: equivalent to `'h:mm:ss'` (e.g. `4:54:15 PM` for `en-US`)
 
 ```Html
-{{ today | L10nDate:defaultLocale:'fullDate' }}
+{{ today | l10nDate:defaultLocale:'fullDate' }}
 ```
 ##### Decimals
 ```
-expression | L10nDecimal[:defaultLocale:[digitInfo]]
+expression | l10nDecimal[:defaultLocale:[digitInfo]]
 ```
 where `expression` is a number and `digitInfo` has the following format: `{minIntegerDigits}.{minFractionDigits}-{maxFractionDigits}`.
 
 ```Html
-{{ value | L10nDecimal:defaultLocale:'1.5-5' }}
+{{ value | l10nDecimal:defaultLocale:'1.5-5' }}
 ```
 ##### Percentages
 ```
-expression | L10nPercent[:defaultLocale:[digitInfo]]
+expression | l10nPercent[:defaultLocale:[digitInfo]]
 ```
 ```Html
-{{ value | L10nPercent:defaultLocale:'1.1-1' }}
+{{ value | l10nPercent:defaultLocale:'1.1-1' }}
 ```
 ##### Currencies
 ```
-expression | L10nCurrency[:defaultLocale[:currency[:currencyDisplay[:digitInfo]]]]
+expression | l10nCurrency[:defaultLocale[:currency[:currencyDisplay[:digitInfo]]]]
 ```
 where `currencyDisplay` is the currency formatting. Possible values are _'symbol'_ to use a localized currency symbol such as _€_, _'code'_ to use the ISO currency code, _'name'_ to use a localized currency name such as _dollar_; the default is _'symbol'_. 
 ```Html
-{{ value | L10nCurrency:defaultLocale:currency:'symbol':'1.2-2' }}
+{{ value | l10nCurrency:defaultLocale:currency:'symbol':'1.2-2' }}
 ```
 
 #### <a name="3.1.3"/>3.1.3 Translation & Localization classes

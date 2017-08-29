@@ -8,7 +8,22 @@ export interface PropertyDecorator {
 
 export interface Type<T> extends Function {
 
-    new(...args: any[]): T;
+    new (...args: any[]): T;
+
+}
+
+export interface DateTimeOptions {
+
+    weekday?: string;
+    era?: string;
+    year?: string;
+    month?: string;
+    day?: string;
+    hour?: string;
+    minute?: string;
+    second?: string;
+    timeZoneName?: string;
+    hour12?: boolean;
 
 }
 
@@ -90,7 +105,7 @@ export enum NumberFormatStyle {
     Currency
 }
 
-export type DateFormatterFn = (date: Date, defaultLocale: string) => string;
+export type DateFormatterFn = (date: Date, defaultLocale: string, timezone?: string) => string;
 
 export type Decimal = {
 

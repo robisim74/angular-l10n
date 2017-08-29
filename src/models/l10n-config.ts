@@ -30,6 +30,11 @@ export interface LocaleConfig {
     currency?: string;
 
     /**
+     * The time zone name of the IANA time zone database to use.
+     */
+    timezone?: string;
+
+    /**
      * Defines the storage to be used for language, default locale & currency. Default is cookie.
      */
     storage?: StorageStrategy;

@@ -5,9 +5,9 @@ import { InjectorRef } from '../models/injector-ref';
 import { PropertyDecorator } from '../models/types';
 
 /**
- * Property decorator for components to provide the parameter to the l10nCurrency pipe.
+ * Property decorator for components to provide the parameter to the l10nDate pipe.
  */
-export function Currency(): PropertyDecorator {
+export function Timezone(): PropertyDecorator {
 
     function DecoratorFactory(target: any, propertyKey?: string): void {
         let subscription: ISubscription;
@@ -17,11 +17,11 @@ export function Currency(): PropertyDecorator {
             const locale: LocaleService = InjectorRef.get(LocaleService);
 
             if (typeof propertyKey !== "undefined") {
-                this[propertyKey] = locale.getCurrentCurrency();
-                // When the currency changes, subscribes to the event & updates currency property.
-                subscription = locale.currencyCodeChanged.subscribe(
-                    (currency: string) => {
-                        this[propertyKey] = currency;
+                this[propertyKey] = locale.getCurrentTimezone();
+                // When the timezone changes, subscribes to the event & updates timezone property.
+                subscription = locale.timezoneChanged.subscribe(
+                    (zoneName: string) => {
+                        this[propertyKey] = zoneName;
                     });
             }
 

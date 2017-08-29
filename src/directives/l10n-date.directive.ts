@@ -3,18 +3,19 @@ import { Directive, ElementRef, Input, Renderer2 } from '@angular/core';
 import { LocaleService } from '../services/locale.service';
 import { BaseDirective } from '../models/base-directive';
 import { L10nDatePipe } from '../pipes/l10n-date.pipe';
+import { DateTimeOptions } from '../models/types';
 
 @Directive({
     selector: '[l10nDate]'
 })
 export class L10nDateDirective extends BaseDirective {
 
-    @Input() set l10nDate(pattern: string) {
-        this.pattern = pattern;
+    @Input() set l10nDate(format: string | DateTimeOptions) {
+        this.format = format;
     }
 
-    private pattern: string;
-    private defaultPattern: string = 'mediumDate';
+    private format: string | DateTimeOptions;
+    private defaultFormat: string = 'mediumDate';
 
     private l10nDatePipe: L10nDatePipe = new L10nDatePipe();
 
@@ -25,6 +26,9 @@ export class L10nDateDirective extends BaseDirective {
     protected setup(): void {
         this.replace();
         this.subscriptions.push(this.locale.defaultLocaleChanged.subscribe(
+            () => { this.replace(); }
+        ));
+        this.subscriptions.push(this.locale.timezoneChanged.subscribe(
             () => { this.replace(); }
         ));
     }
@@ -50,7 +54,8 @@ export class L10nDateDirective extends BaseDirective {
         return this.l10nDatePipe.transform(
             keys,
             this.locale.getDefaultLocale(),
-            this.pattern || this.defaultPattern
+            this.format || this.defaultFormat,
+            this.locale.getCurrentTimezone()
         );
     }
 

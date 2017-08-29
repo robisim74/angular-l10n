@@ -1,62 +1,58 @@
-/**
- * Original code by Google Inc.
- */
-
 import { Pipe, PipeTransform } from '@angular/core';
 
 import { IntlAPI } from '../services/intl-api';
 import { IntlFormatter } from '../models/intl-formatter';
+import { DateTimeOptions } from '../models/types';
 
 /**
- * expression | l10nDate[:defaultLocale[:format]]
+ * expression | l10nDate[:defaultLocale[:format[:timezone]]]
  *
  * Where:
  * - `expression` is a date object or a number (milliseconds since UTC epoch) or an ISO string
  *   (https://www.w3.org/TR/NOTE-datetime).
- * - `format` indicates which date/time components to include. The format can be predefined as
- *   shown below or custom as shown in the table.
- *   - `'medium'`: equivalent to `'yMMMdjms'` (e.g. `Sep 3, 2010, 12:05:08 PM` for `en-US`)
- *   - `'short'`: equivalent to `'yMdjm'` (e.g. `9/3/2010, 12:05 PM` for `en-US`)
- *   - `'fullDate'`: equivalent to `'yMMMMEEEEd'` (e.g. `Friday, September 3, 2010` for `en-US`)
- *   - `'longDate'`: equivalent to `'yMMMMd'` (e.g. `September 3, 2010` for `en-US`)
- *   - `'mediumDate'`: equivalent to `'yMMMd'` (e.g. `Sep 3, 2010` for `en-US`)
- *   - `'shortDate'`: equivalent to `'yMd'` (e.g. `9/3/2010` for `en-US`)
- *   - `'mediumTime'`: equivalent to `'jms'` (e.g. `12:05:08 PM` for `en-US`)
- *   - `'shortTime'`: equivalent to `'jm'` (e.g. `12:05 PM` for `en-US`)
+ * - `format` indicates which date/time components to include.
  *
+ *   The format can be predefined as shown below:
+ *   - `'short'`: equivalent to `'M/d/y, h:mm'` (e.g. `8/29/2017, 4:37 PM` for `en-US`)
+ *   - `'medium'`: equivalent to `'MMM d, y, h:mm:ss'` (e.g. `Aug 29, 2017, 4:32:43 PM` for `en-US`)
  *
- *  | Component | Symbol | Narrow | Short Form   | Long Form                 | Numeric   | 2-digit    |
- *  |-----------|:------:|--------|--------------|---------------------------|-----------|------------|
- *  | era       |   G    | G (A)  | GGG (AD)     | GGGG (Anno Domini)        | -         | -          |
- *  | year      |   y    | -      | -            | -                         | y (2015)  | yy (15)    |
- *  | month     |   M    | L (S)  | MMM (Sep)    | MMMM (September)          | M (9)     | MM (09)    |
- *  | day       |   d    | -      | -            | -                         | d (3)     | dd (03)    |
- *  | weekday   |   E    | E (S)  | EEE (Sun)    | EEEE (Sunday)             | -         | -          |
- *  | hour      |   j    | -      | -            | -                         | j (13)    | jj (13)    |
- *  | hour12    |   h    | -      | -            | -                         | h (1 PM)  | hh (01 PM) |
- *  | hour24    |   H    | -      | -            | -                         | H (13)    | HH (13)    |
- *  | minute    |   m    | -      | -            | -                         | m (5)     | mm (05)    |
- *  | second    |   s    | -      | -            | -                         | s (9)     | ss (09)    |
- *  | timezone  |   z    | -      | -            | z (Pacific Standard Time) | -         | -          |
- *  | timezone  |   Z    | -      | Z (GMT-8:00) | -                         | -         | -          |
- *  | timezone  |   a    | -      | a (PM)       | -                         | -         | -          |
+ *   - `'shortDate'`: equivalent to `'M/d/y'` (e.g. `8/29/2017` for `en-US`)
+ *   - `'mediumDate'`: equivalent to `'MMM d, y'` (e.g. `Aug 29, 2017` for `en-US`)
+ *   - `'longDate'`: equivalent to `'MMMM d, y'` (e.g. `August 29, 2017` for `en-US`)
+ *   - `'fullDate'`: equivalent to `'EEEE, MMMM d, y'` (e.g. `Tuesday, August 29, 2017` for `en-US`)
+ *
+ *   - `'shortTime'`: equivalent to `'h:mm'` (e.g. `4:53 PM` for `en-US`)
+ *   - `'mediumTime'`: equivalent to `'h:mm:ss'` (e.g. `4:54:15 PM` for `en-US`)
+ *
+ *   Or it can be an object with some or all of the following properties
+ *   (https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/DateTimeFormat):
+ *      - weekday
+ *          The representation of the weekday. Possible values are "narrow", "short", "long".
+ *      - era
+ *          The representation of the era. Possible values are "narrow", "short", "long".
+ *      - year
+ *          The representation of the year. Possible values are "numeric", "2-digit".
+ *      - month
+ *          The representation of the month. Possible values are "numeric", "2-digit", "narrow", "short", "long".
+ *      - day
+ *          The representation of the day. Possible values are "numeric", "2-digit".
+ *      - hour
+ *          The representation of the hour. Possible values are "numeric", "2-digit".
+ *      - minute
+ *          The representation of the minute. Possible values are "numeric", "2-digit".
+ *      - second
+ *          The representation of the second. Possible values are "numeric", "2-digit".
+ *      - timeZoneName
+ *          The representation of the time zone name. Possible values are "short", "long".
+ *      - hour12
+ *          Whether to use 12-hour time (as opposed to 24-hour time).
+ *          Possible values are true and false; the default is locale dependent.
  */
 @Pipe({
     name: 'l10nDate',
     pure: true
 })
 export class L10nDatePipe implements PipeTransform {
-
-    public static readonly ALIASES: { [key: string]: string } = {
-        'medium': 'yMMMdjms',
-        'short': 'yMdjm',
-        'fullDate': 'yMMMMEEEEd',
-        'longDate': 'yMMMMd',
-        'mediumDate': 'yMMMd',
-        'shortDate': 'yMd',
-        'mediumTime': 'jms',
-        'shortTime': 'jm'
-    };
 
     private static readonly ISO8601_DATE_REGEX: RegExp =
     /^(\d{4})-?(\d\d)-?(\d\d)(?:T(\d\d)(?::?(\d\d)(?::?(\d\d)(?:\.(\d+))?)?)?(Z|([+-])(\d\d):?(\d\d))?)?$/;
@@ -85,7 +81,12 @@ export class L10nDatePipe implements PipeTransform {
         return date;
     }
 
-    public transform(value: any, defaultLocale: string, pattern: string = 'mediumDate'): string | null {
+    public transform(
+        value: any,
+        defaultLocale: string,
+        format: string | DateTimeOptions = 'mediumDate',
+        timezone?: string): string | null {
+
         if (value == null || value === "" || value !== value) return null;
         if (typeof defaultLocale === "undefined") return null;
 
@@ -114,7 +115,7 @@ export class L10nDatePipe implements PipeTransform {
                 }
             }
 
-            return IntlFormatter.formatDate(date, defaultLocale, L10nDatePipe.ALIASES[pattern] || pattern);
+            return IntlFormatter.formatDate(date, defaultLocale, format, timezone);
         }
         // Returns the date without localization.
         return value;

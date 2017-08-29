@@ -6,7 +6,7 @@ import { PropertyDecorator } from '../models/types';
 
 /**
  * Property decorator for components to provide the parameter
- * to localeDecimal, localePercent & localeCurrency pipes.
+ * to l10nDate, l10nDecimal, l10nPercent & l10nCurrency pipes.
  */
 export function DefaultLocale(): PropertyDecorator {
 

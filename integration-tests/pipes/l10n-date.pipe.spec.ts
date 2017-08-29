@@ -8,7 +8,8 @@ import {
     L10nLoader,
     LocalizationModule,
     LocaleService,
-    StorageStrategy
+    StorageStrategy,
+    DateTimeOptions
 } from './../../index';
 
 describe('L10nDatePipe', () => {
@@ -19,6 +20,7 @@ describe('L10nDatePipe', () => {
     const l10nConfig: L10nConfig = {
         locale: {
             defaultLocale: { languageCode: 'en', countryCode: 'US' },
+            timezone: 'America/Los_Angeles',
             storage: StorageStrategy.Disabled
         }
     };
@@ -36,17 +38,40 @@ describe('L10nDatePipe', () => {
         l10nLoader = TestBed.get(L10nLoader);
         locale = TestBed.get(LocaleService);
         pipe = new L10nDatePipe();
-        
+
         l10nLoader.load().then(() => done());
     });
 
-    it('should localize a date', () => {
+    it('should localize a date using format aliases', () => {
         const date: Date = new Date('7/19/2016');
 
         expect(pipe.transform(date, locale.getDefaultLocale(), 'shortDate')).toEqual('7/19/2016');
 
         locale.setDefaultLocale('it', 'IT');
         expect(pipe.transform(date, locale.getDefaultLocale(), 'shortDate')).toEqual('19/7/2016');
+    });
+
+    it('should localize a date using custom format', () => {
+        const date: Date = new Date('8/29/2017');
+        const options: DateTimeOptions = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+
+        locale.setDefaultLocale('en', 'US');
+        expect(pipe.transform(date, locale.getDefaultLocale(), options)).toEqual('Tuesday, August 29, 2017');
+
+        locale.setDefaultLocale('it', 'IT');
+        expect(pipe.transform(date, locale.getDefaultLocale(), options)).toEqual('martedì 29 agosto 2017');
+    });
+
+    it('should localize a date using timezone', () => {
+        const date: Date = new Date(Date.UTC(2017, 7, 29, 21, 41, 0));
+        const options: DateTimeOptions = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric' };
+
+        locale.setDefaultLocale('en', 'US');
+        expect(pipe.transform(date, locale.getDefaultLocale(), options, locale.getCurrentTimezone())).toEqual('Tuesday, August 29, 2017, 2:41 PM');
+
+        locale.setDefaultLocale('it', 'IT');
+        locale.setCurrentTimezone('Europe/Rome');
+        expect(pipe.transform(date, locale.getDefaultLocale(), options, locale.getCurrentTimezone())).toEqual('martedì 29 agosto 2017, 23:41');
     });
 
 });

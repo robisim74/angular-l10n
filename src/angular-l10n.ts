@@ -1,5 +1,5 @@
 export { InjectorRef } from './models/injector-ref';
-export { StorageStrategy, ProviderType, ISOCode } from './models/types';
+export { StorageStrategy, ProviderType, ISOCode, DateTimeOptions } from './models/types';
 export {
     LOCALE_CONFIG,
     TRANSLATION_CONFIG,
@@ -24,6 +24,7 @@ export { IntlAPI } from './services/intl-api';
 export { Language } from './decorators/language.decorator';
 export { DefaultLocale } from './decorators/default-locale.decorator';
 export { Currency } from './decorators/currency.decorator';
+export { Timezone } from './decorators/timezone.decorator';
 export { TranslatePipe } from './pipes/translate.pipe';
 export { L10nDatePipe } from './pipes/l10n-date.pipe';
 export {
