@@ -500,7 +500,7 @@ expression | l10nDate[:defaultLocale[:format[:timezone]]]
 ```
 Where:
 - `expression` is a date object or a number (milliseconds since UTC epoch) or an ISO string.
-- `format` indicates which date/time components to include. The format can be predefined as shown below:
+- `format` indicates which date/time components to include. The format can be an alias as shown below:
   - `'short'`: equivalent to `'M/d/y, h:mm'` (e.g. `8/29/2017, 4:37 PM` for `en-US`)
   - `'medium'`: equivalent to `'MMM d, y, h:mm:ss'` (e.g. `Aug 29, 2017, 4:32:43 PM` for `en-US`)
   - `'shortDate'`: equivalent to `'M/d/y'` (e.g. `8/29/2017` for `en-US`)
@@ -510,7 +510,7 @@ Where:
   - `'shortTime'`: equivalent to `'h:mm'` (e.g. `4:53 PM` for `en-US`)
   - `'mediumTime'`: equivalent to `'h:mm:ss'` (e.g. `4:54:15 PM` for `en-US`)
 
-  Or it can be an object with some or all of the following properties:
+`format` can also be an object with some or all of the following properties:
   - `weekday` The representation of the weekday. Possible values are _narrow_, _short_, _long_.
   - `era` The representation of the era. Possible values are _narrow_, _short_, _long_.
   - `year` The representation of the year. Possible values are _numeric_, _2-digit_.
@@ -522,7 +522,7 @@ Where:
   - `timeZoneName` The representation of the time zone name. Possible values are _short_, _long_.
   - `hour12` Whether to use 12-hour time (as opposed to 24-hour time). Possible values are true and false; the default is locale dependent.
 
-  See [DateTimeFormat](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/DateTimeFormat) for further information.
+See [DateTimeFormat](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/DateTimeFormat) for further information.
 
 ###### Using format aliases
 ```Html

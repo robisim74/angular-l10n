@@ -9,7 +9,7 @@ import { DateTimeOptions } from '../models/types';
  *
  * Where:
  * - `expression` is a date object or a number (milliseconds since UTC epoch) or an ISO string.
- * - `format` indicates which date/time components to include. The format can be predefined as shown below:
+ * - `format` indicates which date/time components to include. The format can be an alis as shown below:
  *   - `'short'`: equivalent to `'M/d/y, h:mm'` (e.g. `8/29/2017, 4:37 PM` for `en-US`)
  *   - `'medium'`: equivalent to `'MMM d, y, h:mm:ss'` (e.g. `Aug 29, 2017, 4:32:43 PM` for `en-US`)
  *   - `'shortDate'`: equivalent to `'M/d/y'` (e.g. `8/29/2017` for `en-US`)
@@ -19,18 +19,18 @@ import { DateTimeOptions } from '../models/types';
  *   - `'shortTime'`: equivalent to `'h:mm'` (e.g. `4:53 PM` for `en-US`)
  *   - `'mediumTime'`: equivalent to `'h:mm:ss'` (e.g. `4:54:15 PM` for `en-US`)
  *
- *   Or it can be an object with some or all of the following properties:
- *      - `weekday` The representation of the weekday. Possible values are "narrow", "short", "long".
- *      - `era` The representation of the era. Possible values are "narrow", "short", "long".
- *      - `year` The representation of the year. Possible values are "numeric", "2-digit".
- *      - `month` The representation of the month. Possible values are "numeric", "2-digit", "narrow", "short", "long".
- *      - `day` The representation of the day. Possible values are "numeric", "2-digit".
- *      - `hour` The representation of the hour. Possible values are "numeric", "2-digit".
- *      - `minute` The representation of the minute. Possible values are "numeric", "2-digit".
- *      - `second` The representation of the second. Possible values are "numeric", "2-digit".
- *      - `timeZoneName` The representation of the time zone name. Possible values are "short", "long".
- *      - `hour12` Whether to use 12-hour time (as opposed to 24-hour time).
- *        Possible values are true and false; the default is locale dependent.
+ * `format` can also be an object with some or all of the following properties:
+ *   - `weekday` The representation of the weekday. Possible values are "narrow", "short", "long".
+ *   - `era` The representation of the era. Possible values are "narrow", "short", "long".
+ *   - `year` The representation of the year. Possible values are "numeric", "2-digit".
+ *   - `month` The representation of the month. Possible values are "numeric", "2-digit", "narrow", "short", "long".
+ *   - `day` The representation of the day. Possible values are "numeric", "2-digit".
+ *   - `hour` The representation of the hour. Possible values are "numeric", "2-digit".
+ *   - `minute` The representation of the minute. Possible values are "numeric", "2-digit".
+ *   - `second` The representation of the second. Possible values are "numeric", "2-digit".
+ *   - `timeZoneName` The representation of the time zone name. Possible values are "short", "long".
+ *   - `hour12` Whether to use 12-hour time (as opposed to 24-hour time).
+ *   Possible values are true and false; the default is locale dependent.
  */
 @Pipe({
     name: 'l10nDate',
