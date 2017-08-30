@@ -155,15 +155,15 @@ export class AppComponent implements OnInit {
 ```
 See the following documentation to learn more about all the features:
 
-- **Angular v5 current: latest pre-release is v4.0.0-beta.2**
+- **Angular v5: current**
     - [Quick start](https://github.com/robisim74/angular-l10n/blob/master/doc/quick-start.md)
     - [Library specification](https://github.com/robisim74/angular-l10n/blob/master/doc/spec.md)
     - [Snippets](https://github.com/robisim74/angular-l10n/wiki/Snippets)
 
-- **Angular v4: latest release is v3.5.0**
+- **Angular v4: latest compatible release of this library is v3.5.0**
     - [Branch](https://github.com/robisim74/angular-l10n/tree/angular_v4)
 
-- **Angular v2: latest release is v2.0.10**
+- **Angular v2: latest compatible release of this library is v2.0.10**
     - [Branch](https://github.com/robisim74/angular-l10n/tree/angular_v2)
 
 ## Related projects
