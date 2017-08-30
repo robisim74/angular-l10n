@@ -475,7 +475,7 @@ _Json_:
 ```
 
 #### <a name="3.1.2"/>3.1.2 Dates & Numbers
-Implement _DefaultLocale_ & _Currency_ & optionally _Timezone_ decorators in the component to provide _defaultLocale_, _currency_, _timezone_ to _l10nDate_, _l10nDecimal_, _l10nPercent_ & _l10nCurrency_ pipes.
+Implement _DefaultLocale_, _Currency_ & optionally _Timezone_ decorators in the component to provide _defaultLocale_, _currency_, _timezone_ to _l10nDate_, _l10nDecimal_, _l10nPercent_ & _l10nCurrency_ pipes.
 ```TypeScript
 export class HomeComponent implements OnInit {
 
@@ -492,7 +492,7 @@ export class HomeComponent implements OnInit {
 
 ##### Dates
 ```
-expression | l10nDate[:defaultLocale[:format]]
+expression | l10nDate[:defaultLocale[:format[:timezone]]]
 ```
 Where:
 - `expression` is a date object or a number (milliseconds since UTC epoch) or an ISO string
@@ -513,27 +513,27 @@ Where:
 
   Or it can be an object with some or all of the following properties
   (https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/DateTimeFormat):
-     - `weekday`
-         The representation of the weekday. Possible values are _narrow_, _short_, _long_.
-     - `era`
-         The representation of the era. Possible values are _narrow_, _short_, _long_.
-     - `year`
-         The representation of the year. Possible values are _numeric_, _2-digit_.
-     - `month`
-         The representation of the month. Possible values are _numeric_, _2-digit_, _narrow_, _short_, _long_.
-     - `day`
-         The representation of the day. Possible values are _numeric_, _2-digit_.
-     - `hour`
-         The representation of the hour. Possible values are _numeric_, _2-digit_.
-     - `minute`
-         The representation of the minute. Possible values are _numeric_, _2-digit_.
-     - `second`
-         The representation of the second. Possible values are _numeric_, _2-digit_.
-     - `timeZoneName`
-         The representation of the time zone name. Possible values are _short_, _long_.
-     - `hour12`
-         Whether to use 12-hour time (as opposed to 24-hour time).
-         Possible values are true and false; the default is locale dependent.
+  - `weekday`
+      The representation of the weekday. Possible values are _narrow_, _short_, _long_.
+  - `era`
+      The representation of the era. Possible values are _narrow_, _short_, _long_.
+  - `year`
+      The representation of the year. Possible values are _numeric_, _2-digit_.
+  - `month`
+      The representation of the month. Possible values are _numeric_, _2-digit_, _narrow_, _short_, _long_.
+  - `day`
+      The representation of the day. Possible values are _numeric_, _2-digit_.
+  - `hour`
+      The representation of the hour. Possible values are _numeric_, _2-digit_.
+  - `minute`
+      The representation of the minute. Possible values are _numeric_, _2-digit_.
+  - `second`
+      The representation of the second. Possible values are _numeric_, _2-digit_.
+  - `timeZoneName`
+      The representation of the time zone name. Possible values are _short_, _long_.
+  - `hour12`
+      Whether to use 12-hour time (as opposed to 24-hour time).
+      Possible values are true and false; the default is locale dependent.
 
 ###### Using format aliases
 ```Html
@@ -541,16 +541,16 @@ Where:
 ```
 ###### Using a custom format
 ```Html
-<p>{{ day | l10nDate:defaultLocale:options }}</p>
+<p>{{ today | l10nDate:defaultLocale:options }}</p>
 ```
-with:
+
 ```TypeScript
 const options: DateTimeOptions = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
 ```
 
 ###### Using timezone
 ```Html
-<p>{{ day | l10nDate:defaultLocale:'medium':timezone }}</p>
+<p>{{ today | l10nDate:defaultLocale:'medium':timezone }}</p>
 ```
 
 ##### Decimals
