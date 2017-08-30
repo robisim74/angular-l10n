@@ -56,7 +56,7 @@ Class | Contract
 Class | Contract
 ----- | --------
 `L10nLoader` | Initializes the services
-`LocaleService` | Manages language, default locale & currency
+`LocaleService` | Manages language, default locale, currency & timezone
 `TranslationService` | Manages the translation data
 `Translation` | Provides _lang_ to the _translate_ pipe
 `Localization` | Provides _lang_ to the _translate_ pipe, _defaultLocale_, _currency_, _timezone_ to _l10nDate_, _l10nDecimal_, _l10nPercent_ & _l10nCurrency_ pipes
@@ -394,6 +394,10 @@ The next time a translation file will be required, will be taken from the cache 
 ### <a name="2.9"/>2.9 Intl API
 To localize _dates and numbers_, this library uses the [Intl API](https://developer.mozilla.org/it/docs/Web/JavaScript/Reference/Global_Objects/Intl).
 
+Check the current browsers support:
+- http://kangax.github.io/compat-table/esintl/
+- http://caniuse.com/#feat=internationalization
+
 >_All modern browsers have implemented this API_. You can use [Intl.js](https://github.com/andyearnshaw/Intl.js) to extend support to old browsers.
 
 Just add one script tag in your `index.html`:
@@ -495,62 +499,70 @@ export class HomeComponent implements OnInit {
 expression | l10nDate[:defaultLocale[:format[:timezone]]]
 ```
 Where:
-- `expression` is a date object or a number (milliseconds since UTC epoch) or an ISO string
-  (https://www.w3.org/TR/NOTE-datetime).
-- `format` indicates which date/time components to include.
-
-  The format can be predefined as shown below:
+- `expression` is a date object or a number (milliseconds since UTC epoch) or an ISO string.
+- `format` indicates which date/time components to include. The format can be predefined as shown below:
   - `'short'`: equivalent to `'M/d/y, h:mm'` (e.g. `8/29/2017, 4:37 PM` for `en-US`)
   - `'medium'`: equivalent to `'MMM d, y, h:mm:ss'` (e.g. `Aug 29, 2017, 4:32:43 PM` for `en-US`)
-
   - `'shortDate'`: equivalent to `'M/d/y'` (e.g. `8/29/2017` for `en-US`)
   - `'mediumDate'`: equivalent to `'MMM d, y'` (e.g. `Aug 29, 2017` for `en-US`)
   - `'longDate'`: equivalent to `'MMMM d, y'` (e.g. `August 29, 2017` for `en-US`)
   - `'fullDate'`: equivalent to `'EEEE, MMMM d, y'` (e.g. `Tuesday, August 29, 2017` for `en-US`)
-
   - `'shortTime'`: equivalent to `'h:mm'` (e.g. `4:53 PM` for `en-US`)
   - `'mediumTime'`: equivalent to `'h:mm:ss'` (e.g. `4:54:15 PM` for `en-US`)
 
-  Or it can be an object with some or all of the following properties
-  (https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/DateTimeFormat):
-  - `weekday`
-      The representation of the weekday. Possible values are _narrow_, _short_, _long_.
-  - `era`
-      The representation of the era. Possible values are _narrow_, _short_, _long_.
-  - `year`
-      The representation of the year. Possible values are _numeric_, _2-digit_.
-  - `month`
-      The representation of the month. Possible values are _numeric_, _2-digit_, _narrow_, _short_, _long_.
-  - `day`
-      The representation of the day. Possible values are _numeric_, _2-digit_.
-  - `hour`
-      The representation of the hour. Possible values are _numeric_, _2-digit_.
-  - `minute`
-      The representation of the minute. Possible values are _numeric_, _2-digit_.
-  - `second`
-      The representation of the second. Possible values are _numeric_, _2-digit_.
-  - `timeZoneName`
-      The representation of the time zone name. Possible values are _short_, _long_.
-  - `hour12`
-      Whether to use 12-hour time (as opposed to 24-hour time).
-      Possible values are true and false; the default is locale dependent.
+  Or it can be an object with some or all of the following properties:
+  - `weekday` The representation of the weekday. Possible values are _narrow_, _short_, _long_.
+  - `era` The representation of the era. Possible values are _narrow_, _short_, _long_.
+  - `year` The representation of the year. Possible values are _numeric_, _2-digit_.
+  - `month` The representation of the month. Possible values are _numeric_, _2-digit_, _narrow_, _short_, _long_.
+  - `day` The representation of the day. Possible values are _numeric_, _2-digit_.
+  - `hour` The representation of the hour. Possible values are _numeric_, _2-digit_.
+  - `minute` The representation of the minute. Possible values are _numeric_, _2-digit_.
+  - `second` The representation of the second. Possible values are _numeric_, _2-digit_.
+  - `timeZoneName` The representation of the time zone name. Possible values are _short_, _long_.
+  - `hour12` Whether to use 12-hour time (as opposed to 24-hour time). Possible values are true and false; the default is locale dependent.
+
+  See [DateTimeFormat](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/DateTimeFormat) for further information.
 
 ###### Using format aliases
 ```Html
 {{ today | l10nDate:defaultLocale:'fullDate' }}
 ```
 ###### Using a custom format
-```Html
-<p>{{ today | l10nDate:defaultLocale:options }}</p>
-```
-
 ```TypeScript
-const options: DateTimeOptions = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-```
+@Component({
+    template: `
+        <p>{{ today | l10nDate:defaultLocale:options }}</p>
+    `
+})
+export class HomeComponent implements OnInit {
 
+    @DefaultLocale() defaultLocale: string;
+
+    today: Date = new Date();
+    options: DateTimeOptions = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+
+    ngOnInit(): void { }
+
+}
+```
 ###### Using timezone
-```Html
-<p>{{ today | l10nDate:defaultLocale:'medium':timezone }}</p>
+```TypeScript
+@Component({
+    template: `
+        <p>{{ today | l10nDate:defaultLocale:'medium':timezone }}</p>
+    `
+})
+export class HomeComponent implements OnInit {
+
+    @DefaultLocale() defaultLocale: string;
+    @Timezone() timezone: string;
+
+    today: Date = new Date();
+
+    ngOnInit(): void { }
+
+}
 ```
 
 ##### Decimals

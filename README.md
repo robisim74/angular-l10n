@@ -3,7 +3,7 @@
 > An Angular library to translate messages, dates and numbers.
 
 This library is for localization of **Angular 2+** apps written in TypeScript, ES6 or ES5. 
-It allows, in addition to translation, to localize numbers and dates of your app, adding _language code_, _country code_, _currency code_, _timezone_ and optionally _script code_, _numbering system_ and _calendar_, through [Internationalization API](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl). It also implements the validation of numbers by locales.
+It allows, in addition to translation, to localize numbers and dates of your app, adding _language code_, _country code_, _currency code_, _timezone_ and optionally _script code_, _numbering system_ and _calendar_, through [Internationalization API](https://github.com/robisim74/angular-l10n/blob/master/doc/spec.md#2.9). It also implements the validation of numbers by locales.
 
 [Sample app](http://robisim74.github.io/angular-l10n-sample) built with Angular Material, AoT compilation & webpack, and its [source code](https://github.com/robisim74/angular-l10n-sample).
 
@@ -155,15 +155,15 @@ export class AppComponent implements OnInit {
 ```
 See the following documentation to learn more about all the features:
 
-- **Angular v5: current**
+- **Angular v5**
     - [Quick start](https://github.com/robisim74/angular-l10n/blob/master/doc/quick-start.md)
     - [Library specification](https://github.com/robisim74/angular-l10n/blob/master/doc/spec.md)
     - [Snippets](https://github.com/robisim74/angular-l10n/wiki/Snippets)
 
-- **Angular v4: latest compatible release of this library is v3.5.0**
+- **Angular v4**
     - [Branch](https://github.com/robisim74/angular-l10n/tree/angular_v4)
 
-- **Angular v2: latest compatible release of this library is v2.0.10**
+- **Angular v2**
     - [Branch](https://github.com/robisim74/angular-l10n/tree/angular_v2)
 
 ## Related projects
