@@ -1,5 +1,5 @@
 # Angular localization library specification
-Library version: 4.0.0-beta.1
+Library version: 4.0.0-beta.2
 
 ## Table of contents
 * [1 Library structure](#1)
@@ -14,7 +14,7 @@ Library version: 4.0.0-beta.1
         * [2.4.4 Using fallback providers](#2.4.4)
         * [2.4.5 Using a custom provider](#2.4.5)
     * [2.5 Using a composed language](#2.5)
-    * [2.6 Default locale](#2.6)
+    * [2.6 Default locale, currency & timezone](#2.6)
     * [2.7 Storage](#2.7)
     * [2.8 Chaching](#2.8)
     * [2.9 Intl API](#2.9)
@@ -32,7 +32,7 @@ Library version: 4.0.0-beta.1
     * [3.3 Using Html tags in translation](#3.3)
     * [3.4 Getting the translation in component class](#3.4)
     * [3.5 Handle the translation](#3.5)
-* [4 Changing language, default locale or currency at runtime](#4)
+* [4 Changing language, default locale, currency or timezone at runtime](#4)
 * [5 Lazy loaded modules & Shared modules](#5)
     * [5.1 Lazy loaded modules with the router](#5.1)
     * [5.2 Shared modules](#5.2)
@@ -59,7 +59,7 @@ Class | Contract
 `LocaleService` | Manages language, default locale & currency
 `TranslationService` | Manages the translation data
 `Translation` | Provides _lang_ to the _translate_ pipe
-`Localization` | Provides _lang_ to the _translate_ pipe, _defaultLocale_ & _currency_ to _localeDecimal_, _localePercent_ & _localeCurrency_ pipes
+`Localization` | Provides _lang_ to the _translate_ pipe, _defaultLocale_, _currency_, _timezone_ to _l10nDate_, _l10nDecimal_, _l10nPercent_ & _l10nCurrency_ pipes
 `LocaleValidation` | Provides the methods to convert strings according to default locale
 `Collator` | Intl.Collator APIs
 `IntlAPI` | Provides the methods to check if Intl APIs are supported
@@ -157,15 +157,16 @@ Property | Value
 -------- | -----
 `languages?: Language[]` | Adds the languages to use in the app
 `language?: string` | Defines the language ISO 639 two-letter or three-letter code to be used, if the language is not found in the browser
-`defaultLocale?: DefaultLocaleCodes` |Defines the default locale to be used, regardless of the browser language
+`defaultLocale?: DefaultLocaleCodes` | Defines the default locale to be used, regardless of the browser language
 `currency?: string` | Defines the currency ISO 4217 three-letter code to be used
+`timezone?: string` | The time zone name of the IANA time zone database to use
 `storage?: StorageStrategy` | Defines the storage to be used for language, default locale & currency
 `cookieExpiration?: number` | If the cookie expiration is omitted, the cookie becomes a session cookie
 
 #### TranslationConfig
 Property | Value
 -------- | -----
-`translationData?: Array<{ languageCode: string; languageCode: string; }>` | Direct loading: adds translation data
+`translationData?: Array<{ languageCode: string; data: any; }>` | Direct loading: adds translation data
 `providers?: any[]` |  Asynchronous loading: adds translation providers
 `caching?: Boolean` |  Asynchronous loading: disables/enables the cache for translation providers
 `composedLanguage?: ISOCode[]` |  Sets a composed language for translations
@@ -311,8 +312,8 @@ const l10nConfig: L10nConfig = {
 ```
 Your _json_ files should be something like: `./assets/locale-en-US.json` and so on. The available ISO codes are: _language_, _country_, _script_.
 
-### <a name="2.6"/>2.6 Default locale
-The default locale contains the current language and culture. It consists of:
+### <a name="2.6"/>2.6 Default locale, currency & timezone
+The _default locale_ contains the current language and culture. It consists of:
 * `language code`: ISO 639 two-letter or three-letter code of the language
 * `country code`: ISO 3166 two-letter, uppercase code of the country
 
@@ -321,10 +322,14 @@ and optionally:
 - `numbering system`: possible values include: "arab", "arabext", "bali", "beng", "deva", "fullwide", "gujr", "guru", "hanidec", "khmr", "knda", "laoo", "latn", "limb", "mlym", "mong", "mymr", "orya", "tamldec", "telu", "thai", "tibt"
 - `calendar`: possible values include: "buddhist", "chinese", "coptic", "ethioaa", "ethiopic", "gregory", "hebrew", "indian", "islamic", "islamicc", "iso8601", "japanese", "persian", "roc"
 
+The _currency_ contains the ISO 4217 currency codes.
+
+The _timezone_ contains the time zone names of the IANA time zone database.
+
 For more information see [Intl API](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl).
 
 ### <a name="2.7"/>2.7 Storage
-The `defaultLocale` and the `currency` chosen by the user are stored, and retrieved at the next access. During the configuration, you can choose your `StorageStrategy`: _Session_, _Local_, _Cookie_, _Disabled_. If you don't provide a different expiration using `cookieExpiration`, the cookie becomes a session cookie.
+The `defaultLocale`, the `currency` and the `timezone` chosen by the user are stored, and retrieved at the next access. During the configuration, you can choose your `StorageStrategy`: _Session_, _Local_, _Cookie_, _Disabled_. If you don't provide a different expiration using `cookieExpiration`, the cookie becomes a session cookie.
 
 You can also create a custom storage.
 
@@ -387,13 +392,19 @@ The next time a translation file will be required, will be taken from the cache 
 - if you use a global file shared across _lazy loaded modules_.
 
 ### <a name="2.9"/>2.9 Intl API
-To localize dates and numbers, this library uses the [Intl API](https://developer.mozilla.org/it/docs/Web/JavaScript/Reference/Global_Objects/Intl). 
-_All modern browsers have implemented this API_. You can use [Intl.js](https://github.com/andyearnshaw/Intl.js) to extend support to old browsers. 
+To localize _dates and numbers_, this library uses the [Intl API](https://developer.mozilla.org/it/docs/Web/JavaScript/Reference/Global_Objects/Intl).
+
+>_All modern browsers have implemented this API_. You can use [Intl.js](https://github.com/andyearnshaw/Intl.js) to extend support to old browsers.
+
 Just add one script tag in your `index.html`:
 ```Html
 <script src="https://cdn.polyfill.io/v2/polyfill.min.js?features=Intl.~locale.en-US"></script>
 ```
 When specifying the `features`, you have to specify what locale, or locales to load.
+
+The _timezone_ is also provided via _Intl API_: _except IE, all modern browsers have implemented the timezone_.
+
+>To extend the support, you can use [Intl.DateTimeFormat timezone polyfill](https://github.com/yahoo/date-time-format-timezone).
 
 >When a feature is not supported, however, for example in older browsers, Angular localization does not generate an error in the browser, but returns the value without performing operations.
 
@@ -405,10 +416,10 @@ You can also get the translation in component class.
 Pipe | Type | Format | Pipe syntax
 ---- | ---- | ------ | -----------
 Translate | Message | String | `expression \| translate:lang`
-L10nDate | Date | Date/Number/ISO string | `expression \| l10nDate[:defaultLocale[:format]]`
-L10nDecimal | Number | Decimal | `expression \| l10nDecimal[:defaultLocale[:digitInfo]]`
-L10nPercent | Number | Percentage | `expression \| l10nPercent[:defaultLocale[:digitInfo]]`
-L10nCurrency | Number | Currency | `expression \| l10nCurrency[:defaultLocale[:currency[:currencyDisplay[:digitInfo]]]]`
+L10nDate | Date | Date/Number/ISO string | `expression \| l10nDate[:defaultLocale[:format[:timezone]]]`
+L10nDecimal | Decimal | Number/string | `expression \| l10nDecimal[:defaultLocale[:digitInfo]]`
+L10nPercent | Percentage | Number/string | `expression \| l10nPercent[:defaultLocale[:digitInfo]]`
+L10nCurrency | Currency | Number/string | `expression \| l10nCurrency[:defaultLocale[:currency[:currencyDisplay[:digitInfo]]]]`
 
 >You can dynamically change parameters and expressions values.
 
@@ -464,12 +475,13 @@ _Json_:
 ```
 
 #### <a name="3.1.2"/>3.1.2 Dates & Numbers
-Implement _DefaultLocale_ & _Currency_ decorators in the component to provide the parameters to _localeDecimal_, _localePercent_ & _localeCurrency_ pipes.
+Implement _DefaultLocale_ & _Currency_ & optionally _Timezone_ decorators in the component to provide _defaultLocale_, _currency_, _timezone_ to _l10nDate_, _l10nDecimal_, _l10nPercent_ & _l10nCurrency_ pipes.
 ```TypeScript
 export class HomeComponent implements OnInit {
 
     @DefaultLocale() defaultLocale: string;
     @Currency() currency: string;
+    @Timezone() timezone: string;
 
     ngOnInit(): void { }
 
@@ -499,9 +511,48 @@ Where:
   - `'shortTime'`: equivalent to `'h:mm'` (e.g. `4:53 PM` for `en-US`)
   - `'mediumTime'`: equivalent to `'h:mm:ss'` (e.g. `4:54:15 PM` for `en-US`)
 
+  Or it can be an object with some or all of the following properties
+  (https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/DateTimeFormat):
+     - `weekday`
+         The representation of the weekday. Possible values are _narrow_, _short_, _long_.
+     - `era`
+         The representation of the era. Possible values are _narrow_, _short_, _long_.
+     - `year`
+         The representation of the year. Possible values are _numeric_, _2-digit_.
+     - `month`
+         The representation of the month. Possible values are _numeric_, _2-digit_, _narrow_, _short_, _long_.
+     - `day`
+         The representation of the day. Possible values are _numeric_, _2-digit_.
+     - `hour`
+         The representation of the hour. Possible values are _numeric_, _2-digit_.
+     - `minute`
+         The representation of the minute. Possible values are _numeric_, _2-digit_.
+     - `second`
+         The representation of the second. Possible values are _numeric_, _2-digit_.
+     - `timeZoneName`
+         The representation of the time zone name. Possible values are _short_, _long_.
+     - `hour12`
+         Whether to use 12-hour time (as opposed to 24-hour time).
+         Possible values are true and false; the default is locale dependent.
+
+###### Using format aliases
 ```Html
 {{ today | l10nDate:defaultLocale:'fullDate' }}
 ```
+###### Using a custom format
+```Html
+<p>{{ day | l10nDate:defaultLocale:options }}</p>
+```
+with:
+```TypeScript
+const options: DateTimeOptions = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+```
+
+###### Using timezone
+```Html
+<p>{{ day | l10nDate:defaultLocale:'medium':timezone }}</p>
+```
+
 ##### Decimals
 ```
 expression | l10nDecimal[:defaultLocale:[digitInfo]]
@@ -535,8 +586,7 @@ Extend `Translation` class in the component to provide _lang_ to the _translate_
 ```TypeScript
 export class HomeComponent extends Translation { }
 ```
-Extend `Localization` class in the component to provide _lang_ to the _translate_ pipe, _defaultLocale_ & _currency_ 
-to the _localeDecimal_, _localePercent_ & _localeCurrency_ pipes.
+Extend `Localization` class in the component to provide _lang_ to the _translate_ pipe,  _defaultLocale_, _currency_, _timezone_ to _l10nDate_, _l10nDecimal_, _l10nPercent_ & _l10nCurrency_ pipes.
 ```TypeScript
 export class HomeComponent extends Localization { } 
 ```
@@ -577,9 +627,9 @@ Directive | Type | Format | Html syntax
 --------- | ---- | ------ | -----------
 Translate | Message | String | `<tag l10n-attribute attribute="expr1" l10nTranslate>expr2</tag>`
 L10nDate | Date | Date/Number/ISO string | `<tag l10n-attribute attribute="expr1" l10nDate="[format]">expr2</tag>`
-L10nDecimal | Number | Decimal | `<tag l10n-attribute attribute="expr1" l10nDecimal="[digitInfo]">expr2</tag>`
-L10nPercent | Number | Percentage | `<tag l10n-attribute attribute="expr1" l10nPercent="[digitInfo]">expr2</tag>`
-L10nCurrency | Number | Currency | `<tag l10n-attribute attribute="expr1" l10nCurrency="[digitInfo]" [currencyDisplay]="[currencyDisplay]">expr2</tag>`
+L10nDecimal | Decimal | Number/string | `<tag l10n-attribute attribute="expr1" l10nDecimal="[digitInfo]">expr2</tag>`
+L10nPercent | Percentage | Number/string | `<tag l10n-attribute attribute="expr1" l10nPercent="[digitInfo]">expr2</tag>`
+L10nCurrency | Currency | Number/string | `<tag l10n-attribute attribute="expr1" l10nCurrency="[digitInfo]" [currencyDisplay]="[currencyDisplay]">expr2</tag>`
 
 >You can dynamically change parameters and expressions values as with pipes. How does it work? To observe the expression change (not the parameters), a `MutationObserver` is used: the observer is added only if detected in the browser. If you want to use this feature also reaching older browsers, we recommend using pipes.
 
@@ -715,7 +765,7 @@ export class HomeComponent implements OnInit {
 }
 ```
 ##### Dates & numbers
-To get the translation of dates and numbers, you have the `getDefaultLocale` method of `LocaleService`, and the `defaultLocaleChanged` event to know when `defaultLocale` changes. You can use the `transform` method of the corresponding pipe to get the translation, but you could use the _Intl APIs_ directly (or also use other specific libraries):
+To get the translation of dates and numbers, you can use the `transform` method of the corresponding pipe to get the translation: you have the `getDefaultLocale` method of `LocaleService`, and the `defaultLocaleChanged` event to know when `defaultLocale` changes.
 ```TypeScript
 @Component({
     ...
@@ -724,14 +774,14 @@ To get the translation of dates and numbers, you have the `getDefaultLocale` met
 export class HomeComponent {
   
     pipe: L10nDecimalPipe = new L10nDecimalPipe();
-    value: number;
+    value: any = this.pipe.transform(1234.5, this.locale.getDefaultLocale(), '1.2-2');
 
     constructor(public locale: LocaleService) { }
 
     ngOnInit(): void {
         this.locale.defaultLocaleChanged.subscribe(
-            () => {
-                this.value = pipe.transform(1234.5, this.locale.getDefaultLocale(), '1.2-2');
+            (defaultLocale: string) => {
+                this.value = this.pipe.transform(1234.5, defaultLocale, '1.2-2');
             }
         );
     }
@@ -778,11 +828,12 @@ Then provide the class in the module:
 See also [TranslationHandler](https://github.com/robisim74/angular-l10n/blob/master/src/services/translation-handler.ts) code.
 
 
-## <a name="4"/>4 Changing language, default locale or currency at runtime
-To change language, default locale or currency at runtime, `LocaleService` has the following methods:
+## <a name="4"/>4 Changing language, default locale, currency or timezone at runtime
+To change language, default locale, currency or timezone at runtime, `LocaleService` has the following methods:
 * `setCurrentLanguage(languageCode: string): void`
-* `setDefaultLocale(languageCode: string, countryCode: string, scriptCode?: string, numberingSystem?: string, calendar?: string): void`
+* `setDefaultLocale(languageCode: string, countryCode?: string, scriptCode?: string, numberingSystem?: string, calendar?: string): void`
 * `setCurrentCurrency(currencyCode: string): void`
+* `setCurrentTimezone(zoneName: string): void`
 
 ## <a name="5"/>5 Lazy loaded modules & Shared modules
 Before you start using this configuration, you need to know how _lazy-loading_ works: [Lazy-loading modules with the router](https://angular.io/guide/ngmodule#lazy-loading-modules-with-the-router).
@@ -1020,13 +1071,14 @@ Property | Value
 `languageCodeChanged: EventEmitter<string>` |
 `defaultLocaleChanged: EventEmitter<string>` |
 `currencyCodeChanged: EventEmitter<string>` |
+`timezoneChanged: EventEmitter<string>` |
 `loadTranslation: Subject<any>` |
 
 Method | Function
 ------ | --------
 `getConfiguration(): LocaleConfig` |
 `init(): Promise<void>` |
-`getBrowserLanguage(): string | null` |
+`getBrowserLanguage(): string \| null` |
 `getAvailableLanguages(): string[]` |
 `getLanguageDirection(languageCode?: string): string` |
 `getCurrentLanguage(): string` |
@@ -1037,9 +1089,12 @@ Method | Function
 `getCurrentCalendar(): string` |
 `getDefaultLocale(): string` |
 `getCurrentCurrency(): string` |
+`getCurrencySymbol(currencyDisplay?: 'code' \| 'symbol' \| 'name', defaultLocale?: string, currency?: string): string` |
+`getCurrentTimezone(): string` |
 `setCurrentLanguage(languageCode: string): void` |
-`setDefaultLocale(languageCode: string, countryCode: string, scriptCode?: string, numberingSystem?: string, calendar?: string): void` |
+`setDefaultLocale(languageCode: string, countryCode?: string, scriptCode?: string, numberingSystem?: string, calendar?: string): void` |
 `setCurrentCurrency(currencyCode: string): void` |
+`setCurrentTimezone(zoneName: string): void` |
 
 #### ITranslationService
 Property | Value
@@ -1069,6 +1124,7 @@ Property | Value
 -------- | -----
 `defaultLocale: string` |
 `currency: string` |
+`timezone: string` |
 `protected paramSubscriptions: ISubscription[]` |
 
 Method | Function
@@ -1094,6 +1150,7 @@ Method | Function
 ------ | --------
 `static hasIntl(): boolean` |
 `static hasDateTimeFormat(): boolean` |
+`static hasTimezone(): boolean` |
 `static hasNumberFormat(): boolean` |
 `static hasCollator(): boolean` |
 

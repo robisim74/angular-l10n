@@ -26,25 +26,25 @@ import { DateTimeOptions } from '../models/types';
  *
  *   Or it can be an object with some or all of the following properties
  *   (https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/DateTimeFormat):
- *      - weekday
+ *      - `weekday`
  *          The representation of the weekday. Possible values are "narrow", "short", "long".
- *      - era
+ *      - `era`
  *          The representation of the era. Possible values are "narrow", "short", "long".
- *      - year
+ *      - `year`
  *          The representation of the year. Possible values are "numeric", "2-digit".
- *      - month
+ *      - `month`
  *          The representation of the month. Possible values are "numeric", "2-digit", "narrow", "short", "long".
- *      - day
+ *      - `day`
  *          The representation of the day. Possible values are "numeric", "2-digit".
- *      - hour
+ *      - `hour`
  *          The representation of the hour. Possible values are "numeric", "2-digit".
- *      - minute
+ *      - `minute`
  *          The representation of the minute. Possible values are "numeric", "2-digit".
- *      - second
+ *      - `second`
  *          The representation of the second. Possible values are "numeric", "2-digit".
- *      - timeZoneName
+ *      - `timeZoneName`
  *          The representation of the time zone name. Possible values are "short", "long".
- *      - hour12
+ *      - `hour12`
  *          Whether to use 12-hour time (as opposed to 24-hour time).
  *          Possible values are true and false; the default is locale dependent.
  */

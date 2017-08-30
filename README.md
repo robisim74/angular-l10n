@@ -3,7 +3,7 @@
 > An Angular library to translate messages, dates and numbers.
 
 This library is for localization of **Angular 2+** apps written in TypeScript, ES6 or ES5. 
-It allows, in addition to translation, to localize numbers and dates of your app, adding language code, country code, and optionally script code, numbering system and calendar, through [Internationalization API](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl). It also implements the validation of numbers by locales.
+It allows, in addition to translation, to localize numbers and dates of your app, adding _language code_, _country code_, _currency code_, _timezone_ and optionally _script code_, _numbering system_ and _calendar_, through [Internationalization API](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl). It also implements the validation of numbers by locales.
 
 [Sample app](http://robisim74.github.io/angular-l10n-sample) built with Angular Material, AoT compilation & webpack, and its [source code](https://github.com/robisim74/angular-l10n-sample).
 
@@ -16,16 +16,16 @@ _Messages_ | Html attributes, message IDs | directives, impure pipes | directive
 _File formats_ | XLIFF, XMB/XTB | JSON | JSON
 _No bootstrap (when language changes)_ | no | yes | yes
 _Getting the translation in component class_ | not yet | yes | yes
-_Numbers_ | pure pipes using CLDR | - | directives & pure pipes via Intl
-_Dates_ | pure pipes using CLDR | - | directives & pure pipes via Intl
-_Validation_ | - | - | numbers validation
+_Numbers_ | pure pipes using CLDR | - | directives & pure pipes via Intl API
+_Dates_ | pure pipes using CLDR | - | directives & pure pipes via Intl API
+_Validation_ | - | - | numbers validation via Intl API
 
 ## Installing
 You can add `angular-l10n` to your project using `npm`:
 ```Shell
 npm install angular-l10n --save 
 ```
-To install the prerelease package:
+To install the pre-release package:
 ```Shell
 npm install --save angular-l10n@next
 ```
@@ -100,7 +100,7 @@ export class AppModule {
 
         <p title="{{ 'Greeting' | translate:lang }}">{{ 'Title' | translate:lang }}</p>
 
-        <p>{{ today | l10nDate:defaultLocale:'fullDate' }}</p>       
+        <p>{{ today | l10nDate:defaultLocale:'fullDate' }}</p>  
         <p>{{ pi | l10nDecimal:defaultLocale:'1.5-5' }}</p>
         <p>{{ value | l10nCurrency:defaultLocale:currency:'symbol':'1.2-2' }}</p>
     `
@@ -155,15 +155,15 @@ export class AppComponent implements OnInit {
 ```
 See the following documentation to learn more about all the features:
 
-- **Angular v5**
+- **Angular v5 current: latest pre-release is v4.0.0-beta.2**
     - [Quick start](https://github.com/robisim74/angular-l10n/blob/master/doc/quick-start.md)
     - [Library specification](https://github.com/robisim74/angular-l10n/blob/master/doc/spec.md)
     - [Snippets](https://github.com/robisim74/angular-l10n/wiki/Snippets)
 
-- **Angular v4**
+- **Angular v4: latest release is v3.5.0**
     - [Branch](https://github.com/robisim74/angular-l10n/tree/angular_v4)
 
-- **Angular v2**
+- **Angular v2: latest release is v2.0.10**
     - [Branch](https://github.com/robisim74/angular-l10n/tree/angular_v2)
 
 ## Related projects
