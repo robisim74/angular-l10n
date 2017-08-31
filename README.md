@@ -1,17 +1,17 @@
 # Angular localization
 [![Build Status](https://travis-ci.org/robisim74/angular-l10n.svg?branch=master)](https://travis-ci.org/robisim74/angular-l10n) [![npm version](https://badge.fury.io/js/angular-l10n.svg)](https://badge.fury.io/js/angular-l10n)
-> An Angular library to translate messages, dates and numbers.
+> An Angular library to translate messages, dates and numbers
 
 This library is for localization of **Angular 2+** apps written in TypeScript, ES6 or ES5. 
-It allows, in addition to translation, to localize numbers and dates of your app, adding _language code_, _country code_, _currency code_, _timezone_ and optionally _script code_, _numbering system_ and _calendar_, through [Internationalization API](https://github.com/robisim74/angular-l10n/blob/master/doc/spec.md#2.9). It also implements the validation of numbers by locales.
+It allows, in addition to translation, to localize numbers and dates of your app, adding _language code_, _country code_, _currency code_, _timezone_ and optionally _script code_, _numbering system_ and _calendar_, through [Internationalization API](https://robisim74.github.io/angular-l10n/spec/configuration/#intl-api). It also implements the validation of numbers by locales.
 
 [Sample app](http://robisim74.github.io/angular-l10n-sample) built with Angular Material, AoT compilation & webpack, and its [source code](https://github.com/robisim74/angular-l10n-sample).
 
 Get the changelog by [releases](https://github.com/robisim74/angular-l10n/releases).
 
 ## Angular i18n solutions
-| _Feature_ | [Angular](https://angular.io/guide/i18n) _Official_ | [ngx-translate](https://github.com/ngx-translate/core) _External library_ | [angular-l10n](https://github.com/robisim74/angular-l10n/blob/master/doc/spec.md) _External library_ |
-| --------- | ------------------------------------------------------------------------ | --------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------- |
+| _Feature_ | [Angular](https://angular.io/guide/i18n) _Official_ | [ngx-translate](http://www.ngx-translate.com) _External library_ | [angular-l10n](https://robisim74.github.io/angular-l10n) _External library_ |
+| --------- |:---------:|:---------:|:---------:|
 _Messages_ | Html attributes, message IDs | directives, impure pipes | directives, pure pipes
 _File formats_ | XLIFF, XMB/XTB | JSON | JSON
 _No bootstrap (when language changes)_ | no | yes | yes
@@ -54,111 +54,8 @@ and use global `ng.l10n` namespace.
 This library is compatible with AoT compilation & Server Side Rendering. It also supports the `strict` TypeScript compiler option.
 
 ## Usage
-**_Configuration_**
-```TypeScript
-const l10nConfig: L10nConfig = {
-    locale: {
-        languages: [
-            { code: 'en', dir: 'ltr' },
-            { code: 'it', dir: 'ltr' }
-        ],
-        defaultLocale: { languageCode: 'en', countryCode: 'US' },
-        currency: 'USD',
-        storage: StorageStrategy.Cookie
-    },
-    translation: {
-        providers: [
-            { type: ProviderType.Static, prefix: './assets/locale-' }
-        ],
-        caching: true,
-        missingValue: 'No key'
-    }
-};
-
-@NgModule({
-    imports: [
-        ...
-        HttpClientModule,
-        LocalizationModule.forRoot(l10nConfig)
-    ],
-    ...
-})
-export class AppModule {
-
-    constructor(public l10nLoader: L10nLoader) {
-        this.l10nLoader.load();
-    }
-
-}
-```
-**_Pure pipes with Decorators_**
-```TypeScript
-@Component({
-    ...
-    template: `
-        <p>{{ 'Greeting' | translate:lang }}</p>
-
-        <p title="{{ 'Greeting' | translate:lang }}">{{ 'Title' | translate:lang }}</p>
-
-        <p>{{ today | l10nDate:defaultLocale:'fullDate' }}</p>  
-        <p>{{ pi | l10nDecimal:defaultLocale:'1.5-5' }}</p>
-        <p>{{ value | l10nCurrency:defaultLocale:currency:'symbol':'1.2-2' }}</p>
-    `
-})
-export class HomeComponent implements OnInit {
-
-    @Language() lang: string;
-    @DefaultLocale() defaultLocale: string;
-    @Currency() currency: string;
-    
-    ngOnInit(): void { }
-
-}
-```
-**_Directives_**
-```TypeScript
-@Component({
-    ...
-    template: `
-        <p l10nTranslate>Greeting</p>
-
-        <p l10n-title title="Greeting" l10nTranslate>Title</p>
-
-        <p l10nDate="fullDate">{{ today }}</p>    
-        <p l10nDecimal="1.5-5">{{ pi }}</p>
-        <p l10nCurrency="1.2-2" [currencyDisplay]="'symbol'">{{ value }}</p>
-    `
-})
-export class HomeComponent {}
-```
-**_In component class_**
-```TypeScript
-@Component({
-    ...
-    template: `
-        <h1>{{ title }}</h1>
-    `
-})
-export class AppComponent implements OnInit {
-
-    title: string;
-
-    constructor(public translation: TranslationService) { }
-
-    ngOnInit(): void {
-        this.translation.translationChanged().subscribe(
-            () => { this.title = this.translation.translate('Title'); }
-        );
-    }
-
-}
-```
-See the following documentation to learn more about all the features:
-
 - **Angular v5**
-    - [Quick start](https://github.com/robisim74/angular-l10n/blob/master/doc/quick-start.md)
-    - [Library specification](https://github.com/robisim74/angular-l10n/blob/master/doc/spec.md)
-    - [Snippets](https://github.com/robisim74/angular-l10n/wiki/Snippets)
+    - [Docs](https://robisim74.github.io/angular-l10n)
 
 - **Angular v4**
     - [Branch](https://github.com/robisim74/angular-l10n/tree/angular_v4)

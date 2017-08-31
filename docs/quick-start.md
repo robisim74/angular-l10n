@@ -1,14 +1,11 @@
-# Angular localization - Quick start
-> The samples are based on [Angular QuickStart](https://github.com/angular/quickstart).
+## Quick start
+_The samples are based on [Angular QuickStart](https://github.com/angular/quickstart)_
 
-* [1 First scenario: you only need to translate texts](#1)
-* [2 Second scenario: you need to translate texts, dates & numbers](#2)
-* [3 Advanced initialization](#3)
-* [Appendix A - Using Angular CLI](#AppendixA)
-* [Appendix B - Using Ionic](#AppendixB)
-* [Appendix C - Using Angular Meteor](#AppendixC)
+<br>
 
-## <a name="1"/>1 First scenario: you only need to translate texts
+---
+
+### First scenario: you only need to translate texts
 Install the library:
 ```Shell
 npm install angular-l10n --save
@@ -148,6 +145,7 @@ and create the _json_ files of the translations such as `locale-en.json` and `lo
     "Greeting": "Ciao!"
 }
 ```
+<br>
 #### Using directives
 In addition to the _pipes_, you can use _directives_. Try to change `home.component.ts`:
 ```TypeScript
@@ -163,12 +161,13 @@ import { Component } from '@angular/core';
 })
 export class HomeComponent { }
 ```
-Note that if you use in the component only the _directives_ and not the _pipes_, 
-you don't need to use `@Language()` _decorator_. 
+Note that if you use in the component only the _directives_ and not the _pipes_, you don't need to use `@Language()` _decorator_.
 
-For more details, see [library specification](https://github.com/robisim74/angular-l10n/blob/master/doc/spec.md).
+<br>
 
-## <a name="2"/>2 Second scenario: you need to translate texts, dates & numbers
+---
+
+### Second scenario: you need to translate texts, dates & numbers
 Install the library:
 ```Shell
 npm install angular-l10n --save
@@ -337,6 +336,7 @@ Finally, to extend the support to old browsers, add the following script tag in 
 ```Html
 <script src="https://cdn.polyfill.io/v2/polyfill.min.js?features=Intl.~locale.en-US,Intl.~locale.en-GB,Intl.~locale.it-IT"></script>
 ```
+<br>
 #### Using directives
 In addition to the _pipes_, you can use _directives_. Try to change `home.component.ts`:
 ```TypeScript
@@ -374,12 +374,13 @@ export class HomeComponent implements OnInit {
 
 }
 ```
-Note that if you use in the component only the _directives_ and not the _pipes_, 
-you don't need to use _decorators_. 
+Note that if you use in the component only the _directives_ and not the _pipes_, you don't need to use _decorators_.
 
-For more details, see [library specification](https://github.com/robisim74/angular-l10n/blob/master/doc/spec.md).
+<br>
 
-## <a name="3"/>3 Advanced initialization
+---
+
+### Advanced initialization
 If you want the app to be rendered only after the translation file is loaded, 
 you can use these settings in `app.module.ts`:
 ```TypeScript
@@ -435,9 +436,12 @@ export function initL10n(l10nLoader: L10nLoader): Function {
 })
 export class AppModule { }
 ```
-See also the [sample app](https://github.com/robisim74/angular-l10n-sample).
 
-## <a name="AppendixA"/>Appendix A - Using Angular CLI
+<br>
+
+---
+
+### Appendix A - Using Angular CLI
 If you are using _Angular CLI_, you have to add the _json_ files in `src/assets` folder, 
 copied as-is when building your project. 
 Always configure your provider in this way:
@@ -449,7 +453,11 @@ Always configure your provider in this way:
 ...
 ```
 
-## <a name="AppendixB"/>Appendix B - Using Ionic
+<br>
+
+---
+
+### Appendix B - Using Ionic
 You have to add the _json_ files in `www/assets` folder. 
 Always configure your provider in this way:
 ```TypeScript
@@ -460,7 +468,11 @@ Always configure your provider in this way:
 ...
 ```
 
-## <a name="AppendixC"/>Appendix C - Using Angular Meteor
+<br>
+
+---
+
+### Appendix C - Using Angular Meteor
 You must create `public/assets` folder at the root of your app. 
 In this way, `assets` folder is copied directly into your application bundle. 
 Always configure your provider in this way:
