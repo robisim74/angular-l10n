@@ -22,8 +22,7 @@ Follow the issue template and use the [plunker template](http://embed.plnkr.co/U
     npm install [path]angular-l10n-[version].tgz
     ```
 
-- In order to serve the docs:
+- In order to serve the docs (requires Python & [MkDocs](http://www.mkdocs.org/)):
     ```Shell
-    mkdocs serve
+    npm run serve-docs
     ```
-    See also [MkDocs](http://www.mkdocs.org/).
