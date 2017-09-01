@@ -10,7 +10,7 @@ It allows, in addition to translation, to localize numbers and dates of your app
 Get the changelog by [releases](https://github.com/robisim74/angular-l10n/releases).
 
 ## Angular i18n solutions
-| _Feature_ | [Angular](https://angular.io/guide/i18n) _Native_ | [ngx-translate](https://github.com/ngx-translate/core) _External library_ | [angular-l10n](https://github.com/robisim74/angular-l10n/blob/master/doc/spec.md) _External library_ |
+| _Feature_ | [Angular](https://angular.io/guide/i18n) _Native_ | [ngx-translate](https://github.com/ngx-translate/core) _External library_ | [angular-l10n](https://github.com/robisim74/angular-l10n/blob/angular_v4/doc/spec.md) _External library_ |
 | --------- | ------------------------------------------------------------------------ | --------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------- |
 _Messages_ | Html attribute, message ID | directive, impure pipe | directive, pure pipe
 _File formats_ | XLIFF, XMB/XTB | JSON | JSON
@@ -120,8 +120,8 @@ export class HomeComponent {}
 See the following documentation to learn more about all the features:
 
 - **Angular v4**
-    - [Quick start](https://github.com/robisim74/angular-l10n/blob/master/doc/quick-start.md)
-    - [Library specification](https://github.com/robisim74/angular-l10n/blob/master/doc/spec.md)
+    - [Quick start](https://github.com/robisim74/angular-l10n/blob/angular_v4/doc/quick-start.md)
+    - [Library specification](https://github.com/robisim74/angular-l10n/blob/angular_v4/doc/spec.md)
     - [Snippets](https://github.com/robisim74/angular-l10n/wiki/Snippets)
 
 - **Angular v2**

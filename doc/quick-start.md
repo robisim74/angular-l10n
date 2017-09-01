@@ -150,7 +150,7 @@ export class HomeComponent { }
 Note that if you use in the component only the _directives_ and not the _pipes_, 
 you don't need to use `@Language()` _decorator_. 
 
-For more details, see [library specification](https://github.com/robisim74/angular-l10n/blob/master/doc/spec.md).
+For more details, see [library specification](https://github.com/robisim74/angular-l10n/blob/angular_v4/doc/spec.md).
 
 ## <a name="2"/>2 Second scenario: you need to translate texts, dates & numbers
 Install the library:
@@ -345,7 +345,7 @@ export class HomeComponent implements OnInit {
 Note that if you use in the component only the _directives_ and not the _pipes_, 
 you don't need to use _decorators_. 
 
-For more details, see [library specification](https://github.com/robisim74/angular-l10n/blob/master/doc/spec.md).
+For more details, see [library specification](https://github.com/robisim74/angular-l10n/blob/angular_v4/doc/spec.md).
 
 ## <a name="3"/>3 Advanced initialization
 If you want the app to be rendered only after the translation file is loaded, 

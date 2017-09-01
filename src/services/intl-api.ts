@@ -3,7 +3,7 @@
  */
 export class IntlAPI {
 
-    private static readonly hasIntl: boolean = Intl && typeof Intl === "object";
+    private static readonly hasIntl: boolean = typeof Intl === "object" && !!Intl;
 
     public static hasDateTimeFormat(): boolean {
         return this.hasIntl && Intl​.hasOwnProperty​("DateTimeFormat");
