@@ -4,7 +4,7 @@
 export class IntlAPI {
 
     public static hasIntl(): boolean {
-        const hasIntl: boolean = typeof Intl === "object" && Intl;
+        const hasIntl: boolean = typeof Intl === "object" && !!Intl;
         return hasIntl;
     }
 
