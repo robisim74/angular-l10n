@@ -1,5 +1,5 @@
 # Angular localization library specification
-Library version: 2.0.10
+Library version: 2.0.11
 
 ## Table of contents
 * [1 Library structure](#1)
