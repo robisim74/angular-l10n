@@ -3,14 +3,14 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { By } from '@angular/platform-browser';
 import { Component, DebugElement } from '@angular/core';
 
-import { L10nDateDirective } from './../../index';
+import { L10nDateDirective } from './../../angular-l10n';
 import {
     L10nConfig,
     L10nLoader,
     LocalizationModule,
     LocaleService,
     StorageStrategy
-} from './../../index';
+} from './../../angular-l10n';
 
 describe('L10nDateDirective', () => {
 

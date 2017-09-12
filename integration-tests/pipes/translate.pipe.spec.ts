@@ -4,7 +4,7 @@ import { TestBed, fakeAsync, tick } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController, TestRequest } from '@angular/common/http/testing';
 import { Observable } from 'rxjs/Observable';
 
-import { TranslatePipe } from './../../index';
+import { TranslatePipe } from './../../angular-l10n';
 import {
     L10nConfig,
     L10nLoader,
@@ -16,7 +16,7 @@ import {
     StorageStrategy,
     ProviderType,
     ISOCode
-} from './../../index';
+} from './../../angular-l10n';
 
 describe('TranslatePipe', () => {
 

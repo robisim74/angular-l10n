@@ -7,14 +7,14 @@ import {
     L10nDecimalDirective,
     L10nPercentDirective,
     L10nCurrencyDirective
-} from './../../index';
+} from './../../angular-l10n';
 import {
     L10nConfig,
     L10nLoader,
     LocalizationModule,
     LocaleService,
     StorageStrategy
-} from './../../index';
+} from './../../angular-l10n';
 
 describe('L10n number directives', () => {
 

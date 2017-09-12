@@ -3,7 +3,7 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { By } from '@angular/platform-browser';
 import { Component, DebugElement } from '@angular/core';
 
-import { Language } from './../../index';
+import { Language } from './../../angular-l10n';
 import {
     L10nConfig,
     L10nLoader,
@@ -11,7 +11,7 @@ import {
     LocaleService,
     StorageStrategy,
     ProviderType
-} from './../../index';
+} from './../../angular-l10n';
 
 describe('Language decorator', () => {
 

@@ -15,7 +15,7 @@
         "serve-docs": "python -m mkdocs serve",
         "publish-docs": "python -m mkdocs gh-deploy"
     },
-    "typings": "./index.d.ts",
+    "typings": "./angular-l10n.d.ts",
     "author": "Roberto Simonetti",
     "repository": {
         "type": "git",

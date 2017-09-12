@@ -3,7 +3,7 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { FormsModule, NgForm, AbstractControl } from '@angular/forms';
 import { Component } from '@angular/core';
 
-import { L10nNumberValidatorDirective } from './../../index';
+import { L10nNumberValidatorDirective } from './../../angular-l10n';
 import {
     L10nConfig,
     L10nLoader,
@@ -11,7 +11,7 @@ import {
     LocaleValidationModule,
     LocaleService,
     StorageStrategy
-} from './../../index';
+} from './../../angular-l10n';
 
 describe('L10nNumberValidatorDirective', () => {
 

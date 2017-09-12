@@ -3,14 +3,14 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { By } from '@angular/platform-browser';
 import { Component, DebugElement } from '@angular/core';
 
-import { DefaultLocale, Timezone } from './../../index';
+import { DefaultLocale, Timezone } from './../../angular-l10n';
 import {
     L10nConfig,
     L10nLoader,
     LocalizationModule,
     LocaleService,
     StorageStrategy
-} from './../../index';
+} from './../../angular-l10n';
 
 describe('Timezone decorator', () => {
 

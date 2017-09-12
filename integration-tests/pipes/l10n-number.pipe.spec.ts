@@ -2,14 +2,14 @@ import { Pipe } from '@angular/core';
 import { inject, TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 
-import { L10nDecimalPipe, L10nPercentPipe, L10nCurrencyPipe } from './../../index';
+import { L10nDecimalPipe, L10nPercentPipe, L10nCurrencyPipe } from './../../angular-l10n';
 import {
     L10nConfig,
     L10nLoader,
     LocalizationModule,
     LocaleService,
     StorageStrategy
-} from './../../index';
+} from './../../angular-l10n';
 
 describe('L10n number pipes', () => {
 

@@ -3,7 +3,7 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { By } from '@angular/platform-browser';
 import { Component, DebugElement } from '@angular/core';
 
-import { TranslateDirective } from './../../index';
+import { TranslateDirective } from './../../angular-l10n';
 import {
     L10nConfig,
     L10nLoader,
@@ -11,7 +11,7 @@ import {
     LocaleService,
     StorageStrategy,
     ProviderType
-} from './../../index';
+} from './../../angular-l10n';
 
 describe('TranslateDirective', () => {
 

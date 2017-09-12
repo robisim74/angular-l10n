@@ -6,14 +6,14 @@ import { Component, DebugElement } from '@angular/core';
 import {
     DefaultLocale,
     Currency
-} from './../../index';
+} from './../../angular-l10n';
 import {
     L10nConfig,
     L10nLoader,
     LocalizationModule,
     LocaleService,
     StorageStrategy
-} from './../../index';
+} from './../../angular-l10n';
 
 describe('Currency decorator', () => {
 

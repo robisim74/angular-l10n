@@ -25,7 +25,7 @@
         "skipTemplateCodegen": true,
         "annotateForClosureCompiler": true,
         "strictMetadataEmit": true,
-        "flatModuleOutFile": "index.js",
+        "flatModuleOutFile": "angular-l10n.js",
         "flatModuleId": "angular-l10n"
     }
 }
