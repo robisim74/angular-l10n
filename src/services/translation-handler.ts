@@ -16,7 +16,7 @@ import { TRANSLATION_CONFIG, TranslationConfig } from '../models/l10n-config';
      * @param lang The current language
      * @return The parsed value
      */
-    public abstract parseValue(path: string, key: string, value: string | null, args: any, lang: string): string;
+    public abstract parseValue(path: string, key: string, value: string | null, args: any, lang: string): string | any;
 
 }
 
@@ -24,7 +24,7 @@ import { TRANSLATION_CONFIG, TranslationConfig } from '../models/l10n-config';
 
     constructor( @Inject(TRANSLATION_CONFIG) private configuration: TranslationConfig) { }
 
-    public parseValue(path: string, key: string, value: string | null, args: any, lang: string): string {
+    public parseValue(path: string, key: string, value: string | null, args: any, lang: string): string | any {
         if (value == null) {
             return this.handleMissingValue(path);
         } else if (args) {

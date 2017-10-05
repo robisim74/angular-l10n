@@ -127,7 +127,7 @@ export interface ITranslationService {
         });
     }
 
-    private translateKey(key: string, args: any, lang: string): string | null {
+    private translateKey(key: string, args: any, lang: string): string | any {
         if (key == null || key == "") return null;
         // I18n plural.
         if (this.configuration.i18nPlural && /^\d+\b/.exec(key)) {
@@ -136,21 +136,22 @@ export interface ITranslationService {
         return this.getValue(key, args, lang);
     }
 
-    private getValue(key: string, args: any, lang: string): string {
+    private getValue(key: string, args: any, lang: string): string | any {
         const path: string = key;
         let value: string | null = null;
-        if (this.translationData[lang]) {
-            let translation: any = this.translationData[lang];
 
+        let translation: any = this.translationData[lang];
+
+        if (translation) {
             // Composed key.
             if (this.configuration.composedKeySeparator) {
                 const sequences: string[] = key.split(this.configuration.composedKeySeparator);
-                do {
+
+                key = sequences.shift()!;
+                while (sequences.length > 0 && translation[key]) {
+                    translation = translation[key];
                     key = sequences.shift()!;
-                    if (translation[key] && typeof translation[key] === "object") {
-                        translation = translation[key];
-                    }
-                } while (sequences.length > 0);
+                }
             }
 
             value = translation[key] || translation[this.configuration.missingKey || ""];
