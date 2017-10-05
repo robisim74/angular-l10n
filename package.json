@@ -10,7 +10,7 @@
         "test": "karma start",
         "pack-lib": "npm pack ./dist",
         "publish-lib": "npm publish ./dist",
-        "publish-lib-pre": "npm publish --tag next ./dist",
+        "publish-lib:next": "npm publish --tag next ./dist",
         "build-docs": "python -m mkdocs build",
         "serve-docs": "python -m mkdocs serve",
         "publish-docs": "python -m mkdocs gh-deploy"
