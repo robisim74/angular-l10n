@@ -1,63 +1,104 @@
 import { IntlAPI } from '../services/intl-api';
 import { NumberFormatStyle, DateFormatterFn, DateTimeOptions } from './types';
 
-export class IntlFormatter {
+function intlDateTimeFormat(
+    date: Date,
+    defaultLocale: string,
+    options: Intl.DateTimeFormatOptions,
+    timezone?: string
+): string {
+    const marks: RegExp = /[\u200e\u200f]/g;
+    options.timeZone = IntlAPI.hasTimezone() ? timezone : 'UTC';
+    return new Intl.DateTimeFormat(defaultLocale, options).format(date).replace(marks, "");
+}
 
-    private static readonly FORMAT_ALIASES: { [format: string]: DateFormatterFn } = {
-        'short': IntlFormatter.datePartGetterFactory(
-            IntlFormatter.combine([
-                IntlFormatter.digitCondition('year', 1),
-                IntlFormatter.digitCondition('month', 1),
-                IntlFormatter.digitCondition('day', 1),
-                IntlFormatter.digitCondition('hour', 1),
-                IntlFormatter.digitCondition('minute', 1)
-            ])),
-        'medium': IntlFormatter.datePartGetterFactory(
-            IntlFormatter.combine([
-                IntlFormatter.digitCondition('year', 1),
-                IntlFormatter.nameCondition('month', 3),
-                IntlFormatter.digitCondition('day', 1),
-                IntlFormatter.digitCondition('hour', 1),
-                IntlFormatter.digitCondition('minute', 1),
-                IntlFormatter.digitCondition('second', 1),
-            ])),
-        'shortDate': IntlFormatter.datePartGetterFactory(
-            IntlFormatter.combine([
-                IntlFormatter.digitCondition('year', 1),
-                IntlFormatter.digitCondition('month', 1),
-                IntlFormatter.digitCondition('day', 1)
-            ])),
-        'mediumDate': IntlFormatter.datePartGetterFactory(
-            IntlFormatter.combine([
-                IntlFormatter.digitCondition('year', 1),
-                IntlFormatter.nameCondition('month', 3),
-                IntlFormatter.digitCondition('day', 1)
-            ])),
-        'longDate': IntlFormatter.datePartGetterFactory(
-            IntlFormatter.combine([
-                IntlFormatter.digitCondition('year', 1),
-                IntlFormatter.nameCondition('month', 4),
-                IntlFormatter.digitCondition('day', 1)
-            ])),
-        'fullDate': IntlFormatter.datePartGetterFactory(
-            IntlFormatter.combine([
-                IntlFormatter.digitCondition('year', 1),
-                IntlFormatter.nameCondition('month', 4),
-                IntlFormatter.nameCondition('weekday', 4),
-                IntlFormatter.digitCondition('day', 1)
-            ])),
-        'shortTime': IntlFormatter.datePartGetterFactory(
-            IntlFormatter.combine([
-                IntlFormatter.digitCondition('hour', 1),
-                IntlFormatter.digitCondition('minute', 1)
-            ])),
-        'mediumTime': IntlFormatter.datePartGetterFactory(
-            IntlFormatter.combine([
-                IntlFormatter.digitCondition('hour', 1),
-                IntlFormatter.digitCondition('second', 1),
-                IntlFormatter.digitCondition('minute', 1)
-            ])),
-    };
+function datePartFactory(options: Intl.DateTimeFormatOptions): DateFormatterFn {
+    const dateFactory: (date: Date, defaultLocale: string, timezone?: string) => string =
+        (date: Date, defaultLocale: string, timezone?: string): string =>
+            intlDateTimeFormat(date, defaultLocale, options, timezone);
+    return dateFactory;
+}
+
+function combine(options: Intl.DateTimeFormatOptions[]): Intl.DateTimeFormatOptions {
+    const reducedOptions: Intl.DateTimeFormatOptions = options.reduce(
+        (merged: Intl.DateTimeFormatOptions, opt: Intl.DateTimeFormatOptions) => ({ ...merged, ...opt }), {}
+    );
+    return reducedOptions;
+}
+
+function digitCondition(prop: string, len: number): Intl.DateTimeFormatOptions {
+    const result: { [k: string]: string } = {};
+    result[prop] = len === 2 ? '2-digit' : 'numeric';
+    return result;
+}
+
+function nameCondition(prop: string, len: number): Intl.DateTimeFormatOptions {
+    const result: { [k: string]: string } = {};
+    if (len < 4) {
+        result[prop] = len > 1 ? 'short' : 'narrow';
+    } else {
+        result[prop] = 'long';
+    }
+    return result;
+}
+
+const FORMAT_ALIASES: { [format: string]: DateFormatterFn } = {
+    'short': datePartFactory(
+        combine([
+            digitCondition('year', 1),
+            digitCondition('month', 1),
+            digitCondition('day', 1),
+            digitCondition('hour', 1),
+            digitCondition('minute', 1)
+        ])),
+    'medium': datePartFactory(
+        combine([
+            digitCondition('year', 1),
+            nameCondition('month', 3),
+            digitCondition('day', 1),
+            digitCondition('hour', 1),
+            digitCondition('minute', 1),
+            digitCondition('second', 1),
+        ])),
+    'shortDate': datePartFactory(
+        combine([
+            digitCondition('year', 1),
+            digitCondition('month', 1),
+            digitCondition('day', 1)
+        ])),
+    'mediumDate': datePartFactory(
+        combine([
+            digitCondition('year', 1),
+            nameCondition('month', 3),
+            digitCondition('day', 1)
+        ])),
+    'longDate': datePartFactory(
+        combine([
+            digitCondition('year', 1),
+            nameCondition('month', 4),
+            digitCondition('day', 1)
+        ])),
+    'fullDate': datePartFactory(
+        combine([
+            digitCondition('year', 1),
+            nameCondition('month', 4),
+            nameCondition('weekday', 4),
+            digitCondition('day', 1)
+        ])),
+    'shortTime': datePartFactory(
+        combine([
+            digitCondition('hour', 1),
+            digitCondition('minute', 1)
+        ])),
+    'mediumTime': datePartFactory(
+        combine([
+            digitCondition('hour', 1),
+            digitCondition('second', 1),
+            digitCondition('minute', 1)
+        ])),
+};
+
+export class IntlFormatter {
 
     public static formatNumber(
         num: number,
@@ -92,7 +133,7 @@ export class IntlFormatter {
             }
         }
 
-        return IntlFormatter.sendNumberFormat(num, defaultLocale, style, {
+        return IntlFormatter.numberFormatter(num, defaultLocale, style, {
             minimumIntegerDigits: minInt,
             minimumFractionDigits: minFraction,
             maximumFractionDigits: maxFraction,
@@ -107,10 +148,10 @@ export class IntlFormatter {
         format: string | DateTimeOptions,
         timezone?: string): string {
 
-        return IntlFormatter.sendDateTimeFormat(date, defaultLocale, format, timezone);
+        return IntlFormatter.dateTimeFormatter(date, defaultLocale, format, timezone);
     }
 
-    private static sendNumberFormat(num: number, defaultLocale: string, style: NumberFormatStyle, opts: {
+    private static numberFormatter(num: number, defaultLocale: string, style: NumberFormatStyle, opts: {
         minimumIntegerDigits?: number,
         minimumFractionDigits?: number,
         maximumFractionDigits?: number,
@@ -133,54 +174,20 @@ export class IntlFormatter {
         return new Intl.NumberFormat(defaultLocale, options).format(num);
     }
 
-    private static sendDateTimeFormat(
+    private static dateTimeFormatter(
         date: Date, defaultLocale: string,
         format: string | DateTimeOptions,
         timezone?: string): string {
 
         let options: Intl.DateTimeFormatOptions = {};
         if (typeof format === "string") {
-            const fnFormatAliases: DateFormatterFn = IntlFormatter.FORMAT_ALIASES[format];
+            const fnFormatAliases: DateFormatterFn = FORMAT_ALIASES[format];
             if (fnFormatAliases) return fnFormatAliases(date, defaultLocale, timezone);
         } else {
             options = format;
-            options.timeZone = IntlAPI.hasTimezone() ? timezone : 'UTC';
         }
         // If the format is wrong, returns the default Intl format.
-        return IntlFormatter.intlDateTimeFormat(date, defaultLocale, options);
-    }
-
-    private static intlDateTimeFormat(date: Date, defaultLocale: string, options: Intl.DateTimeFormatOptions): string {
-        return new Intl.DateTimeFormat(defaultLocale, options).format(date).replace(/[\u200e\u200f]/g, "");
-    }
-
-    private static datePartGetterFactory(options: Intl.DateTimeFormatOptions): DateFormatterFn {
-        return (date: Date, defaultLocale: string, timezone?: string): string => {
-            options.timeZone = IntlAPI.hasTimezone() ? timezone : 'UTC';
-            return IntlFormatter.intlDateTimeFormat(date, defaultLocale, options);
-        };
-    }
-
-    private static combine(options: Intl.DateTimeFormatOptions[]): Intl.DateTimeFormatOptions {
-        return options.reduce(
-            (merged: Intl.DateTimeFormatOptions, opt: Intl.DateTimeFormatOptions) => ({ ...merged, ...opt }), {}
-        );
-    }
-
-    private static digitCondition(prop: string, len: number): Intl.DateTimeFormatOptions {
-        const result: { [k: string]: string } = {};
-        result[prop] = len === 2 ? '2-digit' : 'numeric';
-        return result;
-    }
-
-    private static nameCondition(prop: string, len: number): Intl.DateTimeFormatOptions {
-        const result: { [k: string]: string } = {};
-        if (len < 4) {
-            result[prop] = len > 1 ? 'short' : 'narrow';
-        } else {
-            result[prop] = 'long';
-        }
-        return result;
+        return intlDateTimeFormat(date, defaultLocale, options, timezone);
     }
 
 }

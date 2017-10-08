@@ -5,7 +5,7 @@
  */
 export class BFS {
 
-    private static readonly SELECTOR: RegExp = /^l10n|translate|locale/;
+    private static readonly SELECTOR: RegExp = new RegExp("^l10n|translate|locale");
 
     private static readonly MAX_DEPTH: number = 10;
 
@@ -13,7 +13,7 @@ export class BFS {
      * Target node is a non empty text node.
      */
     public static getTargetNode(rootNode: any): any {
-        return this.walk(rootNode);
+        return BFS.walk(rootNode);
     }
 
     private static walk(rootNode: any): any {
