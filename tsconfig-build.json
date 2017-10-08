@@ -1,21 +1,28 @@
 {
     "compilerOptions": {
-        "baseUrl": ".",
-        "declaration": true,
-        "experimentalDecorators": true,
-        "strict": true,
-        "module": "es2015",
-        "moduleResolution": "node",
-        "outDir": "dist",
         "rootDir": ".",
-        "sourceMap": true,
-        "inlineSources": true,
+        "baseUrl": ".",
+        "paths": {
+            "@angular/*": [
+                "node_modules/@angular/*"
+            ]
+        },
+        "outDir": "dist",
+        "declaration": true,
+        "strict": true,
+        "moduleResolution": "node",
+        "module": "es2015",
         "target": "es2015",
-        "skipLibCheck": true,
         "lib": [
             "es2015",
             "dom"
-        ]
+        ],
+        "skipLibCheck": true,
+        "types": [],
+        "experimentalDecorators": true,
+        "emitDecoratorMetadata": true,
+        "sourceMap": true,
+        "inlineSources": true
     },
     "files": [
         "public_api.ts",

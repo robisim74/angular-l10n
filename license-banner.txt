@@ -1,0 +1,6 @@
+/**
+ * @license Angular l10n
+ * Copyright Roberto Simonetti
+ * MIT license
+ * https://github.com/robisim74/angular-l10n
+ */

@@ -1,4 +1,5 @@
 import resolve from 'rollup-plugin-node-resolve';
+import sourcemaps from 'rollup-plugin-sourcemaps';
 
 const globals = {
     '@angular/core': 'ng.core',
@@ -17,15 +18,14 @@ const globals = {
 };
 
 export default {
-    input: './dist/modules/angular-l10n.es5.js',
     external: Object.keys(globals),
-    plugins: [resolve()],
+    plugins: [resolve(), sourcemaps()],
     onwarn: () => { return },
     output: {
-        file: './dist/bundles/angular-l10n.umd.js',
         format: 'umd',
         name: 'ng.l10n',
         globals: globals,
+        sourcemap: true,
         exports: 'named'
     }
 }
