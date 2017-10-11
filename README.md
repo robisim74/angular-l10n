@@ -31,7 +31,7 @@ Get the changelog by [releases](https://github.com/robisim74/angular-l10n/releas
 - Composed keys in translations (nested objects)
 - Directives can dynamically change parameters and expressions values as the pipes
 - Directives can translate also attributes
-- Directives works also with complex UI components., like _Material_ or _Ionic_
+- Directives work also with complex UI components, like _Material_ or _Ionic_
 - Methods to translate in component class
 - Custom translation handler for translated values
 - Support for lazy loading
