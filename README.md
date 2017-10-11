@@ -1,5 +1,5 @@
 # Angular localization
-[![Build Status](https://travis-ci.org/robisim74/angular-l10n.svg?branch=master)](https://travis-ci.org/robisim74/angular-l10n) [![npm version](https://badge.fury.io/js/angular-l10n.svg)](https://badge.fury.io/js/angular-l10n)
+[![Build Status](https://travis-ci.org/robisim74/angular-l10n.svg?branch=master)](https://travis-ci.org/robisim74/angular-l10n) [![npm version](https://badge.fury.io/js/angular-l10n.svg)](https://badge.fury.io/js/angular-l10n) [![npm](https://img.shields.io/npm/dm/angular-l10n.svg)](https://www.npmjs.com/package/angular-l10n) [![npm](https://img.shields.io/npm/l/angular-l10n.svg)](https://www.npmjs.com/package/angular-l10n)
 > An Angular library to translate messages, dates and numbers
 
 This library is for localization of **Angular 2+** apps written in TypeScript, ES6 or ES5. 
@@ -8,6 +8,34 @@ It allows, in addition to translation, to localize numbers and dates of your app
 [Sample app](http://robisim74.github.io/angular-l10n-sample) built with Angular Material, AoT compilation & webpack, and its [source code](https://github.com/robisim74/angular-l10n-sample).
 
 Get the changelog by [releases](https://github.com/robisim74/angular-l10n/releases).
+
+## Angular localization features
+- A module to translate texts & a module to translate texts, dates & numbers
+- A module for validation by locales (numbers)
+- Direct & Asynchronous loading of translation data
+- Available providers for Asynchronous loading:
+    - Static (json files)
+    - WebAPI (json format)
+    - Fallback
+    - Custom
+- Caching of the http requests
+- Composed languages (e.g. languageCode-countryCode)
+- Language, Default locale & Currency through _ISO codes_
+- Timezone through _IANA_ time zone
+- Cookies, Session & Local Storage, or custom storage (e.g. for using with _Ionic Storage_) available for storing the _ISO codes_
+- _Intl API_ to localize dates & numbers
+- Pure pipes & Directives to get the translation
+- Decorators or class inheritance for the _ISO codes_ used by the pure pipes
+- Html tags in translations
+- Parameters in translations
+- Composed keys in translations (nested objects)
+- Directives can dynamically change parameters and expressions values as the pipes
+- Directives can translate also attributes
+- Directives works also with complex UI components., like _Material_ or _Ionic_
+- Methods to translate in component class
+- Custom translation handler for translated values
+- Support for lazy loading
+- Collator for sorting and filtering a list by locales
 
 ## Angular i18n solutions
 | _Feature_ | [Angular](https://angular.io/guide/i18n) _Official_ | [ngx-translate](http://www.ngx-translate.com) _External library_ | [angular-l10n](https://robisim74.github.io/angular-l10n) _External library_ |
