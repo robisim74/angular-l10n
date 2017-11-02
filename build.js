@@ -32,7 +32,7 @@ shell.echo(chalk.green(`AoT compilation completed`));
 /* Creates bundles: ESM/ES5 and UMD bundles */
 shell.echo(`Start bundling`);
 shell.echo(`Rollup package`);
-shell.exec(`rollup -i ${NPM_DIR}/index.js -o ${MODULES_DIR}/${PACKAGE}.js --sourcemap`, { silent: true });
+shell.exec(`rollup -i ${NPM_DIR}/${PACKAGE}.js -o ${MODULES_DIR}/${PACKAGE}.js --sourcemap`, { silent: true });
 shell.exec(`node scripts/map-sources -f ${MODULES_DIR}/${PACKAGE}.js`);
 
 shell.echo(`Downleveling ES2015 to ESM/ES5`);

@@ -2,11 +2,11 @@ import { Pipe } from '@angular/core';
 import { inject, TestBed } from '@angular/core/testing';
 import { PipeResolver } from '@angular/compiler';
 
-import { LocaleDecimalPipe, LocalePercentPipe, LocaleCurrencyPipe } from './../../index';
+import { LocaleDecimalPipe, LocalePercentPipe, LocaleCurrencyPipe } from './../../angular-l10n';
 import {
     LocalizationModule,
     LocaleService
-} from './../../index';
+} from './../../angular-l10n';
 
 describe('Locale number pipes', () => {
 

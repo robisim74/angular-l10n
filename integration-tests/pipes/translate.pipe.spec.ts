@@ -12,14 +12,14 @@ import {
 import { PipeResolver } from '@angular/compiler';
 import { Observable } from 'rxjs/Observable';
 
-import { TranslatePipe } from './../../index';
+import { TranslatePipe } from './../../angular-l10n';
 import {
     TranslationModule,
     LocalizationModule,
     LocaleService,
     TranslationService,
     TranslationProvider
-} from './../../index';
+} from './../../angular-l10n';
 
 @Injectable() export class CustomTranslationProvider implements TranslationProvider {
 

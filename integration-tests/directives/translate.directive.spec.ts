@@ -3,12 +3,12 @@ import { HttpModule } from '@angular/http';
 import { By } from '@angular/platform-browser';
 import { Component, DebugElement } from '@angular/core';
 
-import { TranslateDirective } from './../../index';
+import { TranslateDirective } from './../../angular-l10n';
 import {
     TranslationModule,
     LocaleService,
     TranslationService
-} from './../../index';
+} from './../../angular-l10n';
 
 describe('TranslateDirective', () => {
 

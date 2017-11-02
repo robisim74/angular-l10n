@@ -2,12 +2,12 @@ import { TestBed, ComponentFixture, async } from '@angular/core/testing';
 import { FormsModule, NgForm, AbstractControl } from '@angular/forms';
 import { Component } from '@angular/core';
 
-import { LocaleNumberValidatorDirective } from './../../index';
+import { LocaleNumberValidatorDirective } from './../../angular-l10n';
 import {
     LocalizationModule,
     LocaleValidationModule,
     LocaleService
-} from './../../index';
+} from './../../angular-l10n';
 
 describe('LocaleNumberValidatorDirective', () => {
 

@@ -2,11 +2,11 @@ import { TestBed, ComponentFixture, fakeAsync, tick } from '@angular/core/testin
 import { By } from '@angular/platform-browser';
 import { Component, DebugElement } from '@angular/core';
 
-import { LocaleDateDirective } from './../../index';
+import { LocaleDateDirective } from './../../angular-l10n';
 import {
     LocalizationModule,
     LocaleService
-} from './../../index';
+} from './../../angular-l10n';
 
 describe('LocaleDateDirective', () => {
 

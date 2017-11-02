@@ -6,11 +6,11 @@ import {
     LocaleDecimalDirective,
     LocalePercentDirective,
     LocaleCurrencyDirective
-} from './../../index';
+} from './../../angular-l10n';
 import {
     LocalizationModule,
     LocaleService
-} from './../../index';
+} from './../../angular-l10n';
 
 describe('Locale number directives', () => {
 

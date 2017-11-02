@@ -1,5 +1,5 @@
 # Angular localization library specification
-Library version: 3.5.1
+Library version: 3.5.2
 
 ## Table of contents
 * [1 Library structure](#1)

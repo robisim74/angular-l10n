@@ -5,11 +5,11 @@ import { Component, DebugElement } from '@angular/core';
 import {
     DefaultLocale,
     Currency
-} from './../../index';
+} from './../../angular-l10n';
 import {
     LocalizationModule,
     LocaleService
-} from './../../index';
+} from './../../angular-l10n';
 
 describe('Currency decorator', () => {
 
