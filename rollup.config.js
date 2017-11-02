@@ -12,9 +12,8 @@ const globals = {
     'rxjs/Subject': 'Rx',
     'rxjs/BehaviorSubject': 'Rx',
     'rxjs/ReplaySubject': 'Rx',
-    'rxjs/add/observable/merge': 'Rx.Observable',
-    'rxjs/add/observable/concat': 'Rx.Observable',
-    'rxjs/add/operator/toPromise': 'Rx.Observable.prototype'
+    'rxjs/observable/merge': 'Rx.Observable',
+    'rxjs/observable/concat': 'Rx.Observable'
 };
 
 export default {

@@ -3,9 +3,8 @@ import { Observer } from 'rxjs/Observer';
 import { Observable } from 'rxjs/Observable';
 import { Subject } from 'rxjs/Subject';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
-import 'rxjs/add/operator/toPromise';
-import 'rxjs/add/observable/merge';
-import 'rxjs/add/observable/concat';
+import { merge } from 'rxjs/observable/merge';
+import { concat } from 'rxjs/observable/concat';
 
 import { TRANSLATION_CONFIG, TranslationConfig } from '../models/l10n-config';
 import { LocaleService } from './locale.service';
@@ -242,11 +241,11 @@ export interface ITranslationService {
             }
 
             // Merges all the sequences into a single observable sequence.
-            const mergedSequencesOfTranslationData: Observable<any> = Observable.merge(...sequencesOfTranslationData);
+            const mergedSequencesOfTranslationData: Observable<any> = merge(...sequencesOfTranslationData);
 
             sequencesOfOrderedTranslationData.push(mergedSequencesOfTranslationData);
 
-            Observable.concat(...sequencesOfOrderedTranslationData).subscribe(
+            concat(...sequencesOfOrderedTranslationData).subscribe(
                 (data: any) => {
                     this.addData(data, language);
                 },

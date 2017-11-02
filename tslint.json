@@ -50,10 +50,6 @@
             true,
             "Directive"
         ],
-        "templates-use-public": true,
-        "no-access-missing-member": true,
-        "invoke-injectable": true,
-        "template-to-ng-template": true,
         "ban-types": false,
         "curly": [
             true,
