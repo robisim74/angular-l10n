@@ -5,7 +5,7 @@
 This library is for localization of **Angular 2+** apps written in TypeScript, ES6 or ES5. 
 It allows, in addition to translation, to localize numbers and dates of your app, adding _language code_, _country code_, _currency code_, _timezone_ and optionally _script code_, _numbering system_ and _calendar_, through [Internationalization API](https://robisim74.github.io/angular-l10n/spec/configuration/#intl-api). It also implements the validation of numbers by locales.
 
-[Sample app](http://robisim74.github.io/angular-l10n-sample) built with Angular Material, AoT compilation & webpack, and its [source code](https://github.com/robisim74/angular-l10n-sample).
+[Sample app](http://robisim74.github.io/angular-l10n-sample) built with Angular CLI & Material, and its [source code](https://github.com/robisim74/angular-l10n-sample).
 
 Get the changelog by [releases](https://github.com/robisim74/angular-l10n/releases).
 
@@ -92,7 +92,7 @@ This library is compatible with AoT compilation & Server Side Rendering. It also
     - [Branch](https://github.com/robisim74/angular-l10n/tree/angular_v2)
 
 ## Related projects
-[Angular Localization with an ASP.NET CORE MVC Service](https://damienbod.com/2016/04/29/angular-2-localization-with-an-asp-net-core-mvc-service/) @damienbod
+[Angular Localization with an ASP.NET CORE MVC Service](https://damienbod.com/2016/04/29/angular-2-localization-with-an-asp-net-core-mvc-service/)
 
 ## Contributing
 - [Contributing](https://github.com/robisim74/angular-l10n/blob/master/CONTRIBUTING.md)

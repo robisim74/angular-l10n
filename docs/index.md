@@ -10,7 +10,7 @@ It allows, in addition to translation, to localize numbers and dates of your app
 
 ---
 
-> [Sample app](http://robisim74.github.io/angular-l10n-sample) built with Angular Material, AoT compilation & webpack, and its [source code](https://github.com/robisim74/angular-l10n-sample).
+> [Sample app](http://robisim74.github.io/angular-l10n-sample) built with Angular CLI & Material, and its [source code](https://github.com/robisim74/angular-l10n-sample).
 
 ---
 
