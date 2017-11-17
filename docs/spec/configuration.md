@@ -125,6 +125,61 @@ Property | Value
 
 ---
 
+### Dynamic settings
+If you need to load the configuration data dynamically, you can provide a partial or empty `L10nConfig` in `AppModule`, 
+and then update the _configuration tokens_ in your class (just before calling the `load` method of `L10nLoader`):
+```TypeScript
+const l10nConfig: L10nConfig = {
+    locale: {
+        languages: [], // Not available here.
+        defaultLocale: { languageCode: 'en', countryCode: 'US' },
+        currency: 'USD',
+        storage: StorageStrategy.Cookie
+    },
+    translation: {
+        providers: [], // Not available here.
+        caching: true,
+        missingValue: 'No key'
+    }
+};
+
+@NgModule({
+    imports: [
+        ...
+        LocalizationModule.forRoot(l10nConfig)
+    ],
+    declarations: [AppComponent, HomeComponent],
+    bootstrap: [AppComponent]
+})
+export class AppModule { }
+
+...
+
+export class AppComponent {
+
+    constructor(
+        public l10nLoader: L10nLoader,
+        @Inject(LOCALE_CONFIG) private localeConfig,
+        @Inject(TRANSLATION_CONFIG) private translationConfig
+    ) {
+        ...
+
+        this.localeConfig.languages = MY_LANGUAGES;
+
+        this.translationConfig.providers = [
+            { type: ProviderType.WebAPI, path: MY_URL + '/api/values/' }
+        ];
+
+        this.l10nLoader.load();
+    }
+
+}
+```
+
+<br>
+
+---
+
 ### Loading the translation data
 #### Direct loading
 You can use `translationData` setting when you configure the service, 
