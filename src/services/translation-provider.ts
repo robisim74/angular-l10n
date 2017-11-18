@@ -14,7 +14,7 @@ import { ProviderType } from '../models/types';
     /**
      * This method must contain the logic of data access.
      * @param language The current language
-     * @param args The parameter of addCustomProvider method
+     * @param args The object set during the configuration of 'providers'
      * @return An observable of an object of translation data: {key: value}
      */
     public abstract getTranslation(language: string, args: any): Observable<any>;

@@ -126,16 +126,19 @@ Property | Value
 ---
 
 ### Dynamic settings
+The configuration settings are stored in the following `InjectionToken`:
+
+Interface | Token
+----- | --------
+`LocaleConfig` | `LOCALE_CONFIG` 
+`TranslationConfig` | `TRANSLATION_CONFIG`
+
 If you need to load the configuration data dynamically, you can provide a partial or empty `L10nConfig` in `AppModule`, 
-and then update the _configuration tokens_ in your class (just before calling the `load` method of `L10nLoader`):
+and then update the _tokens_ in your class:
+
 ```TypeScript
 const l10nConfig: L10nConfig = {
-    locale: {
-        languages: [], // Not available here.
-        defaultLocale: { languageCode: 'en', countryCode: 'US' },
-        currency: 'USD',
-        storage: StorageStrategy.Cookie
-    },
+    ...
     translation: {
         providers: [], // Not available here.
         caching: true,
@@ -148,32 +151,68 @@ const l10nConfig: L10nConfig = {
         ...
         LocalizationModule.forRoot(l10nConfig)
     ],
-    declarations: [AppComponent, HomeComponent],
-    bootstrap: [AppComponent]
+    ...
 })
-export class AppModule { }
-
-...
-
-export class AppComponent {
+export class AppModule {
 
     constructor(
         public l10nLoader: L10nLoader,
-        @Inject(LOCALE_CONFIG) private localeConfig,
-        @Inject(TRANSLATION_CONFIG) private translationConfig
+        @Inject(TRANSLATION_CONFIG) private translationConfig: TranslationConfig
     ) {
-        ...
-
-        this.localeConfig.languages = MY_LANGUAGES;
-
         this.translationConfig.providers = [
-            { type: ProviderType.WebAPI, path: MY_URL + '/api/values/' }
+            { type: ProviderType.Static, prefix: './assets/locale-' }
         ];
 
         this.l10nLoader.load();
     }
 
 }
+```
+
+> Configuration must be completed before invoking the `load` method of `L10nLoader`.
+
+Or whether you use the _advanced initialization_:
+
+```TypeScript
+@Injectable() export class LocalizationConfig {
+
+    constructor(
+        public l10nLoader: L10nLoader,
+        @Inject(TRANSLATION_CONFIG) private translationConfig: TranslationConfig
+    ) { }
+
+    load(): Promise<void> {
+        this.translationConfig.providers = [
+            { type: ProviderType.Static, prefix: './assets/locale-' }
+        ];
+
+        return this.l10nLoader.load();
+    }
+
+}
+
+export function initLocalization(localizationConfig: LocalizationConfig): Function {
+    return () => localizationConfig.load();
+}
+
+@NgModule({
+    imports: [
+        ...
+        LocalizationModule.forRoot(l10nConfig)
+    ],
+    providers: [
+        ...
+        LocalizationConfig,
+        {
+            provide: APP_INITIALIZER,
+            useFactory: initLocalization,
+            deps: [LocalizationConfig],
+            multi: true
+        }
+    ],
+    ...
+})
+export class AppModule { }
 ```
 
 <br>
@@ -271,7 +310,7 @@ Implement `TranslationProvider` class-interface and the `getTranslation` method 
     /**
      * This method must contain the logic of data access.
      * @param language The current language
-     * @param args The parameter of addCustomProvider method
+     * @param args The object set during the configuration of 'providers'
      * @return An observable of an object of translation data: {key: value}
      */
     public getTranslation(language: string, args: any): Observable<any> {
@@ -294,7 +333,6 @@ Note that the method must return an _observable_ of an _object_. Then provide th
     ...
 })
 ```
-`args` will be the object set during the configuration of `providers`.
 
 See also [TranslationProvider](https://github.com/robisim74/angular-l10n/blob/master/src/services/translation-provider.ts) code.
 
