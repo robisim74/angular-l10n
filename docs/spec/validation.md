@@ -1,0 +1,58 @@
+## Validation by locales
+Import the modules you need in the application root module:
+```TypeScript
+@NgModule({
+    imports: [
+        ...
+        LocalizationModule.forRoot(l10nConfig),
+        LocaleValidationModule.forRoot()
+    ],
+    declarations: [AppComponent],
+    bootstrap: [AppComponent]
+})
+export class AppModule { }
+```
+
+<br>
+
+---
+
+### Validating a number
+Directive | Selectors
+--------- | ---------
+`L10nNumberValidator` | `l10nValidateNumber`
+
+Directive | Validator | Options | Errors
+--------- | --------- | ------- | ------
+`L10nNumberValidator` | `l10nValidateNumber=[digitInfo]` | `[minValue]` `[maxValue]` | `format` or `minValue` or `maxValue`
+
+where `digitInfo` has the following format: `{minIntegerDigits}.{minFractionDigits}-{maxFractionDigits}`, and `minValue` and `maxValue` attributes are optional:
+```Html
+<input l10nValidateNumber="1.2-2" [minValue]="0" [maxValue]="1000" name="decimal" [(ngModel)]="decimal">
+```
+or, if you use variables:
+```Html
+<input [l10nValidateNumber]="digits" [minValue]="minValue" [maxValue]="maxValue" name="decimal" [(ngModel)]="decimal">
+```
+
+The number can be entered with or without the thousands separator.
+
+<br>
+#### Parsing a number
+When the number is valid, you can get its value by the `parseNumber` method of `LocaleValidation`:
+```TypeScript
+parsedValue: number = null;
+
+constructor(private localeValidation: LocaleValidation) { }
+
+onSubmit(value: string): void {
+    this.parsedValue = this.localeValidation.parseNumber(value);
+}
+```
+
+<br>
+#### FormBuilder
+If you use `FormBuilder`, you have to invoke the following function:
+```TypeScript
+l10nValidateNumber(digits: string, MIN_VALUE?: number, MAX_VALUE?: number): Function
+```

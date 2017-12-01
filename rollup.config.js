@@ -1,27 +1,30 @@
+import resolve from 'rollup-plugin-node-resolve';
+import sourcemaps from 'rollup-plugin-sourcemaps';
+
+const globals = {
+    '@angular/core': 'ng.core',
+    '@angular/common': 'ng.common',
+    '@angular/common/http': 'ng.commmon.http',
+    '@angular/forms': 'ng.forms',
+    'rxjs/Observable': 'Rx',
+    'rxjs/Observer': 'Rx',
+    'rxjs/Subscription': 'Rx',
+    'rxjs/Subject': 'Rx',
+    'rxjs/BehaviorSubject': 'Rx',
+    'rxjs/ReplaySubject': 'Rx',
+    'rxjs/observable/merge': 'Rx.Observable',
+    'rxjs/observable/concat': 'Rx.Observable'
+};
+
 export default {
-    entry: './dist/index.js',
-    dest: './dist/bundles/angular-l10n.umd.js',
-    format: 'umd',
-    moduleName: 'ng.l10n',
-    external: [
-        '@angular/core',
-        '@angular/common',
-        '@angular/forms',
-        '@angular/http',
-        'rxjs/Observable',
-        'rxjs/Observer',
-        'rxjs/add/operator/map',
-        'rxjs/add/observable/merge'
-    ],
-    globals: {
-        '@angular/core': 'ng.core',
-        '@angular/common': 'ng.common',
-        '@angular/forms': 'ng.forms',
-        '@angular/http': 'ng.http',
-        'rxjs/Observable': 'Rx',
-        'rxjs/Observer': 'Rx',
-        'rxjs/add/operator/map': 'Rx',
-        'rxjs/add/observable/merge': 'Rx'
-    },
-    onwarn: () => { return }
+    external: Object.keys(globals),
+    plugins: [resolve(), sourcemaps()],
+    onwarn: () => { return },
+    output: {
+        format: 'umd',
+        name: 'ng.l10n',
+        globals: globals,
+        sourcemap: true,
+        exports: 'named'
+    }
 }

@@ -1,7 +1,6 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
 import { TranslationService } from '../services/translation.service';
-import { ServiceState } from '../models/translation/service-state';
 
 @Pipe({
     name: 'translate',
@@ -9,14 +8,10 @@ import { ServiceState } from '../models/translation/service-state';
 })
 export class TranslatePipe implements PipeTransform {
 
-    constructor(public translation: TranslationService) { }
+    constructor(protected translation: TranslationService) { }
 
-    public transform(key: string, lang: string, ...args: any[]): string {
-        if (this.translation.serviceState == ServiceState.isReady) {
-            return this.translation.translate(key, args[0], lang);
-        }
-        // If the service is not ready, returns an empty string.
-        return "";
+    public transform(key: string, lang: string, args?: any): string {
+        return this.translation.translate(key, args, lang);
     }
 
 }

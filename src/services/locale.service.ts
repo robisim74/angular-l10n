@@ -1,64 +1,137 @@
-import { Injectable, EventEmitter, Output } from '@angular/core';
+import { Injectable, Inject, EventEmitter, Output } from '@angular/core';
+import { Subject } from 'rxjs/Subject';
 
-import { LocaleConfig } from '../models/localization/locale-config';
-import { Config } from '../models/localization/config';
-import { Language } from '../models/localization/language';
-import { DefaultLocale } from '../models/localization/default-locale';
-import { Browser } from '../models/localization/browser';
+import { IntlAPI } from '../services/intl-api';
+import { LOCALE_CONFIG, LocaleConfig } from '../models/l10n-config';
+import { LocaleStorage } from './locale-storage';
+import { DefaultLocale } from '../models/default-locale';
+import { Language } from '../models/types';
 
 /**
- * Manages language, default locale & currency.
+ * Manages language, default locale, currency & timezone.
  */
-@Injectable() export class LocaleService {
+export interface ILocaleService {
+
+    languageCodeChanged: EventEmitter<string>;
+    defaultLocaleChanged: EventEmitter<string>;
+    currencyCodeChanged: EventEmitter<string>;
+    timezoneChanged: EventEmitter<string>;
+
+    loadTranslation: Subject<any>;
+
+    getConfiguration(): LocaleConfig;
+
+    init(): Promise<void>;
+
+    getBrowserLanguage(): string | null;
+
+    getAvailableLanguages(): string[];
+
+    getLanguageDirection(languageCode?: string): string;
+
+    getCurrentLanguage(): string;
+
+    getCurrentCountry(): string;
+
+    getCurrentLocale(): string;
+
+    getCurrentScript(): string;
+
+    getCurrentNumberingSystem(): string;
+
+    getCurrentCalendar(): string;
+
+    getDefaultLocale(): string;
+
+    getCurrentCurrency(): string;
+
+    getCurrencySymbol(
+        currencyDisplay?: 'code' | 'symbol' | 'name',
+        defaultLocale?: string,
+        currency?: string
+    ): string;
+
+    getCurrentTimezone(): string;
+
+    setCurrentLanguage(languageCode: string): void;
+
+    setDefaultLocale(
+        languageCode: string,
+        countryCode?: string,
+        scriptCode?: string,
+        numberingSystem?: string,
+        calendar?: string
+    ): void;
+
+    setCurrentCurrency(currencyCode: string): void;
+
+    setCurrentTimezone(zoneName: string): void;
+
+}
+
+@Injectable() export class LocaleService implements ILocaleService {
 
     @Output() public languageCodeChanged: EventEmitter<string> = new EventEmitter<string>(true);
     @Output() public defaultLocaleChanged: EventEmitter<string> = new EventEmitter<string>(true);
     @Output() public currencyCodeChanged: EventEmitter<string> = new EventEmitter<string>(true);
-    @Output() public loadTranslation: EventEmitter<any> = new EventEmitter<any>(true);
+    @Output() public timezoneChanged: EventEmitter<string> = new EventEmitter<string>(true);
 
-    public get configuration(): Config {
-        return this._configuration;
-    }
-
-    private _configuration: Config = new Config();
+    public loadTranslation: Subject<any> = new Subject();
 
     private defaultLocale: DefaultLocale = new DefaultLocale();
 
     private currencyCode: string;
+    private timezone: string;
 
-    private browser: Browser = new Browser(this);
+    constructor( @Inject(LOCALE_CONFIG) private configuration: LocaleConfig, private storage: LocaleStorage) { }
 
-    /**
-     * Configure the service in the application root module or bootstrap component.
-     */
-    public AddConfiguration(): LocaleConfig {
-        return new LocaleConfig(this);
+    public getConfiguration(): LocaleConfig {
+        return this.configuration;
     }
 
-    /**
-     * Call this method after the configuration to initialize the service.
-     */
-    public init(): void {
-        this.initStorage();
+    public async init(): Promise<void> {
+        await this.initStorage();
 
-        if (!!this.configuration.languageCode && !!this.configuration.countryCode) {
+        if (this.configuration.defaultLocale) {
             this.initDefaultLocale();
-        } else if (!!this.configuration.languageCode) {
+        } else if (this.configuration.language) {
             this.initLanguage();
         }
 
-        if (!!this.configuration.currencyCode) {
+        if (this.configuration.currency) {
             this.initCurrency();
+        }
+
+        if (this.configuration.timezone) {
+            this.initTimezone();
         }
     }
 
-    public getAvailableLanguages(): string[] {
-        return this.configuration.languageCodes.map((language: Language) => language.code);
+    public getBrowserLanguage(): string | null {
+        let browserLanguage: string | null = null;
+        if (typeof navigator !== "undefined" && navigator.language) {
+            browserLanguage = navigator.language;
+        }
+        if (browserLanguage != null) {
+            const index: number = browserLanguage.indexOf("-");
+            if (index != -1) {
+                browserLanguage = browserLanguage.substring(0, index);
+            }
+        }
+        return browserLanguage;
     }
 
-    public getLanguageDirection(languageCode: string): string {
-        let matchedLanguages: Language[] = this.matchLanguage(languageCode);
-        return matchedLanguages[0].direction;
+    public getAvailableLanguages(): string[] {
+        let languages: string[] = [];
+        if (this.configuration.languages) {
+            languages = this.configuration.languages.map((language: Language) => language.code);
+        }
+        return languages;
+    }
+
+    public getLanguageDirection(languageCode: string = this.defaultLocale.languageCode): string {
+        const matchedLanguages: Language[] = this.matchLanguage(languageCode);
+        return matchedLanguages[0].dir;
     }
 
     public getCurrentLanguage(): string {
@@ -66,19 +139,38 @@ import { Browser } from '../models/localization/browser';
     }
 
     public getCurrentCountry(): string {
-        return this.defaultLocale.countryCode;
+        if (!!this.defaultLocale.countryCode) {
+            return this.defaultLocale.countryCode;
+        }
+        return "";
     }
 
     public getCurrentScript(): string {
-        return this.defaultLocale.scriptCode;
+        if (!!this.defaultLocale.scriptCode) {
+            return this.defaultLocale.scriptCode;
+        }
+        return "";
+    }
+
+    public getCurrentLocale(): string {
+        const locale: string = !!this.defaultLocale.countryCode
+            ? this.defaultLocale.languageCode + "-" + this.defaultLocale.countryCode
+            : this.defaultLocale.languageCode;
+        return locale;
     }
 
     public getCurrentNumberingSystem(): string {
-        return this.defaultLocale.numberingSystem;
+        if (!!this.defaultLocale.numberingSystem) {
+            return this.defaultLocale.numberingSystem;
+        }
+        return "";
     }
 
     public getCurrentCalendar(): string {
-        return this.defaultLocale.calendar;
+        if (!!this.defaultLocale.calendar) {
+            return this.defaultLocale.calendar;
+        }
+        return "";
     }
 
     public getDefaultLocale(): string {
@@ -89,10 +181,40 @@ import { Browser } from '../models/localization/browser';
         return this.currencyCode;
     }
 
+    public getCurrencySymbol(
+        currencyDisplay: 'code' | 'symbol' | 'name' = 'symbol',
+        defaultLocale: string = this.defaultLocale.value,
+        currency: string = this.currencyCode
+    ): string {
+
+        let currencySymbol: string = this.currencyCode;
+        if (IntlAPI.hasNumberFormat()) {
+            const localeZero: string = new Intl.NumberFormat(defaultLocale).format(0);
+            const value: number = 0; // Reference value.
+            const localeValue: string = new Intl.NumberFormat(
+                defaultLocale,
+                {
+                    style: 'currency',
+                    currency: currency,
+                    currencyDisplay: currencyDisplay,
+                    minimumFractionDigits: 0,
+                    maximumFractionDigits: 0
+                }
+            ).format(value);
+            currencySymbol = localeValue.replace(localeZero, "");
+            currencySymbol = currencySymbol.trim();
+        }
+        return currencySymbol;
+    }
+
+    public getCurrentTimezone(): string {
+        return this.timezone;
+    }
+
     public setCurrentLanguage(languageCode: string): void {
         if (this.defaultLocale.languageCode != languageCode) {
             this.defaultLocale.build(languageCode);
-            this.browser.writeStorage("locale", this.defaultLocale.value);
+            this.storage.write("defaultLocale", this.defaultLocale.value);
             this.sendLanguageEvents();
             this.sendTranslationEvents();
         }
@@ -100,7 +222,7 @@ import { Browser } from '../models/localization/browser';
 
     public setDefaultLocale(
         languageCode: string,
-        countryCode: string,
+        countryCode?: string,
         scriptCode?: string,
         numberingSystem?: string,
         calendar?: string
@@ -119,7 +241,7 @@ import { Browser } from '../models/localization/browser';
                 calendar
             );
 
-            this.browser.writeStorage("locale", this.defaultLocale.value);
+            this.storage.write("defaultLocale", this.defaultLocale.value);
             this.sendDefaultLocaleEvents();
             this.sendTranslationEvents();
         }
@@ -128,61 +250,103 @@ import { Browser } from '../models/localization/browser';
     public setCurrentCurrency(currencyCode: string): void {
         if (this.currencyCode != currencyCode) {
             this.currencyCode = currencyCode;
-            this.browser.writeStorage("currency", this.currencyCode);
+            this.storage.write("currency", this.currencyCode);
             this.sendCurrencyEvents();
         }
     }
 
-    private initStorage(): void {
-        this.browser.storageIsDisabled = this.configuration.storageIsDisabled;
+    public setCurrentTimezone(zoneName: string): void {
+        if (this.timezone != zoneName) {
+            this.timezone = zoneName;
+            this.storage.write("timezone", this.timezone);
+            this.sendTimezoneEvents();
+        }
+    }
 
+    private async initStorage(): Promise<void> {
         // Tries to retrieve default locale & currency from the browser storage.
-        this.defaultLocale.value = this.browser.readStorage("locale");
-        this.currencyCode = this.browser.readStorage("currency");
+        if (!this.defaultLocale.value) {
+            const defaultLocale: string | null = await this.storage.read("defaultLocale");
+            if (!!defaultLocale) {
+                this.defaultLocale.value = defaultLocale;
+            }
+        }
+        if (this.currencyCode == null) {
+            const currencyCode: string | null = await this.storage.read("currency");
+            if (!!currencyCode) {
+                this.currencyCode = currencyCode;
+            }
+        }
+        if (this.timezone == null) {
+            const zoneName: string | null = await this.storage.read("timezone");
+            if (!!zoneName) {
+                this.timezone = zoneName;
+            }
+        }
     }
 
     private initLanguage(): void {
-        if (this.defaultLocale.languageCode == null) {
-            let browserLanguage: string = this.browser.getBrowserLanguage();
-            let matchedLanguages: Language[] = this.matchLanguage(browserLanguage);
-            if (matchedLanguages.length > 0) {
-                this.defaultLocale.build(browserLanguage);
-            } else {
-                this.defaultLocale.build(this.configuration.languageCode);
+        if (!this.defaultLocale.languageCode) {
+            const browserLanguage: string | null = this.getBrowserLanguage();
+            let matchedLanguages: Language[] = [];
+            if (!!browserLanguage) {
+                matchedLanguages = this.matchLanguage(browserLanguage);
             }
-            this.browser.writeStorage("locale", this.defaultLocale.value);
+            if (!!browserLanguage && matchedLanguages.length > 0) {
+                this.defaultLocale.build(browserLanguage);
+            } else if (this.configuration.language) {
+                this.defaultLocale.build(this.configuration.language);
+            }
+            this.storage.write("defaultLocale", this.defaultLocale.value);
         }
         this.sendLanguageEvents();
     }
 
-    private matchLanguage(languageCode: string): Language[] {
-        let matchedLanguages: Language[] = this.configuration.languageCodes.filter(
-            (language: Language) => {
-                return language.code == languageCode;
-            });
-        return matchedLanguages;
-    }
-
     private initDefaultLocale(): void {
-        if (this.defaultLocale.value == null) {
-            this.defaultLocale.build(
-                this.configuration.languageCode,
-                this.configuration.countryCode,
-                this.configuration.scriptCode,
-                this.configuration.numberingSystem,
-                this.configuration.calendar
-            );
-            this.browser.writeStorage("locale", this.defaultLocale.value);
+        if (!this.defaultLocale.value) {
+            if (this.configuration.defaultLocale) {
+                this.defaultLocale.build(
+                    this.configuration.defaultLocale.languageCode,
+                    this.configuration.defaultLocale.countryCode,
+                    this.configuration.defaultLocale.scriptCode,
+                    this.configuration.defaultLocale.numberingSystem,
+                    this.configuration.defaultLocale.calendar
+                );
+                this.storage.write("defaultLocale", this.defaultLocale.value);
+            }
         }
         this.sendDefaultLocaleEvents();
     }
 
     private initCurrency(): void {
         if (this.currencyCode == null) {
-            this.currencyCode = this.configuration.currencyCode;
-            this.browser.writeStorage("currency", this.currencyCode);
+            if (this.configuration.currency) {
+                this.currencyCode = this.configuration.currency;
+                this.storage.write("currency", this.currencyCode);
+            }
         }
         this.sendCurrencyEvents();
+    }
+
+    private initTimezone(): void {
+        if (this.timezone == null) {
+            if (this.configuration.timezone) {
+                this.timezone = this.configuration.timezone;
+                this.storage.write("timezone", this.timezone);
+            }
+        }
+        this.sendCurrencyEvents();
+    }
+
+    private matchLanguage(languageCode: string): Language[] {
+        let matchedLanguages: Language[] = [];
+        if (this.configuration.languages) {
+            matchedLanguages = this.configuration.languages.filter(
+                (language: Language) => {
+                    return language.code == languageCode;
+                });
+        }
+        return matchedLanguages;
     }
 
     private sendLanguageEvents(): void {
@@ -197,9 +361,13 @@ import { Browser } from '../models/localization/browser';
         this.currencyCodeChanged.emit(this.currencyCode);
     }
 
+    private sendTimezoneEvents(): void {
+        this.timezoneChanged.emit(this.timezone);
+    }
+
     private sendTranslationEvents(): void {
         // This event is subscribed by TranslationService to load the translation data.
-        this.loadTranslation.emit(null);
+        this.loadTranslation.next();
     }
 
 }

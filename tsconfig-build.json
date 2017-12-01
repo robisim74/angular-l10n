@@ -1,28 +1,38 @@
 {
     "compilerOptions": {
-        "baseUrl": ".",
-        "declaration": true,
-        "experimentalDecorators": true,
-        "module": "es2015",
-        "moduleResolution": "node",
-        "outDir": "dist",
         "rootDir": ".",
-        "sourceMap": true,
-        "inlineSources": true,
-        "target": "es5",
-        "skipLibCheck": true,
+        "baseUrl": ".",
+        "paths": {
+            "@angular/*": [
+                "node_modules/@angular/*"
+            ]
+        },
+        "outDir": "dist",
+        "declaration": true,
+        "strict": true,
+        "moduleResolution": "node",
+        "module": "es2015",
+        "target": "es2015",
         "lib": [
             "es2015",
             "dom"
-        ]
+        ],
+        "skipLibCheck": true,
+        "types": [],
+        "experimentalDecorators": true,
+        "emitDecoratorMetadata": true,
+        "sourceMap": true,
+        "inlineSources": true
     },
     "files": [
-        "index.ts",
+        "public_api.ts",
         "node_modules/zone.js/dist/zone.js.d.ts"
     ],
     "angularCompilerOptions": {
-        "genDir": "aot",
+        "skipTemplateCodegen": true,
         "annotateForClosureCompiler": true,
-        "strictMetadataEmit": true
+        "strictMetadataEmit": true,
+        "flatModuleOutFile": "angular-l10n.js",
+        "flatModuleId": "angular-l10n"
     }
 }

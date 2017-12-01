@@ -2,15 +2,14 @@ import { Injectable } from '@angular/core';
 import { Observer } from 'rxjs/Observer';
 import { Observable } from 'rxjs/Observable';
 
+import { LocaleService } from './locale.service';
 import { TranslationService } from './translation.service';
 import { IntlAPI } from './intl-api';
 
 /**
  * Intl.Collator APIs.
  */
-@Injectable() export class Collator {
-
-    constructor(public translation: TranslationService) { }
+export interface ICollator {
 
     /**
      * Compares two keys by the value of translation according to the current language.
@@ -22,22 +21,12 @@ import { IntlAPI } from './intl-api';
      *         0 if they are considered equal or Intl.Collator is not supported
      * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Collator
      */
-    public compare(
+    compare(
         key1: string,
         key2: string,
         extension?: string,
-        options: any = { usage: 'sort', sensitivity: 'variant' }
-    ): number {
-        if (!IntlAPI.HasCollator()) {
-            return 0;
-        }
-
-        let value1: string = this.translation.translate(key1);
-        let value2: string = this.translation.translate(key2);
-
-        let locale: string = this.addExtension(this.translation.getLanguage(), extension);
-        return new Intl.Collator(locale, options).compare(value1, value2);
-    }
+        options?: any
+    ): number;
 
     /**
      * Sorts an array of objects or an array of arrays according to the current language.
@@ -49,27 +38,13 @@ import { IntlAPI } from './intl-api';
      * @return The same sorted list or the same list if Intl.Collator is not supported
      * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Collator
      */
-    public sort(
+    sort(
         list: any[],
         keyName: any,
-        order: string = "asc",
+        order?: string,
         extension?: string,
-        options: any = { usage: 'sort', sensitivity: 'variant' }
-    ): any[] {
-        if (!list || !keyName || !IntlAPI.HasCollator()) {
-            return list;
-        }
-
-        list.sort((key1: any, key2: any) => {
-            return this.compare(key1[keyName], key2[keyName], extension, options);
-        });
-
-        if (order == "desc") {
-            list.reverse();
-        }
-
-        return list;
-    }
+        options?: any
+    ): any[];
 
     /**
      * Sorts asynchronously an array of objects or an array of arrays according to the current language.
@@ -81,17 +56,13 @@ import { IntlAPI } from './intl-api';
      * @return An observable of the sorted list or of the same list if Intl.Collator is not supported
      * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Collator
      */
-    public sortAsync(
+    sortAsync(
         list: any[],
-        keyName: any, order?: string,
+        keyName: any,
+        order?: string,
         extension?: string,
-        options: any = { usage: 'sort', sensitivity: 'variant' }
-    ): Observable<any[]> {
-        return Observable.create((observer: Observer<any[]>) => {
-            observer.next(this.sort(list, keyName, order, extension, options));
-            observer.complete();
-        });
-    }
+        options?: any
+    ): Observable<any[]>;
 
     /**
      * Matches a string into an array of objects or an array of arrays
@@ -103,32 +74,12 @@ import { IntlAPI } from './intl-api';
      * @return A filtered list or the same list if Intl.Collator is not supported
      * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Collator
      */
-    public search(
+    search(
         s: string,
         list: any[],
         keyNames: any[],
-        options: any = { usage: 'search' }
-    ): any[] {
-        if (!list || !keyNames || s == "" || s == null || !IntlAPI.HasCollator()) {
-            return list;
-        }
-
-        let locale: string = this.translation.getLanguage();
-        let collator: Intl.Collator = new Intl.Collator(locale, options);
-
-        let matches: any[] = list.filter((key: any) => {
-            let found: boolean = false;
-            for (let i: number = 0; i < keyNames.length; i++) {
-                if (this.match(key[keyNames[i]], s, collator)) {
-                    found = true;
-                    break;
-                }
-            }
-            return found;
-        });
-
-        return matches;
-    }
+        options?: any
+    ): any[];
 
     /**
      * Matches asynchronously a string into an array of objects or an array of arrays
@@ -140,6 +91,99 @@ import { IntlAPI } from './intl-api';
      * @return An observable of the filtered list or the same list if Intl.Collator is not supported
      * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Collator
      */
+    searchAsync(
+        s: string,
+        list: any[],
+        keyNames: any[],
+        options?: any
+    ): Observable<any[]>;
+
+}
+
+@Injectable() export class Collator implements ICollator {
+
+    constructor(private locale: LocaleService, private translation: TranslationService) { }
+
+    public compare(
+        key1: string,
+        key2: string,
+        extension?: string,
+        options: any = { usage: 'sort', sensitivity: 'variant' }
+    ): number {
+        if (!IntlAPI.hasCollator()) {
+            return 0;
+        }
+
+        const value1: string = this.translation.translate(key1);
+        const value2: string = this.translation.translate(key2);
+
+        const locale: string = this.addExtension(
+            this.locale.getCurrentLocale(),
+            extension
+        );
+        return new Intl.Collator(locale, options).compare(value1, value2);
+    }
+
+    public sort(
+        list: any[],
+        keyName: any,
+        order: string = "asc",
+        extension?: string,
+        options: any = { usage: 'sort', sensitivity: 'variant' }
+    ): any[] {
+        if (!list || !keyName || !IntlAPI.hasCollator()) {
+            return list;
+        }
+
+        list.sort((key1: any, key2: any) => {
+            return this.compare(key1[keyName], key2[keyName], extension, options);
+        });
+
+        if (order == "desc") {
+            list.reverse();
+        }
+        return list;
+    }
+
+    public sortAsync(
+        list: any[],
+        keyName: any,
+        order?: string,
+        extension?: string,
+        options: any = { usage: 'sort', sensitivity: 'variant' }
+    ): Observable<any[]> {
+        return Observable.create((observer: Observer<any[]>) => {
+            observer.next(this.sort(list, keyName, order, extension, options));
+            observer.complete();
+        });
+    }
+
+    public search(
+        s: string,
+        list: any[],
+        keyNames: any[],
+        options: any = { usage: 'search' }
+    ): any[] {
+        if (!list || !keyNames || s == "" || s == null || !IntlAPI.hasCollator()) {
+            return list;
+        }
+
+        const locale: string = this.locale.getCurrentLocale();
+        const collator: Intl.Collator = new Intl.Collator(locale, options);
+
+        const matches: any[] = list.filter((key: any) => {
+            let found: boolean = false;
+            for (let i: number = 0; i < keyNames.length; i++) {
+                if (this.match(key[keyNames[i]], s, collator)) {
+                    found = true;
+                    break;
+                }
+            }
+            return found;
+        });
+        return matches;
+    }
+
     public searchAsync(
         s: string,
         list: any[],
@@ -160,9 +204,9 @@ import { IntlAPI } from './intl-api';
     }
 
     private match(key: string, s: string, collator: Intl.Collator): boolean {
-        let value: string = this.translation.translate(key);
-        let valueLength: number = value.length;
-        let sLength: number = s.length;
+        const value: string = this.translation.translate(key);
+        const valueLength: number = value.length;
+        const sLength: number = s.length;
 
         if (sLength > valueLength) {
             return false;
@@ -173,7 +217,7 @@ import { IntlAPI } from './intl-api';
 
         let found: boolean = false;
         for (let i: number = 0; i < valueLength - (sLength - 1); i++) {
-            let str: string = value.substr(i, sLength);
+            const str: string = value.substr(i, sLength);
             if (collator.compare(str, s) == 0) {
                 found = true;
                 break;

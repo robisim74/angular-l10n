@@ -1,0 +1,19 @@
+site_name: Angular localization
+pages:
+- Home: 'index.md'
+pages:
+  - Home: index.md
+  - Quick start: quick-start.md
+  - Specification:
+    - Library structure: spec/library-structure.md
+    - Configuration: spec/configuration.md
+    - Getting the translation: spec/getting-the-translation.md
+    - Lazy loaded modules & Shared modules: spec/lazy-loading.md
+    - Validation by locales: spec/validation.md
+    - Collator: spec/collator.md
+    - Unit testing: spec/testing.md
+    - Services APIs: spec/api.md
+repo_url: https://github.com/robisim74/angular-l10n
+repo_name: 'GitHub'
+site_description: 'An Angular library to translate messages, dates and numbers'
+site_author: 'Roberto Simonetti'

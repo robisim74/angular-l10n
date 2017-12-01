@@ -1,7 +1,8 @@
 $ cat .gitignore
 /node_modules
 /dist
-/aot
+/site
+/coverage
 
 *.log
 *.tgz
