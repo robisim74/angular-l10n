@@ -4,7 +4,7 @@
  - [Pull Requests](#pr)
 
 ## <a name="issue"></a> Issues
-Follow the issue template and use the [plunker template](http://embed.plnkr.co/UdKFunQFnD3TOkXp2v06/) for repro.
+Follow the issue template and use the [StackBlitz Template](https://stackblitz.com/edit/angular-l10n) for repro.
 
 ## <a name="pr"></a> Pull Requests
 - In order to build the library:

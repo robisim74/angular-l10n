@@ -11,6 +11,6 @@
 
 **Steps to reproduce the behavior**
 
-Plunker template: http://embed.plnkr.co/UdKFunQFnD3TOkXp2v06/
+StackBlitz Template: https://stackblitz.com/edit/angular-l10n
 
 **Specifications: Angular version, library version, environment, browser**

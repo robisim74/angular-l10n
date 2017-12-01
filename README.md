@@ -53,7 +53,7 @@ You can add `angular-l10n` to your project using `npm`:
 ```Shell
 npm install angular-l10n --save 
 ```
-To install the pre-release package:
+To install a pre-release package:
 ```Shell
 npm install --save angular-l10n@next
 ```
@@ -91,12 +91,9 @@ This library is compatible with AoT compilation & Server Side Rendering. It also
 - **Angular v2**
     - [Branch](https://github.com/robisim74/angular-l10n/tree/angular_v2)
 
-## Related projects
-[Angular Localization with an ASP.NET CORE MVC Service](https://damienbod.com/2016/04/29/angular-2-localization-with-an-asp-net-core-mvc-service/)
-
 ## Contributing
 - [Contributing](https://github.com/robisim74/angular-l10n/blob/master/CONTRIBUTING.md)
-- [Plunker template](http://embed.plnkr.co/UdKFunQFnD3TOkXp2v06/)
+- [StackBlitz Template](https://stackblitz.com/edit/angular-l10n)
 
 ## License
 MIT
