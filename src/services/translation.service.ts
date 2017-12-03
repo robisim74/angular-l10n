@@ -12,7 +12,7 @@ import { TranslationProvider } from './translation-provider';
 import { TranslationHandler } from './translation-handler';
 import { IntlAPI } from './intl-api';
 import { LoadingMode, ServiceState, ProviderType, ISOCode } from '../models/types';
-import {mergeDeep} from "../models/merge-deep";
+import { mergeDeep } from "../models/merge-deep";
 
 /**
  * Manages the translation data.
