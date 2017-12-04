@@ -80,6 +80,7 @@ and use global `ng.l10n` namespace.
 
 ## AoT compilation, Server Side Rendering & strict
 This library is compatible with AoT compilation & Server Side Rendering. It also supports the `strict` TypeScript compiler option.
+> Note that this library is for translation at runtime, and not for translation during the building process: so we recommend using the _Angular i18n_ native solution for SSR.
 
 ## Usage
 - **Angular v5**
