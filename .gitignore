@@ -1,4 +1,9 @@
+$ cat .gitignore
+
+# editors
+/.vscode
 /.idea
+
 /node_modules
 /dist
 /site
