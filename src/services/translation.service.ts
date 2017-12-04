@@ -12,6 +12,7 @@ import { TranslationProvider } from './translation-provider';
 import { TranslationHandler } from './translation-handler';
 import { IntlAPI } from './intl-api';
 import { LoadingMode, ServiceState, ProviderType, ISOCode } from '../models/types';
+import { mergeDeep } from "../models/merge-deep";
 
 /**
  * Manages the translation data.
@@ -267,7 +268,7 @@ export interface ITranslationService {
 
     private addData(data: any, language: string): void {
         this.translationData[language] = typeof this.translationData[language] !== "undefined"
-            ? { ...this.translationData[language], ...data } // Object spread.
+            ? mergeDeep(this.translationData[language], data)
             : data;
     }
 
