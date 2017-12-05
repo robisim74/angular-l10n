@@ -312,14 +312,15 @@ _Json_:
 #### UI components
 You can properly translate UI components like Angular Material or Ionic:
 ```Html
-<a routerLinkActive="active-link" md-list-item routerLink="/home" l10nTranslate>App.Home</a>
+<a mat-list-item routerLinkActive="active-link" routerLink="/home" l10nTranslate>App.Home</a>
 ```
 rendered as:
 ```Html
-<a md-list-item="" role="listitem" routerlink="/home" routerlinkactive="active-link" l10nTranslate="" href="#/home" class="active-link">
-    <div class="md-list-item">
-        <div class="md-list-text"></div>
-        App.Home
+<a class="mat-list-item ng-star-inserted active-link" l10ntranslate="" mat-list-item="" role="listitem" routerlinkactive="active-link" href="#/home" style="">
+    <div class="mat-list-item-content">
+        <div class="mat-list-item-ripple mat-ripple" mat-ripple=""></div>
+        <div class="mat-list-text"></div>
+            Home
     </div>
 </a>
 ```
