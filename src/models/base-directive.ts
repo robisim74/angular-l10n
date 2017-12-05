@@ -144,7 +144,7 @@ export abstract class BaseDirective implements AfterViewInit, OnChanges, OnDestr
     private getAttributes(): void {
         if (this.element.attributes) {
             for (const attr of this.element.attributes) {
-                if (this.SELECTOR.test(attr.name)) {
+                if (attr && this.SELECTOR.test(attr.name)) {
                     const name: string = attr.name.substr(5);
                     for (const targetAttr of this.element.attributes) {
                         if (new RegExp("^" + name + "$").test(targetAttr.name)) {
