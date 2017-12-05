@@ -57,7 +57,7 @@ export class BFS {
     private static isValidNode(node: any): boolean {
         if (typeof node !== "undefined" && node.nodeType == 1 && node.attributes) {
             for (const attr of node.attributes) {
-                if (this.SELECTOR.test(attr.name)) return false;
+                if (attr && this.SELECTOR.test(attr.name)) return false;
             }
         }
         return true;
