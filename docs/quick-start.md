@@ -461,6 +461,10 @@ Always configure your provider in this way:
 ...
 ```
 
+<br>
+
+---
+
 ### Appendix D - Using Angular Universal
 #### Prerender (prerender)
 - Happens at build time
