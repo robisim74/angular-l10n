@@ -466,6 +466,8 @@ Always configure your provider in this way:
 ---
 
 ### Appendix D - Using Angular Universal
+There are two ways:
+
 #### Prerender (prerender)
 - Happens at build time
 - Renders your application and replaces the dist _index.html_ with a version rendered at the route `/`
@@ -479,15 +481,111 @@ Always configure your provider in this way:
 - This library builds only one app, and not an app for each language as _Angular i18n_ native solution: so your prerendered `index.html` will contain the translation according to the language defined during the configuration
 - If you use _Direct loading_, there are no particular warnings
 - If you use _Asynchronous loading_, you have to solve the problem of _http requests_ during _prerender_ or _ssr_
-    - About _prerender_: you need to provide _absolute URLs_ to a running server that will be the same that will serve the data: if this is not possible and you want to use the _prerender_ instead of _ssr_, you should use _Angular i18n_ native solution
+    - About _prerender_: you need to provide _absolute URLs_ to a running server that will be the same that will serve the data (or through a proxy): if this is not possible and you want to use the _prerender_ instead of _ssr_, you should use _Angular i18n_ native solution
     - About _ssr_: you only need to use _absolute URLs_, so for example:
 
 ```TypeScript
 ...
-    providers: [
-        { type: ProviderType.Static, prefix: 'http:localhost:4000/assets/locale-' }
-    ],
+providers: [
+    { type: ProviderType.Static, prefix: 'http:localhost:4000/assets/locale-' }
+],
 ...
 ```
 
 > Please note that problems with _http requests_ are not due to this library, but to common questions about _http requests_ in _Universal_ apps.
+
+The following is an example that uses _Asynchronous loading_, based on _Angular Universal Starter_:
+
+`app.module.ts`:
+```TypeScript
+const l10nConfig: L10nConfig = {
+    locale: {
+        languages: [
+            { code: 'en', dir: 'ltr' },
+            { code: 'it', dir: 'ltr' }
+        ],
+        defaultLocale: { languageCode: 'en', countryCode: 'US' },
+        currency: 'USD',
+        storage: StorageStrategy.Cookie
+    },
+    translation: {
+        providers: [],
+        caching: true
+    }
+};
+
+@Injectable() export class LocalizationConfig {
+
+    constructor(
+        public l10nLoader: L10nLoader,
+        @Inject(TRANSLATION_CONFIG) private translationConfig: TranslationConfig,
+        @Inject(PLATFORM_ID) private platformId: Object
+    ) { }
+
+    load(): Promise<void> {
+        if (isPlatformBrowser(this.platformId)) {
+            // Client only code.
+            this.translationConfig.providers = [
+                { type: ProviderType.Static, prefix: './assets/locale-' }
+            ];
+        }
+        if (isPlatformServer(this.platformId)) {
+            // Server only code.
+            this.translationConfig.providers = [
+                { type: ProviderType.Static, prefix: 'http://localhost:4000/assets/locale-' }
+            ];
+        }
+
+        return this.l10nLoader.load();
+    }
+
+}
+
+export function initLocalization(localizationConfig: LocalizationConfig): Function {
+    return () => localizationConfig.load();
+}
+
+@NgModule({
+    ...
+    imports: [
+        ...
+        HttpClientModule,
+        LocalizationModule.forRoot(l10nConfig)
+    ],
+    providers: [
+        LocalizationConfig,
+        {
+            provide: APP_INITIALIZER,
+            useFactory: initLocalization,
+            deps: [LocalizationConfig],
+            multi: true
+        }
+    ],
+    bootstrap: [AppComponent]
+})
+export class AppModule { }
+
+```
+
+Now, depending on whether you want to use the _prerender_ or _ssr_ in production, you must proceed as follows:
+
+#### prerender
+```Shell
+npm run build:ssr
+npm run serve:ssr
+```
+The server is ready, so you can generate the pre-built files. Open a _new terminal_ and type:
+```Shell
+npm run generate:prerender
+```
+If you see in the _dist/browser_ folder, your _html_ files should have the translated values (in the default language).
+To test it:
+```Shell
+npm run serve:prerender
+```
+
+#### ssr
+```Shell
+npm run build:ssr
+npm run serve:ssr
+```
