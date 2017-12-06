@@ -79,8 +79,7 @@ If you build apps in Angular using ES5, you can include the `umd` bundle in your
 and use global `ng.l10n` namespace.
 
 ## AoT compilation, Server Side Rendering & strict
-This library is compatible with AoT compilation & Server Side Rendering. It also supports the `strict` TypeScript compiler option.
-> Note that this library is for translation at runtime, and not for translation during the building process: so we recommend using the _Angular i18n_ native solution for SSR.
+This library is compatible with AoT compilation & [Server Side Rendering](https://robisim74.github.io/angular-l10n/quick-start/#appendix-d-using-angular-universal). It also supports the `strict` TypeScript compiler option.
 
 ## Usage
 - **Angular v5**

@@ -460,3 +460,29 @@ Always configure your provider in this way:
     ],
 ...
 ```
+
+### Appendix D - Using Angular Universal
+#### Prerender (prerender)
+- Happens at build time
+- Renders your application and replaces the dist _index.html_ with a version rendered at the route `/`
+
+#### Server-Side Rendering (ssr)
+- Happens at runtime
+- Uses a server _Engine_ to render you application on the fly at the requested url
+
+**Note:**
+- This library builds only one app, and not an app for each language as Angular i18n native solution: so your prerendered `index.html` will contain the translation according to the language defined during the configuration
+- If you use _Direct loading_, there are no particular warnings
+- If you use _Asynchronous loading_, you have to solve the problem of _http requests_ during _prerender_ or _ssr_
+    - About _prerender_: you need to provide _absolute URLs_ to a running server that will be the same that will serve the data 
+    - About _ssr_: you only need to use _absolute URLs_, so for example:
+        ```TypeScript
+        ...
+            providers: [
+                { type: ProviderType.Static, prefix: 'http:localhost:4000/assets/locale-' }
+            ],
+        ...
+        ```
+        Another option is to create an _interceptor_ that catches all requests when in server context to prepend the full URL
+
+Please note that problems with _http requests_ are not due to this library, but to common questions about _http requests_ in _Universal_ apps.
