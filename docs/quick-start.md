@@ -476,10 +476,10 @@ Always configure your provider in this way:
 
 **Note**
 
-- This library builds only one app, and not an app for each language as Angular i18n native solution: so your prerendered `index.html` will contain the translation according to the language defined during the configuration
+- This library builds only one app, and not an app for each language as _Angular i18n_ native solution: so your prerendered `index.html` will contain the translation according to the language defined during the configuration
 - If you use _Direct loading_, there are no particular warnings
 - If you use _Asynchronous loading_, you have to solve the problem of _http requests_ during _prerender_ or _ssr_
-    - About _prerender_: you need to provide _absolute URLs_ to a running server that will be the same that will serve the data 
+    - About _prerender_: you need to provide _absolute URLs_ to a running server that will be the same that will serve the data: if this is not possible and you want to use the _prerender_ instead of _ssr_, you should use _Angular i18n_ native solution
     - About _ssr_: you only need to use _absolute URLs_, so for example:
 
 ```TypeScript
