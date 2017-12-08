@@ -295,6 +295,13 @@ All attributes will be translated according to the master directive: `l10nTransl
 
 > You can't dynamically change expressions in attributes.
 
+If you need to translate only the attributes and there isn't a master key to translate, you should use pipes:
+```Html
+<input type="text" placeholder="{{ 'Greeting' | translate:lang }}">
+```
+
+> Why? Because the master directive tries to find anyway a key to translate, walking the DOM: this may cause unexpected behavior if other translation directives are present in the subtree.
+
 <br>
 ##### Parameters
 ```Html
