@@ -120,6 +120,8 @@ describe('TranslateDirective', () => {
     it('should render translated attributes', (() => {
         expect(els[10].getAttribute('title')).toContain("Angular localization");
         expect(els[11].getAttribute('title')).toContain("robisim74, you have 2 new messages");
+        expect(els[12].getAttribute('title')).toContain("Angular localization");
+        expect(els[13].textContent).toContain("robisim74, you have 2 new messages");
     }));
 
     it('should render translated texts when language changes', fakeAsync(() => {
@@ -145,6 +147,8 @@ describe('TranslateDirective', () => {
         expect(els[9].childNodes[0].nodeName.toLowerCase()).toBe("strong");
         expect(els[10].getAttribute('title')).toContain("Localizzazione in Angular");
         expect(els[11].getAttribute('title')).toContain("robisim74, tu hai 2 nuovi messaggi");
+        expect(els[12].getAttribute('title')).toContain("Localizzazione in Angular");
+        expect(els[13].textContent).toContain("robisim74, tu hai 2 nuovi messaggi");
     }));
 
     it('should change keys & params dynamically', async(() => {
@@ -164,6 +168,7 @@ describe('TranslateDirective', () => {
                 expect(els[9].textContent).toContain("It's a small world");
                 expect(els[9].childNodes[0].nodeName.toLowerCase()).toBe('strong');
                 expect(els[11].getAttribute('title')).toContain("robisim74, you have 3 new messages");
+                expect(els[13].textContent).toContain("robisim74, you have 3 new messages");
             });
         });
     }));
@@ -216,6 +221,9 @@ describe('TranslateDirective', () => {
         <p><em>should render translated attributes</em></p>
         <p l10n-title title="Title" l10nTranslate></p>
         <p l10n-title title="User notifications" [params]="{ user: username, NoMessages: messages.length }" l10nTranslate></p>
+        <p l10n-title title="Title" l10nTranslate>
+            <span [params]="{ user: username, NoMessages: messages.length }" l10nTranslate>User notifications</span>
+        </p>
     `
 })
 class TranslateComponent {
