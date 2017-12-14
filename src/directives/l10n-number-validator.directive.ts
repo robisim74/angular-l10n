@@ -74,7 +74,7 @@ export class L10nNumberValidatorDirective implements Validator, OnInit {
         this.digits = digits;
     }
 
-    @Input() digits: string;
+    @Input() public digits: string;
 
     @Input() public minValue: number;
     @Input() public maxValue: number;

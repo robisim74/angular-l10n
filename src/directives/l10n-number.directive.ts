@@ -13,7 +13,7 @@ export class L10nDecimalDirective extends BaseDirective {
         this.digits = digits;
     }
 
-    @Input() digits: string;
+    @Input() public digits: string;
 
     private l10nDecimalPipe: L10nDecimalPipe = new L10nDecimalPipe();
 
@@ -64,7 +64,7 @@ export class L10nPercentDirective extends BaseDirective {
         this.digits = digits;
     }
 
-    @Input() digits: string;
+    @Input() public digits: string;
 
     private l10nPercentPipe: L10nPercentPipe = new L10nPercentPipe();
 
@@ -117,7 +117,7 @@ export class L10nCurrencyDirective extends BaseDirective {
 
     @Input() public currencyDisplay: 'code' | 'symbol' | 'name';
 
-    @Input() digits: string;
+    @Input() public digits: string;
 
     private l10nCurrencyPipe: L10nCurrencyPipe = new L10nCurrencyPipe();
 

@@ -14,7 +14,7 @@ export class L10nDateDirective extends BaseDirective {
         this.format = format;
     }
 
-    @Input() format: string | DateTimeOptions;
+    @Input() public format: string | DateTimeOptions;
 
     private defaultFormat: string = 'mediumDate';
 

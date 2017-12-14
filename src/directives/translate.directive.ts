@@ -15,7 +15,7 @@ export class TranslateDirective extends BaseDirective {
         this.params = params;
     }
 
-    @Input() params: string;
+    @Input() public params: string;
 
     constructor(protected translation: TranslationService, protected el: ElementRef, protected renderer: Renderer2) {
         super(el, renderer);
