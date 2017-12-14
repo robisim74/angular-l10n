@@ -45,7 +45,7 @@ describe('L10nNumberValidatorDirective', () => {
     beforeEach((done) => {
         l10nLoader = TestBed.get(L10nLoader);
         locale = TestBed.get(LocaleService);
-        
+
         l10nLoader.load().then(() => done());
     });
 
@@ -174,11 +174,11 @@ describe('L10nNumberValidatorDirective', () => {
 @Component({
     template: `
         <form>
-            <input [l10nValidateNumber]="digits"
+            <input [digits]="digits"
                 [minValue]="minValue"
                 [maxValue]="maxValue"
                 name="decimal"
-                [(ngModel)]="decimal">
+                [(ngModel)]="decimal" l10nValidateNumber>
         </form>
     `
 })

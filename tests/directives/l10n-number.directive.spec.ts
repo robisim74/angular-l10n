@@ -53,7 +53,7 @@ describe('L10n number directives', () => {
     beforeEach((done) => {
         l10nLoader = TestBed.get(L10nLoader);
         locale = TestBed.get(LocaleService);
-        
+
         l10nLoader.load().then(() => done());
     });
 
@@ -159,20 +159,20 @@ describe('L10n number directives', () => {
     template: `
         <p><em>should render localized decimal number</em></p>
         <p l10nDecimal>{{ pi }}</p>
-        <p l10nDecimal="1.5-5">{{ pi }}</p>
+        <p digits="1.5-5" l10nDecimal>{{ pi }}</p>
 
         <p><em>should render localized percent number</em></p>
         <p l10nPercent>0.1</p>
-        <p l10nPercent="1.1-1">0.1</p>
+        <p digits="1.1-1" l10nPercent>0.1</p>
 
         <p><em>should render localized currency</em></p>
         <p l10nCurrency>{{ asyncValue }}</p>
-        <p [l10nCurrency]="digits" [currencyDisplay]="'symbol'">{{ value }}</p>
+        <p [digits]="digits" currencyDisplay="symbol" l10nCurrency>{{ value }}</p>
 
         <p><em>should render localized attributes</em></p>
-        <p l10n-title title="{{ pi }}" l10nDecimal="1.5-5"></p>
-        <p l10n-title title="0.1" l10nPercent="1.1-1"></p>
-        <p l10n-title title="{{ value }}" [l10nCurrency]="digits" [currencyDisplay]="'symbol'"></p>
+        <p l10n-title title="{{ pi }}" digits="1.5-5" l10nDecimal></p>
+        <p l10n-title title="0.1" digits="1.1-1" l10nPercent></p>
+        <p l10n-title title="{{ value }}" [digits]="digits" currencyDisplay="symbol" l10nCurrency></p>
     `
 })
 class L10nNumberComponent {

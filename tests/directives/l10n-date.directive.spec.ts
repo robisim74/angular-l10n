@@ -44,7 +44,7 @@ describe('L10nDateDirective', () => {
     beforeEach((done) => {
         l10nLoader = TestBed.get(L10nLoader);
         locale = TestBed.get(LocaleService);
-        
+
         l10nLoader.load().then(() => done());
     });
 
@@ -86,10 +86,10 @@ describe('L10nDateDirective', () => {
     template: `
         <p><em>should render localized date</em></p>
         <p l10nDate>{{ day }}</p>
-        <p l10nDate="shortDate">{{ day }}</p>
+        <p format="shortDate" l10nDate>{{ day }}</p>
 
         <p><em>should render localized attributes</em></p>
-        <p l10n-title title="{{ day }}" l10nDate="shortDate"></p>
+        <p l10n-title title="{{ day }}" format="shortDate" l10nDate></p>
     `
 })
 class L10nDateComponent {

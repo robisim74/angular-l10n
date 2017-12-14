@@ -74,7 +74,7 @@ describe('TranslateDirective', () => {
     beforeEach((done) => {
         l10nLoader = TestBed.get(L10nLoader);
         locale = TestBed.get(LocaleService);
-        
+
         l10nLoader.load().then(() => done());
     });
 
@@ -178,7 +178,7 @@ describe('TranslateDirective', () => {
         </p>
 
         <p><em>should render translated text using parameters</em></p>
-        <p [l10nTranslate]="{ user: username, NoMessages: messages.length }">User notifications</p>
+        <p [params]="{ user: username, NoMessages: messages.length }" l10nTranslate>User notifications</p>
 
         <p><em>should search the key</em></p>
         <p l10nTranslate>
@@ -215,7 +215,7 @@ describe('TranslateDirective', () => {
 
         <p><em>should render translated attributes</em></p>
         <p l10n-title title="Title" l10nTranslate></p>
-        <p l10n-title title="User notifications" [l10nTranslate]="{ user: username, NoMessages: messages.length }"></p>
+        <p l10n-title title="User notifications" [params]="{ user: username, NoMessages: messages.length }" l10nTranslate></p>
     `
 })
 class TranslateComponent {
