@@ -397,7 +397,7 @@ Implement `LocaleStorage` class-interface and the `read` and `write` methods:
 
     /**
      * This method must contain the logic to read the storage.
-     * @param name 'defaultLocale' or 'currency'
+     * @param name 'defaultLocale', 'currency' or 'timezone'
      * @return A promise with the value of the given name
      */
     public async read(name: string): Promise<string | null> {
@@ -407,7 +407,7 @@ Implement `LocaleStorage` class-interface and the `read` and `write` methods:
 
     /**
      * This method must contain the logic to write the storage.
-     * @param name 'defaultLocale' or 'currency'
+     * @param name 'defaultLocale', 'currency' or 'timezone'
      * @param value The value for the given name
      */
     public async write(name: string, value: string): Promise<void> {

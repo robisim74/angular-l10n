@@ -248,11 +248,11 @@ L10nCurrency | `l10nCurrency`
 
 Directive | Type | Format | Html syntax
 --------- | ---- | ------ | -----------
-Translate | Message | String | `<tag l10n-attribute attribute="expr1" l10nTranslate>expr2</tag>`
-L10nDate | Date | Date/Number/ISO string | `<tag l10n-attribute attribute="expr1" l10nDate="[format]">expr2</tag>`
-L10nDecimal | Decimal | Number/string | `<tag l10n-attribute attribute="expr1" l10nDecimal="[digitInfo]">expr2</tag>`
-L10nPercent | Percentage | Number/string | `<tag l10n-attribute attribute="expr1" l10nPercent="[digitInfo]">expr2</tag>`
-L10nCurrency | Currency | Number/string | `<tag l10n-attribute attribute="expr1" l10nCurrency="[digitInfo]" [currencyDisplay]="[currencyDisplay]">expr2</tag>`
+Translate | Message | String | `<tag l10n-attribute attribute="expr1" [params]="[params]" l10nTranslate>expr2</tag>`
+L10nDate | Date | Date/Number/ISO string | `<tag l10n-attribute attribute="expr1" format="[format]" l10nDate>expr2</tag>`
+L10nDecimal | Decimal | Number/string | `<tag l10n-attribute attribute="expr1" digits="[digitInfo]" l10nDecimal>expr2</tag>`
+L10nPercent | Percentage | Number/string | `<tag l10n-attribute attribute="expr1" digits="[digitInfo]" l10nPercent>expr2</tag>`
+L10nCurrency | Currency | Number/string | `<tag l10n-attribute attribute="expr1" digits="[digitInfo]" currencyDisplay="[currencyDisplay]" l10nCurrency>expr2</tag>`
 
 > You can dynamically change parameters and expressions values as with pipes. How does it work? To observe the expression change (not the parameters), a `MutationObserver` is used: the observer is added only if detected in the browser. If you want to use this feature also reaching older browsers, we recommend using pipes.
 
@@ -267,23 +267,23 @@ L10nCurrency | Currency | Number/string | `<tag l10n-attribute attribute="expr1"
 <br>
 ##### Parameters
 ```Html
-<p [l10nTranslate]="{ user: username, NoMessages: messages.length }">User notifications</p>
+<p [params]="{ user: username, NoMessages: messages.length }" l10nTranslate>User notifications</p>
 ```
 
 <br>
 #### Dates & Numbers
 ```Html
 <p l10nDate>{{ today }}</p>
-<p l10nDate="fullDate">{{ today }}</p>
+<p format="fullDate" l10nDate>{{ today }}</p>
 
 <p l10nDecimal>{{ value }}</p>
-<p l10nDecimal="1.5-5">{{ value }}</p>
+<p digits="1.5-5" l10nDecimal>{{ value }}</p>
 
 <p l10nPercent>{{ value }}</p>
-<p l10nPercent="1.1-1">{{ value }}</p>
+<p digits="1.1-1" l10nPercent>{{ value }}</p>
 
 <p l10nCurrency>{{ value }}</p>
-<p l10nCurrency="1.2-2" [currencyDisplay]="'symbol'">{{ value }}</p>
+<p digits="1.2-2" currencyDisplay="symbol" l10nCurrency>{{ value }}</p>
 ```
 
 <br>
@@ -295,17 +295,10 @@ All attributes will be translated according to the master directive: `l10nTransl
 
 > You can't dynamically change expressions in attributes.
 
-If you need to translate only the attributes and there isn't a master key to translate, you should use pipes:
-```Html
-<input type="text" placeholder="{{ 'Greeting' | translate:lang }}">
-```
-
-> Why? Because the master directive tries to find anyway a key to translate, walking the DOM: this may cause unexpected behavior if other translation directives are present in the subtree.
-
 <br>
 ##### Parameters
 ```Html
-<p l10n-title title="Greeting" [l10nTranslate]="{ user: username, NoMessages: messages.length }">User notifications</p>
+<p l10n-title title="Greeting" [params]="{ user: username, NoMessages: messages.length }" l10nTranslate>User notifications</p>
 ```
 _Json_:
 ```

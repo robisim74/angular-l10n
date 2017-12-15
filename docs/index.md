@@ -14,7 +14,7 @@ It allows, in addition to translation, to localize numbers and dates of your app
 
 ---
 
-> Library version: 4.1.2 - [Changelog](https://github.com/robisim74/angular-l10n/releases) 
+> Library version: 4.1.3 - [Changelog](https://github.com/robisim74/angular-l10n/releases) 
 
 <br>
 
@@ -64,4 +64,4 @@ and use global `ng.l10n` namespace.
 ---
 
 ### AoT compilation, Server Side Rendering & strict
-This library is compatible with AoT compilation & Server Side Rendering. It also supports the `strict` TypeScript compiler option.
+This library is compatible with AoT compilation & [Server Side Rendering](quick-start/#appendix-d-using-angular-universal). It also supports the `strict` TypeScript compiler option.

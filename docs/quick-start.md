@@ -326,9 +326,9 @@ import { Component, OnInit } from '@angular/core';
 
         <p l10n-title title="Greeting" l10nTranslate>Subtitle</p>
 
-        <p l10nDate="fullDate">{{ today }}</p>    
-        <p l10nDecimal="1.5-5">{{ pi }}</p>
-        <p l10nCurrency="1.2-2" [currencyDisplay]="'symbol'">{{ value }}</p>
+        <p format="fullDate" l10nDate>{{ today }}</p>    
+        <p digits="1.5-5" l10nDecimal>{{ pi }}</p>
+        <p digits="1.2-2" currencyDisplay="symbol" l10nCurrency>{{ value }}</p>
 
         <button (click)="change()" l10nTranslate>Change</button>
     `

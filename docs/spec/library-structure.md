@@ -34,6 +34,6 @@ Class | Contract
 ### Main class-interfaces
 Class | Contract
 ----- | --------
-`LocaleStorage` | Class-interface to create a custom storage for default locale & currency
+`LocaleStorage` | Class-interface to create a custom storage for default locale, currency & timezone
 `TranslationProvider` | Class-interface to create a custom provider for translation data
 `TranslationHandler` | Class-interface to create a custom handler for translated values

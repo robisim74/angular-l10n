@@ -36,7 +36,7 @@ Method | Function
 ### L10nLoader
 Method | Function
 ------ | --------
-`load(): Promise<void>` |
+`load(): Promise<void>` | Loads l10n services
 
 <br>
 
@@ -127,7 +127,7 @@ Method | Function
 ### ILocaleValidation
 Method | Function
 ------ | --------
-`parseNumber(s: string): number | null` | Converts a string to a number according to default locale
+`parseNumber(s: string): number | null` | Converts a string to a number according to default locale. If the string cannot be converted to a number, returns NaN
 
 <br>
 
