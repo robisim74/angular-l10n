@@ -16,6 +16,9 @@ import { TranslationService } from '../services/translation.service';
         private translation: TranslationService
     ) { }
 
+    /**
+     * Loads l10n services.
+     */
     public async load(): Promise<void> {
         // LocaleService initialization.
         if (Object.keys(this.localeConfig).length > 0) {

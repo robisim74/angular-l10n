@@ -69,6 +69,9 @@ export interface ILocaleService {
 
 }
 
+/**
+ * Manages language, default locale, currency & timezone.
+ */
 @Injectable() export class LocaleService implements ILocaleService {
 
     @Output() public languageCodeChanged: EventEmitter<string> = new EventEmitter<string>(true);

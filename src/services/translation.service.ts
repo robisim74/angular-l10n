@@ -43,6 +43,9 @@ export interface ITranslationService {
 
 }
 
+/**
+ * Manages the translation data.
+ */
 @Injectable() export class TranslationService implements ITranslationService {
 
     public translationError: Subject<any> = new Subject();
@@ -92,10 +95,20 @@ export interface ITranslationService {
         await this.loadTranslation();
     }
 
+    /**
+     * Fired when the translation data has been loaded. Returns the translation language.
+     */
     public translationChanged(): Observable<string> {
         return this.translation.asObservable();
     }
 
+    /**
+     * Translates a key or an array of keys.
+     * @param keys The key or an array of keys to be translated
+     * @param args Optional parameters contained in the key
+     * @param lang The current language of the service is used by default
+     * @return The translated value or an object: {key: value}
+     */
     public translate(
         keys: string | string[],
         args: any = null,

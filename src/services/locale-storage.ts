@@ -4,20 +4,20 @@ import { LOCALE_CONFIG, LocaleConfig } from '../models/l10n-config';
 import { StorageStrategy } from '../models/types';
 
 /**
- * Implement this class-interface to create a custom storage for default locale & currency.
+ * Implement this class-interface to create a custom storage for default locale, currency & timezone.
  */
 @Injectable() export abstract class LocaleStorage {
 
     /**
      * This method must contain the logic to read the storage.
-     * @param name 'defaultLocale' or 'currency'
+     * @param name 'defaultLocale', 'currency' or 'timezone'
      * @return A promise with the value of the given name
      */
     public abstract async read(name: string): Promise<string | null>;
 
     /**
      * This method must contain the logic to write the storage.
-     * @param name 'defaultLocale' or 'currency'
+     * @param name 'defaultLocale', 'currency' or 'timezone'
      * @param value The value for the given name
      */
     public abstract async write(name: string, value: string): Promise<void>;

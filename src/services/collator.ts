@@ -100,10 +100,23 @@ export interface ICollator {
 
 }
 
+/**
+ * Intl.Collator APIs.
+ */
 @Injectable() export class Collator implements ICollator {
 
     constructor(private locale: LocaleService, private translation: TranslationService) { }
 
+    /**
+     * Compares two keys by the value of translation according to the current language.
+     * @param key1, key2 The keys of the values to compare
+     * @param extension Unicode extension key, e.g. 'co-phonebk'
+     * @param options Default is { usage: 'sort', sensitivity: 'variant' }
+     * @return A negative value if the value of translation of key1 comes before the value of translation of key2;
+     *         a positive value if key1 comes after key2;
+     *         0 if they are considered equal or Intl.Collator is not supported
+     * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Collator
+     */
     public compare(
         key1: string,
         key2: string,
@@ -124,6 +137,16 @@ export interface ICollator {
         return new Intl.Collator(locale, options).compare(value1, value2);
     }
 
+    /**
+     * Sorts an array of objects or an array of arrays according to the current language.
+     * @param list The array to be sorted
+     * @param keyName The column that contains the keys of the values to be ordered
+     * @param order 'asc' or 'desc'. The default value is 'asc'
+     * @param extension Unicode extension key, e.g. 'co-phonebk'
+     * @param options Default is { usage: 'sort', sensitivity: 'variant' }
+     * @return The same sorted list or the same list if Intl.Collator is not supported
+     * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Collator
+     */
     public sort(
         list: any[],
         keyName: any,
@@ -145,6 +168,16 @@ export interface ICollator {
         return list;
     }
 
+    /**
+     * Sorts asynchronously an array of objects or an array of arrays according to the current language.
+     * @param list The array to be sorted
+     * @param keyName The column that contains the keys of the values to be ordered
+     * @param order 'asc' or 'desc'. The default value is 'asc'
+     * @param extension Unicode extension key, e.g. 'co-phonebk'
+     * @param options Default is { usage: 'sort', sensitivity: 'variant' }
+     * @return An observable of the sorted list or of the same list if Intl.Collator is not supported
+     * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Collator
+     */
     public sortAsync(
         list: any[],
         keyName: any,
@@ -158,6 +191,16 @@ export interface ICollator {
         });
     }
 
+    /**
+     * Matches a string into an array of objects or an array of arrays
+     * according to the current language.
+     * @param s The string to search
+     * @param list The array in which to search
+     * @param keyNames An array that contains the columns to look for
+     * @param options Default is { usage: 'search' }
+     * @return A filtered list or the same list if Intl.Collator is not supported
+     * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Collator
+     */
     public search(
         s: string,
         list: any[],
@@ -184,6 +227,16 @@ export interface ICollator {
         return matches;
     }
 
+    /**
+     * Matches asynchronously a string into an array of objects or an array of arrays
+     * according to the current language.
+     * @param s The string to search
+     * @param list The array in which to search
+     * @param keyNames An array that contains the columns to look for
+     * @param options Default is { usage: 'search' }
+     * @return An observable of the filtered list or the same list if Intl.Collator is not supported
+     * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Collator
+     */
     public searchAsync(
         s: string,
         list: any[],
