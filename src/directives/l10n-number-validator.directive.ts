@@ -1,5 +1,5 @@
 import { Directive, forwardRef, Input, OnInit } from '@angular/core';
-import { NG_VALIDATORS, FormControl, Validator } from '@angular/forms';
+import { NG_VALIDATORS, FormControl, Validator, ValidatorFn, ValidationErrors } from '@angular/forms';
 
 import { LocaleService } from '../services/locale.service';
 import { DecimalCode } from '../models/decimal-code';
@@ -16,7 +16,7 @@ export function l10nValidateNumber(
     digits: string,
     MIN_VALUE: number = Number.MIN_VALUE,
     MAX_VALUE: number = Number.MAX_VALUE
-): Function {
+): ValidatorFn {
 
     const locale: LocaleService = InjectorRef.get(LocaleService);
     const decimalCode: DecimalCode = InjectorRef.get(DecimalCode);
@@ -24,7 +24,7 @@ export function l10nValidateNumber(
     let defaultLocale: string;
     let NUMBER_REGEXP: RegExp;
 
-    return (formControl: FormControl): { [key: string]: any } | null => {
+    return (formControl: FormControl): ValidationErrors | null => {
         if (formControl.value == null || formControl.value == "") return null;
 
         if (defaultLocale != locale.getDefaultLocale()) {
@@ -82,7 +82,7 @@ export class L10nNumberValidatorDirective implements Validator, OnInit {
     private readonly MIN_VALUE: number = Number.MIN_VALUE;
     private readonly MAX_VALUE: number = Number.MAX_VALUE;
 
-    private validator: Function;
+    private validator: ValidatorFn;
 
     public ngOnInit(): void {
         this.validator = l10nValidateNumber(
@@ -92,7 +92,7 @@ export class L10nNumberValidatorDirective implements Validator, OnInit {
         );
     }
 
-    public validate(formControl: FormControl): Function {
+    public validate(formControl: FormControl): ValidationErrors | null {
         return this.validator(formControl);
     }
 
