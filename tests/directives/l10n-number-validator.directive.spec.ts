@@ -1,9 +1,9 @@
 import { TestBed, ComponentFixture, async } from '@angular/core/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { FormsModule, NgForm, AbstractControl } from '@angular/forms';
+import { FormsModule, NgForm, AbstractControl, FormControl } from '@angular/forms';
 import { Component } from '@angular/core';
 
-import { L10nNumberValidatorDirective } from './../../angular-l10n';
+import { l10nValidateNumber } from "./../../angular-l10n";
 import {
     L10nConfig,
     L10nLoader,
@@ -50,9 +50,8 @@ describe('L10nNumberValidatorDirective', () => {
     });
 
     it('should validate format', async(() => {
-        fixture.detectChanges();
-
         comp.decimal = "12.34";
+        comp.digits = "1.2-2";
 
         fixture.detectChanges();
         fixture.whenStable().then(() => {
@@ -71,7 +70,8 @@ describe('L10nNumberValidatorDirective', () => {
     }));
 
     it('should validate minValue', async(() => {
-        comp.decimal = "-123,45";
+        comp.decimal = "-1234,56";
+        comp.digits = "1.2-2";
 
         fixture.detectChanges();
         fixture.whenStable().then(() => {
@@ -90,7 +90,8 @@ describe('L10nNumberValidatorDirective', () => {
     }));
 
     it('should validate maxValue', async(() => {
-        comp.decimal = "123,45";
+        comp.decimal = "1234,56";
+        comp.digits = "1.2-2";
 
         fixture.detectChanges();
         fixture.whenStable().then(() => {
@@ -110,6 +111,7 @@ describe('L10nNumberValidatorDirective', () => {
 
     it('should validate', async(() => {
         comp.decimal = "12,34";
+        comp.digits = "1.2-2";
 
         fixture.detectChanges();
         fixture.whenStable().then(() => {
@@ -127,31 +129,66 @@ describe('L10nNumberValidatorDirective', () => {
         });
     }));
 
-    it('should validate with thousand separator', async(() => {
-        comp.decimal = "1.012,34";
-        comp.maxValue = 1100;
-        comp.digits = "4.2-2";
+    it('should validate decimal & thousand separators', () => {
+        let control: FormControl;
 
-        fixture.detectChanges();
-        fixture.whenStable().then(() => {
-            const form: NgForm = fixture.debugElement.children[0].injector.get(NgForm);
-            const control: AbstractControl | null = form.control.get('decimal');
+        // Valid.
+        control = new FormControl('12', [l10nValidateNumber('1.0-2')]);
+        expect(control.valid).toBe(true);
+        control = new FormControl('12,34', [l10nValidateNumber('1.0-2')]);
+        expect(control.valid).toBe(true);
+        control = new FormControl('12,3', [l10nValidateNumber('1.0-2')]);
+        expect(control.valid).toBe(true);
+        control = new FormControl('12,', [l10nValidateNumber('1.0-2')]);
+        expect(control.valid).toBe(true);
+        control = new FormControl('0,12', [l10nValidateNumber('1.0-2')]);
+        expect(control.valid).toBe(true);
+        control = new FormControl('12', [l10nValidateNumber('1.0-0')]);
+        expect(control.valid).toBe(true);
+        control = new FormControl('1.012,34', [l10nValidateNumber('1.2-2')]);
+        expect(control.valid).toBe(true);
+        control = new FormControl('1.012.012,34', [l10nValidateNumber('1.2-2')]);
+        expect(control.valid).toBe(true);
+        control = new FormControl('1.012', [l10nValidateNumber('1.0-2')]);
+        expect(control.valid).toBe(true);
+        control = new FormControl('1.012,34', [l10nValidateNumber('1.0-2')]);
+        expect(control.valid).toBe(true);
+        control = new FormControl('1.012', [l10nValidateNumber('1.0-0')]);
+        expect(control.valid).toBe(true);
+        control = new FormControl('012,34', [l10nValidateNumber('3.2-2')]);
+        expect(control.valid).toBe(true);
+        control = new FormControl('01.012,34', [l10nValidateNumber('5.2-2')]);
+        expect(control.valid).toBe(true);
+        control = new FormControl('-12,34', [l10nValidateNumber('1.0-2', -1100)]);
+        expect(control.valid).toBe(true);
+        control = new FormControl('-1.012,34', [l10nValidateNumber('1.0-2', -1100)]);
+        expect(control.valid).toBe(true);
 
-            if (control) {
-                expect(control.valid).toBe(true);
-                expect(control.hasError('format')).toBe(false);
-                expect(control.hasError('minValue')).toBe(false);
-                expect(control.hasError('maxValue')).toBe(false);
-            } else {
-                throw new Error("Control is null");
-            }
-        });
-    }));
+        // Invalid.
+        control = new FormControl('1.012,345', [l10nValidateNumber('1.2-2')]);
+        expect(control.valid).toBe(false);
+        control = new FormControl('0.012,34', [l10nValidateNumber('1.2-2')]);
+        expect(control.valid).toBe(false);
+        control = new FormControl('1..012,34', [l10nValidateNumber('1.2-2')]);
+        expect(control.valid).toBe(false);
+        control = new FormControl('10121.012,34', [l10nValidateNumber('1.2-2')]);
+        expect(control.valid).toBe(false);
+        control = new FormControl('012,34', [l10nValidateNumber('4.2-2')]);
+        expect(control.valid).toBe(false);
+        control = new FormControl('1.012,34', [l10nValidateNumber('5.2-2')]);
+        expect(control.valid).toBe(false);
+        control = new FormControl('1.012', [l10nValidateNumber('5.0-2')]);
+        expect(control.valid).toBe(false);
+        control = new FormControl('1.01', [l10nValidateNumber('1.0-2')]);
+        expect(control.valid).toBe(false);
+
+    });
 
     it('should validate right to left', async(() => {
         locale.setDefaultLocale('ar', 'SA');
 
         comp.decimal = "٣٫١٤";
+        comp.digits = "1.2-2";
 
         fixture.detectChanges();
         fixture.whenStable().then(() => {
@@ -187,7 +224,7 @@ class L10nNumberValidatorComponent {
     decimal: string;
 
     digits: string = "1.2-2";
-    minValue: number = -100;
-    maxValue: number = 100;
+    minValue: number = -1100;
+    maxValue: number = 1100;
 
 }
