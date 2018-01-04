@@ -14,7 +14,7 @@ It allows, in addition to translation, to localize numbers and dates of your app
 
 ---
 
-> Library version: 4.1.3 - [Changelog](https://github.com/robisim74/angular-l10n/releases) 
+> Library version: 4.1.4 - [Changelog](https://github.com/robisim74/angular-l10n/releases) 
 
 <br>
 
