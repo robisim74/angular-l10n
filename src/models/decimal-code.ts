@@ -112,35 +112,34 @@ import { Decimal } from './types';
         const thousandSeparator: string = this.decimalCodes.thousandSeparator;
         const nine: string = this.numberCodes[9];
 
-        // Pattern for 1.2-2 digits: /^-?[0-9,]{1,}\.[0-9]{2,2}$/
-        // Unicode pattern = "^\u002d?[\u0030-\u0039,\u002c]{1,}\\u002e[\u0030-\u0039]{2,2}$"
-        let pattern: string;
+        // Pattern for 1.0-2 digits: /^-?[0-9]{1,}(\.[0-9]{0,2})?$/
+        // Unicode pattern = "^\u002d?[\u0030-\u0039]{1,}(\\u002e[\u0030-\u0039]{0,2})?$"
+        // Complete Pattern with thousand separator:
+        // /^-?([0-9]{1,}|(?=(?:\,*[0-9]){1,}(\.|$))(?!0(?!\.|[0-9]))[0-9]{1,3}(\,[0-9]{3})*)(\.[0-9]{0,2})?$/
+        // where:
+        // (?=(?:\,*[0-9]){1,}(\.|$)) => Positive Lookahead to count the integer digits
+        // (?!0(?!\.|[0-9])) => Negative Lookahead to avoid 0,1111.00
+        // [0-9]{1,3}(\,[0-9]{3})* => Allows thousand separator
+        const d: string = `[${zero}-${nine}]`;
+        const n: string = `{${minInt},}`;
+        const nm: string = `{${minFraction},${maxFraction}}`;
+        const plainPattern: string = `${d}${n}`;
+        // tslint:disable-next-line
+        const thousandPattern: string = `(?=(?:\\${thousandSeparator}*${d})${n}(\\${decimalSeparator}|$))(?!${zero}(?!\\${decimalSeparator}|${d}))${d}{1,3}(\\${thousandSeparator}${d}{3})*`;
+
+        let pattern: string = `^${minusSign}?(${plainPattern}|${thousandPattern})`;
+
         if (minFraction > 0 && maxFraction > 0) {
-            pattern = "^"
-                + minusSign
-                + "?[" + zero + "-" + nine + thousandSeparator
-                + "]{" + minInt + ",}\\"
-                + decimalSeparator
-                + "[" + zero + "-" + nine
-                + "]{" + minFraction + "," + maxFraction
-                + "}$";
+            // Decimal separator is mandatory.
+            pattern += `\\${decimalSeparator}${d}${nm}$`;
         } else if (minFraction == 0 && maxFraction > 0) {
             // Decimal separator is optional.
-            pattern = "^"
-                + minusSign
-                + "?[" + zero + "-" + nine + thousandSeparator
-                + "]{" + minInt + ",}\\"
-                + decimalSeparator
-                + "?[" + zero + "-" + nine
-                + "]{" + minFraction + "," + maxFraction
-                + "}$";
+            pattern += `(\\${decimalSeparator}${d}${nm})?$`;
         } else {
             // Integer number.
-            pattern = "^"
-                + minusSign
-                + "?[" + zero + "-" + nine + thousandSeparator
-                + "]{" + minInt + ",}$";
+            pattern += `$`;
         }
+
         pattern = this.toChar(pattern);
         const regExp: RegExp = new RegExp(pattern);
         return regExp;
