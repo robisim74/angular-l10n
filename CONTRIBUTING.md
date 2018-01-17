@@ -15,7 +15,7 @@ Follow the issue template and use the [StackBlitz Template](https://stackblitz.c
     ```
     To test locally the npm package:
     ```Shell
-    npm run pack-lib
+    npm run pack:lib
     ```
     Then you can install it in your app to test it:
     ```Shell
@@ -24,5 +24,5 @@ Follow the issue template and use the [StackBlitz Template](https://stackblitz.c
 
 - In order to serve the docs (requires Python & [MkDocs](http://www.mkdocs.org/)):
     ```Shell
-    npm run serve-docs
+    npm run serve:docs
     ```

@@ -1,16 +1,9 @@
 {
-    "extends": "tslint:recommended",
-    "rulesDirectory": [
-        "node_modules/codelyzer"
+    "extends": [
+        "tslint:recommended",
+        "tslint-angular"
     ],
     "rules": {
-        "angular-whitespace": [
-            true,
-            "check-interpolation",
-            "check-pipe"
-        ],
-        "banana-in-box": true,
-        "templates-no-negated-async": true,
         "directive-selector": [
             true,
             "attribute",
@@ -28,16 +21,7 @@
             ],
             "kebab-case"
         ],
-        "use-input-property-decorator": true,
-        "use-output-property-decorator": true,
-        "use-host-property-decorator": true,
-        "no-attribute-parameter-decorator": true,
         "no-input-rename": false,
-        "no-output-rename": false,
-        "no-forward-ref": false,
-        "use-view-encapsulation": false,
-        "use-life-cycle-interface": true,
-        "use-pipe-transform-interface": true,
         "pipe-naming": [
             true,
             "camelCase",
@@ -82,6 +66,8 @@
             }
         ],
         "no-conditional-assignment": false,
+        "no-inferrable-types": false,
+        "no-non-null-assertion": false,
         "object-literal-key-quotes": [
             true,
             "consistent"

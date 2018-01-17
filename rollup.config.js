@@ -25,6 +25,7 @@ export default {
         name: 'ng.l10n',
         globals: globals,
         sourcemap: true,
-        exports: 'named'
+        exports: 'named',
+        amd: { id: 'angular-l10n' },
     }
 }
