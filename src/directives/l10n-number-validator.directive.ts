@@ -2,7 +2,7 @@ import { Directive, forwardRef, Input, OnInit } from '@angular/core';
 import { NG_VALIDATORS, FormControl, Validator, ValidatorFn, ValidationErrors } from '@angular/forms';
 
 import { LocaleService } from '../services/locale.service';
-import { DecimalCode } from '../models/decimal-code';
+import { LocaleValidation } from '../services/locale-validation';
 import { InjectorRef } from '../models/injector-ref';
 
 /**
@@ -19,7 +19,7 @@ export function l10nValidateNumber(
 ): ValidatorFn {
 
     const locale: LocaleService = InjectorRef.get(LocaleService);
-    const decimalCode: DecimalCode = InjectorRef.get(DecimalCode);
+    const localeValidation: LocaleValidation = InjectorRef.get(LocaleValidation);
 
     let defaultLocale: string;
     let NUMBER_REGEXP: RegExp;
@@ -28,12 +28,12 @@ export function l10nValidateNumber(
         if (formControl.value == null || formControl.value == "") return null;
 
         if (defaultLocale != locale.getDefaultLocale()) {
-            NUMBER_REGEXP = decimalCode.getRegExp(digits);
+            NUMBER_REGEXP = localeValidation.getRegExp(digits);
             defaultLocale = locale.getDefaultLocale();
         }
 
         if (NUMBER_REGEXP.test(formControl.value)) {
-            const parsedValue: number = decimalCode.parse(formControl.value);
+            const parsedValue: number | null = localeValidation.parseNumber(formControl.value);
             if (parsedValue != null && parsedValue < MIN_VALUE) {
                 return {
                     minValue: {

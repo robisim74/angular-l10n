@@ -1,6 +1,5 @@
 import { NgModule, ModuleWithProviders } from '@angular/core';
 
-import { DecimalCode } from '../models/decimal-code';
 import { LocaleValidation } from '../services/locale-validation';
 import { L10nNumberValidatorDirective } from '../directives/l10n-number-validator.directive';
 
@@ -23,7 +22,7 @@ export class LocaleValidationModule {
     public static forRoot(): ModuleWithProviders {
         return {
             ngModule: LocaleValidationModule,
-            providers: [DecimalCode, LocaleValidation]
+            providers: [LocaleValidation]
         };
     }
 

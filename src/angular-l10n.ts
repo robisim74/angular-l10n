@@ -16,8 +16,6 @@ export { TranslationProvider, HttpTranslationProvider } from './services/transla
 export { TranslationHandler, DefaultTranslationHandler } from './services/translation-handler';
 export { Translation } from './services/translation';
 export { Localization } from './services/localization';
-export { NumberCode } from './models/number-code';
-export { DecimalCode } from './models/decimal-code';
 export { ILocaleValidation, LocaleValidation } from './services/locale-validation';
 export { ICollator, Collator } from './services/collator';
 export { IntlAPI } from './services/intl-api';
