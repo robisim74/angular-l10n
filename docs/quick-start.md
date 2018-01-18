@@ -116,7 +116,9 @@ export class HomeComponent implements OnInit {
 
 }
 ```
-and create the _json_ files of the translations such as `locale-en.json` and `locale-it.json` in `src/assets` folder:
+> To use AoT compilation you have to implement OnInit, and to cancel subscriptions OnDestroy, even if they are empty.
+
+Create the _json_ files of the translations such as `locale-en.json` and `locale-it.json` in `src/assets` folder:
 ```Json
 {
     "Title": "Angular localization",
@@ -134,6 +136,7 @@ and create the _json_ files of the translations such as `locale-en.json` and `lo
 }
 ```
 <br>
+
 #### Using directives
 In addition to the _pipes_, you can use _directives_. Try to change `home.component.ts`:
 ```TypeScript
@@ -149,7 +152,7 @@ import { Component } from '@angular/core';
 })
 export class HomeComponent { }
 ```
-Note that if you use in the component only the _directives_ and not the _pipes_, you don't need to use `@Language()` _decorator_.
+> Note that if you use in the component only the _directives_ and not the _pipes_, you don't need to use `@Language()` _decorator_.
 
 <br>
 
@@ -248,25 +251,6 @@ export class AppComponent implements OnInit {
 
 }
 ```
-and create the _json_ files of the translations such as `locale-en.json` and `locale-it.json` in `src/assets` folder:
-```Json
-{
-    "Title": "Angular localization",
-    "Subtitle": "It's a small world",
-    "Change country": "Change country",
-    "Greeting": "Hi!",
-    "Change": "Change"
-}
-```
-```Json
-{
-    "Title": "Localizzazione in Angular",
-    "Subtitle": "Il mondo è piccolo",
-    "Change country": "Cambia Paese",
-    "Greeting": "Ciao!",
-    "Change": "Cambia"
-}
-```
 Add `home.component.ts`:
 ```TypeScript
 import { Component, OnInit } from '@angular/core';
@@ -309,11 +293,34 @@ export class HomeComponent implements OnInit {
 
 }
 ```
+> To use AoT compilation you have to implement OnInit, and to cancel subscriptions OnDestroy, even if they are empty.
+
+Create the _json_ files of the translations such as `locale-en.json` and `locale-it.json` in `src/assets` folder:
+```Json
+{
+    "Title": "Angular localization",
+    "Subtitle": "It's a small world",
+    "Change country": "Change country",
+    "Greeting": "Hi!",
+    "Change": "Change"
+}
+```
+```Json
+{
+    "Title": "Localizzazione in Angular",
+    "Subtitle": "Il mondo è piccolo",
+    "Change country": "Cambia Paese",
+    "Greeting": "Ciao!",
+    "Change": "Cambia"
+}
+```
+
 Finally, to extend the support to old browsers, add the following script tag in `index.html`:
 ```Html
 <script src="https://cdn.polyfill.io/v2/polyfill.min.js?features=Intl.~locale.en-US,Intl.~locale.en-GB,Intl.~locale.it-IT"></script>
 ```
 <br>
+
 #### Using directives
 In addition to the _pipes_, you can use _directives_. Try to change `home.component.ts`:
 ```TypeScript
@@ -351,7 +358,7 @@ export class HomeComponent implements OnInit {
 
 }
 ```
-Note that if you use in the component only the _directives_ and not the _pipes_, you don't need to use _decorators_.
+> Note that if you use in the component only the _directives_ and not the _pipes_, you don't need to use _decorators_.
 
 <br>
 
