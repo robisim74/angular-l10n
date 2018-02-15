@@ -35,7 +35,9 @@ import { TRANSLATION_CONFIG, TranslationConfig } from '../models/l10n-config';
 
     private handleMissingValue(path: string): string {
         if (this.configuration.missingValue) {
-            return this.configuration.missingValue;
+            return typeof this.configuration.missingValue === "function"
+                ? this.configuration.missingValue(path)
+                : this.configuration.missingValue;
         }
         // The same path is returned.
         return path;
