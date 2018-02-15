@@ -594,6 +594,68 @@ describe('TranslatePipe', () => {
 
     });
 
+    describe('Missing value as function', () => {
+
+        let httpMock: HttpTestingController;
+
+        let l10nLoader: L10nLoader;
+        let locale: LocaleService;
+        let translation: TranslationService;
+
+        let pipe: TranslatePipe;
+
+        const l10nConfig: L10nConfig = {
+            locale: {
+                languages: [
+                    { code: 'en', dir: 'ltr' },
+                    { code: 'it', dir: 'ltr' },
+                    { code: 'ar', dir: 'rtl' }
+                ],
+                defaultLocale: { languageCode: 'en' },
+                storage: StorageStrategy.Disabled
+            },
+            translation: {
+                providers: [
+                    { type: ProviderType.Static, prefix: './assets/locale-' }
+                ],
+                composedKeySeparator: '.',
+                missingKey: 'Missing',
+                missingValue: (path: string) => `${path} was not found`,
+                i18nPlural: true
+            }
+        };
+
+        beforeEach(() => {
+            TestBed.configureTestingModule({
+                imports: [
+                    HttpClientTestingModule,
+                    TranslationModule.forRoot(l10nConfig)
+                ]
+            });
+
+            httpMock = TestBed.get(HttpTestingController);
+
+            l10nLoader = TestBed.get(L10nLoader);
+            locale = TestBed.get(LocaleService);
+            translation = TestBed.get(TranslationService);
+            pipe = new TranslatePipe(translation);
+        });
+
+		it('should execute the user function as missing value', fakeAsync(() => {
+            l10nLoader.load();
+            tick();
+
+            const req1: TestRequest = httpMock.expectOne('./assets/locale-en.json');
+            req1.flush({ "Title": "Angular localization" });
+
+            expect(pipe.transform('Subtitle', locale.getCurrentLanguage())).toEqual("Subtitle was not found");
+        }));
+
+        afterEach(() => {
+            httpMock.verify();
+        });
+    });
+
     describe('Using composed language', () => {
 
         let httpMock: HttpTestingController;

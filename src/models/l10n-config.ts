@@ -79,7 +79,7 @@ export interface TranslationConfig {
     /**
      * Sets the value to use for missing keys.
      */
-    missingValue?: string;
+    missingValue?: string | ((path: string) => string);
 
     /**
      * Sets the key to use for missing keys.
