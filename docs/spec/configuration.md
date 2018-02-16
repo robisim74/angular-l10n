@@ -438,17 +438,17 @@ See also [LocaleStorage](https://github.com/robisim74/angular-l10n/blob/master/s
 ---
 
 ### Getting browser language
-Depending on the configuration, the library will try to get the language from the browser or not:
+Depending on the configuration, _the library_ will automatically try to get the language from the browser or not:
 
 **If you set `language`**
 
-- tries to get the `language` from the storage
+- _the library_ tries to get the `language` from the storage
 - or tries to get the `language` from the browser
 - or uses the `language` set in the configuration
 
 **If you set `defaultLocale`**
 
-- tries to get the `defaultLocale` from the storage
+- _the library_ tries to get the `defaultLocale` from the storage
 - or uses the `defaultLocale` set in the configuration
 
 That's because not all browsers return `languageCode-countryCode`.
