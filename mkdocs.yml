@@ -17,3 +17,6 @@ repo_url: https://github.com/robisim74/angular-l10n
 repo_name: 'GitHub'
 site_description: 'An Angular library to translate messages, dates and numbers'
 site_author: 'Roberto Simonetti'
+markdown_extensions:
+  - toc:
+      permalink: 

@@ -23,7 +23,7 @@ Class | Contract
 `TranslationService` | Manages the translation data
 `Translation` | Provides _lang_ to the _translate_ pipe
 `Localization` | Provides _lang_ to the _translate_ pipe, _defaultLocale_, _currency_, _timezone_ to _l10nDate_, _l10nDecimal_, _l10nPercent_ & _l10nCurrency_ pipes
-`LocaleValidation` | Provides the methods to convert strings according to default locale
+`LocaleValidation` | Provides the methods for locale validation
 `Collator` | Intl.Collator APIs
 `IntlAPI` | Provides the methods to check if Intl APIs are supported
 

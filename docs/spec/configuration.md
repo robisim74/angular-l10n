@@ -114,7 +114,7 @@ Property | Value
 `providers?: any[]` |  Asynchronous loading: adds translation providers
 `caching?: Boolean` |  Asynchronous loading: disables/enables the cache for translation providers
 `composedLanguage?: ISOCode[]` |  Sets a composed language for translations
-`missingValue?: string` | Sets the value to use for missing keys
+`missingValue?: string | ((path: string) => string)` | Sets the value or the function to use for missing keys
 `missingKey?: string` | Sets the key to use for missing keys
 `composedKeySeparator?: string` | Sets composed key separator
 `i18nPlural?: boolean` | Disables/enables the translation of numbers that are contained at the beginning of the keys
@@ -360,6 +360,8 @@ const l10nConfig: L10nConfig = {
 ```
 Your _json_ files should be something like: `./assets/locale-en-US.json` and so on. The available ISO codes are: _language_, _country_, _script_.
 
+> Note that you have to configure `defaultLocale` and not only `language`. You must also use `setDefaultLocale` when the language changes.
+
 <br>
 
 ---
@@ -430,6 +432,26 @@ Note that the `read` method must return a _promise_. Then provide the class in t
 })
 ```
 See also [LocaleStorage](https://github.com/robisim74/angular-l10n/blob/master/src/services/locale-storage.ts) code.
+
+<br>
+
+---
+
+### Getting browser language
+Depending on the configuration, the library will try to get the language from the browser or not:
+
+**If you set `language`**
+
+- tries to get the `language` from the storage
+- or tries to get the `language` from the browser
+- or uses the `language` set in the configuration
+
+**If you set `defaultLocale`**
+
+- tries to get the `defaultLocale` from the storage
+- or uses the `defaultLocale` set in the configuration
+
+That's because not all browsers return `languageCode-countryCode`.
 
 <br>
 

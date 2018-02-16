@@ -127,7 +127,8 @@ Method | Function
 ### ILocaleValidation
 Method | Function
 ------ | --------
-`parseNumber(s: string): number | null` | Converts a string to a number according to default locale. If the string cannot be converted to a number, returns NaN
+`parseNumber(s: string, defaultLocale?: string): number | null` | Converts a string to a number according to default locale. If the string cannot be converted to a number, returns NaN
+`getRegExp(digits: string, defaultLocale?: string): RegExp` |
 
 <br>
 
