@@ -77,7 +77,7 @@ export interface TranslationConfig {
     composedLanguage?: ISOCode[];
 
     /**
-     * Sets the value to use for missing keys.
+     * Sets the value or the function to use for missing keys.
      */
     missingValue?: string | ((path: string) => string);
 

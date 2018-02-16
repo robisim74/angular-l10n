@@ -594,7 +594,7 @@ describe('TranslatePipe', () => {
 
     });
 
-    describe('Missing value as function', () => {
+    describe('Other methods', () => {
 
         let httpMock: HttpTestingController;
 
@@ -608,8 +608,7 @@ describe('TranslatePipe', () => {
             locale: {
                 languages: [
                     { code: 'en', dir: 'ltr' },
-                    { code: 'it', dir: 'ltr' },
-                    { code: 'ar', dir: 'rtl' }
+                    { code: 'it', dir: 'ltr' }
                 ],
                 defaultLocale: { languageCode: 'en' },
                 storage: StorageStrategy.Disabled
@@ -619,9 +618,7 @@ describe('TranslatePipe', () => {
                     { type: ProviderType.Static, prefix: './assets/locale-' }
                 ],
                 composedKeySeparator: '.',
-                missingKey: 'Missing',
                 missingValue: (path: string) => `${path} was not found`,
-                i18nPlural: true
             }
         };
 
@@ -641,7 +638,7 @@ describe('TranslatePipe', () => {
             pipe = new TranslatePipe(translation);
         });
 
-		it('should execute the user function as missing value', fakeAsync(() => {
+        it('should execute the user function as missing value', fakeAsync(() => {
             l10nLoader.load();
             tick();
 
@@ -654,6 +651,7 @@ describe('TranslatePipe', () => {
         afterEach(() => {
             httpMock.verify();
         });
+
     });
 
     describe('Using composed language', () => {
