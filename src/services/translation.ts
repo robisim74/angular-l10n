@@ -1,5 +1,5 @@
 import { Injectable, ChangeDetectorRef } from '@angular/core';
-import { ISubscription } from 'rxjs/Subscription';
+import { Subscription } from 'rxjs';
 
 import { TranslationService } from './translation.service';
 import { InjectorRef } from '../models/injector-ref';
@@ -13,7 +13,7 @@ import { InjectorRef } from '../models/injector-ref';
 
     protected translation: TranslationService;
 
-    protected paramSubscriptions: ISubscription[] = [];
+    protected paramSubscriptions: Subscription[] = [];
 
     constructor(
         protected changeDetectorRef?: ChangeDetectorRef
@@ -30,7 +30,7 @@ import { InjectorRef } from '../models/injector-ref';
     }
 
     protected cancelParamSubscriptions(): void {
-        this.paramSubscriptions.forEach((subscription: ISubscription) => {
+        this.paramSubscriptions.forEach((subscription: Subscription) => {
             if (typeof subscription !== "undefined") {
                 subscription.unsubscribe();
             }

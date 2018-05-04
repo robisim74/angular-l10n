@@ -1,10 +1,5 @@
 import { Injectable, Inject } from '@angular/core';
-import { Observer } from 'rxjs/Observer';
-import { Observable } from 'rxjs/Observable';
-import { Subject } from 'rxjs/Subject';
-import { BehaviorSubject } from 'rxjs/BehaviorSubject';
-import { merge } from 'rxjs/observable/merge';
-import { concat } from 'rxjs/observable/concat';
+import { Observer, Observable, Subject, BehaviorSubject, merge, concat } from 'rxjs';
 
 import { TRANSLATION_CONFIG, TranslationConfig } from '../models/l10n-config';
 import { LocaleService } from './locale.service';

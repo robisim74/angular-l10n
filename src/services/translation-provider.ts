@@ -1,7 +1,6 @@
 import { Injectable, Inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs/Observable';
-import { ReplaySubject } from 'rxjs/ReplaySubject';
+import { Observable, ReplaySubject } from 'rxjs';
 
 import { TRANSLATION_CONFIG, TranslationConfig } from '../models/l10n-config';
 import { ProviderType } from '../models/types';
@@ -25,7 +24,7 @@ import { ProviderType } from '../models/types';
 
     private cache: { [key: string]: Observable<any> } = {};
 
-    constructor( @Inject(TRANSLATION_CONFIG) private configuration: TranslationConfig, private http: HttpClient) { }
+    constructor(@Inject(TRANSLATION_CONFIG) private configuration: TranslationConfig, private http: HttpClient) { }
 
     public getTranslation(language: string, args: any): Observable<any> {
         let url: string = "";

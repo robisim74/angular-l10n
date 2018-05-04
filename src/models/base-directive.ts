@@ -7,7 +7,7 @@ import {
     SimpleChanges,
     OnDestroy
 } from '@angular/core';
-import { ISubscription } from 'rxjs/Subscription';
+import { Subscription } from 'rxjs';
 
 import { BFS } from './bfs';
 
@@ -20,7 +20,7 @@ export abstract class BaseDirective implements AfterViewInit, OnChanges, OnDestr
     protected key: string;
     protected attributes: any[] = [];
 
-    protected subscriptions: ISubscription[] = [];
+    protected subscriptions: Subscription[] = [];
 
     private element: any;
     private renderNode: any;
@@ -157,7 +157,7 @@ export abstract class BaseDirective implements AfterViewInit, OnChanges, OnDestr
     }
 
     private cancelSubscriptions(): void {
-        this.subscriptions.forEach((subscription: ISubscription) => {
+        this.subscriptions.forEach((subscription: Subscription) => {
             if (typeof subscription !== "undefined") {
                 subscription.unsubscribe();
             }

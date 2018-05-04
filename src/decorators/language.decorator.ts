@@ -1,4 +1,4 @@
-import { ISubscription } from 'rxjs/Subscription';
+import { Subscription } from 'rxjs';
 
 import { TranslationService } from '../services/translation.service';
 import { InjectorRef } from '../models/injector-ref';
@@ -9,8 +9,8 @@ import { PropertyDecorator } from '../models/types';
  */
 export function Language(): PropertyDecorator {
 
-    function DecoratorFactory(target: any, propertyKey?: string): void {
-        let subscription: ISubscription;
+    function DecoratorFactory(target: any, propertyKey?: string | symbol): void {
+        let subscription: Subscription;
 
         const targetNgOnInit: Function = target.ngOnInit;
         function ngOnInit(this: any): void {

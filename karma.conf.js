@@ -38,6 +38,7 @@ module.exports = function (config) {
 
         // webpack
         webpack: {
+            mode: 'development',
             resolve: {
                 extensions: ['.ts', '.js']
             },

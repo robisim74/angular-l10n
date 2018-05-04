@@ -6,14 +6,8 @@ const globals = {
     '@angular/common': 'ng.common',
     '@angular/common/http': 'ng.commmon.http',
     '@angular/forms': 'ng.forms',
-    'rxjs/Observable': 'Rx',
-    'rxjs/Observer': 'Rx',
-    'rxjs/Subscription': 'Rx',
-    'rxjs/Subject': 'Rx',
-    'rxjs/BehaviorSubject': 'Rx',
-    'rxjs/ReplaySubject': 'Rx',
-    'rxjs/observable/merge': 'Rx.Observable',
-    'rxjs/observable/concat': 'Rx.Observable'
+    'rxjs': 'rxjs',
+    'rxjs/operators': 'rxjs.operators'
 };
 
 export default {

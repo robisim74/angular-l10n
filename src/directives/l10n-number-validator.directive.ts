@@ -1,5 +1,5 @@
 import { Directive, forwardRef, Input, OnInit } from '@angular/core';
-import { NG_VALIDATORS, FormControl, Validator, ValidatorFn, ValidationErrors } from '@angular/forms';
+import { NG_VALIDATORS, AbstractControl, Validator, ValidatorFn, ValidationErrors } from '@angular/forms';
 
 import { LocaleService } from '../services/locale.service';
 import { LocaleValidation } from '../services/locale-validation';
@@ -24,16 +24,16 @@ export function l10nValidateNumber(
     let defaultLocale: string;
     let NUMBER_REGEXP: RegExp;
 
-    return (formControl: FormControl): ValidationErrors | null => {
-        if (formControl.value == null || formControl.value == "") return null;
+    return (c: AbstractControl): ValidationErrors | null => {
+        if (c.value == null || c.value == "") return null;
 
         if (defaultLocale != locale.getDefaultLocale()) {
             NUMBER_REGEXP = localeValidation.getRegExp(digits);
             defaultLocale = locale.getDefaultLocale();
         }
 
-        if (NUMBER_REGEXP.test(formControl.value)) {
-            const parsedValue: number | null = localeValidation.parseNumber(formControl.value);
+        if (NUMBER_REGEXP.test(c.value)) {
+            const parsedValue: number | null = localeValidation.parseNumber(c.value);
             if (parsedValue != null && parsedValue < MIN_VALUE) {
                 return {
                     minValue: {
@@ -60,7 +60,7 @@ export function l10nValidateNumber(
 }
 
 @Directive({
-    selector: '[l10nValidateNumber][ngModel],[l10nValidateNumber][formControl]',
+    selector: '[l10nValidateNumber][ngModel],[l10nValidateNumber][c]',
     providers: [
         { provide: NG_VALIDATORS, useExisting: forwardRef(() => L10nNumberValidatorDirective), multi: true }
     ]
@@ -92,8 +92,8 @@ export class L10nNumberValidatorDirective implements Validator, OnInit {
         );
     }
 
-    public validate(formControl: FormControl): ValidationErrors | null {
-        return this.validator(formControl);
+    public validate(c: AbstractControl): ValidationErrors | null {
+        return this.validator(c);
     }
 
 }

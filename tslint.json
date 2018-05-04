@@ -40,6 +40,7 @@
             "ignore-same-line"
         ],
         "forin": false,
+        "import-blacklist": false,
         "interface-name": false,
         "interface-over-type-literal": false,
         "max-classes-per-file": [

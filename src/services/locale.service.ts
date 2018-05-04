@@ -1,5 +1,5 @@
 import { Injectable, Inject, EventEmitter, Output } from '@angular/core';
-import { Subject } from 'rxjs/Subject';
+import { Subject } from 'rxjs';
 
 import { IntlAPI } from '../services/intl-api';
 import { LOCALE_CONFIG, LocaleConfig } from '../models/l10n-config';

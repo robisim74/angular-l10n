@@ -12,7 +12,6 @@ export default {
         sourcemaps(),
         license({
             sourceMap: true,
-
             banner: {
                 file: path.join(__dirname, 'license-banner.txt'),
                 encoding: 'utf-8',

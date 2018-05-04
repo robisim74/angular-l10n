@@ -4,12 +4,16 @@
         "baseUrl": ".",
         "paths": {
             "@angular/*": [
-                "node_modules/@angular/*"
+                "../../node_modules/@angular/*"
+            ],
+            "@rxjs/*": [
+                "../../node_modules/rxjs/*"
             ]
         },
-        "outDir": "dist",
+        "outDir": "../",
         "declaration": true,
         "strict": true,
+        "strictPropertyInitialization": false,
         "moduleResolution": "node",
         "module": "es2015",
         "target": "es2015",
@@ -22,13 +26,15 @@
         "experimentalDecorators": true,
         "emitDecoratorMetadata": true,
         "sourceMap": true,
-        "inlineSources": true
+        "inlineSources": true,
+        "importHelpers": true
     },
     "files": [
         "public_api.ts",
-        "node_modules/zone.js/dist/zone.js.d.ts"
+        "../../node_modules/zone.js/dist/zone.js.d.ts"
     ],
     "angularCompilerOptions": {
+        "enableResourceInlining": true,
         "skipTemplateCodegen": true,
         "annotateForClosureCompiler": true,
         "strictMetadataEmit": true,
