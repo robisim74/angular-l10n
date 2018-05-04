@@ -17,70 +17,121 @@ import {
 
 describe('Currency decorator', () => {
 
-    let comp: CurrencyComponent;
-    let fixture: ComponentFixture<CurrencyComponent>;
-    let des: DebugElement[];
-    let els: HTMLElement[] = [];
+    describe('Methods', () => {
 
-    let l10nLoader: L10nLoader;
-    let locale: LocaleService;
+        let comp: CurrencyComponent;
+        let fixture: ComponentFixture<CurrencyComponent>;
+        let des: DebugElement[];
+        let els: HTMLElement[] = [];
 
-    const l10nConfig: L10nConfig = {
-        locale: {
-            defaultLocale: { languageCode: 'en', countryCode: 'US' },
-            currency: 'USD',
-            storage: StorageStrategy.Disabled
-        }
-    };
+        let l10nLoader: L10nLoader;
+        let locale: LocaleService;
 
-    beforeEach(() => {
-        fixture = TestBed.configureTestingModule({
-            declarations: [CurrencyComponent],
-            imports: [
-                HttpClientTestingModule,
-                LocalizationModule.forRoot(l10nConfig)
-            ]
-        }).createComponent(CurrencyComponent);
+        const l10nConfig: L10nConfig = {
+            locale: {
+                defaultLocale: { languageCode: 'en', countryCode: 'US' },
+                currency: 'USD',
+                storage: StorageStrategy.Disabled
+            }
+        };
 
-        comp = fixture.componentInstance;
+        beforeEach(() => {
+            fixture = TestBed.configureTestingModule({
+                declarations: [CurrencyComponent],
+                imports: [
+                    HttpClientTestingModule,
+                    LocalizationModule.forRoot(l10nConfig)
+                ]
+            }).createComponent(CurrencyComponent);
+
+            comp = fixture.componentInstance;
+        });
+
+        beforeEach((done) => {
+            l10nLoader = TestBed.get(L10nLoader);
+            locale = TestBed.get(LocaleService);
+
+            l10nLoader.load().then(() => done());
+        });
+
+        beforeEach(() => {
+            fixture.detectChanges();
+            des = fixture.debugElement.queryAll(By.css("p"));
+            for (let i: number = 0; i < des.length; i++) {
+                els.push(des[i].nativeElement);
+            }
+        });
+
+        it('should render localized currency', (() => {
+            expect(els[0].textContent).toContain("$1,234.50");
+        }));
+
     });
 
-    beforeEach((done) => {
-        l10nLoader = TestBed.get(L10nLoader);
-        locale = TestBed.get(LocaleService);
-        
-        l10nLoader.load().then(() => done());
+    describe('Changing currency', () => {
+
+        let comp: CurrencyComponent;
+        let fixture: ComponentFixture<CurrencyComponent>;
+        let des: DebugElement[];
+        let els: HTMLElement[] = [];
+
+        let l10nLoader: L10nLoader;
+        let locale: LocaleService;
+
+        const l10nConfig: L10nConfig = {
+            locale: {
+                defaultLocale: { languageCode: 'en', countryCode: 'US' },
+                currency: 'USD',
+                storage: StorageStrategy.Disabled
+            }
+        };
+
+        beforeEach(() => {
+            fixture = TestBed.configureTestingModule({
+                declarations: [CurrencyComponent],
+                imports: [
+                    HttpClientTestingModule,
+                    LocalizationModule.forRoot(l10nConfig)
+                ]
+            }).createComponent(CurrencyComponent);
+
+            comp = fixture.componentInstance;
+        });
+
+        beforeEach((done) => {
+            l10nLoader = TestBed.get(L10nLoader);
+            locale = TestBed.get(LocaleService);
+
+            l10nLoader.load().then(() => done());
+        });
+
+        beforeEach(() => {
+            fixture.detectChanges();
+            des = fixture.debugElement.queryAll(By.css("p"));
+            for (let i: number = 0; i < des.length; i++) {
+                els.push(des[i].nativeElement);
+            }
+        });
+
+        it('should render localized number when currency changes', fakeAsync(() => {
+            locale.setDefaultLocale('it', 'IT');
+            locale.setCurrentCurrency('EUR');
+
+            tick();
+            fixture.detectChanges();
+            els = [];
+            for (let i: number = 0; i < des.length; i++) {
+                els.push(des[i].nativeElement);
+            }
+
+            let value: string | null = els[0].textContent;
+            if (!!value) {
+                value = value.replace(/\u00A0/, " "); // Intl returns Unicode Character 'NO-BREAK SPACE' (U+00A0).
+            }
+            expect(value).toContain("1.234,50 €");
+        }));
+
     });
-
-    beforeEach(() => {
-        fixture.detectChanges();
-        des = fixture.debugElement.queryAll(By.css("p"));
-        for (let i: number = 0; i < des.length; i++) {
-            els.push(des[i].nativeElement);
-        }
-    });
-
-    it('should render localized currency', (() => {
-        expect(els[0].textContent).toContain("$1,234.50");
-    }));
-
-    it('should render localized number when currency changes', fakeAsync(() => {
-        locale.setDefaultLocale('it', 'IT');
-        locale.setCurrentCurrency('EUR');
-
-        tick();
-        fixture.detectChanges();
-        els = [];
-        for (let i: number = 0; i < des.length; i++) {
-            els.push(des[i].nativeElement);
-        }
-
-        let value: string | null = els[0].textContent;
-        if (!!value) {
-            value = value.replace(/\u00A0/, " "); // Intl returns Unicode Character 'NO-BREAK SPACE' (U+00A0).
-        }
-        expect(value).toContain("1.234,50 €");
-    }));
 
 });
 

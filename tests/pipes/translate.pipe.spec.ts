@@ -2,7 +2,7 @@ import { Pipe, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { TestBed, fakeAsync, tick } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController, TestRequest } from '@angular/common/http/testing';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 
 import { TranslatePipe } from './../../angular-l10n';
 import {

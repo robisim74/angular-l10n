@@ -14,71 +14,121 @@ import {
 
 describe('L10nDateDirective', () => {
 
-    let comp: L10nDateComponent;
-    let fixture: ComponentFixture<L10nDateComponent>;
-    let des: DebugElement[];
-    let els: HTMLElement[] = [];
+    describe('Methods', () => {
 
-    let l10nLoader: L10nLoader;
-    let locale: LocaleService;
+        let comp: L10nDateComponent;
+        let fixture: ComponentFixture<L10nDateComponent>;
+        let des: DebugElement[];
+        let els: HTMLElement[] = [];
 
-    const l10nConfig: L10nConfig = {
-        locale: {
-            defaultLocale: { languageCode: 'en', countryCode: 'US' },
-            storage: StorageStrategy.Disabled
-        }
-    };
+        let l10nLoader: L10nLoader;
+        let locale: LocaleService;
 
-    beforeEach(() => {
-        fixture = TestBed.configureTestingModule({
-            declarations: [L10nDateComponent],
-            imports: [
-                HttpClientTestingModule,
-                LocalizationModule.forRoot(l10nConfig)
-            ]
-        }).createComponent(L10nDateComponent);
+        const l10nConfig: L10nConfig = {
+            locale: {
+                defaultLocale: { languageCode: 'en', countryCode: 'US' },
+                storage: StorageStrategy.Disabled
+            }
+        };
 
-        comp = fixture.componentInstance;
+        beforeEach(() => {
+            fixture = TestBed.configureTestingModule({
+                declarations: [L10nDateComponent],
+                imports: [
+                    HttpClientTestingModule,
+                    LocalizationModule.forRoot(l10nConfig)
+                ]
+            }).createComponent(L10nDateComponent);
+
+            comp = fixture.componentInstance;
+        });
+
+        beforeEach((done) => {
+            l10nLoader = TestBed.get(L10nLoader);
+            locale = TestBed.get(LocaleService);
+
+            l10nLoader.load().then(() => done());
+        });
+
+        beforeEach(() => {
+            fixture.detectChanges();
+            des = fixture.debugElement.queryAll(By.directive(L10nDateDirective));
+            for (let i: number = 0; i < des.length; i++) {
+                els.push(des[i].nativeElement);
+            }
+        });
+
+        it('should render localized date', (() => {
+            expect(els[0].textContent).toContain("Apr 19, 2017");
+            expect(els[1].textContent).toContain("4/19/2017");
+        }));
+
+        it('should render localized attributes', (() => {
+            expect(els[2].getAttribute('title')).toContain("4/19/2017");
+        }));
+
     });
 
-    beforeEach((done) => {
-        l10nLoader = TestBed.get(L10nLoader);
-        locale = TestBed.get(LocaleService);
+    describe('Changing default locale', () => {
 
-        l10nLoader.load().then(() => done());
+        let comp: L10nDateComponent;
+        let fixture: ComponentFixture<L10nDateComponent>;
+        let des: DebugElement[];
+        let els: HTMLElement[] = [];
+
+        let l10nLoader: L10nLoader;
+        let locale: LocaleService;
+
+        const l10nConfig: L10nConfig = {
+            locale: {
+                defaultLocale: { languageCode: 'en', countryCode: 'US' },
+                storage: StorageStrategy.Disabled
+            }
+        };
+
+        beforeEach(() => {
+            fixture = TestBed.configureTestingModule({
+                declarations: [L10nDateComponent],
+                imports: [
+                    HttpClientTestingModule,
+                    LocalizationModule.forRoot(l10nConfig)
+                ]
+            }).createComponent(L10nDateComponent);
+
+            comp = fixture.componentInstance;
+        });
+
+        beforeEach((done) => {
+            l10nLoader = TestBed.get(L10nLoader);
+            locale = TestBed.get(LocaleService);
+
+            l10nLoader.load().then(() => done());
+        });
+
+        beforeEach(() => {
+            fixture.detectChanges();
+            des = fixture.debugElement.queryAll(By.directive(L10nDateDirective));
+            for (let i: number = 0; i < des.length; i++) {
+                els.push(des[i].nativeElement);
+            }
+        });
+
+        it('should render localized dates when default locale changes', fakeAsync(() => {
+            locale.setDefaultLocale('it', 'IT');
+    
+            tick();
+            fixture.detectChanges();
+            els = [];
+            for (let i: number = 0; i < des.length; i++) {
+                els.push(des[i].nativeElement);
+            }
+    
+            expect(els[0].textContent).toContain("19 apr 2017");
+            expect(els[1].textContent).toContain("19/4/2017");
+            expect(els[2].getAttribute('title')).toContain("19/4/2017");
+        }));
+
     });
-
-    beforeEach(() => {
-        fixture.detectChanges();
-        des = fixture.debugElement.queryAll(By.directive(L10nDateDirective));
-        for (let i: number = 0; i < des.length; i++) {
-            els.push(des[i].nativeElement);
-        }
-    });
-
-    it('should render localized date', (() => {
-        expect(els[0].textContent).toContain("Apr 19, 2017");
-        expect(els[1].textContent).toContain("4/19/2017");
-    }));
-
-    it('should render localized attributes', (() => {
-        expect(els[2].getAttribute('title')).toContain("4/19/2017");
-    }));
-
-    it('should render localized dates when default locale changes', fakeAsync(() => {
-        locale.setDefaultLocale('it', 'IT');
-
-        tick();
-        fixture.detectChanges();
-        els = [];
-        for (let i: number = 0; i < des.length; i++) {
-            els.push(des[i].nativeElement);
-        }
-
-        expect(els[0].textContent).toContain("19 apr 2017");
-        expect(els[1].textContent).toContain("19/4/2017");
-        expect(els[2].getAttribute('title')).toContain("19/4/2017");
-    }));
 
 });
 
