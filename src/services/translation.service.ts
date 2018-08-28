@@ -198,7 +198,7 @@ export interface ITranslationService {
             language = this.locale.getCurrentLanguage();
         }
 
-        if (language != null && language != this.translation.getValue()) {
+        if (language != null) {
             if (this.loadingMode == LoadingMode.Async) {
                 await this.getTranslation(language).toPromise();
             } else {
