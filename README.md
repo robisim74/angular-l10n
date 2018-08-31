@@ -85,7 +85,7 @@ This library is compatible with AoT compilation & [Server Side Rendering](https:
 - **Angular v6**
     - [Docs](https://robisim74.github.io/angular-l10n)
 
-- **Angular v5 (Angular l10n v4.1.5)**
+- **Angular v5 (Angular l10n v4.2.0)**
     - [Branch](https://github.com/robisim74/angular-l10n/tree/angular_v5)
 
 - **Angular v4 (Angular l10n v3.5.2)**
