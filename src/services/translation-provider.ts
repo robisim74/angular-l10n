@@ -1,6 +1,7 @@
 import { Injectable, Inject } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable, ReplaySubject } from 'rxjs';
+import { timeout } from 'rxjs/operators';
 
 import { TRANSLATION_CONFIG, TranslationConfig } from '../models/l10n-config';
 import { ProviderType } from '../models/types';
@@ -27,6 +28,14 @@ import { ProviderType } from '../models/types';
     constructor(@Inject(TRANSLATION_CONFIG) private configuration: TranslationConfig, private http: HttpClient) { }
 
     public getTranslation(language: string, args: any): Observable<any> {
+        const headers: HttpHeaders = new HttpHeaders({ 'Content-Type': 'application/json' });
+        const options: any = {
+            headers: headers
+        };
+        if (this.configuration.version) {
+            options.params = new HttpParams().set('ver', this.configuration.version);
+        }
+        let request: Observable<any>;
         let url: string = "";
 
         switch (args.type) {
@@ -37,10 +46,18 @@ import { ProviderType } from '../models/types';
                 url += args.prefix + language + ".json";
         }
 
-        if (this.configuration.caching) {
-            return this.caching(url, this.http.get(url));
+        if (this.configuration.timeout) {
+            request = this.http.get(url, options).pipe(
+                timeout(this.configuration.timeout)
+            );
+        } else {
+            request = this.http.get(url, options);
         }
-        return this.http.get(url);
+
+        if (this.configuration.caching) {
+            return this.caching(url, request);
+        }
+        return request;
     }
 
     private caching(key: string, request: Observable<any>): Observable<any> {

@@ -72,6 +72,16 @@ export interface TranslationConfig {
     caching?: Boolean;
 
     /**
+     * Asynchronous loading: adds the query parameter 'ver' to the http requests.
+     */
+    version?: string;
+
+    /**
+     * Asynchronous loading: sets a timeout in milliseconds for the http requests.
+     */
+    timeout?: number;
+
+    /**
      * Sets a composed language for translations.
      */
     composedLanguage?: ISOCode[];
