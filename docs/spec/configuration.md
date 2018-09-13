@@ -113,6 +113,8 @@ Property | Value
 `translationData?: Array<{ languageCode: string; data: any; }>` | Direct loading: adds translation data
 `providers?: any[]` |  Asynchronous loading: adds translation providers
 `caching?: Boolean` |  Asynchronous loading: disables/enables the cache for translation providers
+`version?: string` |  Asynchronous loading: adds the query parameter 'ver' to the http requests
+`timeout?: number` |  Asynchronous loading: sets a timeout in milliseconds for the http requests
 `composedLanguage?: ISOCode[]` |  Sets a composed language for translations
 `missingValue?: string | ((path: string) => string)` | Sets the value or the function to use for missing keys
 `missingKey?: string` | Sets the key to use for missing keys
