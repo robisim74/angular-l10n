@@ -179,7 +179,7 @@ export interface ITranslationService {
 
     private translateNumber(keyNumber: number): string {
         if (!isNaN(keyNumber) && IntlAPI.hasNumberFormat()) {
-            const localeNumber: string = new Intl.NumberFormat(this.translation.getValue()).format(keyNumber);
+            const localeNumber: string = new Intl.NumberFormat(this.locale.getDefaultLocale()).format(keyNumber);
             return localeNumber;
         }
         return keyNumber.toString();

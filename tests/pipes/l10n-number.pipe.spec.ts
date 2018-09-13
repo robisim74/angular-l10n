@@ -1,5 +1,5 @@
-import { Pipe } from '@angular/core';
-import { inject, TestBed } from '@angular/core/testing';
+/* tslint:disable */
+import { TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 import { L10nDecimalPipe, L10nPercentPipe, L10nCurrencyPipe } from './../../angular-l10n';
@@ -34,7 +34,7 @@ describe('L10n number pipes', () => {
 
         l10nLoader = TestBed.get(L10nLoader);
         locale = TestBed.get(LocaleService);
-        
+
         l10nLoader.load().then(() => done());
     });
 

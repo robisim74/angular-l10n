@@ -1,3 +1,4 @@
+/* tslint:disable */
 import { TestBed, ComponentFixture, fakeAsync, tick } from '@angular/core/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { By } from '@angular/platform-browser';
@@ -115,14 +116,14 @@ describe('L10nDateDirective', () => {
 
         it('should render localized dates when default locale changes', fakeAsync(() => {
             locale.setDefaultLocale('it', 'IT');
-    
+
             tick();
             fixture.detectChanges();
             els = [];
             for (let i: number = 0; i < des.length; i++) {
                 els.push(des[i].nativeElement);
             }
-    
+
             expect(els[0].textContent).toContain("19 apr 2017");
             expect(els[1].textContent).toContain("19/4/2017");
             expect(els[2].getAttribute('title')).toContain("19/4/2017");

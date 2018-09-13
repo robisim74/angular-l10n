@@ -1,4 +1,5 @@
-import { Pipe, Injectable } from '@angular/core';
+/* tslint:disable */
+import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { TestBed, fakeAsync, tick } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController, TestRequest } from '@angular/common/http/testing';
@@ -578,9 +579,11 @@ describe('TranslatePipe', () => {
             tick();
 
             const req1: TestRequest = httpMock.expectOne('./assets/locale-en.json');
-            req1.flush({ "messages": "10 messages" });
+            req1.flush({ "messages": "messages" });
 
-            locale.setDefaultLocale('ar');
+            expect(pipe.transform('10 messages', locale.getCurrentLanguage())).toEqual("10 messages");
+
+            locale.setDefaultLocale('ar', 'SA');
 
             const req2: TestRequest = httpMock.expectOne('./assets/locale-ar.json');
             req2.flush({ "messages": "رسائل" });

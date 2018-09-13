@@ -1,4 +1,4 @@
-import { Injectable, Inject, InjectionToken } from '@angular/core';
+import { Injectable, Inject } from '@angular/core';
 
 import { LOCALE_CONFIG, TRANSLATION_CONFIG, LocaleConfig, TranslationConfig } from '../models/l10n-config';
 import { LocaleService } from '../services/locale.service';

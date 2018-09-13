@@ -1,3 +1,4 @@
+/* tslint:disable */
 import { TestBed, ComponentFixture, async } from '@angular/core/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { FormsModule, NgForm, AbstractControl, FormControl } from '@angular/forms';

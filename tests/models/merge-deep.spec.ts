@@ -1,3 +1,4 @@
+/* tslint:disable */
 import { mergeDeep } from "../../src/models/merge-deep";
 
 describe('mergeDeep', () => {

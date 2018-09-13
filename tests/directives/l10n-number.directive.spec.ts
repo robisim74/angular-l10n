@@ -1,3 +1,4 @@
+/* tslint:disable */
 import { TestBed, ComponentFixture, fakeAsync, async, tick } from '@angular/core/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { By } from '@angular/platform-browser';
@@ -258,7 +259,7 @@ describe('L10n number directives', () => {
 
         it('should change values & params dynamically', async(() => {
             comp.change();
-    
+
             fixture.detectChanges();
             currencyEls = [];
             for (let i: number = 0; i < currencyDes.length; i++) {
