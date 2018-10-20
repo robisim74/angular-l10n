@@ -28,7 +28,7 @@ Directive | Validator | Options | Errors
 
 where `digitInfo` has the following format: `{minIntegerDigits}.{minFractionDigits}-{maxFractionDigits}`, and `minValue` and `maxValue` attributes are optional:
 ```Html
-<input digits="1.2-2" [minValue]="0" [maxValue]="1000" name="decimal" [(ngModel)]="decimal" l10nValidateNumber>
+<input digits="1.2-2" minValue="0" maxValue="1000" name="decimal" [(ngModel)]="decimal" l10nValidateNumber>
 ```
 or, if you use variables:
 ```Html

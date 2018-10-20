@@ -30,8 +30,7 @@ describe('Component: HomeComponent', () => {
         },
         translation: {
             providers: [
-                // Karma serves files from 'base' relative path.
-                { type: ProviderType.Static, prefix: 'base/src/assets/locale-' }
+                { type: ProviderType.Static, prefix: '/assets/locale-' }
             ],
             ...
         }
