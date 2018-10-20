@@ -35,32 +35,20 @@ export function l10nValidateNumber(
         if (NUMBER_REGEXP.test(c.value)) {
             const parsedValue: number | null = localeValidation.parseNumber(c.value);
             if (parsedValue != null && parsedValue < MIN_VALUE) {
-                return {
-                    minValue: {
-                        valid: false
-                    }
-                };
+                return { minValue: true };
             } else if (parsedValue != null && parsedValue > MAX_VALUE) {
-                return {
-                    maxValue: {
-                        valid: false
-                    }
-                };
+                return { maxValue: true };
             }
             return null; // The number is valid.
         } else {
-            return {
-                format: {
-                    valid: false
-                }
-            };
+            return { format: true };
         }
     };
 
 }
 
 @Directive({
-    selector: '[l10nValidateNumber][ngModel],[l10nValidateNumber][c]',
+    selector: '[l10nValidateNumber][ngModel],[l10nValidateNumber][formControl],[l10nValidateNumber][formControlName]',
     providers: [
         { provide: NG_VALIDATORS, useExisting: forwardRef(() => L10nNumberValidatorDirective), multi: true }
     ]

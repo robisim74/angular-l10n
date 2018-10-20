@@ -22,11 +22,6 @@
             "kebab-case"
         ],
         "no-input-rename": false,
-        "pipe-naming": [
-            true,
-            "camelCase",
-            ""
-        ],
         "component-class-suffix": [
             false
         ],
@@ -43,9 +38,7 @@
         "import-blacklist": false,
         "interface-name": false,
         "interface-over-type-literal": false,
-        "max-classes-per-file": [
-            false
-        ],
+        "max-classes-per-file": false,
         "member-ordering": [
             true,
             {
