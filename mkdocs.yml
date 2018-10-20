@@ -1,7 +1,7 @@
 site_name: Angular localization
-pages:
+nav:
 - Home: 'index.md'
-pages:
+nav:
   - Home: index.md
   - Quick start: quick-start.md
   - Specification:
