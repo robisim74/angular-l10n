@@ -2,7 +2,7 @@
 import { TestBed, ComponentFixture, fakeAsync, tick } from '@angular/core/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { By } from '@angular/platform-browser';
-import { Component, DebugElement } from '@angular/core';
+import { DebugElement } from '@angular/core';
 
 import { L10nDateDirective } from './../../angular-l10n';
 import {
@@ -12,6 +12,8 @@ import {
     LocaleService,
     StorageStrategy
 } from './../../angular-l10n';
+
+import { L10nDateComponent } from '../utils';
 
 describe('L10nDateDirective', () => {
 
@@ -132,19 +134,3 @@ describe('L10nDateDirective', () => {
     });
 
 });
-
-@Component({
-    template: `
-        <p><em>should render localized date</em></p>
-        <p l10nDate>{{ day }}</p>
-        <p format="shortDate" l10nDate>{{ day }}</p>
-
-        <p><em>should render localized attributes</em></p>
-        <p l10n-title title="{{ day }}" format="shortDate" l10nDate></p>
-    `
-})
-class L10nDateComponent {
-
-    day: Date = new Date('4/19/2017');
-
-}

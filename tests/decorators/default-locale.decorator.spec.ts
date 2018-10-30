@@ -2,9 +2,8 @@
 import { TestBed, ComponentFixture, fakeAsync, tick } from '@angular/core/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { By } from '@angular/platform-browser';
-import { Component, DebugElement } from '@angular/core';
+import { DebugElement } from '@angular/core';
 
-import { DefaultLocale } from './../../angular-l10n';
 import {
     L10nConfig,
     L10nLoader,
@@ -12,6 +11,8 @@ import {
     LocaleService,
     StorageStrategy
 } from './../../angular-l10n';
+
+import { DefaultLocaleComponent } from '../utils';
 
 describe('DefaultLocale decorator', () => {
 
@@ -125,16 +126,3 @@ describe('DefaultLocale decorator', () => {
     });
 
 });
-
-@Component({
-    template: `
-        <p>{{ day | l10nDate:defaultLocale }}</p>
-    `
-})
-class DefaultLocaleComponent {
-
-    @DefaultLocale() defaultLocale: string;
-
-    day: Date = new Date('5/8/2017');
-
-}

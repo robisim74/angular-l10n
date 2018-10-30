@@ -2,7 +2,6 @@
 import { TestBed, ComponentFixture, async } from '@angular/core/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { FormsModule, NgForm, AbstractControl, FormControl } from '@angular/forms';
-import { Component } from '@angular/core';
 
 import { l10nValidateNumber } from "./../../angular-l10n";
 import {
@@ -13,6 +12,8 @@ import {
     LocaleService,
     StorageStrategy
 } from './../../angular-l10n';
+
+import { L10nNumberValidatorComponent } from '../utils';
 
 describe('L10nNumberValidatorDirective', () => {
 
@@ -208,24 +209,3 @@ describe('L10nNumberValidatorDirective', () => {
     }));
 
 });
-
-@Component({
-    template: `
-        <form>
-            <input [digits]="digits"
-                [minValue]="minValue"
-                [maxValue]="maxValue"
-                name="decimal"
-                [(ngModel)]="decimal" l10nValidateNumber>
-        </form>
-    `
-})
-class L10nNumberValidatorComponent {
-
-    decimal: string;
-
-    digits: string = "1.2-2";
-    minValue: number = -1100;
-    maxValue: number = 1100;
-
-}

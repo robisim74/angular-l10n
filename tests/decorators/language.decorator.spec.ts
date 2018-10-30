@@ -2,9 +2,8 @@
 import { TestBed, ComponentFixture, fakeAsync, tick } from '@angular/core/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { By } from '@angular/platform-browser';
-import { Component, DebugElement } from '@angular/core';
+import { DebugElement } from '@angular/core';
 
-import { Language } from './../../angular-l10n';
 import {
     L10nConfig,
     L10nLoader,
@@ -12,6 +11,8 @@ import {
     LocaleService,
     StorageStrategy
 } from './../../angular-l10n';
+
+import { LanguageComponent } from '../utils';
 
 describe('Language decorator', () => {
 
@@ -163,14 +164,3 @@ describe('Language decorator', () => {
     });
 
 });
-
-@Component({
-    template: `
-        <p>{{ 'Title' | translate:lang }}</p>
-    `
-})
-class LanguageComponent {
-
-    @Language() lang: string;
-
-}

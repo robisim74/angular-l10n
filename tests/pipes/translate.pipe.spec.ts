@@ -1,9 +1,9 @@
 /* tslint:disable */
-import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { TestBed, fakeAsync, tick } from '@angular/core/testing';
+import { TestBed, fakeAsync, tick, ComponentFixture } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController, TestRequest } from '@angular/common/http/testing';
-import { Observable } from 'rxjs';
+import { RouterTestingModule } from '@angular/router/testing';
+import { Router, Route } from '@angular/router';
+import { Location } from '@angular/common';
 
 import { TranslatePipe } from './../../angular-l10n';
 import {
@@ -13,11 +13,12 @@ import {
     LocalizationModule,
     LocaleService,
     TranslationService,
-    TranslationProvider,
     StorageStrategy,
     ProviderType,
     ISOCode
 } from './../../angular-l10n';
+
+import { MockComponent, CustomTranslationProvider } from '../utils';
 
 describe('TranslatePipe', () => {
 
@@ -706,8 +707,6 @@ describe('TranslatePipe', () => {
             const req1: TestRequest = httpMock.expectOne('./assets/locale-en-US.json');
             req1.flush({ "Title": "Angular localization" });
 
-            expect(req1.request.method).toEqual('GET');
-
             expect(pipe.transform('Title', locale.getCurrentLocale())).toEqual("Angular localization");
 
             locale.setDefaultLocale('en', 'GB');
@@ -724,16 +723,97 @@ describe('TranslatePipe', () => {
 
     });
 
+    describe('Using localized routing', () => {
+
+        let httpMock: HttpTestingController;
+
+        let l10nLoader: L10nLoader;
+        let locale: LocaleService;
+        let translation: TranslationService;
+
+        let pipe: TranslatePipe;
+
+        let fixture: ComponentFixture<MockComponent>;
+        let router: Router;
+        let location: Location;
+
+        const l10nConfig: L10nConfig = {
+            locale: {
+                languages: [
+                    { code: 'en', dir: 'ltr' },
+                    { code: 'it', dir: 'ltr' }
+                ],
+                defaultLocale: { languageCode: 'en' },
+                storage: StorageStrategy.Disabled,
+                localizedRouting: true
+            },
+            translation: {
+                providers: [
+                    { type: ProviderType.Static, prefix: './assets/locale-' }
+                ]
+            }
+        };
+
+        const routes: Route[] = [
+            { path: '', redirectTo: 'mock', pathMatch: 'full' },
+            { path: 'mock', component: MockComponent }
+        ];
+
+        beforeEach(() => {
+            fixture = TestBed.configureTestingModule({
+                declarations: [MockComponent],
+                imports: [
+                    HttpClientTestingModule,
+                    RouterTestingModule.withRoutes(routes),
+                    LocalizationModule.forRoot(l10nConfig)
+                ]
+            }).createComponent(MockComponent);
+
+            httpMock = TestBed.get(HttpTestingController);
+
+            l10nLoader = TestBed.get(L10nLoader);
+            locale = TestBed.get(LocaleService);
+            translation = TestBed.get(TranslationService);
+            pipe = new TranslatePipe(translation);
+
+            router = TestBed.get(Router);
+            location = TestBed.get(Location);
+        });
+
+        it('should translate using the locale in the path', fakeAsync(() => {
+            l10nLoader.load();
+            tick();
+            router.navigate(['/it/mock']);
+            tick();
+
+            expect(location.path()).toBe('/it/mock');
+
+            const req1: TestRequest = httpMock.expectOne('./assets/locale-it.json');
+            const req2: TestRequest = httpMock.expectOne('./assets/locale-en.json');
+            req1.flush({ "Title": "Localizzazione in Angular" });
+            req2.flush({ "Title": "Angular localization" });
+
+            expect(pipe.transform('Title', locale.getCurrentLanguage())).toEqual("Localizzazione in Angular");
+        }));
+
+        it('should translate when the app starts', fakeAsync(() => {
+            l10nLoader.load();
+            tick();
+            router.initialNavigation();
+            tick();
+
+            expect(location.path()).toBe('/en/mock');
+
+            const req1: TestRequest = httpMock.expectOne('./assets/locale-en.json');
+            req1.flush({ "Title": "Angular localization" });
+
+            expect(pipe.transform('Title', locale.getCurrentLanguage())).toEqual("Angular localization");
+        }));
+
+        afterEach(() => {
+            httpMock.verify();
+        });
+
+    });
+
 });
-
-@Injectable() export class CustomTranslationProvider implements TranslationProvider {
-
-    constructor(private http: HttpClient) { }
-
-    public getTranslation(language: string, args: any): Observable<any> {
-        const url: string = args.path + language + ".json";
-
-        return this.http.get(url);
-    }
-
-}
