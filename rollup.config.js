@@ -6,6 +6,7 @@ const globals = {
     '@angular/common': 'ng.common',
     '@angular/common/http': 'ng.commmon.http',
     '@angular/forms': 'ng.forms',
+    '@angular/router': 'ng.router',
     'rxjs': 'rxjs',
     'rxjs/operators': 'rxjs.operators'
 };

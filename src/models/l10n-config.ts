@@ -43,6 +43,11 @@ export interface LocaleConfig {
      * If the cookie expiration is omitted, the cookie becomes a session cookie.
      */
     cookieExpiration?: number;
+
+    /**
+     * Disables/enables localized routing.
+     */
+    localizedRouting?: boolean;
 }
 
 export interface TranslationConfig {
