@@ -10,7 +10,8 @@ import {
     L10nLoader,
     LocalizationModule,
     LocaleService,
-    StorageStrategy
+    StorageStrategy,
+    ISOCode
 } from './../../angular-l10n';
 
 import { MockComponent } from '../utils';
@@ -33,7 +34,7 @@ describe('LocaleService', () => {
                 ],
                 defaultLocale: { languageCode: 'en', countryCode: 'US' },
                 storage: StorageStrategy.Disabled,
-                localizedRouting: true
+                localizedRouting: [ISOCode.Language, ISOCode.Country]
             },
             translation: {
                 providers: []

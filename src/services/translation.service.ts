@@ -6,7 +6,7 @@ import { LocaleService } from './locale.service';
 import { TranslationProvider } from './translation-provider';
 import { TranslationHandler } from './translation-handler';
 import { IntlAPI } from './intl-api';
-import { LoadingMode, ServiceState, ProviderType, ISOCode } from '../models/types';
+import { LoadingMode, ServiceState, ProviderType } from '../models/types';
 import { mergeDeep } from "../models/merge-deep";
 
 /**
@@ -188,7 +188,7 @@ export interface ITranslationService {
     private async loadTranslation(): Promise<void> {
         let language: string;
         if (this.configuration.composedLanguage) {
-            language = this.composeLanguage(this.configuration.composedLanguage);
+            language = this.locale.composeLocale(this.configuration.composedLanguage);
         } else {
             language = this.locale.getCurrentLanguage();
         }
@@ -200,28 +200,6 @@ export interface ITranslationService {
                 this.releaseTranslation(language);
             }
         }
-    }
-
-    private composeLanguage(composedLanguage: ISOCode[]): string {
-        let language: string = "";
-        if (composedLanguage.length > 0) {
-            for (let i: number = 0; i <= composedLanguage.length - 1; i++) {
-                switch (composedLanguage[i]) {
-                    case ISOCode.Script:
-                        language += this.locale.getCurrentScript();
-                        break;
-                    case ISOCode.Country:
-                        language += this.locale.getCurrentCountry();
-                        break;
-                    default:
-                        language += this.locale.getCurrentLanguage();
-                }
-                if (i < composedLanguage.length - 1) {
-                    language += "-";
-                }
-            }
-        }
-        return language;
     }
 
     private getTranslation(language: string): Observable<any> {
@@ -237,7 +215,7 @@ export interface ITranslationService {
                 if (typeof provider.type !== "undefined" && provider.type == ProviderType.Fallback) {
                     let fallbackLanguage: string = language;
                     if (provider.fallbackLanguage) {
-                        fallbackLanguage = this.composeLanguage(provider.fallbackLanguage);
+                        fallbackLanguage = this.locale.composeLocale(provider.fallbackLanguage);
                     }
                     sequencesOfOrderedTranslationData.push(
                         this.translationProvider.getTranslation(fallbackLanguage, provider)

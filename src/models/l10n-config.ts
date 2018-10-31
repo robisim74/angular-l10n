@@ -45,9 +45,9 @@ export interface LocaleConfig {
     cookieExpiration?: number;
 
     /**
-     * Disables/enables localized routing.
+     * Enables localized routing with the provided ISO codes.
      */
-    localizedRouting?: boolean;
+    localizedRouting?: ISOCode[];
 }
 
 export interface TranslationConfig {

@@ -8,7 +8,7 @@ import { IntlAPI } from '../services/intl-api';
 import { LOCALE_CONFIG, LocaleConfig } from '../models/l10n-config';
 import { LocaleStorage } from './locale-storage';
 import { DefaultLocale } from '../models/default-locale';
-import { Language } from '../models/types';
+import { Language, ISOCode } from '../models/types';
 import { InjectorRef } from '../models/injector-ref';
 
 /**
@@ -37,6 +37,9 @@ export interface ILocaleService {
 
     getCurrentCountry(): string;
 
+    /**
+     * Returns the well formatted locale as {languageCode}[-scriptCode][-countryCode]
+     */
     getCurrentLocale(): string;
 
     getCurrentScript(): string;
@@ -67,9 +70,15 @@ export interface ILocaleService {
         calendar?: string
     ): void;
 
+    setCurrentNumberingSystem(numberingSystem: string): void;
+
+    setCurrentCalendar(calendar: string): void;
+
     setCurrentCurrency(currencyCode: string): void;
 
     setCurrentTimezone(zoneName: string): void;
+
+    composeLocale(codes: ISOCode[]): string;
 
 }
 
@@ -105,8 +114,6 @@ export interface ILocaleService {
 
     public async init(): Promise<void> {
         if (this.configuration.localizedRouting) {
-            this.router = InjectorRef.get(Router);
-            this.location = InjectorRef.get(Location);
             this.initByRouting();
         }
 
@@ -133,10 +140,7 @@ export interface ILocaleService {
             browserLanguage = navigator.language;
         }
         if (browserLanguage != null) {
-            const index: number = browserLanguage.indexOf("-");
-            if (index != -1) {
-                browserLanguage = browserLanguage.substring(0, index);
-            }
+            browserLanguage = browserLanguage.split("-")[0];
         }
         return browserLanguage;
     }
@@ -150,8 +154,8 @@ export interface ILocaleService {
     }
 
     public getLanguageDirection(languageCode: string = this.defaultLocale.languageCode): string {
-        const matchedLanguages: Language[] = this.matchLanguage(languageCode);
-        return matchedLanguages[0].dir;
+        const matchedLanguage: Language | undefined = this.matchLanguage(languageCode);
+        return matchedLanguage ? matchedLanguage.dir : "";
     }
 
     public getCurrentLanguage(): string {
@@ -159,38 +163,33 @@ export interface ILocaleService {
     }
 
     public getCurrentCountry(): string {
-        if (!!this.defaultLocale.countryCode) {
-            return this.defaultLocale.countryCode;
-        }
-        return "";
+        return this.defaultLocale.countryCode || "";
     }
 
     public getCurrentScript(): string {
-        if (!!this.defaultLocale.scriptCode) {
-            return this.defaultLocale.scriptCode;
-        }
-        return "";
+        return this.defaultLocale.scriptCode || "";
     }
 
+    /**
+     * Returns the well formatted locale as {languageCode}[-scriptCode][-countryCode]
+     */
     public getCurrentLocale(): string {
-        const locale: string = !!this.defaultLocale.countryCode
-            ? this.defaultLocale.languageCode + "-" + this.defaultLocale.countryCode
-            : this.defaultLocale.languageCode;
+        let locale: string = this.defaultLocale.languageCode;
+        if (!!this.defaultLocale.scriptCode) {
+            locale += ("-" + this.defaultLocale.scriptCode);
+        }
+        if (!!this.defaultLocale.countryCode) {
+            locale += ("-" + this.defaultLocale.countryCode);
+        }
         return locale;
     }
 
     public getCurrentNumberingSystem(): string {
-        if (!!this.defaultLocale.numberingSystem) {
-            return this.defaultLocale.numberingSystem;
-        }
-        return "";
+        return this.defaultLocale.numberingSystem || "";
     }
 
     public getCurrentCalendar(): string {
-        if (!!this.defaultLocale.calendar) {
-            return this.defaultLocale.calendar;
-        }
-        return "";
+        return this.defaultLocale.calendar || "";
     }
 
     public getDefaultLocale(): string {
@@ -235,7 +234,7 @@ export interface ILocaleService {
             this.defaultLocale.build(languageCode);
             this.storage.write("defaultLocale", this.defaultLocale.value);
             if (this.configuration.localizedRouting) {
-                this.replacePath(this.defaultLocale.value);
+                this.replacePath(this.composeLocale(this.configuration.localizedRouting));
             }
             this.sendLanguageEvents();
             this.sendTranslationEvents();
@@ -264,10 +263,38 @@ export interface ILocaleService {
             );
             this.storage.write("defaultLocale", this.defaultLocale.value);
             if (this.configuration.localizedRouting) {
-                this.replacePath(this.defaultLocale.value);
+                this.replacePath(this.composeLocale(this.configuration.localizedRouting));
             }
             this.sendDefaultLocaleEvents();
             this.sendTranslationEvents();
+        }
+    }
+
+    public setCurrentNumberingSystem(numberingSystem: string): void {
+        if (this.defaultLocale.numberingSystem != numberingSystem) {
+            this.defaultLocale.build(
+                this.defaultLocale.languageCode,
+                this.defaultLocale.countryCode,
+                this.defaultLocale.scriptCode,
+                numberingSystem,
+                this.defaultLocale.calendar
+            );
+            this.storage.write("defaultLocale", this.defaultLocale.value);
+            this.sendDefaultLocaleEvents();
+        }
+    }
+
+    public setCurrentCalendar(calendar: string): void {
+        if (this.defaultLocale.calendar != calendar) {
+            this.defaultLocale.build(
+                this.defaultLocale.languageCode,
+                this.defaultLocale.countryCode,
+                this.defaultLocale.scriptCode,
+                this.defaultLocale.numberingSystem,
+                calendar
+            );
+            this.storage.write("defaultLocale", this.defaultLocale.value);
+            this.sendDefaultLocaleEvents();
         }
     }
 
@@ -287,8 +314,33 @@ export interface ILocaleService {
         }
     }
 
+    public composeLocale(codes: ISOCode[]): string {
+        let locale: string = "";
+        if (codes.length > 0) {
+            for (let i: number = 0; i < codes.length; i++) {
+                switch (codes[i]) {
+                    case ISOCode.Script:
+                        locale += this.defaultLocale.scriptCode;
+                        break;
+                    case ISOCode.Country:
+                        locale += this.defaultLocale.countryCode;
+                        break;
+                    default:
+                        locale += this.defaultLocale.languageCode;
+                }
+                if (i < codes.length - 1) {
+                    locale += "-";
+                }
+            }
+        }
+        return locale;
+    }
+
     private initByRouting(): void {
-        // Parses the path to find the locale when the app starts.
+        this.router = InjectorRef.get(Router);
+        this.location = InjectorRef.get(Location);
+
+        // Parses the url to find the locale when the app starts.
         const path: string = this.location.path();
         this.parsePath(path);
 
@@ -296,15 +348,15 @@ export interface ILocaleService {
         this.router.events.pipe(
             filter((event: any) => event instanceof NavigationStart)
         ).subscribe((data: NavigationStart) => {
-            const url: string = data.url;
-            this.parsePath(url, true);
+            this.parsePath(data.url, data.navigationTrigger == "popstate");
+            this.redirectToPath(data.url);
         });
         // Replaces url when a navigation ends.
         this.router.events.pipe(
             filter((event: any) => event instanceof NavigationEnd)
         ).subscribe((data: NavigationEnd) => {
-            const url: string = !!data.url && data.url != '/' ? data.url : data.urlAfterRedirects;
-            this.replacePath(this.defaultLocale.value, url);
+            const url: string = (!!data.url && data.url != '/') ? data.url : data.urlAfterRedirects;
+            this.replacePath(this.composeLocale(this.configuration.localizedRouting!), url);
         });
     }
 
@@ -333,11 +385,8 @@ export interface ILocaleService {
     private initLanguage(): void {
         if (!this.defaultLocale.languageCode) {
             const browserLanguage: string | null = this.getBrowserLanguage();
-            let matchedLanguages: Language[] = [];
-            if (!!browserLanguage) {
-                matchedLanguages = this.matchLanguage(browserLanguage);
-            }
-            if (!!browserLanguage && matchedLanguages.length > 0) {
+            const matchedLanguage: Language | undefined = this.matchLanguage(browserLanguage);
+            if (!!browserLanguage && matchedLanguage) {
                 this.defaultLocale.build(browserLanguage);
             } else if (this.configuration.language) {
                 this.defaultLocale.build(this.configuration.language);
@@ -383,15 +432,12 @@ export interface ILocaleService {
         this.sendCurrencyEvents();
     }
 
-    private matchLanguage(languageCode: string): Language[] {
-        let matchedLanguages: Language[] = [];
-        if (this.configuration.languages) {
-            matchedLanguages = this.configuration.languages.filter(
-                (language: Language) => {
-                    return language.code == languageCode;
-                });
+    private matchLanguage(languageCode: string | null): Language | undefined {
+        let matchedLanguage: Language | undefined;
+        if (this.configuration.languages && languageCode != null) {
+            matchedLanguage = this.configuration.languages.find((language: Language) => language.code == languageCode);
         }
-        return matchedLanguages;
+        return matchedLanguage;
     }
 
     private sendLanguageEvents(): void {
@@ -436,27 +482,69 @@ export interface ILocaleService {
         return '/' + locale + path;
     }
 
+    /**
+     * Parses path to find the locale in path.
+     * @param path The path to be parsed
+     * @param sendEvents If popstate event is fired
+     */
     private parsePath(path: string, sendEvents: boolean = false): void {
         const segment: string | null = this.getLocalizedSegment(path);
         if (segment != null) {
             // Sets the default locale.
-            const defaultLocale: string = segment!.replace(/\//gi, "");
-            this.defaultLocale.value = defaultLocale;
+            const locale: string = segment!.replace(/\//gi, "");
+            const values: string[] = this.splitLocale(locale, this.configuration.localizedRouting!);
+            this.defaultLocale.build(
+                values[0],
+                values[1] || this.defaultLocale.countryCode,
+                values[2] || this.defaultLocale.scriptCode,
+                this.defaultLocale.numberingSystem,
+                this.defaultLocale.calendar
+            );
             this.storage.write("defaultLocale", this.defaultLocale.value);
             if (sendEvents) {
                 this.sendLanguageEvents();
                 this.sendDefaultLocaleEvents();
                 this.sendTranslationEvents();
             }
-            // Removes the locale from the path and navigates without pushing a new state into history.
-            const url: string = path.replace(segment, '/');
-            this.router.navigateByUrl(url, { skipLocationChange: true }); // To keep the query params.
         }
+    }
+
+    /**
+     * Removes the locale from the path and navigates without pushing a new state into history.
+     * @param path Localized path.
+     */
+    private redirectToPath(path: string): void {
+        const segment: string | null = this.getLocalizedSegment(path);
+        if (segment != null) {
+            const url: string = path.replace(segment, '/');
+            // navigateByUrl keeps the query params.
+            this.router.navigateByUrl(url, { skipLocationChange: true });
+        }
+    }
+
+    private splitLocale(locale: string, codes: ISOCode[]): string[] {
+        const values: string[] = locale.split("-");
+        const orderedValues: string[] = [];
+        if (codes.length > 0) {
+            for (let i: number = 0; i < codes.length; i++) {
+                switch (codes[i]) {
+                    case ISOCode.Script:
+                        orderedValues[2] = values[i] || "";
+                        break;
+                    case ISOCode.Country:
+                        orderedValues[1] = values[i] || "";
+                        break;
+                    default:
+                        orderedValues[0] = values[i] || "";
+                }
+            }
+        }
+        return orderedValues;
     }
 
     private getLocalizedSegment(path: string): string | null {
         for (const lang of this.getAvailableLanguages()) {
-            const regex: RegExp = new RegExp(`(^\/${lang}\/)|(^\/${lang}-.*?\/)`);
+            const regex: RegExp = new RegExp(`(^\/${lang}\/)|(^\/${lang}$)|(^\/${lang}-.*?\/)|(^\/${lang}-.*?$)`);
             const segments: RegExpMatchArray | null = path.match(regex);
             if (segments != null) {
                 return segments[0];
