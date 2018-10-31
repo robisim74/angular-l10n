@@ -44,7 +44,8 @@ describe('LocaleService', () => {
         const routes: Route[] = [
             { path: '', redirectTo: 'mock', pathMatch: 'full' },
             { path: 'mock', component: MockComponent },
-            { path: 'otherMock', component: MockComponent }
+            { path: 'otherMock', component: MockComponent },
+            { path: '**', redirectTo: 'mock' }
         ];
 
         beforeEach(() => {
@@ -144,6 +145,15 @@ describe('LocaleService', () => {
             tick();
 
             expect(location.path()).toBe('/en-US/mock?id=1');
+        }));
+
+        it('should redirect wildcard route', fakeAsync(() => {
+            l10nLoader.load();
+            tick();
+            router.navigate(['/it-IT/wildcard']);
+            tick();
+
+            expect(location.path()).toBe('/it-IT/mock');
         }));
 
     });

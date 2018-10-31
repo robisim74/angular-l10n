@@ -355,7 +355,7 @@ export interface ILocaleService {
         this.router.events.pipe(
             filter((event: any) => event instanceof NavigationEnd)
         ).subscribe((data: NavigationEnd) => {
-            const url: string = (!!data.url && data.url != '/') ? data.url : data.urlAfterRedirects;
+            const url: string = (!!data.url && data.url != "/" && data.url == data.urlAfterRedirects) ? data.url : data.urlAfterRedirects;
             this.replacePath(this.composeLocale(this.configuration.localizedRouting!), url);
         });
     }
@@ -471,7 +471,7 @@ export interface ILocaleService {
             const segment: string | null = this.getLocalizedSegment(path);
             if (segment != null) {
                 // Removes the locale from the path.
-                path = path.replace(segment, '/');
+                path = path.replace(segment, "/");
             }
             // Replaces path with the locale pushing a new state into history.
             this.location.go(this.getLocalizedPath(locale, path));
@@ -479,7 +479,7 @@ export interface ILocaleService {
     }
 
     private getLocalizedPath(locale: string, path: string): string {
-        return '/' + locale + path;
+        return "/" + locale + path;
     }
 
     /**
@@ -516,7 +516,7 @@ export interface ILocaleService {
     private redirectToPath(path: string): void {
         const segment: string | null = this.getLocalizedSegment(path);
         if (segment != null) {
-            const url: string = path.replace(segment, '/');
+            const url: string = path.replace(segment, "/");
             // navigateByUrl keeps the query params.
             this.router.navigateByUrl(url, { skipLocationChange: true });
         }
