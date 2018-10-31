@@ -60,7 +60,7 @@ Method | Function
 `getLanguageDirection(languageCode?: string): string` |
 `getCurrentLanguage(): string` |
 `getCurrentCountry(): string` |
-`getCurrentLocale(): string` |
+`getCurrentLocale(): string` | Returns the well formatted locale as {languageCode}[-scriptCode][-countryCode]
 `getCurrentScript(): string` |
 `getCurrentNumberingSystem(): string` |
 `getCurrentCalendar(): string` |
@@ -70,8 +70,11 @@ Method | Function
 `getCurrentTimezone(): string` |
 `setCurrentLanguage(languageCode: string): void` |
 `setDefaultLocale(languageCode: string, countryCode?: string, scriptCode?: string, numberingSystem?: string, calendar?: string): void` |
+`setCurrentNumberingSystem(numberingSystem: string): void` |
+`setCurrentCalendar(calendar: string): void` |
 `setCurrentCurrency(currencyCode: string): void` |
 `setCurrentTimezone(zoneName: string): void` |
+`composeLocale(codes: ISOCode[]): string` |
 
 <br>
 

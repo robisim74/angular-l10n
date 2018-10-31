@@ -36,6 +36,7 @@ Get the changelog by [releases](https://github.com/robisim74/angular-l10n/releas
 - Custom translation handler for translated values
 - Support for lazy loading
 - Collator for sorting and filtering a list by locales
+- Localized routing for SEO
 
 ## Angular i18n solutions
 | _Feature_ | [Angular](https://angular.io/guide/i18n) _Official_ | [ngx-translate](http://www.ngx-translate.com) _External library_ | [angular-l10n](https://robisim74.github.io/angular-l10n) _External library_ |

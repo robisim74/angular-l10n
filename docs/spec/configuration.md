@@ -105,6 +105,7 @@ Property | Value
 `timezone?: string` | The time zone name of the IANA time zone database to use
 `storage?: StorageStrategy` | Defines the storage to be used for language, default locale & currency
 `cookieExpiration?: number` | If the cookie expiration is omitted, the cookie becomes a session cookie
+`localizedRouting?: ISOCode[]` | Enables localized routing with the provided ISO codes
 
 <br>
 #### TranslationConfig
@@ -501,3 +502,57 @@ When specifying the `features`, you have to specify what locale, or locales to l
 The _timezone_ is also provided via _Intl API_. Except IE, all modern browsers have implemented the timezone. To extend the support, you can use [Intl.DateTimeFormat timezone polyfill](https://github.com/yahoo/date-time-format-timezone).
 
 > When a feature is not supported, however, for example in older browsers, Angular localization does not generate an error in the browser, but returns the value without performing operations.
+
+### Localized routing for SEO
+In _locale-adaptive_ apps (like the apps that use this library, that return different content based on the preferred locale of the visitor), _Google might not crawl, index, or rank all the content for different locales_.
+
+To solve this problem, you can enable localized routing during configuration:
+```TypeScript
+const l10nConfig: L10nConfig = {
+    locale: {
+        ...
+        localizedRouting: [ISOCode.Language, /* ISOCode.Script, */ /* ISOCode.Country */]
+    },
+    ...
+};
+```
+
+**Features:**
+
+* A prefix is added to the path of each navigation, containing the language or the locale, creating a semantic URL:
+```
+baseHref[language[-script][-country]]path
+
+https://example.com/en/home
+https://example.com/en-US/home
+```
+* If the localized link is called, the content is automatically translated.
+* When the language changes, the link is also updated.
+* Changes to localized links are pushed into browser history.
+* It works also with SSR.
+
+To achieve this, the router configuration in your app is not rewritten (operation that would poor performance and could cause errors): the `Location` class provided by Angular is used for the replacement of the URL, in order to provide the different contents localized both to the crawlers and to the users that can refer to the localized links.
+
+> Since the link contains only the locale, if your app also uses numbering system, calendar, currency or timezone, you need to update them manually when the application is loaded.
+
+#### Using hreflang and sitemap
+You can use the Sitemap to tell Google all of the locale variants for each URL:
+```XML
+<?xml version="1.0" encoding="utf-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
+  <url>
+    <loc>https://example.com/en/home</loc>
+    <xhtml:link rel="alternate" hreflang="it" href="https://example.com/en/home"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://example.com/it/home"/>
+    ...
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://example.com/home"/>
+  </url>
+  <url>
+    <loc>https://example.com/it/home</loc>
+    ...
+  </url>
+  ...
+</urlset>
+```
+
+For more info, visit [Search Console Help - International](https://support.google.com/webmasters/topic/2370587?hl=en&ref_topic=4598733)
