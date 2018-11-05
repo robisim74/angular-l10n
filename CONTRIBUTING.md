@@ -19,10 +19,10 @@ Follow the issue template and use the [StackBlitz Template](https://stackblitz.c
     ```
     Then you can install it in your app to test it:
     ```Shell
-    npm install [path]angular-l10n-[version].tgz
+    npm install [path]angular-l10n-{version}.tgz
     ```
 
-- In order to serve the docs (requires Python & [MkDocs](http://www.mkdocs.org/)):
+- In order to serve the docs (requires Python, [MkDocs](http://www.mkdocs.org/) and [Material for MkDocs](https://squidfunk.github.io/mkdocs-material/)):
     ```Shell
     npm run serve:docs
     ```

@@ -1,10 +1,32 @@
-## Configuration
+# Configuration
 
-<br>
+## Loading
+
+### Angular CLI
+No need to set up anything, just import it in your code.
+
+### Rollup or webpack
+No need to set up anything, just import it in your code.
+
+### Using SystemJS configuration
+```JavaScript
+System.config({
+    map: {
+        'angular-l10n': 'node_modules/angular-l10n/bundles/angular-l10n.umd.js'
+    }
+});
+```
+
+### Plain JavaScript
+If you build apps in Angular using ES5, you can include the `umd` bundle in your `index.html`:
+```Html
+<script src="node_modules/angular-l10n/bundles/angular-l10n.umd.js"></script>
+```
+and use global `ng.l10n` namespace.
 
 ---
 
-### First scenario: you only need to translate messages
+## First scenario: you only need to translate messages
 Import the modules you need and configure the library in the application root module:
 ```TypeScript
 const l10nConfig: L10nConfig = {
@@ -43,11 +65,9 @@ export class AppModule {
 }
 ```
 
-<br>
-
 ---
 
-### Second scenario: you need to translate messages, dates & numbers
+## Second scenario: you need to translate messages, dates & numbers
 Import the modules you need and configure the library in the application root module:
 ```TypeScript
 const l10nConfig: L10nConfig = {
@@ -87,15 +107,12 @@ export class AppModule {
 }
 ```
 
-<br>
-
 ---
 
-### Configuration settings
+## Configuration settings
 The `L10nConfig` interface contains an interface to configure `LocaleService` and one to configure `TranslationService`.
 
-<br>
-#### LocaleConfig 
+### LocaleConfig 
 Property | Value
 -------- | -----
 `languages?: Language[]` | Adds the languages to use in the app
@@ -107,8 +124,7 @@ Property | Value
 `cookieExpiration?: number` | If the cookie expiration is omitted, the cookie becomes a session cookie
 `localizedRouting?: ISOCode[]` | Enables localized routing with the provided ISO codes
 
-<br>
-#### TranslationConfig
+### TranslationConfig
 Property | Value
 -------- | -----
 `translationData?: Array<{ languageCode: string; data: any; }>` | Direct loading: adds translation data
@@ -124,11 +140,9 @@ Property | Value
 
 > There aren't default values: you must explicitly set each parameter you need.
 
-<br>
-
 ---
 
-### Dynamic settings
+## Dynamic settings
 The configuration settings are stored in the following `InjectionToken`:
 
 Interface | Token
@@ -218,12 +232,10 @@ export function initLocalization(localizationConfig: LocalizationConfig): Functi
 export class AppModule { }
 ```
 
-<br>
-
 ---
 
-### Loading the translation data
-#### Direct loading
+## Loading the translation data
+### Direct loading
 You can use `translationData` setting when you configure the service, 
 adding all the translation data:
 ```TypeScript
@@ -244,8 +256,8 @@ const l10nConfig: L10nConfig = {
     }
 };
 ```
-<br>
-#### Asynchronous loading of json files
+
+### Asynchronous loading of json files
 You can add all the providers you need:
 ```TypeScript
 const l10nConfig: L10nConfig = {
@@ -261,8 +273,7 @@ const l10nConfig: L10nConfig = {
 
 > You can't use Direct and Asynchronous loading at the same time.
 
-<br>
-#### Asynchronous loading through a Web API
+### Asynchronous loading through a Web API
 You can also load the data through a Web API:
 ```TypeScript
 const l10nConfig: L10nConfig = {
@@ -284,8 +295,7 @@ export class AppModule {
 
 The example above also showed as you can perform a custom action if you get a bad response.
 
-<br>
-#### Using fallback providers
+### Using fallback providers
 if you need a cascade fallback when the key is not found, you can use fallback providers:
 ```TypeScript
 const l10nConfig: L10nConfig = {
@@ -302,8 +312,7 @@ const l10nConfig: L10nConfig = {
 ```
 and create the _json_ files such as `global.json`, `locale-en.json`, `locale-en-US.json`. When you set a fallback provider, _the translation data will be merged in order_: if a key is found in the _en-US_ file, it is used, otherwise the key in _en_ file and finally the key in _global_ file.
 
-<br>
-#### Using a custom provider
+### Using a custom provider
 If you need, you can create a custom provider to load translation data.
 
 Implement `TranslationProvider` class-interface and the `getTranslation` method with the logic to retrieve the data:
@@ -339,11 +348,9 @@ Note that the method must return an _observable_ of an _object_. Then provide th
 
 See also [TranslationProvider](https://github.com/robisim74/angular-l10n/blob/master/src/services/translation-provider.ts) code.
 
-<br>
-
 ---
 
-### Using a composed language
+## Using a composed language
 By default, the `languageCode` is added as extension to the translation files. If you set `composedLanguage` during the configuration, the combination of supplied codes will be used as language:
 ```TypeScript
 const l10nConfig: L10nConfig = {
@@ -365,11 +372,9 @@ Your _json_ files should be something like: `./assets/locale-en-US.json` and so 
 
 > Note that you have to configure `defaultLocale` and not only `language`. You must also use `setDefaultLocale` when the language changes.
 
-<br>
-
 ---
 
-### Default locale, currency & timezone
+## Default locale, currency & timezone
 The _default locale_ contains the current language and culture. It consists of:
 
 * `language code`: ISO 639 two-letter or three-letter code of the language
@@ -387,11 +392,9 @@ The _timezone_ contains the time zone names of the IANA time zone database.
 
 For more information see [Intl API](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl).
 
-<br>
-
 ---
 
-### Storage
+## Storage
 The `defaultLocale`, the `currency` and the `timezone` chosen by the user are stored, and retrieved at the next access. During the configuration, you can choose your `StorageStrategy`: _Session_, _Local_, _Cookie_, _Disabled_. If you don't provide a different expiration using `cookieExpiration`, the cookie becomes a session cookie.
 
 You can also create a custom storage.
@@ -436,11 +439,9 @@ Note that the `read` method must return a _promise_. Then provide the class in t
 ```
 See also [LocaleStorage](https://github.com/robisim74/angular-l10n/blob/master/src/services/locale-storage.ts) code.
 
-<br>
-
 ---
 
-### Getting browser language
+## Getting browser language
 Depending on the configuration, _the library_ will automatically try to get the language from the browser or not:
 
 **If you set `language`**
@@ -456,11 +457,9 @@ Depending on the configuration, _the library_ will automatically try to get the 
 
 That's because not all browsers return `languageCode-countryCode`.
 
-<br>
-
 ---
 
-### Caching
+## Caching
 You can enable the cache during configuration:
 ```TypeScript
 const l10nConfig: L10nConfig = {
@@ -479,11 +478,9 @@ The next time a translation file will be required, will be taken from the cache 
 * if the user returns to a language already selected;
 * if you use a global file shared across _lazy loaded modules_.
 
-<br>
-
 ---
 
-### Intl API
+## Intl API
 To localize _dates and numbers_, this library uses the [Intl API](https://developer.mozilla.org/it/docs/Web/JavaScript/Reference/Global_Objects/Intl).
 
 Check the current browser support:
@@ -503,7 +500,7 @@ The _timezone_ is also provided via _Intl API_. Except IE, all modern browsers h
 
 > When a feature is not supported, however, for example in older browsers, Angular localization does not generate an error in the browser, but returns the value without performing operations.
 
-### Localized routing for SEO
+## Localized routing for SEO
 In _locale-adaptive_ apps (like the apps that use this library, that return different content based on the preferred locale of the visitor), _Google might not crawl, index, or rank all the content for different locales_.
 
 To solve this problem, you can enable localized routing during configuration:
@@ -535,7 +532,7 @@ To achieve this, the router configuration in your app is not rewritten (operatio
 
 > Since the link contains only the locale, if your app also uses numbering system, calendar, currency or timezone, you need to update them manually when the application is loaded.
 
-#### Using hreflang and sitemap
+### Using hreflang and sitemap
 You can use the Sitemap to tell Google all of the locale variants for each URL:
 ```XML
 <?xml version="1.0" encoding="utf-8"?>

@@ -1,4 +1,5 @@
-## Validation by locales
+# Validation by locales
+
 Import the modules you need in the application root module:
 ```TypeScript
 @NgModule({
@@ -13,11 +14,9 @@ Import the modules you need in the application root module:
 export class AppModule { }
 ```
 
-<br>
-
 ---
 
-### Validating a number
+## Validating a number
 Directive | Selectors
 --------- | ---------
 `L10nNumberValidator` | `l10nValidateNumber`
@@ -37,8 +36,7 @@ or, if you use variables:
 
 The number can be entered with or without the thousands separator.
 
-<br>
-#### Parsing a number
+### Parsing a number
 When the number is valid, you can get its value by the `parseNumber` method of `LocaleValidation`:
 ```TypeScript
 parsedValue: number = null;
@@ -50,8 +48,7 @@ onSubmit(value: string): void {
 }
 ```
 
-<br>
-#### FormBuilder
+### FormBuilder
 If you use `FormBuilder`, you have to invoke the following function:
 ```TypeScript
 l10nValidateNumber(digits: string, MIN_VALUE?: number, MAX_VALUE?: number): Function

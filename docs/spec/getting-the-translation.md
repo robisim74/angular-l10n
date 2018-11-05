@@ -1,12 +1,9 @@
-## Getting the translation
+# Getting the translation
+
 To get the translation, this library uses _pure pipes_ (to know the difference between _pure_ and _impure pipes_ see [here](https://angular.io/guide/pipes#pure-and-impure-pipes)) or _directives_. 
 You can also get the translation in component class.
 
-<br>
-
----
-
-### Pure pipes
+## Pure pipes
 Pipe | Type | Format | Pipe syntax
 ---- | ---- | ------ | -----------
 Translate | Message | String | `expression | translate:lang`
@@ -17,8 +14,7 @@ L10nCurrency | Currency | Number/string | `expression | l10nCurrency[:defaultLoc
 
 > You can dynamically change parameters and expressions values.
 
-<br>
-#### Messages
+### Messages
 Implement _Language_ decorator in the component to provide the parameter to the _translate_ pipe:
 ```TypeScript
 export class HomeComponent implements OnInit {
@@ -45,8 +41,8 @@ _Json_:
     "Title": "Angular localization"
 }
 ```
-<br>
-##### Composed keys
+
+#### Composed keys
 Set `composedKeySeparator` during the configuration, e.g. to `'.'`:
 ```Html
 {{ 'Home.Title' | translate:lang }}
@@ -59,8 +55,8 @@ _Json_:
     }
 }
 ```
-<br>
-##### Parameters
+
+#### Parameters
 ```Html
 {{ 'User notifications' | translate:lang:{ user: username, NoMessages: messages.length } }}
 ```
@@ -71,8 +67,7 @@ _Json_:
 }
 ```
 
-<br>
-#### Dates & Numbers
+### Dates & Numbers
 Implement _DefaultLocale_, _Currency_ & optionally _Timezone_ decorators in the component to provide _defaultLocale_, _currency_, _timezone_ to _l10nDate_, _l10nDecimal_, _l10nPercent_ & _l10nCurrency_ pipes.
 ```TypeScript
 export class HomeComponent implements OnInit {
@@ -88,8 +83,7 @@ export class HomeComponent implements OnInit {
 
 > To use AoT compilation you have to implement OnInit, and to cancel subscriptions OnDestroy, even if they are empty.
 
-<br>
-##### Dates
+#### Dates
 ```
 expression | l10nDate[:defaultLocale[:format[:timezone]]]
 ```
@@ -107,7 +101,6 @@ Where:
     - `'shortTime'`: equivalent to `'h:mm'` (e.g. `4:53 PM` for `en-US`)
     - `'mediumTime'`: equivalent to `'h:mm:ss'` (e.g. `4:54:15 PM` for `en-US`)
 
-    <br>
     It can also be an object with some or all of the following properties:
 
     - `weekday` The representation of the weekday. Possible values are _narrow_, _short_, _long_.
@@ -121,16 +114,14 @@ Where:
     - `timeZoneName` The representation of the time zone name. Possible values are _short_, _long_.
     - `hour12` Whether to use 12-hour time (as opposed to 24-hour time). Possible values are true and false; the default is locale dependent.
 
-    <br>
     See [DateTimeFormat](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/DateTimeFormat) for further information.
 
-<br>
-###### Using format aliases
+#### Using format aliases
 ```Html
 {{ today | l10nDate:defaultLocale:'fullDate' }}
 ```
-<br>
-###### Using a custom format
+
+#### Using a custom format
 ```TypeScript
 @Component({
     template: `
@@ -148,8 +139,8 @@ export class HomeComponent implements OnInit {
 
 }
 ```
-<br>
-###### Using timezone
+
+#### Using timezone
 ```TypeScript
 @Component({
     template: `
@@ -167,8 +158,8 @@ export class HomeComponent implements OnInit {
 
 }
 ```
-<br>
-##### Decimals
+
+#### Decimals
 ```
 expression | l10nDecimal[:defaultLocale:[digitInfo]]
 ```
@@ -177,16 +168,16 @@ where `expression` is a number and `digitInfo` has the following format: `{minIn
 ```Html
 {{ value | l10nDecimal:defaultLocale:'1.5-5' }}
 ```
-<br>
-##### Percentages
+
+#### Percentages
 ```
 expression | l10nPercent[:defaultLocale:[digitInfo]]
 ```
 ```Html
 {{ value | l10nPercent:defaultLocale:'1.1-1' }}
 ```
-<br>
-##### Currencies
+
+#### Currencies
 ```
 expression | l10nCurrency[:defaultLocale[:currency[:currencyDisplay[:digitInfo]]]]
 ```
@@ -195,8 +186,7 @@ where `currencyDisplay` is the currency formatting. Possible values are _'symbol
 {{ value | l10nCurrency:defaultLocale:currency:'symbol':'1.2-2' }}
 ```
 
-<br>
-#### Translation & Localization classes
+### Translation & Localization classes
 When using _pipes_, alternatively to _decorators_ you can 
 extend `Translation` or `Localization` classes.
 
@@ -210,8 +200,7 @@ export class HomeComponent extends Localization { }
 ```
 To cancel subscriptions for the params, you can call the `cancelParamSubscriptions` method into `ngOnDestroy`.
 
-<br>
-#### OnPush ChangeDetectionStrategy
+### OnPush ChangeDetectionStrategy
 _Pure pipes_ don't need to set `ChangeDetectionStrategy` to `OnPush`. If into your components you need to use it, you have to extend `Translation` or `Localization` class and pass `ChangeDetectorRef`:
 ```TypeScript
 import { Component, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
@@ -233,11 +222,9 @@ export class HomeComponent extends Translation {
 ```
 That's because we need to know the component reference that implements the `OnPush` strategy.
 
-<br>
-
 ---
 
-### Directives
+## Directives
 Directive | Selectors
 --------- | ---------
 Translate | `l10nTranslate`, `translate`
@@ -256,22 +243,19 @@ L10nCurrency | Currency | Number/string | `<tag l10n-attribute attribute="expr1"
 
 > You can dynamically change parameters and expressions values as with pipes. How does it work? To observe the expression change (not the parameters), a `MutationObserver` is used: the observer is added only if detected in the browser. If you want to use this feature also reaching older browsers, we recommend using pipes.
 
-<br>
 > If you use in the component only the directives and not the pipes, you don't need to use decorators.
 
-<br>
-#### Messages
+### Messages
 ```Html
 <h1 l10nTranslate>Title</h1>
 ```
-<br>
-##### Parameters
+
+#### Parameters
 ```Html
 <p [params]="{ user: username, NoMessages: messages.length }" l10nTranslate>User notifications</p>
 ```
 
-<br>
-#### Dates & Numbers
+### Dates & Numbers
 ```Html
 <p l10nDate>{{ today }}</p>
 <p format="fullDate" l10nDate>{{ today }}</p>
@@ -286,8 +270,7 @@ L10nCurrency | Currency | Number/string | `<tag l10n-attribute attribute="expr1"
 <p digits="1.2-2" currencyDisplay="symbol" l10nCurrency>{{ value }}</p>
 ```
 
-<br>
-#### Attributes
+### Attributes
 ```Html
 <p l10n-title title="Greeting" l10nTranslate>Title</p>
 ```
@@ -295,8 +278,7 @@ All attributes will be translated according to the master directive: `l10nTransl
 
 > You can't dynamically change expressions in attributes.
 
-<br>
-##### Parameters
+#### Parameters
 ```Html
 <p l10n-title title="Greeting" [params]="{ user: username, NoMessages: messages.length }" l10nTranslate>User notifications</p>
 ```
@@ -308,8 +290,7 @@ _Json_:
 }
 ```
 
-<br>
-#### UI components
+### UI components
 You can properly translate UI components like Angular Material or Ionic:
 ```Html
 <a mat-list-item routerLinkActive="active-link" routerLink="/home" l10nTranslate>App.Home</a>
@@ -327,11 +308,9 @@ rendered as:
 
 > How does it work? The algorithm searches the text in the subtree. If there is a depth higher than 4 (in the example above the text to translate has a depth 2), we recommend using pipes.
 
-<br>
-
 ---
 
-### Using Html tags in translation
+## Using Html tags in translation
 If you have Html tags in translation like this:
 ```
 "Strong subtitle": "<strong>It's a small world</strong>"
@@ -347,12 +326,10 @@ Using _directives_:
 <p [innerHTML]="'Strong subtitle'" l10nTranslate></p>
 ```
 
-<br>
-
 ---
 
-### Getting the translation in component class
-#### Messages
+## Getting the translation in component class
+### Messages
 To get the translation in component class, `TranslationService` has the following methods:
 
 * `translate(keys: string | string[], args?: any, lang?: string): string | any`
@@ -406,8 +383,7 @@ export class HomeComponent implements OnInit {
 }
 ```
 
-<br>
-#### Dates & numbers
+### Dates & numbers
 To get the translation of dates and numbers, you can use the `transform` method of the corresponding pipe to get the translation: you have the `getDefaultLocale` method of `LocaleService`, and the `defaultLocaleChanged` event to know when `defaultLocale` changes.
 ```TypeScript
 @Component({
@@ -432,11 +408,9 @@ export class HomeComponent {
 }
 ```
 
-<br>
-
 ---
 
-### Handle the translation
+## Handle the translation
 The default translation handler does not perform operations on the translated values: it handles the missing keys returning the path of the key or the value set by `missingValue` during the configuration, and replaces parameters.
 
 To perform custom operations, you can implement `TranslationHandler` class-interface and the `parseValue` method:
@@ -474,11 +448,9 @@ Then provide the class in the module:
 ```
 See also [TranslationHandler](https://github.com/robisim74/angular-l10n/blob/master/src/services/translation-handler.ts) code.
 
-<br>
-
 ---
 
-### Changing language, default locale, currency or timezone at runtime
+## Changing language, default locale, currency or timezone at runtime
 To change language, default locale, currency or timezone at runtime, `LocaleService` has the following methods:
 
 * `setCurrentLanguage(languageCode: string): void`

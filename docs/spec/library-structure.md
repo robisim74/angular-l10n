@@ -1,21 +1,16 @@
-## Library structure
+# Library structure
 
-<br>
-
----
-
-### Main modules
+## Main modules
 Class | Contract
 ----- | --------
 `TranslationModule` | Provides dependencies, pipes & directives for translating messages
 `LocalizationModule` | Provides dependencies, pipes & directives for translating messages, dates & numbers
 `LocaleValidationModule` | Provides dependencies & directives for locale validation
-
-<br>
+`CollatorModule` | Provides dependencies for sorting and filtering a list by locales
 
 ---
 
-### Main services
+## Main services
 Class | Contract
 ----- | --------
 `L10nLoader` | Initializes the services
@@ -27,11 +22,9 @@ Class | Contract
 `Collator` | Intl.Collator APIs
 `IntlAPI` | Provides the methods to check if Intl APIs are supported
 
-<br>
-
 ---
 
-### Main class-interfaces
+## Main class-interfaces
 Class | Contract
 ----- | --------
 `LocaleStorage` | Class-interface to create a custom storage for default locale, currency & timezone

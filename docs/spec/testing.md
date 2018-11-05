@@ -1,8 +1,4 @@
-## Unit testing
-
-<br>
-
----
+# Unit testing
 
 There are several ways to test an app that implements this library. To provide the data, you could use:
 

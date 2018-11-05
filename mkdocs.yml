@@ -19,4 +19,9 @@ site_description: 'An Angular library to translate messages, dates and numbers'
 site_author: 'Roberto Simonetti'
 markdown_extensions:
   - toc:
-      permalink: 
+      permalink: true
+theme:
+  name: 'material'
+  palette:
+    primary: 'indigo'
+    accent: 'indigo'

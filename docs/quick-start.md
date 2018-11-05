@@ -1,10 +1,6 @@
-## Quick start
+# Quick start
 
-<br>
-
----
-
-### First scenario: you only need to translate texts
+## First scenario: you only need to translate texts
 Install the library:
 ```Shell
 npm install angular-l10n --save
@@ -135,9 +131,8 @@ Create the _json_ files of the translations such as `locale-en.json` and `locale
     "Greeting": "Ciao!"
 }
 ```
-<br>
 
-#### Using directives
+### Using directives
 In addition to the _pipes_, you can use _directives_. Try to change `home.component.ts`:
 ```TypeScript
 import { Component } from '@angular/core';
@@ -154,11 +149,9 @@ export class HomeComponent { }
 ```
 > Note that if you use in the component only the _directives_ and not the _pipes_, you don't need to use `@Language()` _decorator_.
 
-<br>
-
 ---
 
-### Second scenario: you need to translate texts, dates & numbers
+## Second scenario: you need to translate texts, dates & numbers
 Install the library:
 ```Shell
 npm install angular-l10n --save
@@ -319,9 +312,8 @@ Finally, to extend the support to old browsers, add the following script tag in 
 ```Html
 <script src="https://cdn.polyfill.io/v2/polyfill.min.js?features=Intl.~locale.en-US,Intl.~locale.en-GB,Intl.~locale.it-IT"></script>
 ```
-<br>
 
-#### Using directives
+### Using directives
 In addition to the _pipes_, you can use _directives_. Try to change `home.component.ts`:
 ```TypeScript
 import { Component, OnInit } from '@angular/core';
@@ -360,11 +352,9 @@ export class HomeComponent implements OnInit {
 ```
 > Note that if you use in the component only the _directives_ and not the _pipes_, you don't need to use _decorators_.
 
-<br>
-
 ---
 
-### Advanced initialization
+## Advanced initialization
 If you want the app to be rendered only after the translation file is loaded, 
 you can use these settings in `app.module.ts`:
 ```TypeScript
@@ -421,11 +411,9 @@ export function initL10n(l10nLoader: L10nLoader): Function {
 export class AppModule { }
 ```
 
-<br>
-
 ---
 
-### Appendix A - Using Angular CLI
+## Appendix A - Using Angular CLI
 If you are using _Angular CLI_, you have to add the _json_ files in `src/assets` folder, 
 copied as-is when building your project. 
 Always configure your provider in this way:
@@ -437,11 +425,9 @@ Always configure your provider in this way:
 ...
 ```
 
-<br>
-
 ---
 
-### Appendix B - Using Ionic
+## Appendix B - Using Ionic
 You have to add the _json_ files in `www/assets` folder. 
 Always configure your provider in this way:
 ```TypeScript
@@ -452,11 +438,9 @@ Always configure your provider in this way:
 ...
 ```
 
-<br>
-
 ---
 
-### Appendix C - Using Angular Meteor
+## Appendix C - Using Angular Meteor
 You must create `public/assets` folder at the root of your app. 
 In this way, `assets` folder is copied directly into your application bundle. 
 Always configure your provider in this way:
@@ -468,27 +452,25 @@ Always configure your provider in this way:
 ...
 ```
 
-<br>
-
 ---
 
-### Appendix D - Using Angular Universal
+## Appendix D - Using Angular Universal
 There are two ways:
 
-#### Prerender (prerender)
-- Happens at build time
-- Renders your application and replaces the dist _index.html_ with a version rendered at the route `/`
+### Prerender (prerender)
+- Happens at build time.
+- Renders your application and replaces the dist _index.html_ with a version rendered at the route `/`.
 
-#### Server-Side Rendering (ssr)
-- Happens at runtime
-- Uses a server _Engine_ to render you application on the fly at the requested url
+### Server-Side Rendering (ssr)
+- Happens at runtime.
+- Uses a server _Engine_ to render you application on the fly at the requested url.
 
 **Note**
 
-- This library builds only one app, and not an app for each language as _Angular i18n_ native solution: so your prerendered `index.html` will contain the translation according to the language defined during the configuration
-- If you use _Direct loading_, there are no particular warnings
-- If you use _Asynchronous loading_, you have to solve the problem of _http requests_ during _prerender_ or _ssr_
-    - About _prerender_: you need to provide _absolute URLs_ to a running server that will be the same that will serve the data (or through a proxy): if this is not possible and you want to use the _prerender_ instead of _ssr_, you should use _Angular i18n_ native solution
+- This library builds only one app, and not an app for each language as _Angular i18n_ native solution: so your prerendered `index.html` will contain the translation according to the language defined during the configuration.
+- If you use _Direct loading_, there are no particular warnings.
+- If you use _Asynchronous loading_, you have to solve the problem of _http requests_ during _prerender_ or _ssr_:
+    - About _prerender_: you need to provide _absolute URLs_ to a running server that will be the same that will serve the data (or through a proxy): if this is not possible and you want to use the _prerender_ instead of _ssr_, you should use _Angular i18n_ native solution.
     - About _ssr_: you only need to use _absolute URLs_, so for example:
 
 ```TypeScript
@@ -576,7 +558,7 @@ export class AppModule { }
 
 Now, depending on whether you want to use the _prerender_ or _ssr_ in production, you must proceed as follows:
 
-#### prerender
+**prerender**
 ```Shell
 npm run build:ssr
 npm run serve:ssr
@@ -591,7 +573,7 @@ To test it:
 npm run serve:prerender
 ```
 
-#### ssr
+**ssr**
 ```Shell
 npm run build:ssr
 npm run serve:ssr

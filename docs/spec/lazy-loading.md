@@ -1,11 +1,8 @@
-## Lazy loaded modules & Shared modules
+# Lazy loaded modules & Shared modules
+
 Before you start using this configuration, you need to know how _lazy-loading_ works: [Lazy-loading modules with the router](https://angular.io/guide/ngmodule#lazy-loading-modules-with-the-router).
 
-<br>
-
----
-
-### Lazy loaded modules with the router
+## Lazy loaded modules with the router
 You can create an instance of `TranslationService` with its own translation data for every _lazy loaded_ module, as shown:
 ![LazyLoading](../images/LazyLoading.png)
 
@@ -42,11 +39,9 @@ export class ListModule {
 
 In this way, application performance and memory usage are optimized.
 
-<br>
-
 ---
 
-### Shared modules
+## Shared modules
 If you don't want a new instance of `TranslationService` with its own translation data for each feature module, but you want it to be _singleton_ and shared by other modules, you have to call `forRoot` method of the module you are using once in `AppModule`:
 ```TypeScript
 @NgModule({

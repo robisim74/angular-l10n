@@ -1,48 +1,43 @@
-## Services APIs
+# Services APIs
 
-<br>
-
----
-
-### TranslationModule
+## TranslationModule
 Method | Function
 ------ | --------
-`static forRoot(l10nConfig: L10nConfig, token?: Token): ModuleWithProviders` | Use in `AppModule`: new instances of `LocaleService` & `TranslationService`
-`static forChild(l10nConfig: L10nConfig, token?: Token): ModuleWithProviders` | Use in feature modules with lazy loading: new instance of `TranslationService`
-
-<br>
+`static forRoot(l10nConfig: L10nConfig, token?: Token): ModuleWithProviders<TranslationModule>` | Use in `AppModule`: new instances of `LocaleService` & `TranslationService`
+`static forChild(l10nConfig: L10nConfig, token?: Token): ModuleWithProviders<TranslationModule>` | Use in feature modules with lazy loading: new instance of `TranslationService`
 
 ---
 
-### LocalizationModule
+## LocalizationModule
 Method | Function
 ------ | --------
-`static forRoot(l10nConfig: L10nConfig, token?: Token): ModuleWithProviders` | Use in `AppModule`: new instances of `LocaleService` & `TranslationService`
-`static forChild(l10nConfig: L10nConfig, token?: Token): ModuleWithProviders` | Use in feature modules with lazy loading: new instance of `TranslationService`
-
-<br>
+`static forRoot(l10nConfig: L10nConfig, token?: Token): ModuleWithProviders<LocalizationModule>` | Use in `AppModule`: new instances of `LocaleService` & `TranslationService`
+`static forChild(l10nConfig: L10nConfig, token?: Token): ModuleWithProviders<LocalizationModule>` | Use in feature modules with lazy loading: new instance of `TranslationService`
 
 ---
 
-### LocaleValidationModule
+## LocaleValidationModule
 Method | Function
 ------ | --------
-`static forRoot(): ModuleWithProviders` | Use in `AppModule`: new instance of `LocaleValidation`
-
-<br>
+`static forRoot(): ModuleWithProviders<LocaleValidationModule>` | Use in `AppModule`: new instance of `LocaleValidation`
 
 ---
 
-### L10nLoader
+## CollatorModule
+Method | Function
+------ | --------
+ | 
+
+---
+
+## L10nLoader
 Method | Function
 ------ | --------
 `load(): Promise<void>` | Loads l10n services
 
-<br>
-
 ---
 
-### ILocaleService
+## ILocaleService
 Property | Value
 -------- | -----
 `languageCodeChanged: EventEmitter<string>` |
@@ -76,11 +71,9 @@ Method | Function
 `setCurrentTimezone(zoneName: string): void` |
 `composeLocale(codes: ISOCode[]): string` |
 
-<br>
-
 ---
 
-### ITranslationService
+## ITranslationService
 Property | Value
 -------- | -----
 `translationError: Subject<any>` |
@@ -93,11 +86,9 @@ Method | Function
 `translate(keys: string | string[], args?: any, lang?: string): string | any` | Translates a key or an array of keys
 `translateAsync(keys: string | string[], args?: any, lang?: string): Observable<string | any>` |
 
-<br>
-
 ---
 
-### Translation
+## Translation
 Property | Value
 -------- | -----
 `lang: string` |
@@ -107,11 +98,9 @@ Method | Function
 ------ | --------
 `protected cancelParamSubscriptions(): void` |
 
-<br>
-
 ---
 
-### Localization
+## Localization
 Property | Value
 -------- | -----
 `defaultLocale: string` |
@@ -123,21 +112,17 @@ Method | Function
 ------ | --------
 `protected cancelParamSubscriptions(): void` |
 
-<br>
-
 ---
 
-### ILocaleValidation
+## ILocaleValidation
 Method | Function
 ------ | --------
 `parseNumber(s: string, defaultLocale?: string): number | null` | Converts a string to a number according to default locale. If the string cannot be converted to a number, returns NaN
 `getRegExp(digits: string, defaultLocale?: string): RegExp` |
 
-<br>
-
 ---
 
-### ICollator
+## ICollator
 Method | Function
 ------ | --------
 `compare(key1: string, key2: string, extension?: string, options?: any): number` | Compares two keys by the value of translation according to the current language
@@ -146,11 +131,9 @@ Method | Function
 `search(s: string, list: any[], keyNames: any[], options?: any): any[]` | Matches a string into an array of objects or an array of arrays according to the current language
 `searchAsync(s: string, list: any[], keyNames: any[], options?: any): Observable<any[]>` | Matches asynchronously a string into an array of objects or an array of arrays according to the current language
 
-<br>
-
 ---
 
-### IntlAPI
+## IntlAPI
 Method | Function
 ------ | --------
 `static hasIntl(): boolean` |
@@ -159,30 +142,24 @@ Method | Function
 `static hasNumberFormat(): boolean` |
 `static hasCollator(): boolean` |
 
-<br>
-
 ---
 
-### LocaleStorage
+## LocaleStorage
 Method | Function
 ------ | --------
 `abstract read(name: string): Promise<string | null>` | This method must contain the logic to read the storage
 `abstract write(name: string, value: string): Promise<void>` | This method must contain the logic to write the storage
 
-<br>
-
 ---
 
-### TranslationProvider
+## TranslationProvider
 Method | Function
 ------ | --------
 `abstract getTranslation(language: string, args: any): Observable<any>` | This method must contain the logic of data access
 
-<br>
-
 ---
 
-### TranslationHandler
+## TranslationHandler
 Method | Function
 ------ | --------
 `abstract parseValue(path: string, key: string, value: string | null, args: any, lang: string): string` | This method must contain the logic to parse the translated value

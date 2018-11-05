@@ -1,6 +1,16 @@
-## Collator
+# Collator
 
-<br>
+Import the module:
+```TypeScript
+@NgModule({
+    imports: [
+        ...
+        CollatorModule // New instance of Collator.
+    ],
+    declarations: [ListComponent]
+})
+export class ListModule { }
+```
 
 ---
 
@@ -12,5 +22,3 @@
 * `searchAsync(s: string, list: any[], keyNames: any[], options?: any): Observable<any[]>`
 
 These methods use the [Intl.Collator](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Collator) object, a constructor for collators, objects that enable language sensitive string comparison.
-
-> Only modern browsers support this API.

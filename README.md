@@ -2,7 +2,7 @@
 [![Build Status](https://travis-ci.org/robisim74/angular-l10n.svg?branch=master)](https://travis-ci.org/robisim74/angular-l10n) [![npm version](https://badge.fury.io/js/angular-l10n.svg)](https://badge.fury.io/js/angular-l10n) [![npm](https://img.shields.io/npm/dm/angular-l10n.svg)](https://www.npmjs.com/package/angular-l10n) [![npm](https://img.shields.io/npm/l/angular-l10n.svg)](https://www.npmjs.com/package/angular-l10n)
 > An Angular library to translate messages, dates and numbers
 
-This library is for localization of **Angular v7** apps written in TypeScript, ES6 or ES5. 
+This library is for localization of **Angular v7** apps. 
 It allows, in addition to translation, to localize numbers and dates of your app, adding _language code_, _country code_, _currency code_, _timezone_ and optionally _script code_, _numbering system_ and _calendar_, through [Internationalization API](https://robisim74.github.io/angular-l10n/spec/configuration/#intl-api). It also implements the validation of numbers by locales.
 
 [Sample app](http://robisim74.github.io/angular-l10n-sample) built with Angular CLI & Material, and its [source code](https://github.com/robisim74/angular-l10n-sample).
@@ -10,32 +10,36 @@ It allows, in addition to translation, to localize numbers and dates of your app
 Get the changelog by [releases](https://github.com/robisim74/angular-l10n/releases).
 
 ## Angular localization features
-- A module to translate texts & a module to translate texts, dates & numbers
-- A module for validation by locales (numbers)
-- Direct & Asynchronous loading of translation data
-- Available providers for Asynchronous loading:
-    - Static (json files)
-    - WebAPI (json format)
+- Four modules to support tree shaking:
+    - `TranslationModule` to translate texts
+    - `LocalizationModule` to translate texts, dates & numbers
+    - `LocaleValidationModule` for number validation by locales
+    - `CollatorModule` for sorting and filtering a list by locales
+- Direct loading of translation data (objects)
+- Asynchronous loading of translation data (json):
+    - Static
+    - WebAPI
     - Fallback
     - Custom
 - Caching of the http requests
-- Composed languages (e.g. languageCode-countryCode)
+- Composed languages: `language[-script][-country]`
 - Language, Default locale & Currency through _ISO codes_
 - Timezone through _IANA_ time zone
 - Cookies, Session & Local Storage, or custom storage (e.g. for using with _Ionic Storage_) available for storing the _ISO codes_
 - _Intl API_ to localize dates & numbers
-- Pure pipes & Directives to get the translation
-- Decorators or class inheritance for the _ISO codes_ used by the pure pipes
+- Pure pipes to get the translation
+- Directives to get the translation:
+    - can dynamically change parameters and expressions values as the pipes
+    - can translate also attributes
+    - work also with complex UI components, like _Material_ or _Ionic_
+- Methods to get the translation in component class
 - Html tags in translations
 - Parameters in translations
 - Composed keys in translations (nested objects)
-- Directives can dynamically change parameters and expressions values as the pipes
-- Directives can translate also attributes
-- Directives work also with complex UI components, like _Material_ or _Ionic_
-- Methods to translate in component class
-- Custom translation handler for translated values
-- Support for lazy loading
-- Collator for sorting and filtering a list by locales
+- AoT compliant
+- Lazy loading compliant
+- Server Side Rendering compliant
+- `strict` TypeScript compiler option compliant
 - Localized routing for SEO
 
 ## Angular i18n solutions
@@ -54,33 +58,6 @@ You can add `angular-l10n` to your project using `npm`:
 ```Shell
 npm install angular-l10n --save 
 ```
-To install a pre-release package:
-```Shell
-npm install --save angular-l10n@next
-```
-
-## Loading
-#### Using SystemJS configuration
-```JavaScript
-System.config({
-    map: {
-        'angular-l10n': 'node_modules/angular-l10n/bundles/angular-l10n.umd.js'
-    }
-});
-```
-#### Angular CLI
-No need to set up anything, just import it in your code.
-#### Rollup or webpack
-No need to set up anything, just import it in your code.
-#### Plain JavaScript
-If you build apps in Angular using ES5, you can include the `umd` bundle in your `index.html`:
-```Html
-<script src="node_modules/angular-l10n/bundles/angular-l10n.umd.js"></script>
-```
-and use global `ng.l10n` namespace.
-
-## AoT compilation, Server Side Rendering & strict
-This library is compatible with AoT compilation & [Server Side Rendering](https://robisim74.github.io/angular-l10n/quick-start/#appendix-d-using-angular-universal). It also supports the `strict` TypeScript compiler option.
 
 ## Usage
 - **Angular v7**
