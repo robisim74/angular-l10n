@@ -7,11 +7,8 @@ import { TranslationProvider } from './translation-provider';
 import { TranslationHandler } from './translation-handler';
 import { IntlAPI } from './intl-api';
 import { LoadingMode, ServiceState, ProviderType } from '../models/types';
-import { mergeDeep } from "../models/merge-deep";
+import { mergeDeep } from '../models/merge-deep';
 
-/**
- * Manages the translation data.
- */
 export interface ITranslationService {
 
     translationError: Subject<any>;
@@ -20,18 +17,8 @@ export interface ITranslationService {
 
     init(): Promise<void>;
 
-    /**
-     * Fired when the translation data has been loaded. Returns the translation language.
-     */
     translationChanged(): Observable<string>;
 
-    /**
-     * Translates a key or an array of keys.
-     * @param keys The key or an array of keys to be translated
-     * @param args Optional parameters contained in the key
-     * @param lang The current language of the service is used by default
-     * @return The translated value or an object: {key: value}
-     */
     translate(keys: string | string[], args?: any, lang?: string): string | any;
 
     translateAsync(keys: string | string[], args?: any, lang?: string): Observable<string | any>;
@@ -203,7 +190,6 @@ export interface ITranslationService {
     }
 
     private getTranslation(language: string): Observable<any> {
-
         return Observable.create((observer: Observer<any>) => {
             this.translationData = {};
             this.serviceState = ServiceState.isLoading;

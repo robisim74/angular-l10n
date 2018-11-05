@@ -19,7 +19,7 @@ export class LocaleValidationModule {
     /**
      * Use in AppModule: new instance of LocaleValidation.
      */
-    public static forRoot(): ModuleWithProviders {
+    public static forRoot(): ModuleWithProviders<LocaleValidationModule> {
         return {
             ngModule: LocaleValidationModule,
             providers: [LocaleValidation]

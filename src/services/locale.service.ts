@@ -11,9 +11,6 @@ import { DefaultLocale } from '../models/default-locale';
 import { Language, ISOCode } from '../models/types';
 import { InjectorRef } from '../models/injector-ref';
 
-/**
- * Manages language, default locale, currency & timezone.
- */
 export interface ILocaleService {
 
     languageCodeChanged: EventEmitter<string>;
@@ -37,9 +34,6 @@ export interface ILocaleService {
 
     getCurrentCountry(): string;
 
-    /**
-     * Returns the well formatted locale as {languageCode}[-scriptCode][-countryCode]
-     */
     getCurrentLocale(): string;
 
     getCurrentScript(): string;
@@ -175,12 +169,8 @@ export interface ILocaleService {
      */
     public getCurrentLocale(): string {
         let locale: string = this.defaultLocale.languageCode;
-        if (!!this.defaultLocale.scriptCode) {
-            locale += ("-" + this.defaultLocale.scriptCode);
-        }
-        if (!!this.defaultLocale.countryCode) {
-            locale += ("-" + this.defaultLocale.countryCode);
-        }
+        locale += !!this.defaultLocale.scriptCode ? "-" + this.defaultLocale.scriptCode : "";
+        locale += !!this.defaultLocale.countryCode ? "-" + this.defaultLocale.countryCode : "";
         return locale;
     }
 
@@ -348,7 +338,12 @@ export interface ILocaleService {
         this.router.events.pipe(
             filter((event: any) => event instanceof NavigationStart)
         ).subscribe((data: NavigationStart) => {
-            this.parsePath(data.url, data.navigationTrigger == "popstate");
+            if (data.navigationTrigger == "popstate") {
+                this.parsePath(data.url);
+                this.sendLanguageEvents();
+                this.sendDefaultLocaleEvents();
+                this.sendTranslationEvents();
+            }
             this.redirectToPath(data.url);
         });
         // Replaces url when a navigation ends.
@@ -485,9 +480,8 @@ export interface ILocaleService {
     /**
      * Parses path to find the locale in path.
      * @param path The path to be parsed
-     * @param sendEvents If popstate event is fired
      */
-    private parsePath(path: string, sendEvents: boolean = false): void {
+    private parsePath(path: string): void {
         const segment: string | null = this.getLocalizedSegment(path);
         if (segment != null) {
             // Sets the default locale.
@@ -501,11 +495,6 @@ export interface ILocaleService {
                 this.defaultLocale.calendar
             );
             this.storage.write("defaultLocale", this.defaultLocale.value);
-            if (sendEvents) {
-                this.sendLanguageEvents();
-                this.sendDefaultLocaleEvents();
-                this.sendTranslationEvents();
-            }
         }
     }
 

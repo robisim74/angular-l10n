@@ -52,7 +52,7 @@ export class LocalizationModule {
     /**
      * Use in AppModule: new instances of LocaleService & TranslationService.
      */
-    public static forRoot(l10nConfig: L10nConfig, token: Token = {}): ModuleWithProviders {
+    public static forRoot(l10nConfig: L10nConfig, token: Token = {}): ModuleWithProviders<LocalizationModule> {
         return {
             ngModule: LocalizationModule,
             providers: [
@@ -81,7 +81,7 @@ export class LocalizationModule {
     /**
      * Use in feature modules with lazy loading: new instance of TranslationService.
      */
-    public static forChild(l10nConfig: L10nConfig, token: Token = {}): ModuleWithProviders {
+    public static forChild(l10nConfig: L10nConfig, token: Token = {}): ModuleWithProviders<LocalizationModule> {
         return {
             ngModule: LocalizationModule,
             providers: [

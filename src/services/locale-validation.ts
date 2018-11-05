@@ -2,17 +2,10 @@ import { Injectable } from '@angular/core';
 
 import { LocaleService } from './locale.service';
 import { IntlAPI } from './intl-api';
-import { Decimal } from "../models/types";
+import { Decimal } from '../models/types';
 
-/**
- * Provides the methods for locale validation.
- */
 export interface ILocaleValidation {
 
-    /**
-     * Converts a string to a number according to default locale.
-     * If the string cannot be converted to a number, returns NaN.
-     */
     parseNumber(s: string, defaultLocale?: string): number | null;
 
     getRegExp(digits: string, defaultLocale?: string): RegExp;

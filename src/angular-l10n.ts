@@ -45,3 +45,4 @@ export {
 export { TranslationModule } from './modules/translation.module';
 export { LocalizationModule } from './modules/localization.module';
 export { LocaleValidationModule } from './modules/locale-validation.module';
+export { CollatorModule } from './modules/collator.module';

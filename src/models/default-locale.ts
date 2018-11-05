@@ -9,15 +9,15 @@ export class DefaultLocale implements DefaultLocaleCodes {
     public calendar?: string;
 
     public get value(): string {
-        return this._value;
+        return this.formattedValue;
     }
 
     public set value(defaultLocale: string) {
-        this._value = defaultLocale;
+        this.formattedValue = defaultLocale;
         this.parseValue();
     }
 
-    private _value: string;
+    private formattedValue: string;
 
     public build(
         languageCode: string,
@@ -32,15 +32,14 @@ export class DefaultLocale implements DefaultLocaleCodes {
         this.numberingSystem = numberingSystem;
         this.calendar = calendar;
 
-        const value: string[] = [];
-        value.push(languageCode);
-        value.push(!!scriptCode ? "-" + scriptCode : "");
-        value.push(!!countryCode ? "-" + countryCode : "");
+        let value: string = languageCode;
+        value += !!scriptCode ? "-" + scriptCode : "";
+        value += !!countryCode ? "-" + countryCode : "";
         // Adds the 'u' (Unicode) extension.
-        value.push((!!numberingSystem || !!calendar) ? "-u" : "");
-        value.push(!!numberingSystem ? "-nu-" + numberingSystem : "");
-        value.push(!!calendar ? "-ca-" + calendar : "");
-        this._value = value.join("");
+        value += (!!numberingSystem || !!calendar) ? "-u" : "";
+        value += !!numberingSystem ? "-nu-" + numberingSystem : "";
+        value += !!calendar ? "-ca-" + calendar : "";
+        this.formattedValue = value;
     }
 
     private parseValue(): void {
@@ -54,14 +53,15 @@ export class DefaultLocale implements DefaultLocaleCodes {
                     case 3:
                         if (extensions[1] == "nu") {
                             this.numberingSystem = extensions[2];
+                            this.calendar = undefined;
                         } else if (extensions[1] == "ca") {
+                            this.numberingSystem = undefined;
                             this.calendar = extensions[2];
                         }
                         break;
                     default:
                         this.numberingSystem = extensions[2];
                         this.calendar = extensions[4];
-                        break;
                 }
                 // Extracts the codes.
                 value = value.substring(0, index);
@@ -71,16 +71,18 @@ export class DefaultLocale implements DefaultLocaleCodes {
             switch (codes.length) {
                 case 1:
                     this.languageCode = codes[0];
+                    this.scriptCode = undefined;
+                    this.countryCode = undefined;
                     break;
                 case 2:
                     this.languageCode = codes[0];
+                    this.scriptCode = undefined;
                     this.countryCode = codes[1];
                     break;
                 default:
                     this.languageCode = codes[0];
                     this.scriptCode = codes[1];
                     this.countryCode = codes[2];
-                    break;
             }
         }
     }
