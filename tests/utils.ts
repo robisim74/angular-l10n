@@ -1,7 +1,7 @@
 /* tslint:disable */
-import { Component, Injectable } from "@angular/core";
-import { HttpClient } from "@angular/common/http";
-import { Observable } from "rxjs";
+import { Component, Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
 
 import { TranslationProvider, Language, DefaultLocale, Currency, Timezone } from '../angular-l10n';
 

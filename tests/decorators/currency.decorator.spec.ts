@@ -10,7 +10,7 @@ import {
     LocalizationModule,
     LocaleService,
     StorageStrategy
-} from './../../angular-l10n';
+} from '../../src/angular-l10n';
 
 import { CurrencyComponent } from '../utils';
 

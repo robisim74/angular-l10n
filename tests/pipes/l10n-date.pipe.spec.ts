@@ -2,15 +2,15 @@
 import { TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 
-import { L10nDatePipe } from './../../angular-l10n';
 import {
+    L10nDatePipe,
     L10nConfig,
     L10nLoader,
     LocalizationModule,
     LocaleService,
     StorageStrategy,
     DateTimeOptions
-} from './../../angular-l10n';
+} from '../../src/angular-l10n';
 
 describe('L10nDatePipe', () => {
 

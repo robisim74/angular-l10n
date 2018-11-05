@@ -5,8 +5,8 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { Router, Route } from '@angular/router';
 import { Location } from '@angular/common';
 
-import { TranslatePipe } from './../../angular-l10n';
 import {
+    TranslatePipe,
     L10nConfig,
     L10nLoader,
     TranslationModule,
@@ -16,7 +16,7 @@ import {
     StorageStrategy,
     ProviderType,
     ISOCode
-} from './../../angular-l10n';
+} from '../../src/angular-l10n';
 
 import { MockComponent, CustomTranslationProvider } from '../utils';
 

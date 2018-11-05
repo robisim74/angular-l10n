@@ -4,14 +4,14 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { By } from '@angular/platform-browser';
 import { DebugElement } from '@angular/core';
 
-import { TranslateDirective } from './../../angular-l10n';
 import {
+    TranslateDirective,
     L10nConfig,
     L10nLoader,
     TranslationModule,
     LocaleService,
     StorageStrategy
-} from './../../angular-l10n';
+} from '../../src/angular-l10n';
 
 import { TranslateComponent } from '../utils';
 

@@ -7,15 +7,13 @@ import { DebugElement } from '@angular/core';
 import {
     L10nDecimalDirective,
     L10nPercentDirective,
-    L10nCurrencyDirective
-} from './../../angular-l10n';
-import {
+    L10nCurrencyDirective,
     L10nConfig,
     L10nLoader,
     LocalizationModule,
     LocaleService,
     StorageStrategy
-} from './../../angular-l10n';
+} from '../../src/angular-l10n';
 
 import { L10nNumberComponent } from '../utils';
 

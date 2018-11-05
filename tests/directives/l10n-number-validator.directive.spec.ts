@@ -3,15 +3,15 @@ import { TestBed, ComponentFixture, async } from '@angular/core/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { FormsModule, NgForm, AbstractControl, FormControl } from '@angular/forms';
 
-import { l10nValidateNumber } from "./../../angular-l10n";
 import {
+    l10nValidateNumber,
     L10nConfig,
     L10nLoader,
     LocalizationModule,
     LocaleValidationModule,
     LocaleService,
     StorageStrategy
-} from './../../angular-l10n';
+} from '../../src/angular-l10n';
 
 import { L10nNumberValidatorComponent } from '../utils';
 
