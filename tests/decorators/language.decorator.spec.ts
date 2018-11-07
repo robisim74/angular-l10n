@@ -12,7 +12,7 @@ import {
     StorageStrategy
 } from '../../src/angular-l10n';
 
-import { LanguageComponent } from '../utils';
+import { LanguageComponent, LanguageOnPushComponent } from '../utils';
 
 describe('Language decorator', () => {
 
@@ -127,6 +127,84 @@ describe('Language decorator', () => {
                     TranslationModule.forRoot(l10nConfig)
                 ]
             }).createComponent(LanguageComponent);
+
+            comp = fixture.componentInstance;
+        });
+
+        beforeEach((done) => {
+            l10nLoader = TestBed.get(L10nLoader);
+            locale = TestBed.get(LocaleService);
+
+            l10nLoader.load().then(() => done());
+        });
+
+        beforeEach(() => {
+            locale.setCurrentLanguage('en');
+
+            fixture.detectChanges();
+            des = fixture.debugElement.queryAll(By.css("p"));
+            for (let i: number = 0; i < des.length; i++) {
+                els.push(des[i].nativeElement);
+            }
+        });
+
+        it('should render translated text when language changes', fakeAsync(() => {
+            locale.setCurrentLanguage('it');
+
+            tick();
+            fixture.detectChanges();
+            els = [];
+            for (let i: number = 0; i < des.length; i++) {
+                els.push(des[i].nativeElement);
+            }
+
+            expect(els[0].textContent).toContain("Localizzazione in Angular");
+        }));
+
+    });
+
+    describe('OnPush change detection strategy', () => {
+
+        let comp: LanguageOnPushComponent;
+        let fixture: ComponentFixture<LanguageOnPushComponent>;
+        let des: DebugElement[];
+        let els: HTMLElement[] = [];
+
+        let l10nLoader: L10nLoader;
+        let locale: LocaleService;
+
+        const translationEN: any = {
+            "Title": "Angular localization"
+        };
+        const translationIT: any = {
+            "Title": "Localizzazione in Angular"
+        };
+
+        const l10nConfig: L10nConfig = {
+            locale: {
+                languages: [
+                    { code: 'en', dir: 'ltr' },
+                    { code: 'it', dir: 'ltr' }
+                ],
+                language: 'en',
+                storage: StorageStrategy.Disabled
+            },
+            translation: {
+                translationData: [
+                    { languageCode: 'en', data: translationEN },
+                    { languageCode: 'it', data: translationIT }
+                ]
+            }
+        };
+
+        beforeEach(() => {
+            fixture = TestBed.configureTestingModule({
+                declarations: [LanguageOnPushComponent],
+                imports: [
+                    HttpClientTestingModule,
+                    TranslationModule.forRoot(l10nConfig)
+                ]
+            }).createComponent(LanguageOnPushComponent);
 
             comp = fixture.componentInstance;
         });

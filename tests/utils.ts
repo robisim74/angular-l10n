@@ -1,5 +1,5 @@
 /* tslint:disable */
-import { Component, Injectable } from '@angular/core';
+import { Component, Injectable, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
@@ -158,6 +158,20 @@ export class L10nDateComponent {
 export class LanguageComponent {
 
     @Language() lang: string;
+
+}
+
+@Component({
+    template: `
+        <p>{{ 'Title' | translate:lang }}</p>
+    `,
+    changeDetection: ChangeDetectionStrategy.OnPush
+})
+export class LanguageOnPushComponent {
+
+    @Language() lang: string;
+
+    constructor(private cdr: ChangeDetectorRef) { }
 
 }
 
