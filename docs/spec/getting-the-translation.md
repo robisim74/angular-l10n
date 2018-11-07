@@ -186,41 +186,28 @@ where `currencyDisplay` is the currency formatting. Possible values are _'symbol
 {{ value | l10nCurrency:defaultLocale:currency:'symbol':'1.2-2' }}
 ```
 
-### Translation & Localization classes
-When using _pipes_, alternatively to _decorators_ you can 
-extend `Translation` or `Localization` classes.
-
-Extend `Translation` class in the component to provide _lang_ to the _translate_ pipe:
-```TypeScript
-export class HomeComponent extends Translation { }
-```
-Extend `Localization` class in the component to provide _lang_ to the _translate_ pipe,  _defaultLocale_, _currency_, _timezone_ to _l10nDate_, _l10nDecimal_, _l10nPercent_ & _l10nCurrency_ pipes.
-```TypeScript
-export class HomeComponent extends Localization { } 
-```
-To cancel subscriptions for the params, you can call the `cancelParamSubscriptions` method into `ngOnDestroy`.
-
 ### OnPush ChangeDetectionStrategy
-_Pure pipes_ don't need to set `ChangeDetectionStrategy` to `OnPush`. If into your components you need to use it, you have to extend `Translation` or `Localization` class and pass `ChangeDetectorRef`:
+_Pure pipes_ don't need to set `ChangeDetectionStrategy` to `OnPush`. If into your components you need to use it, you have to inject `ChangeDetectorRef`:
 ```TypeScript
 import { Component, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
-
-import { Translation } from 'angular-l10n'
 
 @Component({
     ...
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class HomeComponent extends Translation {
+export class HomeComponent implements OnInit {
 
-    constructor(public ref: ChangeDetectorRef) {
-        super(ref);
-        ...
-    }
+    @Language() lang: string;
+
+    constructor(private cdr: ChangeDetectorRef) { }
+
+    ngOnInit(): void { }
 
 } 
 ```
 That's because we need to know the component reference that implements the `OnPush` strategy.
+
+> Note that if you use in the component only the _directives_ and not the _pipes_, you don't need to inject `ChangeDetectorRef`.
 
 ---
 

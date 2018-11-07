@@ -88,32 +88,6 @@ Method | Function
 
 ---
 
-## Translation
-Property | Value
--------- | -----
-`lang: string` |
-`protected paramSubscriptions: ISubscription[]` |
-
-Method | Function
------- | --------
-`protected cancelParamSubscriptions(): void` |
-
----
-
-## Localization
-Property | Value
--------- | -----
-`defaultLocale: string` |
-`currency: string` |
-`timezone: string` |
-`protected paramSubscriptions: ISubscription[]` |
-
-Method | Function
------- | --------
-`protected cancelParamSubscriptions(): void` |
-
----
-
 ## ILocaleValidation
 Method | Function
 ------ | --------
