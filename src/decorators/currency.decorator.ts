@@ -22,6 +22,9 @@ export function Currency(): PropertyDecorator {
                 subscription = locale.currencyCodeChanged.subscribe(
                     (currency: string) => {
                         this[propertyKey] = currency;
+                        // OnPush Change Detection strategy.
+                        const cdr: string | undefined = Object.keys(this).find((key: string) => this[key]['markForCheck'] !== undefined);
+                        if (cdr) { this[cdr].markForCheck(); }
                     });
             }
 

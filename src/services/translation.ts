@@ -5,6 +5,7 @@ import { TranslationService } from './translation.service';
 import { InjectorRef } from '../models/injector-ref';
 
 /**
+ * @deprecated Use Language decorator and inject ChangeDetectorRef in the component
  * Provides 'lang' to the translate pipe.
  */
 @Injectable() export class Translation {

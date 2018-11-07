@@ -2,10 +2,10 @@ import { Injectable, ChangeDetectorRef } from '@angular/core';
 
 import { Translation } from './translation';
 import { LocaleService } from './locale.service';
-import { TranslationService } from './translation.service';
 import { InjectorRef } from '../models/injector-ref';
 
 /**
+ * @deprecated Use decorators and inject ChangeDetectorRef in the component
  * Provides 'lang' to the translate pipe,
  * 'defaultLocale', 'currency', 'timezone' to l10nDate, l10nDecimal, l10nPercent & l10nCurrency pipes.
  */

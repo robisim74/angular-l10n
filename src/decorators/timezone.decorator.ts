@@ -22,6 +22,9 @@ export function Timezone(): PropertyDecorator {
                 subscription = locale.timezoneChanged.subscribe(
                     (zoneName: string) => {
                         this[propertyKey] = zoneName;
+                        // OnPush Change Detection strategy.
+                        const cdr: string | undefined = Object.keys(this).find((key: string) => this[key]['markForCheck'] !== undefined);
+                        if (cdr) { this[cdr].markForCheck(); }
                     });
             }
 

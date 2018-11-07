@@ -21,6 +21,9 @@ export function Language(): PropertyDecorator {
                 subscription = translation.translationChanged().subscribe(
                     (language: string) => {
                         this[propertyKey] = language;
+                        // OnPush Change Detection strategy.
+                        const cdr: string | undefined = Object.keys(this).find((key: string) => this[key]['markForCheck'] !== undefined);
+                        if (cdr) { this[cdr].markForCheck(); }
                     });
             }
 

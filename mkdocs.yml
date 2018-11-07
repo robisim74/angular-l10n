@@ -25,3 +25,9 @@ theme:
   palette:
     primary: 'indigo'
     accent: 'indigo'
+extra:
+  social:
+    - type: 'github'
+      link: 'https://github.com/robisim74'
+    - type: 'twitter'
+      link: 'https://twitter.com/robisim74'

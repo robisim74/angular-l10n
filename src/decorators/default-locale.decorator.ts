@@ -23,6 +23,9 @@ export function DefaultLocale(): PropertyDecorator {
                 subscription = locale.defaultLocaleChanged.subscribe(
                     (defaultLocale: string) => {
                         this[propertyKey] = defaultLocale;
+                        // OnPush Change Detection strategy.
+                        const cdr: string | undefined = Object.keys(this).find((key: string) => this[key]['markForCheck'] !== undefined);
+                        if (cdr) { this[cdr].markForCheck(); }
                     });
             }
 
