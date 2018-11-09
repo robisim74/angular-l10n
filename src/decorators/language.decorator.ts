@@ -22,7 +22,7 @@ export function Language(): PropertyDecorator {
                     (language: string) => {
                         this[propertyKey] = language;
                         // OnPush Change Detection strategy.
-                        const cdr: string | undefined = Object.keys(this).find((key: string) => this[key]['markForCheck'] !== undefined);
+                        const cdr: string | undefined = Object.keys(this).find((key: string) => this[key] && this[key]['markForCheck'] !== undefined);
                         if (cdr) { this[cdr].markForCheck(); }
                     });
             }
