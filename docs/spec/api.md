@@ -55,8 +55,8 @@ Method | Function
 `getLanguageDirection(languageCode?: string): string` |
 `getCurrentLanguage(): string` |
 `getCurrentCountry(): string` |
-`getCurrentLocale(): string` | Returns the well formatted locale as {languageCode}[-scriptCode][-countryCode]
 `getCurrentScript(): string` |
+`getCurrentLocale(): string` | Returns the well formatted locale as {languageCode}[-scriptCode][-countryCode]
 `getCurrentNumberingSystem(): string` |
 `getCurrentCalendar(): string` |
 `getDefaultLocale(): string` |

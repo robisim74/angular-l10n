@@ -123,6 +123,7 @@ Property | Value
 `storage?: StorageStrategy` | Defines the storage to be used for language, default locale & currency
 `cookieExpiration?: number` | If the cookie expiration is omitted, the cookie becomes a session cookie
 `localizedRouting?: ISOCode[]` | Enables localized routing with the provided ISO codes
+`localizedRoutingOptions?: LocalizedRoutingOptions` | Options for localized routing
 
 ### TranslationConfig
 Property | Value
@@ -553,3 +554,20 @@ You can use the Sitemap to tell Google all of the locale variants for each URL:
 ```
 
 For more info, visit [Search Console Help - International](https://support.google.com/webmasters/topic/2370587?hl=en&ref_topic=4598733)
+
+### Options
+
+#### Default routing
+If you don't want a localized routing for default language or locale, you can enable it during the configuration:
+```TypeScript
+const l10nConfig: L10nConfig = {
+    locale: {
+        ...
+        localizedRouting: [ISOCode.Language, /* ISOCode.Script, */ /* ISOCode.Country */],
+        localizedRoutingOptions: {
+            defaultRouting: true
+        }
+    },
+    ...
+};
+```
