@@ -106,7 +106,7 @@ describe('LocaleService', () => {
             expect(location.path()).toBe('/en-US/mock');
         }));
 
-        it('should keep localized url when goes back after the language has changed', fakeAsync(() => {
+        it('should keep localized url when goes back after the locale has changed', fakeAsync(() => {
             l10nLoader.load();
             tick();
             router.navigate(['/mock']);
@@ -134,6 +134,112 @@ describe('LocaleService', () => {
             tick();
 
             expect(location.path()).toBe('/en-US/mock');
+        }));
+
+    });
+
+    describe('Localized routing with default routing', () => {
+
+        let l10nLoader: L10nLoader;
+        let locale: LocaleService;
+
+        let router: Router;
+        let location: Location;
+
+        const l10nConfig: L10nConfig = {
+            locale: {
+                languages: [
+                    { code: 'en', dir: 'ltr' },
+                    { code: 'it', dir: 'ltr' }
+                ],
+                defaultLocale: { languageCode: 'en', countryCode: 'US' },
+                storage: StorageStrategy.Disabled,
+                localizedRouting: [ISOCode.Language, ISOCode.Country],
+                localizedRoutingOptions: {
+                    defaultRouting: true
+                }
+            },
+            translation: {
+                providers: []
+            }
+        };
+
+        const routes: Route[] = [
+            { path: '', redirectTo: 'mock', pathMatch: 'full' },
+            { path: 'mock', component: MockComponent },
+            { path: 'otherMock', component: MockComponent },
+            { path: '**', redirectTo: 'mock' }
+        ];
+
+        beforeEach(() => {
+            TestBed.configureTestingModule({
+                declarations: [MockComponent],
+                imports: [
+                    HttpClientTestingModule,
+                    RouterTestingModule.withRoutes(routes),
+                    LocalizationModule.forRoot(l10nConfig)
+                ]
+            }).createComponent(MockComponent);
+
+            l10nLoader = TestBed.get(L10nLoader);
+            locale = TestBed.get(LocaleService);
+
+            router = TestBed.get(Router);
+            location = TestBed.get(Location);
+        });
+
+        it('should not replace url when the app starts', fakeAsync(() => {
+            l10nLoader.load();
+            tick();
+            router.initialNavigation();
+            tick();
+
+            expect(location.path()).toBe('/mock');
+        }));
+
+        it('should not replace url when navigation ends', fakeAsync(() => {
+            l10nLoader.load();
+            tick();
+            router.navigate(['/otherMock']);
+            tick();
+
+            expect(location.path()).toBe('/otherMock');
+        }));
+
+        it('should replace url when default locale changes', fakeAsync(() => {
+            l10nLoader.load();
+            tick();
+            router.navigate(['/mock']);
+            tick();
+            locale.setDefaultLocale('it', 'IT');
+            tick();
+
+            expect(location.path()).toBe('/it-IT/mock');
+        }));
+
+        it('should remove locale from url when default locale changes', fakeAsync(() => {
+            l10nLoader.load();
+            tick();
+            router.navigate(['/mock']);
+            tick();
+            locale.setDefaultLocale('it', 'IT');
+            tick();
+            locale.setDefaultLocale('en', 'US');
+            tick();
+
+            expect(location.path()).toBe('/mock');
+        }));
+
+        it('should not keep localized url when goes back after the locale has changed', fakeAsync(() => {
+            l10nLoader.load();
+            tick();
+            router.navigate(['/mock']);
+            tick();
+            locale.setDefaultLocale('it', 'IT');
+            tick();
+            location.back();
+
+            expect(location.path()).toBe('/mock');
         }));
 
     });
