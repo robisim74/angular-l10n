@@ -1,6 +1,6 @@
 import { InjectionToken } from '@angular/core';
 
-import { Type, DefaultLocaleCodes, Language, StorageStrategy, ISOCode } from './types';
+import { Type, DefaultLocaleCodes, Language, StorageStrategy, ISOCode, LocalizedRoutingOptions } from './types';
 
 export const LOCALE_CONFIG: InjectionToken<LocaleConfig> =
     new InjectionToken<LocaleConfig>('LOCALE_CONFIG');
@@ -48,6 +48,11 @@ export interface LocaleConfig {
      * Enables localized routing with the provided ISO codes.
      */
     localizedRouting?: ISOCode[];
+
+    /**
+     * Options for localized routing.
+     */
+    localizedRoutingOptions?: LocalizedRoutingOptions;
 }
 
 export interface TranslationConfig {

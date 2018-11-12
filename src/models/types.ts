@@ -47,7 +47,7 @@ export interface DefaultLocaleCodes {
     calendar?: string;
 }
 
-export type Language = {
+export interface Language {
     /**
      * ISO 639 two-letter or three-letter code.
      */
@@ -57,7 +57,14 @@ export type Language = {
      * 'ltr' or 'rtl'.
      */
     dir: string;
-};
+}
+
+export interface LocalizedRoutingOptions {
+    /**
+     * Disables/enables default routing for default language or locale.
+     */
+    defaultRouting?: boolean;
+}
 
 export enum StorageStrategy {
 

@@ -1,15 +1,15 @@
 import { Injectable, Inject, EventEmitter, Output } from '@angular/core';
-import { Location } from '@angular/common';
+import { Location, PopStateEvent } from '@angular/common';
 import { Router, NavigationEnd, NavigationStart } from '@angular/router';
 import { Subject } from 'rxjs';
 import { filter } from 'rxjs/operators';
 
-import { IntlAPI } from '../services/intl-api';
-import { LOCALE_CONFIG, LocaleConfig } from '../models/l10n-config';
+import { IntlAPI } from './intl-api';
 import { LocaleStorage } from './locale-storage';
+import { LOCALE_CONFIG, LocaleConfig } from '../models/l10n-config';
 import { DefaultLocale } from '../models/default-locale';
-import { Language, ISOCode } from '../models/types';
 import { InjectorRef } from '../models/injector-ref';
+import { Language, ISOCode } from '../models/types';
 
 export interface ILocaleService {
 
@@ -34,9 +34,9 @@ export interface ILocaleService {
 
     getCurrentCountry(): string;
 
-    getCurrentLocale(): string;
-
     getCurrentScript(): string;
+
+    getCurrentLocale(): string;
 
     getCurrentNumberingSystem(): string;
 
@@ -94,7 +94,6 @@ export interface ILocaleService {
     private timezone: string;
 
     private router: Router;
-
     private location: Location;
 
     constructor(
@@ -107,25 +106,14 @@ export interface ILocaleService {
     }
 
     public async init(): Promise<void> {
-        if (this.configuration.localizedRouting) {
-            this.initByRouting();
-        }
+        this.initRouting();
 
-        await this.initByStorage();
+        await this.initStorage();
 
-        if (this.configuration.defaultLocale) {
-            this.initDefaultLocale();
-        } else if (this.configuration.language) {
-            this.initLanguage();
-        }
-
-        if (this.configuration.currency) {
-            this.initCurrency();
-        }
-
-        if (this.configuration.timezone) {
-            this.initTimezone();
-        }
+        this.initDefaultLocale();
+        this.initLanguage();
+        this.initCurrency();
+        this.initTimezone();
     }
 
     public getBrowserLanguage(): string | null {
@@ -306,56 +294,56 @@ export interface ILocaleService {
 
     public composeLocale(codes: ISOCode[]): string {
         let locale: string = "";
-        if (codes.length > 0) {
-            for (let i: number = 0; i < codes.length; i++) {
-                switch (codes[i]) {
-                    case ISOCode.Script:
-                        locale += this.defaultLocale.scriptCode;
-                        break;
-                    case ISOCode.Country:
-                        locale += this.defaultLocale.countryCode;
-                        break;
-                    default:
-                        locale += this.defaultLocale.languageCode;
-                }
-                if (i < codes.length - 1) {
-                    locale += "-";
-                }
+        for (const code of codes) {
+            switch (code) {
+                case ISOCode.Script:
+                    locale += "-" + this.defaultLocale.scriptCode;
+                    break;
+                case ISOCode.Country:
+                    locale += "-" + this.defaultLocale.countryCode;
+                    break;
+                default:
+                    locale += this.defaultLocale.languageCode;
             }
         }
         return locale;
     }
 
-    private initByRouting(): void {
-        this.router = InjectorRef.get(Router);
-        this.location = InjectorRef.get(Location);
+    private initRouting(): void {
+        if (this.configuration.localizedRouting) {
+            this.router = InjectorRef.get(Router);
+            this.location = InjectorRef.get(Location);
 
-        // Parses the url to find the locale when the app starts.
-        const path: string = this.location.path();
-        this.parsePath(path);
+            // Parses the url to find the locale when the app starts.
+            const path: string = this.location.path();
+            this.parsePath(path);
 
-        // Parses the url to find the locale when a navigation starts.
-        this.router.events.pipe(
-            filter((event: any) => event instanceof NavigationStart)
-        ).subscribe((data: NavigationStart) => {
-            if (data.navigationTrigger == "popstate") {
-                this.parsePath(data.url);
-                this.sendLanguageEvents();
-                this.sendDefaultLocaleEvents();
-                this.sendTranslationEvents();
-            }
-            this.redirectToPath(data.url);
-        });
-        // Replaces url when a navigation ends.
-        this.router.events.pipe(
-            filter((event: any) => event instanceof NavigationEnd)
-        ).subscribe((data: NavigationEnd) => {
-            const url: string = (!!data.url && data.url != "/" && data.url == data.urlAfterRedirects) ? data.url : data.urlAfterRedirects;
-            this.replacePath(this.composeLocale(this.configuration.localizedRouting!), url);
-        });
+            // Parses the url to find the locale when a navigation starts.
+            this.router.events.pipe(
+                filter((event: any) => event instanceof NavigationStart)
+            ).subscribe((data: NavigationStart) => {
+                this.redirectToPath(data.url);
+            });
+            // Parses the url to find the locale on popstate event.
+            this.location.subscribe((data: PopStateEvent) => {
+                if (data && data.pop) {
+                    this.parsePath(data.url || "");
+                    this.onPopState(data.url || "");
+                }
+            });
+            // Replaces url when a navigation ends.
+            this.router.events.pipe(
+                filter((event: any) => event instanceof NavigationEnd)
+            ).subscribe((data: NavigationEnd) => {
+                const url: string = (!!data.url && data.url != "/" && data.url == data.urlAfterRedirects) ?
+                    data.url :
+                    data.urlAfterRedirects;
+                this.replacePath(this.composeLocale(this.configuration.localizedRouting!), url);
+            });
+        }
     }
 
-    private async initByStorage(): Promise<void> {
+    private async initStorage(): Promise<void> {
         // Tries to retrieve default locale & currency from the browser storage.
         if (!this.defaultLocale.value) {
             const defaultLocale: string | null = await this.storage.read("defaultLocale");
@@ -377,23 +365,9 @@ export interface ILocaleService {
         }
     }
 
-    private initLanguage(): void {
-        if (!this.defaultLocale.languageCode) {
-            const browserLanguage: string | null = this.getBrowserLanguage();
-            const matchedLanguage: Language | undefined = this.matchLanguage(browserLanguage);
-            if (!!browserLanguage && matchedLanguage) {
-                this.defaultLocale.build(browserLanguage);
-            } else if (this.configuration.language) {
-                this.defaultLocale.build(this.configuration.language);
-            }
-            this.storage.write("defaultLocale", this.defaultLocale.value);
-        }
-        this.sendLanguageEvents();
-    }
-
     private initDefaultLocale(): void {
-        if (!this.defaultLocale.value) {
-            if (this.configuration.defaultLocale) {
+        if (this.configuration.defaultLocale) {
+            if (!this.defaultLocale.value) {
                 this.defaultLocale.build(
                     this.configuration.defaultLocale.languageCode,
                     this.configuration.defaultLocale.countryCode,
@@ -403,28 +377,44 @@ export interface ILocaleService {
                 );
                 this.storage.write("defaultLocale", this.defaultLocale.value);
             }
+            this.sendDefaultLocaleEvents();
         }
-        this.sendDefaultLocaleEvents();
+    }
+
+    private initLanguage(): void {
+        if (this.configuration.language) {
+            if (!this.defaultLocale.languageCode) {
+                const browserLanguage: string | null = this.getBrowserLanguage();
+                const matchedLanguage: Language | undefined = this.matchLanguage(browserLanguage);
+                if (!!browserLanguage && matchedLanguage) {
+                    this.defaultLocale.build(browserLanguage);
+                } else {
+                    this.defaultLocale.build(this.configuration.language);
+                }
+                this.storage.write("defaultLocale", this.defaultLocale.value);
+            }
+            this.sendLanguageEvents();
+        }
     }
 
     private initCurrency(): void {
-        if (this.currencyCode == null) {
-            if (this.configuration.currency) {
+        if (this.configuration.currency) {
+            if (this.currencyCode == null) {
                 this.currencyCode = this.configuration.currency;
                 this.storage.write("currency", this.currencyCode);
             }
+            this.sendCurrencyEvents();
         }
-        this.sendCurrencyEvents();
     }
 
     private initTimezone(): void {
-        if (this.timezone == null) {
-            if (this.configuration.timezone) {
+        if (this.configuration.timezone) {
+            if (this.timezone == null) {
                 this.timezone = this.configuration.timezone;
                 this.storage.write("timezone", this.timezone);
             }
+            this.sendCurrencyEvents();
         }
-        this.sendCurrencyEvents();
     }
 
     private matchLanguage(languageCode: string | null): Language | undefined {
@@ -456,27 +446,6 @@ export interface ILocaleService {
         this.loadTranslation.next();
     }
 
-    private replacePath(locale: string, path?: string): void {
-        if (path) {
-            // Replaces the path with the locale without pushing a new state into history.
-            this.location.replaceState(this.getLocalizedPath(locale, path));
-        } else {
-            path = this.location.path();
-            // Parses the path to find the locale.
-            const segment: string | null = this.getLocalizedSegment(path);
-            if (segment != null) {
-                // Removes the locale from the path.
-                path = path.replace(segment, "/");
-            }
-            // Replaces path with the locale pushing a new state into history.
-            this.location.go(this.getLocalizedPath(locale, path));
-        }
-    }
-
-    private getLocalizedPath(locale: string, path: string): string {
-        return "/" + locale + path;
-    }
-
     /**
      * Parses path to find the locale in path.
      * @param path The path to be parsed
@@ -500,7 +469,7 @@ export interface ILocaleService {
 
     /**
      * Removes the locale from the path and navigates without pushing a new state into history.
-     * @param path Localized path.
+     * @param path Localized path
      */
     private redirectToPath(path: string): void {
         const segment: string | null = this.getLocalizedSegment(path);
@@ -509,6 +478,69 @@ export interface ILocaleService {
             // navigateByUrl keeps the query params.
             this.router.navigateByUrl(url, { skipLocationChange: true });
         }
+    }
+
+    private onPopState(path: string): void {
+        if (this.configuration.localizedRoutingOptions && this.configuration.localizedRoutingOptions.defaultRouting) {
+            const segment: string | null = this.getLocalizedSegment(path);
+            if (segment == null) {
+                if (this.configuration.defaultLocale) {
+                    this.defaultLocale.build(
+                        this.configuration.defaultLocale.languageCode,
+                        this.configuration.defaultLocale.countryCode,
+                        this.configuration.defaultLocale.scriptCode,
+                        this.configuration.defaultLocale.numberingSystem,
+                        this.configuration.defaultLocale.calendar
+                    );
+                    this.storage.write("defaultLocale", this.defaultLocale.value);
+                }
+                if (this.configuration.language) {
+                    this.defaultLocale.build(this.configuration.language);
+                    this.storage.write("defaultLocale", this.defaultLocale.value);
+                }
+            }
+        }
+        if (this.configuration.defaultLocale) {
+            this.sendDefaultLocaleEvents();
+        }
+        if (this.configuration.language) {
+            this.sendLanguageEvents();
+        }
+        this.sendTranslationEvents();
+    }
+
+    private replacePath(locale: string, path?: string): void {
+        if (path) {
+            // Replaces the path with the locale without pushing a new state into history.
+            if (!this.isDefaultRouting()) {
+                this.location.replaceState(this.getLocalizedPath(locale, path));
+            }
+        } else {
+            path = this.location.path();
+            // Parses the path to find the locale.
+            const segment: string | null = this.getLocalizedSegment(path);
+            if (segment != null) {
+                // Removes the locale from the path.
+                path = path.replace(segment, "/");
+            }
+            // Replaces path with the locale pushing a new state into history.
+            if (this.isDefaultRouting()) {
+                this.location.go(path);
+            } else {
+                this.location.go(this.getLocalizedPath(locale, path));
+            }
+        }
+    }
+
+    private getLocalizedSegment(path: string): string | null {
+        for (const lang of this.getAvailableLanguages()) {
+            const regex: RegExp = new RegExp(`(^\/${lang}\/)|(^\/${lang}$)|(^\/${lang}-.*?\/)|(^\/${lang}-.*?$)`);
+            const segments: RegExpMatchArray | null = path.match(regex);
+            if (segments != null) {
+                return segments[0];
+            }
+        }
+        return null;
     }
 
     private splitLocale(locale: string, codes: ISOCode[]): string[] {
@@ -531,15 +563,23 @@ export interface ILocaleService {
         return orderedValues;
     }
 
-    private getLocalizedSegment(path: string): string | null {
-        for (const lang of this.getAvailableLanguages()) {
-            const regex: RegExp = new RegExp(`(^\/${lang}\/)|(^\/${lang}$)|(^\/${lang}-.*?\/)|(^\/${lang}-.*?$)`);
-            const segments: RegExpMatchArray | null = path.match(regex);
-            if (segments != null) {
-                return segments[0];
-            }
+    private isDefaultRouting(): boolean {
+        if (!this.configuration.localizedRoutingOptions || !this.configuration.localizedRoutingOptions.defaultRouting) { return false; }
+        if (this.configuration.language) {
+            return this.defaultLocale.languageCode == this.configuration.language;
         }
-        return null;
+        if (this.configuration.defaultLocale) {
+            return this.defaultLocale.languageCode == this.configuration.defaultLocale.languageCode &&
+                (!!this.defaultLocale.scriptCode ?
+                    this.defaultLocale.scriptCode == this.configuration.defaultLocale.scriptCode : true) &&
+                (!!this.defaultLocale.countryCode ?
+                    this.defaultLocale.countryCode == this.configuration.defaultLocale.countryCode : true);
+        }
+        return false;
+    }
+
+    private getLocalizedPath(locale: string, path: string): string {
+        return Location.stripTrailingSlash("/" + locale + path);
     }
 
 }
