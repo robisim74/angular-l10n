@@ -1,6 +1,6 @@
 import { Injectable, Inject } from '@angular/core';
 
-import { LOCALE_CONFIG, TRANSLATION_CONFIG, LocaleConfig, TranslationConfig } from '../models/l10n-config';
+import { LOCALE_CONFIG, TRANSLATION_CONFIG, L10N_ROOT, LocaleConfig, TranslationConfig } from '../models/l10n-config';
 import { LocaleService } from '../services/locale.service';
 import { TranslationService } from '../services/translation.service';
 
@@ -12,6 +12,7 @@ import { TranslationService } from '../services/translation.service';
     constructor(
         @Inject(LOCALE_CONFIG) private localeConfig: LocaleConfig,
         @Inject(TRANSLATION_CONFIG) private translationConfig: TranslationConfig,
+        @Inject(L10N_ROOT) private l10nRoot: boolean,
         private locale: LocaleService,
         private translation: TranslationService
     ) { }
@@ -21,8 +22,10 @@ import { TranslationService } from '../services/translation.service';
      */
     public async load(): Promise<void> {
         // LocaleService initialization.
-        if (Object.keys(this.localeConfig).length > 0) {
-            await this.locale.init();
+        if (this.l10nRoot) {
+            if (Object.keys(this.localeConfig).length > 0) {
+                await this.locale.init();
+            }
         }
         // TranslationService initialization.
         if (Object.keys(this.translationConfig).length > 0) {

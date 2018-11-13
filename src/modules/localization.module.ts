@@ -2,7 +2,7 @@ import { NgModule, ModuleWithProviders } from '@angular/core';
 
 import { TranslationModule } from './translation.module';
 import { InjectorRef } from '../models/injector-ref';
-import { LOCALE_CONFIG, TRANSLATION_CONFIG, L10nConfig, Token } from '../models/l10n-config';
+import { LOCALE_CONFIG, TRANSLATION_CONFIG, L10N_ROOT, L10nConfig, Token } from '../models/l10n-config';
 import { L10nLoader } from '../services/l10n-loader';
 import { LocaleService } from '../services/locale.service';
 import { LocaleStorage, BrowserStorage } from '../services/locale-storage';
@@ -59,6 +59,7 @@ export class LocalizationModule {
                 InjectorRef,
                 { provide: LOCALE_CONFIG, useValue: l10nConfig.locale || {} },
                 { provide: TRANSLATION_CONFIG, useValue: l10nConfig.translation || {} },
+                { provide: L10N_ROOT, useValue: true },
                 LocaleService,
                 {
                     provide: LocaleStorage,
@@ -87,6 +88,7 @@ export class LocalizationModule {
             providers: [
                 InjectorRef,
                 { provide: TRANSLATION_CONFIG, useValue: l10nConfig.translation || {} },
+                { provide: L10N_ROOT, useValue: false },
                 TranslationService,
                 L10nLoader
             ]

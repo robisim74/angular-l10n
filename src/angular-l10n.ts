@@ -3,6 +3,7 @@ export { StorageStrategy, ProviderType, ISOCode, DateTimeOptions } from './model
 export {
     LOCALE_CONFIG,
     TRANSLATION_CONFIG,
+    L10N_ROOT,
     LocaleConfig,
     TranslationConfig,
     L10nConfig,

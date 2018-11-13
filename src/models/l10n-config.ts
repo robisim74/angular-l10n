@@ -6,6 +6,8 @@ export const LOCALE_CONFIG: InjectionToken<LocaleConfig> =
     new InjectionToken<LocaleConfig>('LOCALE_CONFIG');
 export const TRANSLATION_CONFIG: InjectionToken<TranslationConfig> =
     new InjectionToken<TranslationConfig>('TRANSLATION_CONFIG');
+export const L10N_ROOT: InjectionToken<boolean> =
+    new InjectionToken<boolean>('L10N_ROOT');
 
 export interface LocaleConfig {
     /**
