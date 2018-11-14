@@ -9,6 +9,8 @@ export {
     L10nConfig,
     Token
 } from './models/l10n-config';
+export { DefaultLocaleBuilder } from './models/default-locale-builder';
+export { LocalizedRouting } from './models/localized-routing';
 export { L10nLoader } from './services/l10n-loader';
 export { ILocaleService, LocaleService } from './services/locale.service';
 export { LocaleStorage, BrowserStorage } from './services/locale-storage';

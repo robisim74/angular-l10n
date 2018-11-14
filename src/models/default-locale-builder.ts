@@ -1,6 +1,8 @@
+import { Injectable } from '@angular/core';
+
 import { DefaultLocaleCodes } from './types';
 
-export class DefaultLocale implements DefaultLocaleCodes {
+@Injectable() export class DefaultLocaleBuilder implements DefaultLocaleCodes {
 
     public languageCode: string;
     public scriptCode?: string;

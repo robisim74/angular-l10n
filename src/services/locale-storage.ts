@@ -13,14 +13,14 @@ import { StorageStrategy } from '../models/types';
      * @param name 'defaultLocale', 'currency' or 'timezone'
      * @return A promise with the value of the given name
      */
-    public abstract async read(name: string): Promise<string | null>;
+    public abstract async read(name: 'defaultLocale' | 'currency' | 'timezone'): Promise<string | null>;
 
     /**
      * This method must contain the logic to write the storage.
      * @param name 'defaultLocale', 'currency' or 'timezone'
      * @param value The value for the given name
      */
-    public abstract async write(name: string, value: string): Promise<void>;
+    public abstract async write(name: 'defaultLocale' | 'currency' | 'timezone', value: string): Promise<void>;
 
 }
 
@@ -29,7 +29,7 @@ import { StorageStrategy } from '../models/types';
     private hasCookie: boolean;
     private hasStorage: boolean;
 
-    constructor( @Inject(LOCALE_CONFIG) private configuration: LocaleConfig) {
+    constructor(@Inject(LOCALE_CONFIG) private configuration: LocaleConfig) {
         this.hasCookie = typeof navigator !== "undefined" && navigator.cookieEnabled;
         this.hasStorage = typeof Storage !== "undefined";
     }

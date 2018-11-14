@@ -27,7 +27,7 @@ export interface DateTimeOptions {
 
 }
 
-export interface DefaultLocaleCodes {
+export interface LocaleCodes {
     /**
      * ISO 639 two-letter or three-letter code.
      */
@@ -42,6 +42,9 @@ export interface DefaultLocaleCodes {
      * ISO 15924 four-letter script code.
      */
     scriptCode?: string;
+}
+
+export interface DefaultLocaleCodes extends LocaleCodes {
 
     numberingSystem?: string;
     calendar?: string;
@@ -59,11 +62,32 @@ export interface Language {
     dir: string;
 }
 
+export interface LocalizedRoutingSchema extends DefaultLocaleCodes {
+
+    currency?: string;
+    timezone?: string;
+    text?: string;
+
+}
+
 export interface LocalizedRoutingOptions {
     /**
      * Disables/enables default routing for default language or locale.
      */
     defaultRouting?: boolean;
+
+    /**
+     * Provides the schema to the default behaviour of localized routing.
+     */
+    schema?: LocalizedRoutingSchema[];
+}
+
+export interface Decimal {
+
+    minusSign: string;
+    decimalSeparator: string;
+    thousandSeparator: string;
+
 }
 
 export enum StorageStrategy {
@@ -85,9 +109,18 @@ export enum ProviderType {
 
 export enum ISOCode {
 
-    Language,
-    Country,
-    Script
+    Language = 'languageCode',
+    Country = 'countryCode',
+    Script = 'scriptCode'
+
+}
+
+export enum ExtraCode {
+
+    NumberingSystem = 'numberingSystem',
+    Calendar = 'calendar',
+    Currency = 'currency',
+    Timezone = 'timezone'
 
 }
 
@@ -107,17 +140,11 @@ export enum ServiceState {
 }
 
 export enum NumberFormatStyle {
+
     Decimal,
     Percent,
     Currency
+
 }
 
 export type DateFormatterFn = (date: Date, defaultLocale: string, timezone?: string) => string;
-
-export type Decimal = {
-
-    minusSign: string;
-    decimalSeparator: string;
-    thousandSeparator: string;
-
-};
