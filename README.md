@@ -10,11 +10,12 @@ It allows, in addition to translation, to localize numbers and dates of your app
 Get the changelog by [releases](https://github.com/robisim74/angular-l10n/releases).
 
 ## Angular localization features
-- Four modules to support tree shaking:
+- More modules to support tree shaking:
     - `TranslationModule` to translate texts
     - `LocalizationModule` to translate texts, dates & numbers
     - `LocaleValidationModule` for number validation by locales
     - `CollatorModule` for sorting and filtering a list by locales
+    - `LocaleInterceptorModule` for setting the locale in _Accept-Language_ header on outgoing requests
 - Direct loading of translation data (objects)
 - Asynchronous loading of translation data (json):
     - Static
