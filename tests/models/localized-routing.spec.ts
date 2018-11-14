@@ -2,6 +2,7 @@
 import { TestBed, fakeAsync, tick } from '@angular/core/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { RouterTestingModule } from '@angular/router/testing';
+import { SpyLocation } from '@angular/common/testing';
 import { Router, Route } from '@angular/router';
 import { Location } from '@angular/common';
 
@@ -16,9 +17,9 @@ import {
 
 import { MockComponent } from '../utils';
 
-describe('LocaleService', () => {
+describe('LocalizedRouting', () => {
 
-    describe('Localized routing', () => {
+    describe('Navigation', () => {
 
         let l10nLoader: L10nLoader;
         let locale: LocaleService;
@@ -106,18 +107,6 @@ describe('LocaleService', () => {
             expect(location.path()).toBe('/en-US/mock');
         }));
 
-        it('should keep localized url when goes back after the locale has changed', fakeAsync(() => {
-            l10nLoader.load();
-            tick();
-            router.navigate(['/mock']);
-            tick();
-            locale.setDefaultLocale('it', 'IT');
-            tick();
-            location.back();
-
-            expect(location.path()).toBe('/en-US/mock');
-        }));
-
         it('should keep url query params', fakeAsync(() => {
             l10nLoader.load();
             tick();
@@ -138,7 +127,7 @@ describe('LocaleService', () => {
 
     });
 
-    describe('Localized routing with default routing', () => {
+    describe('Default routing', () => {
 
         let l10nLoader: L10nLoader;
         let locale: LocaleService;
@@ -230,16 +219,75 @@ describe('LocaleService', () => {
             expect(location.path()).toBe('/mock');
         }));
 
-        it('should not keep localized url when goes back after the locale has changed', fakeAsync(() => {
+    });
+
+    describe('Schema', () => {
+
+        let l10nLoader: L10nLoader;
+        let locale: LocaleService;
+
+        let router: Router;
+        let location: Location;
+
+        let spyLocation: SpyLocation;
+
+        const l10nConfig: L10nConfig = {
+            locale: {
+                languages: [
+                    { code: 'en', dir: 'ltr' },
+                    { code: 'it', dir: 'ltr' }
+                ],
+                defaultLocale: { languageCode: 'en', countryCode: 'US' },
+                currency: 'USD',
+                storage: StorageStrategy.Disabled,
+                localizedRouting: [ISOCode.Language, ISOCode.Country],
+                localizedRoutingOptions: {
+                    schema: [
+                        { text: 'United States', languageCode: 'en', countryCode: 'US', currency: 'USD' },
+                        { text: 'Italia', languageCode: 'it', countryCode: 'IT', currency: 'EUR' },
+                    ]
+                }
+            },
+            translation: {
+                providers: []
+            }
+        };
+
+        const routes: Route[] = [
+            { path: '', redirectTo: 'mock', pathMatch: 'full' },
+            { path: 'mock', component: MockComponent },
+            { path: 'otherMock', component: MockComponent },
+            { path: '**', redirectTo: 'mock' }
+        ];
+
+        beforeEach(() => {
+            TestBed.configureTestingModule({
+                declarations: [MockComponent],
+                imports: [
+                    HttpClientTestingModule,
+                    RouterTestingModule.withRoutes(routes),
+                    LocalizationModule.forRoot(l10nConfig)
+                ]
+            }).createComponent(MockComponent);
+
+            l10nLoader = TestBed.get(L10nLoader);
+            locale = TestBed.get(LocaleService);
+
+            router = TestBed.get(Router);
+            location = TestBed.get(Location);
+
+            spyLocation = <SpyLocation>location;
+            spyLocation.setInitialPath('/it-IT/mock');
+        });
+
+        it('should use schema values when app starts', fakeAsync(() => {
             l10nLoader.load();
             tick();
-            router.navigate(['/mock']);
+            router.initialNavigation();
             tick();
-            locale.setDefaultLocale('it', 'IT');
-            tick();
-            location.back();
 
-            expect(location.path()).toBe('/mock');
+            expect(locale.getCurrentLocale()).toBe('it-IT');
+            expect(locale.getCurrentCurrency()).toBe('EUR');
         }));
 
     });
