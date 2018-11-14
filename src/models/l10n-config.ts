@@ -55,6 +55,11 @@ export interface LocaleConfig {
      * Options for localized routing.
      */
     localizedRoutingOptions?: LocalizedRoutingOptions;
+
+    /**
+     * Provides ISO codes to locale interceptor.
+     */
+    localeInterceptor?: ISOCode[];
 }
 
 export interface TranslationConfig {

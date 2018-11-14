@@ -281,16 +281,18 @@ export interface ILocaleService {
 
     public composeLocale(codes: ISOCode[]): string {
         let locale: string = "";
-        for (const code of codes) {
-            switch (code) {
-                case ISOCode.Script:
-                    locale += "-" + this.defaultLocale.scriptCode;
-                    break;
-                case ISOCode.Country:
-                    locale += "-" + this.defaultLocale.countryCode;
-                    break;
-                default:
-                    locale += this.defaultLocale.languageCode;
+        if (this.defaultLocale.languageCode) {
+            for (const code of codes) {
+                switch (code) {
+                    case ISOCode.Script:
+                        locale += "-" + this.defaultLocale.scriptCode;
+                        break;
+                    case ISOCode.Country:
+                        locale += "-" + this.defaultLocale.countryCode;
+                        break;
+                    default:
+                        locale += this.defaultLocale.languageCode;
+                }
             }
         }
         return locale;
