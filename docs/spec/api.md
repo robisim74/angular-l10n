@@ -23,13 +23,6 @@ Method | Function
 
 ---
 
-## CollatorModule
-Method | Function
------- | --------
- | 
-
----
-
 ## L10nLoader
 Method | Function
 ------ | --------
@@ -45,6 +38,8 @@ Property | Value
 `currencyCodeChanged: EventEmitter<string>` |
 `timezoneChanged: EventEmitter<string>` |
 `loadTranslation: Subject<any>` |
+`currencyCode: string` |
+`timezone: string` |
 
 Method | Function
 ------ | --------

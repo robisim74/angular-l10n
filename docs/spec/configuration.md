@@ -124,6 +124,7 @@ Property | Value
 `cookieExpiration?: number` | If the cookie expiration is omitted, the cookie becomes a session cookie
 `localizedRouting?: ISOCode[]` | Enables localized routing with the provided ISO codes
 `localizedRoutingOptions?: LocalizedRoutingOptions` | Options for localized routing
+`localeInterceptor?: ISOCode[]` | Provides ISO codes to locale interceptor
 
 ### TranslationConfig
 Property | Value
@@ -387,9 +388,9 @@ and optionally:
 * `numbering system`: possible values include: _arab_, _arabext_, _bali_, _beng_, _deva_, _fullwide_, _gujr_, _guru_, _hanidec_, _khmr_, _knda_, _laoo_, _latn_, _limb_, _mlym_, _mong_, _mymr_, _orya_, _tamldec_, _telu_, _thai_, _tibt_
 * `calendar`: possible values include: _buddhist_, _chinese_, _coptic_, _ethioaa_, _ethiopic_, _gregory_, _hebrew_, _indian_, _islamic_, _islamicc_, _iso8601_, _japanese_, _persian_, _roc_
 
-The _currency_ contains the ISO 4217 currency codes.
+The `currency` contains the ISO 4217 currency codes.
 
-The _timezone_ contains the time zone names of the IANA time zone database.
+The `timezone` contains the time zone names of the IANA time zone database.
 
 For more information see [Intl API](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl).
 
@@ -526,12 +527,12 @@ https://example.com/en-US/home
 ```
 * If the localized link is called, the content is automatically translated.
 * When the language changes, the link is also updated.
-* Changes to localized links are pushed into browser history.
+* Changes to localized links do not change browser history.
 * It works also with SSR.
 
 To achieve this, the router configuration in your app is not rewritten (operation that would poor performance and could cause errors): the `Location` class provided by Angular is used for the replacement of the URL, in order to provide the different contents localized both to the crawlers and to the users that can refer to the localized links.
 
-> Since the link contains only the locale, if your app also uses numbering system, calendar, currency or timezone, you need to update them manually when the application is loaded.
+> Since the link contains only the locale, if your app also uses _numbering system_, _calendar_, _currency_ or _timezone_, you should set _schema_ option below.
 
 ### Using hreflang and sitemap
 You can use the Sitemap to tell Google all of the locale variants for each URL:
@@ -570,4 +571,46 @@ const l10nConfig: L10nConfig = {
     },
     ...
 };
+```
+
+#### Schema
+If your app uses _numbering system_, _calendar_, _currency_ or _timezone_, it is recommended to provide the _schema_ option, to manage the localized links and refreshes:
+```TypeScript
+const l10nConfig: L10nConfig = {
+    locale: {
+        ...
+        localizedRouting: [ISOCode.Language, /* ISOCode.Script, */ /* ISOCode.Country */],
+        localizedRoutingOptions: {
+            schema: [
+                { text: 'United States', languageCode: 'en', countryCode: 'US', currency: 'USD' },
+                { text: 'Italia', languageCode: 'it', countryCode: 'IT', currency: 'EUR' },
+            ]
+        }
+    },
+    ...
+};
+```
+
+### Setting the locale in _Accept-Language_ header on outgoing requests
+To set the locale in _Accept-Language_ header on all outgoing requests, provide the _localeInterceptor_ option during the configuration:
+```TypeScript
+const l10nConfig: L10nConfig = {
+    locale: {
+        ...
+        localeInterceptor: [ISOCode.Language, /* ISOCode.Script, */ /* ISOCode.Country */]
+    },
+    ...
+};
+```
+
+Then import the module:
+```TypeScript
+@NgModule({
+    imports: [
+        ...
+        LocaleInterceptorModule
+    ],
+    ...
+})
+export class AppModule { }
 ```
