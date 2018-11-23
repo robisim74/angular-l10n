@@ -43,8 +43,8 @@ describe('L10nLoader', () => {
             locale = TestBed.get(LocaleService);
             translation = TestBed.get(TranslationService);
 
-            spyOn(locale, 'init');
-            spyOn(translation, 'init');
+            spyOn(locale, 'init').and.returnValue(Promise.resolve());
+            spyOn(translation, 'init').and.returnValue(Promise.resolve());
         });
 
         it('should call locale & translation services', fakeAsync(() => {
@@ -93,8 +93,8 @@ describe('L10nLoader', () => {
             locale = TestBed.get(LocaleService);
             translation = TestBed.get(TranslationService);
 
-            spyOn(locale, 'init');
-            spyOn(translation, 'init');
+            spyOn(locale, 'init').and.returnValue(Promise.resolve());
+            spyOn(translation, 'init').and.returnValue(Promise.resolve());
         });
 
         it('should call only translation service', fakeAsync(() => {
