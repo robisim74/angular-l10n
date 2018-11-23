@@ -99,6 +99,11 @@ export interface TranslationConfig {
     timeout?: number;
 
     /**
+     * Asynchronous loading: rollbacks to previous default locale, currency and timezone on error.
+     */
+    rollbackOnError?: boolean;
+
+    /**
      * Sets a composed language for translations.
      */
     composedLanguage?: ISOCode[];

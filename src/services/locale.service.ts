@@ -63,15 +63,13 @@ export interface ILocaleService {
         calendar?: string
     ): void;
 
-    setCurrentNumberingSystem(numberingSystem: string): void;
-
-    setCurrentCalendar(calendar: string): void;
-
     setCurrentCurrency(currencyCode: string): void;
 
     setCurrentTimezone(zoneName: string): void;
 
     composeLocale(codes: ISOCode[]): string;
+
+    rollback(): void;
 
 }
 
@@ -89,6 +87,10 @@ export interface ILocaleService {
 
     public currencyCode: string;
     public timezone: string;
+
+    private rollbackDefaultLocale: string;
+    private rollbackCurrencyCode: string;
+    private rollbackTimezone: string;
 
     constructor(
         @Inject(LOCALE_CONFIG) private configuration: LocaleConfig,
@@ -202,10 +204,9 @@ export interface ILocaleService {
 
     public setCurrentLanguage(languageCode: string): void {
         if (this.defaultLocale.languageCode != languageCode) {
+            this.rollbackDefaultLocale = this.defaultLocale.value;
             this.defaultLocale.build(languageCode);
-            this.storage.write("defaultLocale", this.defaultLocale.value);
-            this.sendLanguageEvents();
-            this.sendTranslationEvents();
+            this.releaseLanguage();
         }
     }
 
@@ -222,60 +223,25 @@ export interface ILocaleService {
             this.defaultLocale.numberingSystem != numberingSystem ||
             this.defaultLocale.calendar != calendar) {
 
-            this.defaultLocale.build(
-                languageCode,
-                countryCode,
-                scriptCode,
-                numberingSystem,
-                calendar
-            );
-            this.storage.write("defaultLocale", this.defaultLocale.value);
-            this.sendDefaultLocaleEvents();
-            this.sendTranslationEvents();
-        }
-    }
-
-    public setCurrentNumberingSystem(numberingSystem: string): void {
-        if (this.defaultLocale.numberingSystem != numberingSystem) {
-            this.defaultLocale.build(
-                this.defaultLocale.languageCode,
-                this.defaultLocale.countryCode,
-                this.defaultLocale.scriptCode,
-                numberingSystem,
-                this.defaultLocale.calendar
-            );
-            this.storage.write("defaultLocale", this.defaultLocale.value);
-            this.sendDefaultLocaleEvents();
-        }
-    }
-
-    public setCurrentCalendar(calendar: string): void {
-        if (this.defaultLocale.calendar != calendar) {
-            this.defaultLocale.build(
-                this.defaultLocale.languageCode,
-                this.defaultLocale.countryCode,
-                this.defaultLocale.scriptCode,
-                this.defaultLocale.numberingSystem,
-                calendar
-            );
-            this.storage.write("defaultLocale", this.defaultLocale.value);
-            this.sendDefaultLocaleEvents();
+            this.rollbackDefaultLocale = this.defaultLocale.value;
+            this.defaultLocale.build(languageCode, countryCode, scriptCode, numberingSystem, calendar);
+            this.releaseDefaultLocale();
         }
     }
 
     public setCurrentCurrency(currencyCode: string): void {
         if (this.currencyCode != currencyCode) {
+            this.rollbackCurrencyCode = this.currencyCode;
             this.currencyCode = currencyCode;
-            this.storage.write("currency", this.currencyCode);
-            this.sendCurrencyEvents();
+            this.releaseCurrency();
         }
     }
 
     public setCurrentTimezone(zoneName: string): void {
         if (this.timezone != zoneName) {
+            this.rollbackTimezone = this.timezone;
             this.timezone = zoneName;
-            this.storage.write("timezone", this.timezone);
-            this.sendTimezoneEvents();
+            this.releaseTimezone();
         }
     }
 
@@ -296,6 +262,21 @@ export interface ILocaleService {
             }
         }
         return locale;
+    }
+
+    public rollback(): void {
+        if (this.rollbackDefaultLocale && this.rollbackDefaultLocale != this.defaultLocale.value) {
+            this.defaultLocale.value = this.rollbackDefaultLocale;
+            this.releaseDefaultLocale();
+        }
+        if (this.rollbackCurrencyCode && this.rollbackCurrencyCode != this.currencyCode) {
+            this.currencyCode = this.rollbackCurrencyCode;
+            this.releaseCurrency();
+        }
+        if (this.rollbackTimezone && this.rollbackTimezone != this.timezone) {
+            this.timezone = this.rollbackTimezone;
+            this.releaseTimezone();
+        }
     }
 
     private async initStorage(): Promise<void> {
@@ -332,6 +313,7 @@ export interface ILocaleService {
                 );
                 this.storage.write("defaultLocale", this.defaultLocale.value);
             }
+            this.rollbackDefaultLocale = this.defaultLocale.value;
             this.sendDefaultLocaleEvents();
         }
     }
@@ -348,6 +330,7 @@ export interface ILocaleService {
                 }
                 this.storage.write("defaultLocale", this.defaultLocale.value);
             }
+            this.rollbackDefaultLocale = this.defaultLocale.value;
             this.sendLanguageEvents();
         }
     }
@@ -358,6 +341,7 @@ export interface ILocaleService {
                 this.currencyCode = this.configuration.currency;
                 this.storage.write("currency", this.currencyCode);
             }
+            this.rollbackCurrencyCode = this.currencyCode;
             this.sendCurrencyEvents();
         }
     }
@@ -368,6 +352,7 @@ export interface ILocaleService {
                 this.timezone = this.configuration.timezone;
                 this.storage.write("timezone", this.timezone);
             }
+            this.rollbackTimezone = this.timezone;
             this.sendCurrencyEvents();
         }
     }
@@ -378,6 +363,28 @@ export interface ILocaleService {
             matchedLanguage = this.configuration.languages.find((language: Language) => language.code == languageCode);
         }
         return matchedLanguage;
+    }
+
+    private releaseLanguage(): void {
+        this.storage.write("defaultLocale", this.defaultLocale.value);
+        this.sendLanguageEvents();
+        this.sendTranslationEvents();
+    }
+
+    private releaseDefaultLocale(): void {
+        this.storage.write("defaultLocale", this.defaultLocale.value);
+        this.sendDefaultLocaleEvents();
+        this.sendTranslationEvents();
+    }
+
+    private releaseCurrency(): void {
+        this.storage.write("currency", this.currencyCode);
+        this.sendCurrencyEvents();
+    }
+
+    private releaseTimezone(): void {
+        this.storage.write("timezone", this.timezone);
+        this.sendTimezoneEvents();
     }
 
     private sendLanguageEvents(): void {
@@ -396,8 +403,10 @@ export interface ILocaleService {
         this.timezoneChanged.emit(this.timezone);
     }
 
+    /**
+     * Sends an event to all Translation services to load the translation data.
+     */
     private sendTranslationEvents(): void {
-        // This event is subscribed by TranslationService to load the translation data.
         this.loadTranslation.next();
     }
 

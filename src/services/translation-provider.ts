@@ -67,13 +67,15 @@ import { ProviderType } from '../models/types';
 
         const buffer: ReplaySubject<any> = new ReplaySubject<any>(1);
         request.subscribe(
-            (value: any) => buffer.next(value),
+            (value: any) => {
+                buffer.next(value);
+                this.cache[key] = buffer.asObservable();
+            },
             (error: any) => buffer.error(error),
             () => buffer.complete()
         );
 
         const response: Observable<any> = buffer.asObservable();
-        this.cache[key] = response;
         return response;
     }
 

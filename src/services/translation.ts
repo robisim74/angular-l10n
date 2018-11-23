@@ -23,9 +23,11 @@ import { InjectorRef } from '../models/injector-ref';
         // When the language changes, subscribes to the event & updates lang property.
         this.paramSubscriptions.push(this.translation.translationChanged().subscribe(
             (language: string) => {
-                this.lang = language;
-                // OnPush Change Detection strategy.
-                if (this.changeDetectorRef) { this.changeDetectorRef.markForCheck(); }
+                if (language) {
+                    this.lang = language;
+                    // OnPush Change Detection strategy.
+                    if (this.changeDetectorRef) { this.changeDetectorRef.markForCheck(); }
+                }
             }
         ));
     }

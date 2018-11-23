@@ -131,14 +131,6 @@ export enum LoadingMode {
 
 }
 
-export enum ServiceState {
-
-    isReady,
-    isLoading,
-    isWaiting
-
-}
-
 export enum NumberFormatStyle {
 
     Decimal,

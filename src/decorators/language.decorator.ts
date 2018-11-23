@@ -20,11 +20,13 @@ export function Language(): PropertyDecorator {
                 // When the language changes, subscribes to the event & updates language property.
                 subscription = translation.translationChanged().subscribe(
                     (language: string) => {
-                        this[propertyKey] = language;
-                        // OnPush Change Detection strategy.
-                        const cdr: string | undefined = Object.keys(this)
-                            .find((key: string) => this[key] && this[key]['markForCheck'] !== undefined);
-                        if (cdr) { this[cdr].markForCheck(); }
+                        if (language) {
+                            this[propertyKey] = language;
+                            // OnPush Change Detection strategy.
+                            const cdr: string | undefined = Object.keys(this)
+                                .find((key: string) => this[key] && this[key]['markForCheck'] !== undefined);
+                            if (cdr) { this[cdr].markForCheck(); }
+                        }
                     });
             }
 

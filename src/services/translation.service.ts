@@ -6,7 +6,7 @@ import { LocaleService } from './locale.service';
 import { TranslationProvider } from './translation-provider';
 import { TranslationHandler } from './translation-handler';
 import { IntlAPI } from './intl-api';
-import { LoadingMode, ServiceState, ProviderType } from '../models/types';
+import { LoadingMode, ProviderType } from '../models/types';
 import { mergeDeep } from '../models/merge-deep';
 
 export interface ITranslationService {
@@ -30,9 +30,10 @@ export interface ITranslationService {
  */
 @Injectable() export class TranslationService implements ITranslationService {
 
-    public translationError: Subject<any> = new Subject();
-
-    private serviceState: ServiceState;
+    /**
+     * Fired when the translation data could not been loaded. Returns the error.
+     */
+    translationError: Subject<any> = new Subject<any>();
 
     private loadingMode: LoadingMode;
 
@@ -48,9 +49,7 @@ export interface ITranslationService {
         private locale: LocaleService,
         private translationProvider: TranslationProvider,
         private translationHandler: TranslationHandler
-    ) {
-        this.serviceState = ServiceState.isWaiting;
-    }
+    ) { }
 
     public getConfiguration(): TranslationConfig {
         return this.configuration;
@@ -96,9 +95,6 @@ export interface ITranslationService {
         args: any = null,
         lang: string = this.translation.getValue()
     ): string | any {
-        // If the service is not ready, returns the keys.
-        if (this.serviceState != ServiceState.isReady) return keys;
-
         if (Array.isArray(keys)) {
             const data: any = {};
             for (const key of keys) {
@@ -106,7 +102,6 @@ export interface ITranslationService {
             }
             return data;
         }
-
         return this.translateKey(keys, args, lang);
     }
 
@@ -180,7 +175,7 @@ export interface ITranslationService {
             language = this.locale.getCurrentLanguage();
         }
 
-        if (language != null) {
+        if (language) {
             if (this.loadingMode == LoadingMode.Async) {
                 await this.getTranslation(language).toPromise();
             } else {
@@ -192,7 +187,6 @@ export interface ITranslationService {
     private getTranslation(language: string): Observable<any> {
         return Observable.create((observer: Observer<any>) => {
             this.translationData = {};
-            this.serviceState = ServiceState.isLoading;
 
             const sequencesOfOrderedTranslationData: Array<Observable<any>> = [];
             const sequencesOfTranslationData: Array<Observable<any>> = [];
@@ -223,9 +217,7 @@ export interface ITranslationService {
                     this.addData(data, language);
                 },
                 (error: any) => {
-                    // Sends an event for custom actions.
-                    this.translationError.next(error);
-                    this.releaseTranslation(language);
+                    this.handleError(error);
                     observer.next(null);
                     observer.complete();
                 },
@@ -245,13 +237,14 @@ export interface ITranslationService {
     }
 
     private releaseTranslation(language: string): void {
-        this.serviceState = ServiceState.isReady;
-        this.sendEvents(language);
+        this.translation.next(language);
     }
 
-    private sendEvents(language: string): void {
-        // Sends an event for the services.
-        this.translation.next(language);
+    private handleError(error: any): void {
+        if (this.configuration.rollbackOnError) {
+            this.locale.rollback();
+        }
+        this.translationError.next(error);
     }
 
 }
