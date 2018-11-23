@@ -22,7 +22,7 @@ import { TranslationService } from '../services/translation.service';
     /**
      * Loads l10n services.
      */
-    public async load(): Promise<void> {
+    public async load(): Promise<any> {
         // Root initialization.
         if (this.l10nRoot) {
             if (Object.keys(this.localeConfig).length > 0) {
@@ -34,7 +34,8 @@ import { TranslationService } from '../services/translation.service';
         }
         // TranslationService initialization.
         if (Object.keys(this.translationConfig).length > 0) {
-            await this.translation.init();
+            await this.translation.init()
+                .catch((error: any) => { throw error; });
         }
     }
 

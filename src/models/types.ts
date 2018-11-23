@@ -124,13 +124,6 @@ export enum ExtraCode {
 
 }
 
-export enum LoadingMode {
-
-    Direct,
-    Async
-
-}
-
 export enum NumberFormatStyle {
 
     Decimal,
