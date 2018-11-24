@@ -160,6 +160,7 @@ export interface ITranslationService {
         }
         if (language) {
             this.translationData = {};
+
             if (this.configuration.translationData) {
                 this.getTranslation(language);
             }
@@ -174,9 +175,11 @@ export interface ITranslationService {
     private getTranslation(language: string): void {
         const translations: any[] = this.configuration.translationData!.filter((value: any) => value.languageCode == language);
         for (const translation of translations) {
-            this.addData(translation.data, translation.languageCode);
+            this.addData(translation.data, language);
         }
-        this.releaseTranslation(language);
+        if (!this.configuration.providers) {
+            this.releaseTranslation(language);
+        }
     }
 
     private getAsyncTranslation(language: string): Observable<any> {

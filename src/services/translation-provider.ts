@@ -23,7 +23,7 @@ import { ProviderType } from '../models/types';
 
 @Injectable() export class HttpTranslationProvider implements TranslationProvider {
 
-    private cache: { [key: string]: Observable<any> } = {};
+    private cache: { [key: string]: Observable<any> | undefined } = {};
 
     constructor(@Inject(TRANSLATION_CONFIG) private configuration: TranslationConfig, private http: HttpClient) { }
 
@@ -61,21 +61,21 @@ import { ProviderType } from '../models/types';
     }
 
     private caching(key: string, request: Observable<any>): Observable<any> {
-        if (this.cache[key]) {
-            return this.cache[key];
-        }
+        const cached: Observable<any> | undefined = this.cache[key];
+        if (cached) return cached;
 
         const buffer: ReplaySubject<any> = new ReplaySubject<any>(1);
         request.subscribe(
-            (value: any) => {
-                buffer.next(value);
-                this.cache[key] = buffer.asObservable();
+            (value: any) => buffer.next(value),
+            (error: any) => {
+                buffer.error(error);
+                this.cache[key] = undefined;
             },
-            (error: any) => buffer.error(error),
             () => buffer.complete()
         );
 
         const response: Observable<any> = buffer.asObservable();
+        this.cache[key] = response;
         return response;
     }
 
