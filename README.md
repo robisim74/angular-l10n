@@ -23,25 +23,26 @@ Get the changelog by [releases](https://github.com/robisim74/angular-l10n/releas
     - Fallback
     - Custom
 - Caching of the http requests
+- Rollback on error
 - Composed languages: `language[-script][-country]`
 - Language, Default locale & Currency through _ISO codes_
 - Timezone through _IANA_ time zone
 - Cookies, Session & Local Storage, or custom storage (e.g. for using with _Ionic Storage_) available for storing the _ISO codes_
 - _Intl API_ to localize dates & numbers
+- Localized routing for SEO
 - Pure pipes to get the translation
 - Directives to get the translation:
     - can dynamically change parameters and expressions values as the pipes
     - can translate also attributes
     - work also with complex UI components, like _Material_ or _Ionic_
-- Methods to get the translation in component class
-- Html tags in translations
 - Parameters in translations
 - Composed keys in translations (nested objects)
+- Html tags in translations
+- Methods to get the translation in component class
 - AoT compliant
 - Lazy loading compliant
 - Server Side Rendering compliant
 - `strict` TypeScript compiler option compliant
-- Localized routing for SEO
 
 ## Angular i18n solutions
 | _Feature_ | [Angular](https://angular.io/guide/i18n) _Official_ | [ngx-translate](http://www.ngx-translate.com) _External library_ | [angular-l10n](https://robisim74.github.io/angular-l10n) _External library_ |

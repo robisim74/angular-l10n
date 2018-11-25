@@ -315,6 +315,28 @@ Using _directives_:
 
 ---
 
+## Pluralization
+The library implements pluralization through the official [i18nPluralPipe](https://angular.io/api/common/I18nPluralPipe). Just add to it the translate pipe:
+```Html
+<p>{{ messages.length | i18nPlural:messageMapping | translate:lang }}</p>
+```
+or the directive:
+```Html
+<p l10nTranslate>{{ messages.length | i18nPlural:messageMapping }}</p>
+```
+and enable `i18nPlural` option during the configuration:
+```TypeScript
+const l10nConfig: L10nConfig = {
+    ...
+    translation: {
+        ...
+        i18nPlural: true
+    }
+};
+```
+
+---
+
 ## Getting the translation in component class
 ### Messages
 To get the translation in component class, `TranslationService` has the following methods:

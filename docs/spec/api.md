@@ -26,7 +26,7 @@ Method | Function
 ## L10nLoader
 Method | Function
 ------ | --------
-`load(): Promise<void>` | Loads l10n services
+`load(): Promise<any>` | Loads l10n services
 
 ---
 
@@ -60,23 +60,22 @@ Method | Function
 `getCurrentTimezone(): string` |
 `setCurrentLanguage(languageCode: string): void` |
 `setDefaultLocale(languageCode: string, countryCode?: string, scriptCode?: string, numberingSystem?: string, calendar?: string): void` |
-`setCurrentNumberingSystem(numberingSystem: string): void` |
-`setCurrentCalendar(calendar: string): void` |
 `setCurrentCurrency(currencyCode: string): void` |
 `setCurrentTimezone(zoneName: string): void` |
 `composeLocale(codes: ISOCode[]): string` |
+`rollback(): void` |
 
 ---
 
 ## ITranslationService
 Property | Value
 -------- | -----
-`translationError: Subject<any>` |
+`translationError: Subject<any>` | Fired when the translation data could not been loaded. Returns the error
 
 Method | Function
 ------ | --------
 `getConfiguration(): TranslationConfig` |
-`init(): Promise<void>` | 
+`init(): Promise<any>` | 
 `translationChanged(): Observable<string>` | Fired when the translation data has been loaded. Returns the translation language
 `translate(keys: string | string[], args?: any, lang?: string): string | any` | Translates a key or an array of keys
 `translateAsync(keys: string | string[], args?: any, lang?: string): Observable<string | any>` |

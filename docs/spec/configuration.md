@@ -131,11 +131,12 @@ Property | Value
 -------- | -----
 `translationData?: Array<{ languageCode: string; data: any; }>` | Direct loading: adds translation data
 `providers?: any[]` |  Asynchronous loading: adds translation providers
-`caching?: Boolean` |  Asynchronous loading: disables/enables the cache for translation providers
-`version?: string` |  Asynchronous loading: adds the query parameter 'ver' to the http requests
-`timeout?: number` |  Asynchronous loading: sets a timeout in milliseconds for the http requests
+`caching?: Boolean` |  Asynchronous loading: disables/enables the cache for translation providers. Provide it only at the root level
+`version?: string` |  Asynchronous loading: adds the query parameter `ver` to the http requests. Provide it only at the root level
+`timeout?: number` |  Asynchronous loading: sets a timeout in milliseconds for the http requests. Provide it only at the root level
+`rollbackOnError?: boolean` |  Asynchronous loading: rollbacks to previous default locale, currency and timezone on error
 `composedLanguage?: ISOCode[]` |  Sets a composed language for translations
-`missingValue?: string | ((path: string) => string)` | Sets the value or the function to use for missing keys
+`missingValue?: string | ((path: string) => string)` | Sets the value or the function to use for missing keys. Provide it only at the root level
 `missingKey?: string` | Sets the key to use for missing keys
 `composedKeySeparator?: string` | Sets composed key separator
 `i18nPlural?: boolean` | Disables/enables the translation of numbers that are contained at the beginning of the keys
@@ -273,7 +274,7 @@ const l10nConfig: L10nConfig = {
 };
 ```
 
-> You can't use Direct and Asynchronous loading at the same time.
+> You can use Direct and Asynchronous loading at the same time. Translation data of Direct loading will be merged before the data of Asynchronous loading.
 
 ### Asynchronous loading through a Web API
 You can also load the data through a Web API:
@@ -289,13 +290,15 @@ const l10nConfig: L10nConfig = {
 ...
 export class AppModule {
     constructor(private translation: TranslationService) {
-        this.translation.translationError.subscribe((error: any) => console.log(error));
+        this.translation.translationError.subscribe((error) => {
+            if (error) {
+                console.log(error);
+            }
+        });
     }
 }
 ```
 `[path]{languageCode}` will be the URL used by the Http GET requests. So the example URI will be something like: `http://localhost:54703/api/values/en`.
-
-The example above also showed as you can perform a custom action if you get a bad response.
 
 ### Using fallback providers
 if you need a cascade fallback when the key is not found, you can use fallback providers:
@@ -349,6 +352,68 @@ Note that the method must return an _observable_ of an _object_. Then provide th
 ```
 
 See also [TranslationProvider](https://github.com/robisim74/angular-l10n/blob/master/src/services/translation-provider.ts) code.
+
+---
+
+## Caching
+You can enable the cache during configuration:
+```TypeScript
+const l10nConfig: L10nConfig = {
+    ...
+    translation: {
+        providers: [
+            { type: ProviderType.Static, prefix: './assets/global-' },
+            { type: ProviderType.Static, prefix: './assets/locale-' }
+        ],
+        caching: true
+    }
+};
+```
+The next time a translation file will be required, will be taken from the cache without making a new _http request_, with a significant performance improvement:
+
+* if the user returns to a language already selected;
+* if you use a global file shared across _lazy loaded modules_.
+
+---
+
+## Error handling of data loading
+To find out if an error occurred during asynchronous loading of translation data, you have the `translationError` event:
+```TypeScript
+...
+export class AppComponent {
+    constructor(private translation: TranslationService) {
+        this.translation.translationError.subscribe((error) => {
+            if (error) {
+                console.log(error);
+            }
+        });
+    }
+}
+```
+If the error occurs on the first loading of the application or a lazy loaded module, you can catch it with the `load` method: 
+```TypeScript
+export class AppModule {
+    constructor(public l10nLoader: L10nLoader) {
+        this.l10nLoader.load()
+            .catch(err => console.error(err));
+    }
+}
+```
+
+> If you use _advanced initialization_, you can catch it with the `bootstrapModule` method in `main.ts`.
+
+### Rollback on errror
+If the error occurs when the user changes language, you can enable `rollbackOnError` option during the configuration:
+```TypeScript
+const l10nConfig: L10nConfig = {
+    ...
+    translation: {
+        ...
+        rollbackOnError: true
+    }
+};
+```
+In this way, the application will keep the previous locatization without changing settings.
 
 ---
 
@@ -461,27 +526,6 @@ That's because not all browsers return `languageCode-countryCode`.
 
 ---
 
-## Caching
-You can enable the cache during configuration:
-```TypeScript
-const l10nConfig: L10nConfig = {
-    ...
-    translation: {
-        providers: [
-            { type: ProviderType.Static, prefix: './assets/global-' },
-            { type: ProviderType.Static, prefix: './assets/locale-' }
-        ],
-        caching: true
-    }
-};
-```
-The next time a translation file will be required, will be taken from the cache without making a new _http request_, with a significant performance improvement:
-
-* if the user returns to a language already selected;
-* if you use a global file shared across _lazy loaded modules_.
-
----
-
 ## Intl API
 To localize _dates and numbers_, this library uses the [Intl API](https://developer.mozilla.org/it/docs/Web/JavaScript/Reference/Global_Objects/Intl).
 
@@ -591,7 +635,7 @@ const l10nConfig: L10nConfig = {
 };
 ```
 
-### Setting the locale in _Accept-Language_ header on outgoing requests
+## Setting the locale in _Accept-Language_ header on outgoing requests
 To set the locale in _Accept-Language_ header on all outgoing requests, provide the _localeInterceptor_ option during the configuration:
 ```TypeScript
 const l10nConfig: L10nConfig = {
