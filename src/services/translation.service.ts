@@ -98,7 +98,7 @@ export interface ITranslationService {
     public translateAsync(
         keys: string | string[],
         args?: any,
-        lang: string = this.translation.getValue()
+        lang?: string
     ): Observable<string | any> {
         return Observable.create((observer: Observer<string | any>) => {
             const values: string | any = this.translate(keys, args, lang);
@@ -165,7 +165,7 @@ export interface ITranslationService {
                 this.getTranslation(language);
             }
             if (this.configuration.providers) {
-                await this.getAsyncTranslation(language)
+                await this.getTranslationAsync(language)
                     .toPromise()
                     .catch((error: any) => { throw error; });
             }
@@ -182,7 +182,7 @@ export interface ITranslationService {
         }
     }
 
-    private getAsyncTranslation(language: string): Observable<any> {
+    private getTranslationAsync(language: string): Observable<any> {
         return Observable.create((observer: Observer<any>) => {
             const sequencesOfOrderedTranslationData: Array<Observable<any>> = [];
             const sequencesOfTranslationData: Array<Observable<any>> = [];
@@ -213,7 +213,7 @@ export interface ITranslationService {
                     this.addData(data, language);
                 },
                 (error: any) => {
-                    this.handleError(error);
+                    this.handleError(error, language);
                     observer.error(error);
                     observer.complete();
                 },
@@ -236,9 +236,11 @@ export interface ITranslationService {
         this.translation.next(language);
     }
 
-    private handleError(error: any): void {
+    private handleError(error: any, language: string): void {
         if (this.configuration.rollbackOnError) {
             this.locale.rollback();
+        } else {
+            this.releaseTranslation(language);
         }
         this.translationError.next(error);
     }
