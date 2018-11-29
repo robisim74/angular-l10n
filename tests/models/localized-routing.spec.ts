@@ -3,6 +3,7 @@ import { TestBed, fakeAsync, tick } from '@angular/core/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { SpyLocation } from '@angular/common/testing';
+import { Component } from '@angular/core';
 import { Router, Route } from '@angular/router';
 import { Location } from '@angular/common';
 
@@ -15,9 +16,19 @@ import {
     ISOCode
 } from '../../src/angular-l10n';
 
-import { MockComponent } from '../utils';
+@Component({
+    template: ``
+})
+class MockComponent { }
 
 describe('LocalizedRouting', () => {
+
+    const routes: Route[] = [
+        { path: '', redirectTo: 'mock', pathMatch: 'full' },
+        { path: 'mock', component: MockComponent },
+        { path: 'otherMock', component: MockComponent },
+        { path: '**', redirectTo: 'mock' }
+    ];
 
     describe('Navigation', () => {
 
@@ -41,13 +52,6 @@ describe('LocalizedRouting', () => {
                 providers: []
             }
         };
-
-        const routes: Route[] = [
-            { path: '', redirectTo: 'mock', pathMatch: 'full' },
-            { path: 'mock', component: MockComponent },
-            { path: 'otherMock', component: MockComponent },
-            { path: '**', redirectTo: 'mock' }
-        ];
 
         beforeEach(() => {
             TestBed.configureTestingModule({
@@ -153,13 +157,6 @@ describe('LocalizedRouting', () => {
             }
         };
 
-        const routes: Route[] = [
-            { path: '', redirectTo: 'mock', pathMatch: 'full' },
-            { path: 'mock', component: MockComponent },
-            { path: 'otherMock', component: MockComponent },
-            { path: '**', redirectTo: 'mock' }
-        ];
-
         beforeEach(() => {
             TestBed.configureTestingModule({
                 declarations: [MockComponent],
@@ -252,13 +249,6 @@ describe('LocalizedRouting', () => {
                 providers: []
             }
         };
-
-        const routes: Route[] = [
-            { path: '', redirectTo: 'mock', pathMatch: 'full' },
-            { path: 'mock', component: MockComponent },
-            { path: 'otherMock', component: MockComponent },
-            { path: '**', redirectTo: 'mock' }
-        ];
 
         beforeEach(() => {
             TestBed.configureTestingModule({

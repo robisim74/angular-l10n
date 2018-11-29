@@ -2,17 +2,31 @@
 import { TestBed, ComponentFixture, fakeAsync, tick } from '@angular/core/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { By } from '@angular/platform-browser';
-import { DebugElement } from '@angular/core';
+import { DebugElement, Component } from '@angular/core';
 
 import {
     L10nConfig,
     L10nLoader,
     LocalizationModule,
     LocaleService,
-    StorageStrategy
+    StorageStrategy,
+    DefaultLocale,
+    Currency
 } from '../../src/angular-l10n';
 
-import { CurrencyComponent } from '../utils';
+@Component({
+    template: `
+        <p>{{ value | l10nCurrency:defaultLocale:currency:'symbol':'1.2-2' }}</p>
+    `
+})
+class CurrencyComponent {
+
+    @DefaultLocale() defaultLocale: string;
+    @Currency() currency: string;
+
+    value: number = 1234.5;
+
+}
 
 describe('Currency decorator', () => {
 

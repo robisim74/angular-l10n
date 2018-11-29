@@ -1,9 +1,13 @@
 /* tslint:disable */
+
 import { TestBed, fakeAsync, tick, ComponentFixture } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController, TestRequest } from '@angular/common/http/testing';
 import { RouterTestingModule } from '@angular/router/testing';
+import { Component, Injectable } from '@angular/core';
 import { Router, Route } from '@angular/router';
 import { Location } from '@angular/common';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
 
 import {
     TranslatePipe,
@@ -15,10 +19,26 @@ import {
     TranslationService,
     StorageStrategy,
     ProviderType,
-    ISOCode
+    ISOCode,
+    TranslationProvider
 } from '../../src/angular-l10n';
 
-import { MockComponent, CustomTranslationProvider } from '../utils';
+@Component({
+    template: ``
+})
+class MockComponent { }
+
+@Injectable() class CustomTranslationProvider implements TranslationProvider {
+
+    constructor(private http: HttpClient) { }
+
+    public getTranslation(language: string, args: any): Observable<any> {
+        const url: string = args.path + language + ".json";
+
+        return this.http.get(url);
+    }
+
+}
 
 describe('TranslatePipe', () => {
 

@@ -2,7 +2,7 @@
 import { TestBed, ComponentFixture, fakeAsync, async, tick } from '@angular/core/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { By } from '@angular/platform-browser';
-import { DebugElement } from '@angular/core';
+import { DebugElement, Component } from '@angular/core';
 
 import {
     L10nDecimalDirective,
@@ -15,7 +15,40 @@ import {
     StorageStrategy
 } from '../../src/angular-l10n';
 
-import { L10nNumberComponent } from '../utils';
+@Component({
+    template: `
+        <p><em>should render localized decimal number</em></p>
+        <p l10nDecimal>{{ pi }}</p>
+        <p digits="1.5-5" l10nDecimal>{{ pi }}</p>
+
+        <p><em>should render localized percent number</em></p>
+        <p l10nPercent>0.1</p>
+        <p digits="1.1-1" l10nPercent>0.1</p>
+
+        <p><em>should render localized currency</em></p>
+        <p l10nCurrency>{{ asyncValue }}</p>
+        <p [digits]="digits" currencyDisplay="symbol" l10nCurrency>{{ value }}</p>
+
+        <p><em>should render localized attributes</em></p>
+        <p l10n-title title="{{ pi }}" digits="1.5-5" l10nDecimal></p>
+        <p l10n-title title="0.1" digits="1.1-1" l10nPercent></p>
+        <p l10n-title title="{{ value }}" [digits]="digits" currencyDisplay="symbol" l10nCurrency></p>
+    `
+})
+class L10nNumberComponent {
+
+    pi: number = 3.14159;
+    asyncValue: number;
+    value: number = 1234.5;
+    digits: string = "1.2-2";
+
+    change() {
+        this.asyncValue = 1234.56;
+        this.value = 1234.56;
+        this.digits = "1.3-3";
+    }
+
+}
 
 describe('L10n number directives', () => {
 

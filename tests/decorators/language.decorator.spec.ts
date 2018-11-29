@@ -2,17 +2,41 @@
 import { TestBed, ComponentFixture, fakeAsync, tick } from '@angular/core/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { By } from '@angular/platform-browser';
-import { DebugElement } from '@angular/core';
+import { DebugElement, Component, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 
 import {
     L10nConfig,
     L10nLoader,
     TranslationModule,
     LocaleService,
-    StorageStrategy
+    StorageStrategy,
+    Language
 } from '../../src/angular-l10n';
 
-import { LanguageComponent, LanguageOnPushComponent } from '../utils';
+@Component({
+    template: `
+        <p>{{ 'Title' | translate:lang }}</p>
+    `
+})
+class LanguageComponent {
+
+    @Language() lang: string;
+
+}
+
+@Component({
+    template: `
+        <p>{{ 'Title' | translate:lang }}</p>
+    `,
+    changeDetection: ChangeDetectionStrategy.OnPush
+})
+class LanguageOnPushComponent {
+
+    @Language() lang: string;
+
+    constructor(private cdr: ChangeDetectorRef) { }
+
+}
 
 describe('Language decorator', () => {
 

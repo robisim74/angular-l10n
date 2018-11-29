@@ -2,7 +2,7 @@
 import { TestBed, ComponentFixture, fakeAsync, async, tick } from '@angular/core/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { By } from '@angular/platform-browser';
-import { DebugElement } from '@angular/core';
+import { DebugElement, Component } from '@angular/core';
 
 import {
     TranslateDirective,
@@ -13,7 +13,73 @@ import {
     StorageStrategy
 } from '../../src/angular-l10n';
 
-import { TranslateComponent } from '../utils';
+@Component({
+    template: `
+        <p><em>should render translated text & trim spaces</em></p>
+        <p l10nTranslate>
+            {{ key }}
+        </p>
+
+        <p><em>should render translated text using parameters</em></p>
+        <p [params]="{ user: username, NoMessages: messages.length }" l10nTranslate>User notifications</p>
+
+        <p><em>should search the key</em></p>
+        <p l10nTranslate>
+            <em l10nTranslate>Title</em>
+            <span>&nbsp;</span>
+            Subtitle
+        </p>
+        <p l10nTranslate>
+            Subtitle
+            <span>&nbsp;</span>
+            <em l10nTranslate>Title</em>
+        </p>
+        <a l10nTranslate>
+            <div>
+                <div></div>
+                Title
+            </div>
+        </a>
+
+        <p><em>should use value attribute</em></p>
+        <input type="button" [value]="value" l10nTranslate>
+
+        <p><em>should not use value attribute</em></p>
+        <select>
+            <option [value]="value" l10nTranslate>Select</option>
+            <option value="10">10</option>
+            <option value="20">20</option>
+            <option value="50">50</option>
+            <option value="100">100</option>
+        </select>
+
+        <p><em>should use innerHTML attribute</em></p>
+        <p [innerHTML]="innerHTML" l10nTranslate></p>
+
+        <p><em>should render translated attributes</em></p>
+        <p l10n-title title="Title" l10nTranslate></p>
+        <p l10n-title title="User notifications" [params]="{ user: username, NoMessages: messages.length }" l10nTranslate></p>
+        <p l10n-title title="Title" l10nTranslate>
+            <span [params]="{ user: username, NoMessages: messages.length }" l10nTranslate>User notifications</span>
+        </p>
+    `
+})
+class TranslateComponent {
+
+    key: string = "Title";
+    username: string = "robisim74";
+    messages: string[] = ["Test1", "Test2"];
+    value: string = "Insert";
+    innerHTML: string = "Strong title";
+
+    change() {
+        this.key = "Subtitle";
+        this.messages.push("Test3");
+        this.value = "Select";
+        this.innerHTML = "Strong subtitle";
+    }
+
+}
 
 describe('TranslateDirective', () => {
     describe('Methods', () => {

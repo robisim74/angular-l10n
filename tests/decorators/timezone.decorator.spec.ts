@@ -2,17 +2,31 @@
 import { TestBed, ComponentFixture, fakeAsync, tick } from '@angular/core/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { By } from '@angular/platform-browser';
-import { DebugElement } from '@angular/core';
+import { DebugElement, Component } from '@angular/core';
 
 import {
     L10nConfig,
     L10nLoader,
     LocalizationModule,
     LocaleService,
-    StorageStrategy
+    StorageStrategy,
+    DefaultLocale,
+    Timezone
 } from '../../src/angular-l10n';
 
-import { TimezoneComponent } from '../utils';
+@Component({
+    template: `
+        <p>{{ day | l10nDate:defaultLocale:'medium':timezone }}</p>
+    `
+})
+class TimezoneComponent {
+
+    @DefaultLocale() defaultLocale: string;
+    @Timezone() timezone: string;
+
+    day: Date = new Date(Date.UTC(2017, 7, 29, 21, 41, 0));
+
+}
 
 describe('Timezone decorator', () => {
 
