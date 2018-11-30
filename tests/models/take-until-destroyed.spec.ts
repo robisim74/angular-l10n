@@ -27,11 +27,7 @@ class MockComponent implements OnDestroy {
 @Component({
     template: ``,
 })
-class MockExtensionComponent extends Translation implements OnDestroy {
-
-    ngOnDestroy(): void { }
-
-}
+class MockExtensionComponent extends Translation { }
 
 describe('takeUntilDestroyed', () => {
 

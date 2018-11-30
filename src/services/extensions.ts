@@ -1,4 +1,4 @@
-import { Injectable, ChangeDetectorRef } from '@angular/core';
+import { Injectable, OnDestroy, ChangeDetectorRef } from '@angular/core';
 
 import { LocaleService } from './locale.service';
 import { TranslationService } from './translation.service';
@@ -8,7 +8,7 @@ import { InjectorRef } from '../models/injector-ref';
 /**
  * Provides 'lang' to the translate pipe.
  */
-@Injectable() export class Translation {
+@Injectable() export class Translation implements OnDestroy {
 
     public lang: string;
 
@@ -28,8 +28,10 @@ import { InjectorRef } from '../models/injector-ref';
         );
     }
 
+    ngOnDestroy(): void { }
+
     /**
-     * @deprecated Add the ngOnDestroy method even if empty.
+     * @deprecated You can remove it.
      */
     protected cancelParamSubscriptions(): void { }
 
