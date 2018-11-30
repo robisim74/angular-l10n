@@ -40,6 +40,30 @@ class LanguageOnPushComponent {
 
 describe('Language decorator', () => {
 
+    const translationEN: any = {
+        "Title": "Angular localization"
+    };
+    const translationIT: any = {
+        "Title": "Localizzazione in Angular"
+    };
+
+    const l10nConfig: L10nConfig = {
+        locale: {
+            languages: [
+                { code: 'en', dir: 'ltr' },
+                { code: 'it', dir: 'ltr' }
+            ],
+            language: 'en',
+            storage: StorageStrategy.Disabled
+        },
+        translation: {
+            translationData: [
+                { languageCode: 'en', data: translationEN },
+                { languageCode: 'it', data: translationIT }
+            ]
+        }
+    };
+
     describe('Methods', () => {
 
         let comp: LanguageComponent;
@@ -49,30 +73,6 @@ describe('Language decorator', () => {
 
         let l10nLoader: L10nLoader;
         let locale: LocaleService;
-
-        const translationEN: any = {
-            "Title": "Angular localization"
-        };
-        const translationIT: any = {
-            "Title": "Localizzazione in Angular"
-        };
-
-        const l10nConfig: L10nConfig = {
-            locale: {
-                languages: [
-                    { code: 'en', dir: 'ltr' },
-                    { code: 'it', dir: 'ltr' }
-                ],
-                language: 'en',
-                storage: StorageStrategy.Disabled
-            },
-            translation: {
-                translationData: [
-                    { languageCode: 'en', data: translationEN },
-                    { languageCode: 'it', data: translationIT }
-                ]
-            }
-        };
 
         beforeEach(() => {
             fixture = TestBed.configureTestingModule({
@@ -118,30 +118,6 @@ describe('Language decorator', () => {
 
         let l10nLoader: L10nLoader;
         let locale: LocaleService;
-
-        const translationEN: any = {
-            "Title": "Angular localization"
-        };
-        const translationIT: any = {
-            "Title": "Localizzazione in Angular"
-        };
-
-        const l10nConfig: L10nConfig = {
-            locale: {
-                languages: [
-                    { code: 'en', dir: 'ltr' },
-                    { code: 'it', dir: 'ltr' }
-                ],
-                language: 'en',
-                storage: StorageStrategy.Disabled
-            },
-            translation: {
-                translationData: [
-                    { languageCode: 'en', data: translationEN },
-                    { languageCode: 'it', data: translationIT }
-                ]
-            }
-        };
 
         beforeEach(() => {
             fixture = TestBed.configureTestingModule({
@@ -196,30 +172,6 @@ describe('Language decorator', () => {
 
         let l10nLoader: L10nLoader;
         let locale: LocaleService;
-
-        const translationEN: any = {
-            "Title": "Angular localization"
-        };
-        const translationIT: any = {
-            "Title": "Localizzazione in Angular"
-        };
-
-        const l10nConfig: L10nConfig = {
-            locale: {
-                languages: [
-                    { code: 'en', dir: 'ltr' },
-                    { code: 'it', dir: 'ltr' }
-                ],
-                language: 'en',
-                storage: StorageStrategy.Disabled
-            },
-            translation: {
-                translationData: [
-                    { languageCode: 'en', data: translationEN },
-                    { languageCode: 'it', data: translationIT }
-                ]
-            }
-        };
 
         beforeEach(() => {
             fixture = TestBed.configureTestingModule({

@@ -28,6 +28,13 @@ class DefaultLocaleComponent {
 
 describe('DefaultLocale decorator', () => {
 
+    const l10nConfig: L10nConfig = {
+        locale: {
+            defaultLocale: { languageCode: 'en', countryCode: 'US' },
+            storage: StorageStrategy.Disabled
+        }
+    };
+
     describe('Methods', () => {
 
         let comp: DefaultLocaleComponent;
@@ -37,13 +44,6 @@ describe('DefaultLocale decorator', () => {
 
         let l10nLoader: L10nLoader;
         let locale: LocaleService;
-
-        const l10nConfig: L10nConfig = {
-            locale: {
-                defaultLocale: { languageCode: 'en', countryCode: 'US' },
-                storage: StorageStrategy.Disabled
-            }
-        };
 
         beforeEach(() => {
             fixture = TestBed.configureTestingModule({
@@ -87,13 +87,6 @@ describe('DefaultLocale decorator', () => {
 
         let l10nLoader: L10nLoader;
         let locale: LocaleService;
-
-        const l10nConfig: L10nConfig = {
-            locale: {
-                defaultLocale: { languageCode: 'en', countryCode: 'US' },
-                storage: StorageStrategy.Disabled
-            }
-        };
 
         beforeEach(() => {
             fixture = TestBed.configureTestingModule({

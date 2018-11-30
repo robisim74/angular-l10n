@@ -81,6 +81,42 @@ class TranslateComponent {
 
 }
 
+const translationEN: any = {
+    "Title": "Angular localization",
+    "Subtitle": "It's a small world",
+    "User notifications": "{{ user }}, you have {{ NoMessages }} new messages",
+    "Insert": "Insert",
+    "Select": "Select",
+    "Strong title": "<strong>Angular localization</strong>",
+    "Strong subtitle": "<strong>It's a small world</strong>"
+};
+const translationIT: any = {
+    "Title": "Localizzazione in Angular",
+    "Subtitle": "Il mondo è piccolo",
+    "User notifications": "{{ user }}, tu hai {{ NoMessages }} nuovi messaggi",
+    "Insert": "Inserisci",
+    "Select": "Seleziona",
+    "Strong title": "<strong>Localizzazione in Angular</strong>",
+    "Strong subtitle": "<strong>Il mondo è piccolo</strong>"
+};
+
+const l10nConfig: L10nConfig = {
+    locale: {
+        languages: [
+            { code: 'en', dir: 'ltr' },
+            { code: 'it', dir: 'ltr' }
+        ],
+        language: 'en',
+        storage: StorageStrategy.Disabled
+    },
+    translation: {
+        translationData: [
+            { languageCode: 'en', data: translationEN },
+            { languageCode: 'it', data: translationIT }
+        ]
+    }
+};
+
 describe('TranslateDirective', () => {
     describe('Methods', () => {
 
@@ -91,42 +127,6 @@ describe('TranslateDirective', () => {
 
         let l10nLoader: L10nLoader;
         let locale: LocaleService;
-
-        const translationEN: any = {
-            "Title": "Angular localization",
-            "Subtitle": "It's a small world",
-            "User notifications": "{{ user }}, you have {{ NoMessages }} new messages",
-            "Insert": "Insert",
-            "Select": "Select",
-            "Strong title": "<strong>Angular localization</strong>",
-            "Strong subtitle": "<strong>It's a small world</strong>"
-        };
-        const translationIT: any = {
-            "Title": "Localizzazione in Angular",
-            "Subtitle": "Il mondo è piccolo",
-            "User notifications": "{{ user }}, tu hai {{ NoMessages }} nuovi messaggi",
-            "Insert": "Inserisci",
-            "Select": "Seleziona",
-            "Strong title": "<strong>Localizzazione in Angular</strong>",
-            "Strong subtitle": "<strong>Il mondo è piccolo</strong>"
-        };
-
-        const l10nConfig: L10nConfig = {
-            locale: {
-                languages: [
-                    { code: 'en', dir: 'ltr' },
-                    { code: 'it', dir: 'ltr' }
-                ],
-                language: 'en',
-                storage: StorageStrategy.Disabled
-            },
-            translation: {
-                translationData: [
-                    { languageCode: 'en', data: translationEN },
-                    { languageCode: 'it', data: translationIT }
-                ]
-            }
-        };
 
         beforeEach(() => {
             fixture = TestBed.configureTestingModule({
@@ -205,42 +205,6 @@ describe('TranslateDirective', () => {
         let l10nLoader: L10nLoader;
         let locale: LocaleService;
 
-        const translationEN: any = {
-            "Title": "Angular localization",
-            "Subtitle": "It's a small world",
-            "User notifications": "{{ user }}, you have {{ NoMessages }} new messages",
-            "Insert": "Insert",
-            "Select": "Select",
-            "Strong title": "<strong>Angular localization</strong>",
-            "Strong subtitle": "<strong>It's a small world</strong>"
-        };
-        const translationIT: any = {
-            "Title": "Localizzazione in Angular",
-            "Subtitle": "Il mondo è piccolo",
-            "User notifications": "{{ user }}, tu hai {{ NoMessages }} nuovi messaggi",
-            "Insert": "Inserisci",
-            "Select": "Seleziona",
-            "Strong title": "<strong>Localizzazione in Angular</strong>",
-            "Strong subtitle": "<strong>Il mondo è piccolo</strong>"
-        };
-
-        const l10nConfig: L10nConfig = {
-            locale: {
-                languages: [
-                    { code: 'en', dir: 'ltr' },
-                    { code: 'it', dir: 'ltr' }
-                ],
-                language: 'en',
-                storage: StorageStrategy.Disabled
-            },
-            translation: {
-                translationData: [
-                    { languageCode: 'en', data: translationEN },
-                    { languageCode: 'it', data: translationIT }
-                ]
-            }
-        };
-
         beforeEach(() => {
             fixture = TestBed.configureTestingModule({
                 declarations: [TranslateComponent],
@@ -308,42 +272,6 @@ describe('TranslateDirective', () => {
 
         let l10nLoader: L10nLoader;
         let locale: LocaleService;
-
-        const translationEN: any = {
-            "Title": "Angular localization",
-            "Subtitle": "It's a small world",
-            "User notifications": "{{ user }}, you have {{ NoMessages }} new messages",
-            "Insert": "Insert",
-            "Select": "Select",
-            "Strong title": "<strong>Angular localization</strong>",
-            "Strong subtitle": "<strong>It's a small world</strong>"
-        };
-        const translationIT: any = {
-            "Title": "Localizzazione in Angular",
-            "Subtitle": "Il mondo è piccolo",
-            "User notifications": "{{ user }}, tu hai {{ NoMessages }} nuovi messaggi",
-            "Insert": "Inserisci",
-            "Select": "Seleziona",
-            "Strong title": "<strong>Localizzazione in Angular</strong>",
-            "Strong subtitle": "<strong>Il mondo è piccolo</strong>"
-        };
-
-        const l10nConfig: L10nConfig = {
-            locale: {
-                languages: [
-                    { code: 'en', dir: 'ltr' },
-                    { code: 'it', dir: 'ltr' }
-                ],
-                language: 'en',
-                storage: StorageStrategy.Disabled
-            },
-            translation: {
-                translationData: [
-                    { languageCode: 'en', data: translationEN },
-                    { languageCode: 'it', data: translationIT }
-                ]
-            }
-        };
 
         beforeEach(() => {
             fixture = TestBed.configureTestingModule({

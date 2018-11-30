@@ -30,6 +30,14 @@ class TimezoneComponent {
 
 describe('Timezone decorator', () => {
 
+    const l10nConfig: L10nConfig = {
+        locale: {
+            defaultLocale: { languageCode: 'en', countryCode: 'US' },
+            timezone: 'America/Los_Angeles',
+            storage: StorageStrategy.Disabled
+        }
+    };
+
     describe('Methods', () => {
 
         let comp: TimezoneComponent;
@@ -39,14 +47,6 @@ describe('Timezone decorator', () => {
 
         let l10nLoader: L10nLoader;
         let locale: LocaleService;
-
-        const l10nConfig: L10nConfig = {
-            locale: {
-                defaultLocale: { languageCode: 'en', countryCode: 'US' },
-                timezone: 'America/Los_Angeles',
-                storage: StorageStrategy.Disabled
-            }
-        };
 
         beforeEach(() => {
             fixture = TestBed.configureTestingModule({
@@ -90,14 +90,6 @@ describe('Timezone decorator', () => {
 
         let l10nLoader: L10nLoader;
         let locale: LocaleService;
-
-        const l10nConfig: L10nConfig = {
-            locale: {
-                defaultLocale: { languageCode: 'en', countryCode: 'US' },
-                timezone: 'America/Los_Angeles',
-                storage: StorageStrategy.Disabled
-            }
-        };
 
         beforeEach(() => {
             fixture = TestBed.configureTestingModule({

@@ -31,6 +31,13 @@ class L10nDateComponent {
 
 describe('L10nDateDirective', () => {
 
+    const l10nConfig: L10nConfig = {
+        locale: {
+            defaultLocale: { languageCode: 'en', countryCode: 'US' },
+            storage: StorageStrategy.Disabled
+        }
+    };
+
     describe('Methods', () => {
 
         let comp: L10nDateComponent;
@@ -40,13 +47,6 @@ describe('L10nDateDirective', () => {
 
         let l10nLoader: L10nLoader;
         let locale: LocaleService;
-
-        const l10nConfig: L10nConfig = {
-            locale: {
-                defaultLocale: { languageCode: 'en', countryCode: 'US' },
-                storage: StorageStrategy.Disabled
-            }
-        };
 
         beforeEach(() => {
             fixture = TestBed.configureTestingModule({
@@ -95,13 +95,6 @@ describe('L10nDateDirective', () => {
 
         let l10nLoader: L10nLoader;
         let locale: LocaleService;
-
-        const l10nConfig: L10nConfig = {
-            locale: {
-                defaultLocale: { languageCode: 'en', countryCode: 'US' },
-                storage: StorageStrategy.Disabled
-            }
-        };
 
         beforeEach(() => {
             fixture = TestBed.configureTestingModule({

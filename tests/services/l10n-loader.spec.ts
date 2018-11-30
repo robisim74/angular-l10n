@@ -14,21 +14,21 @@ import {
 
 describe('L10nLoader', () => {
 
+    const l10nConfig: L10nConfig = {
+        locale: {
+            language: 'en',
+            storage: StorageStrategy.Disabled
+        },
+        translation: {
+            providers: []
+        }
+    };
+
     describe('Root', () => {
 
         let l10nLoader: L10nLoader;
         let locale: LocaleService;
         let translation: TranslationService;
-
-        const l10nConfig: L10nConfig = {
-            locale: {
-                language: 'en',
-                storage: StorageStrategy.Disabled
-            },
-            translation: {
-                providers: []
-            }
-        };
 
         beforeEach(() => {
             TestBed.configureTestingModule({
@@ -62,16 +62,6 @@ describe('L10nLoader', () => {
         let l10nLoader: L10nLoader;
         let locale: LocaleService;
         let translation: TranslationService;
-
-        const l10nConfig: L10nConfig = {
-            locale: {
-                language: 'en',
-                storage: StorageStrategy.Disabled
-            },
-            translation: {
-                providers: []
-            }
-        };
 
         beforeEach(() => {
             TestBed.configureTestingModule({

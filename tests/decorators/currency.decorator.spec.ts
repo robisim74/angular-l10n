@@ -30,6 +30,14 @@ class CurrencyComponent {
 
 describe('Currency decorator', () => {
 
+    const l10nConfig: L10nConfig = {
+        locale: {
+            defaultLocale: { languageCode: 'en', countryCode: 'US' },
+            currency: 'USD',
+            storage: StorageStrategy.Disabled
+        }
+    };
+
     describe('Methods', () => {
 
         let comp: CurrencyComponent;
@@ -39,14 +47,6 @@ describe('Currency decorator', () => {
 
         let l10nLoader: L10nLoader;
         let locale: LocaleService;
-
-        const l10nConfig: L10nConfig = {
-            locale: {
-                defaultLocale: { languageCode: 'en', countryCode: 'US' },
-                currency: 'USD',
-                storage: StorageStrategy.Disabled
-            }
-        };
 
         beforeEach(() => {
             fixture = TestBed.configureTestingModule({
@@ -90,14 +90,6 @@ describe('Currency decorator', () => {
 
         let l10nLoader: L10nLoader;
         let locale: LocaleService;
-
-        const l10nConfig: L10nConfig = {
-            locale: {
-                defaultLocale: { languageCode: 'en', countryCode: 'US' },
-                currency: 'USD',
-                storage: StorageStrategy.Disabled
-            }
-        };
 
         beforeEach(() => {
             fixture = TestBed.configureTestingModule({

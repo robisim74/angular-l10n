@@ -52,6 +52,14 @@ class L10nNumberComponent {
 
 describe('L10n number directives', () => {
 
+    const l10nConfig: L10nConfig = {
+        locale: {
+            defaultLocale: { languageCode: 'en', countryCode: 'US' },
+            currency: 'USD',
+            storage: StorageStrategy.Disabled
+        }
+    };
+
     describe('Methods', () => {
 
         let comp: L10nNumberComponent;
@@ -65,14 +73,6 @@ describe('L10n number directives', () => {
 
         let l10nLoader: L10nLoader;
         let locale: LocaleService;
-
-        const l10nConfig: L10nConfig = {
-            locale: {
-                defaultLocale: { languageCode: 'en', countryCode: 'US' },
-                currency: 'USD',
-                storage: StorageStrategy.Disabled
-            }
-        };
 
         beforeEach(() => {
             fixture = TestBed.configureTestingModule({
@@ -145,14 +145,6 @@ describe('L10n number directives', () => {
 
         let l10nLoader: L10nLoader;
         let locale: LocaleService;
-
-        const l10nConfig: L10nConfig = {
-            locale: {
-                defaultLocale: { languageCode: 'en', countryCode: 'US' },
-                currency: 'USD',
-                storage: StorageStrategy.Disabled
-            }
-        };
 
         beforeEach(() => {
             fixture = TestBed.configureTestingModule({
@@ -246,14 +238,6 @@ describe('L10n number directives', () => {
 
         let l10nLoader: L10nLoader;
         let locale: LocaleService;
-
-        const l10nConfig: L10nConfig = {
-            locale: {
-                defaultLocale: { languageCode: 'en', countryCode: 'US' },
-                currency: 'USD',
-                storage: StorageStrategy.Disabled
-            }
-        };
 
         beforeEach(() => {
             fixture = TestBed.configureTestingModule({
