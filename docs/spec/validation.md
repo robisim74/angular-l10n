@@ -49,7 +49,42 @@ onSubmit(value: string): void {
 ```
 
 ### FormBuilder
-If you use `FormBuilder`, you have to invoke the following function:
+If you use `FormBuilder`, you have to use the following validator function:
 ```TypeScript
 l10nValidateNumber(digits: string, MIN_VALUE?: number, MAX_VALUE?: number): Function
 ```
+
+Defining a form:
+```TypeScript
+this.myForm = this.fb.group({
+  weight: ['', [ l10nValidateNumber('1.0-1') ]],
+  height: ['', [ l10nValidateNumber('1.0-0', 50, 260) ]],
+});
+```
+
+On submit parse the values using `parseNumber`:
+```TypeScript
+const formvalues = this.myForm.value;
+
+weight = this.localeValidation.parseNumber(formvalues.weight);
+height = this.localeValidation.parseNumber(formvalues.height);
+```
+
+When first populating form data you have to format numbers before calling `patchValue`:
+```TypeScript
+// class attributes
+@DefaultLocale() defaultLocale: string;
+decimalPipe: L10nDecimalPipe = new L10nDecimalPipe();
+
+[...]
+
+// after loading data
+const formvalues = {
+  weight: this.decimalPipe.transform(weight, this.defaultLocale, '1.0-1'),
+  height: this.decimalPipe.transform(height, this.defaultLocale, '1.0-0'),
+}
+this.myForm.patchValue(formvalues);
+
+```
+
+
