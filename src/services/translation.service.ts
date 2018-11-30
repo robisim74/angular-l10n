@@ -130,7 +130,9 @@ export interface ITranslationService {
                     key = sequences.shift()!;
                 }
             }
-            value = translation[key] || translation[this.configuration.missingKey || ""];
+            value = typeof translation[key] === "undefined" ?
+                translation[this.configuration.missingKey || ""] :
+                translation[key];
         }
         return this.translationHandler.parseValue(path, key, value, args, lang);
     }

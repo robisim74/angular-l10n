@@ -672,6 +672,16 @@ describe('TranslatePipe', () => {
             expect(pipe.transform('Subtitle', locale.getCurrentLanguage())).toEqual("No key");
         }));
 
+        it('should not return the missing value', fakeAsync(() => {
+            l10nLoader.load();
+            tick();
+
+            const req1: TestRequest = httpMock.expectOne('./assets/locale-en.json');
+            req1.flush({ "Title": "" });
+
+            expect(pipe.transform('Title', locale.getCurrentLanguage())).toEqual("");
+        }));
+
         it('should translate i18n plural', fakeAsync(() => {
             l10nLoader.load();
             tick();
