@@ -1,122 +1,12 @@
 import { IntlAPI } from '../services/intl-api';
-import { NumberFormatStyle, DateFormatterFn, DateTimeOptions, DigitsOptions } from './types';
-
-function intlDateTimeFormat(
-    date: Date,
-    defaultLocale: string,
-    options: Intl.DateTimeFormatOptions,
-    timezone?: string
-): string {
-    options.timeZone = IntlAPI.hasTimezone() ? timezone : 'UTC';
-
-    return new Intl.DateTimeFormat(defaultLocale, options).format(date).replace(/[\u200e\u200f]/g, "");
-}
-
-function datePartFactory(options: Intl.DateTimeFormatOptions): DateFormatterFn {
-    const dateFactory: (date: Date, defaultLocale: string, timezone?: string) => string =
-        (date: Date, defaultLocale: string, timezone?: string): string =>
-            intlDateTimeFormat(date, defaultLocale, options, timezone);
-    return dateFactory;
-}
-
-function combine(options: Intl.DateTimeFormatOptions[]): Intl.DateTimeFormatOptions {
-    const reducedOptions: Intl.DateTimeFormatOptions = options.reduce(
-        (merged: Intl.DateTimeFormatOptions, opt: Intl.DateTimeFormatOptions) => ({ ...merged, ...opt }), {}
-    );
-    return reducedOptions;
-}
-
-function digitCondition(prop: string, len: number): Intl.DateTimeFormatOptions {
-    const result: { [k: string]: string } = {};
-    result[prop] = len === 2 ? '2-digit' : 'numeric';
-    return result;
-}
-
-function nameCondition(prop: string, len: number): Intl.DateTimeFormatOptions {
-    const result: { [k: string]: string } = {};
-    if (len < 4) {
-        result[prop] = len > 1 ? 'short' : 'narrow';
-    } else {
-        result[prop] = 'long';
-    }
-    return result;
-}
-
-const FORMAT_ALIASES: { [format: string]: DateFormatterFn } = {
-    'short': datePartFactory(
-        combine([
-            digitCondition('year', 1),
-            digitCondition('month', 1),
-            digitCondition('day', 1),
-            digitCondition('hour', 1),
-            digitCondition('minute', 1)
-        ])),
-    'medium': datePartFactory(
-        combine([
-            digitCondition('year', 1),
-            nameCondition('month', 3),
-            digitCondition('day', 1),
-            digitCondition('hour', 1),
-            digitCondition('minute', 1),
-            digitCondition('second', 1),
-        ])),
-    'shortDate': datePartFactory(
-        combine([
-            digitCondition('year', 1),
-            digitCondition('month', 1),
-            digitCondition('day', 1)
-        ])),
-    'mediumDate': datePartFactory(
-        combine([
-            digitCondition('year', 1),
-            nameCondition('month', 3),
-            digitCondition('day', 1)
-        ])),
-    'longDate': datePartFactory(
-        combine([
-            digitCondition('year', 1),
-            nameCondition('month', 4),
-            digitCondition('day', 1)
-        ])),
-    'fullDate': datePartFactory(
-        combine([
-            digitCondition('year', 1),
-            nameCondition('month', 4),
-            nameCondition('weekday', 4),
-            digitCondition('day', 1)
-        ])),
-    'shortTime': datePartFactory(
-        combine([
-            digitCondition('hour', 1),
-            digitCondition('minute', 1)
-        ])),
-    'mediumTime': datePartFactory(
-        combine([
-            digitCondition('hour', 1),
-            digitCondition('second', 1),
-            digitCondition('minute', 1)
-        ]))
-};
-
-const ISO8601_DATE_REGEX: RegExp = /^(\d{4})-?(\d\d)-?(\d\d)(?:T(\d\d)(?::?(\d\d)(?::?(\d\d)(?:\.(\d+))?)?)?(Z|([+-])(\d\d):?(\d\d))?)?$/;
-
-export function formatDigitsAliases(digits: string): DigitsOptions {
-    const digitsOptions: DigitsOptions = {};
-    const NUMBER_FORMAT_REGEXP: RegExp = /^(\d+)?\.((\d+)(\-(\d+))?)?$/;
-    const parts: RegExpMatchArray | null = digits.match(NUMBER_FORMAT_REGEXP);
-    if (parts != null) {
-        if (parts[1] != null) {
-            digitsOptions.minimumIntegerDigits = parseInt(parts[1]);
-        }
-        if (parts[3] != null) {
-            digitsOptions.minimumFractionDigits = parseInt(parts[3]);
-        }
-        if (parts[5] != null) {
-            digitsOptions.maximumFractionDigits = parseInt(parts[5]);
-        }
-    }
-    return digitsOptions;
-}
+import {
+    NumberFormatStyle,
+    DigitsOptions,
+    DateTimeOptions,
+    ISO8601_DATE_REGEX,
+    FORMAT_ALIASES,
+    NUMBER_FORMAT_REGEXP
+} from './types';
 
 export class IntlFormatter {
 
@@ -172,7 +62,7 @@ export class IntlFormatter {
     ): string {
         let options: Intl.NumberFormatOptions = {};
         if (typeof digits === "string") {
-            options = formatDigitsAliases(digits);
+            options = formatDigitsAliases(digits) || {};
         } else if (digits) {
             options = digits;
         }
@@ -181,18 +71,20 @@ export class IntlFormatter {
             options.currency = currency;
             options.currencyDisplay = currencyDisplay;
         }
+
         return new Intl.NumberFormat(defaultLocale, options).format(num);
     }
 
     private static dateTimeFormatter(date: Date, defaultLocale: string, format: string | DateTimeOptions, timezone?: string): string {
         let options: Intl.DateTimeFormatOptions = {};
         if (typeof format === "string") {
-            const formatAliases: DateFormatterFn = FORMAT_ALIASES[format];
-            if (formatAliases) return formatAliases(date, defaultLocale, timezone);
+            options = FORMAT_ALIASES[format] || {};
         } else {
             options = format;
         }
-        return intlDateTimeFormat(date, defaultLocale, options, timezone);
+        options.timeZone = IntlAPI.hasTimezone() ? timezone : 'UTC';
+
+        return new Intl.DateTimeFormat(defaultLocale, options).format(date).replace(/[\u200e\u200f]/g, "");
     }
 
     private static isDate(value: any): value is Date {
@@ -218,4 +110,21 @@ export class IntlFormatter {
         return date;
     }
 
+}
+
+export function formatDigitsAliases(digits: string): DigitsOptions {
+    const digitsOptions: DigitsOptions = {};
+    const parts: RegExpMatchArray | null = digits.match(NUMBER_FORMAT_REGEXP);
+    if (parts != null) {
+        if (parts[1] != null) {
+            digitsOptions.minimumIntegerDigits = parseInt(parts[1]);
+        }
+        if (parts[3] != null) {
+            digitsOptions.minimumFractionDigits = parseInt(parts[3]);
+        }
+        if (parts[5] != null) {
+            digitsOptions.maximumFractionDigits = parseInt(parts[5]);
+        }
+    }
+    return digitsOptions;
 }

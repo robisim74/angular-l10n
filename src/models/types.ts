@@ -143,4 +143,20 @@ export enum NumberFormatStyle {
 
 }
 
-export type DateFormatterFn = (date: Date, defaultLocale: string, timezone?: string) => string;
+export const NUMBER_FORMAT_REGEXP: RegExp = /^(\d+)?\.((\d+)(\-(\d+))?)?$/;
+
+export const ISO8601_DATE_REGEX: RegExp =
+    /^(\d{4})-?(\d\d)-?(\d\d)(?:T(\d\d)(?::?(\d\d)(?::?(\d\d)(?:\.(\d+))?)?)?(Z|([+-])(\d\d):?(\d\d))?)?$/;
+
+export const FORMAT_ALIASES: { [format: string]: DateTimeOptions } = {
+    'short': { year: 'numeric', month: 'numeric', day: 'numeric', hour: 'numeric', minute: 'numeric' },
+    'medium': { year: 'numeric', month: 'short', day: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric' },
+    'long': { year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric' },
+    'full': { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric' },
+    'shortDate': { year: 'numeric', month: 'numeric', day: 'numeric' },
+    'mediumDate': { year: 'numeric', month: 'short', day: 'numeric' },
+    'longDate': { year: 'numeric', month: 'long', day: 'numeric' },
+    'fullDate': { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' },
+    'shortTime': { hour: 'numeric', minute: 'numeric' },
+    'mediumTime': { hour: 'numeric', minute: 'numeric', second: 'numeric' }
+};

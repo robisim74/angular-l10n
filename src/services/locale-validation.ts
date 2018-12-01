@@ -25,9 +25,8 @@ export interface ILocaleValidation {
      * If the string cannot be converted to a number, returns NaN.
      */
     public parseNumber(s: string, defaultLocale?: string): number | null {
-        if (s == "" || s == null) {
-            return null;
-        }
+        if (s == "" || s == null) return null;
+
         let value: string = "";
 
         const decimalCode: Decimal = this.getDecimalCode(defaultLocale);

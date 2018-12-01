@@ -4,6 +4,7 @@ function isObject(item: any): boolean {
 
 export function mergeDeep(target: any, source: any): any {
     const output: any = Object.assign({}, target);
+
     if (isObject(target) && isObject(source)) {
         Object.keys(source).forEach((key: any) => {
             if (isObject(source[key])) {

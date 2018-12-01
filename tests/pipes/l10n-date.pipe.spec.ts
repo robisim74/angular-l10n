@@ -61,7 +61,19 @@ describe('L10nDatePipe', () => {
         expect(pipe.transform(date, locale.getDefaultLocale(), options)).toEqual('martedì 29 agosto 2017');
     });
 
-    it('should localize a date using timezone', () => {
+    it('should localize a date with timezone using format aliases', () => {
+        const date: Date = new Date('2017-08-29T21:41:00Z');
+
+        locale.setDefaultLocale('en', 'US');
+        locale.setCurrentTimezone('America/Los_Angeles');
+        expect(pipe.transform(date, locale.getDefaultLocale(), 'full', locale.getCurrentTimezone())).toEqual('Tuesday, August 29, 2017, 2:41:00 PM');
+
+        locale.setDefaultLocale('it', 'IT');
+        locale.setCurrentTimezone('Europe/Rome');
+        expect(pipe.transform(date, locale.getDefaultLocale(), 'full', locale.getCurrentTimezone())).toEqual('martedì 29 agosto 2017, 23:41:00');
+    });
+
+    it('should localize a date with timezone using custom format', () => {
         const date: Date = new Date(Date.UTC(2017, 7, 29, 21, 41, 0));
         const options: DateTimeOptions = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric' };
 

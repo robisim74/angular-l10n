@@ -42,13 +42,10 @@ export interface ICollator {
         extension?: string,
         options: any = { usage: 'sort', sensitivity: 'variant' }
     ): number {
-        if (!IntlAPI.hasCollator()) {
-            return 0;
-        }
+        if (!IntlAPI.hasCollator()) return 0;
 
         const value1: string = this.translation.translate(key1);
         const value2: string = this.translation.translate(key2);
-
         const locale: string = this.addExtension(
             this.locale.getCurrentLocale(),
             extension
@@ -72,14 +69,11 @@ export interface ICollator {
         extension?: string,
         options: any = { usage: 'sort', sensitivity: 'variant' }
     ): any[] {
-        if (!list || !keyName || !IntlAPI.hasCollator()) {
-            return list;
-        }
+        if (!list || !keyName || !IntlAPI.hasCollator()) return list;
 
         list.sort((key1: any, key2: any) => {
             return this.compare(key1[keyName], key2[keyName], extension, options);
         });
-
         if (order == "desc") {
             list.reverse();
         }
@@ -109,8 +103,7 @@ export interface ICollator {
     }
 
     /**
-     * Matches a string into an array of objects or an array of arrays
-     * according to the current language.
+     * Matches a string into an array of objects or an array of arrays according to the current language.
      * @param s The string to search
      * @param list The array in which to search
      * @param keyNames An array that contains the columns to look for
@@ -123,13 +116,10 @@ export interface ICollator {
         keyNames: any[],
         options: any = { usage: 'search' }
     ): any[] {
-        if (!list || !keyNames || s == "" || s == null || !IntlAPI.hasCollator()) {
-            return list;
-        }
+        if (!list || !keyNames || s == "" || s == null || !IntlAPI.hasCollator()) return list;
 
         const locale: string = this.locale.getCurrentLocale();
         const collator: Intl.Collator = new Intl.Collator(locale, options);
-
         const matches: any[] = list.filter((key: any) => {
             let found: boolean = false;
             for (let i: number = 0; i < keyNames.length; i++) {
@@ -144,8 +134,7 @@ export interface ICollator {
     }
 
     /**
-     * Matches asynchronously a string into an array of objects or an array of arrays
-     * according to the current language.
+     * Matches asynchronously a string into an array of objects or an array of arrays according to the current language.
      * @param s The string to search
      * @param list The array in which to search
      * @param keyNames An array that contains the columns to look for

@@ -46,11 +46,7 @@ export interface ILocaleService {
 
     getCurrentCurrency(): string;
 
-    getCurrencySymbol(
-        currencyDisplay?: 'code' | 'symbol' | 'name',
-        defaultLocale?: string,
-        currency?: string
-    ): string;
+    getCurrencySymbol(currencyDisplay?: string, defaultLocale?: string, currency?: string): string;
 
     getCurrentTimezone(): string;
 
@@ -291,7 +287,7 @@ export interface ILocaleService {
      * @param value The number to be formatted
      * @param defaultLocale The default locale to use. Default is the current locale
      * @param currency The currency to use. Default is the current currency
-     * @param currencyDisplay The format for the currency. Possible values are 'symbol', 'code', 'name'. Default is 'symbol'
+     * @param currencyDisplay The format for the currency. Possible values are 'code', 'symbol', 'name'. Default is 'symbol'
      * @param digits An alias or a DigitsOptions object
      */
     public formatCurrency(
