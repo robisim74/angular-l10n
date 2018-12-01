@@ -2,6 +2,7 @@ import { Pipe, PipeTransform } from '@angular/core';
 
 import { LocaleService } from '../services/locale.service';
 import { DateTimeOptions } from '../models/types';
+import { Logger } from '../models/logger';
 
 @Pipe({
     name: 'l10nDate',
@@ -18,6 +19,7 @@ export class L10nDatePipe implements PipeTransform {
         timezone?: string
     ): string | null {
         if (value == null || value === "" || value !== value) return null;
+        if (typeof defaultLocale === "undefined") Logger.log('L10nDatePipe', 'missingDefaultLocale');
 
         return this.locale.formatDate(value, format, defaultLocale, timezone);
     }

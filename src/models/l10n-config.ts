@@ -1,6 +1,6 @@
 import { InjectionToken } from '@angular/core';
 
-import { Type, DefaultLocaleCodes, Language, StorageStrategy, ISOCode, LocalizedRoutingOptions } from './types';
+import { Type, DefaultLocaleCodes, Language, StorageStrategy, ISOCode, LocalizedRoutingOptions, LogLevel } from './types';
 
 export const LOCALE_CONFIG: InjectionToken<LocaleConfig> =
     new InjectionToken<LocaleConfig>('LOCALE_CONFIG');
@@ -60,6 +60,11 @@ export interface LocaleConfig {
      * Provides ISO codes to locale interceptor.
      */
     localeInterceptor?: ISOCode[];
+
+    /**
+     * Defines the log level. Turn off in production.
+     */
+    logger?: LogLevel;
 }
 
 export interface TranslationConfig {

@@ -1,4 +1,4 @@
-import { Injectable, Injector } from '@angular/core';
+import { Injectable, Injector, InjectionToken } from '@angular/core';
 
 import { Type } from './types';
 
@@ -7,10 +7,10 @@ import { Type } from './types';
  */
 @Injectable() export class InjectorRef {
 
-    private static injector: any = null;
+    private static injector: Injector;
 
-    public static get<T>(token: Type<T>): T {
-        return InjectorRef.injector.get(token);
+    public static get<T>(token: Type<T> | InjectionToken<T>, notFoundValue?: T): T {
+        return InjectorRef.injector.get(token, notFoundValue);
     }
 
     constructor(private injector: Injector) {

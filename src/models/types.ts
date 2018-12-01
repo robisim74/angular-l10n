@@ -93,14 +93,6 @@ export interface LocalizedRoutingOptions {
     schema?: LocalizedRoutingSchema[];
 }
 
-export interface Decimal {
-
-    minusSign: string;
-    decimalSeparator: string;
-    thousandSeparator: string;
-
-}
-
 export enum StorageStrategy {
 
     Session,
@@ -135,11 +127,28 @@ export enum ExtraCode {
 
 }
 
+export enum LogLevel {
+
+    Error,
+    Warn,
+    log,
+    Off
+
+}
+
 export enum NumberFormatStyle {
 
     Decimal,
     Percent,
     Currency
+
+}
+
+export interface Decimal {
+
+    minusSign: string;
+    decimalSeparator: string;
+    thousandSeparator: string;
 
 }
 
@@ -159,4 +168,14 @@ export const FORMAT_ALIASES: { [format: string]: DateTimeOptions } = {
     'fullDate': { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' },
     'shortTime': { hour: 'numeric', minute: 'numeric' },
     'mediumTime': { hour: 'numeric', minute: 'numeric', second: 'numeric' }
+};
+
+export const LOG_MESSAGES: { [message: string]: string } = {
+    'missingLocale': 'missing locale configuration',
+    'missingTranslation': 'missing translation configuration',
+    'missingOnInit': 'missing ngOnInit method: required by AoT compilation',
+    'missingOnDestroy': 'missing ngOnDestroy method to cancel subscriptions: required by AoT compilation',
+    'missingLang': 'missing lang parameter',
+    'missingDefaultLocale': 'missing defaultLocale parameter',
+    'missingCurrency': 'missing currency parameter'
 };

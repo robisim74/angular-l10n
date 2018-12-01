@@ -2,6 +2,7 @@ import { Injectable, Inject } from '@angular/core';
 
 import { LOCALE_CONFIG, TRANSLATION_CONFIG, L10N_ROOT, LocaleConfig, TranslationConfig } from '../models/l10n-config';
 import { LocalizedRouting } from '../models/localized-routing';
+import { Logger } from '../models/logger';
 import { LocaleService } from '../services/locale.service';
 import { TranslationService } from '../services/translation.service';
 
@@ -30,12 +31,16 @@ import { TranslationService } from '../services/translation.service';
                 this.localizedRouting.init();
                 // LocaleService initialization.
                 await this.locale.init();
+            } else {
+                Logger.log('L10nLoader', 'missingLocale');
             }
         }
         // TranslationService initialization.
         if (Object.keys(this.translationConfig).length > 0) {
             await this.translation.init()
                 .catch((error: any) => { throw error; });
+        } else {
+            Logger.log('L10nLoader', 'missingTranslation');
         }
     }
 

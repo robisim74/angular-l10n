@@ -1,7 +1,6 @@
 /* tslint:disable */
 import { TestBed, fakeAsync, tick } from '@angular/core/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { RouterTestingModule } from '@angular/router/testing';
 
 import {
     L10nConfig,
@@ -34,7 +33,6 @@ describe('L10nLoader', () => {
             TestBed.configureTestingModule({
                 imports: [
                     HttpClientTestingModule,
-                    RouterTestingModule,
                     TranslationModule.forRoot(l10nConfig)
                 ]
             });
@@ -67,14 +65,12 @@ describe('L10nLoader', () => {
             TestBed.configureTestingModule({
                 imports: [
                     HttpClientTestingModule,
-                    RouterTestingModule,
                     TranslationModule.forRoot(l10nConfig)
                 ]
             });
             TestBed.configureTestingModule({
                 imports: [
                     HttpClientTestingModule,
-                    RouterTestingModule,
                     TranslationModule.forChild(l10nConfig)
                 ]
             });

@@ -2,6 +2,7 @@ import { Pipe, PipeTransform } from '@angular/core';
 
 import { LocaleService } from '../services/locale.service';
 import { DigitsOptions } from '../models/types';
+import { Logger } from '../models/logger';
 
 @Pipe({
     name: 'l10nDecimal',
@@ -13,6 +14,7 @@ export class L10nDecimalPipe implements PipeTransform {
 
     public transform(value: any, defaultLocale: string, digits?: string | DigitsOptions): string | null {
         if (value == null) return null;
+        if (typeof defaultLocale === "undefined") Logger.log('L10nDecimalPipe', 'missingDefaultLocale');
 
         return this.locale.formatDecimal(value, digits, defaultLocale);
     }
@@ -29,6 +31,7 @@ export class L10nPercentPipe implements PipeTransform {
 
     public transform(value: any, defaultLocale: string, digits?: string | DigitsOptions): string | null {
         if (value == null) return null;
+        if (typeof defaultLocale === "undefined") Logger.log('L10nPercentPipe', 'missingDefaultLocale');
 
         return this.locale.formatPercent(value, digits, defaultLocale);
     }
@@ -51,6 +54,8 @@ export class L10nCurrencyPipe implements PipeTransform {
         digits?: string | DigitsOptions
     ): string | null {
         if (value == null) return null;
+        if (typeof defaultLocale === "undefined") Logger.log('L10nCurrencyPipe', 'missingDefaultLocale');
+        if (typeof currency === "undefined") Logger.log('L10nCurrencyPipe', 'missingCurrency');
 
         return this.locale.formatCurrency(value, digits, currencyDisplay, defaultLocale, currency);
     }

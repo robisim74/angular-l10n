@@ -2,6 +2,7 @@ import { LocaleService } from '../services/locale.service';
 import { PropertyDecorator } from '../models/types';
 import { takeUntilDestroyed } from '../models/take-until-destroyed';
 import { InjectorRef } from '../models/injector-ref';
+import { Logger } from '../models/logger';
 
 /**
  * Property decorator for components to provide the parameter to the l10nDate pipe.
@@ -26,6 +27,8 @@ export function Timezone(): PropertyDecorator {
 
             if (targetNgOnInit) {
                 targetNgOnInit.apply(this);
+            } else {
+                Logger.log(this.constructor ? this.constructor.name : 'Timezone decorator', 'missingOnInit');
             }
         }
         target.ngOnInit = ngOnInit;

@@ -61,6 +61,7 @@
             }
         ],
         "no-conditional-assignment": false,
+        "no-console": false,
         "no-inferrable-types": false,
         "no-non-null-assertion": false,
         "object-literal-key-quotes": [
