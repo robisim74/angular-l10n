@@ -50,12 +50,7 @@ export class L10nDateDirective extends BaseDirective {
     }
 
     protected getValues(keys: string | string[]): string | any {
-        return this.locale.formatDate(
-            keys,
-            this.locale.getDefaultLocale(),
-            this.format || this.defaultFormat,
-            this.locale.getCurrentTimezone()
-        );
+        return this.locale.formatDate(keys, this.format || this.defaultFormat);
     }
 
 }

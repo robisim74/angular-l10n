@@ -44,7 +44,7 @@ export class L10nDecimalDirective extends BaseDirective {
     }
 
     protected getValues(keys: string | string[]): string | any {
-        return this.locale.formatDecimal(keys, this.locale.getDefaultLocale(), this.digits);
+        return this.locale.formatDecimal(keys, this.digits);
     }
 
 }
@@ -89,7 +89,7 @@ export class L10nPercentDirective extends BaseDirective {
     }
 
     protected getValues(keys: string | string[]): string | any {
-        return this.locale.formatPercent(keys, this.locale.getDefaultLocale(), this.digits);
+        return this.locale.formatPercent(keys, this.digits);
     }
 
 }
@@ -139,13 +139,7 @@ export class L10nCurrencyDirective extends BaseDirective {
     }
 
     protected getValues(keys: string | string[]): string | any {
-        return this.locale.formatCurrency(
-            keys,
-            this.locale.getDefaultLocale(),
-            this.locale.getCurrentCurrency(),
-            this.currencyDisplay,
-            this.digits
-        );
+        return this.locale.formatCurrency(keys, this.digits, this.currencyDisplay);
     }
 
 }

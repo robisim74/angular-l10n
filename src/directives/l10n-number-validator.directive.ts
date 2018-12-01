@@ -2,7 +2,6 @@ import { Directive, forwardRef, OnInit, Input } from '@angular/core';
 import { NG_VALIDATORS, AbstractControl, Validator, ValidatorFn, ValidationErrors } from '@angular/forms';
 
 import { LocaleValidation } from '../services/locale-validation';
-import { LocaleService } from '../services/locale.service';
 import { InjectorRef } from '../models/injector-ref';
 import { DigitsOptions } from '../models/types';
 
@@ -19,23 +18,15 @@ export function l10nValidateNumber(
     MAX_VALUE: number = Number.MAX_VALUE
 ): ValidatorFn {
     const localeValidation: LocaleValidation = InjectorRef.get(LocaleValidation);
-    const locale: LocaleService = InjectorRef.get(LocaleService);
-    let defaultLocale: string;
-    let NUMBER_REGEXP: RegExp;
 
     return (c: AbstractControl): ValidationErrors | null => {
-        if (c.value == null || c.value == "") return null;
+        if (c.value == "" || c.value == null) return null;
 
-        if (defaultLocale != locale.getDefaultLocale()) {
-            NUMBER_REGEXP = localeValidation.getRegExp(digits);
-            defaultLocale = locale.getDefaultLocale();
-        }
-
-        if (NUMBER_REGEXP.test(c.value)) {
-            const parsedValue: number | null = localeValidation.parseNumber(c.value);
-            if (parsedValue != null && parsedValue < MIN_VALUE) {
+        const parsedValue: number | null = localeValidation.parseNumber(c.value, digits);
+        if (parsedValue != null && !isNaN(parsedValue)) {
+            if (parsedValue < MIN_VALUE) {
                 return { minValue: true };
-            } else if (parsedValue != null && parsedValue > MAX_VALUE) {
+            } else if (parsedValue > MAX_VALUE) {
                 return { maxValue: true };
             }
             return null; // The number is valid.

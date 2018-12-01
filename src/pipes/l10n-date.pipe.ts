@@ -19,7 +19,7 @@ export class L10nDatePipe implements PipeTransform {
     ): string | null {
         if (value == null || value === "" || value !== value) return null;
 
-        return this.locale.formatDate(value, defaultLocale, format, timezone);
+        return this.locale.formatDate(value, format, defaultLocale, timezone);
     }
 
 }

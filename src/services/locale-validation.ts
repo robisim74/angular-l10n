@@ -7,9 +7,7 @@ import { Decimal, DigitsOptions } from '../models/types';
 
 export interface ILocaleValidation {
 
-    parseNumber(s: string, defaultLocale?: string): number | null;
-
-    getRegExp(digits: string): RegExp;
+    parseNumber(s: string, digits?: string | DigitsOptions, defaultLocale?: string): number | null;
 
 }
 
@@ -18,51 +16,59 @@ export interface ILocaleValidation {
  */
 @Injectable() export class LocaleValidation implements ILocaleValidation {
 
+    private decimalCode: Decimal;
+
+    private numberCodes: string[];
+
     constructor(private locale: LocaleService) { }
 
     /**
      * Converts a string to a number according to default locale.
      * If the string cannot be converted to a number, returns NaN.
+     * @param s The string to be parsed
+     * @param digits An alias or a DigitsOptions object
+     * @param defaultLocale The default locale to use. Default is the current locale
      */
-    public parseNumber(s: string, defaultLocale?: string): number | null {
+    public parseNumber(s: string, digits?: string | DigitsOptions, defaultLocale?: string): number | null {
         if (s == "" || s == null) return null;
 
-        let value: string = "";
+        this.decimalCode = this.getDecimalCode(defaultLocale);
+        this.numberCodes = this.getNumberCodes(defaultLocale);
 
-        const decimalCode: Decimal = this.getDecimalCode(defaultLocale);
-        const numberCodes: string[] = this.getNumberCodes(defaultLocale);
+        if (digits) {
+            const NUMBER_REGEXP: RegExp = this.getRegExp(digits);
+            if (!NUMBER_REGEXP.test(s)) return NaN;
+        }
+
+        let value: string = "";
 
         const characters: string[] = s.split("");
         for (const char of characters) {
             const charCode: string = this.toUnicode(char);
-            const index: number = numberCodes.indexOf(charCode);
+            const index: number = this.numberCodes.indexOf(charCode);
             if (index != -1) {
                 value += index;
-            } else if (charCode == decimalCode.minusSign) {
+            } else if (charCode == this.decimalCode.minusSign) {
                 value += "-";
-            } else if (charCode == decimalCode.decimalSeparator) {
+            } else if (charCode == this.decimalCode.decimalSeparator) {
                 value += ".";
-            } else if (charCode == decimalCode.thousandSeparator) {
+            } else if (charCode == this.decimalCode.thousandSeparator) {
                 continue;
             } else { return NaN; }
         }
         return parseFloat(value);
     }
 
-    public getRegExp(digits: string | DigitsOptions): RegExp {
+    private getRegExp(digits: string | DigitsOptions): RegExp {
         const digitsOptions: DigitsOptions = typeof digits === "string" ? formatDigitsAliases(digits) : digits;
         const minInt: number = digitsOptions.minimumIntegerDigits || 1;
         const minFraction: number = digitsOptions.minimumFractionDigits || 0;
         const maxFraction: number = digitsOptions.maximumFractionDigits || 3;
-
-        const decimalCode: Decimal = this.getDecimalCode();
-        const numberCodes: string[] = this.getNumberCodes();
-
-        const minusSign: string = decimalCode.minusSign;
-        const zero: string = numberCodes[0];
-        const decimalSeparator: string = decimalCode.decimalSeparator;
-        const thousandSeparator: string = decimalCode.thousandSeparator;
-        const nine: string = numberCodes[9];
+        const minusSign: string = this.decimalCode.minusSign;
+        const zero: string = this.numberCodes[0];
+        const decimalSeparator: string = this.decimalCode.decimalSeparator;
+        const thousandSeparator: string = this.decimalCode.thousandSeparator;
+        const nine: string = this.numberCodes[9];
 
         // Pattern for 1.0-2 digits: /^-?[0-9]{1,}(\.[0-9]{0,2})?$/
         // Unicode pattern = "^\u002d?[\u0030-\u0039]{1,}(\\u002e[\u0030-\u0039]{0,2})?$"
@@ -104,7 +110,7 @@ export interface ILocaleValidation {
 
         if (IntlAPI.hasNumberFormat()) {
             const value: number = -1000.9; // Reference value.
-            const localeValue: string = this.locale.formatDecimal(value, defaultLocale);
+            const localeValue: string = this.locale.formatDecimal(value, '1.1-1', defaultLocale);
 
             const unicodeChars: string[] = [];
             for (let i: number = 0; i <= 7; i++) {
@@ -122,7 +128,7 @@ export interface ILocaleValidation {
                     decimalSeparator: unicodeChars[7],
                     thousandSeparator: unicodeChars[3]
                 };
-            } else if (unicodeChars[0] == this.toUnicode(this.locale.formatDecimal(1, defaultLocale))) {
+            } else if (unicodeChars[0] == this.toUnicode(this.locale.formatDecimal(1, '1.0-0', defaultLocale))) {
                 decimalCode = {
                     minusSign: unicodeChars[7],
                     decimalSeparator: unicodeChars[5],
@@ -154,7 +160,7 @@ export interface ILocaleValidation {
 
         if (IntlAPI.hasNumberFormat()) {
             for (let num: number = 0; num <= 9; num++) {
-                numberCodes[num] = this.toUnicode(this.locale.formatDecimal(num, defaultLocale));
+                numberCodes[num] = this.toUnicode(this.locale.formatDecimal(num, '1.0-0', defaultLocale));
             }
         }
         return numberCodes;

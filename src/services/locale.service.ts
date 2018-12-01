@@ -64,18 +64,18 @@ export interface ILocaleService {
 
     setCurrentTimezone(zoneName: string): void;
 
-    formatDate(value: any, defaultLocale?: string, format?: string | DateTimeOptions, timezone?: string): string;
+    formatDate(value: any, format?: string | DateTimeOptions, defaultLocale?: string, timezone?: string): string;
 
-    formatDecimal(value: any, defaultLocale?: string, digits?: string | DigitsOptions): string;
+    formatDecimal(value: any, digits?: string | DigitsOptions, defaultLocale?: string): string;
 
-    formatPercent(value: any, defaultLocale?: string, digits?: string | DigitsOptions): string;
+    formatPercent(value: any, digits?: string | DigitsOptions, defaultLocale?: string): string;
 
     formatCurrency(
         value: any,
-        defaultLocale?: string,
-        currency?: string,
+        digits?: string | DigitsOptions,
         currencyDisplay?: string,
-        digits?: string | DigitsOptions
+        defaultLocale?: string,
+        currency?: string
     ): string;
 
     composeLocale(codes: ISOCode[]): string;
@@ -191,8 +191,8 @@ export interface ILocaleService {
     ): string {
         let currencySymbol: string = this.currencyCode;
         if (IntlAPI.hasNumberFormat()) {
-            const localeZero: string = this.formatDecimal(0, defaultLocale);
-            const localeValue: string = this.formatCurrency(0, defaultLocale, currency, currencyDisplay, '1.0-0');
+            const localeZero: string = this.formatDecimal(0, '1.0-0', defaultLocale);
+            const localeValue: string = this.formatCurrency(0, '1.0-0', currencyDisplay, defaultLocale, currency);
             currencySymbol = localeValue.replace(localeZero, "");
             currencySymbol = currencySymbol.trim();
         }
@@ -249,14 +249,14 @@ export interface ILocaleService {
     /**
      * Formats a date according to default locale.
      * @param value A Date, a number (milliseconds since UTC epoch) or an ISO string
-     * @param defaultLocale The default locale to use. Default is the current locale
      * @param format An alias or a DateTimeOptions object. Default is 'mediumDate'
+     * @param defaultLocale The default locale to use. Default is the current locale
      * @param timezone The time zone name. Default is the current timezone
      */
     public formatDate(
         value: any,
-        defaultLocale: string = this.defaultLocale.value,
         format: string | DateTimeOptions = 'mediumDate',
+        defaultLocale: string = this.defaultLocale.value,
         timezone: string = this.timezone
     ): string {
         return IntlFormatter.formatDate(value, defaultLocale, format, timezone);
@@ -265,37 +265,37 @@ export interface ILocaleService {
     /**
      * Formats a decimal number according to default locale.
      * @param value The number to be formatted
-     * @param defaultLocale The default locale to use. Default is the current locale
      * @param digits An alias or a DigitsOptions object
+     * @param defaultLocale The default locale to use. Default is the current locale
      */
-    public formatDecimal(value: any, defaultLocale: string = this.defaultLocale.value, digits?: string | DigitsOptions): string {
+    public formatDecimal(value: any, digits?: string | DigitsOptions, defaultLocale: string = this.defaultLocale.value): string {
         return IntlFormatter.formatNumber(value, defaultLocale, NumberFormatStyle.Decimal, digits);
     }
 
     /**
      * Formats a number as a percentage according to default locale.
      * @param value The number to be formatted
-     * @param defaultLocale The default locale to use. Default is the current locale
      * @param digits An alias or a DigitsOptions object
+     * @param defaultLocale The default locale to use. Default is the current locale
      */
-    public formatPercent(value: any, defaultLocale: string = this.defaultLocale.value, digits?: string | DigitsOptions): string {
+    public formatPercent(value: any, digits?: string | DigitsOptions, defaultLocale: string = this.defaultLocale.value): string {
         return IntlFormatter.formatNumber(value, defaultLocale, NumberFormatStyle.Percent, digits);
     }
 
     /**
      * Formats a number as a currency according to default locale.
      * @param value The number to be formatted
+     * @param digits An alias or a DigitsOptions object
+     * @param currencyDisplay The format for the currency. Possible values are 'code', 'symbol', 'name'. Default is 'symbol'
      * @param defaultLocale The default locale to use. Default is the current locale
      * @param currency The currency to use. Default is the current currency
-     * @param currencyDisplay The format for the currency. Possible values are 'code', 'symbol', 'name'. Default is 'symbol'
-     * @param digits An alias or a DigitsOptions object
      */
     public formatCurrency(
         value: any,
-        defaultLocale: string = this.defaultLocale.value,
-        currency: string = this.currencyCode,
+        digits?: string | DigitsOptions,
         currencyDisplay: 'code' | 'symbol' | 'name' = 'symbol',
-        digits?: string | DigitsOptions
+        defaultLocale: string = this.defaultLocale.value,
+        currency: string = this.currencyCode
     ): string {
         return IntlFormatter.formatNumber(
             value,

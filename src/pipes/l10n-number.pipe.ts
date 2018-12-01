@@ -14,7 +14,7 @@ export class L10nDecimalPipe implements PipeTransform {
     public transform(value: any, defaultLocale: string, digits?: string | DigitsOptions): string | null {
         if (value == null) return null;
 
-        return this.locale.formatDecimal(value, defaultLocale, digits);
+        return this.locale.formatDecimal(value, digits, defaultLocale);
     }
 
 }
@@ -30,7 +30,7 @@ export class L10nPercentPipe implements PipeTransform {
     public transform(value: any, defaultLocale: string, digits?: string | DigitsOptions): string | null {
         if (value == null) return null;
 
-        return this.locale.formatPercent(value, defaultLocale, digits);
+        return this.locale.formatPercent(value, digits, defaultLocale);
     }
 
 }
@@ -52,7 +52,7 @@ export class L10nCurrencyPipe implements PipeTransform {
     ): string | null {
         if (value == null) return null;
 
-        return this.locale.formatCurrency(value, defaultLocale, currency, currencyDisplay, digits);
+        return this.locale.formatCurrency(value, digits, currencyDisplay, defaultLocale, currency);
     }
 
 }
