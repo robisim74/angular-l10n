@@ -30,11 +30,6 @@ import { InjectorRef } from '../models/injector-ref';
 
     ngOnDestroy(): void { }
 
-    /**
-     * @deprecated You can remove it.
-     */
-    protected cancelParamSubscriptions(): void { }
-
 }
 
 /**

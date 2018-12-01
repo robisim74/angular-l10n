@@ -1,9 +1,9 @@
-import { Directive, forwardRef, Input, OnInit } from '@angular/core';
+import { Directive, forwardRef, OnInit, Input } from '@angular/core';
 import { NG_VALIDATORS, AbstractControl, Validator, ValidatorFn, ValidationErrors } from '@angular/forms';
 
-import { LocaleService } from '../services/locale.service';
 import { LocaleValidation } from '../services/locale-validation';
 import { InjectorRef } from '../models/injector-ref';
+import { DigitsOptions } from '../models/types';
 
 /**
  * Function that takes a control and returns either null when it’s valid, or an error object if it’s not.
@@ -13,25 +13,16 @@ import { InjectorRef } from '../models/injector-ref';
  * @return An error object: 'format', 'minValue' or 'maxValue'; null in case the value is valid
  */
 export function l10nValidateNumber(
-    digits: string,
+    digits: string | DigitsOptions,
     MIN_VALUE: number = Number.MIN_VALUE,
     MAX_VALUE: number = Number.MAX_VALUE
 ): ValidatorFn {
-
-    const locale: LocaleService = InjectorRef.get(LocaleService);
     const localeValidation: LocaleValidation = InjectorRef.get(LocaleValidation);
-
-    let defaultLocale: string;
-    let NUMBER_REGEXP: RegExp;
 
     return (c: AbstractControl): ValidationErrors | null => {
         if (c.value == null || c.value == "") return null;
 
-        if (defaultLocale != locale.getDefaultLocale()) {
-            NUMBER_REGEXP = localeValidation.getRegExp(digits);
-            defaultLocale = locale.getDefaultLocale();
-        }
-
+        const NUMBER_REGEXP: RegExp = localeValidation.getRegExp(digits);
         if (NUMBER_REGEXP.test(c.value)) {
             const parsedValue: number | null = localeValidation.parseNumber(c.value);
             if (parsedValue != null && parsedValue < MIN_VALUE) {
@@ -44,7 +35,6 @@ export function l10nValidateNumber(
             return { format: true };
         }
     };
-
 }
 
 @Directive({
@@ -55,14 +45,11 @@ export function l10nValidateNumber(
 })
 export class L10nNumberValidatorDirective implements Validator, OnInit {
 
-    /**
-     * Format: {minIntegerDigits}.{minFractionDigits}-{maxFractionDigits}.
-     */
-    @Input() set l10nValidateNumber(digits: string) {
+    @Input() set l10nValidateNumber(digits: string | DigitsOptions) {
         this.digits = digits;
     }
 
-    @Input() public digits: string;
+    @Input() public digits: string | DigitsOptions;
 
     @Input() public minValue: number;
     @Input() public maxValue: number;

@@ -1,4 +1,5 @@
 import { Directive, ElementRef, Input, Renderer2 } from '@angular/core';
+import { takeUntil } from 'rxjs/operators';
 
 import { TranslationService } from '../services/translation.service';
 import { BaseDirective } from '../models/base-directive';
@@ -23,9 +24,9 @@ export class TranslateDirective extends BaseDirective {
 
     protected setup(): void {
         this.replace();
-        this.subscriptions.push(this.translation.translationChanged().subscribe(
+        this.translation.translationChanged().pipe(takeUntil(this.destroy)).subscribe(
             () => { this.replace(); }
-        ));
+        );
     }
 
     protected replace(): void {

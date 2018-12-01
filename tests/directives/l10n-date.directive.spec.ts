@@ -25,7 +25,7 @@ import {
 })
 class L10nDateComponent {
 
-    day: Date = new Date('4/19/2017');
+    day: Date = new Date('2017-04-19');
 
 }
 

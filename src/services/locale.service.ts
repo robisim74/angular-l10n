@@ -1,18 +1,19 @@
-import { Injectable, Inject, EventEmitter, Output } from '@angular/core';
+import { Injectable, Inject } from '@angular/core';
 import { Subject } from 'rxjs';
 
 import { IntlAPI } from './intl-api';
 import { LocaleStorage } from './locale-storage';
 import { LOCALE_CONFIG, LocaleConfig } from '../models/l10n-config';
 import { DefaultLocaleBuilder } from '../models/default-locale-builder';
-import { Language, ISOCode } from '../models/types';
+import { IntlFormatter } from '../models/intl-formatter';
+import { Language, ISOCode, DateTimeOptions, DigitsOptions, NumberFormatStyle } from '../models/types';
 
 export interface ILocaleService {
 
-    languageCodeChanged: EventEmitter<string>;
-    defaultLocaleChanged: EventEmitter<string>;
-    currencyCodeChanged: EventEmitter<string>;
-    timezoneChanged: EventEmitter<string>;
+    languageCodeChanged: Subject<string>;
+    defaultLocaleChanged: Subject<string>;
+    currencyCodeChanged: Subject<string>;
+    timezoneChanged: Subject<string>;
 
     loadTranslation: Subject<any>;
 
@@ -67,6 +68,20 @@ export interface ILocaleService {
 
     setCurrentTimezone(zoneName: string): void;
 
+    formatDate(value: any, defaultLocale?: string, format?: string | DateTimeOptions, timezone?: string): string;
+
+    formatDecimal(value: any, defaultLocale?: string, digits?: string | DigitsOptions): string;
+
+    formatPercent(value: any, defaultLocale?: string, digits?: string | DigitsOptions): string;
+
+    formatCurrency(
+        value: any,
+        defaultLocale?: string,
+        currency?: string,
+        currencyDisplay?: string,
+        digits?: string | DigitsOptions
+    ): string;
+
     composeLocale(codes: ISOCode[]): string;
 
     rollback(): void;
@@ -78,10 +93,10 @@ export interface ILocaleService {
  */
 @Injectable() export class LocaleService implements ILocaleService {
 
-    @Output() public languageCodeChanged: EventEmitter<string> = new EventEmitter<string>(true);
-    @Output() public defaultLocaleChanged: EventEmitter<string> = new EventEmitter<string>(true);
-    @Output() public currencyCodeChanged: EventEmitter<string> = new EventEmitter<string>(true);
-    @Output() public timezoneChanged: EventEmitter<string> = new EventEmitter<string>(true);
+    public languageCodeChanged: Subject<string> = new Subject<string>();
+    public defaultLocaleChanged: Subject<string> = new Subject<string>();
+    public currencyCodeChanged: Subject<string> = new Subject<string>();
+    public timezoneChanged: Subject<string> = new Subject<string>();
 
     public loadTranslation: Subject<any> = new Subject();
 
@@ -175,23 +190,13 @@ export interface ILocaleService {
 
     public getCurrencySymbol(
         currencyDisplay: 'code' | 'symbol' | 'name' = 'symbol',
-        defaultLocale: string = this.defaultLocale.value,
-        currency: string = this.currencyCode
+        defaultLocale?: string,
+        currency?: string
     ): string {
-        let currencySymbol: string = currency;
+        let currencySymbol: string = this.currencyCode;
         if (IntlAPI.hasNumberFormat()) {
-            const localeZero: string = new Intl.NumberFormat(defaultLocale).format(0);
-            const value: number = 0; // Reference value.
-            const localeValue: string = new Intl.NumberFormat(
-                defaultLocale,
-                {
-                    style: 'currency',
-                    currency: currency,
-                    currencyDisplay: currencyDisplay,
-                    minimumFractionDigits: 0,
-                    maximumFractionDigits: 0
-                }
-            ).format(value);
+            const localeZero: string = this.formatDecimal(0, defaultLocale);
+            const localeValue: string = this.formatCurrency(0, defaultLocale, currency, currencyDisplay, '1.0-0');
             currencySymbol = localeValue.replace(localeZero, "");
             currencySymbol = currencySymbol.trim();
         }
@@ -243,6 +248,67 @@ export interface ILocaleService {
             this.timezone = zoneName;
             this.releaseTimezone();
         }
+    }
+
+    /**
+     * Formats a date according to default locale.
+     * @param value A Date, a number (milliseconds since UTC epoch) or an ISO string
+     * @param defaultLocale The default locale to use. Default is the current locale
+     * @param format An alias or a DateTimeOptions object. Default is 'mediumDate'
+     * @param timezone The time zone name. Default is the current timezone
+     */
+    public formatDate(
+        value: any,
+        defaultLocale: string = this.defaultLocale.value,
+        format: string | DateTimeOptions = 'mediumDate',
+        timezone: string = this.timezone
+    ): string {
+        return IntlFormatter.formatDate(value, defaultLocale, format, timezone);
+    }
+
+    /**
+     * Formats a decimal number according to default locale.
+     * @param value The number to be formatted
+     * @param defaultLocale The default locale to use. Default is the current locale
+     * @param digits An alias or a DigitsOptions object
+     */
+    public formatDecimal(value: any, defaultLocale: string = this.defaultLocale.value, digits?: string | DigitsOptions): string {
+        return IntlFormatter.formatNumber(value, defaultLocale, NumberFormatStyle.Decimal, digits);
+    }
+
+    /**
+     * Formats a number as a percentage according to default locale.
+     * @param value The number to be formatted
+     * @param defaultLocale The default locale to use. Default is the current locale
+     * @param digits An alias or a DigitsOptions object
+     */
+    public formatPercent(value: any, defaultLocale: string = this.defaultLocale.value, digits?: string | DigitsOptions): string {
+        return IntlFormatter.formatNumber(value, defaultLocale, NumberFormatStyle.Percent, digits);
+    }
+
+    /**
+     * Formats a number as a currency according to default locale.
+     * @param value The number to be formatted
+     * @param defaultLocale The default locale to use. Default is the current locale
+     * @param currency The currency to use. Default is the current currency
+     * @param currencyDisplay The format for the currency. Possible values are 'symbol', 'code', 'name'. Default is 'symbol'
+     * @param digits An alias or a DigitsOptions object
+     */
+    public formatCurrency(
+        value: any,
+        defaultLocale: string = this.defaultLocale.value,
+        currency: string = this.currencyCode,
+        currencyDisplay: 'code' | 'symbol' | 'name' = 'symbol',
+        digits?: string | DigitsOptions
+    ): string {
+        return IntlFormatter.formatNumber(
+            value,
+            defaultLocale,
+            NumberFormatStyle.Currency,
+            digits,
+            currency,
+            currencyDisplay
+        );
     }
 
     public composeLocale(codes: ISOCode[]): string {
@@ -388,19 +454,19 @@ export interface ILocaleService {
     }
 
     private sendLanguageEvents(): void {
-        this.languageCodeChanged.emit(this.defaultLocale.languageCode);
+        this.languageCodeChanged.next(this.defaultLocale.languageCode);
     }
 
     private sendDefaultLocaleEvents(): void {
-        this.defaultLocaleChanged.emit(this.defaultLocale.value);
+        this.defaultLocaleChanged.next(this.defaultLocale.value);
     }
 
     private sendCurrencyEvents(): void {
-        this.currencyCodeChanged.emit(this.currencyCode);
+        this.currencyCodeChanged.next(this.currencyCode);
     }
 
     private sendTimezoneEvents(): void {
-        this.timezoneChanged.emit(this.timezone);
+        this.timezoneChanged.next(this.timezone);
     }
 
     /**

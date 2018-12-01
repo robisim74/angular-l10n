@@ -5,7 +5,6 @@ import { TRANSLATION_CONFIG, TranslationConfig } from '../models/l10n-config';
 import { LocaleService } from './locale.service';
 import { TranslationProvider } from './translation-provider';
 import { TranslationHandler } from './translation-handler';
-import { IntlAPI } from './intl-api';
 import { ProviderType } from '../models/types';
 import { mergeDeep } from '../models/merge-deep';
 
@@ -141,16 +140,10 @@ export interface ITranslationService {
         let keyText: string = key.replace(/^\d+\b/, "");
         keyText = keyText.trim();
         const keyNumber: number = parseFloat(key);
-        key = key.replace(/^\d+/, this.translateNumber(keyNumber));
-        return key.replace(keyText, this.getValue(keyText, args, lang));
-    }
-
-    private translateNumber(keyNumber: number): string {
-        if (!isNaN(keyNumber) && IntlAPI.hasNumberFormat()) {
-            const localeNumber: string = new Intl.NumberFormat(this.locale.getDefaultLocale()).format(keyNumber);
-            return localeNumber;
+        if (!isNaN(keyNumber)) {
+            key = key.replace(/^\d+/, this.locale.formatDecimal(keyNumber));
         }
-        return keyNumber.toString();
+        return key.replace(keyText, this.getValue(keyText, args, lang));
     }
 
     private async loadTranslation(): Promise<any> {

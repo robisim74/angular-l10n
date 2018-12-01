@@ -1,8 +1,7 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
-import { IntlAPI } from '../services/intl-api';
-import { IntlFormatter } from '../models/intl-formatter';
-import { NumberFormatStyle } from '../models/types';
+import { LocaleService } from '../services/locale.service';
+import { DigitsOptions } from '../models/types';
 
 @Pipe({
     name: 'l10nDecimal',
@@ -10,17 +9,12 @@ import { NumberFormatStyle } from '../models/types';
 })
 export class L10nDecimalPipe implements PipeTransform {
 
-    public transform(value: any, defaultLocale: string, digits?: string): string | null {
+    constructor(protected locale: LocaleService) { }
+
+    public transform(value: any, defaultLocale: string, digits?: string | DigitsOptions): string | null {
         if (value == null) return null;
-        if (typeof defaultLocale === "undefined") return null;
 
-        if (IntlAPI.hasNumberFormat()) {
-            value = typeof value === "string" && !isNaN(+value - parseFloat(value)) ? +value : value;
-
-            return IntlFormatter.formatNumber(value, defaultLocale, NumberFormatStyle.Decimal, digits);
-        }
-        // Returns the number without localization.
-        return value;
+        return this.locale.formatDecimal(value, defaultLocale, digits);
     }
 
 }
@@ -31,17 +25,12 @@ export class L10nDecimalPipe implements PipeTransform {
 })
 export class L10nPercentPipe implements PipeTransform {
 
-    public transform(value: any, defaultLocale: string, digits?: string): string | null {
+    constructor(protected locale: LocaleService) { }
+
+    public transform(value: any, defaultLocale: string, digits?: string | DigitsOptions): string | null {
         if (value == null) return null;
-        if (typeof defaultLocale === "undefined") return null;
 
-        if (IntlAPI.hasNumberFormat()) {
-            value = typeof value === "string" && !isNaN(+value - parseFloat(value)) ? +value : value;
-
-            return IntlFormatter.formatNumber(value, defaultLocale, NumberFormatStyle.Percent, digits);
-        }
-        // Returns the number without localization.
-        return value;
+        return this.locale.formatPercent(value, defaultLocale, digits);
     }
 
 }
@@ -52,31 +41,18 @@ export class L10nPercentPipe implements PipeTransform {
 })
 export class L10nCurrencyPipe implements PipeTransform {
 
+    constructor(protected locale: LocaleService) { }
+
     public transform(
         value: any,
         defaultLocale: string,
         currency: string,
         currencyDisplay: 'code' | 'symbol' | 'name' = 'symbol',
-        digits?: string
+        digits?: string | DigitsOptions
     ): string | null {
-
         if (value == null) return null;
-        if (typeof defaultLocale === "undefined" || typeof currency === "undefined") return null;
 
-        if (IntlAPI.hasNumberFormat()) {
-            value = typeof value === "string" && !isNaN(+value - parseFloat(value)) ? +value : value;
-
-            return IntlFormatter.formatNumber(
-                value,
-                defaultLocale,
-                NumberFormatStyle.Currency,
-                digits,
-                currency,
-                currencyDisplay
-            );
-        }
-        // Returns the number & currency without localization.
-        return value + " " + currency;
+        return this.locale.formatCurrency(value, defaultLocale, currency, currencyDisplay, digits);
     }
 
 }

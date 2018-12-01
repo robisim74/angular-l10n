@@ -22,7 +22,7 @@ class DefaultLocaleComponent {
 
     @DefaultLocale() defaultLocale: string;
 
-    day: Date = new Date('5/8/2017');
+    day: Date = new Date('2017-05-08');
 
 }
 

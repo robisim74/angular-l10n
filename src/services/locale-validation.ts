@@ -2,13 +2,14 @@ import { Injectable } from '@angular/core';
 
 import { LocaleService } from './locale.service';
 import { IntlAPI } from './intl-api';
-import { Decimal } from '../models/types';
+import { formatDigitsAliases } from '../models/intl-formatter';
+import { Decimal, DigitsOptions } from '../models/types';
 
 export interface ILocaleValidation {
 
     parseNumber(s: string, defaultLocale?: string): number | null;
 
-    getRegExp(digits: string, defaultLocale?: string): RegExp;
+    getRegExp(digits: string): RegExp;
 
 }
 
@@ -23,7 +24,7 @@ export interface ILocaleValidation {
      * Converts a string to a number according to default locale.
      * If the string cannot be converted to a number, returns NaN.
      */
-    public parseNumber(s: string, defaultLocale: string = this.locale.getDefaultLocale()): number | null {
+    public parseNumber(s: string, defaultLocale?: string): number | null {
         if (s == "" || s == null) {
             return null;
         }
@@ -49,29 +50,14 @@ export interface ILocaleValidation {
         return parseFloat(value);
     }
 
-    public getRegExp(digits: string, defaultLocale: string = this.locale.getDefaultLocale()): RegExp {
-        let minInt: number = 1;
-        let minFraction: number = 0;
-        let maxFraction: number = 3;
+    public getRegExp(digits: string | DigitsOptions): RegExp {
+        const digitsOptions: DigitsOptions = typeof digits === "string" ? formatDigitsAliases(digits) : digits;
+        const minInt: number = digitsOptions.minimumIntegerDigits || 1;
+        const minFraction: number = digitsOptions.minimumFractionDigits || 0;
+        const maxFraction: number = digitsOptions.maximumFractionDigits || 3;
 
-        if (!!digits) {
-            const NUMBER_FORMAT_REGEXP: RegExp = /^(\d+)?\.((\d+)(\-(\d+))?)?$/;
-            const parts: RegExpMatchArray | null = digits.match(NUMBER_FORMAT_REGEXP);
-            if (parts != null) {
-                if (parts[1] != null) {  // Min integer digits.
-                    minInt = parseInt(parts[1]);
-                }
-                if (parts[3] != null) {  // Min fraction digits.
-                    minFraction = parseInt(parts[3]);
-                }
-                if (parts[5] != null) {  // Max fraction digits.
-                    maxFraction = parseInt(parts[5]);
-                }
-            }
-        }
-
-        const decimalCode: Decimal = this.getDecimalCode(defaultLocale);
-        const numberCodes: string[] = this.getNumberCodes(defaultLocale);
+        const decimalCode: Decimal = this.getDecimalCode();
+        const numberCodes: string[] = this.getNumberCodes();
 
         const minusSign: string = decimalCode.minusSign;
         const zero: string = numberCodes[0];
@@ -95,7 +81,6 @@ export interface ILocaleValidation {
         const thousandPattern: string = `(?=(?:\\${thousandSeparator}*${d})${n}(\\${decimalSeparator}|$))(?!${zero}(?!\\${decimalSeparator}|${d}))${d}{1,3}(\\${thousandSeparator}${d}{3})*`;
 
         let pattern: string = `^${minusSign}?(${plainPattern}|${thousandPattern})`;
-
         if (minFraction > 0 && maxFraction > 0) {
             // Decimal separator is mandatory.
             pattern += `\\${decimalSeparator}${d}${nm}$`;
@@ -106,13 +91,12 @@ export interface ILocaleValidation {
             // Integer number.
             pattern += `$`;
         }
-
         pattern = this.toChar(pattern);
-        const regExp: RegExp = new RegExp(pattern);
-        return regExp;
+
+        return new RegExp(pattern);
     }
 
-    private getDecimalCode(defaultLocale: string): Decimal {
+    private getDecimalCode(defaultLocale?: string): Decimal {
         let decimalCode: Decimal = {
             minusSign: this.toUnicode("-"),
             decimalSeparator: this.toUnicode("."),
@@ -121,7 +105,7 @@ export interface ILocaleValidation {
 
         if (IntlAPI.hasNumberFormat()) {
             const value: number = -1000.9; // Reference value.
-            const localeValue: string = new Intl.NumberFormat(defaultLocale).format(value);
+            const localeValue: string = this.locale.formatDecimal(value, defaultLocale);
 
             const unicodeChars: string[] = [];
             for (let i: number = 0; i <= 7; i++) {
@@ -139,9 +123,7 @@ export interface ILocaleValidation {
                     decimalSeparator: unicodeChars[7],
                     thousandSeparator: unicodeChars[3]
                 };
-            } else if (unicodeChars[0] == this.toUnicode(
-                new Intl.NumberFormat(defaultLocale).format(1))
-            ) {
+            } else if (unicodeChars[0] == this.toUnicode(this.locale.formatDecimal(1, defaultLocale))) {
                 decimalCode = {
                     minusSign: unicodeChars[7],
                     decimalSeparator: unicodeChars[5],
@@ -164,7 +146,7 @@ export interface ILocaleValidation {
         return decimalCode;
     }
 
-    private getNumberCodes(defaultLocale: string): string[] {
+    private getNumberCodes(defaultLocale?: string): string[] {
         const numberCodes: string[] = [];
 
         for (let num: number = 0; num <= 9; num++) {
@@ -173,9 +155,7 @@ export interface ILocaleValidation {
 
         if (IntlAPI.hasNumberFormat()) {
             for (let num: number = 0; num <= 9; num++) {
-                numberCodes[num] = this.toUnicode(
-                    new Intl.NumberFormat(defaultLocale).format(num)
-                );
+                numberCodes[num] = this.toUnicode(this.locale.formatDecimal(num, defaultLocale));
             }
         }
         return numberCodes;

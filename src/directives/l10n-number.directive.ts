@@ -1,8 +1,8 @@
 import { Directive, ElementRef, Input, Renderer2 } from '@angular/core';
+import { takeUntil } from 'rxjs/operators';
 
 import { LocaleService } from '../services/locale.service';
 import { BaseDirective } from '../models/base-directive';
-import { L10nDecimalPipe, L10nPercentPipe, L10nCurrencyPipe } from '../pipes/l10n-number.pipe';
 
 @Directive({
     selector: '[l10nDecimal]'
@@ -15,17 +15,15 @@ export class L10nDecimalDirective extends BaseDirective {
 
     @Input() public digits: string;
 
-    private l10nDecimalPipe: L10nDecimalPipe = new L10nDecimalPipe();
-
     constructor(protected locale: LocaleService, protected el: ElementRef, protected renderer: Renderer2) {
         super(el, renderer);
     }
 
     protected setup(): void {
         this.replace();
-        this.subscriptions.push(this.locale.defaultLocaleChanged.subscribe(
+        this.locale.defaultLocaleChanged.pipe(takeUntil(this.destroy)).subscribe(
             () => { this.replace(); }
-        ));
+        );
     }
 
     protected replace(): void {
@@ -46,11 +44,7 @@ export class L10nDecimalDirective extends BaseDirective {
     }
 
     protected getValues(keys: string | string[]): string | any {
-        return this.l10nDecimalPipe.transform(
-            keys,
-            this.locale.getDefaultLocale(),
-            this.digits
-        );
+        return this.locale.formatDecimal(keys, this.locale.getDefaultLocale(), this.digits);
     }
 
 }
@@ -66,17 +60,15 @@ export class L10nPercentDirective extends BaseDirective {
 
     @Input() public digits: string;
 
-    private l10nPercentPipe: L10nPercentPipe = new L10nPercentPipe();
-
     constructor(protected locale: LocaleService, protected el: ElementRef, protected renderer: Renderer2) {
         super(el, renderer);
     }
 
     protected setup(): void {
         this.replace();
-        this.subscriptions.push(this.locale.defaultLocaleChanged.subscribe(
+        this.locale.defaultLocaleChanged.pipe(takeUntil(this.destroy)).subscribe(
             () => { this.replace(); }
-        ));
+        );
     }
 
     protected replace(): void {
@@ -97,11 +89,7 @@ export class L10nPercentDirective extends BaseDirective {
     }
 
     protected getValues(keys: string | string[]): string | any {
-        return this.l10nPercentPipe.transform(
-            keys,
-            this.locale.getDefaultLocale(),
-            this.digits
-        );
+        return this.locale.formatPercent(keys, this.locale.getDefaultLocale(), this.digits);
     }
 
 }
@@ -119,20 +107,18 @@ export class L10nCurrencyDirective extends BaseDirective {
 
     @Input() public digits: string;
 
-    private l10nCurrencyPipe: L10nCurrencyPipe = new L10nCurrencyPipe();
-
     constructor(protected locale: LocaleService, protected el: ElementRef, protected renderer: Renderer2) {
         super(el, renderer);
     }
 
     protected setup(): void {
         this.replace();
-        this.subscriptions.push(this.locale.defaultLocaleChanged.subscribe(
+        this.locale.defaultLocaleChanged.pipe(takeUntil(this.destroy)).subscribe(
             () => { this.replace(); }
-        ));
-        this.subscriptions.push(this.locale.currencyCodeChanged.subscribe(
+        );
+        this.locale.currencyCodeChanged.pipe(takeUntil(this.destroy)).subscribe(
             () => { this.replace(); }
-        ));
+        );
     }
 
     protected replace(): void {
@@ -153,7 +139,7 @@ export class L10nCurrencyDirective extends BaseDirective {
     }
 
     protected getValues(keys: string | string[]): string | any {
-        return this.l10nCurrencyPipe.transform(
+        return this.locale.formatCurrency(
             keys,
             this.locale.getDefaultLocale(),
             this.locale.getCurrentCurrency(),

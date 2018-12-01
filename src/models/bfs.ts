@@ -24,14 +24,14 @@ export class BFS {
         let nodeToDepthIncrease: number = 1;
 
         queue.push(rootNode);
-        while (queue.length > 0 && depth <= this.MAX_DEPTH) {
+        while (queue.length > 0 && depth <= BFS.MAX_DEPTH) {
             iNode = queue.shift();
-            if (this.isTargetNode(iNode)) {
+            if (BFS.isTargetNode(iNode)) {
                 return iNode;
             }
-            if (depth < this.MAX_DEPTH && iNode.childNodes != null) {
+            if (depth < BFS.MAX_DEPTH && iNode.childNodes != null) {
                 for (const child of iNode.childNodes) {
-                    if (this.isValidNode(child)) {
+                    if (BFS.isValidNode(child)) {
                         queue.push(child);
                     }
                 }
@@ -57,7 +57,7 @@ export class BFS {
     private static isValidNode(node: any): boolean {
         if (typeof node !== "undefined" && node.nodeType == 1 && node.attributes) {
             for (const attr of node.attributes) {
-                if (attr && this.SELECTOR.test(attr.name)) return false;
+                if (attr && BFS.SELECTOR.test(attr.name)) return false;
             }
         }
         return true;

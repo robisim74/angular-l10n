@@ -7,7 +7,7 @@ import {
     SimpleChanges,
     OnDestroy
 } from '@angular/core';
-import { Subscription } from 'rxjs';
+import { Subject } from 'rxjs';
 
 import { BFS } from './bfs';
 
@@ -20,7 +20,7 @@ export abstract class BaseDirective implements AfterViewInit, OnChanges, OnDestr
     protected key: string;
     protected attributes: any[] = [];
 
-    protected subscriptions: Subscription[] = [];
+    protected destroy: Subject<boolean> = new Subject<boolean>();
 
     private element: any;
     private renderNode: any;
@@ -62,8 +62,8 @@ export abstract class BaseDirective implements AfterViewInit, OnChanges, OnDestr
     }
 
     public ngOnDestroy(): void {
+        this.destroy.next(true);
         this.removeTextListener();
-        this.cancelSubscriptions();
     }
 
     protected abstract setup(): void;
@@ -154,14 +154,6 @@ export abstract class BaseDirective implements AfterViewInit, OnChanges, OnDestr
                 }
             }
         }
-    }
-
-    private cancelSubscriptions(): void {
-        this.subscriptions.forEach((subscription: Subscription) => {
-            if (typeof subscription !== "undefined") {
-                subscription.unsubscribe();
-            }
-        });
     }
 
 }

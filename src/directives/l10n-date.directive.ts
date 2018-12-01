@@ -1,8 +1,8 @@
 import { Directive, ElementRef, Input, Renderer2 } from '@angular/core';
+import { takeUntil } from 'rxjs/operators';
 
 import { LocaleService } from '../services/locale.service';
 import { BaseDirective } from '../models/base-directive';
-import { L10nDatePipe } from '../pipes/l10n-date.pipe';
 import { DateTimeOptions } from '../models/types';
 
 @Directive({
@@ -18,20 +18,18 @@ export class L10nDateDirective extends BaseDirective {
 
     private defaultFormat: string = 'mediumDate';
 
-    private l10nDatePipe: L10nDatePipe = new L10nDatePipe();
-
     constructor(protected locale: LocaleService, protected el: ElementRef, protected renderer: Renderer2) {
         super(el, renderer);
     }
 
     protected setup(): void {
         this.replace();
-        this.subscriptions.push(this.locale.defaultLocaleChanged.subscribe(
+        this.locale.defaultLocaleChanged.pipe(takeUntil(this.destroy)).subscribe(
             () => { this.replace(); }
-        ));
-        this.subscriptions.push(this.locale.timezoneChanged.subscribe(
+        );
+        this.locale.timezoneChanged.pipe(takeUntil(this.destroy)).subscribe(
             () => { this.replace(); }
-        ));
+        );
     }
 
     protected replace(): void {
@@ -52,7 +50,7 @@ export class L10nDateDirective extends BaseDirective {
     }
 
     protected getValues(keys: string | string[]): string | any {
-        return this.l10nDatePipe.transform(
+        return this.locale.formatDate(
             keys,
             this.locale.getDefaultLocale(),
             this.format || this.defaultFormat,

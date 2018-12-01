@@ -17,15 +17,14 @@ describe('L10nDatePipe', () => {
     let l10nLoader: L10nLoader;
     let locale: LocaleService;
 
+    let pipe: L10nDatePipe;
+
     const l10nConfig: L10nConfig = {
         locale: {
             defaultLocale: { languageCode: 'en', countryCode: 'US' },
-            timezone: 'America/Los_Angeles',
             storage: StorageStrategy.Disabled
         }
     };
-
-    let pipe: L10nDatePipe;
 
     beforeEach((done) => {
         TestBed.configureTestingModule({
@@ -37,13 +36,13 @@ describe('L10nDatePipe', () => {
 
         l10nLoader = TestBed.get(L10nLoader);
         locale = TestBed.get(LocaleService);
-        pipe = new L10nDatePipe();
+        pipe = new L10nDatePipe(locale);
 
         l10nLoader.load().then(() => done());
     });
 
     it('should localize a date using format aliases', () => {
-        const date: Date = new Date('7/19/2016');
+        const date: Date = new Date('2016-07-19');
 
         expect(pipe.transform(date, locale.getDefaultLocale(), 'shortDate')).toEqual('7/19/2016');
 
@@ -52,7 +51,7 @@ describe('L10nDatePipe', () => {
     });
 
     it('should localize a date using custom format', () => {
-        const date: Date = new Date('8/29/2017');
+        const date: Date = new Date('2017-08-29');
         const options: DateTimeOptions = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
 
         locale.setDefaultLocale('en', 'US');
@@ -67,6 +66,7 @@ describe('L10nDatePipe', () => {
         const options: DateTimeOptions = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric' };
 
         locale.setDefaultLocale('en', 'US');
+        locale.setCurrentTimezone('America/Los_Angeles');
         expect(pipe.transform(date, locale.getDefaultLocale(), options, locale.getCurrentTimezone())).toEqual('Tuesday, August 29, 2017, 2:41 PM');
 
         locale.setDefaultLocale('it', 'IT');

@@ -1,5 +1,5 @@
 export { InjectorRef } from './models/injector-ref';
-export { StorageStrategy, ProviderType, ISOCode, DateTimeOptions } from './models/types';
+export { StorageStrategy, ProviderType, ISOCode, DateTimeOptions, DigitsOptions } from './models/types';
 export {
     LOCALE_CONFIG,
     TRANSLATION_CONFIG,

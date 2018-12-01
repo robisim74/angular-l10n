@@ -27,6 +27,17 @@ export interface DateTimeOptions {
 
 }
 
+export interface DigitsOptions {
+
+    minimumIntegerDigits?: number;
+    minimumFractionDigits?: number;
+    maximumFractionDigits?: number;
+    minimumSignificantDigits?: number;
+    maximumSignificantDigits?: number;
+    useGrouping?: boolean;
+
+}
+
 export interface LocaleCodes {
     /**
      * ISO 639 two-letter or three-letter code.
