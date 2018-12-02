@@ -95,7 +95,14 @@
         "webpack": "4.21.0",
         "zone.js": "0.8.26",
         "tsickle": "0.33.0",
-        "webpack-filter-warnings-plugin": "1.2.0"
+        "webpack-filter-warnings-plugin": "1.2.0",
+        "husky": "1.2.0"
     },
-    "sideEffects": false
+    "sideEffects": false,
+    "husky": {
+        "hooks": {
+            "pre-commit": "npm run test",
+            "pre-push": "npm run build"
+        }
+    }
 }

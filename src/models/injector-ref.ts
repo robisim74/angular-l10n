@@ -7,7 +7,7 @@ import { Type } from './types';
  */
 @Injectable() export class InjectorRef {
 
-    private static injector: Injector;
+    private static injector: Injector = Injector.NULL;
 
     public static get<T>(token: Type<T> | InjectionToken<T>, notFoundValue?: T): T {
         return InjectorRef.injector.get(token, notFoundValue);

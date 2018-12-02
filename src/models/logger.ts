@@ -5,7 +5,7 @@ import { LogLevel, LOG_MESSAGES } from "./types";
 
 @Injectable() export class Logger {
 
-    private static level: LogLevel;
+    private static level: LogLevel = LogLevel.Off;
 
     public static log(name: string, message: string): void {
         if (Logger.level == LogLevel.Off) return;
@@ -24,7 +24,9 @@ import { LogLevel, LOG_MESSAGES } from "./types";
     }
 
     constructor(@Inject(LOCALE_CONFIG) private configuration: LocaleConfig) {
-        Logger.level = this.configuration.logger || LogLevel.Off;
+        if (this.configuration.logger) {
+            Logger.level = this.configuration.logger;
+        }
     }
 
 }
