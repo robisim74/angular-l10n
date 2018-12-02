@@ -131,7 +131,7 @@ export enum LogLevel {
 
     Error,
     Warn,
-    log,
+    Log,
     Off
 
 }
@@ -178,6 +178,6 @@ export const LOG_MESSAGES: { [message: string]: string } = {
     'missingLang': "Missing 'lang' parameter",
     'missingDefaultLocale': "Missing 'defaultLocale' parameter",
     'missingCurrency': "Missing 'currency' parameter",
-    'incorrectNumberFormatAlias': "Incorrect number format alias: the default format will be used",
-    'incorrectDateFormatAlias': "Incorrect date format alias: the default format will be used"
+    'invalidNumberFormatAlias': "Invalid number format alias: the default format will be used",
+    'invalidDateFormatAlias': "Invalid date format alias: the default format will be used"
 };

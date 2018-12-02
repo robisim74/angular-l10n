@@ -50,7 +50,7 @@ export class L10nCurrencyPipe implements PipeTransform {
         value: any,
         defaultLocale: string,
         currency: string,
-        currencyDisplay: 'code' | 'symbol' | 'name' = 'symbol',
+        currencyDisplay?: 'code' | 'symbol' | 'name',
         digits?: string | DigitsOptions
     ): string | null {
         if (isEmpty(value)) return null;

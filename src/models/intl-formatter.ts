@@ -62,15 +62,17 @@ export class IntlFormatter {
         currencyDisplay?: string
     ): string {
         let options: Intl.NumberFormatOptions = {};
-        if (typeof digits === "string") {
-            const digitsOptions: DigitsOptions | null = formatDigitsAliases(digits);
-            if (digitsOptions != null) {
-                options = digitsOptions;
+        if (digits) {
+            if (typeof digits === "string") {
+                const digitsOptions: DigitsOptions | null = formatDigitsAliases(digits);
+                if (digitsOptions != null) {
+                    options = digitsOptions;
+                } else {
+                    Logger.log('IntlFormatter', 'invalidNumberFormatAlias');
+                }
             } else {
-                Logger.log('IntlFormatter', 'incorrectNumberFormatAlias');
+                options = digits;
             }
-        } else if (digits) {
-            options = digits;
         }
         options.style = NumberFormatStyle[style].toLowerCase();
         if (style == NumberFormatStyle.Currency) {
@@ -83,15 +85,17 @@ export class IntlFormatter {
 
     private static dateTimeFormatter(date: Date, defaultLocale: string, format: string | DateTimeOptions, timezone?: string): string {
         let options: Intl.DateTimeFormatOptions = {};
-        if (typeof format === "string") {
-            const dateTimeOptions: DateTimeOptions = FORMAT_ALIASES[format];
-            if (dateTimeOptions) {
-                options = dateTimeOptions;
+        if (format) {
+            if (typeof format === "string") {
+                const dateTimeOptions: DateTimeOptions = FORMAT_ALIASES[format];
+                if (dateTimeOptions) {
+                    options = dateTimeOptions;
+                } else {
+                    Logger.log('IntlFormatter', 'invalidDateFormatAlias');
+                }
             } else {
-                Logger.log('IntlFormatter', 'incorrectDateFormatAlias');
+                options = format;
             }
-        } else {
-            options = format;
         }
         options.timeZone = IntlAPI.hasTimezone() ? timezone : 'UTC';
 

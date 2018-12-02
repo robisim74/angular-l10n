@@ -64,7 +64,7 @@ export interface ILocaleValidation {
             if (digitsOptions != null) {
                 options = digitsOptions;
             } else {
-                Logger.log('LocaleValidation', 'incorrectNumberFormatAlias');
+                Logger.log('LocaleValidation', 'invalidNumberFormatAlias');
             }
         }
         const minInt: number = options.minimumIntegerDigits || 1;

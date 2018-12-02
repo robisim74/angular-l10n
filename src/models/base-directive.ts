@@ -78,7 +78,7 @@ export abstract class BaseDirective implements AfterViewInit, OnChanges, OnDestr
         const keys: string[] = this.getAttributesKeys();
         const data: any = {};
         for (const key of keys) {
-            data[key] = this.getValues(key);
+            data[key] = this.getValue(key);
         }
         return data;
     }
@@ -87,7 +87,7 @@ export abstract class BaseDirective implements AfterViewInit, OnChanges, OnDestr
         return this.attributes.map((attr: any) => attr.key);
     }
 
-    protected abstract getValues(keys: string | string[]): string | any;
+    protected abstract getValue(key: string): string;
 
     protected setText(value: string): void {
         if (!!value) {

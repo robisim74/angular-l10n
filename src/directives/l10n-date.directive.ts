@@ -16,8 +16,6 @@ export class L10nDateDirective extends BaseDirective {
 
     @Input() public format: string | DateTimeOptions;
 
-    private defaultFormat: string = 'mediumDate';
-
     constructor(protected locale: LocaleService, protected el: ElementRef, protected renderer: Renderer2) {
         super(el, renderer);
     }
@@ -39,7 +37,7 @@ export class L10nDateDirective extends BaseDirective {
 
     protected replaceText(): void {
         if (!!this.key) {
-            this.setText(this.getValues(this.key));
+            this.setText(this.getValue(this.key));
         }
     }
 
@@ -49,8 +47,8 @@ export class L10nDateDirective extends BaseDirective {
         }
     }
 
-    protected getValues(keys: string | string[]): string | any {
-        return this.locale.formatDate(keys, this.format || this.defaultFormat);
+    protected getValue(key: string): string {
+        return this.locale.formatDate(key, this.format);
     }
 
 }

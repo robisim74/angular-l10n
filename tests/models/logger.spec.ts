@@ -68,7 +68,7 @@ describe('Logger', () => {
         expect(console.warn).toHaveBeenCalledWith("angular-l10n (L10nLoader): Missing 'translation' configuration");
         expect(console.warn).toHaveBeenCalledWith("angular-l10n (LanguageComponent): Missing 'ngOnInit' method: required by AoT compilation");
         expect(console.warn).toHaveBeenCalledWith("angular-l10n (TranslatePipe): Missing 'lang' parameter");
-        expect(console.warn).toHaveBeenCalledWith("angular-l10n (IntlFormatter): Incorrect number format alias: the default format will be used");
+        expect(console.warn).toHaveBeenCalledWith("angular-l10n (IntlFormatter): Invalid number format alias: the default format will be used");
 
         comp.ngOnDestroy();
         expect(console.warn).toHaveBeenCalledWith("angular-l10n (LanguageComponent): Missing 'ngOnDestroy' method to cancel subscriptions: required by AoT compilation");

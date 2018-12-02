@@ -81,17 +81,17 @@ export interface ITranslationService {
      */
     public translate(
         keys: string | string[],
-        args: any = null,
-        lang: string = this.translation.getValue()
+        args?: any,
+        lang?: string
     ): string | any {
         if (Array.isArray(keys)) {
             const data: any = {};
             for (const key of keys) {
-                data[key] = this.translateKey(key, args, lang);
+                data[key] = this.translateKey(key, args, lang || this.translation.getValue());
             }
             return data;
         }
-        return this.translateKey(keys, args, lang);
+        return this.translateKey(keys, args, lang || this.translation.getValue());
     }
 
     public translateAsync(

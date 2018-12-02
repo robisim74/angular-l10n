@@ -185,7 +185,7 @@ export interface ILocaleService {
     }
 
     public getCurrencySymbol(
-        currencyDisplay: 'code' | 'symbol' | 'name' = 'symbol',
+        currencyDisplay: 'code' | 'symbol' | 'name',
         defaultLocale?: string,
         currency?: string
     ): string {
@@ -253,13 +253,13 @@ export interface ILocaleService {
      * @param defaultLocale The default locale to use. Default is the current locale
      * @param timezone The time zone name. Default is the current timezone
      */
-    public formatDate(
-        value: any,
-        format: string | DateTimeOptions = 'mediumDate',
-        defaultLocale: string = this.defaultLocale.value,
-        timezone: string = this.timezone
-    ): string {
-        return IntlFormatter.formatDate(value, defaultLocale, format, timezone);
+    public formatDate(value: any, format?: string | DateTimeOptions, defaultLocale?: string, timezone?: string): string {
+        return IntlFormatter.formatDate(
+            value,
+            defaultLocale || this.defaultLocale.value,
+            format || 'mediumDate',
+            timezone || this.timezone
+        );
     }
 
     /**
@@ -268,8 +268,8 @@ export interface ILocaleService {
      * @param digits An alias or a DigitsOptions object of the format
      * @param defaultLocale The default locale to use. Default is the current locale
      */
-    public formatDecimal(value: any, digits?: string | DigitsOptions, defaultLocale: string = this.defaultLocale.value): string {
-        return IntlFormatter.formatNumber(value, defaultLocale, NumberFormatStyle.Decimal, digits);
+    public formatDecimal(value: any, digits?: string | DigitsOptions, defaultLocale?: string): string {
+        return IntlFormatter.formatNumber(value, defaultLocale || this.defaultLocale.value, NumberFormatStyle.Decimal, digits);
     }
 
     /**
@@ -278,8 +278,8 @@ export interface ILocaleService {
      * @param digits An alias or a DigitsOptions object of the format
      * @param defaultLocale The default locale to use. Default is the current locale
      */
-    public formatPercent(value: any, digits?: string | DigitsOptions, defaultLocale: string = this.defaultLocale.value): string {
-        return IntlFormatter.formatNumber(value, defaultLocale, NumberFormatStyle.Percent, digits);
+    public formatPercent(value: any, digits?: string | DigitsOptions, defaultLocale?: string): string {
+        return IntlFormatter.formatNumber(value, defaultLocale || this.defaultLocale.value, NumberFormatStyle.Percent, digits);
     }
 
     /**
@@ -293,17 +293,17 @@ export interface ILocaleService {
     public formatCurrency(
         value: any,
         digits?: string | DigitsOptions,
-        currencyDisplay: 'code' | 'symbol' | 'name' = 'symbol',
-        defaultLocale: string = this.defaultLocale.value,
-        currency: string = this.currencyCode
+        currencyDisplay?: 'code' | 'symbol' | 'name',
+        defaultLocale?: string,
+        currency?: string
     ): string {
         return IntlFormatter.formatNumber(
             value,
-            defaultLocale,
+            defaultLocale || this.defaultLocale.value,
             NumberFormatStyle.Currency,
             digits,
-            currency,
-            currencyDisplay
+            currency || this.currencyCode,
+            currencyDisplay || 'symbol'
         );
     }
 

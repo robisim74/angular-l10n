@@ -28,7 +28,7 @@ import { InjectorRef } from '../models/injector-ref';
         );
     }
 
-    ngOnDestroy(): void { }
+    public ngOnDestroy(): void { }
 
 }
 

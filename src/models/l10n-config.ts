@@ -62,7 +62,7 @@ export interface LocaleConfig {
     localeInterceptor?: ISOCode[];
 
     /**
-     * Defines the log level. Turn off in production.
+     * Defines the log level. Turn off it in production.
      */
     logger?: LogLevel;
 }

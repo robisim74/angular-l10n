@@ -23,7 +23,6 @@ export class TranslateDirective extends BaseDirective {
     }
 
     protected setup(): void {
-        this.replace();
         this.translation.translationChanged().pipe(takeUntil(this.destroy)).subscribe(
             () => { this.replace(); }
         );
@@ -36,19 +35,20 @@ export class TranslateDirective extends BaseDirective {
 
     protected replaceText(): void {
         if (!!this.key) {
-            this.setText(this.getValues(this.key));
+            this.setText(this.getValue(this.key));
         }
     }
 
     protected replaceAttributes(): void {
         if (this.attributes.length > 0) {
             const keys: string[] = this.getAttributesKeys();
-            this.setAttributes(this.getValues(keys));
+            const data: any = this.translation.translate(keys, this.params);
+            this.setAttributes(data);
         }
     }
 
-    protected getValues(keys: string | string[]): string | any {
-        return this.translation.translate(keys, this.params);
+    protected getValue(key: string): string {
+        return this.translation.translate(key, this.params);
     }
 
 }

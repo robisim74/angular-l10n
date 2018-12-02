@@ -24,9 +24,7 @@ import { LogLevel, LOG_MESSAGES } from "./types";
     }
 
     constructor(@Inject(LOCALE_CONFIG) private configuration: LocaleConfig) {
-        if (this.configuration.logger) {
-            Logger.level = this.configuration.logger;
-        }
+        Logger.level = this.configuration.logger || LogLevel.Off;
     }
 
 }
