@@ -6,22 +6,24 @@ import { Component } from '@angular/core';
 import {
     L10nConfig,
     L10nLoader,
-    TranslationModule,
+    LocalizationModule,
     StorageStrategy,
     LogLevel,
-    Language
+    Language,
+    DefaultLocale
 } from '../../src/angular-l10n';
-
 
 @Component({
     template: `
         <p>{{ 'Title' | translate:lang }}</p>
         <p>{{ 'Title' | translate }}</p>
+        <p>{{ 1.22 | l10nDecimal:defaultLocale:'1-2.1' }}</p>
     `
 })
 class LanguageComponent {
 
     @Language() lang: string;
+    @DefaultLocale() defaultLocale: string
 
 }
 
@@ -45,7 +47,7 @@ describe('Logger', () => {
             declarations: [LanguageComponent],
             imports: [
                 HttpClientTestingModule,
-                TranslationModule.forRoot(l10nConfig)
+                LocalizationModule.forRoot(l10nConfig)
             ]
         }).createComponent(LanguageComponent);
 
@@ -63,12 +65,13 @@ describe('Logger', () => {
     it('should log missing parts', fakeAsync(() => {
         fixture.detectChanges();
 
-        expect(console.warn).toHaveBeenCalledWith('angular-l10n - L10nLoader: missing translation configuration');
-        expect(console.warn).toHaveBeenCalledWith('angular-l10n - LanguageComponent: missing ngOnInit method: required by AoT compilation');
-        expect(console.warn).toHaveBeenCalledWith('angular-l10n - TranslatePipe: missing lang parameter');
+        expect(console.warn).toHaveBeenCalledWith("angular-l10n (L10nLoader): Missing 'translation' configuration");
+        expect(console.warn).toHaveBeenCalledWith("angular-l10n (LanguageComponent): Missing 'ngOnInit' method: required by AoT compilation");
+        expect(console.warn).toHaveBeenCalledWith("angular-l10n (TranslatePipe): Missing 'lang' parameter");
+        expect(console.warn).toHaveBeenCalledWith("angular-l10n (IntlFormatter): Incorrect number format alias: the default format will be used");
 
         comp.ngOnDestroy();
-        expect(console.warn).toHaveBeenCalledWith('angular-l10n - LanguageComponent: missing ngOnDestroy method to cancel subscriptions: required by AoT compilation');
+        expect(console.warn).toHaveBeenCalledWith("angular-l10n (LanguageComponent): Missing 'ngOnDestroy' method to cancel subscriptions: required by AoT compilation");
     }));
 
 });

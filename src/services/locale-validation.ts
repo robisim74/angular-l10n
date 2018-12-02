@@ -4,10 +4,11 @@ import { LocaleService } from './locale.service';
 import { IntlAPI } from './intl-api';
 import { formatDigitsAliases } from '../models/intl-formatter';
 import { Decimal, DigitsOptions } from '../models/types';
+import { Logger } from '../models/logger';
 
 export interface ILocaleValidation {
 
-    parseNumber(s: string, digits?: string | DigitsOptions, defaultLocale?: string): number | null;
+    parseNumber(s: string, digits?: string, defaultLocale?: string): number | null;
 
 }
 
@@ -26,19 +27,16 @@ export interface ILocaleValidation {
      * Converts a string to a number according to default locale.
      * If the string cannot be converted to a number, returns NaN.
      * @param s The string to be parsed
-     * @param digits An alias or a DigitsOptions object
+     * @param digits An alias of the format. Default is '1.0-3'
      * @param defaultLocale The default locale to use. Default is the current locale
      */
-    public parseNumber(s: string, digits?: string | DigitsOptions, defaultLocale?: string): number | null {
+    public parseNumber(s: string, digits?: string, defaultLocale?: string): number | null {
         if (s == "" || s == null) return null;
 
         this.decimalCode = this.getDecimalCode(defaultLocale);
         this.numberCodes = this.getNumberCodes(defaultLocale);
 
-        if (digits) {
-            const NUMBER_REGEXP: RegExp = this.getRegExp(digits);
-            if (!NUMBER_REGEXP.test(s)) return NaN;
-        }
+        if (!this.validateNumber(s, digits)) return NaN;
 
         let value: string = "";
 
@@ -59,11 +57,20 @@ export interface ILocaleValidation {
         return parseFloat(value);
     }
 
-    private getRegExp(digits: string | DigitsOptions): RegExp {
-        const digitsOptions: DigitsOptions = typeof digits === "string" ? formatDigitsAliases(digits) : digits;
-        const minInt: number = digitsOptions.minimumIntegerDigits || 1;
-        const minFraction: number = digitsOptions.minimumFractionDigits || 0;
-        const maxFraction: number = digitsOptions.maximumFractionDigits || 3;
+    private validateNumber(s: string, digits?: string): boolean {
+        let options: DigitsOptions = {};
+        if (digits) {
+            const digitsOptions: DigitsOptions | null = formatDigitsAliases(digits);
+            if (digitsOptions != null) {
+                options = digitsOptions;
+            } else {
+                Logger.log('LocaleValidation', 'incorrectNumberFormatAlias');
+            }
+        }
+        const minInt: number = options.minimumIntegerDigits || 1;
+        const minFraction: number = options.minimumFractionDigits || 0;
+        const maxFraction: number = options.maximumFractionDigits || 3;
+
         const minusSign: string = this.decimalCode.minusSign;
         const zero: string = this.numberCodes[0];
         const decimalSeparator: string = this.decimalCode.decimalSeparator;
@@ -98,7 +105,8 @@ export interface ILocaleValidation {
         }
         pattern = this.toChar(pattern);
 
-        return new RegExp(pattern);
+        const NUMBER_REGEXP: RegExp = new RegExp(pattern);
+        return NUMBER_REGEXP.test(s);
     }
 
     private getDecimalCode(defaultLocale?: string): Decimal {

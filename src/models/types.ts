@@ -171,11 +171,13 @@ export const FORMAT_ALIASES: { [format: string]: DateTimeOptions } = {
 };
 
 export const LOG_MESSAGES: { [message: string]: string } = {
-    'missingLocale': 'missing locale configuration',
-    'missingTranslation': 'missing translation configuration',
-    'missingOnInit': 'missing ngOnInit method: required by AoT compilation',
-    'missingOnDestroy': 'missing ngOnDestroy method to cancel subscriptions: required by AoT compilation',
-    'missingLang': 'missing lang parameter',
-    'missingDefaultLocale': 'missing defaultLocale parameter',
-    'missingCurrency': 'missing currency parameter'
+    'missingLocale': "Missing 'locale' configuration",
+    'missingTranslation': "Missing 'translation' configuration",
+    'missingOnInit': "Missing 'ngOnInit' method: required by AoT compilation",
+    'missingOnDestroy': "Missing 'ngOnDestroy' method to cancel subscriptions: required by AoT compilation",
+    'missingLang': "Missing 'lang' parameter",
+    'missingDefaultLocale': "Missing 'defaultLocale' parameter",
+    'missingCurrency': "Missing 'currency' parameter",
+    'incorrectNumberFormatAlias': "Incorrect number format alias: the default format will be used",
+    'incorrectDateFormatAlias': "Incorrect date format alias: the default format will be used"
 };

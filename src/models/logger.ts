@@ -10,7 +10,7 @@ import { LogLevel, LOG_MESSAGES } from "./types";
     public static log(name: string, message: string): void {
         if (Logger.level == LogLevel.Off) return;
 
-        message = `angular-l10n - ${name}: ${LOG_MESSAGES[message]}`;
+        message = `angular-l10n (${name}): ${LOG_MESSAGES[message]}`;
         switch (Logger.level) {
             case LogLevel.Error:
                 console.error(message);

@@ -15,7 +15,7 @@ export class L10nDatePipe implements PipeTransform {
     public transform(
         value: any,
         defaultLocale: string,
-        format: string | DateTimeOptions = 'mediumDate',
+        format?: string | DateTimeOptions,
         timezone?: string
     ): string | null {
         if (value == null || value === "" || value !== value) return null;

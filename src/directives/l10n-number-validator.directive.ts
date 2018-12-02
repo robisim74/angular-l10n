@@ -3,17 +3,16 @@ import { NG_VALIDATORS, AbstractControl, Validator, ValidatorFn, ValidationError
 
 import { LocaleValidation } from '../services/locale-validation';
 import { InjectorRef } from '../models/injector-ref';
-import { DigitsOptions } from '../models/types';
 
 /**
  * Function that takes a control and returns either null when it’s valid, or an error object if it’s not.
- * @param digits The format of the number
+ * @param digits An alias of the format
  * @param MIN_VALUE The minimum value for the number
  * @param MAX_VALUE The maximum value for the number
  * @return An error object: 'format', 'minValue' or 'maxValue'; null in case the value is valid
  */
 export function l10nValidateNumber(
-    digits: string | DigitsOptions,
+    digits: string,
     MIN_VALUE: number = Number.MIN_VALUE,
     MAX_VALUE: number = Number.MAX_VALUE
 ): ValidatorFn {
@@ -44,11 +43,11 @@ export function l10nValidateNumber(
 })
 export class L10nNumberValidatorDirective implements Validator, OnInit {
 
-    @Input() set l10nValidateNumber(digits: string | DigitsOptions) {
+    @Input() set l10nValidateNumber(digits: string) {
         this.digits = digits;
     }
 
-    @Input() public digits: string | DigitsOptions;
+    @Input() public digits: string;
 
     @Input() public minValue: number;
     @Input() public maxValue: number;

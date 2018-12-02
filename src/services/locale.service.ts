@@ -249,7 +249,7 @@ export interface ILocaleService {
     /**
      * Formats a date according to default locale.
      * @param value A Date, a number (milliseconds since UTC epoch) or an ISO string
-     * @param format An alias or a DateTimeOptions object. Default is 'mediumDate'
+     * @param format An alias or a DateTimeOptions object of the format. Default is 'mediumDate'
      * @param defaultLocale The default locale to use. Default is the current locale
      * @param timezone The time zone name. Default is the current timezone
      */
@@ -265,7 +265,7 @@ export interface ILocaleService {
     /**
      * Formats a decimal number according to default locale.
      * @param value The number to be formatted
-     * @param digits An alias or a DigitsOptions object
+     * @param digits An alias or a DigitsOptions object of the format
      * @param defaultLocale The default locale to use. Default is the current locale
      */
     public formatDecimal(value: any, digits?: string | DigitsOptions, defaultLocale: string = this.defaultLocale.value): string {
@@ -275,7 +275,7 @@ export interface ILocaleService {
     /**
      * Formats a number as a percentage according to default locale.
      * @param value The number to be formatted
-     * @param digits An alias or a DigitsOptions object
+     * @param digits An alias or a DigitsOptions object of the format
      * @param defaultLocale The default locale to use. Default is the current locale
      */
     public formatPercent(value: any, digits?: string | DigitsOptions, defaultLocale: string = this.defaultLocale.value): string {
@@ -285,7 +285,7 @@ export interface ILocaleService {
     /**
      * Formats a number as a currency according to default locale.
      * @param value The number to be formatted
-     * @param digits An alias or a DigitsOptions object
+     * @param digits An alias or a DigitsOptions object of the format
      * @param currencyDisplay The format for the currency. Possible values are 'code', 'symbol', 'name'. Default is 'symbol'
      * @param defaultLocale The default locale to use. Default is the current locale
      * @param currency The currency to use. Default is the current currency

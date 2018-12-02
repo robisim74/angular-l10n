@@ -7,6 +7,7 @@ import {
     FORMAT_ALIASES,
     NUMBER_FORMAT_REGEXP
 } from './types';
+import { Logger } from './logger';
 
 export class IntlFormatter {
 
@@ -62,7 +63,12 @@ export class IntlFormatter {
     ): string {
         let options: Intl.NumberFormatOptions = {};
         if (typeof digits === "string") {
-            options = formatDigitsAliases(digits) || {};
+            const digitsOptions: DigitsOptions | null = formatDigitsAliases(digits);
+            if (digitsOptions != null) {
+                options = digitsOptions;
+            } else {
+                Logger.log('IntlFormatter', 'incorrectNumberFormatAlias');
+            }
         } else if (digits) {
             options = digits;
         }
@@ -78,7 +84,12 @@ export class IntlFormatter {
     private static dateTimeFormatter(date: Date, defaultLocale: string, format: string | DateTimeOptions, timezone?: string): string {
         let options: Intl.DateTimeFormatOptions = {};
         if (typeof format === "string") {
-            options = FORMAT_ALIASES[format] || {};
+            const dateTimeOptions: DateTimeOptions = FORMAT_ALIASES[format];
+            if (dateTimeOptions) {
+                options = dateTimeOptions;
+            } else {
+                Logger.log('IntlFormatter', 'incorrectDateFormatAlias');
+            }
         } else {
             options = format;
         }
@@ -112,19 +123,19 @@ export class IntlFormatter {
 
 }
 
-export function formatDigitsAliases(digits: string): DigitsOptions {
-    const digitsOptions: DigitsOptions = {};
+export function formatDigitsAliases(digits: string): DigitsOptions | null {
     const parts: RegExpMatchArray | null = digits.match(NUMBER_FORMAT_REGEXP);
-    if (parts != null) {
-        if (parts[1] != null) {
-            digitsOptions.minimumIntegerDigits = parseInt(parts[1]);
-        }
-        if (parts[3] != null) {
-            digitsOptions.minimumFractionDigits = parseInt(parts[3]);
-        }
-        if (parts[5] != null) {
-            digitsOptions.maximumFractionDigits = parseInt(parts[5]);
-        }
+    if (parts == null) return null;
+
+    const digitsOptions: DigitsOptions = {};
+    if (parts[1] != null) {
+        digitsOptions.minimumIntegerDigits = parseInt(parts[1]);
+    }
+    if (parts[3] != null) {
+        digitsOptions.minimumFractionDigits = parseInt(parts[3]);
+    }
+    if (parts[5] != null) {
+        digitsOptions.maximumFractionDigits = parseInt(parts[5]);
     }
     return digitsOptions;
 }

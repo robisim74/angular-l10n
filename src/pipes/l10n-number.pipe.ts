@@ -13,7 +13,7 @@ export class L10nDecimalPipe implements PipeTransform {
     constructor(protected locale: LocaleService) { }
 
     public transform(value: any, defaultLocale: string, digits?: string | DigitsOptions): string | null {
-        if (value == null) return null;
+        if (isEmpty(value)) return null;
         if (typeof defaultLocale === "undefined") Logger.log('L10nDecimalPipe', 'missingDefaultLocale');
 
         return this.locale.formatDecimal(value, digits, defaultLocale);
@@ -30,7 +30,7 @@ export class L10nPercentPipe implements PipeTransform {
     constructor(protected locale: LocaleService) { }
 
     public transform(value: any, defaultLocale: string, digits?: string | DigitsOptions): string | null {
-        if (value == null) return null;
+        if (isEmpty(value)) return null;
         if (typeof defaultLocale === "undefined") Logger.log('L10nPercentPipe', 'missingDefaultLocale');
 
         return this.locale.formatPercent(value, digits, defaultLocale);
@@ -53,11 +53,15 @@ export class L10nCurrencyPipe implements PipeTransform {
         currencyDisplay: 'code' | 'symbol' | 'name' = 'symbol',
         digits?: string | DigitsOptions
     ): string | null {
-        if (value == null) return null;
+        if (isEmpty(value)) return null;
         if (typeof defaultLocale === "undefined") Logger.log('L10nCurrencyPipe', 'missingDefaultLocale');
         if (typeof currency === "undefined") Logger.log('L10nCurrencyPipe', 'missingCurrency');
 
         return this.locale.formatCurrency(value, digits, currencyDisplay, defaultLocale, currency);
     }
 
+}
+
+function isEmpty(value: any): boolean {
+    return value == null || value === '' || value !== value; // Checks for NaN.
 }
