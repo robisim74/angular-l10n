@@ -5,7 +5,7 @@ import { InjectorRef } from '../models/injector-ref';
 import { Logger } from '../models/logger';
 
 /**
- * Property decorator for components to provide the parameter to the translate pipe.
+ * Property decorator for components to provide the parameter to translate pipe.
  */
 export function Language(): PropertyDecorator {
     function DecoratorFactory(target: any, propertyKey?: string | symbol): void {

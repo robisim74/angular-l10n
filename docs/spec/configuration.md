@@ -30,6 +30,7 @@ and use global `ng.l10n` namespace.
 Import the modules you need and configure the library in the application root module:
 ```TypeScript
 const l10nConfig: L10nConfig = {
+    logger: LogLevel.Warn,
     locale: {
         languages: [
             { code: 'en', dir: 'ltr' },
@@ -43,6 +44,7 @@ const l10nConfig: L10nConfig = {
             { type: ProviderType.Static, prefix: './assets/locale-' }
         ],
         caching: true,
+        composedKeySeparator: '.',
         missingValue: 'No key'
     }
 };
@@ -71,6 +73,7 @@ export class AppModule {
 Import the modules you need and configure the library in the application root module:
 ```TypeScript
 const l10nConfig: L10nConfig = {
+    logger: LogLevel.Warn,
     locale: {
         languages: [
             { code: 'en', dir: 'ltr' },
@@ -85,6 +88,7 @@ const l10nConfig: L10nConfig = {
             { type: ProviderType.Static, prefix: './assets/locale-' }
         ],
         caching: true,
+        composedKeySeparator: '.',
         missingValue: 'No key'
     }
 };
@@ -110,7 +114,14 @@ export class AppModule {
 ---
 
 ## Configuration settings
-The `L10nConfig` interface contains an interface to configure `LocaleService` and one to configure `TranslationService`.
+The `L10nConfig` interface contains the interfaces to configure the services.
+
+### L10nConfig 
+Property | Value
+-------- | -----
+`locale?: LocaleConfig` |  LocaleService configuration
+`translation?: TranslationConfig` |  TranslationService configuration
+`logger?: LogLevel` |  Defines the log level. Turn off it in production
 
 ### LocaleConfig 
 Property | Value
@@ -162,6 +173,7 @@ const l10nConfig: L10nConfig = {
     translation: {
         providers: [], // Not available here.
         caching: true,
+        composedKeySeparator: '.',
         missingValue: 'No key'
     }
 };
@@ -201,7 +213,7 @@ Or whether you use the _advanced initialization_:
         @Inject(TRANSLATION_CONFIG) private translationConfig: TranslationConfig
     ) { }
 
-    load(): Promise<void> {
+    load(): Promise<any> {
         this.translationConfig.providers = [
             { type: ProviderType.Static, prefix: './assets/locale-' }
         ];
@@ -233,6 +245,31 @@ export function initLocalization(localizationConfig: LocalizationConfig): Functi
     ...
 })
 export class AppModule { }
+```
+
+---
+
+## Logger
+For development, you can enable the logger:
+```TypeScript
+const l10nConfig: L10nConfig = {
+    logger: LogLevel.Warn,
+    locale: {
+        ...
+    },
+    translation: {
+        ...
+    }
+};
+```
+In this way, you will be warned of the most common errors in the implementation of this library, such as missing functions or invalid formats.
+
+To turn off it in production, you can use:
+```TypeScript
+const l10nConfig: L10nConfig = {
+    logger: environment.production ? LogLevel.Off : LogLevel.Warn,
+    ...
+};
 ```
 
 ---
@@ -509,17 +546,19 @@ See also [LocaleStorage](https://github.com/robisim74/angular-l10n/blob/master/s
 ---
 
 ## Getting browser language
-Depending on the configuration, _the library_ will automatically try to get the language from the browser or not:
+Depending on the configuration, the library will automatically try to get the language from the browser or not:
 
-**If you set `language`**
+**If you set the language**
 
-- _the library_ tries to get the `language` from the storage
+- the library gets the `language` from the URL (if `localizedRouting` is enabled)
+- or tries to get the `language` from the storage
 - or tries to get the `language` from the browser
 - or uses the `language` set in the configuration
 
-**If you set `defaultLocale`**
+**If you set the default locale**
 
-- _the library_ tries to get the `defaultLocale` from the storage
+- the library gets the `defaultLocale` from the URL (if `localizedRouting` is enabled)
+- or tries to get the `defaultLocale` from the storage
 - or uses the `defaultLocale` set in the configuration
 
 That's because not all browsers return `languageCode-countryCode`.

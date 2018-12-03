@@ -23,9 +23,9 @@ Directive | Selectors
 
 Directive | Validator | Options | Errors
 --------- | --------- | ------- | ------
-`L10nNumberValidator` | `digits=[digitInfo]` | `[minValue]` `[maxValue]` | `format` or `minValue` or `maxValue`
+`L10nNumberValidator` | `digits=[digits]` | `[minValue]` `[maxValue]` | `format` or `minValue` or `maxValue`
 
-where `digitInfo` has the following format: `{minIntegerDigits}.{minFractionDigits}-{maxFractionDigits}`, and `minValue` and `maxValue` attributes are optional:
+where `digits` has the following format: `{minIntegerDigits}.{minFractionDigits}-{maxFractionDigits}`, and `minValue` and `maxValue` attributes are optional:
 ```Html
 <input digits="1.2-2" minValue="0" maxValue="1000" name="decimal" [(ngModel)]="decimal" l10nValidateNumber>
 ```
@@ -37,7 +37,7 @@ or, if you use variables:
 The number can be entered with or without the thousands separator.
 
 ### Parsing a number
-When the number is valid, you can get its value by the `parseNumber` method of `LocaleValidation`:
+You can get the value of a localized number by the `parseNumber` method of `LocaleValidation`:
 ```TypeScript
 parsedValue: number = null;
 
@@ -58,33 +58,23 @@ Defining a form:
 ```TypeScript
 this.myForm = this.fb.group({
   weight: ['', [ l10nValidateNumber('1.0-1') ]],
-  height: ['', [ l10nValidateNumber('1.0-0', 50, 260) ]],
+  height: ['', [ l10nValidateNumber('1.0-0', 50, 260) ]]
 });
 ```
 
 On submit parse the values using `parseNumber`:
 ```TypeScript
-const formvalues = this.myForm.value;
+const formValues = this.myForm.value;
 
-weight = this.localeValidation.parseNumber(formvalues.weight);
-height = this.localeValidation.parseNumber(formvalues.height);
+this.weight = this.localeValidation.parseNumber(formValues.weight);
+this.height = this.localeValidation.parseNumber(formValues.height);
 ```
 
 When first populating form data you have to format numbers before calling `patchValue`:
 ```TypeScript
-// class attributes
-@DefaultLocale() defaultLocale: string;
-decimalPipe: L10nDecimalPipe = new L10nDecimalPipe();
-
-[...]
-
-// after loading data
-const formvalues = {
-  weight: this.decimalPipe.transform(weight, this.defaultLocale, '1.0-1'),
-  height: this.decimalPipe.transform(height, this.defaultLocale, '1.0-0'),
+const formValues = {
+  weight: this.locale.formatDecimal(weight, '1.0-1'),
+  height: this.locale.formatDecimal(height, '1.0-0')
 }
-this.myForm.patchValue(formvalues);
-
+this.myForm.patchValue(formValues);
 ```
-
-

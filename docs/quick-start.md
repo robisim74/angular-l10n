@@ -14,9 +14,10 @@ import { HttpClientModule } from '@angular/common/http';
 import { AppComponent } from './app.component';
 import { HomeComponent } from './home/home.component';
 
-import { L10nConfig, L10nLoader, TranslationModule, StorageStrategy, ProviderType } from 'angular-l10n';
+import { L10nConfig, L10nLoader, TranslationModule, StorageStrategy, ProviderType, LogLevel } from 'angular-l10n';
 
 const l10nConfig: L10nConfig = {
+    logger: LogLevel.Warn,
     locale: {
         languages: [
             { code: 'en', dir: 'ltr' },
@@ -30,6 +31,7 @@ const l10nConfig: L10nConfig = {
             { type: ProviderType.Static, prefix: './assets/locale-' }
         ],
         caching: true,
+        composedKeySeparator: '.',
         missingValue: 'No key'
     }
 };
@@ -165,9 +167,10 @@ import { HttpClientModule } from '@angular/common/http';
 import { AppComponent } from './app.component';
 import { HomeComponent } from './home/home.component';
 
-import { L10nConfig, L10nLoader, LocalizationModule, StorageStrategy, ProviderType } from 'angular-l10n';
+import { L10nConfig, L10nLoader, LocalizationModule, StorageStrategy, ProviderType, LogLevel } from 'angular-l10n';
 
 const l10nConfig: L10nConfig = {
+    logger: LogLevel.Warn,
     locale: {
         languages: [
             { code: 'en', dir: 'ltr' },
@@ -182,6 +185,7 @@ const l10nConfig: L10nConfig = {
             { type: ProviderType.Static, prefix: './assets/locale-' }
         ],
         caching: true,
+        composedKeySeparator: '.',
         missingValue: 'No key'
     }
 };
@@ -365,9 +369,10 @@ import { HttpClientModule } from '@angular/common/http';
 import { AppComponent } from './app.component';
 import { HomeComponent } from './home/home.component';
 
-import { L10nConfig, L10nLoader, TranslationModule, StorageStrategy, ProviderType } from 'angular-l10n';
+import { L10nConfig, L10nLoader, TranslationModule, StorageStrategy, ProviderType, LogLevel } from 'angular-l10n';
 
 const l10nConfig: L10nConfig = {
+    logger: LogLevel.Warn,
     locale: {
         languages: [
             { code: 'en', dir: 'ltr' },
@@ -381,6 +386,7 @@ const l10nConfig: L10nConfig = {
             { type: ProviderType.Static, prefix: './assets/locale-' }
         ],
         caching: true,
+        composedKeySeparator: '.',
         missingValue: 'No key'
     }
 };
@@ -488,6 +494,7 @@ The following is an example that uses _Asynchronous loading_, based on _Angular 
 `app.module.ts`:
 ```TypeScript
 const l10nConfig: L10nConfig = {
+    logger: LogLevel.Warn,
     locale: {
         languages: [
             { code: 'en', dir: 'ltr' },
@@ -511,7 +518,7 @@ const l10nConfig: L10nConfig = {
         @Inject(PLATFORM_ID) private platformId: Object
     ) { }
 
-    load(): Promise<void> {
+    load(): Promise<any> {
         if (isPlatformBrowser(this.platformId)) {
             // Client only code.
             this.translationConfig.providers = [

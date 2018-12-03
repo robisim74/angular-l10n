@@ -33,13 +33,11 @@ Method | Function
 ## ILocaleService
 Property | Value
 -------- | -----
-`languageCodeChanged: EventEmitter<string>` |
-`defaultLocaleChanged: EventEmitter<string>` |
-`currencyCodeChanged: EventEmitter<string>` |
-`timezoneChanged: EventEmitter<string>` |
+`languageCodeChanged: Subject<string>` |
+`defaultLocaleChanged: Subject<string>` |
+`currencyCodeChanged: Subject<string>` |
+`timezoneChanged: Subject<string>` |
 `loadTranslation: Subject<any>` |
-`currencyCode: string` |
-`timezone: string` |
 
 Method | Function
 ------ | --------
@@ -56,12 +54,16 @@ Method | Function
 `getCurrentCalendar(): string` |
 `getDefaultLocale(): string` |
 `getCurrentCurrency(): string` |
-`getCurrencySymbol(currencyDisplay?: 'code' | 'symbol' | 'name', defaultLocale?: string, currency?: string): string` |
+`getCurrencySymbol(currencyDisplay?: string, defaultLocale?: string, currency?: string): string` |
 `getCurrentTimezone(): string` |
 `setCurrentLanguage(languageCode: string): void` |
 `setDefaultLocale(languageCode: string, countryCode?: string, scriptCode?: string, numberingSystem?: string, calendar?: string): void` |
 `setCurrentCurrency(currencyCode: string): void` |
 `setCurrentTimezone(zoneName: string): void` |
+`formatDate(value: any, format?: string | DateTimeOptions, defaultLocale?: string, timezone?: string): string` | Formats a date according to default locale
+`formatDecimal(value: any, digits?: string | DigitsOptions, defaultLocale?: string): string` | Formats a decimal number according to default locale
+`formatPercent(value: any, digits?: string | DigitsOptions, defaultLocale?: string): string` | Formats a number as a percentage according to default locale
+`formatCurrency(value: any, digits?: string | DigitsOptions, currencyDisplay?: string, defaultLocale?: string, currency?: string): string` | Formats a number as a currency according to default locale
 `composeLocale(codes: ISOCode[]): string` |
 `rollback(): void` |
 
@@ -85,8 +87,7 @@ Method | Function
 ## ILocaleValidation
 Method | Function
 ------ | --------
-`parseNumber(s: string, defaultLocale?: string): number | null` | Converts a string to a number according to default locale. If the string cannot be converted to a number, returns NaN
-`getRegExp(digits: string, defaultLocale?: string): RegExp` |
+`parseNumber(s: string, digits?: string, defaultLocale?: string): number | null` | Converts a string to a number according to default locale. If the string cannot be converted to a number, returns NaN
 
 ---
 

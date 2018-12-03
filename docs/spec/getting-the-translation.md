@@ -8,14 +8,14 @@ Pipe | Type | Format | Pipe syntax
 ---- | ---- | ------ | -----------
 Translate | Message | String | `expression | translate:lang`
 L10nDate | Date | Date/Number/ISO string | `expression | l10nDate[:defaultLocale[:format[:timezone]]]`
-L10nDecimal | Decimal | Number/string | `expression | l10nDecimal[:defaultLocale[:digitInfo]]`
-L10nPercent | Percentage | Number/string | `expression | l10nPercent[:defaultLocale[:digitInfo]]`
-L10nCurrency | Currency | Number/string | `expression | l10nCurrency[:defaultLocale[:currency[:currencyDisplay[:digitInfo]]]]`
+L10nDecimal | Decimal | Number/string | `expression | l10nDecimal[:defaultLocale[:digits]]`
+L10nPercent | Percentage | Number/string | `expression | l10nPercent[:defaultLocale[:digits]]`
+L10nCurrency | Currency | Number/string | `expression | l10nCurrency[:defaultLocale[:currency[:currencyDisplay[:digits]]]]`
 
 > You can dynamically change parameters and expressions values.
 
 ### Messages
-Implement _Language_ decorator in the component to provide the parameter to the _translate_ pipe:
+Implement _Language_ decorator in the component to provide the parameter to _translate_ pipe:
 ```TypeScript
 export class HomeComponent implements OnInit {
 
@@ -87,13 +87,14 @@ export class HomeComponent implements OnInit {
 ```
 expression | l10nDate[:defaultLocale[:format[:timezone]]]
 ```
-Where:
+where:
 
 - `expression` is a date object or a number (milliseconds since UTC epoch) or an ISO string.
 - `format` indicates which date/time components to include. The format can be an alias as shown below:
 
     - `'short'`: equivalent to `'M/d/y, h:mm'` (e.g. `8/29/2017, 4:37 PM` for `en-US`)
     - `'medium'`: equivalent to `'MMM d, y, h:mm:ss'` (e.g. `Aug 29, 2017, 4:32:43 PM` for `en-US`)
+    - `'long'`: equivalent to `'MMMM d, y, h:mm:ss'` (e.g. `August 29, 2017, 4:32:43 PM` for `en-US`)
     - `'shortDate'`: equivalent to `'M/d/y'` (e.g. `8/29/2017` for `en-US`)
     - `'mediumDate'`: equivalent to `'MMM d, y'` (e.g. `Aug 29, 2017` for `en-US`)
     - `'longDate'`: equivalent to `'MMMM d, y'` (e.g. `August 29, 2017` for `en-US`)
@@ -101,7 +102,7 @@ Where:
     - `'shortTime'`: equivalent to `'h:mm'` (e.g. `4:53 PM` for `en-US`)
     - `'mediumTime'`: equivalent to `'h:mm:ss'` (e.g. `4:54:15 PM` for `en-US`)
 
-    It can also be an object with some or all of the following properties:
+    It can also be a `DateTimeOptions` object with some or all of the following properties:
 
     - `weekday` The representation of the weekday. Possible values are _narrow_, _short_, _long_.
     - `era` The representation of the era. Possible values are _narrow_, _short_, _long_.
@@ -114,7 +115,7 @@ Where:
     - `timeZoneName` The representation of the time zone name. Possible values are _short_, _long_.
     - `hour12` Whether to use 12-hour time (as opposed to 24-hour time). Possible values are true and false; the default is locale dependent.
 
-    See [DateTimeFormat](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/DateTimeFormat) for further information.
+    See [Intl.DateTimeFormat](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/DateTimeFormat) for further information.
 
 #### Using format aliases
 ```Html
@@ -161,9 +162,25 @@ export class HomeComponent implements OnInit {
 
 #### Decimals
 ```
-expression | l10nDecimal[:defaultLocale:[digitInfo]]
+expression | l10nDecimal[:defaultLocale:[digits]]
 ```
-where `expression` is a number and `digitInfo` has the following format: `{minIntegerDigits}.{minFractionDigits}-{maxFractionDigits}`.
+where:
+
+- `expression` is a number or a string.
+- `digits` indicates the format of the digits. It can be an alias as:
+
+    `{minIntegerDigits}.{minFractionDigits}-{maxFractionDigits}`
+  
+    or a `DigitsOptions` object with some or all of the following properties:
+
+    - `minimumIntegerDigits` The minimum number of integer digits to use.
+    - `minimumFractionDigits` The minimum number of fraction digits to use.
+    - `maximumFractionDigits` The maximum number of fraction digits to use.
+    - `minimumSignificantDigits` The minimum number of significant digits to use.
+    - `maximumSignificantDigits` The maximum number of significant digits to use.
+    - `useGrouping` Whether to use grouping separators, such as thousands separators.
+
+    See [Intl.NumberFormat](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/NumberFormat) for further information.
 
 ```Html
 {{ value | l10nDecimal:defaultLocale:'1.5-5' }}
@@ -171,7 +188,7 @@ where `expression` is a number and `digitInfo` has the following format: `{minIn
 
 #### Percentages
 ```
-expression | l10nPercent[:defaultLocale:[digitInfo]]
+expression | l10nPercent[:defaultLocale:[digits]]
 ```
 ```Html
 {{ value | l10nPercent:defaultLocale:'1.1-1' }}
@@ -179,18 +196,30 @@ expression | l10nPercent[:defaultLocale:[digitInfo]]
 
 #### Currencies
 ```
-expression | l10nCurrency[:defaultLocale[:currency[:currencyDisplay[:digitInfo]]]]
+expression | l10nCurrency[:defaultLocale[:currency[:currencyDisplay[:digits]]]]
 ```
 where `currencyDisplay` is the currency formatting. Possible values are _'symbol'_ to use a localized currency symbol such as _€_, _'code'_ to use the ISO currency code, _'name'_ to use a localized currency name such as _dollar_; the default is _'symbol'_. 
 ```Html
 {{ value | l10nCurrency:defaultLocale:currency:'symbol':'1.2-2' }}
 ```
 
-### OnPush ChangeDetectionStrategy
+### Extended classes	
+When using _pipes_, alternatively to _decorators_ you can extend `Translation` or `Localization` classes.	
+
+Extend `Translation` class in the component to provide _lang_ to _translate_ pipe:	
+```TypeScript	
+export class HomeComponent extends Translation { }	
+```	
+Extend `Localization` class in the component to provide _lang_ to _translate_ pipe,  _defaultLocale_, _currency_, _timezone_ to _l10nDate_, _l10nDecimal_, _l10nPercent_ & _l10nCurrency_ pipes.	
+```TypeScript	
+export class HomeComponent extends Localization { } 	
+```
+
+The subclass component will also inherit the instances of `LocaleService` and `TranslationService` as _locale_ and _translation_.
+
+### OnPush Change detection strategy
 _Pure pipes_ don't need to set `ChangeDetectionStrategy` to `OnPush`. If into your components you need to use it, you have to inject `ChangeDetectorRef`:
 ```TypeScript
-import { Component, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
-
 @Component({
     ...
     changeDetection: ChangeDetectionStrategy.OnPush
@@ -205,6 +234,17 @@ export class HomeComponent implements OnInit {
 
 } 
 ```
+Or if you use extended classes:
+```TypeScript
+export class HomeComponent extends Translation  {
+
+    constructor(private cdr: ChangeDetectorRef) {
+        super(cdr);
+    }
+
+} 
+```
+
 That's because we need to know the component reference that implements the `OnPush` strategy.
 
 > Note that if you use in the component only the _directives_ and not the _pipes_, you don't need to inject `ChangeDetectorRef`.
@@ -224,9 +264,9 @@ Directive | Type | Format | Html syntax
 --------- | ---- | ------ | -----------
 Translate | Message | String | `<tag l10n-attribute attribute="expr1" [params]="[params]" l10nTranslate>expr2</tag>`
 L10nDate | Date | Date/Number/ISO string | `<tag l10n-attribute attribute="expr1" format="[format]" l10nDate>expr2</tag>`
-L10nDecimal | Decimal | Number/string | `<tag l10n-attribute attribute="expr1" digits="[digitInfo]" l10nDecimal>expr2</tag>`
-L10nPercent | Percentage | Number/string | `<tag l10n-attribute attribute="expr1" digits="[digitInfo]" l10nPercent>expr2</tag>`
-L10nCurrency | Currency | Number/string | `<tag l10n-attribute attribute="expr1" digits="[digitInfo]" currencyDisplay="[currencyDisplay]" l10nCurrency>expr2</tag>`
+L10nDecimal | Decimal | Number/string | `<tag l10n-attribute attribute="expr1" digits="[digits]" l10nDecimal>expr2</tag>`
+L10nPercent | Percentage | Number/string | `<tag l10n-attribute attribute="expr1" digits="[digits]" l10nPercent>expr2</tag>`
+L10nCurrency | Currency | Number/string | `<tag l10n-attribute attribute="expr1" digits="[digits]" currencyDisplay="[currencyDisplay]" l10nCurrency>expr2</tag>`
 
 > You can dynamically change parameters and expressions values as with pipes. How does it work? To observe the expression change (not the parameters), a `MutationObserver` is used: the observer is added only if detected in the browser. If you want to use this feature also reaching older browsers, we recommend using pipes.
 
@@ -393,29 +433,12 @@ export class HomeComponent implements OnInit {
 ```
 
 ### Dates & numbers
-To get the translation of dates and numbers, you can use the `transform` method of the corresponding pipe to get the translation: you have the `getDefaultLocale` method of `LocaleService`, and the `defaultLocaleChanged` event to know when `defaultLocale` changes.
-```TypeScript
-@Component({
-    ...
-    template: `<p>{{ value }}</p>`
-})
-export class HomeComponent {
-  
-    pipe: L10nDecimalPipe = new L10nDecimalPipe();
-    value: any = this.pipe.transform(1234.5, this.locale.getDefaultLocale(), '1.2-2');
+To get the translation of dates and numbers, `LocaleService` has the following methods:
 
-    constructor(public locale: LocaleService) { }
-
-    ngOnInit(): void {
-        this.locale.defaultLocaleChanged.subscribe(
-            (defaultLocale: string) => {
-                this.value = this.pipe.transform(1234.5, defaultLocale, '1.2-2');
-            }
-        );
-    }
-
-}
-```
+* `formatDate(value: any, format?: string | DateTimeOptions, defaultLocale?: string, timezone?: string): string`
+* `formatDecimal(value: any, digits?: string | DigitsOptions, defaultLocale?: string): string`
+* `formatPercent(value: any, digits?: string | DigitsOptions, defaultLocale?: string): string`
+* `formatCurrency(value: any, digits?: string | DigitsOptions, currencyDisplay?: string, defaultLocale?: string, currency?: string): string`
 
 ---
 

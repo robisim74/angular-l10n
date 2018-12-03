@@ -6,7 +6,7 @@ import { takeUntilDestroyed } from '../models/take-until-destroyed';
 import { InjectorRef } from '../models/injector-ref';
 
 /**
- * Provides 'lang' to the translate pipe.
+ * Provides 'lang' to translate pipe.
  */
 @Injectable() export class Translation implements OnDestroy {
 
@@ -31,7 +31,7 @@ import { InjectorRef } from '../models/injector-ref';
 }
 
 /**
- * Provides 'lang' to the translate pipe,
+ * Provides 'lang' to translate pipe,
  * 'defaultLocale', 'currency', 'timezone' to l10nDate, l10nDecimal, l10nPercent & l10nCurrency pipes.
  */
 @Injectable() export class Localization extends Translation {
