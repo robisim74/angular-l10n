@@ -832,6 +832,7 @@ describe('TranslatePipe', () => {
     describe('Using localized routing', () => {
 
         let httpMock: HttpTestingController;
+        let fixture: ComponentFixture<MockComponent>;
 
         let l10nLoader: L10nLoader;
         let locale: LocaleService;
@@ -839,7 +840,6 @@ describe('TranslatePipe', () => {
 
         let pipe: TranslatePipe;
 
-        let fixture: ComponentFixture<MockComponent>;
         let router: Router;
         let location: Location;
 
@@ -887,39 +887,51 @@ describe('TranslatePipe', () => {
         });
 
         it('should translate when language changes', fakeAsync(() => {
-            l10nLoader.load();
-            tick();
-            router.initialNavigation();
-            tick();
+            if (fixture.ngZone) {
+                fixture.ngZone.run(() => {
+                    l10nLoader.load();
+                    tick();
+                    router.initialNavigation();
+                    tick();
 
-            const req1: TestRequest = httpMock.expectOne('./assets/locale-en.json');
-            req1.flush({ "Title": "Angular localization" });
+                    const req1: TestRequest = httpMock.expectOne('./assets/locale-en.json');
+                    req1.flush({ "Title": "Angular localization" });
 
-            expect(location.path()).toBe('/en/mock');
-            expect(pipe.transform('Title', locale.getCurrentLanguage())).toEqual("Angular localization");
+                    expect(location.path()).toBe('/en/mock');
+                    expect(pipe.transform('Title', locale.getCurrentLanguage())).toEqual("Angular localization");
 
-            locale.setDefaultLocale('it');
-            tick();
+                    locale.setDefaultLocale('it');
+                    tick();
 
-            const req2: TestRequest = httpMock.expectOne('./assets/locale-it.json');
-            req2.flush({ "Title": "Localizzazione in Angular" });
+                    const req2: TestRequest = httpMock.expectOne('./assets/locale-it.json');
+                    req2.flush({ "Title": "Localizzazione in Angular" });
 
-            expect(location.path()).toBe('/it/mock');
-            expect(pipe.transform('Title', locale.getCurrentLanguage())).toEqual("Localizzazione in Angular");
+                    expect(location.path()).toBe('/it/mock');
+                    expect(pipe.transform('Title', locale.getCurrentLanguage())).toEqual("Localizzazione in Angular");
+                });
+            } else {
+                console.warn('Test not executed');
+            }
         }));
 
         it('should translate when the app starts', fakeAsync(() => {
-            l10nLoader.load();
-            tick();
-            router.initialNavigation();
-            tick();
+            if (fixture.ngZone) {
+                fixture.ngZone.run(() => {
+                    l10nLoader.load();
+                    tick();
+                    router.initialNavigation();
+                    tick();
 
-            expect(location.path()).toBe('/en/mock');
+                    expect(location.path()).toBe('/en/mock');
 
-            const req1: TestRequest = httpMock.expectOne('./assets/locale-en.json');
-            req1.flush({ "Title": "Angular localization" });
+                    const req1: TestRequest = httpMock.expectOne('./assets/locale-en.json');
+                    req1.flush({ "Title": "Angular localization" });
 
-            expect(pipe.transform('Title', locale.getCurrentLanguage())).toEqual("Angular localization");
+                    expect(pipe.transform('Title', locale.getCurrentLanguage())).toEqual("Angular localization");
+                });
+            } else {
+                console.warn('Test not executed');
+            }
         }));
 
         afterEach(() => {

@@ -2,7 +2,7 @@
 import { TestBed, ComponentFixture, fakeAsync, tick } from '@angular/core/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { By } from '@angular/platform-browser';
-import { DebugElement, Component } from '@angular/core';
+import { DebugElement, Component, OnInit } from '@angular/core';
 
 import {
     L10nConfig,
@@ -18,11 +18,13 @@ import {
         <p>{{ day | l10nDate:defaultLocale }}</p>
     `
 })
-class DefaultLocaleComponent {
+class DefaultLocaleComponent implements OnInit {
 
     @DefaultLocale() defaultLocale: string;
 
     day: Date = new Date('2017-05-08');
+
+    ngOnInit(): void { }
 
 }
 

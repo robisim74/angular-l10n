@@ -10,6 +10,9 @@ import { Logger } from '../models/logger';
 export function Language(): PropertyDecorator {
     function DecoratorFactory(target: any, propertyKey?: string | symbol): void {
         const targetNgOnInit: Function = target.ngOnInit;
+        if (typeof targetNgOnInit === "undefined") {
+            Logger.log(target.constructor ? target.constructor.name : 'Language decorator', 'missingOnInit');
+        }
 
         function ngOnInit(this: any): void {
             const translation: TranslationService = InjectorRef.get(TranslationService);
@@ -27,8 +30,6 @@ export function Language(): PropertyDecorator {
 
             if (targetNgOnInit) {
                 targetNgOnInit.apply(this);
-            } else {
-                Logger.log(this.constructor ? this.constructor.name : 'Language decorator', 'missingOnInit');
             }
         }
         target.ngOnInit = ngOnInit;

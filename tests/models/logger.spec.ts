@@ -42,13 +42,17 @@ describe('Logger', () => {
         }
     };
 
+    beforeAll(() => {
+        spyOn(console, 'warn');
+    });
+
     beforeEach(() => {
         fixture = TestBed.configureTestingModule({
             declarations: [LanguageComponent],
             imports: [
                 HttpClientTestingModule,
                 LocalizationModule.forRoot(l10nConfig)
-            ]
+            ],
         }).createComponent(LanguageComponent);
 
         comp = fixture.componentInstance;
@@ -56,8 +60,6 @@ describe('Logger', () => {
 
     beforeEach((done) => {
         l10nLoader = TestBed.get(L10nLoader);
-
-        spyOn(console, 'warn');
 
         l10nLoader.load().then(() => done());
     });
@@ -68,7 +70,6 @@ describe('Logger', () => {
         expect(console.warn).toHaveBeenCalledWith("angular-l10n (L10nLoader): Missing 'translation' configuration");
         expect(console.warn).toHaveBeenCalledWith("angular-l10n (LanguageComponent): Missing 'ngOnInit' method: required by AoT compilation");
         expect(console.warn).toHaveBeenCalledWith("angular-l10n (TranslatePipe): Missing 'lang' parameter");
-        expect(console.warn).toHaveBeenCalledWith("angular-l10n (IntlFormatter): Invalid number format alias: the default format will be used");
 
         comp.ngOnDestroy();
         expect(console.warn).toHaveBeenCalledWith("angular-l10n (LanguageComponent): Missing 'ngOnDestroy' method to cancel subscriptions: required by AoT compilation");

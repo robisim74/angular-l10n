@@ -11,6 +11,9 @@ import { Logger } from '../models/logger';
 export function DefaultLocale(): PropertyDecorator {
     function DecoratorFactory(target: any, propertyKey?: string | symbol): void {
         const targetNgOnInit: Function = target.ngOnInit;
+        if (typeof targetNgOnInit === "undefined") {
+            Logger.log(target.constructor ? target.constructor.name : 'DefaultLocale decorator', 'missingOnInit');
+        }
 
         function ngOnInit(this: any): void {
             const locale: LocaleService = InjectorRef.get(LocaleService);
@@ -28,8 +31,6 @@ export function DefaultLocale(): PropertyDecorator {
 
             if (targetNgOnInit) {
                 targetNgOnInit.apply(this);
-            } else {
-                Logger.log(this.constructor ? this.constructor.name : 'DefaultLocale decorator', 'missingOnInit');
             }
         }
         target.ngOnInit = ngOnInit;

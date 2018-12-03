@@ -1,7 +1,7 @@
 /* tslint:disable */
 import { TestBed, ComponentFixture, fakeAsync, tick } from '@angular/core/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { Component, OnDestroy } from "@angular/core";
+import { Component, OnInit, OnDestroy } from "@angular/core";
 
 import {
     L10nConfig,
@@ -16,9 +16,11 @@ import {
 @Component({
     template: ``,
 })
-class MockComponent implements OnDestroy {
+class MockComponent implements OnInit, OnDestroy {
 
     @Language() lang: string;
+
+    ngOnInit(): void { }
 
     ngOnDestroy(): void { }
 

@@ -1,16 +1,30 @@
 import { Injectable, Inject } from "@angular/core";
+import { ReplaySubject } from "rxjs";
 
 import { L10N_LOGGER } from "./l10n-config";
-import { LogLevel, LOG_MESSAGES } from "./types";
+import { LogLevel, Log, LOG_MESSAGES } from "./types";
 
+/**
+ * The buffer is necessary to the logger because during the initialization of the decorators the services are not yet available.
+ */
 @Injectable() export class Logger {
 
-    private static level: LogLevel = LogLevel.Off;
+    private static level: LogLevel | null = null;
+
+    private static buffer: ReplaySubject<Log> = new ReplaySubject<Log>();
 
     public static log(name: string, message: string): void {
         if (Logger.level == LogLevel.Off) return;
 
-        message = `angular-l10n (${name}): ${LOG_MESSAGES[message]}`;
+        if (Logger.level) {
+            Logger.send({ name: name, message: message });
+        } else {
+            Logger.buffer.next({ name: name, message: message });
+        }
+    }
+
+    public static send(log: Log): void {
+        const message: string = `angular-l10n (${log.name}): ${LOG_MESSAGES[log.message]}`;
         switch (Logger.level) {
             case LogLevel.Error:
                 console.error(message);
@@ -25,6 +39,11 @@ import { LogLevel, LOG_MESSAGES } from "./types";
 
     constructor(@Inject(L10N_LOGGER) private level: LogLevel) {
         Logger.level = this.level || LogLevel.Off;
+        if (Logger.level != LogLevel.Off) {
+            Logger.buffer.subscribe((log: Log) => {
+                Logger.send(log);
+            });
+        }
     }
 
 }

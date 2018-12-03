@@ -73,6 +73,14 @@ export interface Language {
     dir: string;
 }
 
+export interface Decimal {
+
+    minusSign: string;
+    decimalSeparator: string;
+    thousandSeparator: string;
+
+}
+
 export interface LocalizedRoutingSchema extends DefaultLocaleCodes {
 
     currency?: string;
@@ -91,6 +99,13 @@ export interface LocalizedRoutingOptions {
      * Provides the schema to the default behaviour of localized routing.
      */
     schema?: LocalizedRoutingSchema[];
+}
+
+export interface Log {
+
+    name: string;
+    message: string;
+
 }
 
 export enum StorageStrategy {
@@ -141,14 +156,6 @@ export enum NumberFormatStyle {
     Decimal,
     Percent,
     Currency
-
-}
-
-export interface Decimal {
-
-    minusSign: string;
-    decimalSeparator: string;
-    thousandSeparator: string;
 
 }
 

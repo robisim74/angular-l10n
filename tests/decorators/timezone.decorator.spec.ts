@@ -2,7 +2,7 @@
 import { TestBed, ComponentFixture, fakeAsync, tick } from '@angular/core/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { By } from '@angular/platform-browser';
-import { DebugElement, Component } from '@angular/core';
+import { DebugElement, Component, OnInit } from '@angular/core';
 
 import {
     L10nConfig,
@@ -19,12 +19,14 @@ import {
         <p>{{ day | l10nDate:defaultLocale:'medium':timezone }}</p>
     `
 })
-class TimezoneComponent {
+class TimezoneComponent implements OnInit {
 
     @DefaultLocale() defaultLocale: string;
     @Timezone() timezone: string;
 
     day: Date = new Date(Date.UTC(2017, 7, 29, 21, 41, 0));
+
+    ngOnInit(): void { }
 
 }
 

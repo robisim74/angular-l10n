@@ -10,6 +10,9 @@ import { Logger } from '../models/logger';
 export function Currency(): PropertyDecorator {
     function DecoratorFactory(target: any, propertyKey?: string | symbol): void {
         const targetNgOnInit: Function = target.ngOnInit;
+        if (typeof targetNgOnInit === "undefined") {
+            Logger.log(target.constructor ? target.constructor.name : 'Currency decorator', 'missingOnInit');
+        }
 
         function ngOnInit(this: any): void {
             const locale: LocaleService = InjectorRef.get(LocaleService);
@@ -27,8 +30,6 @@ export function Currency(): PropertyDecorator {
 
             if (targetNgOnInit) {
                 targetNgOnInit.apply(this);
-            } else {
-                Logger.log(this.constructor ? this.constructor.name : 'Currency decorator', 'missingOnInit');
             }
         }
         target.ngOnInit = ngOnInit;

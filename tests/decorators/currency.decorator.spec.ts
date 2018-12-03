@@ -2,7 +2,7 @@
 import { TestBed, ComponentFixture, fakeAsync, tick } from '@angular/core/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { By } from '@angular/platform-browser';
-import { DebugElement, Component } from '@angular/core';
+import { DebugElement, Component, OnInit } from '@angular/core';
 
 import {
     L10nConfig,
@@ -19,12 +19,14 @@ import {
         <p>{{ value | l10nCurrency:defaultLocale:currency:'symbol':'1.2-2' }}</p>
     `
 })
-class CurrencyComponent {
+class CurrencyComponent implements OnInit {
 
     @DefaultLocale() defaultLocale: string;
     @Currency() currency: string;
 
     value: number = 1234.5;
+
+    ngOnInit(): void { }
 
 }
 

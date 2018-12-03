@@ -2,7 +2,7 @@
 import { TestBed, ComponentFixture, fakeAsync, tick } from '@angular/core/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { By } from '@angular/platform-browser';
-import { DebugElement, Component, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
+import { DebugElement, Component, OnInit, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 
 import {
     L10nConfig,
@@ -18,9 +18,11 @@ import {
         <p>{{ 'Title' | translate:lang }}</p>
     `
 })
-class LanguageComponent {
+class LanguageComponent implements OnInit {
 
     @Language() lang: string;
+
+    ngOnInit(): void { }
 
 }
 
@@ -30,11 +32,13 @@ class LanguageComponent {
     `,
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-class LanguageOnPushComponent {
+class LanguageOnPushComponent implements OnInit {
 
     @Language() lang: string;
 
     constructor(private cdr: ChangeDetectorRef) { }
+
+    ngOnInit(): void { }
 
 }
 
