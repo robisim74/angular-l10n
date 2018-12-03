@@ -1,5 +1,4 @@
 /* tslint:disable */
-
 import { TestBed, fakeAsync, tick, ComponentFixture } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController, TestRequest } from '@angular/common/http/testing';
 import { RouterTestingModule } from '@angular/router/testing';

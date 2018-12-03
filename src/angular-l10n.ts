@@ -5,6 +5,7 @@ export {
     LOCALE_CONFIG,
     TRANSLATION_CONFIG,
     L10N_ROOT,
+    L10N_LOGGER,
     LocaleConfig,
     TranslationConfig,
     L10nConfig,

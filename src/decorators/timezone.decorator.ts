@@ -36,7 +36,7 @@ export function Timezone(): PropertyDecorator {
         if (typeof propertyKey !== "undefined") {
             Object.defineProperty(target, propertyKey, {
                 writable: true,
-                value: undefined
+                value: ''
             });
         }
     }

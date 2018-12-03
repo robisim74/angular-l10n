@@ -17,13 +17,11 @@ export function Language(): PropertyDecorator {
             if (typeof propertyKey !== "undefined") {
                 translation.translationChanged().pipe(takeUntilDestroyed(this)).subscribe(
                     (language: string) => {
-                        if (language) {
-                            this[propertyKey] = language;
-                            // OnPush Change Detection strategy.
-                            const cdr: string | undefined = Object.keys(this)
-                                .find((key: string) => this[key] && this[key]['markForCheck'] !== undefined);
-                            if (cdr) { this[cdr].markForCheck(); }
-                        }
+                        this[propertyKey] = language;
+                        // OnPush Change Detection strategy.
+                        const cdr: string | undefined = Object.keys(this)
+                            .find((key: string) => this[key] && this[key]['markForCheck'] !== undefined);
+                        if (cdr) { this[cdr].markForCheck(); }
                     });
             }
 
@@ -38,7 +36,7 @@ export function Language(): PropertyDecorator {
         if (typeof propertyKey !== "undefined") {
             Object.defineProperty(target, propertyKey, {
                 writable: true,
-                value: undefined
+                value: ''
             });
         }
     }

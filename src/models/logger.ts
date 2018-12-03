@@ -1,6 +1,6 @@
 import { Injectable, Inject } from "@angular/core";
 
-import { LOCALE_CONFIG, LocaleConfig } from "./l10n-config";
+import { L10N_LOGGER } from "./l10n-config";
 import { LogLevel, LOG_MESSAGES } from "./types";
 
 @Injectable() export class Logger {
@@ -23,8 +23,8 @@ import { LogLevel, LOG_MESSAGES } from "./types";
         }
     }
 
-    constructor(@Inject(LOCALE_CONFIG) private configuration: LocaleConfig) {
-        Logger.level = this.configuration.logger || LogLevel.Off;
+    constructor(@Inject(L10N_LOGGER) private level: LogLevel) {
+        Logger.level = this.level || LogLevel.Off;
     }
 
 }

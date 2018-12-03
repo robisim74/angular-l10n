@@ -35,10 +35,10 @@ describe('Logger', () => {
     let l10nLoader: L10nLoader;
 
     const l10nConfig: L10nConfig = {
+        logger: LogLevel.Warn,
         locale: {
             language: 'en',
-            storage: StorageStrategy.Disabled,
-            logger: LogLevel.Warn
+            storage: StorageStrategy.Disabled
         }
     };
 
@@ -62,7 +62,7 @@ describe('Logger', () => {
         l10nLoader.load().then(() => done());
     });
 
-    it('should log missing parts', fakeAsync(() => {
+    it('should log missing functions', fakeAsync(() => {
         fixture.detectChanges();
 
         expect(console.warn).toHaveBeenCalledWith("angular-l10n (L10nLoader): Missing 'translation' configuration");
@@ -72,6 +72,12 @@ describe('Logger', () => {
 
         comp.ngOnDestroy();
         expect(console.warn).toHaveBeenCalledWith("angular-l10n (LanguageComponent): Missing 'ngOnDestroy' method to cancel subscriptions: required by AoT compilation");
+    }));
+
+    it('should log invalid formats', fakeAsync(() => {
+        fixture.detectChanges();
+
+        expect(console.warn).toHaveBeenCalledWith("angular-l10n (IntlFormatter): Invalid number format alias: the default format will be used");
     }));
 
 });

@@ -37,7 +37,7 @@ export function DefaultLocale(): PropertyDecorator {
         if (typeof propertyKey !== "undefined") {
             Object.defineProperty(target, propertyKey, {
                 writable: true,
-                value: undefined
+                value: ''
             });
         }
     }

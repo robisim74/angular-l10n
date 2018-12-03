@@ -8,6 +8,8 @@ export const TRANSLATION_CONFIG: InjectionToken<TranslationConfig> =
     new InjectionToken<TranslationConfig>('TRANSLATION_CONFIG');
 export const L10N_ROOT: InjectionToken<boolean> =
     new InjectionToken<boolean>('L10N_ROOT');
+export const L10N_LOGGER: InjectionToken<LogLevel> =
+    new InjectionToken<LogLevel>('L10N_LOGGER');
 
 export interface LocaleConfig {
     /**
@@ -60,11 +62,6 @@ export interface LocaleConfig {
      * Provides ISO codes to locale interceptor.
      */
     localeInterceptor?: ISOCode[];
-
-    /**
-     * Defines the log level. Turn off it in production.
-     */
-    logger?: LogLevel;
 }
 
 export interface TranslationConfig {
@@ -147,6 +144,10 @@ export interface L10nConfig {
      * TranslationService configuration.
      */
     translation?: TranslationConfig;
+    /**
+     * Defines the log level. Turn off it in production.
+     */
+    logger?: LogLevel;
 }
 
 export interface Token {

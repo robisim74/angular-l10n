@@ -19,11 +19,9 @@ import { InjectorRef } from '../models/injector-ref';
         this.translation = InjectorRef.get(TranslationService);
         this.translation.translationChanged().pipe(takeUntilDestroyed(this)).subscribe(
             (language: string) => {
-                if (language) {
-                    this.lang = language;
-                    // OnPush Change Detection strategy.
-                    if (this.changeDetectorRef) { this.changeDetectorRef.markForCheck(); }
-                }
+                this.lang = language;
+                // OnPush Change Detection strategy.
+                if (this.changeDetectorRef) { this.changeDetectorRef.markForCheck(); }
             }
         );
     }

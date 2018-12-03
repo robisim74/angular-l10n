@@ -107,7 +107,6 @@ export interface ITranslationService {
     }
 
     private translateKey(key: string, args: any, lang: string): string | any {
-        if (key == null || key == "") return null;
         // I18n plural.
         if (this.configuration.i18nPlural && /^\d+\b/.exec(key)) {
             return this.translateI18nPlural(key, args, lang);

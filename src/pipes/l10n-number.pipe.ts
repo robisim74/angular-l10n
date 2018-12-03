@@ -63,5 +63,5 @@ export class L10nCurrencyPipe implements PipeTransform {
 }
 
 function isEmpty(value: any): boolean {
-    return value == null || value === '' || value !== value; // Checks for NaN.
+    return value == null || value === "" || value !== value; // Checks for NaN.
 }

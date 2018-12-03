@@ -2,7 +2,7 @@ import { NgModule, ModuleWithProviders } from '@angular/core';
 
 import { InjectorRef } from '../models/injector-ref';
 import { Logger } from '../models/logger';
-import { LOCALE_CONFIG, TRANSLATION_CONFIG, L10N_ROOT, L10nConfig, Token } from '../models/l10n-config';
+import { LOCALE_CONFIG, TRANSLATION_CONFIG, L10N_ROOT, L10N_LOGGER, L10nConfig, Token } from '../models/l10n-config';
 import { DefaultLocaleBuilder } from '../models/default-locale-builder';
 import { LocalizedRouting } from '../models/localized-routing';
 import { L10nLoader } from '../services/l10n-loader';
@@ -41,6 +41,7 @@ export class TranslationModule {
                 { provide: LOCALE_CONFIG, useValue: l10nConfig.locale || {} },
                 { provide: TRANSLATION_CONFIG, useValue: l10nConfig.translation || {} },
                 { provide: L10N_ROOT, useValue: true },
+                { provide: L10N_LOGGER, useValue: l10nConfig.logger },
                 DefaultLocaleBuilder,
                 LocalizedRouting,
                 LocaleService,
