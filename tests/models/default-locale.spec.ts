@@ -1,9 +1,9 @@
 /* tslint:disable */
-import { DefaultLocaleBuilder } from '../../src/models/default-locale-builder';
+import { DefaultLocale } from '../../src/models/default-locale';
 
 describe('DefaultLocaleBuilder', () => {
 
-    const defaultLocale: DefaultLocaleBuilder = new DefaultLocaleBuilder();
+    const defaultLocale: DefaultLocale = new DefaultLocale();
 
     it('should build the default locale', () => {
         defaultLocale.build('en', 'US', 'Zzzz', 'latn', 'gregory');

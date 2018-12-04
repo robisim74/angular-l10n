@@ -4,9 +4,7 @@ import { Location } from "@angular/common";
 import { filter } from "rxjs/operators";
 
 import { LOCALE_CONFIG, LocaleConfig } from "./l10n-config";
-import { DefaultLocaleBuilder } from "./default-locale-builder";
 import { InjectorRef } from "./injector-ref";
-import { LocaleStorage } from "../services/locale-storage";
 import { LocaleService } from "../services/locale.service";
 import { LocaleCodes, ISOCode, ExtraCode, LocalizedRoutingSchema } from "./types";
 
@@ -17,8 +15,6 @@ import { LocaleCodes, ISOCode, ExtraCode, LocalizedRoutingSchema } from "./types
 
     constructor(
         @Inject(LOCALE_CONFIG) private configuration: LocaleConfig,
-        private defaultLocale: DefaultLocaleBuilder,
-        private storage: LocaleStorage,
         private locale: LocaleService
     ) { }
 
@@ -79,29 +75,28 @@ import { LocaleCodes, ISOCode, ExtraCode, LocalizedRoutingSchema } from "./types
                 ) return;
             }
 
-            // Sets the default locale.
-            this.defaultLocale.build(
-                localeCodes.languageCode,
-                localeCodes.countryCode || this.getSchema(ISOCode.Country, localeCodes),
-                localeCodes.scriptCode || this.getSchema(ISOCode.Script, localeCodes),
-                this.getSchema(ExtraCode.NumberingSystem, localeCodes),
-                this.getSchema(ExtraCode.Calendar, localeCodes)
-            );
-            this.storage.write("defaultLocale", this.defaultLocale.value);
-            // Sets currency.
+            if (this.configuration.language) {
+                this.locale.setCurrentLanguage(localeCodes.languageCode);
+            }
+            if (this.configuration.defaultLocale) {
+                this.locale.setDefaultLocale(
+                    localeCodes.languageCode,
+                    localeCodes.countryCode || this.getSchema(ISOCode.Country, localeCodes),
+                    localeCodes.scriptCode || this.getSchema(ISOCode.Script, localeCodes),
+                    this.getSchema(ExtraCode.NumberingSystem, localeCodes),
+                    this.getSchema(ExtraCode.Calendar, localeCodes)
+                );
+            }
             if (this.configuration.currency) {
                 const currency: string | undefined = this.getSchema(ExtraCode.Currency, localeCodes);
                 if (currency) {
-                    this.locale.currencyCode = currency;
-                    this.storage.write("currency", currency);
+                    this.locale.setCurrentCurrency(currency);
                 }
             }
-            // Sets timezone.
             if (this.configuration.timezone) {
                 const timezone: string | undefined = this.getSchema(ExtraCode.Timezone, localeCodes);
                 if (timezone) {
-                    this.locale.timezone = timezone;
-                    this.storage.write("timezone", timezone);
+                    this.locale.setCurrentTimezone(timezone);
                 }
             }
         }
@@ -188,10 +183,17 @@ import { LocaleCodes, ISOCode, ExtraCode, LocalizedRoutingSchema } from "./types
     private isDefaultRouting(): boolean {
         if (!this.configuration.localizedRoutingOptions || !this.configuration.localizedRoutingOptions.defaultRouting) return false;
         if (this.configuration.language) {
-            return this.defaultLocale.languageCode == this.configuration.language;
+            return this.locale.getCurrentLanguage() == this.configuration.language;
         }
         if (this.configuration.defaultLocale) {
-            return this.compareLocale(this.defaultLocale, this.configuration.defaultLocale);
+            return this.compareLocale(
+                {
+                    languageCode: this.locale.getCurrentLanguage(),
+                    scriptCode: this.locale.getCurrentScript(),
+                    countryCode: this.locale.getCurrentCountry()
+                },
+                this.configuration.defaultLocale
+            );
         }
         return false;
     }
