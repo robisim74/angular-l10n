@@ -17,7 +17,9 @@ import { HomeComponent } from './home/home.component';
 import { L10nConfig, L10nLoader, TranslationModule, StorageStrategy, ProviderType, LogLevel } from 'angular-l10n';
 
 const l10nConfig: L10nConfig = {
-    logger: LogLevel.Warn,
+    logger: {
+        level: LogLevel.Warn
+    },
     locale: {
         languages: [
             { code: 'en', dir: 'ltr' },
@@ -170,7 +172,9 @@ import { HomeComponent } from './home/home.component';
 import { L10nConfig, L10nLoader, LocalizationModule, StorageStrategy, ProviderType, LogLevel } from 'angular-l10n';
 
 const l10nConfig: L10nConfig = {
-    logger: LogLevel.Warn,
+    logger: {
+        level: LogLevel.Warn
+    },
     locale: {
         languages: [
             { code: 'en', dir: 'ltr' },
@@ -372,7 +376,9 @@ import { HomeComponent } from './home/home.component';
 import { L10nConfig, L10nLoader, TranslationModule, StorageStrategy, ProviderType, LogLevel } from 'angular-l10n';
 
 const l10nConfig: L10nConfig = {
-    logger: LogLevel.Warn,
+    logger: {
+        level: LogLevel.Warn
+    },
     locale: {
         languages: [
             { code: 'en', dir: 'ltr' },
@@ -494,7 +500,9 @@ The following is an example that uses _Asynchronous loading_, based on _Angular 
 `app.module.ts`:
 ```TypeScript
 const l10nConfig: L10nConfig = {
-    logger: LogLevel.Warn,
+    logger: {
+        level: LogLevel.Warn
+    },
     locale: {
         languages: [
             { code: 'en', dir: 'ltr' },

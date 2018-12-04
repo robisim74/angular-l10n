@@ -35,7 +35,9 @@ describe('Logger', () => {
     let l10nLoader: L10nLoader;
 
     const l10nConfig: L10nConfig = {
-        logger: LogLevel.Warn,
+        logger: {
+            level: LogLevel.Warn
+        },
         locale: {
             language: 'en',
             storage: StorageStrategy.Disabled

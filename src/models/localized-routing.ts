@@ -3,10 +3,10 @@ import { Router, NavigationStart, NavigationEnd } from "@angular/router";
 import { Location } from "@angular/common";
 import { filter } from "rxjs/operators";
 
-import { LOCALE_CONFIG, LocaleConfig } from "./l10n-config";
+import { LOCALE_CONFIG, LOCALIZED_ROUTING, LocaleConfig, LocalizedRoutingConfig } from "./l10n-config";
 import { InjectorRef } from "./injector-ref";
 import { LocaleService } from "../services/locale.service";
-import { LocaleCodes, ISOCode, ExtraCode, LocalizedRoutingSchema } from "./types";
+import { LocaleCodes, ISOCode, ExtraCode, Schema } from "./types";
 
 @Injectable() export class LocalizedRouting {
 
@@ -14,12 +14,13 @@ import { LocaleCodes, ISOCode, ExtraCode, LocalizedRoutingSchema } from "./types
     private location: Location;
 
     constructor(
-        @Inject(LOCALE_CONFIG) private configuration: LocaleConfig,
+        @Inject(LOCALE_CONFIG) private localeConfig: LocaleConfig,
+        @Inject(LOCALIZED_ROUTING) private localizedRoutingConfig: LocalizedRoutingConfig,
         private locale: LocaleService
     ) { }
 
     public init(): void {
-        if (this.configuration.localizedRouting) {
+        if (this.localizedRoutingConfig.format) {
             this.router = InjectorRef.get(Router);
             this.location = InjectorRef.get(Location);
 
@@ -40,15 +41,15 @@ import { LocaleCodes, ISOCode, ExtraCode, LocalizedRoutingSchema } from "./types
                 const url: string = (!!data.url && data.url != "/" && data.url == data.urlAfterRedirects) ?
                     data.url :
                     data.urlAfterRedirects;
-                this.replacePath(this.locale.composeLocale(this.configuration.localizedRouting!), url);
+                this.replacePath(this.locale.composeLocale(this.localizedRoutingConfig.format!), url);
             });
 
             // Replaces url when locale changes.
             this.locale.languageCodeChanged.subscribe(() => {
-                this.replacePath(this.locale.composeLocale(this.configuration.localizedRouting!));
+                this.replacePath(this.locale.composeLocale(this.localizedRoutingConfig.format!));
             });
             this.locale.defaultLocaleChanged.subscribe(() => {
-                this.replacePath(this.locale.composeLocale(this.configuration.localizedRouting!));
+                this.replacePath(this.locale.composeLocale(this.localizedRoutingConfig.format!));
             });
         }
     }
@@ -62,10 +63,10 @@ import { LocaleCodes, ISOCode, ExtraCode, LocalizedRoutingSchema } from "./types
         const segment: string | null = this.getLocalizedSegment(path);
         if (segment != null) {
             const locale: string = segment!.replace(/\//gi, "");
-            const localeCodes: LocaleCodes = this.splitLocale(locale, this.configuration.localizedRouting!);
+            const localeCodes: LocaleCodes = this.splitLocale(locale, this.localizedRoutingConfig.format!);
 
             // Unrecognized segment.
-            if (this.configuration.localizedRoutingOptions && this.configuration.localizedRoutingOptions.schema) {
+            if (this.localizedRoutingConfig.schema) {
                 if (!this.compareLocale(localeCodes,
                     {
                         languageCode: localeCodes.languageCode,
@@ -75,10 +76,10 @@ import { LocaleCodes, ISOCode, ExtraCode, LocalizedRoutingSchema } from "./types
                 ) return;
             }
 
-            if (this.configuration.language) {
+            if (this.localeConfig.language) {
                 this.locale.setCurrentLanguage(localeCodes.languageCode);
             }
-            if (this.configuration.defaultLocale) {
+            if (this.localeConfig.defaultLocale) {
                 this.locale.setDefaultLocale(
                     localeCodes.languageCode,
                     localeCodes.countryCode || this.getSchema(ISOCode.Country, localeCodes),
@@ -87,13 +88,13 @@ import { LocaleCodes, ISOCode, ExtraCode, LocalizedRoutingSchema } from "./types
                     this.getSchema(ExtraCode.Calendar, localeCodes)
                 );
             }
-            if (this.configuration.currency) {
+            if (this.localeConfig.currency) {
                 const currency: string | undefined = this.getSchema(ExtraCode.Currency, localeCodes);
                 if (currency) {
                     this.locale.setCurrentCurrency(currency);
                 }
             }
-            if (this.configuration.timezone) {
+            if (this.localeConfig.timezone) {
                 const timezone: string | undefined = this.getSchema(ExtraCode.Timezone, localeCodes);
                 if (timezone) {
                     this.locale.setCurrentTimezone(timezone);
@@ -174,25 +175,25 @@ import { LocaleCodes, ISOCode, ExtraCode, LocalizedRoutingSchema } from "./types
     }
 
     private getSchema(code: string, locale: LocaleCodes): string | undefined {
-        if (!this.configuration.localizedRoutingOptions || !this.configuration.localizedRoutingOptions.schema) return undefined;
-        const schema: any = this.configuration.localizedRoutingOptions.schema
-            .find(((s: LocalizedRoutingSchema) => this.compareLocale(locale, s)));
+        if (!this.localizedRoutingConfig.schema) return undefined;
+        const schema: any = this.localizedRoutingConfig.schema
+            .find(((s: Schema) => this.compareLocale(locale, s)));
         return schema ? schema[code] : undefined;
     }
 
     private isDefaultRouting(): boolean {
-        if (!this.configuration.localizedRoutingOptions || !this.configuration.localizedRoutingOptions.defaultRouting) return false;
-        if (this.configuration.language) {
-            return this.locale.getCurrentLanguage() == this.configuration.language;
+        if (!this.localizedRoutingConfig.defaultRouting) return false;
+        if (this.localeConfig.language) {
+            return this.locale.getCurrentLanguage() == this.localeConfig.language;
         }
-        if (this.configuration.defaultLocale) {
+        if (this.localeConfig.defaultLocale) {
             return this.compareLocale(
                 {
                     languageCode: this.locale.getCurrentLanguage(),
                     scriptCode: this.locale.getCurrentScript(),
                     countryCode: this.locale.getCurrentCountry()
                 },
-                this.configuration.defaultLocale
+                this.localeConfig.defaultLocale
             );
         }
         return false;

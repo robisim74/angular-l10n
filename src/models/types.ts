@@ -81,24 +81,12 @@ export interface Decimal {
 
 }
 
-export interface LocalizedRoutingSchema extends DefaultLocaleCodes {
+export interface Schema extends DefaultLocaleCodes {
 
     currency?: string;
     timezone?: string;
     text?: string;
 
-}
-
-export interface LocalizedRoutingOptions {
-    /**
-     * Disables/enables default routing for default language or locale.
-     */
-    defaultRouting?: boolean;
-
-    /**
-     * Provides the schema to the default behaviour of localized routing.
-     */
-    schema?: LocalizedRoutingSchema[];
 }
 
 export interface Log {

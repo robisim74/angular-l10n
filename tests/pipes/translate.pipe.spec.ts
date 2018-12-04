@@ -850,13 +850,15 @@ describe('TranslatePipe', () => {
                     { code: 'it', dir: 'ltr' }
                 ],
                 defaultLocale: { languageCode: 'en' },
-                storage: StorageStrategy.Disabled,
-                localizedRouting: [ISOCode.Language]
+                storage: StorageStrategy.Disabled
             },
             translation: {
                 providers: [
                     { type: ProviderType.Static, prefix: './assets/locale-' }
                 ]
+            },
+            localizedRouting: {
+                format: [ISOCode.Language]
             }
         };
 

@@ -6,9 +6,14 @@ export {
     TRANSLATION_CONFIG,
     L10N_ROOT,
     L10N_LOGGER,
+    LOCALIZED_ROUTING,
+    LOCALE_INTERCEPTOR,
     LocaleConfig,
     TranslationConfig,
     L10nConfig,
+    LoggerConfig,
+    LocalizedRoutingConfig,
+    LocaleInterceptorConfig,
     Token
 } from './models/l10n-config';
 export { LocalizedRouting } from './models/localized-routing';

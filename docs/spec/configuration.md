@@ -18,7 +18,7 @@ System.config({
 ```
 
 ### Plain JavaScript
-If you build apps in Angular using ES5, you can include the `umd` bundle in your `index.html`:
+If you build apps in Angular using ES5, you can include the _umd_ bundle in your `index.html`:
 ```Html
 <script src="node_modules/angular-l10n/bundles/angular-l10n.umd.js"></script>
 ```
@@ -30,7 +30,9 @@ and use global `ng.l10n` namespace.
 Import the modules you need and configure the library in the application root module:
 ```TypeScript
 const l10nConfig: L10nConfig = {
-    logger: LogLevel.Warn,
+    logger: {
+        level: LogLevel.Warn
+    },
     locale: {
         languages: [
             { code: 'en', dir: 'ltr' },
@@ -73,7 +75,9 @@ export class AppModule {
 Import the modules you need and configure the library in the application root module:
 ```TypeScript
 const l10nConfig: L10nConfig = {
-    logger: LogLevel.Warn,
+    logger: {
+        level: LogLevel.Warn
+    },
     locale: {
         languages: [
             { code: 'en', dir: 'ltr' },
@@ -119,9 +123,11 @@ The `L10nConfig` interface contains the interfaces to configure the services.
 ### L10nConfig 
 Property | Value
 -------- | -----
-`locale?: LocaleConfig` |  LocaleService configuration
-`translation?: TranslationConfig` |  TranslationService configuration
-`logger?: LogLevel` |  Defines the log level. Turn off it in production
+`locale?: LocaleConfig` | LocaleService configuration
+`translation?: TranslationConfig` | TranslationService configuration
+`logger?: LoggerConfig` | Logger configuration
+`localizedRouting?: LocalizedRoutingConfig` | Localized routing configuration
+`localeInterceptor?: LocaleInterceptorConfig` | LocaleInterceptor configuration
 
 ### LocaleConfig 
 Property | Value
@@ -133,24 +139,38 @@ Property | Value
 `timezone?: string` | The time zone name of the IANA time zone database to use
 `storage?: StorageStrategy` | Defines the storage to be used for language, default locale & currency
 `cookieExpiration?: number` | If the cookie expiration is omitted, the cookie becomes a session cookie
-`localizedRouting?: ISOCode[]` | Enables localized routing with the provided ISO codes
-`localizedRoutingOptions?: LocalizedRoutingOptions` | Options for localized routing
-`localeInterceptor?: ISOCode[]` | Provides ISO codes to locale interceptor
 
 ### TranslationConfig
 Property | Value
 -------- | -----
 `translationData?: Array<{ languageCode: string; data: any; }>` | Direct loading: adds translation data
-`providers?: any[]` |  Asynchronous loading: adds translation providers
-`caching?: Boolean` |  Asynchronous loading: disables/enables the cache for translation providers. Provide it only at the root level
-`version?: string` |  Asynchronous loading: adds the query parameter `ver` to the http requests. Provide it only at the root level
-`timeout?: number` |  Asynchronous loading: sets a timeout in milliseconds for the http requests. Provide it only at the root level
-`rollbackOnError?: boolean` |  Asynchronous loading: rollbacks to previous default locale, currency and timezone on error
-`composedLanguage?: ISOCode[]` |  Sets a composed language for translations
+`providers?: any[]` | Asynchronous loading: adds translation providers
+`caching?: Boolean` | Asynchronous loading: disables/enables the cache for translation providers. Provide it only at the root level
+`version?: string` | Asynchronous loading: adds the query parameter `ver` to the http requests. Provide it only at the root level
+`timeout?: number` | Asynchronous loading: sets a timeout in milliseconds for the http requests. Provide it only at the root level
+`rollbackOnError?: boolean` | Asynchronous loading: rollbacks to previous default locale, currency and timezone on error
+`composedLanguage?: ISOCode[]` | Sets a composed language for translations
 `missingValue?: string | ((path: string) => string)` | Sets the value or the function to use for missing keys. Provide it only at the root level
 `missingKey?: string` | Sets the key to use for missing keys
 `composedKeySeparator?: string` | Sets composed key separator
 `i18nPlural?: boolean` | Disables/enables the translation of numbers that are contained at the beginning of the keys
+
+### LoggerConfig 
+Property | Value
+-------- | -----
+`level?: LogLevel` | Defines the log level
+
+### LocalizedRoutingConfig 
+Property | Value
+-------- | -----
+`format?: ISOCode[]` | Defines the format of the localized routing
+`defaultRouting?: boolean` | Disables/enables default routing for default language or locale
+`schema?: Schema[]` | Provides the schema to the default behaviour of localized routing
+
+### LocaleInterceptorConfig 
+Property | Value
+-------- | -----
+`format?: ISOCode[]` | Defines the format of the _Accept-Language_ header
 
 > There aren't default values: you must explicitly set each parameter you need.
 
@@ -253,13 +273,10 @@ export class AppModule { }
 For development, you can enable the logger:
 ```TypeScript
 const l10nConfig: L10nConfig = {
-    logger: LogLevel.Warn,
-    locale: {
-        ...
+    logger: {
+        level: LogLevel.Warn
     },
-    translation: {
-        ...
-    }
+    ...
 };
 ```
 In this way, you will be warned of the most common errors in the implementation of this library, such as missing functions or invalid formats.
@@ -267,7 +284,9 @@ In this way, you will be warned of the most common errors in the implementation 
 To turn off it in production, you can use:
 ```TypeScript
 const l10nConfig: L10nConfig = {
-    logger: environment.production ? LogLevel.Off : LogLevel.Warn,
+    logger: {
+        level: environment.production ? LogLevel.Off : LogLevel.Warn
+    },
     ...
 };
 ```
@@ -591,11 +610,10 @@ In _locale-adaptive_ apps (like the apps that use this library, that return diff
 To solve this problem, you can enable localized routing during configuration:
 ```TypeScript
 const l10nConfig: L10nConfig = {
-    locale: {
-        ...
-        localizedRouting: [ISOCode.Language, /* ISOCode.Script, */ /* ISOCode.Country */]
-    },
     ...
+    localizedRouting: {
+        format: [ISOCode.Language, /* ISOCode.Script, */ /* ISOCode.Country */]
+    }
 };
 ```
 
@@ -617,8 +635,8 @@ To achieve this, the router configuration in your app is not rewritten (operatio
 
 > Since the link contains only the locale, if your app also uses _numbering system_, _calendar_, _currency_ or _timezone_, you should set _schema_ option below.
 
-### Using hreflang and sitemap
-You can use the Sitemap to tell Google all of the locale variants for each URL:
+### Using _hreflang_ and _sitemap_
+You can use the _sitemap_ to tell Google all of the locale variants for each URL:
 ```XML
 <?xml version="1.0" encoding="utf-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
@@ -645,44 +663,37 @@ For more info, visit [Search Console Help - International](https://support.googl
 If you don't want a localized routing for default language or locale, you can enable it during the configuration:
 ```TypeScript
 const l10nConfig: L10nConfig = {
-    locale: {
-        ...
-        localizedRouting: [ISOCode.Language, /* ISOCode.Script, */ /* ISOCode.Country */],
-        localizedRoutingOptions: {
-            defaultRouting: true
-        }
-    },
     ...
+    localizedRouting: {
+        format: [ISOCode.Language, /* ISOCode.Script, */ /* ISOCode.Country */],
+        defaultRouting: true
+    }
 };
 ```
 
 #### Schema
-If your app uses _numbering system_, _calendar_, _currency_ or _timezone_, it is recommended to provide the _schema_ option, to manage the localized links and refreshes:
+If your app uses _numbering system_, _calendar_, _currency_ or _timezone_, it is recommended to provide the `schema` option, to manage the localized links and refreshes:
 ```TypeScript
 const l10nConfig: L10nConfig = {
-    locale: {
-        ...
-        localizedRouting: [ISOCode.Language, /* ISOCode.Script, */ /* ISOCode.Country */],
-        localizedRoutingOptions: {
-            schema: [
-                { text: 'United States', languageCode: 'en', countryCode: 'US', currency: 'USD' },
-                { text: 'Italia', languageCode: 'it', countryCode: 'IT', currency: 'EUR' },
-            ]
-        }
-    },
     ...
+    localizedRouting: {
+        format: [ISOCode.Language, ISOCode.Country],
+        schema: [
+            { text: 'United States', languageCode: 'en', countryCode: 'US', currency: 'USD' },
+            { text: 'Italia', languageCode: 'it', countryCode: 'IT', currency: 'EUR' },
+        ]
+    }
 };
 ```
 
 ## Setting the locale in _Accept-Language_ header on outgoing requests
-To set the locale in _Accept-Language_ header on all outgoing requests, provide the _localeInterceptor_ option during the configuration:
+To set the locale in _Accept-Language_ header on all outgoing requests, provide the `localeInterceptor` option during the configuration:
 ```TypeScript
 const l10nConfig: L10nConfig = {
-    locale: {
-        ...
-        localeInterceptor: [ISOCode.Language, /* ISOCode.Script, */ /* ISOCode.Country */]
-    },
     ...
+    localeInterceptor: {
+        format: [ISOCode.Language, /* ISOCode.Script, */ /* ISOCode.Country */]
+    }
 };
 ```
 

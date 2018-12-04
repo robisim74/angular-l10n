@@ -1,6 +1,6 @@
 import { InjectionToken } from '@angular/core';
 
-import { Type, DefaultLocaleCodes, Language, StorageStrategy, ISOCode, LocalizedRoutingOptions, LogLevel } from './types';
+import { Type, DefaultLocaleCodes, Language, StorageStrategy, ISOCode, LogLevel, Schema } from './types';
 
 export const LOCALE_CONFIG: InjectionToken<LocaleConfig> =
     new InjectionToken<LocaleConfig>('LOCALE_CONFIG');
@@ -8,8 +8,12 @@ export const TRANSLATION_CONFIG: InjectionToken<TranslationConfig> =
     new InjectionToken<TranslationConfig>('TRANSLATION_CONFIG');
 export const L10N_ROOT: InjectionToken<boolean> =
     new InjectionToken<boolean>('L10N_ROOT');
-export const L10N_LOGGER: InjectionToken<LogLevel> =
-    new InjectionToken<LogLevel>('L10N_LOGGER');
+export const L10N_LOGGER: InjectionToken<LoggerConfig> =
+    new InjectionToken<LoggerConfig>('L10N_LOGGER');
+export const LOCALIZED_ROUTING: InjectionToken<LocalizedRoutingConfig> =
+    new InjectionToken<LocalizedRoutingConfig>('LOCALIZED_ROUTING');
+export const LOCALE_INTERCEPTOR: InjectionToken<LocaleInterceptorConfig> =
+    new InjectionToken<LocaleInterceptorConfig>('LOCALE_INTERCEPTOR');
 
 export interface LocaleConfig {
     /**
@@ -48,20 +52,6 @@ export interface LocaleConfig {
      */
     cookieExpiration?: number;
 
-    /**
-     * Enables localized routing with the provided ISO codes.
-     */
-    localizedRouting?: ISOCode[];
-
-    /**
-     * Options for localized routing.
-     */
-    localizedRoutingOptions?: LocalizedRoutingOptions;
-
-    /**
-     * Provides ISO codes to locale interceptor.
-     */
-    localeInterceptor?: ISOCode[];
 }
 
 export interface TranslationConfig {
@@ -135,19 +125,62 @@ export interface TranslationConfig {
     i18nPlural?: boolean;
 }
 
+export interface LoggerConfig {
+    /**
+     * Defines the log level.
+     */
+    level?: LogLevel;
+}
+
+export interface LocalizedRoutingConfig {
+    /**
+     * Defines the format of the localized routing.
+     */
+    format?: ISOCode[];
+
+    /**
+     * Disables/enables default routing for default language or locale.
+     */
+    defaultRouting?: boolean;
+
+    /**
+     * Provides the schema to the default behaviour of localized routing.
+     */
+    schema?: Schema[];
+}
+
+export interface LocaleInterceptorConfig {
+    /**
+     * Defines the format of the 'Accept-Language' header.
+     */
+    format?: ISOCode[];
+}
+
 export interface L10nConfig {
     /**
      * LocaleService configuration.
      */
     locale?: LocaleConfig;
+
     /**
      * TranslationService configuration.
      */
     translation?: TranslationConfig;
+
     /**
-     * Defines the log level. Turn off it in production.
+     * Logger configuration.
      */
-    logger?: LogLevel;
+    logger?: LoggerConfig;
+
+    /**
+     * Localized routing configuration.
+     */
+    localizedRouting?: LocalizedRoutingConfig;
+
+    /**
+     * LocaleInterceptor configuration.
+     */
+    localeInterceptor?: LocaleInterceptorConfig;
 }
 
 export interface Token {
@@ -155,10 +188,12 @@ export interface Token {
      * Defines the locale storage to be used.
      */
     localeStorage?: Type<any>;
+
     /**
      * Defines the translation provider to be used.
      */
     translationProvider?: Type<any>;
+
     /**
      * Defines the translation handler to be used.
      */

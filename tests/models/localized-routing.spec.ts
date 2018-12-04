@@ -47,11 +47,13 @@ describe('LocalizedRouting', () => {
                     { code: 'it', dir: 'ltr' }
                 ],
                 defaultLocale: { languageCode: 'en', countryCode: 'US' },
-                storage: StorageStrategy.Disabled,
-                localizedRouting: [ISOCode.Language, ISOCode.Country]
+                storage: StorageStrategy.Disabled
             },
             translation: {
                 providers: []
+            },
+            localizedRouting: {
+                format: [ISOCode.Language, ISOCode.Country]
             }
         };
 
@@ -186,14 +188,14 @@ describe('LocalizedRouting', () => {
                     { code: 'it', dir: 'ltr' }
                 ],
                 defaultLocale: { languageCode: 'en', countryCode: 'US' },
-                storage: StorageStrategy.Disabled,
-                localizedRouting: [ISOCode.Language, ISOCode.Country],
-                localizedRoutingOptions: {
-                    defaultRouting: true
-                }
+                storage: StorageStrategy.Disabled
             },
             translation: {
                 providers: []
+            },
+            localizedRouting: {
+                format: [ISOCode.Language, ISOCode.Country],
+                defaultRouting: true
             }
         };
 
@@ -302,17 +304,17 @@ describe('LocalizedRouting', () => {
                 ],
                 defaultLocale: { languageCode: 'en', countryCode: 'US' },
                 currency: 'USD',
-                storage: StorageStrategy.Disabled,
-                localizedRouting: [ISOCode.Language, ISOCode.Country],
-                localizedRoutingOptions: {
-                    schema: [
-                        { text: 'United States', languageCode: 'en', countryCode: 'US', currency: 'USD' },
-                        { text: 'Italia', languageCode: 'it', countryCode: 'IT', currency: 'EUR' },
-                    ]
-                }
+                storage: StorageStrategy.Disabled
             },
             translation: {
                 providers: []
+            },
+            localizedRouting: {
+                format: [ISOCode.Language, ISOCode.Country],
+                schema: [
+                    { text: 'United States', languageCode: 'en', countryCode: 'US', currency: 'USD' },
+                    { text: 'Italia', languageCode: 'it', countryCode: 'IT', currency: 'EUR' },
+                ]
             }
         };
 

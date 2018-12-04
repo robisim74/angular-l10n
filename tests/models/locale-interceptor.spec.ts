@@ -25,13 +25,15 @@ describe('LocaleInterceptor', () => {
                 { code: 'it', dir: 'ltr' }
             ],
             defaultLocale: { languageCode: 'it', countryCode: 'IT' },
-            storage: StorageStrategy.Disabled,
-            localeInterceptor: [ISOCode.Language, ISOCode.Country]
+            storage: StorageStrategy.Disabled
         },
         translation: {
             providers: [
                 { type: ProviderType.Static, prefix: './assets/locale-' }
             ]
+        },
+        localeInterceptor: {
+            format: [ISOCode.Language, ISOCode.Country]
         }
     };
 
