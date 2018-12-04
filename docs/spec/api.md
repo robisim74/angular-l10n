@@ -33,11 +33,10 @@ Method | Function
 ## ILocaleService
 Property | Value
 -------- | -----
-`languageCodeChanged: Subject<string>` |
-`defaultLocaleChanged: Subject<string>` |
-`currencyCodeChanged: Subject<string>` |
-`timezoneChanged: Subject<string>` |
-`loadTranslation: Subject<any>` |
+`languageCodeChanged: Subject<string>` | Fired when the language changes. Returns the language code
+`defaultLocaleChanged: Subject<string>` | Fired when the default locale changes. Returns the default locale
+`currencyCodeChanged: Subject<string>` | Fired when the currency changes. Returns the currency code
+`timezoneChanged: Subject<string>` | Fired when the timezone changes. Returns the timezone
 
 Method | Function
 ------ | --------

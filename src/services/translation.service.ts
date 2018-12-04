@@ -1,5 +1,5 @@
 import { Injectable, Inject } from '@angular/core';
-import { Observer, Observable, Subject, BehaviorSubject, merge, concat } from 'rxjs';
+import { Observer, Observable, Subject, BehaviorSubject, merge, concat, race } from 'rxjs';
 
 import { TRANSLATION_CONFIG, TranslationConfig } from '../models/l10n-config';
 import { LocaleService } from './locale.service';
@@ -53,8 +53,8 @@ export interface ITranslationService {
     }
 
     public async init(): Promise<any> {
-        // When the language changes, loads translation data.
-        this.locale.loadTranslation.subscribe(
+        // When the language or the default locale changes, loads translation data.
+        race(this.locale.languageCodeChanged, this.locale.defaultLocaleChanged).subscribe(
             () => {
                 this.loadTranslation()
                     .catch((error: any) => null);

@@ -15,8 +15,6 @@ export interface ILocaleService {
     currencyCodeChanged: Subject<string>;
     timezoneChanged: Subject<string>;
 
-    loadTranslation: Subject<any>;
-
     currencyCode: string;
     timezone: string;
 
@@ -89,12 +87,22 @@ export interface ILocaleService {
  */
 @Injectable() export class LocaleService implements ILocaleService {
 
+    /**
+     * Fired when the language changes. Returns the language code.
+     */
     public languageCodeChanged: Subject<string> = new Subject<string>();
+    /**
+     * Fired when the default locale changes. Returns the default locale.
+     */
     public defaultLocaleChanged: Subject<string> = new Subject<string>();
+    /**
+     * Fired when the currency changes. Returns the currency code.
+     */
     public currencyCodeChanged: Subject<string> = new Subject<string>();
+    /**
+     * Fired when the timezone changes. Returns the timezone.
+     */
     public timezoneChanged: Subject<string> = new Subject<string>();
-
-    public loadTranslation: Subject<any> = new Subject();
 
     public currencyCode: string;
     public timezone: string;
@@ -430,13 +438,11 @@ export interface ILocaleService {
     private releaseLanguage(): void {
         this.storage.write("defaultLocale", this.defaultLocale.value);
         this.sendLanguageEvents();
-        this.sendTranslationEvents();
     }
 
     private releaseDefaultLocale(): void {
         this.storage.write("defaultLocale", this.defaultLocale.value);
         this.sendDefaultLocaleEvents();
-        this.sendTranslationEvents();
     }
 
     private releaseCurrency(): void {
@@ -463,13 +469,6 @@ export interface ILocaleService {
 
     private sendTimezoneEvents(): void {
         this.timezoneChanged.next(this.timezone);
-    }
-
-    /**
-     * Sends an event to all Translation services to load the translation data.
-     */
-    private sendTranslationEvents(): void {
-        this.loadTranslation.next();
     }
 
 }
