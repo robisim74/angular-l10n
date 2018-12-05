@@ -23,10 +23,16 @@ Method | Function
 
 ---
 
+## LocaleSeoModule
+Method | Function
+------ | --------
+`static forRoot(): ModuleWithProviders<LocaleSeoModule>` | Use in `AppModule`
+---
+
 ## L10nLoader
 Method | Function
 ------ | --------
-`load(): Promise<any>` | Loads l10n services
+`abstract load(): Promise<any>` | Loads l10n services
 
 ---
 
@@ -64,7 +70,7 @@ Method | Function
 `formatPercent(value: any, digits?: string | DigitsOptions, defaultLocale?: string): string` | Formats a number as a percentage according to default locale
 `formatCurrency(value: any, digits?: string | DigitsOptions, currencyDisplay?: string, defaultLocale?: string, currency?: string): string` | Formats a number as a currency according to default locale
 `composeLocale(codes: ISOCode[]): string` |
-`rollback(): void` |
+`rollback(): void` | Rollbacks to previous default locale, currency & timezone
 
 ---
 
@@ -131,3 +137,32 @@ Method | Function
 Method | Function
 ------ | --------
 `abstract parseValue(path: string, key: string, value: string | null, args: any, lang: string): string` | This method must contain the logic to parse the translated value
+
+---
+
+## Translation
+Property | Value
+-------- | -----
+`lang: string` | 
+`locale: LocaleService` | 
+`translation: TranslationService` | 
+
+Method | Function
+------ | --------
+`ngOnDestroy(): void` | 
+
+---
+
+## Localization
+Property | Value
+-------- | -----
+`lang: string` | 
+`defaultLocale: string` | 
+`currency: string` | 
+`timezone: string` | 
+`locale: LocaleService` | 
+`translation: TranslationService` | 
+
+Method | Function
+------ | --------
+`ngOnDestroy(): void` | 

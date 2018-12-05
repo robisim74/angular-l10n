@@ -4,7 +4,6 @@ export { StorageStrategy, ProviderType, ISOCode, DateTimeOptions, DigitsOptions,
 export {
     LOCALE_CONFIG,
     TRANSLATION_CONFIG,
-    L10N_ROOT,
     L10N_LOGGER,
     LOCALIZED_ROUTING,
     LOCALE_INTERCEPTOR,
@@ -17,7 +16,7 @@ export {
     Token
 } from './models/l10n-config';
 export { LocalizedRouting } from './models/localized-routing';
-export { L10nLoader } from './services/l10n-loader';
+export { L10nLoader, initLocalizedRouting, initLocale, initTranslation } from './services/l10n-loader';
 export { ILocaleService, LocaleService } from './services/locale.service';
 export { LocaleStorage, BrowserStorage } from './services/locale-storage';
 export { ITranslationService, TranslationService } from './services/translation.service';
@@ -55,4 +54,5 @@ export { TranslationModule } from './modules/translation.module';
 export { LocalizationModule } from './modules/localization.module';
 export { LocaleValidationModule } from './modules/locale-validation.module';
 export { CollatorModule } from './modules/collator.module';
+export { LocaleSeoModule } from './modules/locale-seo.module';
 export { LocaleInterceptorModule } from './modules/locale-interceptor.module';

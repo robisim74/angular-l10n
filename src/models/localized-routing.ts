@@ -10,8 +10,13 @@ import { LocaleCodes, ISOCode, ExtraCode, Schema } from "./types";
 
 @Injectable() export class LocalizedRouting {
 
-    private router: Router;
-    private location: Location;
+    private get router(): Router {
+        return InjectorRef.get(Router);
+    }
+
+    private get location(): Location {
+        return InjectorRef.get(Location);
+    }
 
     constructor(
         @Inject(LOCALE_CONFIG) private localeConfig: LocaleConfig,
@@ -21,9 +26,6 @@ import { LocaleCodes, ISOCode, ExtraCode, Schema } from "./types";
 
     public init(): void {
         if (this.localizedRoutingConfig.format) {
-            this.router = InjectorRef.get(Router);
-            this.location = InjectorRef.get(Location);
-
             // Parses the url to find the locale when the app starts.
             const path: string = this.location.path();
             this.parsePath(path);

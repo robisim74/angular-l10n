@@ -11,6 +11,7 @@ import {
     L10nConfig,
     L10nLoader,
     LocalizationModule,
+    LocaleSeoModule,
     LocaleService,
     StorageStrategy,
     ISOCode
@@ -63,7 +64,8 @@ describe('LocalizedRouting', () => {
                 imports: [
                     HttpClientTestingModule,
                     RouterTestingModule.withRoutes(routes),
-                    LocalizationModule.forRoot(l10nConfig)
+                    LocalizationModule.forRoot(l10nConfig),
+                    LocaleSeoModule.forRoot()
                 ]
             }).createComponent(MockComponent);
 
@@ -205,7 +207,8 @@ describe('LocalizedRouting', () => {
                 imports: [
                     HttpClientTestingModule,
                     RouterTestingModule.withRoutes(routes),
-                    LocalizationModule.forRoot(l10nConfig)
+                    LocalizationModule.forRoot(l10nConfig),
+                    LocaleSeoModule.forRoot()
                 ]
             }).createComponent(MockComponent);
 
@@ -324,7 +327,8 @@ describe('LocalizedRouting', () => {
                 imports: [
                     HttpClientTestingModule,
                     RouterTestingModule.withRoutes(routes),
-                    LocalizationModule.forRoot(l10nConfig)
+                    LocalizationModule.forRoot(l10nConfig),
+                    LocaleSeoModule.forRoot()
                 ]
             }).createComponent(MockComponent);
 

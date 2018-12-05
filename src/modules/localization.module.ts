@@ -6,15 +6,13 @@ import { Logger } from '../models/logger';
 import {
     LOCALE_CONFIG,
     TRANSLATION_CONFIG,
-    L10N_ROOT,
     L10N_LOGGER,
     LOCALIZED_ROUTING,
     LOCALE_INTERCEPTOR,
     L10nConfig,
     Token
 } from '../models/l10n-config';
-import { LocalizedRouting } from '../models/localized-routing';
-import { L10nLoader } from '../services/l10n-loader';
+import { L10nLoader, initLocale, initTranslation } from '../services/l10n-loader';
 import { LocaleService } from '../services/locale.service';
 import { LocaleStorage, BrowserStorage } from '../services/locale-storage';
 import { TranslationService } from '../services/translation.service';
@@ -71,11 +69,9 @@ export class LocalizationModule {
                 Logger,
                 { provide: LOCALE_CONFIG, useValue: l10nConfig.locale || {} },
                 { provide: TRANSLATION_CONFIG, useValue: l10nConfig.translation || {} },
-                { provide: L10N_ROOT, useValue: true },
                 { provide: L10N_LOGGER, useValue: l10nConfig.logger || {} },
                 { provide: LOCALIZED_ROUTING, useValue: l10nConfig.localizedRouting || {} },
                 { provide: LOCALE_INTERCEPTOR, useValue: l10nConfig.localeInterceptor || {} },
-                LocalizedRouting,
                 LocaleService,
                 {
                     provide: LocaleStorage,
@@ -90,7 +86,11 @@ export class LocalizationModule {
                     provide: TranslationHandler,
                     useClass: token.translationHandler || DefaultTranslationHandler
                 },
-                L10nLoader
+                {
+                    provide: L10nLoader,
+                    useFactory: initLocale,
+                    deps: [LocaleService, TranslationService]
+                }
             ]
         };
     }
@@ -104,9 +104,12 @@ export class LocalizationModule {
             providers: [
                 InjectorRef,
                 { provide: TRANSLATION_CONFIG, useValue: l10nConfig.translation || {} },
-                { provide: L10N_ROOT, useValue: false },
                 TranslationService,
-                L10nLoader
+                {
+                    provide: L10nLoader,
+                    useFactory: initTranslation,
+                    deps: [TranslationService]
+                }
             ]
         };
     }

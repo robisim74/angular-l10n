@@ -329,6 +329,9 @@ export interface ILocaleService {
         return locale;
     }
 
+    /**
+     * Rollbacks to previous default locale, currency & timezone.
+     */
     public rollback(): void {
         if (this.rollbackDefaultLocale && this.rollbackDefaultLocale != this.defaultLocale.value) {
             this.defaultLocale.value = this.rollbackDefaultLocale;

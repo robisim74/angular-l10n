@@ -166,8 +166,6 @@ export const FORMAT_ALIASES: { [format: string]: DateTimeOptions } = {
 };
 
 export const LOG_MESSAGES: { [message: string]: string } = {
-    'missingLocale': "Missing 'locale' configuration",
-    'missingTranslation': "Missing 'translation' configuration",
     'missingOnInit': "Missing 'ngOnInit' method: required by AoT compilation",
     'missingOnDestroy': "Missing 'ngOnDestroy' method to cancel subscriptions: required by AoT compilation",
     'missingLang': "Missing 'lang' parameter",

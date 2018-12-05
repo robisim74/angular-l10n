@@ -12,11 +12,15 @@ import { InjectorRef } from '../models/injector-ref';
 
     public lang: string;
 
-    protected locale: LocaleService;
-    protected translation: TranslationService;
+    protected get locale(): LocaleService {
+        return InjectorRef.get(LocaleService);
+    }
+
+    protected get translation(): TranslationService {
+        return InjectorRef.get(TranslationService);
+    }
 
     constructor(protected changeDetectorRef?: ChangeDetectorRef) {
-        this.translation = InjectorRef.get(TranslationService);
         this.translation.translationChanged().pipe(takeUntilDestroyed(this)).subscribe(
             (language: string) => {
                 this.lang = language;
@@ -43,7 +47,6 @@ import { InjectorRef } from '../models/injector-ref';
     constructor(protected changeDetectorRef?: ChangeDetectorRef) {
         super();
 
-        this.locale = InjectorRef.get(LocaleService);
         this.defaultLocale = this.locale.getDefaultLocale();
         this.locale.defaultLocaleChanged.pipe(takeUntilDestroyed(this)).subscribe(
             (defaultLocale: string) => {

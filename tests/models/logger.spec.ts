@@ -69,7 +69,6 @@ describe('Logger', () => {
     it('should log missing functions', fakeAsync(() => {
         fixture.detectChanges();
 
-        expect(console.warn).toHaveBeenCalledWith("angular-l10n (L10nLoader): Missing 'translation' configuration");
         expect(console.warn).toHaveBeenCalledWith("angular-l10n (LanguageComponent): Missing 'ngOnInit' method: required by AoT compilation");
         expect(console.warn).toHaveBeenCalledWith("angular-l10n (TranslatePipe): Missing 'lang' parameter");
 

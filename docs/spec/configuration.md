@@ -123,11 +123,11 @@ The `L10nConfig` interface contains the interfaces to configure the services.
 ### L10nConfig 
 Property | Value
 -------- | -----
-`locale?: LocaleConfig` | LocaleService configuration
-`translation?: TranslationConfig` | TranslationService configuration
+`locale?: LocaleConfig` | Locale service configuration
+`translation?: TranslationConfig` | Translation service configuration
 `logger?: LoggerConfig` | Logger configuration
 `localizedRouting?: LocalizedRoutingConfig` | Localized routing configuration
-`localeInterceptor?: LocaleInterceptorConfig` | LocaleInterceptor configuration
+`localeInterceptor?: LocaleInterceptorConfig` | Locale interceptor configuration
 
 ### LocaleConfig 
 Property | Value
@@ -176,14 +176,20 @@ Property | Value
 
 ---
 
-## Dynamic settings
+## Configuration tokens
 The configuration settings are stored in the following `InjectionToken`:
 
 Interface | Token
 ----- | --------
 `LocaleConfig` | `LOCALE_CONFIG` 
 `TranslationConfig` | `TRANSLATION_CONFIG`
+`LoggerConfig` | `L10N_LOGGER` 
+`LocalizedRoutingConfig` | `LOCALIZED_ROUTING`
+`LocaleInterceptorConfig` | `LOCALE_INTERCEPTOR`
 
+---
+
+## Dynamic settings
 If you need to load the configuration data dynamically, you can provide a partial or empty `L10nConfig` in `AppModule`, 
 and then update the _tokens_ in your class:
 
@@ -604,7 +610,11 @@ The _timezone_ is also provided via _Intl API_. Except IE, all modern browsers h
 
 > When a feature is not supported, however, for example in older browsers, Angular localization does not generate an error in the browser, but returns the value without performing operations.
 
-## Localized routing for SEO
+---
+
+## Support for SEO
+
+### Localized routing 
 In _locale-adaptive_ apps (like the apps that use this library, that return different content based on the preferred locale of the visitor), _Google might not crawl, index, or rank all the content for different locales_.
 
 To solve this problem, you can enable localized routing during configuration:
@@ -616,6 +626,21 @@ const l10nConfig: L10nConfig = {
     }
 };
 ```
+
+Then import the module:
+```TypeScript
+@NgModule({
+    imports: [
+        ...
+        TranslationModule.forRoot(l10nConfig)
+        LocaleSeo.forRoot()
+    ],
+    ...
+})
+export class AppModule { }
+```
+
+> The order is important: always import `LocaleSeoModule` after `TranslationModule` or `LocalizationModule`.
 
 **Features:**
 
@@ -635,7 +660,7 @@ To achieve this, the router configuration in your app is not rewritten (operatio
 
 > Since the link contains only the locale, if your app also uses _numbering system_, _calendar_, _currency_ or _timezone_, you should set _schema_ option below.
 
-### Using _hreflang_ and _sitemap_
+#### Using _hreflang_ and _sitemap_
 You can use the _sitemap_ to tell Google all of the locale variants for each URL:
 ```XML
 <?xml version="1.0" encoding="utf-8"?>
@@ -656,8 +681,6 @@ You can use the _sitemap_ to tell Google all of the locale variants for each URL
 ```
 
 For more info, visit [Search Console Help - International](https://support.google.com/webmasters/topic/2370587?hl=en&ref_topic=4598733)
-
-### Options
 
 #### Default routing
 If you don't want a localized routing for default language or locale, you can enable it during the configuration:
@@ -685,6 +708,8 @@ const l10nConfig: L10nConfig = {
     }
 };
 ```
+
+---
 
 ## Setting the locale in _Accept-Language_ header on outgoing requests
 To set the locale in _Accept-Language_ header on all outgoing requests, provide the `localeInterceptor` option during the configuration:

@@ -14,6 +14,7 @@ import {
     L10nLoader,
     TranslationModule,
     LocalizationModule,
+    LocaleSeoModule,
     LocaleService,
     TranslationService,
     StorageStrategy,
@@ -873,7 +874,8 @@ describe('TranslatePipe', () => {
                 imports: [
                     HttpClientTestingModule,
                     RouterTestingModule.withRoutes(routes),
-                    LocalizationModule.forRoot(l10nConfig)
+                    LocalizationModule.forRoot(l10nConfig),
+                    LocaleSeoModule.forRoot()
                 ]
             }).createComponent(MockComponent);
 
