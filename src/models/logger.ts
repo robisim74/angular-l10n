@@ -1,7 +1,7 @@
 import { Injectable, Inject } from "@angular/core";
 import { ReplaySubject } from "rxjs";
 
-import { L10N_LOGGER, LoggerConfig } from "./l10n-config";
+import { LOGGER_CONFIG, LoggerConfig } from "./l10n-config";
 import { LogLevel, Log, LOG_MESSAGES } from "./types";
 
 /**
@@ -37,7 +37,7 @@ import { LogLevel, Log, LOG_MESSAGES } from "./types";
         }
     }
 
-    constructor(@Inject(L10N_LOGGER) private configuration: LoggerConfig) {
+    constructor(@Inject(LOGGER_CONFIG) private configuration: LoggerConfig) {
         Logger.level = this.configuration.level || LogLevel.Off;
         if (Logger.level != LogLevel.Off) {
             Logger.buffer.subscribe((log: Log) => {

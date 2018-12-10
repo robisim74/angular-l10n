@@ -6,12 +6,12 @@ export const LOCALE_CONFIG: InjectionToken<LocaleConfig> =
     new InjectionToken<LocaleConfig>('LOCALE_CONFIG');
 export const TRANSLATION_CONFIG: InjectionToken<TranslationConfig> =
     new InjectionToken<TranslationConfig>('TRANSLATION_CONFIG');
-export const L10N_LOGGER: InjectionToken<LoggerConfig> =
-    new InjectionToken<LoggerConfig>('L10N_LOGGER');
-export const LOCALIZED_ROUTING: InjectionToken<LocalizedRoutingConfig> =
-    new InjectionToken<LocalizedRoutingConfig>('LOCALIZED_ROUTING');
-export const LOCALE_INTERCEPTOR: InjectionToken<LocaleInterceptorConfig> =
-    new InjectionToken<LocaleInterceptorConfig>('LOCALE_INTERCEPTOR');
+export const LOGGER_CONFIG: InjectionToken<LoggerConfig> =
+    new InjectionToken<LoggerConfig>('LOGGER_CONFIG');
+export const LOCALIZED_ROUTING_CONFIG: InjectionToken<LocalizedRoutingConfig> =
+    new InjectionToken<LocalizedRoutingConfig>('LOCALIZED_ROUTING_CONFIG');
+export const LOCALE_INTERCEPTOR_CONFIG: InjectionToken<LocaleInterceptorConfig> =
+    new InjectionToken<LocaleInterceptorConfig>('LOCALE_INTERCEPTOR_CONFIG');
 
 export interface LocaleConfig {
     /**

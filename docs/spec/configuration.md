@@ -183,9 +183,9 @@ Interface | Token
 ----- | --------
 `LocaleConfig` | `LOCALE_CONFIG` 
 `TranslationConfig` | `TRANSLATION_CONFIG`
-`LoggerConfig` | `L10N_LOGGER` 
-`LocalizedRoutingConfig` | `LOCALIZED_ROUTING`
-`LocaleInterceptorConfig` | `LOCALE_INTERCEPTOR`
+`LoggerConfig` | `LOGGER_CONFIG` 
+`LocalizedRoutingConfig` | `LOCALIZED_ROUTING_CONFIG`
+`LocaleInterceptorConfig` | `LOCALE_INTERCEPTOR_CONFIG`
 
 ---
 

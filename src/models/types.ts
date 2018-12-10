@@ -1,10 +1,4 @@
-export interface PropertyDecorator {
-
-    <T extends Function>(type: T): T;
-
-    (target: Object, propertyKey?: string | symbol): void;
-
-}
+export type PropertyDecorator = (target: Object, propertyKey?: string | symbol) => void;
 
 export interface Type<T> extends Function {
 

@@ -3,7 +3,7 @@ import { Router, NavigationStart, NavigationEnd } from "@angular/router";
 import { Location } from "@angular/common";
 import { filter } from "rxjs/operators";
 
-import { LOCALE_CONFIG, LOCALIZED_ROUTING, LocaleConfig, LocalizedRoutingConfig } from "./l10n-config";
+import { LOCALE_CONFIG, LOCALIZED_ROUTING_CONFIG, LocaleConfig, LocalizedRoutingConfig } from "./l10n-config";
 import { InjectorRef } from "./injector-ref";
 import { LocaleService } from "../services/locale.service";
 import { LocaleCodes, ISOCode, ExtraCode, Schema } from "./types";
@@ -20,7 +20,7 @@ import { LocaleCodes, ISOCode, ExtraCode, Schema } from "./types";
 
     constructor(
         @Inject(LOCALE_CONFIG) private localeConfig: LocaleConfig,
-        @Inject(LOCALIZED_ROUTING) private localizedRoutingConfig: LocalizedRoutingConfig,
+        @Inject(LOCALIZED_ROUTING_CONFIG) private localizedRoutingConfig: LocalizedRoutingConfig,
         private locale: LocaleService
     ) { }
 

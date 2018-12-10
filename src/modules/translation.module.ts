@@ -5,9 +5,9 @@ import { Logger } from '../models/logger';
 import {
     LOCALE_CONFIG,
     TRANSLATION_CONFIG,
-    L10N_LOGGER,
-    LOCALIZED_ROUTING,
-    LOCALE_INTERCEPTOR,
+    LOGGER_CONFIG,
+    LOCALIZED_ROUTING_CONFIG,
+    LOCALE_INTERCEPTOR_CONFIG,
     L10nConfig,
     Token
 } from '../models/l10n-config';
@@ -46,9 +46,9 @@ export class TranslationModule {
                 Logger,
                 { provide: LOCALE_CONFIG, useValue: l10nConfig.locale || {} },
                 { provide: TRANSLATION_CONFIG, useValue: l10nConfig.translation || {} },
-                { provide: L10N_LOGGER, useValue: l10nConfig.logger || {} },
-                { provide: LOCALIZED_ROUTING, useValue: l10nConfig.localizedRouting || {} },
-                { provide: LOCALE_INTERCEPTOR, useValue: l10nConfig.localeInterceptor || {} },
+                { provide: LOGGER_CONFIG, useValue: l10nConfig.logger || {} },
+                { provide: LOCALIZED_ROUTING_CONFIG, useValue: l10nConfig.localizedRouting || {} },
+                { provide: LOCALE_INTERCEPTOR_CONFIG, useValue: l10nConfig.localeInterceptor || {} },
                 LocaleService,
                 {
                     provide: LocaleStorage,
