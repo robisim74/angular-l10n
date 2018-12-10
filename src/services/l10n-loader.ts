@@ -1,42 +1,8 @@
 import { Injectable } from '@angular/core';
 
-import { LocalizedRouting } from '../models/localized-routing';
 import { LocaleService } from './locale.service';
 import { TranslationService } from './translation.service';
-
-export function initLocalizedRouting(
-    localizedRouting: LocalizedRouting,
-    locale: LocaleService,
-    translation: TranslationService
-): L10nLoader {
-    return {
-        load: async () => {
-            localizedRouting.init();
-            await locale.init();
-            await translation.init()
-                .catch((error: any) => { throw error; });
-        }
-    };
-}
-
-export function initLocale(locale: LocaleService, translation: TranslationService): L10nLoader {
-    return {
-        load: async () => {
-            await locale.init();
-            await translation.init()
-                .catch((error: any) => { throw error; });
-        }
-    };
-}
-
-export function initTranslation(translation: TranslationService): L10nLoader {
-    return {
-        load: async () => {
-            await translation.init()
-                .catch((error: any) => { throw error; });
-        }
-    };
-}
+import { LocalizedRouting } from '../models/localized-routing';
 
 /**
  * Initializes the services.
@@ -47,5 +13,41 @@ export function initTranslation(translation: TranslationService): L10nLoader {
      * Loads l10n services.
      */
     public abstract async load(): Promise<any>;
+
+}
+
+@Injectable() export class LocaleLoader implements L10nLoader {
+
+    constructor(private locale: LocaleService, private translation: TranslationService) { }
+
+    public async load(): Promise<any> {
+        await this.locale.init();
+        await this.translation.init()
+            .catch((error: any) => { throw error; });
+    }
+
+}
+
+@Injectable() export class TranslationLoader implements L10nLoader {
+
+    constructor(private translation: TranslationService) { }
+
+    public async load(): Promise<any> {
+        await this.translation.init()
+            .catch((error: any) => { throw error; });
+    }
+
+}
+
+@Injectable() export class LocalizedRoutingLoader implements L10nLoader {
+
+    constructor(private localizedRouting: LocalizedRouting, private locale: LocaleService, private translation: TranslationService) { }
+
+    public async load(): Promise<any> {
+        this.localizedRouting.init();
+        await this.locale.init();
+        await this.translation.init()
+            .catch((error: any) => { throw error; });
+    }
 
 }

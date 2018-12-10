@@ -1,9 +1,7 @@
 import { NgModule, ModuleWithProviders } from '@angular/core';
 
 import { LocalizedRouting } from '../models/localized-routing';
-import { L10nLoader, initLocalizedRouting } from '../services/l10n-loader';
-import { LocaleService } from '../services/locale.service';
-import { TranslationService } from '../services/translation.service';
+import { L10nLoader, LocalizedRoutingLoader } from '../services/l10n-loader';
 
 /**
  * Provides dependencies & components for SEO.
@@ -22,11 +20,7 @@ export class LocaleSeoModule {
             ngModule: LocaleSeoModule,
             providers: [
                 LocalizedRouting,
-                {
-                    provide: L10nLoader,
-                    useFactory: initLocalizedRouting,
-                    deps: [LocalizedRouting, LocaleService, TranslationService]
-                }
+                { provide: L10nLoader, useClass: LocalizedRoutingLoader }
             ]
         };
     }

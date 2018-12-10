@@ -12,7 +12,7 @@ import {
     L10nConfig,
     Token
 } from '../models/l10n-config';
-import { L10nLoader, initLocale, initTranslation } from '../services/l10n-loader';
+import { L10nLoader, LocaleLoader, TranslationLoader } from '../services/l10n-loader';
 import { LocaleService } from '../services/locale.service';
 import { LocaleStorage, BrowserStorage } from '../services/locale-storage';
 import { TranslationService } from '../services/translation.service';
@@ -86,11 +86,7 @@ export class LocalizationModule {
                     provide: TranslationHandler,
                     useClass: token.translationHandler || DefaultTranslationHandler
                 },
-                {
-                    provide: L10nLoader,
-                    useFactory: initLocale,
-                    deps: [LocaleService, TranslationService]
-                }
+                { provide: L10nLoader, useClass: LocaleLoader }
             ]
         };
     }
@@ -105,11 +101,7 @@ export class LocalizationModule {
                 InjectorRef,
                 { provide: TRANSLATION_CONFIG, useValue: l10nConfig.translation || {} },
                 TranslationService,
-                {
-                    provide: L10nLoader,
-                    useFactory: initTranslation,
-                    deps: [TranslationService]
-                }
+                { provide: L10nLoader, useClass: TranslationLoader }
             ]
         };
     }

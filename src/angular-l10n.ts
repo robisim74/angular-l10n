@@ -16,7 +16,7 @@ export {
     Token
 } from './models/l10n-config';
 export { LocalizedRouting } from './models/localized-routing';
-export { L10nLoader, initLocalizedRouting, initLocale, initTranslation } from './services/l10n-loader';
+export { L10nLoader, LocaleLoader, TranslationLoader, LocalizedRoutingLoader } from './services/l10n-loader';
 export { ILocaleService, LocaleService } from './services/locale.service';
 export { LocaleStorage, BrowserStorage } from './services/locale-storage';
 export { ITranslationService, TranslationService } from './services/translation.service';
