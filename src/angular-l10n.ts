@@ -18,10 +18,10 @@ export {
 export { LocalizedRouting } from './models/localized-routing';
 export { L10nLoader, LocaleLoader, TranslationLoader, LocalizedRoutingLoader } from './services/l10n-loader';
 export { ILocaleService, LocaleService } from './services/locale.service';
-export { LocaleStorage, BrowserStorage } from './services/locale-storage';
+export { LocaleStorage, L10nStorage } from './services/locale-storage';
 export { ITranslationService, TranslationService } from './services/translation.service';
-export { TranslationProvider, HttpTranslationProvider } from './services/translation-provider';
-export { TranslationHandler, DefaultTranslationHandler } from './services/translation-handler';
+export { TranslationProvider, L10nTranslationProvider } from './services/translation-provider';
+export { TranslationHandler, L10nTranslationHandler } from './services/translation-handler';
 export { Translation, Localization } from './services/extensions';
 export { ILocaleValidation, LocaleValidation } from './services/locale-validation';
 export { ICollator, Collator } from './services/collator';

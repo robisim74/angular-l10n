@@ -20,7 +20,7 @@ import { TRANSLATION_CONFIG, TranslationConfig } from '../models/l10n-config';
 
 }
 
-@Injectable() export class DefaultTranslationHandler implements TranslationHandler {
+@Injectable() export class L10nTranslationHandler implements TranslationHandler {
 
     constructor(@Inject(TRANSLATION_CONFIG) private configuration: TranslationConfig) { }
 

@@ -24,7 +24,7 @@ import { StorageStrategy } from '../models/types';
 
 }
 
-@Injectable() export class BrowserStorage implements LocaleStorage {
+@Injectable() export class L10nStorage implements LocaleStorage {
 
     private hasCookie: boolean;
     private hasStorage: boolean;

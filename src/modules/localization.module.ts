@@ -14,10 +14,10 @@ import {
 } from '../models/l10n-config';
 import { L10nLoader, LocaleLoader, TranslationLoader } from '../services/l10n-loader';
 import { LocaleService } from '../services/locale.service';
-import { LocaleStorage, BrowserStorage } from '../services/locale-storage';
+import { LocaleStorage, L10nStorage } from '../services/locale-storage';
 import { TranslationService } from '../services/translation.service';
-import { TranslationProvider, HttpTranslationProvider } from '../services/translation-provider';
-import { TranslationHandler, DefaultTranslationHandler } from '../services/translation-handler';
+import { TranslationProvider, L10nTranslationProvider } from '../services/translation-provider';
+import { TranslationHandler, L10nTranslationHandler } from '../services/translation-handler';
 import { L10nDatePipe } from '../pipes/l10n-date.pipe';
 import { L10nDecimalPipe, L10nPercentPipe, L10nCurrencyPipe } from '../pipes/l10n-number.pipe';
 import { L10nDateDirective } from '../directives/l10n-date.directive';
@@ -75,16 +75,16 @@ export class LocalizationModule {
                 LocaleService,
                 {
                     provide: LocaleStorage,
-                    useClass: token.localeStorage || BrowserStorage
+                    useClass: token.localeStorage || L10nStorage
                 },
                 TranslationService,
                 {
                     provide: TranslationProvider,
-                    useClass: token.translationProvider || HttpTranslationProvider
+                    useClass: token.translationProvider || L10nTranslationProvider
                 },
                 {
                     provide: TranslationHandler,
-                    useClass: token.translationHandler || DefaultTranslationHandler
+                    useClass: token.translationHandler || L10nTranslationHandler
                 },
                 { provide: L10nLoader, useClass: LocaleLoader }
             ]

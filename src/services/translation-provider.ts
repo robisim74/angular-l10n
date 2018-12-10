@@ -21,7 +21,7 @@ import { ProviderType } from '../models/types';
 
 }
 
-@Injectable() export class HttpTranslationProvider implements TranslationProvider {
+@Injectable() export class L10nTranslationProvider implements TranslationProvider {
 
     private cache: { [key: string]: Observable<any> | undefined } = {};
 
