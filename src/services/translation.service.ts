@@ -1,7 +1,7 @@
 import { Injectable, Inject } from '@angular/core';
 import { Observer, Observable, Subject, BehaviorSubject, merge, concat, race } from 'rxjs';
 
-import { TRANSLATION_CONFIG, TranslationConfig } from '../models/l10n-config';
+import { L10N_CONFIG, L10nConfigRef } from "../models/l10n-config";
 import { LocaleService } from './locale.service';
 import { TranslationProvider } from './translation-provider';
 import { TranslationHandler } from './translation-handler';
@@ -12,7 +12,7 @@ export interface ITranslationService {
 
     translationError: Subject<any>;
 
-    getConfiguration(): TranslationConfig;
+    getConfiguration(): L10nConfigRef['translation'];
 
     init(): Promise<any>;
 
@@ -42,14 +42,14 @@ export interface ITranslationService {
     private translationData: any = {};
 
     constructor(
-        @Inject(TRANSLATION_CONFIG) private configuration: TranslationConfig,
+        @Inject(L10N_CONFIG) private configuration: L10nConfigRef,
         private locale: LocaleService,
         private translationProvider: TranslationProvider,
         private translationHandler: TranslationHandler
     ) { }
 
-    public getConfiguration(): TranslationConfig {
-        return this.configuration;
+    public getConfiguration(): L10nConfigRef['translation'] {
+        return this.configuration.translation;
     }
 
     public async init(): Promise<any> {
@@ -108,7 +108,7 @@ export interface ITranslationService {
 
     private translateKey(key: string, args: any, lang: string): string | any {
         // I18n plural.
-        if (this.configuration.i18nPlural && /^\d+\b/.exec(key)) {
+        if (this.configuration.translation.i18nPlural && /^\d+\b/.exec(key)) {
             return this.translateI18nPlural(key, args, lang);
         }
         return this.getValue(key, args, lang);
@@ -120,8 +120,8 @@ export interface ITranslationService {
         let translation: any = this.translationData[lang];
         if (translation) {
             // Composed key.
-            if (this.configuration.composedKeySeparator) {
-                const sequences: string[] = key.split(this.configuration.composedKeySeparator);
+            if (this.configuration.translation.composedKeySeparator) {
+                const sequences: string[] = key.split(this.configuration.translation.composedKeySeparator);
                 key = sequences.shift()!;
                 while (sequences.length > 0 && translation[key]) {
                     translation = translation[key];
@@ -129,7 +129,7 @@ export interface ITranslationService {
                 }
             }
             value = typeof translation[key] === "undefined" ?
-                translation[this.configuration.missingKey || ""] :
+                translation[this.configuration.translation.missingKey || ""] :
                 translation[key];
         }
         return this.translationHandler.parseValue(path, key, value, args, lang);
@@ -147,18 +147,18 @@ export interface ITranslationService {
 
     private async loadTranslation(): Promise<any> {
         let language: string;
-        if (this.configuration.composedLanguage) {
-            language = this.locale.composeLocale(this.configuration.composedLanguage);
+        if (this.configuration.translation.composedLanguage) {
+            language = this.locale.composeLocale(this.configuration.translation.composedLanguage);
         } else {
             language = this.locale.getCurrentLanguage();
         }
         if (language) {
             this.translationData = {};
 
-            if (this.configuration.translationData) {
+            if (this.configuration.translation.translationData) {
                 this.getTranslation(language);
             }
-            if (this.configuration.providers) {
+            if (this.configuration.translation.providers) {
                 await this.getTranslationAsync(language)
                     .toPromise()
                     .catch((error: any) => { throw error; });
@@ -167,11 +167,11 @@ export interface ITranslationService {
     }
 
     private getTranslation(language: string): void {
-        const translations: any[] = this.configuration.translationData!.filter((value: any) => value.languageCode == language);
+        const translations: any[] = this.configuration.translation.translationData!.filter((value: any) => value.languageCode == language);
         for (const translation of translations) {
             this.addData(translation.data, language);
         }
-        if (!this.configuration.providers) {
+        if (!this.configuration.translation.providers) {
             this.releaseTranslation(language);
         }
     }
@@ -181,7 +181,7 @@ export interface ITranslationService {
             const sequencesOfOrderedTranslationData: Array<Observable<any>> = [];
             const sequencesOfTranslationData: Array<Observable<any>> = [];
 
-            for (const provider of this.configuration.providers!) {
+            for (const provider of this.configuration.translation.providers!) {
                 if (typeof provider.type !== "undefined" && provider.type == ProviderType.Fallback) {
                     let fallbackLanguage: string = language;
                     if (provider.fallbackLanguage) {
@@ -231,7 +231,7 @@ export interface ITranslationService {
     }
 
     private handleError(error: any, language: string): void {
-        if (this.configuration.rollbackOnError) {
+        if (this.configuration.translation.rollbackOnError) {
             this.locale.rollback();
         } else {
             this.releaseTranslation(language);

@@ -3,7 +3,7 @@ import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable, ReplaySubject } from 'rxjs';
 import { timeout } from 'rxjs/operators';
 
-import { TRANSLATION_CONFIG, TranslationConfig } from '../models/l10n-config';
+import { L10N_CONFIG, L10nConfigRef } from "../models/l10n-config";
 import { ProviderType } from '../models/types';
 
 /**
@@ -25,15 +25,15 @@ import { ProviderType } from '../models/types';
 
     private cache: { [key: string]: Observable<any> | undefined } = {};
 
-    constructor(@Inject(TRANSLATION_CONFIG) private configuration: TranslationConfig, private http: HttpClient) { }
+    constructor(@Inject(L10N_CONFIG) private configuration: L10nConfigRef, private http: HttpClient) { }
 
     public getTranslation(language: string, args: any): Observable<any> {
         const headers: HttpHeaders = new HttpHeaders({ 'Content-Type': 'application/json' });
         const options: any = {
             headers: headers
         };
-        if (this.configuration.version) {
-            options.params = new HttpParams().set('ver', this.configuration.version);
+        if (this.configuration.translation.version) {
+            options.params = new HttpParams().set('ver', this.configuration.translation.version);
         }
         let request: Observable<any>;
         let url: string = "";
@@ -46,15 +46,15 @@ import { ProviderType } from '../models/types';
                 url += args.prefix + language + ".json";
         }
 
-        if (this.configuration.timeout) {
+        if (this.configuration.translation.timeout) {
             request = this.http.get(url, options).pipe(
-                timeout(this.configuration.timeout)
+                timeout(this.configuration.translation.timeout)
             );
         } else {
             request = this.http.get(url, options);
         }
 
-        if (this.configuration.caching) {
+        if (this.configuration.translation.caching) {
             return this.caching(url, request);
         }
         return request;

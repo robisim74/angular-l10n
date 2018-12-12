@@ -3,7 +3,7 @@ import { Subject } from 'rxjs';
 
 import { IntlAPI } from './intl-api';
 import { LocaleStorage } from './locale-storage';
-import { LOCALE_CONFIG, LocaleConfig } from '../models/l10n-config';
+import { L10N_CONFIG, L10nConfigRef } from "../models/l10n-config";
 import { DefaultLocale } from '../models/default-locale';
 import { IntlFormatter } from '../models/intl-formatter';
 import { Language, ISOCode, DateTimeOptions, DigitsOptions, NumberFormatStyle } from '../models/types';
@@ -15,7 +15,7 @@ export interface ILocaleService {
     currencyCodeChanged: Subject<string>;
     timezoneChanged: Subject<string>;
 
-    getConfiguration(): LocaleConfig;
+    getConfiguration(): L10nConfigRef['locale'];
 
     init(): Promise<void>;
 
@@ -109,13 +109,10 @@ export interface ILocaleService {
     private rollbackCurrencyCode: string;
     private rollbackTimezone: string;
 
-    constructor(
-        @Inject(LOCALE_CONFIG) private configuration: LocaleConfig,
-        private storage: LocaleStorage
-    ) { }
+    constructor(@Inject(L10N_CONFIG) private configuration: L10nConfigRef, private storage: LocaleStorage) { }
 
-    public getConfiguration(): LocaleConfig {
-        return this.configuration;
+    public getConfiguration(): L10nConfigRef['locale'] {
+        return this.configuration.locale;
     }
 
     public async init(): Promise<void> {
@@ -138,8 +135,8 @@ export interface ILocaleService {
 
     public getAvailableLanguages(): string[] {
         let languages: string[] = [];
-        if (this.configuration.languages) {
-            languages = this.configuration.languages.map((language: Language) => language.code);
+        if (this.configuration.locale.languages) {
+            languages = this.configuration.locale.languages.map((language: Language) => language.code);
         }
         return languages;
     }
@@ -348,7 +345,7 @@ export interface ILocaleService {
     }
 
     private async initLanguage(): Promise<void> {
-        if (this.configuration.language) {
+        if (this.configuration.locale.language) {
             if (!this.defaultLocale.languageCode) {
                 // Tries to get the language from the storage.
                 const defaultLocale: string | null = await this.storage.read("defaultLocale");
@@ -362,7 +359,7 @@ export interface ILocaleService {
                         this.defaultLocale.build(browserLanguage);
                     } else {
                         // Uses the language set in the configuration.
-                        this.defaultLocale.build(this.configuration.language);
+                        this.defaultLocale.build(this.configuration.locale.language);
                     }
                     this.storage.write("defaultLocale", this.defaultLocale.value);
                 }
@@ -373,18 +370,18 @@ export interface ILocaleService {
     }
 
     private async initDefaultLocale(): Promise<void> {
-        if (this.configuration.defaultLocale) {
+        if (this.configuration.locale.defaultLocale) {
             if (!this.defaultLocale.value) {
                 const defaultLocale: string | null = await this.storage.read("defaultLocale");
                 if (!!defaultLocale) {
                     this.defaultLocale.value = defaultLocale;
                 } else {
                     this.defaultLocale.build(
-                        this.configuration.defaultLocale.languageCode,
-                        this.configuration.defaultLocale.countryCode,
-                        this.configuration.defaultLocale.scriptCode,
-                        this.configuration.defaultLocale.numberingSystem,
-                        this.configuration.defaultLocale.calendar
+                        this.configuration.locale.defaultLocale.languageCode,
+                        this.configuration.locale.defaultLocale.countryCode,
+                        this.configuration.locale.defaultLocale.scriptCode,
+                        this.configuration.locale.defaultLocale.numberingSystem,
+                        this.configuration.locale.defaultLocale.calendar
                     );
                     this.storage.write("defaultLocale", this.defaultLocale.value);
                 }
@@ -395,13 +392,13 @@ export interface ILocaleService {
     }
 
     private async initCurrency(): Promise<void> {
-        if (this.configuration.currency) {
+        if (this.configuration.locale.currency) {
             if (!this.currencyCode) {
                 const currencyCode: string | null = await this.storage.read("currency");
                 if (!!currencyCode) {
                     this.currencyCode = currencyCode;
                 } else {
-                    this.currencyCode = this.configuration.currency;
+                    this.currencyCode = this.configuration.locale.currency;
                     this.storage.write("currency", this.currencyCode);
                 }
                 this.rollbackCurrencyCode = this.currencyCode;
@@ -411,13 +408,13 @@ export interface ILocaleService {
     }
 
     private async initTimezone(): Promise<void> {
-        if (this.configuration.timezone) {
+        if (this.configuration.locale.timezone) {
             if (!this.timezone) {
                 const zoneName: string | null = await this.storage.read("timezone");
                 if (!!zoneName) {
                     this.timezone = zoneName;
                 } else {
-                    this.timezone = this.configuration.timezone;
+                    this.timezone = this.configuration.locale.timezone;
                     this.storage.write("timezone", this.timezone);
                 }
                 this.rollbackTimezone = this.timezone;
@@ -428,8 +425,8 @@ export interface ILocaleService {
 
     private matchLanguage(languageCode: string | null): Language | undefined {
         let matchedLanguage: Language | undefined;
-        if (this.configuration.languages && languageCode != null) {
-            matchedLanguage = this.configuration.languages.find((language: Language) => language.code == languageCode);
+        if (this.configuration.locale.languages && languageCode != null) {
+            matchedLanguage = this.configuration.locale.languages.find((language: Language) => language.code == languageCode);
         }
         return matchedLanguage;
     }

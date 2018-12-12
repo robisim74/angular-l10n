@@ -46,7 +46,7 @@ Property | Value
 
 Method | Function
 ------ | --------
-`getConfiguration(): LocaleConfig` |
+`getConfiguration(): L10nConfigRef['locale']` |
 `init(): Promise<void>` |
 `getBrowserLanguage(): string | null` |
 `getAvailableLanguages(): string[]` |
@@ -81,7 +81,7 @@ Property | Value
 
 Method | Function
 ------ | --------
-`getConfiguration(): TranslationConfig` |
+`getConfiguration(): L10nConfigRef['translation']` |
 `init(): Promise<any>` | 
 `translationChanged(): Observable<string>` | Fired when the translation data has been loaded. Returns the translation language
 `translate(keys: string | string[], args?: any, lang?: string): string | any` | Translates a key or an array of keys

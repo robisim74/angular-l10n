@@ -1,6 +1,4 @@
-import { DefaultLocaleCodes } from './types';
-
-export class DefaultLocale implements DefaultLocaleCodes {
+export class DefaultLocale {
 
     public languageCode: string;
     public scriptCode?: string;

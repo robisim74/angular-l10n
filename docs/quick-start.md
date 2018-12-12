@@ -522,20 +522,20 @@ const l10nConfig: L10nConfig = {
 
     constructor(
         public l10nLoader: L10nLoader,
-        @Inject(TRANSLATION_CONFIG) private translationConfig: TranslationConfig,
+        @Inject(L10N_CONFIG) private configuration: L10nConfigRef,
         @Inject(PLATFORM_ID) private platformId: Object
     ) { }
 
     load(): Promise<any> {
         if (isPlatformBrowser(this.platformId)) {
             // Client only code.
-            this.translationConfig.providers = [
+            this.configuration.translation.providers = [
                 { type: ProviderType.Static, prefix: './assets/locale-' }
             ];
         }
         if (isPlatformServer(this.platformId)) {
             // Server only code.
-            this.translationConfig.providers = [
+            this.configuration.translation.providers = [
                 { type: ProviderType.Static, prefix: 'http://localhost:4000/assets/locale-' }
             ];
         }

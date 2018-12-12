@@ -1,6 +1,6 @@
 import { Injectable, Inject } from '@angular/core';
 
-import { LOCALE_CONFIG, LocaleConfig } from '../models/l10n-config';
+import { L10N_CONFIG, L10nConfigRef } from "../models/l10n-config";
 import { StorageStrategy } from '../models/types';
 
 /**
@@ -29,19 +29,19 @@ import { StorageStrategy } from '../models/types';
     private hasCookie: boolean;
     private hasStorage: boolean;
 
-    constructor(@Inject(LOCALE_CONFIG) private configuration: LocaleConfig) {
+    constructor(@Inject(L10N_CONFIG) private configuration: L10nConfigRef) {
         this.hasCookie = typeof navigator !== "undefined" && navigator.cookieEnabled;
         this.hasStorage = typeof Storage !== "undefined";
     }
 
     public async read(name: string): Promise<string | null> {
         let value: string | null = null;
-        if (this.configuration.storage != StorageStrategy.Disabled) {
-            if (this.configuration.storage == StorageStrategy.Local && this.hasStorage) {
+        if (this.configuration.locale.storage != StorageStrategy.Disabled) {
+            if (this.configuration.locale.storage == StorageStrategy.Local && this.hasStorage) {
                 value = this.getLocalStorage(name);
-            } else if (this.configuration.storage == StorageStrategy.Session && this.hasStorage) {
+            } else if (this.configuration.locale.storage == StorageStrategy.Session && this.hasStorage) {
                 value = this.getSessionStorage(name);
-            } else if (this.configuration.storage == StorageStrategy.Cookie && this.hasCookie) {
+            } else if (this.configuration.locale.storage == StorageStrategy.Cookie && this.hasCookie) {
                 value = this.getCookie(name);
             }
         }
@@ -49,12 +49,12 @@ import { StorageStrategy } from '../models/types';
     }
 
     public async write(name: string, value: string): Promise<void> {
-        if (this.configuration.storage != StorageStrategy.Disabled) {
-            if (this.configuration.storage == StorageStrategy.Local && this.hasStorage) {
+        if (this.configuration.locale.storage != StorageStrategy.Disabled) {
+            if (this.configuration.locale.storage == StorageStrategy.Local && this.hasStorage) {
                 this.setLocalStorage(name, value);
-            } else if (this.configuration.storage == StorageStrategy.Session && this.hasStorage) {
+            } else if (this.configuration.locale.storage == StorageStrategy.Session && this.hasStorage) {
                 this.setSessionStorage(name, value);
-            } else if (this.configuration.storage == StorageStrategy.Cookie && this.hasCookie) {
+            } else if (this.configuration.locale.storage == StorageStrategy.Cookie && this.hasCookie) {
                 this.setCookie(name, value);
             }
         }
@@ -86,11 +86,11 @@ import { StorageStrategy } from '../models/types';
 
     private setCookie(name: string, value: string): void {
         let expires: string = "";
-        if (this.configuration.cookieExpiration != null) {
+        if (this.configuration.locale.cookieExpiration != null) {
             const expirationDate: Date = new Date();
             expirationDate.setTime(
                 expirationDate.getTime() +
-                (this.configuration.cookieExpiration * 24 * 60 * 60 * 1000)
+                (this.configuration.locale.cookieExpiration * 24 * 60 * 60 * 1000)
             );
             expires = "; expires=" + expirationDate.toUTCString();
         }

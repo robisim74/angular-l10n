@@ -1,5 +1,4 @@
 import { TranslationService } from '../services/translation.service';
-import { PropertyDecorator } from '../models/types';
 import { takeUntilDestroyed } from '../models/take-until-destroyed';
 import { InjectorRef } from '../models/injector-ref';
 import { Logger } from '../models/logger';

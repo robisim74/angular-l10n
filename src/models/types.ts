@@ -1,5 +1,3 @@
-export type PropertyDecorator = (target: Object, propertyKey?: string | symbol) => void;
-
 export interface Type<T> extends Function {
 
     new(...args: any[]): T;
@@ -32,7 +30,7 @@ export interface DigitsOptions {
 
 }
 
-export interface LocaleCodes {
+export interface Locale {
     /**
      * ISO 639 two-letter or three-letter code.
      */
@@ -49,7 +47,7 @@ export interface LocaleCodes {
     scriptCode?: string;
 }
 
-export interface DefaultLocaleCodes extends LocaleCodes {
+export interface DefaultLocale extends Locale {
 
     numberingSystem?: string;
     calendar?: string;
@@ -75,7 +73,7 @@ export interface Decimal {
 
 }
 
-export interface Schema extends DefaultLocaleCodes {
+export interface Schema extends DefaultLocale {
 
     currency?: string;
     timezone?: string;

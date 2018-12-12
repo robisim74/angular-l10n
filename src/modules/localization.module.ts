@@ -3,15 +3,7 @@ import { NgModule, ModuleWithProviders } from '@angular/core';
 import { TranslationModule } from './translation.module';
 import { InjectorRef } from '../models/injector-ref';
 import { Logger } from '../models/logger';
-import {
-    LOCALE_CONFIG,
-    TRANSLATION_CONFIG,
-    LOGGER_CONFIG,
-    LOCALIZED_ROUTING_CONFIG,
-    LOCALE_INTERCEPTOR_CONFIG,
-    L10nConfig,
-    Token
-} from '../models/l10n-config';
+import { L10N_CONFIG, L10nConfig, l10nConfigFactory, Token } from '../models/l10n-config';
 import { L10nLoader, LocaleLoader, TranslationLoader } from '../services/l10n-loader';
 import { LocaleService } from '../services/locale.service';
 import { LocaleStorage, L10nStorage } from '../services/locale-storage';
@@ -67,11 +59,7 @@ export class LocalizationModule {
             providers: [
                 InjectorRef,
                 Logger,
-                { provide: LOCALE_CONFIG, useValue: l10nConfig.locale || {} },
-                { provide: TRANSLATION_CONFIG, useValue: l10nConfig.translation || {} },
-                { provide: LOGGER_CONFIG, useValue: l10nConfig.logger || {} },
-                { provide: LOCALIZED_ROUTING_CONFIG, useValue: l10nConfig.localizedRouting || {} },
-                { provide: LOCALE_INTERCEPTOR_CONFIG, useValue: l10nConfig.localeInterceptor || {} },
+                { provide: L10N_CONFIG, useValue: l10nConfigFactory(l10nConfig) },
                 LocaleService,
                 {
                     provide: LocaleStorage,
@@ -99,7 +87,7 @@ export class LocalizationModule {
             ngModule: LocalizationModule,
             providers: [
                 InjectorRef,
-                { provide: TRANSLATION_CONFIG, useValue: l10nConfig.translation || {} },
+                { provide: L10N_CONFIG, useValue: l10nConfigFactory(l10nConfig) },
                 TranslationService,
                 { provide: L10nLoader, useClass: TranslationLoader }
             ]

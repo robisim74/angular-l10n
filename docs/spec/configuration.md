@@ -118,80 +118,56 @@ export class AppModule {
 ---
 
 ## Configuration settings
-The `L10nConfig` interface contains the interfaces to configure the services.
+The `L10nConfig` interface contains the properties to configure the library.
 
 ### L10nConfig 
-Property | Value
--------- | -----
-`locale?: LocaleConfig` | Locale service configuration
-`translation?: TranslationConfig` | Translation service configuration
-`logger?: LoggerConfig` | Logger configuration
-`localizedRouting?: LocalizedRoutingConfig` | Localized routing configuration
-`localeInterceptor?: LocaleInterceptorConfig` | Locale interceptor configuration
-
-### LocaleConfig 
-Property | Value
--------- | -----
-`languages?: Language[]` | Adds the languages to use in the app
-`language?: string` | Defines the language ISO 639 two-letter or three-letter code to be used, if the language is not found in the browser
-`defaultLocale?: DefaultLocaleCodes` | Defines the default locale to be used, regardless of the browser language
-`currency?: string` | Defines the currency ISO 4217 three-letter code to be used
-`timezone?: string` | The time zone name of the IANA time zone database to use
-`storage?: StorageStrategy` | Defines the storage to be used for language, default locale & currency
-`cookieExpiration?: number` | If the cookie expiration is omitted, the cookie becomes a session cookie
-
-### TranslationConfig
-Property | Value
--------- | -----
-`translationData?: Array<{ languageCode: string; data: any; }>` | Direct loading: adds translation data
-`providers?: any[]` | Asynchronous loading: adds translation providers
-`caching?: Boolean` | Asynchronous loading: disables/enables the cache for translation providers. Provide it only at the root level
-`version?: string` | Asynchronous loading: adds the query parameter `ver` to the http requests. Provide it only at the root level
-`timeout?: number` | Asynchronous loading: sets a timeout in milliseconds for the http requests. Provide it only at the root level
-`rollbackOnError?: boolean` | Asynchronous loading: rollbacks to previous default locale, currency and timezone on error
-`composedLanguage?: ISOCode[]` | Sets a composed language for translations
-`missingValue?: string | ((path: string) => string)` | Sets the value or the function to use for missing keys. Provide it only at the root level
-`missingKey?: string` | Sets the key to use for missing keys
-`composedKeySeparator?: string` | Sets composed key separator
-`i18nPlural?: boolean` | Disables/enables the translation of numbers that are contained at the beginning of the keys
-
-### LoggerConfig 
-Property | Value
--------- | -----
-`level?: LogLevel` | Defines the log level
-
-### LocalizedRoutingConfig 
-Property | Value
--------- | -----
-`format?: ISOCode[]` | Defines the format of the localized routing
-`defaultRouting?: boolean` | Disables/enables default routing for default language or locale
-`schema?: Schema[]` | Provides the schema to the default behaviour of localized routing
-
-### LocaleInterceptorConfig 
-Property | Value
--------- | -----
-`format?: ISOCode[]` | Defines the format of the _Accept-Language_ header
+Property | Nested property | Value
+-------- | --------------- | -----
+`locale?` | | Locale service configuration
+| | `languages?: Language[]` | Adds the languages to use in the app
+| | `language?: string` | Defines the language ISO 639 two-letter or three-letter code to be used, if the language is not found in the browser
+| | `defaultLocale?: DefaultLocale` | Defines the default locale to be used, regardless of the browser language
+| | `currency?: string` | Defines the currency ISO 4217 three-letter code to be used
+| | `timezone?: string` | The time zone name of the IANA time zone database to use
+| | `storage?: StorageStrategy` | Defines the storage to be used for default locale, currency & timezone
+| | `cookieExpiration?: number` | If the cookie expiration is omitted, the cookie becomes a session cookie
+`translation?` | | Translation service configuration
+| | `translationData?: Array<{ languageCode: string; data: any; }>` | Direct loading: adds translation data
+| | `providers?: any[]` | Asynchronous loading: adds translation providers
+| | `caching?: Boolean` | Asynchronous loading: disables/enables the cache for translation providers. Provide it only at the root level
+| | `version?: string` | Asynchronous loading: adds the query parameter `ver` to the http requests. Provide it only at the root level
+| | `timeout?: number` | Asynchronous loading: sets a timeout in milliseconds for the http requests. Provide it only at the root level
+| | `rollbackOnError?: boolean` | Asynchronous loading: rollbacks to previous default locale, currency and timezone on error
+| | `composedLanguage?: ISOCode[]` | Sets a composed language for translations
+| | `missingValue?: string | ((path: string) => string)` | Sets the value or the function to use for missing keys. Provide it only at the root level
+| | `missingKey?: string` | Sets the key to use for missing keys
+| | `composedKeySeparator?: string` | Sets composed key separator
+| | `i18nPlural?: boolean` | Disables/enables the translation of numbers that are contained at the beginning of the keys
+`logger?` | | Logger configuration
+| | `level?: LogLevel` | Defines the log level
+`localizedRouting?` | | Localized routing configuration
+| | `format?: ISOCode[]` | Defines the format of the localized routing
+| | `defaultRouting?: boolean` | Disables/enables default routing for default language or locale
+| | `schema?: Schema[]` | Provides the schema to the default behaviour of localized routing
+`localeInterceptor?` | | Locale interceptor configuration
+| | `format?: ISOCode[]` | Defines the format of the _Accept-Language_ header
 
 > There aren't default values: you must explicitly set each parameter you need.
 
 ---
 
-## Configuration tokens
+## Configuration token
 The configuration settings are stored in the following `InjectionToken`:
 
-Interface | Token
+Token | Interface
 ----- | --------
-`LocaleConfig` | `LOCALE_CONFIG` 
-`TranslationConfig` | `TRANSLATION_CONFIG`
-`LoggerConfig` | `LOGGER_CONFIG` 
-`LocalizedRoutingConfig` | `LOCALIZED_ROUTING_CONFIG`
-`LocaleInterceptorConfig` | `LOCALE_INTERCEPTOR_CONFIG`
+`L10N_CONFIG` | `L10nConfigRef`
 
 ---
 
 ## Dynamic settings
 If you need to load the configuration data dynamically, you can provide a partial or empty `L10nConfig` in `AppModule`, 
-and then update the _tokens_ in your class:
+and then update the _token_ in your class:
 
 ```TypeScript
 const l10nConfig: L10nConfig = {
@@ -215,9 +191,9 @@ export class AppModule {
 
     constructor(
         public l10nLoader: L10nLoader,
-        @Inject(TRANSLATION_CONFIG) private translationConfig: TranslationConfig
+        @Inject(L10N_CONFIG) private configuration: L10nConfigRef
     ) {
-        this.translationConfig.providers = [
+        this.configuration.translation.providers = [
             { type: ProviderType.Static, prefix: './assets/locale-' }
         ];
 
@@ -236,11 +212,11 @@ Or whether you use the _advanced initialization_:
 
     constructor(
         public l10nLoader: L10nLoader,
-        @Inject(TRANSLATION_CONFIG) private translationConfig: TranslationConfig
+        @Inject(L10N_CONFIG) private configuration: L10nConfigRef
     ) { }
 
     load(): Promise<any> {
-        this.translationConfig.providers = [
+        this.configuration.translation.providers = [
             { type: ProviderType.Static, prefix: './assets/locale-' }
         ];
 

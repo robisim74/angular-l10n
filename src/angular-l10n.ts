@@ -1,20 +1,7 @@
 export { InjectorRef } from './models/injector-ref';
 export { Logger } from './models/logger';
 export { StorageStrategy, ProviderType, ISOCode, DateTimeOptions, DigitsOptions, LogLevel } from './models/types';
-export {
-    LOCALE_CONFIG,
-    TRANSLATION_CONFIG,
-    LOGGER_CONFIG,
-    LOCALIZED_ROUTING_CONFIG,
-    LOCALE_INTERCEPTOR_CONFIG,
-    LocaleConfig,
-    TranslationConfig,
-    L10nConfig,
-    LoggerConfig,
-    LocalizedRoutingConfig,
-    LocaleInterceptorConfig,
-    Token
-} from './models/l10n-config';
+export { L10N_CONFIG, L10nConfigRef, L10nConfig, l10nConfigFactory, Token } from './models/l10n-config';
 export { LocalizedRouting } from './models/localized-routing';
 export { L10nLoader, LocaleLoader, TranslationLoader, LocalizedRoutingLoader } from './services/l10n-loader';
 export { ILocaleService, LocaleService } from './services/locale.service';
