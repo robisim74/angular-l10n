@@ -1,5 +1,5 @@
 /* tslint:disable */
-import { TestBed, ComponentFixture, fakeAsync, tick } from '@angular/core/testing';
+import { TestBed, ComponentFixture } from '@angular/core/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { By } from '@angular/platform-browser';
 import { DebugElement, Component, OnInit, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
@@ -15,7 +15,7 @@ import {
 
 @Component({
     template: `
-        <p>{{ 'Title' | translate:lang }}</p>
+        <p>{{ 'title' | translate:lang }}</p>
     `
 })
 class LanguageComponent implements OnInit {
@@ -28,7 +28,7 @@ class LanguageComponent implements OnInit {
 
 @Component({
     template: `
-        <p>{{ 'Title' | translate:lang }}</p>
+        <p>{{ 'title' | translate:lang }}</p>
     `,
     changeDetection: ChangeDetectionStrategy.OnPush
 })
@@ -45,10 +45,10 @@ class LanguageOnPushComponent implements OnInit {
 describe('Language decorator', () => {
 
     const translationEN: any = {
-        "Title": "Angular localization"
+        "title": "Angular localization"
     };
     const translationIT: any = {
-        "Title": "Localizzazione in Angular"
+        "title": "Localizzazione in Angular"
     };
 
     const l10nConfig: L10nConfig = {
@@ -68,7 +68,7 @@ describe('Language decorator', () => {
         }
     };
 
-    describe('Methods', () => {
+    describe('Basic behavior', () => {
 
         let comp: LanguageComponent;
         let fixture: ComponentFixture<LanguageComponent>;
@@ -152,10 +152,9 @@ describe('Language decorator', () => {
             }
         });
 
-        it('should render translated text when language changes', fakeAsync(() => {
+        it('should render translated text when language changes', (() => {
             locale.setCurrentLanguage('it');
 
-            tick();
             fixture.detectChanges();
             els = [];
             for (let i: number = 0; i < des.length; i++) {
@@ -206,10 +205,9 @@ describe('Language decorator', () => {
             }
         });
 
-        it('should render translated text when language changes', fakeAsync(() => {
+        it('should render translated text when language changes', (() => {
             locale.setCurrentLanguage('it');
 
-            tick();
             fixture.detectChanges();
             els = [];
             for (let i: number = 0; i < des.length; i++) {

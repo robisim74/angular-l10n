@@ -1,5 +1,5 @@
 /* tslint:disable */
-import { TestBed, fakeAsync, ComponentFixture } from '@angular/core/testing';
+import { TestBed, ComponentFixture } from '@angular/core/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { Component } from '@angular/core';
 
@@ -15,8 +15,8 @@ import {
 
 @Component({
     template: `
-        <p>{{ 'Title' | translate:lang }}</p>
-        <p>{{ 'Title' | translate }}</p>
+        <p>{{ 'title' | translate:lang }}</p>
+        <p>{{ 'title' | translate }}</p>
         <p>{{ 1.22 | l10nDecimal:defaultLocale:'1-2.1' }}</p>
     `
 })
@@ -66,7 +66,7 @@ describe('Logger', () => {
         l10nLoader.load().then(() => done());
     });
 
-    it('should log missing functions', fakeAsync(() => {
+    it('should log missing functions', (() => {
         fixture.detectChanges();
 
         expect(console.warn).toHaveBeenCalledWith("angular-l10n (LanguageComponent): Missing 'ngOnInit' method: required by AoT compilation");
@@ -76,7 +76,7 @@ describe('Logger', () => {
         expect(console.warn).toHaveBeenCalledWith("angular-l10n (LanguageComponent): Missing 'ngOnDestroy' method to cancel subscriptions: required by AoT compilation");
     }));
 
-    it('should log invalid formats', fakeAsync(() => {
+    it('should log invalid formats', (() => {
         fixture.detectChanges();
 
         expect(console.warn).toHaveBeenCalledWith("angular-l10n (IntlFormatter): Invalid number format alias: the default format will be used");

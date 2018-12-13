@@ -4,7 +4,7 @@ import { LocaleValidation } from '../services/locale-validation';
 import { L10nNumberValidatorDirective } from '../directives/l10n-number-validator.directive';
 
 /**
- * Provides dependencies & directives for locale validation.
+ * Provides dependencies & directives for validation by locales.
  */
 @NgModule({
     declarations: [

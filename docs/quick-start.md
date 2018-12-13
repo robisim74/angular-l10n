@@ -66,7 +66,7 @@ import { LocaleService, TranslationService, Language } from 'angular-l10n';
     template: `
         <h1>{{ title }}</h1>
 
-        <h3>{{ 'Change language' | translate:lang }}</h3>
+        <h3>{{ 'changeLanguage' | translate:lang }}</h3>
         
         <button (click)="selectLanguage('en');">English</button>
         <button (click)="selectLanguage('it');">Italiano</button>
@@ -84,7 +84,7 @@ export class AppComponent implements OnInit {
 
     ngOnInit(): void {
         this.translation.translationChanged().subscribe(
-            () => { this.title = this.translation.translate('Title'); }
+            () => { this.title = this.translation.translate('title'); }
         );
     }
 
@@ -103,9 +103,9 @@ import { Language } from 'angular-l10n';
 @Component({
     selector: 'app-home',
     template: `
-        <p>{{ 'Greeting' | translate:lang }}</p>
+        <p>{{ 'greeting' | translate:lang }}</p>
 
-        <p title="{{ 'Greeting' | translate:lang }}">{{ 'Subtitle' | translate:lang }}</p>
+        <p title="{{ 'greeting' | translate:lang }}">{{ 'subtitle' | translate:lang }}</p>
     `
 })
 export class HomeComponent implements OnInit {
@@ -121,18 +121,18 @@ export class HomeComponent implements OnInit {
 Create the _json_ files of the translations such as `locale-en.json` and `locale-it.json` in `src/assets` folder:
 ```Json
 {
-    "Title": "Angular localization",
-    "Subtitle": "It's a small world",
-    "Change language": "Change language",
-    "Greeting": "Hi!"
+    "title": "Angular localization",
+    "subtitle": "It's a small world",
+    "changeLanguage": "Change language",
+    "greeting": "Hi!"
 }
 ```
 ```Json
 {
-    "Title": "Localizzazione in Angular",
-    "Subtitle": "Il mondo è piccolo",
-    "Change language": "Cambia lingua",
-    "Greeting": "Ciao!"
+    "title": "Localizzazione in Angular",
+    "subtitle": "Il mondo è piccolo",
+    "changeLanguage": "Cambia lingua",
+    "greeting": "Ciao!"
 }
 ```
 
@@ -144,9 +144,9 @@ import { Component } from '@angular/core';
 @Component({
     selector: 'app-home',
     template: `
-        <p l10nTranslate>Greeting</p>
+        <p l10nTranslate>greeting</p>
 
-        <p l10n-title title="Greeting" l10nTranslate>Subtitle</p>
+        <p l10n-title title="greeting" l10nTranslate>subtitle</p>
     `
 })
 export class HomeComponent { }
@@ -222,7 +222,7 @@ import { LocaleService, TranslationService, Language } from 'angular-l10n';
     template: `
         <h1>{{ title }}</h1>
 
-        <h3>{{ 'Change country' | translate:lang }}</h3>
+        <h3>{{ 'changeCountry' | translate:lang }}</h3>
         
         <button (click)="selectLocale('en', 'US', 'USD');">United States</button>
         <button (click)="selectLocale('en', 'GB', 'GBP');">United Kingdom</button>
@@ -241,7 +241,7 @@ export class AppComponent implements OnInit {
 
     ngOnInit(): void {
         this.translation.translationChanged().subscribe(
-            () => { this.title = this.translation.translate('Title'); }
+            () => { this.title = this.translation.translate('title'); }
         );
     }
 
@@ -261,15 +261,15 @@ import { Language, DefaultLocale, Currency } from 'angular-l10n';
 @Component({
     selector: 'app-home',
     template: `
-        <p>{{ 'Greeting' | translate:lang }}</p>
+        <p>{{ 'greeting' | translate:lang }}</p>
 
-        <p title="{{ 'Greeting' | translate:lang }}">{{ 'Subtitle' | translate:lang }}</p>
+        <p title="{{ 'greeting' | translate:lang }}">{{ 'subtitle' | translate:lang }}</p>
 
         <p>{{ today | l10nDate:defaultLocale:'fullDate' }}</p>       
         <p>{{ pi | l10nDecimal:defaultLocale:'1.5-5' }}</p>
         <p>{{ value | l10nCurrency:defaultLocale:currency:'symbol':'1.2-2' }}</p>
 
-        <button (click)="change()">{{ 'Change' | translate:lang }}</button>
+        <button (click)="change()">{{ 'change' | translate:lang }}</button>
     `
 })
 export class HomeComponent implements OnInit {
@@ -299,20 +299,20 @@ export class HomeComponent implements OnInit {
 Create the _json_ files of the translations such as `locale-en.json` and `locale-it.json` in `src/assets` folder:
 ```Json
 {
-    "Title": "Angular localization",
-    "Subtitle": "It's a small world",
-    "Change country": "Change country",
-    "Greeting": "Hi!",
-    "Change": "Change"
+    "title": "Angular localization",
+    "subtitle": "It's a small world",
+    "changeCountry": "Change country",
+    "greeting": "Hi!",
+    "change": "Change"
 }
 ```
 ```Json
 {
-    "Title": "Localizzazione in Angular",
-    "Subtitle": "Il mondo è piccolo",
-    "Change country": "Cambia Paese",
-    "Greeting": "Ciao!",
-    "Change": "Cambia"
+    "title": "Localizzazione in Angular",
+    "subtitle": "Il mondo è piccolo",
+    "changeCountry": "Cambia Paese",
+    "greeting": "Ciao!",
+    "change": "Cambia"
 }
 ```
 
@@ -329,15 +329,15 @@ import { Component, OnInit } from '@angular/core';
 @Component({
     selector: 'app-home',
     template: `
-        <p l10nTranslate>Greeting</p>
+        <p l10nTranslate>greeting</p>
 
-        <p l10n-title title="Greeting" l10nTranslate>Subtitle</p>
+        <p l10n-title title="greeting" l10nTranslate>subtitle</p>
 
         <p format="fullDate" l10nDate>{{ today }}</p>    
         <p digits="1.5-5" l10nDecimal>{{ pi }}</p>
         <p digits="1.2-2" currencyDisplay="symbol" l10nCurrency>{{ value }}</p>
 
-        <button (click)="change()" l10nTranslate>Change</button>
+        <button (click)="change()" l10nTranslate>change</button>
     `
 })
 export class HomeComponent implements OnInit {

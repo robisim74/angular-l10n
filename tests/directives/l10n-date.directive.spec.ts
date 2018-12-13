@@ -1,5 +1,5 @@
 /* tslint:disable */
-import { TestBed, ComponentFixture, fakeAsync, tick } from '@angular/core/testing';
+import { TestBed, ComponentFixture } from '@angular/core/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { By } from '@angular/platform-browser';
 import { DebugElement, Component } from '@angular/core';
@@ -38,7 +38,7 @@ describe('L10nDateDirective', () => {
         }
     };
 
-    describe('Methods', () => {
+    describe('Basic behavior', () => {
 
         let comp: L10nDateComponent;
         let fixture: ComponentFixture<L10nDateComponent>;
@@ -123,10 +123,9 @@ describe('L10nDateDirective', () => {
             }
         });
 
-        it('should render localized dates when default locale changes', fakeAsync(() => {
+        it('should render localized dates when default locale changes', (() => {
             locale.setDefaultLocale('it', 'IT');
 
-            tick();
             fixture.detectChanges();
             els = [];
             for (let i: number = 0; i < des.length; i++) {

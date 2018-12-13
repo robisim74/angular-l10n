@@ -1,5 +1,5 @@
 /* tslint:disable */
-import { TestBed, ComponentFixture, fakeAsync, tick } from '@angular/core/testing';
+import { TestBed, ComponentFixture } from '@angular/core/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { By } from '@angular/platform-browser';
 import { DebugElement, Component, OnInit } from '@angular/core';
@@ -40,7 +40,7 @@ describe('Timezone decorator', () => {
         }
     };
 
-    describe('Methods', () => {
+    describe('Basic behavior', () => {
 
         let comp: TimezoneComponent;
         let fixture: ComponentFixture<TimezoneComponent>;
@@ -120,11 +120,10 @@ describe('Timezone decorator', () => {
             }
         });
 
-        it('should render localized date when timezone changes', fakeAsync(() => {
+        it('should render localized date when timezone changes', (() => {
             locale.setDefaultLocale('it', 'IT');
             locale.setCurrentTimezone('Europe/Rome');
 
-            tick();
             fixture.detectChanges();
             els = [];
             for (let i: number = 0; i < des.length; i++) {

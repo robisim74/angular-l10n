@@ -62,7 +62,7 @@ const l10nConfig: L10nConfig = {
 })
 export class AppModule {
 
-    constructor(public l10nLoader: L10nLoader) {
+    constructor(private l10nLoader: L10nLoader) {
         this.l10nLoader.load();
     }
 
@@ -108,7 +108,7 @@ const l10nConfig: L10nConfig = {
 })
 export class AppModule {
 
-    constructor(public l10nLoader: L10nLoader) {
+    constructor(private l10nLoader: L10nLoader) {
         this.l10nLoader.load();
     }
 
@@ -149,6 +149,8 @@ Property | Nested property | Value
 | | `format?: ISOCode[]` | Defines the format of the localized routing
 | | `defaultRouting?: boolean` | Disables/enables default routing for default language or locale
 | | `schema?: Schema[]` | Provides the schema to the default behaviour of localized routing
+`search?` | | Search configuration
+| | `metaTags?: string[]` | List of meta tag names to translate
 `localeInterceptor?` | | Locale interceptor configuration
 | | `format?: ISOCode[]` | Defines the format of the _Accept-Language_ header
 
@@ -190,7 +192,7 @@ const l10nConfig: L10nConfig = {
 export class AppModule {
 
     constructor(
-        public l10nLoader: L10nLoader,
+        private l10nLoader: L10nLoader,
         @Inject(L10N_CONFIG) private configuration: L10nConfigRef
     ) {
         this.configuration.translation.providers = [
@@ -211,7 +213,7 @@ Or whether you use the _advanced initialization_:
 @Injectable() export class LocalizationConfig {
 
     constructor(
-        public l10nLoader: L10nLoader,
+        private l10nLoader: L10nLoader,
         @Inject(L10N_CONFIG) private configuration: L10nConfigRef
     ) { }
 
@@ -298,7 +300,7 @@ const l10nConfig: L10nConfig = {
 };
 ```
 
-### Asynchronous loading of json files
+### Asynchronous loading of JSON files
 You can add all the providers you need:
 ```TypeScript
 const l10nConfig: L10nConfig = {
@@ -431,7 +433,7 @@ export class AppComponent {
 If the error occurs on the first loading of the application or a lazy loaded module, you can catch it with the `load` method: 
 ```TypeScript
 export class AppModule {
-    constructor(public l10nLoader: L10nLoader) {
+    constructor(private l10nLoader: L10nLoader) {
         this.l10nLoader.load()
             .catch(err => console.error(err));
     }
@@ -546,8 +548,8 @@ See also [LocaleStorage](https://github.com/robisim74/angular-l10n/blob/master/s
 
 ---
 
-## Getting browser language
-Depending on the configuration, the library will automatically try to get the language from the browser or not:
+## How the language is defined at the first loading
+Depending on the configuration, the library tries to define the language:
 
 **If you set the language**
 
@@ -585,127 +587,3 @@ When specifying the `features`, you have to specify what locale, or locales to l
 The _timezone_ is also provided via _Intl API_. Except IE, all modern browsers have implemented the timezone. To extend the support, you can use [Intl.DateTimeFormat timezone polyfill](https://github.com/yahoo/date-time-format-timezone).
 
 > When a feature is not supported, however, for example in older browsers, Angular localization does not generate an error in the browser, but returns the value without performing operations.
-
----
-
-## Support for SEO
-
-### Localized routing 
-In _locale-adaptive_ apps (like the apps that use this library, that return different content based on the preferred locale of the visitor), _Google might not crawl, index, or rank all the content for different locales_.
-
-To solve this problem, you can enable localized routing during configuration:
-```TypeScript
-const l10nConfig: L10nConfig = {
-    ...
-    localizedRouting: {
-        format: [ISOCode.Language, /* ISOCode.Script, */ /* ISOCode.Country */]
-    }
-};
-```
-
-Then import the module:
-```TypeScript
-@NgModule({
-    imports: [
-        ...
-        TranslationModule.forRoot(l10nConfig)
-        LocaleSeo.forRoot()
-    ],
-    ...
-})
-export class AppModule { }
-```
-
-> The order is important: always import `LocaleSeoModule` after `TranslationModule` or `LocalizationModule`.
-
-**Features:**
-
-* A prefix is added to the path of each navigation, containing the language or the locale, creating a semantic URL:
-```
-baseHref[language[-script][-country]]path
-
-https://example.com/en/home
-https://example.com/en-US/home
-```
-* If the localized link is called, the content is automatically translated.
-* When the language changes, the link is also updated.
-* Changes to localized links do not change browser history.
-* It works also with SSR.
-
-To achieve this, the router configuration in your app is not rewritten (operation that would poor performance and could cause errors): the `Location` class provided by Angular is used for the replacement of the URL, in order to provide the different contents localized both to the crawlers and to the users that can refer to the localized links.
-
-> Since the link contains only the locale, if your app also uses _numbering system_, _calendar_, _currency_ or _timezone_, you should set _schema_ option below.
-
-#### Using _hreflang_ and _sitemap_
-You can use the _sitemap_ to tell Google all of the locale variants for each URL:
-```XML
-<?xml version="1.0" encoding="utf-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
-  <url>
-    <loc>https://example.com/en/home</loc>
-    <xhtml:link rel="alternate" hreflang="it" href="https://example.com/en/home"/>
-    <xhtml:link rel="alternate" hreflang="en" href="https://example.com/it/home"/>
-    ...
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://example.com/home"/>
-  </url>
-  <url>
-    <loc>https://example.com/it/home</loc>
-    ...
-  </url>
-  ...
-</urlset>
-```
-
-For more info, visit [Search Console Help - International](https://support.google.com/webmasters/topic/2370587?hl=en&ref_topic=4598733)
-
-#### Default routing
-If you don't want a localized routing for default language or locale, you can enable it during the configuration:
-```TypeScript
-const l10nConfig: L10nConfig = {
-    ...
-    localizedRouting: {
-        format: [ISOCode.Language, /* ISOCode.Script, */ /* ISOCode.Country */],
-        defaultRouting: true
-    }
-};
-```
-
-#### Schema
-If your app uses _numbering system_, _calendar_, _currency_ or _timezone_, it is recommended to provide the `schema` option, to manage the localized links and refreshes:
-```TypeScript
-const l10nConfig: L10nConfig = {
-    ...
-    localizedRouting: {
-        format: [ISOCode.Language, ISOCode.Country],
-        schema: [
-            { text: 'United States', languageCode: 'en', countryCode: 'US', currency: 'USD' },
-            { text: 'Italia', languageCode: 'it', countryCode: 'IT', currency: 'EUR' },
-        ]
-    }
-};
-```
-
----
-
-## Setting the locale in _Accept-Language_ header on outgoing requests
-To set the locale in _Accept-Language_ header on all outgoing requests, provide the `localeInterceptor` option during the configuration:
-```TypeScript
-const l10nConfig: L10nConfig = {
-    ...
-    localeInterceptor: {
-        format: [ISOCode.Language, /* ISOCode.Script, */ /* ISOCode.Country */]
-    }
-};
-```
-
-Then import the module:
-```TypeScript
-@NgModule({
-    imports: [
-        ...
-        LocaleInterceptorModule
-    ],
-    ...
-})
-export class AppModule { }
-```

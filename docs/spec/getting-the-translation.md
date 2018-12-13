@@ -33,37 +33,37 @@ expression | translate:lang
 ```
 where `expression` is a string key that indicates the message to translate:
 ```Html
-{{ 'Title' | translate:lang }}
+{{ 'title' | translate:lang }}
 ```
-_Json_:
+_JSON_:
 ```
 {
-    "Title": "Angular localization"
+    "title": "Angular localization"
 }
 ```
 
 #### Composed keys
 Set `composedKeySeparator` during the configuration, e.g. to `'.'`:
 ```Html
-{{ 'Home.Title' | translate:lang }}
+{{ 'home.title' | translate:lang }}
 ```
-_Json_:
+_JSON_:
 ```
 {
-    "Home": {
-        "Title": "Angular localization"
+    "home": {
+        "title": "Angular localization"
     }
 }
 ```
 
 #### Parameters
 ```Html
-{{ 'User notifications' | translate:lang:{ user: username, NoMessages: messages.length } }}
+{{ 'userNotifications' | translate:lang:{ user: username, NoMessages: messages.length } }}
 ```
-_Json_:
+_JSON_:
 ```
 {
-    "User notifications": "{{ user }}, you have {{ NoMessages }} new messages"
+    "userNotifications": "{{ user }}, you have {{ NoMessages }} new messages"
 }
 ```
 
@@ -274,12 +274,12 @@ L10nCurrency | Currency | Number/string | `<tag l10n-attribute attribute="expr1"
 
 ### Messages
 ```Html
-<h1 l10nTranslate>Title</h1>
+<h1 l10nTranslate>title</h1>
 ```
 
 #### Parameters
 ```Html
-<p [params]="{ user: username, NoMessages: messages.length }" l10nTranslate>User notifications</p>
+<p [params]="{ user: username, NoMessages: messages.length }" l10nTranslate>userNotifications</p>
 ```
 
 ### Dates & Numbers
@@ -299,7 +299,7 @@ L10nCurrency | Currency | Number/string | `<tag l10n-attribute attribute="expr1"
 
 ### Attributes
 ```Html
-<p l10n-title title="Greeting" l10nTranslate>Title</p>
+<p l10n-title title="greeting" l10nTranslate>title</p>
 ```
 All attributes will be translated according to the master directive: `l10nTranslate`, `l10nDate` and so on.
 
@@ -307,20 +307,20 @@ All attributes will be translated according to the master directive: `l10nTransl
 
 #### Parameters
 ```Html
-<p l10n-title title="Greeting" [params]="{ user: username, NoMessages: messages.length }" l10nTranslate>User notifications</p>
+<p l10n-title title="greeting" [params]="{ user: username, NoMessages: messages.length }" l10nTranslate>userNotifications</p>
 ```
-_Json_:
+_JSON_:
 ```
 {
-    "Greeting": "Hi {{ user }}",
-    "User notifications": "{{ user }}, you have {{ NoMessages }} new messages"
+    "greeting": "Hi {{ user }}",
+    "userNotifications": "{{ user }}, you have {{ NoMessages }} new messages"
 }
 ```
 
 ### UI components
 You can properly translate UI components like Angular Material or Ionic:
 ```Html
-<a mat-list-item routerLinkActive="active-link" routerLink="/home" l10nTranslate>App.Home</a>
+<a mat-list-item routerLinkActive="active-link" routerLink="/home" l10nTranslate>app.home</a>
 ```
 rendered as:
 ```Html
@@ -340,23 +340,23 @@ rendered as:
 ## Using Html tags in translation
 If you have Html tags in translation like this:
 ```
-"Strong subtitle": "<strong>It's a small world</strong>"
+"strongSubtitle": "<strong>It's a small world</strong>"
 ```
 you have to use `innerHTML` property.
 
 Using _pipes_:
 ```Html
-<p [innerHTML]="'Strong subtitle' | translate:lang"></p>
+<p [innerHTML]="'strongSubtitle' | translate:lang"></p>
 ```
 Using _directives_:
 ```Html
-<p [innerHTML]="'Strong subtitle'" l10nTranslate></p>
+<p [innerHTML]="'strongSubtitle'" l10nTranslate></p>
 ```
 
 ---
 
 ## Pluralization
-The library implements pluralization through the official [i18nPluralPipe](https://angular.io/api/common/I18nPluralPipe). Just add to it the translate pipe:
+The library implements pluralization through the official [i18nPluralPipe](https://angular.io/api/common/I18nPluralPipe). Just add to it the _translate_ pipe:
 ```Html
 <p>{{ messages.length | i18nPlural:messageMapping | translate:lang }}</p>
 ```
@@ -398,10 +398,10 @@ export class HomeComponent {
 
     title: string;
 
-    constructor(public translation: TranslationService) { }
+    constructor(private translation: TranslationService) { }
 
     getTranslation(): void {
-        this.title = this.translation.translate('Title');
+        this.title = this.translation.translate('title');
     }
 
 }
@@ -421,11 +421,11 @@ export class HomeComponent implements OnInit {
 
     title: string;
 
-    constructor(public translation: TranslationService) { }
+    constructor(private translation: TranslationService) { }
 
     ngOnInit(): void {
         this.translation.translationChanged().subscribe(
-            () => { this.title = this.translation.translate('Title'); }
+            () => { this.title = this.translation.translate('title'); }
         );
     }
 

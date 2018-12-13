@@ -18,6 +18,7 @@ export { Language } from './decorators/language.decorator';
 export { DefaultLocale } from './decorators/default-locale.decorator';
 export { Currency } from './decorators/currency.decorator';
 export { Timezone } from './decorators/timezone.decorator';
+export { Search } from './decorators/search.decorator';
 export { TranslatePipe } from './pipes/translate.pipe';
 export { L10nDatePipe } from './pipes/l10n-date.pipe';
 export {
@@ -37,6 +38,7 @@ export {
     L10nNumberValidatorDirective,
     l10nValidateNumber
 } from './directives/l10n-number-validator.directive';
+export { L10nJsonLdComponent } from './components/l10n-json-ld.component';
 export { TranslationModule } from './modules/translation.module';
 export { LocalizationModule } from './modules/localization.module';
 export { LocaleValidationModule } from './modules/locale-validation.module';

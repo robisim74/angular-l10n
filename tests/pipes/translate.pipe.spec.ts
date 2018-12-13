@@ -1,5 +1,5 @@
 /* tslint:disable */
-import { TestBed, fakeAsync, tick, ComponentFixture } from '@angular/core/testing';
+import { TestBed, ComponentFixture, fakeAsync, tick } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController, TestRequest } from '@angular/common/http/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { Component, Injectable } from '@angular/core';
@@ -51,16 +51,16 @@ describe('TranslatePipe', () => {
         let pipe: TranslatePipe;
 
         const translationGlobalEN: any = {
-            Save: "Save"
+            "save": "Save"
         };
         const translationGlobalIT: any = {
-            Save: "Salva"
+            "save": "Salva"
         };
         const translationEN: any = {
-            Title: "Angular localization"
+            "title": "Angular localization"
         };
         const translationIT: any = {
-            Title: "Localizzazione in Angular"
+            "title": "Localizzazione in Angular"
         };
 
         const l10nConfig: L10nConfig = {
@@ -100,12 +100,12 @@ describe('TranslatePipe', () => {
 
         it('should translate using more than one translation', (() => {
             locale.setCurrentLanguage('en');
-            expect(pipe.transform('Title', locale.getCurrentLanguage())).toEqual("Angular localization");
-            expect(pipe.transform('Save', locale.getCurrentLanguage())).toEqual("Save");
+            expect(pipe.transform('title', locale.getCurrentLanguage())).toEqual("Angular localization");
+            expect(pipe.transform('save', locale.getCurrentLanguage())).toEqual("Save");
 
             locale.setCurrentLanguage('it');
-            expect(pipe.transform('Title', locale.getCurrentLanguage())).toEqual("Localizzazione in Angular");
-            expect(pipe.transform('Save', locale.getCurrentLanguage())).toEqual("Salva");
+            expect(pipe.transform('title', locale.getCurrentLanguage())).toEqual("Localizzazione in Angular");
+            expect(pipe.transform('save', locale.getCurrentLanguage())).toEqual("Salva");
         }));
 
     });
@@ -159,21 +159,21 @@ describe('TranslatePipe', () => {
 
             const req1: TestRequest = httpMock.expectOne('./assets/global-en.json');
             const req2: TestRequest = httpMock.expectOne('./assets/locale-en.json');
-            req1.flush({ "Save": "Save" });
-            req2.flush({ "Title": "Angular localization" });
+            req1.flush({ "save": "Save" });
+            req2.flush({ "title": "Angular localization" });
 
-            expect(pipe.transform('Title', locale.getCurrentLanguage())).toEqual("Angular localization");
-            expect(pipe.transform('Save', locale.getCurrentLanguage())).toEqual("Save");
+            expect(pipe.transform('title', locale.getCurrentLanguage())).toEqual("Angular localization");
+            expect(pipe.transform('save', locale.getCurrentLanguage())).toEqual("Save");
 
             locale.setDefaultLocale('it');
 
             const req3: TestRequest = httpMock.expectOne('./assets/global-it.json');
             const req4: TestRequest = httpMock.expectOne('./assets/locale-it.json');
-            req3.flush({ "Save": "Salva" });
-            req4.flush({ "Title": "Localizzazione in Angular" });
+            req3.flush({ "save": "Salva" });
+            req4.flush({ "title": "Localizzazione in Angular" });
 
-            expect(pipe.transform('Title', locale.getCurrentLanguage())).toEqual("Localizzazione in Angular");
-            expect(pipe.transform('Save', locale.getCurrentLanguage())).toEqual("Salva");
+            expect(pipe.transform('title', locale.getCurrentLanguage())).toEqual("Localizzazione in Angular");
+            expect(pipe.transform('save', locale.getCurrentLanguage())).toEqual("Salva");
         }));
 
         afterEach(() => {
@@ -193,10 +193,10 @@ describe('TranslatePipe', () => {
         let pipe: TranslatePipe;
 
         const translationGlobalEN: any = {
-            Save: "Save"
+            "save": "Save"
         };
         const translationGlobalIT: any = {
-            Save: "Salva"
+            "save": "Salva"
         };
 
         const l10nConfig: L10nConfig = {
@@ -240,18 +240,18 @@ describe('TranslatePipe', () => {
             tick();
 
             const req1: TestRequest = httpMock.expectOne('./assets/locale-en.json');
-            req1.flush({ "Title": "Angular localization" });
+            req1.flush({ "title": "Angular localization" });
 
-            expect(pipe.transform('Title', locale.getCurrentLanguage())).toEqual("Angular localization");
-            expect(pipe.transform('Save', locale.getCurrentLanguage())).toEqual("Save");
+            expect(pipe.transform('title', locale.getCurrentLanguage())).toEqual("Angular localization");
+            expect(pipe.transform('save', locale.getCurrentLanguage())).toEqual("Save");
 
             locale.setDefaultLocale('it');
 
             const req2: TestRequest = httpMock.expectOne('./assets/locale-it.json');
-            req2.flush({ "Title": "Localizzazione in Angular" });
+            req2.flush({ "title": "Localizzazione in Angular" });
 
-            expect(pipe.transform('Title', locale.getCurrentLanguage())).toEqual("Localizzazione in Angular");
-            expect(pipe.transform('Save', locale.getCurrentLanguage())).toEqual("Salva");
+            expect(pipe.transform('title', locale.getCurrentLanguage())).toEqual("Localizzazione in Angular");
+            expect(pipe.transform('save', locale.getCurrentLanguage())).toEqual("Salva");
         }));
 
         afterEach(() => {
@@ -308,22 +308,22 @@ describe('TranslatePipe', () => {
             tick();
 
             const req1: TestRequest = httpMock.expectOne('./assets/global.json');
-            req1.flush({ "Title": "Angular localization" });
+            req1.flush({ "title": "Angular localization" });
             const req2: TestRequest = httpMock.expectOne('./assets/locale-en.json');
-            req2.flush({ "Save": "Save" });
+            req2.flush({ "save": "Save" });
 
-            expect(pipe.transform('Title', locale.getCurrentLanguage())).toEqual("Angular localization");
-            expect(pipe.transform('Save', locale.getCurrentLanguage())).toEqual("Save");
+            expect(pipe.transform('title', locale.getCurrentLanguage())).toEqual("Angular localization");
+            expect(pipe.transform('save', locale.getCurrentLanguage())).toEqual("Save");
 
             locale.setDefaultLocale('it');
 
             const req3: TestRequest = httpMock.expectOne('./assets/global.json');
-            req3.flush({ "Title": "Angular localization", "Save": "Save" });
+            req3.flush({ "title": "Angular localization", "save": "Save" });
             const req4: TestRequest = httpMock.expectOne('./assets/locale-it.json');
-            req4.flush({ "Save": "Salva" });
+            req4.flush({ "save": "Salva" });
 
-            expect(pipe.transform('Title', locale.getCurrentLanguage())).toEqual("Angular localization");
-            expect(pipe.transform('Save', locale.getCurrentLanguage())).toEqual("Salva");
+            expect(pipe.transform('title', locale.getCurrentLanguage())).toEqual("Angular localization");
+            expect(pipe.transform('save', locale.getCurrentLanguage())).toEqual("Salva");
         }));
 
         afterEach(() => {
@@ -381,21 +381,21 @@ describe('TranslatePipe', () => {
 
             const req1: TestRequest = httpMock.expectOne('http://localhost:54703/api/global/en');
             const req2: TestRequest = httpMock.expectOne('http://localhost:54703/api/locales/en');
-            req1.flush({ "Title": "Angular localization" });
-            req2.flush({ "Save": "Save" });
+            req1.flush({ "title": "Angular localization" });
+            req2.flush({ "save": "Save" });
 
-            expect(pipe.transform('Title', locale.getCurrentLanguage())).toEqual("Angular localization");
-            expect(pipe.transform('Save', locale.getCurrentLanguage())).toEqual("Save");
+            expect(pipe.transform('title', locale.getCurrentLanguage())).toEqual("Angular localization");
+            expect(pipe.transform('save', locale.getCurrentLanguage())).toEqual("Save");
 
             locale.setDefaultLocale('it');
 
             const req3: TestRequest = httpMock.expectOne('http://localhost:54703/api/global/it');
             const req4: TestRequest = httpMock.expectOne('http://localhost:54703/api/locales/it');
-            req3.flush({ "Title": "Localizzazione in Angular" });
-            req4.flush({ "Save": "Salva" });
+            req3.flush({ "title": "Localizzazione in Angular" });
+            req4.flush({ "save": "Salva" });
 
-            expect(pipe.transform('Title', locale.getCurrentLanguage())).toEqual("Localizzazione in Angular");
-            expect(pipe.transform('Save', locale.getCurrentLanguage())).toEqual("Salva");
+            expect(pipe.transform('title', locale.getCurrentLanguage())).toEqual("Localizzazione in Angular");
+            expect(pipe.transform('save', locale.getCurrentLanguage())).toEqual("Salva");
         }));
 
         afterEach(() => {
@@ -454,16 +454,16 @@ describe('TranslatePipe', () => {
             tick();
 
             const req1: TestRequest = httpMock.expectOne('./assets/locale-en.json');
-            req1.flush({ "Title": "Angular localization" });
+            req1.flush({ "title": "Angular localization" });
 
-            expect(pipe.transform('Title', locale.getCurrentLanguage())).toEqual("Angular localization");
+            expect(pipe.transform('title', locale.getCurrentLanguage())).toEqual("Angular localization");
 
             locale.setDefaultLocale('it');
 
             const req2: TestRequest = httpMock.expectOne('./assets/locale-it.json');
-            req2.flush({ "Title": "Localizzazione in Angular" });
+            req2.flush({ "title": "Localizzazione in Angular" });
 
-            expect(pipe.transform('Title', locale.getCurrentLanguage())).toEqual("Localizzazione in Angular");
+            expect(pipe.transform('title', locale.getCurrentLanguage())).toEqual("Localizzazione in Angular");
         }));
 
         afterEach(() => {
@@ -472,7 +472,7 @@ describe('TranslatePipe', () => {
 
     });
 
-    describe('Default behaviours', () => {
+    describe('Basic behaviors', () => {
 
         let httpMock: HttpTestingController;
 
@@ -527,20 +527,20 @@ describe('TranslatePipe', () => {
 
             const req1: TestRequest = httpMock.expectOne('./assets/locale-en.json');
             req1.flush({
-                "User notifications": "{{ user }}, you have {{ NoMessages }} new messages"
+                "userNotifications": "{{ user }}, you have {{ NoMessages }} new messages"
             });
 
-            expect(pipe.transform('User notifications', locale.getCurrentLanguage(), params))
+            expect(pipe.transform('userNotifications', locale.getCurrentLanguage(), params))
                 .toEqual("robisim74, you have 2 new messages");
 
             locale.setDefaultLocale('it');
 
             const req2: TestRequest = httpMock.expectOne('./assets/locale-it.json');
             req2.flush({
-                "User notifications": "{{ user }}, tu hai {{ NoMessages }} nuovi messaggi"
+                "userNotifications": "{{ user }}, tu hai {{ NoMessages }} nuovi messaggi"
             });
 
-            expect(pipe.transform('User notifications', locale.getCurrentLanguage(), params))
+            expect(pipe.transform('userNotifications', locale.getCurrentLanguage(), params))
                 .toEqual("robisim74, tu hai 2 nuovi messaggi");
         }));
 
@@ -550,19 +550,19 @@ describe('TranslatePipe', () => {
 
             const req1: TestRequest = httpMock.expectOne('./assets/locale-en.json');
             req1.flush({
-                "Home": { "Title": "Angular localization" }
+                "home": { "title": "Angular localization" }
             });
 
-            expect(pipe.transform('Home.Subtitle', locale.getCurrentLanguage())).toEqual("Home.Subtitle");
+            expect(pipe.transform('home.subtitle', locale.getCurrentLanguage())).toEqual("home.subtitle");
 
             locale.setDefaultLocale('it');
 
             const req2: TestRequest = httpMock.expectOne('./assets/locale-it.json');
             req2.flush({
-                "Home": { "Title": "Localizzazione in Angular" }
+                "home": { "title": "Localizzazione in Angular" }
             });
 
-            expect(pipe.transform('Home.Subtitle', locale.getCurrentLanguage())).toEqual("Home.Subtitle");
+            expect(pipe.transform('home.subtitle', locale.getCurrentLanguage())).toEqual("home.subtitle");
         }));
 
         afterEach(() => {
@@ -596,7 +596,7 @@ describe('TranslatePipe', () => {
                     { type: ProviderType.Static, prefix: './assets/locale-' }
                 ],
                 composedKeySeparator: '.',
-                missingKey: 'Missing',
+                missingKey: 'missing',
                 missingValue: 'No key',
                 i18nPlural: true
             }
@@ -624,19 +624,19 @@ describe('TranslatePipe', () => {
 
             const req1: TestRequest = httpMock.expectOne('./assets/locale-en.json');
             req1.flush({
-                "Home": { "Title": "Angular localization" }
+                "home": { "title": "Angular localization" }
             });
 
-            expect(pipe.transform('Home.Title', locale.getCurrentLanguage())).toEqual("Angular localization");
+            expect(pipe.transform('home.title', locale.getCurrentLanguage())).toEqual("Angular localization");
 
             locale.setDefaultLocale('it');
 
             const req2: TestRequest = httpMock.expectOne('./assets/locale-it.json');
             req2.flush({
-                "Home": { "Title": "Localizzazione in Angular" }
+                "home": { "title": "Localizzazione in Angular" }
             });
 
-            expect(pipe.transform('Home.Title', locale.getCurrentLanguage())).toEqual("Localizzazione in Angular");
+            expect(pipe.transform('home.title', locale.getCurrentLanguage())).toEqual("Localizzazione in Angular");
         }));
 
         it('should return the missing key', fakeAsync(() => {
@@ -645,21 +645,21 @@ describe('TranslatePipe', () => {
 
             const req1: TestRequest = httpMock.expectOne('./assets/locale-en.json');
             req1.flush({
-                "Home": { "Title": "Angular localization" },
-                "Missing": "No key"
+                "home": { "title": "Angular localization" },
+                "missing": "No key"
             });
 
-            expect(pipe.transform('Subtitle', locale.getCurrentLanguage())).toEqual("No key");
+            expect(pipe.transform('subtitle', locale.getCurrentLanguage())).toEqual("No key");
 
             locale.setDefaultLocale('it');
 
             const req2: TestRequest = httpMock.expectOne('./assets/locale-it.json');
             req2.flush({
-                "Home": { "Title": "Localizzazione in Angular" },
-                "Missing": "Nessuna chiave"
+                "home": { "title": "Localizzazione in Angular" },
+                "missing": "Nessuna chiave"
             });
 
-            expect(pipe.transform('Subtitle', locale.getCurrentLanguage())).toEqual("Nessuna chiave");
+            expect(pipe.transform('subtitle', locale.getCurrentLanguage())).toEqual("Nessuna chiave");
         }));
 
         it('should return the missing value', fakeAsync(() => {
@@ -667,9 +667,9 @@ describe('TranslatePipe', () => {
             tick();
 
             const req1: TestRequest = httpMock.expectOne('./assets/locale-en.json');
-            req1.flush({ "Title": "Angular localization" });
+            req1.flush({ "title": "Angular localization" });
 
-            expect(pipe.transform('Subtitle', locale.getCurrentLanguage())).toEqual("No key");
+            expect(pipe.transform('subtitle', locale.getCurrentLanguage())).toEqual("No key");
         }));
 
         it('should not return the missing value', fakeAsync(() => {
@@ -677,9 +677,9 @@ describe('TranslatePipe', () => {
             tick();
 
             const req1: TestRequest = httpMock.expectOne('./assets/locale-en.json');
-            req1.flush({ "Title": "" });
+            req1.flush({ "title": "" });
 
-            expect(pipe.transform('Title', locale.getCurrentLanguage())).toEqual("");
+            expect(pipe.transform('title', locale.getCurrentLanguage())).toEqual("");
         }));
 
         it('should translate i18n plural', fakeAsync(() => {
@@ -754,9 +754,9 @@ describe('TranslatePipe', () => {
             tick();
 
             const req1: TestRequest = httpMock.expectOne('./assets/locale-en.json');
-            req1.flush({ "Title": "Angular localization" });
+            req1.flush({ "title": "Angular localization" });
 
-            expect(pipe.transform('Subtitle', locale.getCurrentLanguage())).toEqual("Subtitle was not found");
+            expect(pipe.transform('subtitle', locale.getCurrentLanguage())).toEqual("subtitle was not found");
         }));
 
         afterEach(() => {
@@ -812,16 +812,16 @@ describe('TranslatePipe', () => {
             tick();
 
             const req1: TestRequest = httpMock.expectOne('./assets/locale-en-US.json');
-            req1.flush({ "Title": "Angular localization" });
+            req1.flush({ "title": "Angular localization" });
 
-            expect(pipe.transform('Title', locale.getCurrentLocale())).toEqual("Angular localization");
+            expect(pipe.transform('title', locale.getCurrentLocale())).toEqual("Angular localization");
 
             locale.setDefaultLocale('en', 'GB');
 
             const req2: TestRequest = httpMock.expectOne('./assets/locale-en-GB.json');
-            req2.flush({ "Title": "Angular localisation" });
+            req2.flush({ "title": "Angular localisation" });
 
-            expect(pipe.transform('Title', locale.getCurrentLocale())).toEqual("Angular localisation");
+            expect(pipe.transform('title', locale.getCurrentLocale())).toEqual("Angular localisation");
         }));
 
         afterEach(() => {
@@ -899,19 +899,19 @@ describe('TranslatePipe', () => {
                     tick();
 
                     const req1: TestRequest = httpMock.expectOne('./assets/locale-en.json');
-                    req1.flush({ "Title": "Angular localization" });
+                    req1.flush({ "title": "Angular localization" });
 
                     expect(location.path()).toBe('/en/mock');
-                    expect(pipe.transform('Title', locale.getCurrentLanguage())).toEqual("Angular localization");
+                    expect(pipe.transform('title', locale.getCurrentLanguage())).toEqual("Angular localization");
 
                     locale.setDefaultLocale('it');
                     tick();
 
                     const req2: TestRequest = httpMock.expectOne('./assets/locale-it.json');
-                    req2.flush({ "Title": "Localizzazione in Angular" });
+                    req2.flush({ "title": "Localizzazione in Angular" });
 
                     expect(location.path()).toBe('/it/mock');
-                    expect(pipe.transform('Title', locale.getCurrentLanguage())).toEqual("Localizzazione in Angular");
+                    expect(pipe.transform('title', locale.getCurrentLanguage())).toEqual("Localizzazione in Angular");
                 });
             } else {
                 console.warn('Test not executed');
@@ -929,9 +929,9 @@ describe('TranslatePipe', () => {
                     expect(location.path()).toBe('/en/mock');
 
                     const req1: TestRequest = httpMock.expectOne('./assets/locale-en.json');
-                    req1.flush({ "Title": "Angular localization" });
+                    req1.flush({ "title": "Angular localization" });
 
-                    expect(pipe.transform('Title', locale.getCurrentLanguage())).toEqual("Angular localization");
+                    expect(pipe.transform('title', locale.getCurrentLanguage())).toEqual("Angular localization");
                 });
             } else {
                 console.warn('Test not executed');

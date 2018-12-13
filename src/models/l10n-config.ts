@@ -156,6 +156,16 @@ export interface L10nConfig {
     };
 
     /**
+     * Search configuration.
+     */
+    search?: {
+        /**
+         * List of meta tag names to translate.
+         */
+        metaTags?: string[];
+    };
+
+    /**
      * Locale interceptor configuration.
      */
     localeInterceptor?: {
@@ -172,6 +182,7 @@ export function l10nConfigFactory(l10nConfig: L10nConfig): L10nConfigRef {
         translation: l10nConfig.translation || {},
         logger: l10nConfig.logger || {},
         localizedRouting: l10nConfig.localizedRouting || {},
+        search: l10nConfig.search || {},
         localeInterceptor: l10nConfig.localeInterceptor || {}
     };
 }

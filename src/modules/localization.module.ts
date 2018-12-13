@@ -94,6 +94,6 @@ export class LocalizationModule {
         };
     }
 
-    constructor(private injector: InjectorRef, logger: Logger) { }
+    constructor(private injector: InjectorRef, private logger: Logger) { }
 
 }

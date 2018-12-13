@@ -1,5 +1,5 @@
 /* tslint:disable */
-import { TestBed, ComponentFixture, fakeAsync, tick } from '@angular/core/testing';
+import { TestBed, ComponentFixture } from '@angular/core/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { By } from '@angular/platform-browser';
 import { DebugElement, Component, OnInit } from '@angular/core';
@@ -40,7 +40,7 @@ describe('Currency decorator', () => {
         }
     };
 
-    describe('Methods', () => {
+    describe('Basic behavior', () => {
 
         let comp: CurrencyComponent;
         let fixture: ComponentFixture<CurrencyComponent>;
@@ -120,11 +120,10 @@ describe('Currency decorator', () => {
             }
         });
 
-        it('should render localized number when currency changes', fakeAsync(() => {
+        it('should render localized number when currency changes', (() => {
             locale.setDefaultLocale('it', 'IT');
             locale.setCurrentCurrency('EUR');
 
-            tick();
             fixture.detectChanges();
             els = [];
             for (let i: number = 0; i < des.length; i++) {

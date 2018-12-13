@@ -1,5 +1,5 @@
 /* tslint:disable */
-import { TestBed, ComponentFixture, fakeAsync, async, tick } from '@angular/core/testing';
+import { TestBed, ComponentFixture, async } from '@angular/core/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { By } from '@angular/platform-browser';
 import { DebugElement, Component } from '@angular/core';
@@ -60,7 +60,7 @@ describe('L10n number directives', () => {
         }
     };
 
-    describe('Methods', () => {
+    describe('Basic behavior', () => {
 
         let comp: L10nNumberComponent;
         let fixture: ComponentFixture<L10nNumberComponent>;
@@ -181,11 +181,10 @@ describe('L10n number directives', () => {
             }
         });
 
-        it('should render localized numbers when default locale changes', fakeAsync(() => {
+        it('should render localized numbers when default locale changes', (() => {
             locale.setDefaultLocale('it', 'IT');
             locale.setCurrentCurrency('EUR');
 
-            tick();
             fixture.detectChanges();
             decimalEls = [];
             for (let i: number = 0; i < decimalDes.length; i++) {

@@ -18,7 +18,7 @@ describe('TranslationService', () => {
     let translation: TranslationService;
 
     const translationEN: any = {
-        Title: "Angular localization"
+        "title": "Angular localization"
     };
 
     const l10nConfig: L10nConfig = {
@@ -36,7 +36,7 @@ describe('TranslationService', () => {
         }
     };
 
-    describe('translate', () => {
+    describe('Translate', () => {
 
         beforeEach((done) => {
             TestBed.configureTestingModule({
@@ -55,12 +55,12 @@ describe('TranslationService', () => {
 
         it('should translate', (() => {
             locale.setCurrentLanguage('en');
-            expect(translation.translate('Title')).toEqual("Angular localization");
+            expect(translation.translate('title')).toEqual("Angular localization");
         }));
 
         it('should translate using empty parameters', (() => {
             locale.setCurrentLanguage('en');
-            expect(translation.translate('Title', null, '')).toEqual("Angular localization");
+            expect(translation.translate('title', null, '')).toEqual("Angular localization");
         }));
 
     });

@@ -28,7 +28,7 @@ const l10nConfig: L10nConfig = {
 })
 export class ListModule {
 
-    constructor(public l10nLoader: L10nLoader) {
+    constructor(private l10nLoader: L10nLoader) {
         this.l10nLoader.load();
     }
 

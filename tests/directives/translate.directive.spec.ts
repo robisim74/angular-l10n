@@ -1,5 +1,5 @@
 /* tslint:disable */
-import { TestBed, ComponentFixture, fakeAsync, async, tick } from '@angular/core/testing';
+import { TestBed, ComponentFixture, async } from '@angular/core/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { By } from '@angular/platform-browser';
 import { DebugElement, Component } from '@angular/core';
@@ -21,23 +21,23 @@ import {
         </p>
 
         <p><em>should render translated text using parameters</em></p>
-        <p [params]="{ user: username, NoMessages: messages.length }" l10nTranslate>User notifications</p>
+        <p [params]="{ user: username, NoMessages: messages.length }" l10nTranslate>userNotifications</p>
 
         <p><em>should search the key</em></p>
         <p l10nTranslate>
-            <em l10nTranslate>Title</em>
+            <em l10nTranslate>title</em>
             <span>&nbsp;</span>
-            Subtitle
+            subtitle
         </p>
         <p l10nTranslate>
-            Subtitle
+            subtitle
             <span>&nbsp;</span>
-            <em l10nTranslate>Title</em>
+            <em l10nTranslate>title</em>
         </p>
         <a l10nTranslate>
             <div>
                 <div></div>
-                Title
+                title
             </div>
         </a>
 
@@ -46,7 +46,7 @@ import {
 
         <p><em>should not use value attribute</em></p>
         <select>
-            <option [value]="value" l10nTranslate>Select</option>
+            <option [value]="value" l10nTranslate>select</option>
             <option value="10">10</option>
             <option value="20">20</option>
             <option value="50">50</option>
@@ -57,26 +57,26 @@ import {
         <p [innerHTML]="innerHTML" l10nTranslate></p>
 
         <p><em>should render translated attributes</em></p>
-        <p l10n-title title="Title" l10nTranslate></p>
-        <p l10n-title title="User notifications" [params]="{ user: username, NoMessages: messages.length }" l10nTranslate></p>
-        <p l10n-title title="Title" l10nTranslate>
-            <span [params]="{ user: username, NoMessages: messages.length }" l10nTranslate>User notifications</span>
+        <p l10n-title title="title" l10nTranslate></p>
+        <p l10n-title title="userNotifications" [params]="{ user: username, NoMessages: messages.length }" l10nTranslate></p>
+        <p l10n-title title="title" l10nTranslate>
+            <span [params]="{ user: username, NoMessages: messages.length }" l10nTranslate>userNotifications</span>
         </p>
     `
 })
 class TranslateComponent {
 
-    key: string = "Title";
+    key: string = "title";
     username: string = "robisim74";
     messages: string[] = ["Test1", "Test2"];
-    value: string = "Insert";
-    innerHTML: string = "Strong title";
+    value: string = "insert";
+    innerHTML: string = "strongTitle";
 
     change() {
-        this.key = "Subtitle";
+        this.key = "subtitle";
         this.messages.push("Test3");
-        this.value = "Select";
-        this.innerHTML = "Strong subtitle";
+        this.value = "select";
+        this.innerHTML = "strongSubtitle";
     }
 
 }
@@ -84,22 +84,22 @@ class TranslateComponent {
 describe('TranslateDirective', () => {
 
     const translationEN: any = {
-        "Title": "Angular localization",
-        "Subtitle": "It's a small world",
-        "User notifications": "{{ user }}, you have {{ NoMessages }} new messages",
-        "Insert": "Insert",
-        "Select": "Select",
-        "Strong title": "<strong>Angular localization</strong>",
-        "Strong subtitle": "<strong>It's a small world</strong>"
+        "title": "Angular localization",
+        "subtitle": "It's a small world",
+        "userNotifications": "{{ user }}, you have {{ NoMessages }} new messages",
+        "insert": "Insert",
+        "select": "Select",
+        "strongTitle": "<strong>Angular localization</strong>",
+        "strongSubtitle": "<strong>It's a small world</strong>"
     };
     const translationIT: any = {
-        "Title": "Localizzazione in Angular",
-        "Subtitle": "Il mondo è piccolo",
-        "User notifications": "{{ user }}, tu hai {{ NoMessages }} nuovi messaggi",
-        "Insert": "Inserisci",
-        "Select": "Seleziona",
-        "Strong title": "<strong>Localizzazione in Angular</strong>",
-        "Strong subtitle": "<strong>Il mondo è piccolo</strong>"
+        "title": "Localizzazione in Angular",
+        "subtitle": "Il mondo è piccolo",
+        "userNotifications": "{{ user }}, tu hai {{ NoMessages }} nuovi messaggi",
+        "insert": "Inserisci",
+        "select": "Seleziona",
+        "strongTitle": "<strong>Localizzazione in Angular</strong>",
+        "strongSubtitle": "<strong>Il mondo è piccolo</strong>"
     };
 
     const l10nConfig: L10nConfig = {
@@ -119,7 +119,7 @@ describe('TranslateDirective', () => {
         }
     };
 
-    describe('Methods', () => {
+    describe('Basic behavior', () => {
 
         let comp: TranslateComponent;
         let fixture: ComponentFixture<TranslateComponent>;
@@ -235,10 +235,9 @@ describe('TranslateDirective', () => {
             }
         });
 
-        it('should render translated texts when language changes', fakeAsync(() => {
+        it('should render translated texts when language changes', (() => {
             locale.setCurrentLanguage('it');
 
-            tick();
             fixture.detectChanges();
             els = [];
             for (let i: number = 0; i < des.length; i++) {

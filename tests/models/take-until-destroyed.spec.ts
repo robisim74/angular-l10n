@@ -1,5 +1,5 @@
 /* tslint:disable */
-import { TestBed, ComponentFixture, fakeAsync, tick } from '@angular/core/testing';
+import { TestBed, ComponentFixture } from '@angular/core/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { Component, OnInit, OnDestroy } from "@angular/core";
 
@@ -34,10 +34,10 @@ class MockExtensionComponent extends Translation { }
 describe('takeUntilDestroyed', () => {
 
     const translationEN: any = {
-        "Title": "Angular localization"
+        "title": "Angular localization"
     };
     const translationIT: any = {
-        "Title": "Localizzazione in Angular"
+        "title": "Localizzazione in Angular"
     };
 
     const l10nConfig: L10nConfig = {
@@ -84,10 +84,9 @@ describe('takeUntilDestroyed', () => {
             l10nLoader.load().then(() => done());
         });
 
-        it('should unsubscribe when component is destroyed', fakeAsync(() => {
+        it('should unsubscribe when component is destroyed', (() => {
             locale.setCurrentLanguage('it');
 
-            tick();
             fixture.detectChanges();
 
             expect(comp.lang).toEqual('it');
@@ -95,7 +94,6 @@ describe('takeUntilDestroyed', () => {
             comp.ngOnDestroy();
             locale.setCurrentLanguage('en');
 
-            tick();
             fixture.detectChanges();
 
             expect(comp.lang).toEqual('it');
@@ -130,10 +128,9 @@ describe('takeUntilDestroyed', () => {
             l10nLoader.load().then(() => done());
         });
 
-        it('should unsubscribe when component is destroyed', fakeAsync(() => {
+        it('should unsubscribe when component is destroyed', (() => {
             locale.setCurrentLanguage('it');
 
-            tick();
             fixture.detectChanges();
 
             expect(comp.lang).toEqual('it');
@@ -141,7 +138,6 @@ describe('takeUntilDestroyed', () => {
             comp.ngOnDestroy();
             locale.setCurrentLanguage('en');
 
-            tick();
             fixture.detectChanges();
 
             expect(comp.lang).toEqual('it');

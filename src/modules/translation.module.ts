@@ -71,6 +71,6 @@ export class TranslationModule {
         };
     }
 
-    constructor(private injector: InjectorRef, logger: Logger) { }
+    constructor(private injector: InjectorRef, private logger: Logger) { }
 
 }
