@@ -1,6 +1,6 @@
 import { TranslationService } from '../services/translation.service';
-import { takeUntilDestroyed } from '../models/take-until-destroyed';
 import { InjectorRef } from '../models/injector-ref';
+import { takeUntilDestroyed } from '../models/take-until-destroyed';
 import { Logger } from '../models/logger';
 
 /**
@@ -17,7 +17,7 @@ export function Language(): PropertyDecorator {
             const translation: TranslationService = InjectorRef.get(TranslationService);
 
             if (typeof propertyKey !== "undefined") {
-                translation.translationChanged().pipe(takeUntilDestroyed(this)).subscribe(
+                translation.allTranslationsChanged().pipe(takeUntilDestroyed(this)).subscribe(
                     (language: string) => {
                         this[propertyKey] = language;
                         // OnPush Change Detection strategy.

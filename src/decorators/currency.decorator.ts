@@ -1,6 +1,6 @@
 import { LocaleService } from '../services/locale.service';
-import { takeUntilDestroyed } from '../models/take-until-destroyed';
 import { InjectorRef } from '../models/injector-ref';
+import { takeUntilDestroyed } from '../models/take-until-destroyed';
 import { Logger } from '../models/logger';
 
 /**

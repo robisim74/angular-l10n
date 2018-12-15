@@ -2,26 +2,20 @@ import { Injectable, OnDestroy, ChangeDetectorRef } from '@angular/core';
 
 import { LocaleService } from './locale.service';
 import { TranslationService } from './translation.service';
-import { takeUntilDestroyed } from '../models/take-until-destroyed';
 import { InjectorRef } from '../models/injector-ref';
+import { takeUntilDestroyed } from '../models/take-until-destroyed';
 
 /**
  * Provides 'lang' to translate pipe.
  */
 @Injectable() export class Translation implements OnDestroy {
 
-    public lang: string;
-
-    protected get locale(): LocaleService {
-        return InjectorRef.get(LocaleService);
-    }
-
-    protected get translation(): TranslationService {
-        return InjectorRef.get(TranslationService);
-    }
+    public lang: string = '';
 
     constructor(protected changeDetectorRef?: ChangeDetectorRef) {
-        this.translation.translationChanged().pipe(takeUntilDestroyed(this)).subscribe(
+        const translation: TranslationService = InjectorRef.get(TranslationService);
+
+        translation.allTranslationsChanged().pipe(takeUntilDestroyed(this)).subscribe(
             (language: string) => {
                 this.lang = language;
                 // OnPush Change Detection strategy.
@@ -46,25 +40,26 @@ import { InjectorRef } from '../models/injector-ref';
 
     constructor(protected changeDetectorRef?: ChangeDetectorRef) {
         super();
+        const locale: LocaleService = InjectorRef.get(LocaleService);
 
-        this.defaultLocale = this.locale.getDefaultLocale();
-        this.locale.defaultLocaleChanged.pipe(takeUntilDestroyed(this)).subscribe(
+        this.defaultLocale = locale.getDefaultLocale();
+        locale.defaultLocaleChanged.pipe(takeUntilDestroyed(this)).subscribe(
             (defaultLocale: string) => {
                 this.defaultLocale = defaultLocale;
                 if (this.changeDetectorRef) { this.changeDetectorRef.markForCheck(); }
             }
         );
 
-        this.currency = this.locale.getCurrentCurrency();
-        this.locale.currencyCodeChanged.pipe(takeUntilDestroyed(this)).subscribe(
+        this.currency = locale.getCurrentCurrency();
+        locale.currencyCodeChanged.pipe(takeUntilDestroyed(this)).subscribe(
             (currency: string) => {
                 this.currency = currency;
                 if (this.changeDetectorRef) { this.changeDetectorRef.markForCheck(); }
             }
         );
 
-        this.timezone = this.locale.getCurrentTimezone();
-        this.locale.timezoneChanged.pipe(takeUntilDestroyed(this)).subscribe(
+        this.timezone = locale.getCurrentTimezone();
+        locale.timezoneChanged.pipe(takeUntilDestroyed(this)).subscribe(
             (zoneName: string) => {
                 this.timezone = zoneName;
                 if (this.changeDetectorRef) { this.changeDetectorRef.markForCheck(); }

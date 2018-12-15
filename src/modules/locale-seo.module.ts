@@ -1,7 +1,9 @@
 import { NgModule, ModuleWithProviders } from '@angular/core';
 
-import { LocalizedRouting } from '../models/localized-routing';
 import { L10nLoader, LocalizedRoutingLoader } from '../services/l10n-loader';
+import { SearchService } from '../services/search.service';
+import { LocalizedRouting } from '../models/localized-routing';
+
 import { L10nJsonLdComponent } from '../components/l10n-json-ld.component';
 
 /**
@@ -13,15 +15,22 @@ import { L10nJsonLdComponent } from '../components/l10n-json-ld.component';
 })
 export class LocaleSeoModule {
 
-    /**
-     * Use in AppModule.
-     */
     public static forRoot(): ModuleWithProviders<LocaleSeoModule> {
         return {
             ngModule: LocaleSeoModule,
             providers: [
                 LocalizedRouting,
+                SearchService,
                 { provide: L10nLoader, useClass: LocalizedRoutingLoader }
+            ]
+        };
+    }
+
+    public static forChild(): ModuleWithProviders<LocaleSeoModule> {
+        return {
+            ngModule: LocaleSeoModule,
+            providers: [
+                SearchService
             ]
         };
     }

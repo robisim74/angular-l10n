@@ -3,9 +3,9 @@ import { Router, NavigationStart, NavigationEnd } from "@angular/router";
 import { Location } from "@angular/common";
 import { filter } from "rxjs/operators";
 
-import { L10N_CONFIG, L10nConfigRef } from "./l10n-config";
-import { InjectorRef } from "./injector-ref";
 import { LocaleService } from "../services/locale.service";
+import { InjectorRef } from "./injector-ref";
+import { L10N_CONFIG, L10nConfigRef } from "./l10n-config";
 import { Locale, ISOCode, ExtraCode, Schema } from "./types";
 
 @Injectable() export class LocalizedRouting {

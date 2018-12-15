@@ -1,8 +1,6 @@
 # Lazy loaded modules & Shared modules
 
-Before you start using this configuration, you need to know how _lazy-loading_ works: [Lazy-loading modules with the router](https://angular.io/guide/ngmodule#lazy-loading-modules-with-the-router).
-
-## Lazy loaded modules with the router
+## Lazy loaded modules
 You can create an instance of `TranslationService` with its own translation data for every _lazy loaded_ module, as shown:
 ![LazyLoading](../images/LazyLoading.png)
 

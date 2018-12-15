@@ -1,7 +1,7 @@
 import { LocaleService } from '../services/locale.service';
-import { takeUntilDestroyed } from '../models/take-until-destroyed';
 import { InjectorRef } from '../models/injector-ref';
 import { Logger } from '../models/logger';
+import { takeUntilDestroyed } from '../models/take-until-destroyed';
 
 /**
  * Property decorator for components to provide the parameter to the l10nDate pipe.

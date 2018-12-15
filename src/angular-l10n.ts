@@ -12,13 +12,13 @@ export { TranslationHandler, L10nTranslationHandler } from './services/translati
 export { Translation, Localization } from './services/extensions';
 export { ILocaleValidation, LocaleValidation } from './services/locale-validation';
 export { ICollator, Collator } from './services/collator';
+export { SearchService } from './services/search.service';
 export { LocaleInterceptor } from './models/locale-interceptor';
 export { IntlAPI } from './services/intl-api';
 export { Language } from './decorators/language.decorator';
 export { DefaultLocale } from './decorators/default-locale.decorator';
 export { Currency } from './decorators/currency.decorator';
 export { Timezone } from './decorators/timezone.decorator';
-export { Search } from './decorators/search.decorator';
 export { TranslatePipe } from './pipes/translate.pipe';
 export { L10nDatePipe } from './pipes/l10n-date.pipe';
 export {
@@ -39,7 +39,7 @@ export {
     l10nValidateNumber
 } from './directives/l10n-number-validator.directive';
 export { L10nJsonLdComponent } from './components/l10n-json-ld.component';
-export { TranslationModule } from './modules/translation.module';
+export { TranslationModule, provideRoots, provideChilds } from './modules/translation.module';
 export { LocalizationModule } from './modules/localization.module';
 export { LocaleValidationModule } from './modules/locale-validation.module';
 export { CollatorModule } from './modules/collator.module';

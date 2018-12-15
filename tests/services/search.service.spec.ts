@@ -8,22 +8,26 @@ import {
     L10nConfig,
     L10nLoader,
     TranslationModule,
+    LocaleSeoModule,
     LocaleService,
-    StorageStrategy,
-    Search
+    SearchService,
+    StorageStrategy
 } from '../../src/angular-l10n';
 
-@Search('home')
 @Component({
     template: ``
 })
 class HomeComponent implements OnInit {
 
-    ngOnInit(): void { }
+    constructor(private search: SearchService) { }
+
+    ngOnInit(): void {
+        this.search.updateHead('home');
+    }
 
 }
 
-describe('Search decorator', () => {
+describe('SearchService', () => {
 
     const translationEN: any = {
         "home": {
@@ -73,7 +77,8 @@ describe('Search decorator', () => {
             declarations: [HomeComponent],
             imports: [
                 HttpClientTestingModule,
-                TranslationModule.forRoot(l10nConfig)
+                TranslationModule.forRoot(l10nConfig),
+                LocaleSeoModule.forRoot()
             ]
         }).createComponent(HomeComponent);
 

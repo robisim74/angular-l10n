@@ -84,6 +84,7 @@ Method | Function
 `getConfiguration(): L10nConfigRef['translation']` |
 `init(): Promise<any>` | 
 `translationChanged(): Observable<string>` | Fired when the translation data has been loaded. Returns the translation language
+`allTranslationsChanged(): Observable<string>` | Fired when the translation data of all the instances has been loaded. Returns the translation language
 `translate(keys: string | string[], args?: any, lang?: string): string | any` | Translates a key or an array of keys
 `translateAsync(keys: string | string[], args?: any, lang?: string): Observable<string | any>` |
 
@@ -144,8 +145,6 @@ Method | Function
 Property | Value
 -------- | -----
 `lang: string` | 
-`locale: LocaleService` | 
-`translation: TranslationService` | 
 
 Method | Function
 ------ | --------
@@ -160,8 +159,6 @@ Property | Value
 `defaultLocale: string` | 
 `currency: string` | 
 `timezone: string` | 
-`locale: LocaleService` | 
-`translation: TranslationService` | 
 
 Method | Function
 ------ | --------

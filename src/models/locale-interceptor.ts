@@ -2,8 +2,8 @@ import { Injectable, Inject } from "@angular/core";
 import { HttpInterceptor, HttpRequest, HttpHandler, HttpEvent } from "@angular/common/http";
 import { Observable } from "rxjs";
 
-import { L10N_CONFIG, L10nConfigRef } from "./l10n-config";
 import { LocaleService } from "../services/locale.service";
+import { L10N_CONFIG, L10nConfigRef } from "./l10n-config";
 
 @Injectable() export class LocaleInterceptor implements HttpInterceptor {
 

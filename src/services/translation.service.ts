@@ -1,12 +1,14 @@
 import { Injectable, Inject } from '@angular/core';
-import { Observer, Observable, Subject, BehaviorSubject, merge, concat, race } from 'rxjs';
+import { Observer, Observable, Subject, BehaviorSubject, race, combineLatest, merge, concat } from 'rxjs';
+import { filter, map } from 'rxjs/operators';
 
-import { L10N_CONFIG, L10nConfigRef } from "../models/l10n-config";
 import { LocaleService } from './locale.service';
 import { TranslationProvider } from './translation-provider';
 import { TranslationHandler } from './translation-handler';
-import { ProviderType } from '../models/types';
+import { InjectorRef } from '../models/injector-ref';
+import { L10N_CONFIG, L10nConfigRef } from "../models/l10n-config";
 import { mergeDeep } from '../models/merge-deep';
+import { ProviderType } from '../models/types';
 
 export interface ITranslationService {
 
@@ -17,6 +19,8 @@ export interface ITranslationService {
     init(): Promise<any>;
 
     translationChanged(): Observable<string>;
+
+    allTranslationsChanged(): Observable<string>;
 
     translate(keys: string | string[], args?: any, lang?: string): string | any;
 
@@ -32,7 +36,7 @@ export interface ITranslationService {
     /**
      * Fired when the translation data could not been loaded. Returns the error.
      */
-    translationError: Subject<any> = new Subject<any>();
+    public translationError: Subject<any> = new Subject<any>();
 
     private translation: BehaviorSubject<string> = new BehaviorSubject<string>('');
 
@@ -45,8 +49,11 @@ export interface ITranslationService {
         @Inject(L10N_CONFIG) private configuration: L10nConfigRef,
         private locale: LocaleService,
         private translationProvider: TranslationProvider,
-        private translationHandler: TranslationHandler
-    ) { }
+        private translationHandler: TranslationHandler,
+        private injector: InjectorRef
+    ) {
+        this.injector.translations.push(this);
+    }
 
     public getConfiguration(): L10nConfigRef['translation'] {
         return this.configuration.translation;
@@ -70,6 +77,23 @@ export interface ITranslationService {
      */
     public translationChanged(): Observable<string> {
         return this.translation.asObservable();
+    }
+
+    /**
+     * Fired when the translation data of all the instances has been loaded. Returns the translation language.
+     */
+    public allTranslationsChanged(): Observable<string> {
+        const sequencesOfTranslation: Array<Observable<any>> = [];
+        for (const translation of this.injector.translations) {
+            sequencesOfTranslation.push(translation.translationChanged());
+        }
+        return combineLatest(sequencesOfTranslation).pipe(
+            filter((languages: string[]) =>
+                languages.every((lang: string, i: number, arr: string[]) => lang == arr[0]) &&
+                languages.length == sequencesOfTranslation.length
+            ),
+            map((languages: string[]) => languages[0])
+        );
     }
 
     /**

@@ -77,19 +77,16 @@ export interface L10nConfig {
 
         /**
          * Asynchronous loading: disables/enables the cache for translation providers.
-         * Provide it only at the root level.
          */
         caching?: boolean;
 
         /**
          * Asynchronous loading: adds the query parameter 'ver' to the http requests.
-         * Provide it only at the root level.
          */
         version?: string;
 
         /**
          * Asynchronous loading: sets a timeout in milliseconds for the http requests.
-         * Provide it only at the root level.
          */
         timeout?: number;
 
@@ -105,7 +102,6 @@ export interface L10nConfig {
 
         /**
          * Sets the value or the function to use for missing keys.
-         * Provide it only at the root level.
          */
         missingValue?: string | ((path: string) => string);
 

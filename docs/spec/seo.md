@@ -98,20 +98,18 @@ const l10nConfig: L10nConfig = {
 ---
 
 ## Translation of _title_ and meta tags
-To translate the _title_ and other meta tags you can use the `Search` decorator, passing the key _path_ of the page:
+To translate the _title_ and other meta tags you can use the `updateHead` method of `SearchService`, passing the key _path_ of the page:
 ```TypeScript
-@Search('home')
-@Component({
-    template: ``
-})
 class HomeComponent implements OnInit {
 
-    ngOnInit(): void { }
+    constructor(private search: SearchService) { }
+
+    ngOnInit(): void {
+        this.search.updateHead('home');
+    }
 
 }
 ```
-
-> To use AoT compilation you have to implement OnInit, and to cancel subscriptions OnDestroy, even if they are empty.
 
 Basically, only the _title_ is translated. To translate meta tags, you must pass them during configuration, both for the `forRoot` and `forChild` method:
 ```TypeScript

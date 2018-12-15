@@ -215,8 +215,6 @@ Extend `Localization` class in the component to provide _lang_ to _translate_ pi
 export class HomeComponent extends Localization { } 	
 ```
 
-The subclass component will also inherit the instances of `LocaleService` and `TranslationService` as _locale_ and _translation_.
-
 ### OnPush Change detection strategy
 _Pure pipes_ don't need to set `ChangeDetectionStrategy` to `OnPush`. If into your components you need to use it, you have to inject `ChangeDetectorRef`:
 ```TypeScript

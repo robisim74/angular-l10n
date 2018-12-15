@@ -1,9 +1,10 @@
 import { Injectable, Injector, InjectionToken } from '@angular/core';
 
+import { TranslationService } from '../services/translation.service';
 import { Type } from './types';
 
 /**
- * Allows to get the dependencies at the module level or component.
+ * Allows to get the dependencies at the root level.
  */
 @Injectable() export class InjectorRef {
 
@@ -13,8 +14,14 @@ import { Type } from './types';
         return InjectorRef.injector.get(token, notFoundValue);
     }
 
+    /**
+     * TranslationService instances.
+     */
+    public translations: TranslationService[] = [];
+
     constructor(private injector: Injector) {
         InjectorRef.injector = this.injector;
+        this.translations = [];
     }
 
 }

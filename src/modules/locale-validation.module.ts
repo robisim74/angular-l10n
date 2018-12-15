@@ -1,6 +1,7 @@
 import { NgModule, ModuleWithProviders } from '@angular/core';
 
 import { LocaleValidation } from '../services/locale-validation';
+
 import { L10nNumberValidatorDirective } from '../directives/l10n-number-validator.directive';
 
 /**

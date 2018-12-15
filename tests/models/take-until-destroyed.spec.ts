@@ -10,7 +10,7 @@ import {
     LocaleService,
     StorageStrategy,
     Language,
-    Translation,
+    Translation
 } from '../../src/angular-l10n';
 
 @Component({
