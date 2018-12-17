@@ -14,10 +14,11 @@ Get the changelog by [releases](https://github.com/robisim74/angular-l10n/releas
     - `TranslationModule` to translate texts
     - `LocalizationModule` to translate texts, dates & numbers
     - `LocaleValidationModule` for number validation by locales
+    - `LocaleSeoModule` for SEO by locales
     - `CollatorModule` for sorting and filtering a list by locales
     - `LocaleInterceptorModule` for setting the locale in _Accept-Language_ header on outgoing requests
 - Direct loading of translation data (objects)
-- Asynchronous loading of translation data (json):
+- Asynchronous loading of translation data (JSON):
     - Static
     - WebAPI
     - Fallback
@@ -29,7 +30,6 @@ Get the changelog by [releases](https://github.com/robisim74/angular-l10n/releas
 - Timezone through _IANA_ time zone
 - Cookies, Session & Local Storage, or custom storage (e.g. for using with _Ionic Storage_) available for storing the _ISO codes_
 - _Intl API_ to localize dates & numbers
-- Localized routing for SEO
 - Pure pipes to get the translation
 - Directives to get the translation:
     - can dynamically change parameters and expressions values as the pipes
@@ -38,7 +38,11 @@ Get the changelog by [releases](https://github.com/robisim74/angular-l10n/releas
 - Parameters in translations
 - Composed keys in translations (nested objects)
 - Html tags in translations
-- Methods to get the translation in component class
+- Methods to get the translation and to format dates & numbers in component class
+- SEO by locales:
+    - localized routing
+    - translation of _title_ and meta tags
+    - translation of JSON-LD structured data
 - AoT compliant
 - Lazy loading compliant
 - Server Side Rendering compliant
