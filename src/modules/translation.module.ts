@@ -8,15 +8,17 @@ import { TranslationProvider, L10nTranslationProvider } from '../services/transl
 import { TranslationHandler, L10nTranslationHandler } from '../services/translation-handler';
 import { InjectorRef } from '../models/injector-ref';
 import { Logger } from '../models/logger';
+import { Caching } from '../models/caching';
 import { L10N_CONFIG, L10nConfig, l10nConfigFactory, Token } from '../models/l10n-config';
 
 import { TranslatePipe } from '../pipes/translate.pipe';
 import { TranslateDirective } from '../directives/translate.directive';
 
-export function provideRoots(l10nConfig: L10nConfig, token: Token): any[] {
+export function provideRoot(l10nConfig: L10nConfig, token: Token): any[] {
     return [
         InjectorRef,
         Logger,
+        Caching,
         { provide: L10N_CONFIG, useValue: l10nConfigFactory(l10nConfig) },
         LocaleService,
         { provide: LocaleStorage, useClass: token.localeStorage || L10nStorage },
@@ -27,7 +29,7 @@ export function provideRoots(l10nConfig: L10nConfig, token: Token): any[] {
     ];
 }
 
-export function provideChilds(l10nConfig: L10nConfig, token: Token): any[] {
+export function provideChild(l10nConfig: L10nConfig, token: Token): any[] {
     return [
         { provide: L10N_CONFIG, useValue: l10nConfigFactory(l10nConfig) },
         TranslationService,
@@ -58,7 +60,7 @@ export class TranslationModule {
     public static forRoot(l10nConfig: L10nConfig, token: Token = {}): ModuleWithProviders<TranslationModule> {
         return {
             ngModule: TranslationModule,
-            providers: provideRoots(l10nConfig, token)
+            providers: provideRoot(l10nConfig, token)
         };
     }
 
@@ -68,7 +70,7 @@ export class TranslationModule {
     public static forChild(l10nConfig: L10nConfig, token: Token = {}): ModuleWithProviders<TranslationModule> {
         return {
             ngModule: TranslationModule,
-            providers: provideChilds(l10nConfig, token)
+            providers: provideChild(l10nConfig, token)
         };
     }
 

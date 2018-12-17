@@ -472,7 +472,7 @@ describe('TranslatePipe', () => {
 
     });
 
-    describe('Basic behaviors', () => {
+    describe('Basic behavior', () => {
 
         let httpMock: HttpTestingController;
 

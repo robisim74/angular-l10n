@@ -20,7 +20,7 @@ export interface ITranslationService {
 
     translationChanged(): Observable<string>;
 
-    allTranslationsChanged(): Observable<string>;
+    latestTranslation(): Observable<string>;
 
     translate(keys: string | string[], args?: any, lang?: string): string | any;
 
@@ -80,17 +80,18 @@ export interface ITranslationService {
     }
 
     /**
-     * Fired when the translation data of all the instances has been loaded. Returns the translation language.
+     * Fired when the latest 'translationChanged' is emitted. Returns the translation language.
+     * Used when the reference to the service is not known, as in decorators.
      */
-    public allTranslationsChanged(): Observable<string> {
+    public latestTranslation(): Observable<string> {
         const sequencesOfTranslation: Array<Observable<any>> = [];
         for (const translation of this.injector.translations) {
             sequencesOfTranslation.push(translation.translationChanged());
         }
         return combineLatest(sequencesOfTranslation).pipe(
             filter((languages: string[]) =>
-                languages.every((lang: string, i: number, arr: string[]) => lang == arr[0]) &&
-                languages.length == sequencesOfTranslation.length
+                languages.length == sequencesOfTranslation.length &&
+                languages.every((lang: string, i: number, arr: string[]) => lang == arr[0])
             ),
             map((languages: string[]) => languages[0])
         );

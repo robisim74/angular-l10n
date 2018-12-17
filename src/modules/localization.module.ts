@@ -1,7 +1,6 @@
 import { NgModule, ModuleWithProviders } from '@angular/core';
 
-import { TranslationModule, provideRoots, provideChilds } from './translation.module';
-import { TranslationService } from '../services/translation.service';
+import { TranslationModule, provideRoot, provideChild } from './translation.module';
 import { InjectorRef } from '../models/injector-ref';
 import { Logger } from '../models/logger';
 import { L10nConfig, Token } from '../models/l10n-config';
@@ -52,7 +51,7 @@ export class LocalizationModule {
     public static forRoot(l10nConfig: L10nConfig, token: Token = {}): ModuleWithProviders<LocalizationModule> {
         return {
             ngModule: LocalizationModule,
-            providers: provideRoots(l10nConfig, token)
+            providers: provideRoot(l10nConfig, token)
         };
     }
 
@@ -62,7 +61,7 @@ export class LocalizationModule {
     public static forChild(l10nConfig: L10nConfig, token: Token = {}): ModuleWithProviders<LocalizationModule> {
         return {
             ngModule: LocalizationModule,
-            providers: provideChilds(l10nConfig, token)
+            providers: provideChild(l10nConfig, token)
         };
     }
 

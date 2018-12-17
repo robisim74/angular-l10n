@@ -1,5 +1,6 @@
 export { InjectorRef } from './models/injector-ref';
 export { Logger } from './models/logger';
+export { Caching } from './models/caching';
 export { StorageStrategy, ProviderType, ISOCode, DateTimeOptions, DigitsOptions, LogLevel } from './models/types';
 export { L10N_CONFIG, L10nConfigRef, L10nConfig, l10nConfigFactory, Token } from './models/l10n-config';
 export { LocalizedRouting } from './models/localized-routing';
@@ -12,7 +13,7 @@ export { TranslationHandler, L10nTranslationHandler } from './services/translati
 export { Translation, Localization } from './services/extensions';
 export { ILocaleValidation, LocaleValidation } from './services/locale-validation';
 export { ICollator, Collator } from './services/collator';
-export { SearchService } from './services/search.service';
+export { ISearchService, SearchService } from './services/search.service';
 export { LocaleInterceptor } from './models/locale-interceptor';
 export { IntlAPI } from './services/intl-api';
 export { Language } from './decorators/language.decorator';
@@ -39,7 +40,7 @@ export {
     l10nValidateNumber
 } from './directives/l10n-number-validator.directive';
 export { L10nJsonLdComponent } from './components/l10n-json-ld.component';
-export { TranslationModule, provideRoots, provideChilds } from './modules/translation.module';
+export { TranslationModule, provideRoot, provideChild } from './modules/translation.module';
 export { LocalizationModule } from './modules/localization.module';
 export { LocaleValidationModule } from './modules/locale-validation.module';
 export { CollatorModule } from './modules/collator.module';

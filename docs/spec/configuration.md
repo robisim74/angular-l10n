@@ -412,7 +412,7 @@ const l10nConfig: L10nConfig = {
 The next time a translation file will be required, will be taken from the cache without making a new _http request_, with a significant performance improvement:
 
 * if the user returns to a language already selected;
-* if you use a global file shared across _lazy loaded modules_.
+* if you use a global file shared across _lazy loaded_ modules.
 
 ---
 
@@ -549,18 +549,18 @@ See also [LocaleStorage](https://github.com/robisim74/angular-l10n/blob/master/s
 ---
 
 ## How the language is defined at the first loading
-Depending on the configuration, the library tries to define the language:
+Depending on the configuration, the library tries to define the language.
 
 **If you set the language**
 
-- the library gets the `language` from the URL (if `localizedRouting` is enabled)
+- the library tries to get the `language` from the URL
 - or tries to get the `language` from the storage
 - or tries to get the `language` from the browser
 - or uses the `language` set in the configuration
 
 **If you set the default locale**
 
-- the library gets the `defaultLocale` from the URL (if `localizedRouting` is enabled)
+- the library tries to get the `defaultLocale` from the URL
 - or tries to get the `defaultLocale` from the storage
 - or uses the `defaultLocale` set in the configuration
 

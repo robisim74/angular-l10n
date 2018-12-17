@@ -17,7 +17,7 @@ export function Language(): PropertyDecorator {
             const translation: TranslationService = InjectorRef.get(TranslationService);
 
             if (typeof propertyKey !== "undefined") {
-                translation.allTranslationsChanged().pipe(takeUntilDestroyed(this)).subscribe(
+                translation.latestTranslation().pipe(takeUntilDestroyed(this)).subscribe(
                     (language: string) => {
                         this[propertyKey] = language;
                         // OnPush Change Detection strategy.

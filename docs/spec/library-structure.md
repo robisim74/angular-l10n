@@ -19,6 +19,7 @@ Class | Contract
 `LocaleService` | Manages language, default locale, currency & timezone
 `TranslationService` | Manages the translation data
 `LocaleValidation` | Provides the methods for locale validation
+`SearchService` | Manages the translation of page 'title' and meta tags
 `Collator` | Intl.Collator APIs
 `IntlAPI` | Provides the methods to check if Intl APIs are supported
 

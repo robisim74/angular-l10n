@@ -15,6 +15,9 @@ import { L10nJsonLdComponent } from '../components/l10n-json-ld.component';
 })
 export class LocaleSeoModule {
 
+    /**
+     * Use in AppModule: new instance of SearchService.
+     */
     public static forRoot(): ModuleWithProviders<LocaleSeoModule> {
         return {
             ngModule: LocaleSeoModule,
@@ -26,6 +29,9 @@ export class LocaleSeoModule {
         };
     }
 
+    /**
+     * Use in feature modules with lazy loading: new instance of SearchService.
+     */
     public static forChild(): ModuleWithProviders<LocaleSeoModule> {
         return {
             ngModule: LocaleSeoModule,

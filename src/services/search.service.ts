@@ -4,7 +4,16 @@ import { Title, Meta } from "@angular/platform-browser";
 import { TranslationService } from "./translation.service";
 import { L10N_CONFIG, L10nConfigRef } from "../models/l10n-config";
 
-@Injectable() export class SearchService {
+export interface ISearchService {
+
+    updateHead(page: string): void;
+
+}
+
+/**
+ * Manages the translation of page 'title' and meta tags.
+ */
+@Injectable() export class SearchService implements ISearchService {
 
     constructor(
         @Inject(L10N_CONFIG) private configuration: L10nConfigRef,
@@ -13,6 +22,10 @@ import { L10N_CONFIG, L10nConfigRef } from "../models/l10n-config";
         private meta: Meta
     ) { }
 
+    /**
+     * Translates the 'title' of the page and the provided meta tags.
+     * @param page The key path of the page
+     */
     public updateHead(page: string): void {
         this.translation.translationChanged().subscribe(
             () => {

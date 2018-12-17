@@ -1,8 +1,9 @@
 import { Injectable, Inject } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
-import { Observable, ReplaySubject } from 'rxjs';
+import { Observable } from 'rxjs';
 import { timeout } from 'rxjs/operators';
 
+import { Caching } from '../models/caching';
 import { L10N_CONFIG, L10nConfigRef } from "../models/l10n-config";
 import { ProviderType } from '../models/types';
 
@@ -23,9 +24,7 @@ import { ProviderType } from '../models/types';
 
 @Injectable() export class L10nTranslationProvider implements TranslationProvider {
 
-    private cache: { [key: string]: Observable<any> | undefined } = {};
-
-    constructor(@Inject(L10N_CONFIG) private configuration: L10nConfigRef, private http: HttpClient) { }
+    constructor(@Inject(L10N_CONFIG) private configuration: L10nConfigRef, private caching: Caching, private http: HttpClient) { }
 
     public getTranslation(language: string, args: any): Observable<any> {
         const headers: HttpHeaders = new HttpHeaders({ 'Content-Type': 'application/json' });
@@ -55,28 +54,9 @@ import { ProviderType } from '../models/types';
         }
 
         if (this.configuration.translation.caching) {
-            return this.caching(url, request);
+            return this.caching.read(url, request);
         }
         return request;
-    }
-
-    private caching(key: string, request: Observable<any>): Observable<any> {
-        const cached: Observable<any> | undefined = this.cache[key];
-        if (cached) return cached;
-
-        const buffer: ReplaySubject<any> = new ReplaySubject<any>(1);
-        request.subscribe(
-            (value: any) => buffer.next(value),
-            (error: any) => {
-                buffer.error(error);
-                this.cache[key] = undefined;
-            },
-            () => buffer.complete()
-        );
-
-        const response: Observable<any> = buffer.asObservable();
-        this.cache[key] = response;
-        return response;
     }
 
 }

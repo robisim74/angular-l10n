@@ -111,7 +111,7 @@ class HomeComponent implements OnInit {
 }
 ```
 
-Basically, only the _title_ is translated. To translate meta tags, you must pass them during configuration, both for the `forRoot` and `forChild` method:
+Basically, only the _title_ is translated. To translate meta tags, you must pass them during configuration:
 ```TypeScript
 const l10nConfig: L10nConfig = {
     ...

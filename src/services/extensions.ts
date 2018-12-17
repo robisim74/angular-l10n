@@ -15,7 +15,7 @@ import { takeUntilDestroyed } from '../models/take-until-destroyed';
     constructor(protected changeDetectorRef?: ChangeDetectorRef) {
         const translation: TranslationService = InjectorRef.get(TranslationService);
 
-        translation.allTranslationsChanged().pipe(takeUntilDestroyed(this)).subscribe(
+        translation.latestTranslation().pipe(takeUntilDestroyed(this)).subscribe(
             (language: string) => {
                 this.lang = language;
                 // OnPush Change Detection strategy.

@@ -21,7 +21,6 @@ import { Type } from './types';
 
     constructor(private injector: Injector) {
         InjectorRef.injector = this.injector;
-        this.translations = [];
     }
 
 }

@@ -26,7 +26,9 @@ Method | Function
 ## LocaleSeoModule
 Method | Function
 ------ | --------
-`static forRoot(): ModuleWithProviders<LocaleSeoModule>` | Use in `AppModule`
+`static forRoot(): ModuleWithProviders<LocaleSeoModule>` | Use in `AppModule`: new instance of `SearchService`
+`static forChild(): ModuleWithProviders<LocaleSeoModule>` | Use in feature modules with lazy loading: new instance of `SearchService`
+
 ---
 
 ## L10nLoader
@@ -84,7 +86,7 @@ Method | Function
 `getConfiguration(): L10nConfigRef['translation']` |
 `init(): Promise<any>` | 
 `translationChanged(): Observable<string>` | Fired when the translation data has been loaded. Returns the translation language
-`allTranslationsChanged(): Observable<string>` | Fired when the translation data of all the instances has been loaded. Returns the translation language
+`latestTranslation(): Observable<string>` | Fired when the latest `translationChanged` is emitted. Returns the translation language. Used when the reference to the service is not known, as in decorators
 `translate(keys: string | string[], args?: any, lang?: string): string | any` | Translates a key or an array of keys
 `translateAsync(keys: string | string[], args?: any, lang?: string): Observable<string | any>` |
 
@@ -94,6 +96,13 @@ Method | Function
 Method | Function
 ------ | --------
 `parseNumber(s: string, digits?: string, defaultLocale?: string): number | null` | Converts a string to a number according to default locale. If the string cannot be converted to a number, returns NaN
+
+---
+
+## ISearchService
+Method | Function
+------ | --------
+`updateHead(page: string): void` | Translates the _title_ of the page and the provided meta tags
 
 ---
 
@@ -146,10 +155,6 @@ Property | Value
 -------- | -----
 `lang: string` | 
 
-Method | Function
------- | --------
-`ngOnDestroy(): void` | 
-
 ---
 
 ## Localization
@@ -159,7 +164,3 @@ Property | Value
 `defaultLocale: string` | 
 `currency: string` | 
 `timezone: string` | 
-
-Method | Function
------- | --------
-`ngOnDestroy(): void` | 
