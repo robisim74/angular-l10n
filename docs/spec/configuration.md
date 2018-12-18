@@ -124,35 +124,35 @@ The `L10nConfig` interface contains the properties to configure the library.
 Property | Nested property | Value
 -------- | --------------- | -----
 `locale?` | | Locale service configuration
-| | `languages?: Language[]` | Adds the languages to use in the app
-| | `language?: string` | Defines the language ISO 639 two-letter or three-letter code to be used, if the language is not found in the browser
-| | `defaultLocale?: DefaultLocale` | Defines the default locale to be used, regardless of the browser language
-| | `currency?: string` | Defines the currency ISO 4217 three-letter code to be used
-| | `timezone?: string` | The time zone name of the IANA time zone database to use
-| | `storage?: StorageStrategy` | Defines the storage to be used for default locale, currency & timezone
-| | `cookieExpiration?: number` | If the cookie expiration is omitted, the cookie becomes a session cookie
+ | `languages?: Language[]` | Adds the languages to use in the app
+ | `language?: string` | Defines the language ISO 639 two-letter or three-letter code to be used, if the language is not found in the browser
+ | `defaultLocale?: DefaultLocale` | Defines the default locale to be used, regardless of the browser language
+ | `currency?: string` | Defines the currency ISO 4217 three-letter code to be used
+ | `timezone?: string` | The time zone name of the IANA time zone database to use
+ | `storage?: StorageStrategy` | Defines the storage to be used for default locale, currency & timezone
+ | `cookieExpiration?: number` | If the cookie expiration is omitted, the cookie becomes a session cookie
 `translation?` | | Translation service configuration
-| | `translationData?: Array<{ languageCode: string; data: any; }>` | Direct loading: adds translation data
-| | `providers?: any[]` | Asynchronous loading: adds translation providers
-| | `caching?: Boolean` | Asynchronous loading: disables/enables the cache for translation providers
-| | `version?: string` | Asynchronous loading: adds the query parameter `ver` to the http requests
-| | `timeout?: number` | Asynchronous loading: sets a timeout in milliseconds for the http requests
-| | `rollbackOnError?: boolean` | Asynchronous loading: rollbacks to previous default locale, currency and timezone on error
-| | `composedLanguage?: ISOCode[]` | Sets a composed language for translations
-| | `missingValue?: string | ((path: string) => string)` | Sets the value or the function to use for missing keys
-| | `missingKey?: string` | Sets the key to use for missing keys
-| | `composedKeySeparator?: string` | Sets composed key separator
-| | `i18nPlural?: boolean` | Disables/enables the translation of numbers that are contained at the beginning of the keys
+ | `translationData?: Array<{ languageCode: string; data: any; }>` | Direct loading: adds translation data
+ | `providers?: any[]` | Asynchronous loading: adds translation providers
+ | `caching?: Boolean` | Asynchronous loading: disables/enables the cache for translation providers
+ | `version?: string` | Asynchronous loading: adds the query parameter `ver` to the http requests
+ | `timeout?: number` | Asynchronous loading: sets a timeout in milliseconds for the http requests
+ | `rollbackOnError?: boolean` | Asynchronous loading: rollbacks to previous default locale, currency and timezone on error
+ | `composedLanguage?: ISOCode[]` | Sets a composed language for translations
+ | `missingValue?: string | ((path: string) => string)` | Sets the value or the function to use for missing keys
+ | `missingKey?: string` | Sets the key to use for missing keys
+ | `composedKeySeparator?: string` | Sets composed key separator
+ | `i18nPlural?: boolean` | Disables/enables the translation of numbers that are contained at the beginning of the keys
 `logger?` | | Logger configuration
-| | `level?: LogLevel` | Defines the log level
+ | `level?: LogLevel` | Defines the log level
 `localizedRouting?` | | Localized routing configuration
-| | `format?: ISOCode[]` | Defines the format of the localized routing
-| | `defaultRouting?: boolean` | Disables/enables default routing for default language or locale
-| | `schema?: Schema[]` | Provides the schema to the default behaviour of localized routing
+ | `format?: ISOCode[]` | Defines the format of the localized routing
+ | `defaultRouting?: boolean` | Disables/enables default routing for default language or locale
+ | `schema?: Schema[]` | Provides the schema to the default behaviour of localized routing
 `search?` | | Search configuration
-| | `metaTags?: string[]` | List of meta tag names to translate
+ | `metaTags?: string[]` | List of meta tag names to translate
 `localeInterceptor?` | | Locale interceptor configuration
-| | `format?: ISOCode[]` | Defines the format of the _Accept-Language_ header
+ | `format?: ISOCode[]` | Defines the format of the _Accept-Language_ header
 
 > There aren't default values: you must explicitly set each parameter you need.
 
