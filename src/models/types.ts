@@ -124,10 +124,11 @@ export enum ExtraCode {
 
 export enum LogLevel {
 
-    Error,
-    Warn,
-    Log,
-    Off
+    Error = 'error',
+    Warn = 'warn',
+    Info = 'info',
+    Log = 'log',
+    Off = 'off'
 
 }
 

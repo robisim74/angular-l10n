@@ -105,6 +105,7 @@ export interface ILocaleService {
     private currencyCode: string;
     private timezone: string;
 
+    private rollbackLanguageCode: string;
     private rollbackDefaultLocale: string;
     private rollbackCurrencyCode: string;
     private rollbackTimezone: string;
@@ -205,7 +206,7 @@ export interface ILocaleService {
 
     public setCurrentLanguage(languageCode: string): void {
         if (this.defaultLocale.languageCode != languageCode) {
-            this.rollbackDefaultLocale = this.defaultLocale.value;
+            this.rollbackLanguageCode = this.defaultLocale.languageCode;
             this.defaultLocale.build(languageCode);
             this.releaseLanguage();
         }
@@ -327,9 +328,13 @@ export interface ILocaleService {
     }
 
     /**
-     * Rollbacks to previous default locale, currency & timezone.
+     * Rollbacks to previous language, default locale, currency & timezone.
      */
     public rollback(): void {
+        if (this.rollbackLanguageCode && this.rollbackLanguageCode != this.defaultLocale.languageCode) {
+            this.defaultLocale.value = this.rollbackLanguageCode;
+            this.releaseLanguage();
+        }
         if (this.rollbackDefaultLocale && this.rollbackDefaultLocale != this.defaultLocale.value) {
             this.defaultLocale.value = this.rollbackDefaultLocale;
             this.releaseDefaultLocale();
@@ -363,7 +368,7 @@ export interface ILocaleService {
                     }
                     this.storage.write("defaultLocale", this.defaultLocale.value);
                 }
-                this.rollbackDefaultLocale = this.defaultLocale.value;
+                this.rollbackLanguageCode = this.defaultLocale.languageCode;
                 this.sendLanguageEvents();
             }
         }

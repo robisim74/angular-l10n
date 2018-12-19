@@ -34,9 +34,9 @@ import { takeUntilDestroyed } from '../models/take-until-destroyed';
  */
 @Injectable() export class Localization extends Translation {
 
-    public defaultLocale: string;
-    public currency: string;
-    public timezone: string;
+    public defaultLocale: string = '';
+    public currency: string = '';
+    public timezone: string = '';
 
     constructor(protected changeDetectorRef?: ChangeDetectorRef) {
         super();

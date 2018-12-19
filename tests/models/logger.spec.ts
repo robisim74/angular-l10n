@@ -20,7 +20,7 @@ import {
         <p>{{ 1.22 | l10nDecimal:defaultLocale:'1-2.1' }}</p>
     `
 })
-class LanguageComponent {
+class MockComponent {
 
     @Language() lang: string;
     @DefaultLocale() defaultLocale: string
@@ -30,7 +30,7 @@ class LanguageComponent {
 describe('Logger', () => {
 
     let comp: any;
-    let fixture: ComponentFixture<LanguageComponent>;
+    let fixture: ComponentFixture<MockComponent>;
 
     let l10nLoader: L10nLoader;
 
@@ -50,12 +50,12 @@ describe('Logger', () => {
 
     beforeEach(() => {
         fixture = TestBed.configureTestingModule({
-            declarations: [LanguageComponent],
+            declarations: [MockComponent],
             imports: [
                 HttpClientTestingModule,
                 LocalizationModule.forRoot(l10nConfig)
             ],
-        }).createComponent(LanguageComponent);
+        }).createComponent(MockComponent);
 
         comp = fixture.componentInstance;
     });
@@ -69,11 +69,11 @@ describe('Logger', () => {
     it('should log missing functions', (() => {
         fixture.detectChanges();
 
-        expect(console.warn).toHaveBeenCalledWith("angular-l10n (LanguageComponent): Missing 'ngOnInit' method: required by AoT compilation");
+        expect(console.warn).toHaveBeenCalledWith("angular-l10n (MockComponent): Missing 'ngOnInit' method: required by AoT compilation");
         expect(console.warn).toHaveBeenCalledWith("angular-l10n (TranslatePipe): Missing 'lang' parameter");
 
         comp.ngOnDestroy();
-        expect(console.warn).toHaveBeenCalledWith("angular-l10n (LanguageComponent): Missing 'ngOnDestroy' method to cancel subscriptions: required by AoT compilation");
+        expect(console.warn).toHaveBeenCalledWith("angular-l10n (MockComponent): Missing 'ngOnDestroy' method to cancel subscriptions: required by AoT compilation");
     }));
 
     it('should log invalid formats', (() => {

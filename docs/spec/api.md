@@ -72,7 +72,7 @@ Method | Function
 `formatPercent(value: any, digits?: string | DigitsOptions, defaultLocale?: string): string` | Formats a number as a percentage according to default locale
 `formatCurrency(value: any, digits?: string | DigitsOptions, currencyDisplay?: string, defaultLocale?: string, currency?: string): string` | Formats a number as a currency according to default locale
 `composeLocale(codes: ISOCode[]): string` |
-`rollback(): void` | Rollbacks to previous default locale, currency & timezone
+`rollback(): void` | Rollbacks to previous language, default locale, currency & timezone
 
 ---
 
