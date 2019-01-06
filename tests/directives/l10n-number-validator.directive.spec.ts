@@ -203,6 +203,8 @@ describe('L10nNumberValidatorDirective', () => {
         expect(control.valid).toBe(false);
         control = new FormControl('1.01', [l10nValidateNumber('1.0-2')]);
         expect(control.valid).toBe(false);
+        control = new FormControl('1,01', [l10nValidateNumber('1.0-0')]);
+        expect(control.valid).toBe(false);
 
     });
 

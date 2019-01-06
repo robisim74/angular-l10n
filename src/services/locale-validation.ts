@@ -67,9 +67,9 @@ export interface ILocaleValidation {
                 Logger.log('LocaleValidation', 'invalidNumberFormatAlias');
             }
         }
-        const minInt: number = options.minimumIntegerDigits || 1;
-        const minFraction: number = options.minimumFractionDigits || 0;
-        const maxFraction: number = options.maximumFractionDigits || 3;
+        const minInt: number = options.minimumIntegerDigits !== undefined ? options.minimumIntegerDigits : 1;
+        const minFraction: number = options.minimumFractionDigits !== undefined ? options.minimumFractionDigits : 0;
+        const maxFraction: number = options.maximumFractionDigits !== undefined ? options.maximumFractionDigits : 3;
 
         const minusSign: string = this.decimalCode.minusSign;
         const zero: string = this.numberCodes[0];
