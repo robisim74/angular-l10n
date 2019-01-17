@@ -18,6 +18,8 @@ export interface ITranslationService {
 
     init(): Promise<any>;
 
+    loadTranslation(): Promise<any>;
+
     translationChanged(): Observable<string>;
 
     latestTranslation(): Observable<string>;
@@ -70,6 +72,30 @@ export interface ITranslationService {
 
         await this.loadTranslation()
             .catch((error: any) => { throw error; });
+    }
+
+    /**
+     * Forces the translation loading for the current language.
+     */
+    public async loadTranslation(): Promise<any> {
+        let language: string;
+        if (this.configuration.translation.composedLanguage) {
+            language = this.locale.composeLocale(this.configuration.translation.composedLanguage);
+        } else {
+            language = this.locale.getCurrentLanguage();
+        }
+        if (language) {
+            this.translationData = {};
+
+            if (this.configuration.translation.translationData) {
+                this.getTranslation(language);
+            }
+            if (this.configuration.translation.providers) {
+                await this.getTranslationAsync(language)
+                    .toPromise()
+                    .catch((error: any) => { throw error; });
+            }
+        }
     }
 
     /**
@@ -168,27 +194,6 @@ export interface ITranslationService {
             key = key.replace(/^\d+/, this.locale.formatDecimal(keyNumber));
         }
         return key.replace(keyText, this.getValue(keyText, args, lang));
-    }
-
-    private async loadTranslation(): Promise<any> {
-        let language: string;
-        if (this.configuration.translation.composedLanguage) {
-            language = this.locale.composeLocale(this.configuration.translation.composedLanguage);
-        } else {
-            language = this.locale.getCurrentLanguage();
-        }
-        if (language) {
-            this.translationData = {};
-
-            if (this.configuration.translation.translationData) {
-                this.getTranslation(language);
-            }
-            if (this.configuration.translation.providers) {
-                await this.getTranslationAsync(language)
-                    .toPromise()
-                    .catch((error: any) => { throw error; });
-            }
-        }
     }
 
     private getTranslation(language: string): void {

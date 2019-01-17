@@ -85,6 +85,7 @@ Method | Function
 ------ | --------
 `getConfiguration(): L10nConfigRef['translation']` |
 `init(): Promise<any>` | 
+`loadTranslation(): Promise<any>` | Forces the translation loading for the current language.
 `translationChanged(): Observable<string>` | Fired when the translation data has been loaded. Returns the translation language
 `latestTranslation(): Observable<string>` | Fired when the latest `translationChanged` is emitted. Returns the translation language. Used when the reference to the service is not known, as in decorators
 `translate(keys: string | string[], args?: any, lang?: string): string | any` | Translates a key or an array of keys
