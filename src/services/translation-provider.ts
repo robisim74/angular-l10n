@@ -1,4 +1,4 @@
-import { Injectable, Inject } from '@angular/core';
+import { Injectable, Inject, Optional } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { timeout } from 'rxjs/operators';
@@ -24,7 +24,11 @@ import { ProviderType } from '../models/types';
 
 @Injectable() export class L10nTranslationProvider implements TranslationProvider {
 
-    constructor(@Inject(L10N_CONFIG) private configuration: L10nConfigRef, private caching: Caching, private http: HttpClient) { }
+    constructor(
+        @Inject(L10N_CONFIG) private configuration: L10nConfigRef,
+        private caching: Caching,
+        @Optional() private http: HttpClient
+    ) { }
 
     public getTranslation(language: string, args: any): Observable<any> {
         const headers: HttpHeaders = new HttpHeaders({ 'Content-Type': 'application/json' });
