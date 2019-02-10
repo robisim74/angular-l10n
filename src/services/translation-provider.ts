@@ -24,23 +24,20 @@ import { ProviderType } from '../models/types';
 
 @Injectable() export class L10nTranslationProvider implements TranslationProvider {
 
+    private headers: HttpHeaders = new HttpHeaders({ 'Content-Type': 'application/json' });
+
+    private options: any = {};
+
     constructor(
+        @Optional() private http: HttpClient,
         @Inject(L10N_CONFIG) private configuration: L10nConfigRef,
-        private caching: Caching,
-        @Optional() private http: HttpClient
+        private caching: Caching
     ) { }
 
     public getTranslation(language: string, args: any): Observable<any> {
-        const headers: HttpHeaders = new HttpHeaders({ 'Content-Type': 'application/json' });
-        const options: any = {
-            headers: headers
-        };
-        if (this.configuration.translation.version) {
-            options.params = new HttpParams().set('ver', this.configuration.translation.version);
-        }
-        let request: Observable<any>;
-        let url: string = "";
+        this.setOptions();
 
+        let url: string = "";
         switch (args.type) {
             case ProviderType.WebAPI:
                 url += args.path + language;
@@ -49,12 +46,24 @@ import { ProviderType } from '../models/types';
                 url += args.prefix + language + ".json";
         }
 
+        return this.getRequest(url);
+    }
+
+    private setOptions(): void {
+        this.options = {
+            headers: this.headers,
+            params: this.configuration.translation.version ? new HttpParams().set('ver', this.configuration.translation.version) : undefined
+        };
+    }
+
+    private getRequest(url: string): Observable<any> {
+        let request: Observable<any>;
         if (this.configuration.translation.timeout) {
-            request = this.http.get(url, options).pipe(
+            request = this.http.get(url, this.options).pipe(
                 timeout(this.configuration.translation.timeout)
             );
         } else {
-            request = this.http.get(url, options);
+            request = this.http.get(url, this.options);
         }
 
         if (this.configuration.translation.caching) {
