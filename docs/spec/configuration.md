@@ -131,6 +131,7 @@ Property | Nested property | Value
  | `timezone?: string` | The time zone name of the IANA time zone database to use
  | `storage?: StorageStrategy` | Defines the storage to be used for default locale, currency & timezone
  | `cookieExpiration?: number` | If the cookie expiration is omitted, the cookie becomes a session cookie
+ | `storageNames?: { defaultLocale: string, currency?: string, timezone?: string }` | Custom storage names
 `translation?` | | Translation service configuration
  | `translationData?: Array<{ languageCode: string; data: any; }>` | Direct loading: adds translation data
  | `providers?: any[]` | Asynchronous loading: adds translation providers
@@ -341,7 +342,7 @@ export class AppModule {
 `[path]{languageCode}` will be the URL used by the Http GET requests. So the example URI will be something like: `http://localhost:54703/api/values/en`.
 
 ### Using fallback providers
-if you need a cascade fallback when the key is not found, you can use fallback providers:
+If you need a cascade fallback when the key is not found, you can use fallback providers:
 ```TypeScript
 const l10nConfig: L10nConfig = {
     ...
@@ -440,7 +441,7 @@ export class AppModule {
 }
 ```
 
-> If you use _advanced initialization_, you can catch it with the `bootstrapModule` method in `main.ts`.
+> If you use _advanced initialization_, you can catch it in the exported function.
 
 ### Rollback on errror
 If the error occurs when the user changes language, you can enable `rollbackOnError` option during the configuration:

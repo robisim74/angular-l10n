@@ -2,6 +2,7 @@ import { Injectable, Inject } from '@angular/core';
 
 import { L10N_CONFIG, L10nConfigRef } from "../models/l10n-config";
 import { StorageStrategy } from '../models/types';
+import { getLocalStorage, getSessionStorage, getCookie, setLocalStorage, setSessionStorage, setCookie } from '../models/utils';
 
 /**
  * Implement this class-interface to create a custom storage for default locale, currency & timezone.
@@ -38,11 +39,11 @@ import { StorageStrategy } from '../models/types';
         let value: string | null = null;
         if (this.configuration.locale.storage != StorageStrategy.Disabled) {
             if (this.configuration.locale.storage == StorageStrategy.Local && this.hasStorage) {
-                value = this.getLocalStorage(name);
+                value = getLocalStorage(this.getName(name));
             } else if (this.configuration.locale.storage == StorageStrategy.Session && this.hasStorage) {
-                value = this.getSessionStorage(name);
+                value = getSessionStorage(this.getName(name));
             } else if (this.configuration.locale.storage == StorageStrategy.Cookie && this.hasCookie) {
-                value = this.getCookie(name);
+                value = getCookie(this.getName(name));
             }
         }
         return value;
@@ -51,52 +52,21 @@ import { StorageStrategy } from '../models/types';
     public async write(name: string, value: string): Promise<void> {
         if (this.configuration.locale.storage != StorageStrategy.Disabled) {
             if (this.configuration.locale.storage == StorageStrategy.Local && this.hasStorage) {
-                this.setLocalStorage(name, value);
+                setLocalStorage(this.getName(name), value);
             } else if (this.configuration.locale.storage == StorageStrategy.Session && this.hasStorage) {
-                this.setSessionStorage(name, value);
+                setSessionStorage(this.getName(name), value);
             } else if (this.configuration.locale.storage == StorageStrategy.Cookie && this.hasCookie) {
-                this.setCookie(name, value);
+                setCookie(this.getName(name), value, this.configuration.locale.cookieExpiration);
             }
         }
     }
 
-    private getLocalStorage(name: string): string | null {
-        return localStorage.getItem(name);
-    }
-
-    private getSessionStorage(name: string): string | null {
-        return sessionStorage.getItem(name);
-    }
-
-    private getCookie(name: string): string | null {
-        let result: RegExpExecArray | null = null;
-        if (typeof document !== "undefined") {
-            result = new RegExp("(?:^|; )" + encodeURIComponent(name) + "=([^;]*)").exec(document.cookie);
+    private getName(name: string): string {
+        if (this.configuration.locale.storageNames) {
+            console.log(this.configuration.locale.storageNames[name]);
+            return this.configuration.locale.storageNames[name] || name;
         }
-        return result ? result[1] : null;
-    }
-
-    private setLocalStorage(name: string, value: string): void {
-        localStorage.setItem(name, value);
-    }
-
-    private setSessionStorage(name: string, value: string): void {
-        sessionStorage.setItem(name, value);
-    }
-
-    private setCookie(name: string, value: string): void {
-        let expires: string = "";
-        if (this.configuration.locale.cookieExpiration != null) {
-            const expirationDate: Date = new Date();
-            expirationDate.setTime(
-                expirationDate.getTime() +
-                (this.configuration.locale.cookieExpiration * 24 * 60 * 60 * 1000)
-            );
-            expires = "; expires=" + expirationDate.toUTCString();
-        }
-        if (typeof document !== "undefined") {
-            document.cookie = name + "=" + value + expires + "; path=/";
-        }
+        return name;
     }
 
 }

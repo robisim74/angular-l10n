@@ -49,6 +49,11 @@ export interface L10nConfig {
          * If the cookie expiration is omitted, the cookie becomes a session cookie.
          */
         cookieExpiration?: number;
+
+        /**
+         * Custom storage names.
+         */
+        storageNames?: { [key: string]: string | undefined, defaultLocale: string, currency?: string, timezone?: string }
     };
 
     /**
