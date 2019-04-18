@@ -53,7 +53,7 @@ export interface L10nConfig {
         /**
          * Custom storage names.
          */
-        storageNames?: { [key: string]: string | undefined, defaultLocale: string, currency?: string, timezone?: string }
+        storageNames?: { defaultLocale: string, currency?: string, timezone?: string }
     };
 
     /**

@@ -63,7 +63,7 @@ import { getLocalStorage, getSessionStorage, getCookie, setLocalStorage, setSess
 
     private getName(name: string): string {
         if (this.configuration.locale.storageNames) {
-            return this.configuration.locale.storageNames[name] || name;
+            return (this.configuration.locale.storageNames as any)[name] || name;
         }
         return name;
     }
