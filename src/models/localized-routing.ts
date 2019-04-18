@@ -23,7 +23,7 @@ import { Locale, ISOCode, ExtraCode, Schema } from "./types";
     public init(): void {
         if (this.configuration.localizedRouting.format) {
             // Parses the url to find the locale when the app starts.
-            const path: string = this.location.path();
+            const path: string = this.location.path(true);
             this.parsePath(path);
 
             // Parses the url to find the locale when a navigation starts.
@@ -125,7 +125,7 @@ import { Locale, ISOCode, ExtraCode, Schema } from "./types";
                 this.location.replaceState(this.getLocalizedPath(locale, path));
             }
         } else {
-            path = this.location.path();
+            path = this.location.path(true);
             // Parses the path to find the locale.
             const segment: string | null = this.getLocalizedSegment(path);
             if (segment != null) {
