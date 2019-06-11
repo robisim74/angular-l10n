@@ -158,7 +158,7 @@ import { Locale, ISOCode, ExtraCode, Schema } from "./types";
         const localeCodes: Locale = { languageCode: "" };
         if (codes.length > 0) {
             for (let i: number = 0; i < codes.length; i++) {
-                localeCodes[codes[i]] = values[i] || undefined;
+                if (values[i]) localeCodes[codes[i]] = values[i];
             }
         }
         return localeCodes;
