@@ -6,7 +6,7 @@ import { LocaleStorage } from './locale-storage';
 import { L10N_CONFIG, L10nConfigRef } from "../models/l10n-config";
 import { DefaultLocale } from '../models/default-locale';
 import { IntlFormatter } from '../models/intl-formatter';
-import { Language, ISOCode, DateTimeOptions, DigitsOptions, NumberFormatStyle } from '../models/types';
+import { Language, ISOCode, DateTimeOptions, DigitsOptions, NumberFormatStyle, RelativeTimeOptions, Unit } from '../models/types';
 
 export interface ILocaleService {
 
@@ -260,6 +260,22 @@ export interface ILocaleService {
             defaultLocale || this.defaultLocale.value,
             format || 'mediumDate',
             timezone || this.timezone
+        );
+    }
+
+    /**
+     * Formats a relative time according to default locale.
+     * @param value Negative (or positive) number
+     * @param unit Unit of the value. Possible values are: 'year', 'quarter', 'month', 'week', 'day', 'hour', 'minute', 'second'
+     * @param format RelativeTimeOptions object of the format
+     * @param defaultLocale The default locale to use. Default is the current locale
+     */
+    public formatRelativeTime(value: any, unit: Unit, format?: RelativeTimeOptions, defaultLocale?: string): string {
+        return IntlFormatter.formatRelativeTime(
+            value,
+            unit,
+            defaultLocale || this.defaultLocale.value,
+            format
         );
     }
 

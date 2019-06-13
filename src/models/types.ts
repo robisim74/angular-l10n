@@ -1,4 +1,4 @@
-export type Type<T> = new(...args: any[]) => T;
+export type Type<T> = new (...args: any[]) => T;
 
 export interface DateTimeOptions {
 
@@ -25,6 +25,15 @@ export interface DigitsOptions {
     useGrouping?: boolean;
 
 }
+
+export interface RelativeTimeOptions {
+
+    numeric?: string;
+    style?: string;
+
+}
+
+export type Unit = 'year' | 'quarter' | 'month' | 'week' | 'day' | 'hour' | 'minute' | 'second';
 
 export interface Locale {
     /**

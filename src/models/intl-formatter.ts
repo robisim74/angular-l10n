@@ -5,7 +5,9 @@ import {
     DateTimeOptions,
     ISO8601_DATE_REGEX,
     FORMAT_ALIASES,
-    NUMBER_FORMAT_REGEXP
+    NUMBER_FORMAT_REGEXP,
+    RelativeTimeOptions,
+    Unit
 } from './types';
 import { Logger } from './logger';
 
@@ -51,6 +53,14 @@ export class IntlFormatter {
         }
 
         return IntlFormatter.dateTimeFormatter(date, defaultLocale, format, timezone);
+    }
+
+    public static formatRelativeTime(value: any, unit: Unit, defaultLocale: string, format?: RelativeTimeOptions): string {
+        if (!IntlAPI.hasRelativeTimeFormat()) return value + " " + unit;
+
+        value = typeof value === "string" && !isNaN(+value - parseFloat(value)) ? +value : value;
+
+        return IntlFormatter.relativeTimeFormatter(value, unit, defaultLocale, format);
     }
 
     private static numberFormatter(
@@ -100,6 +110,15 @@ export class IntlFormatter {
         options.timeZone = IntlAPI.hasTimezone() ? timezone : 'UTC';
 
         return new Intl.DateTimeFormat(defaultLocale, options).format(date).replace(/[\u200e\u200f]/g, "");
+    }
+
+    private static relativeTimeFormatter(value: number, unit: Unit, defaultLocale: string, format?: RelativeTimeOptions): string {
+        let options: any = {};
+        if (format) {
+            options = format;
+        }
+
+        return new Intl.RelativeTimeFormat(defaultLocale, options).format(value, unit);
     }
 
     private static isDate(value: any): value is Date {
