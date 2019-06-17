@@ -8,9 +8,9 @@ nav:
     - Library structure: spec/library-structure.md
     - Configuration: spec/configuration.md
     - Getting the translation: spec/getting-the-translation.md
+    - Extra: spec/extra.md
     - Lazy loaded modules & Shared modules: spec/lazy-loading.md
     - Validation by locales: spec/validation.md
-    - Collator: spec/collator.md
     - SEO by locales: spec/seo.md
     - Setting the locale in Accept-Language header: spec/interceptor.md
     - Unit testing: spec/testing.md

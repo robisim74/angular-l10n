@@ -5,9 +5,9 @@ Class | Contract
 ----- | --------
 `TranslationModule` | Provides dependencies, pipes & directives for translating messages
 `LocalizationModule` | Provides dependencies, pipes & directives for translating messages, dates & numbers
+`LocalizationExtraModule` | Provides extra dependencies, pipes & directives
 `LocaleValidationModule` | Provides dependencies & directives for validation by locales
 `LocaleSeoModule` | Provides dependencies & components for SEO by locales
-`CollatorModule` | Provides dependencies for sorting and filtering a list by locales
 `LocaleInterceptorModule` | Sets locale in _Accept-Language_ header on outgoing requests
 
 ---

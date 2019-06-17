@@ -13,9 +13,9 @@ Get the changelog by [releases](https://github.com/robisim74/angular-l10n/releas
 - More modules to support tree shaking:
     - `TranslationModule` to translate texts
     - `LocalizationModule` to translate texts, dates & numbers
+    - `LocalizationExtraModule` new features of _Intl API_ like _collator_ and _relative time_
     - `LocaleValidationModule` for number validation by locales
     - `LocaleSeoModule` for SEO by locales
-    - `CollatorModule` for sorting and filtering a list by locales
     - `LocaleInterceptorModule` for setting the locale in _Accept-Language_ header on outgoing requests
 - Direct loading of translation data (objects)
 - Asynchronous loading of translation data (JSON):
@@ -66,8 +66,11 @@ npm install angular-l10n --save
 ```
 
 ## Usage
-- **Angular v7 & v8**
+- **Angular v8**
     - [Docs](https://robisim74.github.io/angular-l10n)
+
+- **Angular v7 (Angular l10n v7.2.0)**
+    - [Branch](https://github.com/robisim74/angular-l10n/tree/angular_v7/docs)
 
 - **Angular v6 (Angular l10n v5.2.0)**
     - [Branch](https://github.com/robisim74/angular-l10n/tree/angular_v6/docs)

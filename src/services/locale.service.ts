@@ -61,6 +61,8 @@ export interface ILocaleService {
 
     formatDate(value: any, format?: string | DateTimeOptions, defaultLocale?: string, timezone?: string): string;
 
+    formatRelativeTime(value: any, unit: Unit, format?: RelativeTimeOptions, defaultLocale?: string): string;
+
     formatDecimal(value: any, digits?: string | DigitsOptions, defaultLocale?: string): string;
 
     formatPercent(value: any, digits?: string | DigitsOptions, defaultLocale?: string): string;

@@ -68,6 +68,7 @@ Method | Function
 `setCurrentCurrency(currencyCode: string): void` |
 `setCurrentTimezone(zoneName: string): void` |
 `formatDate(value: any, format?: string | DateTimeOptions, defaultLocale?: string, timezone?: string): string` | Formats a date according to default locale
+`formatRelativeTime(value: any, unit: Unit, format?: RelativeTimeOptions, defaultLocale?: string): string` | Formats a relative time according to default locale
 `formatDecimal(value: any, digits?: string | DigitsOptions, defaultLocale?: string): string` | Formats a decimal number according to default locale
 `formatPercent(value: any, digits?: string | DigitsOptions, defaultLocale?: string): string` | Formats a number as a percentage according to default locale
 `formatCurrency(value: any, digits?: string | DigitsOptions, currencyDisplay?: string, defaultLocale?: string, currency?: string): string` | Formats a number as a currency according to default locale
@@ -126,6 +127,7 @@ Method | Function
 `static hasTimezone(): boolean` |
 `static hasNumberFormat(): boolean` |
 `static hasCollator(): boolean` |
+`static hasRelativeTimeFormat(): boolean` |
 
 ---
 

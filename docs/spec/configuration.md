@@ -577,14 +577,17 @@ Check the current browser support:
 * [ECMAScript compatibility tables](http://kangax.github.io/compat-table/esintl/)
 * [Can I use](http://caniuse.com/#feat=internationalization)
 
-All modern browsers have implemented this API. You can use [Intl.js](https://github.com/andyearnshaw/Intl.js) to extend support to old browsers.
+All modern browsers have implemented this API. You can use a polyfill like [Polyfill.io](https://polyfill.io/v3/) to extend support to old browsers.
 
 Just add one script tag in your `index.html`:
 ```Html
-<script src="https://cdn.polyfill.io/v2/polyfill.min.js?features=Intl.~locale.en-US"></script>
+<script crossorigin="anonymous"
+    src="https://polyfill.io/v3/polyfill.min.js?flags=gated&features=Intl.~locale.en-US"></script>
 ```
 When specifying the `features`, you have to specify what locale, or locales to load.
 
 The _timezone_ is also provided via _Intl API_. Except IE, all modern browsers have implemented the timezone. To extend the support, you can use [Intl.DateTimeFormat timezone polyfill](https://github.com/yahoo/date-time-format-timezone).
+
+The _timeAgo_ pipe and directive use the new `Intl.RelativeTimeFormat` API. To extend support to all browsers, you can install a specific polyfill like [intl-relativetimeformat](https://www.npmjs.com/package/@formatjs/intl-relativetimeformat).
 
 > When a feature is not supported, however, for example in older browsers, Angular localization does not generate an error in the browser, but returns the value without performing operations.
