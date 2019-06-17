@@ -6,7 +6,7 @@ import {
     L10nConfig,
     L10nLoader,
     TranslationModule,
-    CollatorModule,
+    LocalizationExtraModule,
     Collator,
     StorageStrategy
 } from '../../src/angular-l10n';
@@ -51,7 +51,7 @@ describe('Collator', () => {
             imports: [
                 HttpClientTestingModule,
                 TranslationModule.forRoot(l10nConfig),
-                CollatorModule
+                LocalizationExtraModule
             ]
         });
 

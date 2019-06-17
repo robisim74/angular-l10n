@@ -46,6 +46,5 @@ export { TranslationModule, provideRoot, provideChild } from './modules/translat
 export { LocalizationModule } from './modules/localization.module';
 export { LocalizationExtraModule } from './modules/localization-extra.module';
 export { LocaleValidationModule } from './modules/locale-validation.module';
-export { CollatorModule } from './modules/collator.module';
 export { LocaleSeoModule } from './modules/locale-seo.module';
 export { LocaleInterceptorModule } from './modules/locale-interceptor.module';

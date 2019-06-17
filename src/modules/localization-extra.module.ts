@@ -3,8 +3,10 @@ import { NgModule } from '@angular/core';
 import { L10nTimeAgoPipe } from '../pipes/l10n-time-ago.pipe';
 import { L10nTimeAgoDirective } from '../directives/l10n-time-ago.directive';
 
+import { Collator } from '../services/collator';
+
 /**
- * Provides extra pipes & directives.
+ * Provides extra dependencies, pipes & directives.
  */
 @NgModule({
     declarations: [
@@ -14,6 +16,7 @@ import { L10nTimeAgoDirective } from '../directives/l10n-time-ago.directive';
     exports: [
         L10nTimeAgoPipe,
         L10nTimeAgoDirective
-    ]
+    ],
+    providers: [Collator]
 })
 export class LocalizationExtraModule { }
