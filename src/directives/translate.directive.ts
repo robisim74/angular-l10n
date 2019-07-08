@@ -9,14 +9,14 @@ import { BaseDirective } from '../models/base-directive';
 })
 export class TranslateDirective extends BaseDirective {
 
-    @Input() set l10nTranslate(params: string) {
+    @Input() set l10nTranslate(params: any) {
         this.params = params;
     }
-    @Input() set translate(params: string) {
+    @Input() set translate(params: any) {
         this.params = params;
     }
 
-    @Input() public params: string;
+    @Input() public params: any;
 
     constructor(protected translation: TranslationService, protected el: ElementRef, protected renderer: Renderer2) {
         super(el, renderer);
