@@ -34,7 +34,9 @@
             true,
             "ignore-same-line"
         ],
-        "deprecation": false,
+        "deprecation": {
+            "severity": "warning"
+        },
         "forin": false,
         "import-blacklist": false,
         "interface-name": false,

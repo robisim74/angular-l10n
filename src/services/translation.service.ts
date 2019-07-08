@@ -150,7 +150,7 @@ export interface ITranslationService {
         args?: any,
         lang?: string
     ): Observable<string | any> {
-        return Observable.create((observer: Observer<string | any>) => {
+        return new Observable((observer: Observer<string | any>) => {
             const values: string | any = this.translate(keys, args, lang);
             observer.next(values);
             observer.complete();
@@ -207,7 +207,7 @@ export interface ITranslationService {
     }
 
     private getTranslationAsync(language: string): Observable<any> {
-        return Observable.create((observer: Observer<any>) => {
+        return new Observable((observer: Observer<any>) => {
             const sequencesOfOrderedTranslationData: Array<Observable<any>> = [];
             const sequencesOfTranslationData: Array<Observable<any>> = [];
 

@@ -96,7 +96,7 @@ export interface ICollator {
         extension?: string,
         options: any = { usage: 'sort', sensitivity: 'variant' }
     ): Observable<any[]> {
-        return Observable.create((observer: Observer<any[]>) => {
+        return new Observable((observer: Observer<any[]>) => {
             observer.next(this.sort(list, keyName, order, extension, options));
             observer.complete();
         });
@@ -147,7 +147,7 @@ export interface ICollator {
         keyNames: any[],
         options: any = { usage: 'search' }
     ): Observable<any[]> {
-        return Observable.create((observer: Observer<any[]>) => {
+        return new Observable((observer: Observer<any[]>) => {
             observer.next(this.search(s, list, keyNames, options));
             observer.complete();
         });
