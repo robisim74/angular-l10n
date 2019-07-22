@@ -18,7 +18,10 @@ describe('TranslationService', () => {
     let translation: TranslationService;
 
     const translationEN: any = {
-        "title": "Angular localization"
+        "title": "Angular localization",
+        "home": {
+            "title": "Angular localization - Home"
+        }
     };
 
     const l10nConfig: L10nConfig = {
@@ -32,7 +35,8 @@ describe('TranslationService', () => {
         translation: {
             translationData: [
                 { languageCode: 'en', data: translationEN }
-            ]
+            ],
+            composedKeySeparator: '.'
         }
     };
 
@@ -61,6 +65,16 @@ describe('TranslationService', () => {
         it('should translate using empty parameters', (() => {
             locale.setCurrentLanguage('en');
             expect(translation.translate('title', null, '')).toEqual("Angular localization");
+        }));
+
+        it('should check that the translation exists', (() => {
+            locale.setCurrentLanguage('en');
+            expect(translation.has('home')).toEqual(true);
+            expect(translation.has('home.title')).toEqual(true);
+            expect(translation.has('subtitle')).toEqual(false);
+            expect(translation.has('home.subtitle')).toEqual(false);
+
+            expect(translation.has('home', 'it')).toEqual(false);
         }));
 
     });

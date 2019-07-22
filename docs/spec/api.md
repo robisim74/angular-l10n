@@ -91,6 +91,7 @@ Method | Function
 `latestTranslation(): Observable<string>` | Fired when the latest `translationChanged` is emitted. Returns the translation language. Used when the reference to the service is not known, as in decorators
 `translate(keys: string | string[], args?: any, lang?: string): string | any` | Translates a key or an array of keys
 `translateAsync(keys: string | string[], args?: any, lang?: string): Observable<string | any>` |
+`has(key: string, lang?: string): boolean` | Checks if a translation exists
 
 ---
 

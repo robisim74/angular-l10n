@@ -28,6 +28,8 @@ export interface ITranslationService {
 
     translateAsync(keys: string | string[], args?: any, lang?: string): Observable<string | any>;
 
+    has(key: string, lang?: string): boolean;
+
 }
 
 /**
@@ -155,6 +157,28 @@ export interface ITranslationService {
             observer.next(values);
             observer.complete();
         });
+    }
+
+    /**
+     * Checks if a translation exists.
+     * @param key The key to be tested
+     * @param lang The current language of the service is used by default
+     */
+    public has(key: string, lang: string = this.translation.getValue()): boolean {
+        let translation: any = this.translationData[lang];
+        if (translation) {
+            // Composed key.
+            if (this.configuration.translation.composedKeySeparator) {
+                const sequences: string[] = key.split(this.configuration.translation.composedKeySeparator);
+                key = sequences.shift()!;
+                while (sequences.length > 0 && translation[key]) {
+                    translation = translation[key];
+                    key = sequences.shift()!;
+                }
+            }
+            return typeof translation[key] !== "undefined";
+        }
+        return false;
     }
 
     private translateKey(key: string, args: any, lang: string): string | any {
