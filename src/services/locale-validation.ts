@@ -121,40 +121,32 @@ export interface ILocaleValidation {
             const localeValue: string = this.locale.formatDecimal(value, '1.1-1', defaultLocale);
 
             const unicodeChars: string[] = [];
-            for (let i: number = 0; i <= 7; i++) {
+            for (let i: number = 0; i < localeValue.length; i++) {
                 unicodeChars.push(this.toUnicode(localeValue.charAt(i)));
             }
+
+            const thousandSeparator: boolean = localeValue.length >= 8 ? true : false; // Expected positions.
 
             // Right to left:
             // checks Unicode characters 'RIGHT-TO-LEFT MARK' (U+200F) & 'Arabic Letter Mark' (U+061C),
             // or the reverse order.
             // Left to right:
             // checks Unicode character 'LEFT-TO-RIGHT MARK' (U+200E).
+            let positions: number[];
             if (unicodeChars[0] == "\\u200F" || unicodeChars[0] == "\\u061C") {
-                decimalCode = {
-                    minusSign: unicodeChars[1],
-                    decimalSeparator: unicodeChars[7],
-                    thousandSeparator: unicodeChars[3]
-                };
+                positions = thousandSeparator ? [1, 7, 3] : [1, 6];
             } else if (unicodeChars[0] == this.toUnicode(this.locale.formatDecimal(1, '1.0-0', defaultLocale))) {
-                decimalCode = {
-                    minusSign: unicodeChars[7],
-                    decimalSeparator: unicodeChars[5],
-                    thousandSeparator: unicodeChars[1]
-                };
+                positions = thousandSeparator ? [7, 5, 1] : [6, 4];
             } else if (unicodeChars[0] == "\\u200E") {
-                decimalCode = {
-                    minusSign: unicodeChars[1],
-                    decimalSeparator: unicodeChars[7],
-                    thousandSeparator: unicodeChars[3]
-                };
+                positions = thousandSeparator ? [1, 7, 3] : [1, 6];
             } else {
-                decimalCode = {
-                    minusSign: unicodeChars[0],
-                    decimalSeparator: unicodeChars[6],
-                    thousandSeparator: unicodeChars[2]
-                };
+                positions = thousandSeparator ? [0, 6, 2] : [0, 5];
             }
+            decimalCode = {
+                minusSign: unicodeChars[positions[0]],
+                decimalSeparator: unicodeChars[positions[1]],
+                thousandSeparator: thousandSeparator ? unicodeChars[positions[2]] : ""
+            };
         }
         return decimalCode;
     }
@@ -181,7 +173,11 @@ export interface ILocaleValidation {
     }
 
     private toUnicode(c: string): string {
-        return "\\u" + this.toHex(c.charCodeAt(0));
+        let unicode: string = "\\u" + this.toHex(c.charCodeAt(0));
+        // Replaces NO-BREAK SPACE
+        unicode = unicode.replace("\\u202F", "\\u0020");
+        unicode = unicode.replace("\\u00A0", "\\u0020");
+        return unicode;
     }
 
     private toHex(value: number): string {
