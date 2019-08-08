@@ -165,18 +165,13 @@ export interface ITranslationService {
      * @param lang The current language of the service is used by default
      */
     public has(key: string, lang: string = this.translation.getValue()): boolean {
-        let translation: any = this.translationData[lang];
-        if (translation) {
-            // Composed key.
-            if (this.configuration.translation.composedKeySeparator) {
-                const sequences: string[] = key.split(this.configuration.translation.composedKeySeparator);
-                key = sequences.shift()!;
-                while (sequences.length > 0 && translation[key]) {
-                    translation = translation[key];
-                    key = sequences.shift()!;
-                }
-            }
-            return typeof translation[key] !== "undefined";
+        const path: string = key;
+        const translation: any = {
+            nested: this.translationData[lang]
+        };
+        if (translation.nested) {
+            key = this.extractKey(translation, path);
+            return typeof translation.nested[key] !== "undefined";
         }
         return false;
     }
@@ -191,23 +186,29 @@ export interface ITranslationService {
 
     private getValue(key: string, args: any, lang: string): string | any {
         const path: string = key;
+        const translation: any = {
+            nested: this.translationData[lang]
+        };
         let value: string | null = null;
-        let translation: any = this.translationData[lang];
-        if (translation) {
-            // Composed key.
-            if (this.configuration.translation.composedKeySeparator) {
-                const sequences: string[] = key.split(this.configuration.translation.composedKeySeparator);
-                key = sequences.shift()!;
-                while (sequences.length > 0 && translation[key]) {
-                    translation = translation[key];
-                    key = sequences.shift()!;
-                }
-            }
-            value = typeof translation[key] === "undefined" ?
-                translation[this.configuration.translation.missingKey || ""] :
-                translation[key];
+        if (translation.nested) {
+            key = this.extractKey(translation, path);
+            value = typeof translation.nested[key] === "undefined" ?
+                translation.nested[this.configuration.translation.missingKey || ""] :
+                translation.nested[key];
         }
         return this.translationHandler.parseValue(path, key, value, args, lang);
+    }
+
+    private extractKey(translation: { nested: any }, path: string): string {
+        if (!this.configuration.translation.composedKeySeparator) return path;
+        // Composed key.
+        const sequences: string[] = path.split(this.configuration.translation.composedKeySeparator);
+        let key: string = sequences.shift()!;
+        while (sequences.length > 0 && translation.nested[key]) {
+            translation.nested = translation.nested[key];
+            key = sequences.shift()!;
+        }
+        return key;
     }
 
     private translateI18nPlural(key: string, args: any, lang: string): string {
