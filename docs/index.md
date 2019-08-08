@@ -10,7 +10,7 @@ It allows, in addition to translation, to localize numbers and dates of your app
 
 ---
 
-Library version: 8.1.0 - [Changelog](https://github.com/robisim74/angular-l10n/releases) 
+Library version: 8.1.1 - [Changelog](https://github.com/robisim74/angular-l10n/releases) 
 
 ---
 
