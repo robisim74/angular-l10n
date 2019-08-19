@@ -33,6 +33,9 @@ export interface ILocaleValidation {
     public parseNumber(s: string, digits?: string, defaultLocale?: string): number | null {
         if (s == "" || s == null) return null;
 
+        // Replaces whitespace metacharacters.
+        s = s.replace(/\s/g, ' ');
+
         this.decimalCode = this.getDecimalCode(defaultLocale);
         this.numberCodes = this.getNumberCodes(defaultLocale);
 
@@ -122,7 +125,11 @@ export interface ILocaleValidation {
 
             const unicodeChars: string[] = [];
             for (let i: number = 0; i < localeValue.length; i++) {
-                unicodeChars.push(this.toUnicode(localeValue.charAt(i)));
+                let unicodeChar: string = this.toUnicode(localeValue.charAt(i));
+                // Replaces NO-BREAK SPACE
+                unicodeChar = unicodeChar.replace("\\u202F", "\\u0020");
+                unicodeChar = unicodeChar.replace("\\u00A0", "\\u0020");
+                unicodeChars.push(unicodeChar);
             }
 
             const thousandSeparator: boolean = localeValue.length >= 8 ? true : false; // Expected positions.
@@ -173,11 +180,7 @@ export interface ILocaleValidation {
     }
 
     private toUnicode(c: string): string {
-        let unicode: string = "\\u" + this.toHex(c.charCodeAt(0));
-        // Replaces NO-BREAK SPACE
-        unicode = unicode.replace("\\u202F", "\\u0020");
-        unicode = unicode.replace("\\u00A0", "\\u0020");
-        return unicode;
+        return "\\u" + this.toHex(c.charCodeAt(0));
     }
 
     private toHex(value: number): string {

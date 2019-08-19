@@ -252,4 +252,26 @@ describe('L10nNumberValidatorDirective', () => {
         });
     }));
 
+    it('should validate space as thousand separator with format', async(() => {
+        locale.setDefaultLocale('fr', 'FR');
+
+        comp.decimal = locale.formatDecimal(1012.34, "1.2-2");
+        comp.digits = "1.2-2";
+
+        fixture.detectChanges();
+        fixture.whenStable().then(() => {
+            const form: NgForm = fixture.debugElement.children[0].injector.get(NgForm);
+            const control: AbstractControl | null = form.control.get('decimal');
+
+            if (control) {
+                expect(control.valid).toBe(true);
+                expect(control.hasError('format')).toBe(false);
+                expect(control.hasError('minValue')).toBe(false);
+                expect(control.hasError('maxValue')).toBe(false);
+            } else {
+                throw new Error("Control is null");
+            }
+        });
+    }));
+
 });
