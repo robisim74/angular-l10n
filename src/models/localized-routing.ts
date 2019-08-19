@@ -144,7 +144,7 @@ import { Locale, ISOCode, ExtraCode, Schema } from "./types";
 
     private getLocalizedSegment(path: string): string | null {
         for (const lang of this.locale.getAvailableLanguages()) {
-            const regex: RegExp = new RegExp(`(^\/${lang}\/)|(^\/${lang}$)|(^\/${lang}-.*?\/)|(^\/${lang}-.*?$)`);
+            const regex: RegExp = new RegExp(`(\/${lang}\/)|(\/${lang}$)|(\/${lang}-.*?\/)|(\/${lang}-.*?$)`);
             const segments: RegExpMatchArray | null = path.match(regex);
             if (segments != null) {
                 return segments[0];
