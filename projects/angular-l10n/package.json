@@ -1,0 +1,31 @@
+{
+  "name": "angular-l10n",
+  "version": "9.0.0",
+  "author": "Roberto Simonetti",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/robisim74/angular-l10n.git"
+  },
+  "bugs": {
+    "url": "https://github.com/robisim74/angular-l10n/issues"
+  },
+  "homepage": "https://github.com/robisim74/angular-l10n",
+  "keywords": [
+    "angular",
+    "javascript",
+    "typescript",
+    "internationalization",
+    "localization",
+    "i18n",
+    "l10n",
+    "translation"
+  ],
+  "license": "MIT",
+  "dependencies": {
+    "tslib": "^1.9.0"
+  },
+  "peerDependencies": {
+    "@angular/core": ">= 9.0.0-next.4",
+    "rxjs": ">= 6.5.2"
+  }
+}
