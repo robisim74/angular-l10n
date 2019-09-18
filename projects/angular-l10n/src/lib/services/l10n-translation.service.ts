@@ -119,7 +119,7 @@ import { L10nMissingTranslationHandler } from './l10n-missing-translation-handle
         if (locale) await this.loadTranslation(locale);
     }
 
-    public async loadTranslation(locale = this.getLocale()): Promise<void> {
+    public async loadTranslation(locale = this.locale): Promise<void> {
         const language = formatLanguage(locale.language, this.config.format);
 
         this.data = {};

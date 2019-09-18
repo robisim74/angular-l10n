@@ -32,7 +32,7 @@ export interface L10nLocale {
     /**
      * Time zone name from the IANA time zone database.
      */
-    timezone?: string;
+    timeZone?: string;
 }
 
 export interface L10nSchema {
@@ -43,3 +43,31 @@ export interface L10nSchema {
     dir?: 'ltr' | 'rtl';
     text?: string;
 }
+
+export interface L10nDateTimeFormatOptions {
+    /**
+     * The date formatting style.
+     */
+    dateStyle?: 'full' | 'long' | 'medium' | 'short';
+    /**
+     * The time formatting style.
+     */
+    timeStyle?: 'full' | 'long' | 'medium' | 'short';
+}
+
+export interface L10nNumberFormatOptions {
+    /**
+     * The digits formatting.
+     */
+    digits?: string;
+    /**
+     * The formatting style.
+     */
+    style?: 'decimal' | 'currency' | 'percent';
+    /**
+     * How to display the currency in currency formatting.
+     */
+    currencyDisplay?: 'symbol' | 'code' | 'name';
+}
+
+export type Unit = 'year' | 'quarter' | 'month' | 'week' | 'day' | 'hour' | 'minute' | 'second';
