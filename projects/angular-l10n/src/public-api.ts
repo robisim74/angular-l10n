@@ -15,3 +15,8 @@ export { L10nTranslationHandler } from './lib/services/l10n-translation-handler'
 export { L10nMissingTranslationHandler } from './lib/services/l10n-missing-translation-handler';
 export * from './lib/pipes/l10n-translate.pipe';
 export * from './lib/modules/l10n-translation.module';
+export * from './lib/services/l10n-intl.service';
+export * from './lib/pipes/l10n-date.pipe';
+export * from './lib/pipes/l10n-number.pipe';
+export * from './lib/pipes/l10n-time-ago.pipe';
+export * from './lib/modules/l10n-intl.module';

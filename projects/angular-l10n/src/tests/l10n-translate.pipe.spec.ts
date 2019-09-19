@@ -6,7 +6,7 @@ import { L10nLoader, L10nTranslationService, L10nConfig, L10nTranslationModule, 
 
 @Component({
     template: `
-        <p>{{ 'title' | translate:locale.language }}</p>
+        <p>{{ 'home.title' | translate:locale.language }}</p>
     `
 })
 class HomeComponent {
@@ -15,7 +15,7 @@ class HomeComponent {
 
 @Component({
     template: `
-        <p>{{ 'title' | translateAsync }}</p>
+        <p>{{ 'home.title' | translateAsync }}</p>
     `,
     changeDetection: ChangeDetectionStrategy.OnPush
 })
@@ -26,18 +26,22 @@ describe('L10nTranslatePipe', () => {
     let el: HTMLElement;
     let loader: L10nLoader;
     let translation: L10nTranslationService;
-    const i18nAsset = {
+    const i18nHome = {
         en: {
-            title: 'Angular localization'
+            home: {
+                title: 'Angular localization'
+            }
         },
         it: {
-            title: 'Localizzazione in Angular'
+            home: {
+                title: 'Localizzazione in Angular'
+            }
         }
     };
     const config: L10nConfig = {
         format: 'language',
         providers: [
-            { name: 'asset', asset: i18nAsset }
+            { name: 'home', asset: i18nHome }
         ],
         cache: true,
         keySeparator: '.',
@@ -70,18 +74,22 @@ describe('L10nTranslateAsyncPipe', () => {
     let el: HTMLElement;
     let loader: L10nLoader;
     let translation: L10nTranslationService;
-    const i18nAsset = {
+    const i18nHome = {
         en: {
-            title: 'Angular localization'
+            home: {
+                title: 'Angular localization'
+            }
         },
         it: {
-            title: 'Localizzazione in Angular'
+            home: {
+                title: 'Localizzazione in Angular'
+            }
         }
     };
     const config: L10nConfig = {
         format: 'language',
         providers: [
-            { name: 'asset', asset: i18nAsset }
+            { name: 'home', asset: i18nHome }
         ],
         keySeparator: '.',
         defaultLocale: { language: 'en' }

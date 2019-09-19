@@ -1,5 +1,6 @@
 import { NgModule, ModuleWithProviders } from '@angular/core';
 
+import { L10nTranslatePipe, L10nTranslateAsyncPipe } from '../pipes/l10n-translate.pipe';
 import { L10nConfig, L10nToken, L10N_CONFIG, L10N_LOCALE } from '../models/l10n-config';
 import { L10nTranslationService } from '../services/l10n-translation.service';
 import { L10nCache } from '../services/l10n-cache';
@@ -9,7 +10,6 @@ import { L10nTranslationLoader, L10nDefaultTranslationLoader } from '../services
 import { L10nTranslationHandler, L10nDefaultTranslationHandler } from '../services/l10n-translation-handler';
 import { L10nMissingTranslationHandler, L10nDefaultMissingTranslationHandler } from '../services/l10n-missing-translation-handler';
 import { L10nLoader, L10nDefaultLoader } from '../services/l10n-loader';
-import { L10nTranslatePipe, L10nTranslateAsyncPipe } from '../pipes/l10n-translate.pipe';
 
 @NgModule({
     declarations: [

@@ -153,15 +153,11 @@ export function toDate(value: any): Date {
     return value;
 }
 
-export function isL10nDateTimeFormatOptions(
-    options: L10nDateTimeFormatOptions | Intl.DateTimeFormatOptions
-): options is L10nDateTimeFormatOptions {
+export function isL10nDateTimeFormatOptions(options: any): options is L10nDateTimeFormatOptions {
     return (options as L10nDateTimeFormatOptions).dateStyle !== undefined || (options as L10nDateTimeFormatOptions).timeStyle !== undefined;
 }
 
-export function isL10nNumberFormatOptions(
-    options: L10nNumberFormatOptions | Intl.NumberFormatOptions
-): options is L10nNumberFormatOptions {
+export function isL10nNumberFormatOptions(options: any): options is L10nNumberFormatOptions {
     return (options as L10nNumberFormatOptions).digits !== undefined;
 }
 
@@ -192,7 +188,7 @@ export function parseDigits(digits: string) {
 }
 
 function isObject(item: any): boolean {
-    return (typeof item === 'object' && !Array.isArray(item));
+    return typeof item === 'object' && !Array.isArray(item);
 }
 
 /**

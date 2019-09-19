@@ -1,4 +1,20 @@
-import { validateLanguage, formatLanguage, parseLanguage, lookupMatcher, getValue, handleParams, mergeDeep } from '../public-api';
+import {
+    validateLanguage,
+    formatLanguage,
+    parseLanguage,
+    lookupMatcher,
+    getValue,
+    handleParams,
+    mergeDeep,
+    hasIntl,
+    hasDateTimeFormat,
+    hasNumberFormat,
+    hasTimeZone,
+    hasRelativeTimeFormat,
+    hasCollator,
+    hasPluralRules
+} from '../public-api';
+import { toNumber, toDate, parseDigits } from '../lib/models/utils';
 
 describe('utils', () => {
     describe('validateLanguage', () => {
@@ -122,6 +138,45 @@ describe('utils', () => {
                     AA: 'aaa',
                     BB: 'bb'
                 }
+            }));
+        });
+    });
+    describe('hasIntl', () => {
+        it('should has Intl', () => {
+            expect(hasIntl()).toBe(true);
+            expect(hasDateTimeFormat()).toBe(true);
+            expect(hasNumberFormat()).toBe(true);
+            expect(hasTimeZone()).toBe(true);
+            expect(hasRelativeTimeFormat()).toBe(true);
+            expect(hasCollator()).toBe(true);
+            expect(hasPluralRules()).toBe(true);
+        });
+    });
+    describe('toNumber', () => {
+        it('should convert to number', () => {
+            expect(toNumber('1234')).toEqual(1234);
+            expect(toNumber(1234)).toEqual(1234);
+        });
+    });
+    describe('toDate', () => {
+        it('should convert to date', () => {
+            expect(toDate(100000000000)).toEqual(new Date(100000000000));
+            expect(toDate('100000000000')).toEqual(new Date(100000000000));
+            expect(toDate('2019-09-19')).toEqual(new Date(2019, 8, 19));
+            expect(toDate('2019-09-19T16:30:00')).toEqual(new Date('2019-09-19T16:30:00'));
+            expect(toDate(new Date('2019-09-19T16:30:00'))).toEqual(new Date('2019-09-19T16:30:00'));
+        });
+    });
+    describe('parseDigits', () => {
+        it('should parse digits', () => {
+            expect(parseDigits('1.2-2')).toEqual(jasmine.objectContaining({
+                minimumIntegerDigits: 1, minimumFractionDigits: 2, maximumFractionDigits: 2
+            }));
+            expect(parseDigits('1.')).toEqual(jasmine.objectContaining({
+                minimumIntegerDigits: 1
+            }));
+            expect(parseDigits('.0-2')).toEqual(jasmine.objectContaining({
+                minimumFractionDigits: 0, maximumFractionDigits: 2
             }));
         });
     });

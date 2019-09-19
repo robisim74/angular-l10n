@@ -1,6 +1,6 @@
-import { Pipe, PipeTransform, ChangeDetectorRef, OnDestroy } from '@angular/core';
-import { Subscription } from 'rxjs';
+import { Pipe, PipeTransform, ChangeDetectorRef } from '@angular/core';
 
+import { L10nAsyncPipe } from '../models/l10n-async-pipe';
 import { L10nTranslationService } from '../services/l10n-translation.service';
 
 @Pipe({
@@ -11,13 +11,7 @@ export class L10nTranslatePipe implements PipeTransform {
 
     constructor(protected translation: L10nTranslationService) { }
 
-    /**
-     * Translates a key.
-     * @param key The key to be translated
-     * @param language The current language
-     * @param params Optional parameters contained in the key
-     */
-    public transform(key: string, language?: string, params?: any): string | null {
+    public transform(key: string, language: string, params?: any): string | null {
         if (key == null || key === '') return null;
 
         return this.translation.translate(key, params, language);
@@ -25,27 +19,20 @@ export class L10nTranslatePipe implements PipeTransform {
 
 }
 
-/**
- * Use with OnPush change detection strategy.
- */
 @Pipe({
     name: 'translateAsync',
     pure: false
 })
-export class L10nTranslateAsyncPipe extends L10nTranslatePipe implements PipeTransform, OnDestroy {
-
-    protected onChanges: Subscription;
+export class L10nTranslateAsyncPipe extends L10nAsyncPipe implements PipeTransform {
 
     constructor(protected translation: L10nTranslationService, protected cdr: ChangeDetectorRef) {
-        super(translation);
-
-        this.onChanges = this.translation.onChange().subscribe({
-            next: () => this.cdr.markForCheck()
-        });
+        super(translation, cdr);
     }
 
-    ngOnDestroy() {
-        if (this.onChanges) this.onChanges.unsubscribe();
+    public transform(key: string, params?: any): string | null {
+        if (key == null || key === '') return null;
+
+        return this.translation.translate(key, params);
     }
 
 }

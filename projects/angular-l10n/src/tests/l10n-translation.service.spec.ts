@@ -21,7 +21,7 @@ import { L10nTranslationService, L10nConfig, L10nTranslationModule, L10nTranslat
     }
 }
 
-describe('TranslationService', () => {
+describe('L10nTranslationService', () => {
     describe('APIs', () => {
         let translation: L10nTranslationService;
         const i18nHome = {
