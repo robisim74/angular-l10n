@@ -155,6 +155,7 @@ describe('utils', () => {
     describe('toNumber', () => {
         it('should convert to number', () => {
             expect(toNumber('1234')).toEqual(1234);
+            expect(toNumber('-1234')).toEqual(-1234);
             expect(toNumber(1234)).toEqual(1234);
         });
     });

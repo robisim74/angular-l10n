@@ -106,6 +106,8 @@ import {
     ): string {
         if (!hasRelativeTimeFormat) return value;
 
+        value = toNumber(value);
+
         return new Intl.RelativeTimeFormat(language, options).format(value, unit);
     }
 
