@@ -80,10 +80,10 @@ describe('utils', () => {
     });
     describe('handleParams', () => {
         it('should handle the params', () => {
-            let value = handleParams('Hi {{name}}', { name: 'Robi' });
-            expect(value).toEqual('Hi Robi');
-            value = handleParams('Hi {{name}} {{surname}}', { name: 'Robi', surname: 'Sim' });
-            expect(value).toEqual('Hi Robi Sim');
+            let value = handleParams('Hi {{name}}', { name: 'robisim74' });
+            expect(value).toEqual('Hi robisim74');
+            value = handleParams('{{ user }}, you have {{ NoMessages }} new messages', { user: 'robisim74', NoMessages: 2 });
+            expect(value).toEqual('robisim74, you have 2 new messages');
         });
     });
     describe('mergeDeep', () => {

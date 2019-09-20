@@ -11,10 +11,8 @@ export abstract class L10nDirective implements AfterViewInit, OnChanges, OnDestr
 
     @Input() public innerHTML: string;
 
-    protected text: string;
-    protected attributes: any[] = [];
-
-    protected destroy = new Subject<boolean>();
+    private text: string;
+    private attributes: any[];
 
     private element: any;
     private renderNode: any;
@@ -26,16 +24,18 @@ export abstract class L10nDirective implements AfterViewInit, OnChanges, OnDestr
 
     private readonly SELECTOR = /^l10n-/;
 
+    private destroy = new Subject<boolean>();
+
     constructor(protected el: ElementRef, protected renderer: Renderer2, protected translation: L10nTranslationService) { }
 
     public ngAfterViewInit(): void {
         if (this.el && this.el.nativeElement) {
             this.element = this.el.nativeElement;
             this.renderNode = getTargetNode(this.element);
-            this.getText();
-            this.getAttributes();
+            this.text = this.getText();
+            this.attributes = this.getAttributes();
             this.addTextListener();
-            this.setup();
+            this.addTranslationListener();
         }
     }
 
@@ -50,7 +50,7 @@ export abstract class L10nDirective implements AfterViewInit, OnChanges, OnDestr
             }
             this.replaceText();
         }
-        if (this.attributes.length > 0) {
+        if (this.attributes && this.attributes.length > 0) {
             this.replaceAttributes();
         }
     }
@@ -62,14 +62,16 @@ export abstract class L10nDirective implements AfterViewInit, OnChanges, OnDestr
 
     protected abstract getValue(text: string): string;
 
-    private getText(): void {
+    private getText(): string {
+        let text = '';
         if (this.element.childNodes.length > 0) {
-            this.text = this.getNodeValue();
+            text = this.getNodeValue();
         } else if (this.value) {
-            this.text = this.value;
+            text = this.value;
         } else if (this.innerHTML) {
-            this.text = this.innerHTML;
+            text = this.innerHTML;
         }
+        return text;
     }
 
     private getNodeValue(): string {
@@ -77,26 +79,28 @@ export abstract class L10nDirective implements AfterViewInit, OnChanges, OnDestr
         return this.nodeValue ? this.nodeValue.trim() : '';
     }
 
-    private getAttributes(): void {
+    private getAttributes(): any[] {
+        const attributes: any[] = [];
         if (this.element.attributes) {
             for (const attr of this.element.attributes) {
                 if (attr && this.SELECTOR.test(attr.name)) {
                     const name = attr.name.substr(5);
                     for (const targetAttr of this.element.attributes) {
                         if (new RegExp('^' + name + '$').test(targetAttr.name)) {
-                            this.attributes.push({ name, key: targetAttr.value });
+                            attributes.push({ name, text: targetAttr.value });
                         }
                     }
                 }
             }
         }
+        return attributes;
     }
 
     private addTextListener(): void {
         if (typeof MutationObserver !== 'undefined') {
             this.textObserver = new MutationObserver(() => {
                 this.renderNode = getTargetNode(this.element);
-                this.getText();
+                this.text = this.getText();
                 this.replaceText();
             });
             this.textObserver.observe(this.renderNode, this.TEXT_MUTATION_CONFIG);
@@ -109,15 +113,13 @@ export abstract class L10nDirective implements AfterViewInit, OnChanges, OnDestr
         }
     }
 
-    private setup(): void {
+    private addTranslationListener(): void {
         this.translation.onChange().pipe(takeUntil(this.destroy)).subscribe({
-            next: () => this.replace()
+            next: () => {
+                this.replaceText();
+                this.replaceAttributes();
+            }
         });
-    }
-
-    private replace(): void {
-        this.replaceText();
-        this.replaceAttributes();
     }
 
     private replaceText(): void {
@@ -148,21 +150,21 @@ export abstract class L10nDirective implements AfterViewInit, OnChanges, OnDestr
 
     private setAttributes(data: any): void {
         for (const attr of this.attributes) {
-            this.renderer.setAttribute(this.element, attr.name, data[attr.key]);
+            this.renderer.setAttribute(this.element, attr.name, data[attr.text]);
         }
     }
 
     private getAttributesData(): any {
-        const keys = this.getAttributesKeys();
+        const texts = this.getAttributesTexts();
         const data: any = {};
-        for (const key of keys) {
-            data[key] = this.getValue(key);
+        for (const text of texts) {
+            data[text] = this.getValue(text);
         }
         return data;
     }
 
-    private getAttributesKeys(): string[] {
-        return this.attributes.map((attr: any) => attr.key);
+    private getAttributesTexts(): string[] {
+        return this.attributes.map(attr => attr.text);
     }
 
 }

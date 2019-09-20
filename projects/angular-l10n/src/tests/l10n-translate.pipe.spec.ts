@@ -6,54 +6,48 @@ import { L10nLoader, L10nTranslationService, L10nConfig, L10nTranslationModule, 
 
 @Component({
     template: `
-        <p>{{ 'home.title' | translate:locale.language }}</p>
+        <p>{{ 'title' | translate:locale.language }}</p>
     `
 })
-class HomeComponent {
+class AssetComponent {
     constructor(@Inject(L10N_LOCALE) public locale: L10nLocale) { }
 }
 
 @Component({
     template: `
-        <p>{{ 'home.title' | translateAsync }}</p>
+        <p>{{ 'title' | translateAsync }}</p>
     `,
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-class HomeOnPushComponent { }
+class AssetOnPushComponent { }
 
 describe('L10nTranslatePipe', () => {
-    let fixture: ComponentFixture<HomeComponent>;
+    let fixture: ComponentFixture<AssetComponent>;
     let el: HTMLElement;
     let loader: L10nLoader;
     let translation: L10nTranslationService;
-    const i18nHome = {
+    const i18nAsset = {
         en: {
-            home: {
-                title: 'Angular localization'
-            }
+            title: 'Angular localization'
         },
         it: {
-            home: {
-                title: 'Localizzazione in Angular'
-            }
+            title: 'Localizzazione in Angular'
         }
     };
     const config: L10nConfig = {
         format: 'language',
         providers: [
-            { name: 'home', asset: i18nHome }
+            { name: 'asset', asset: i18nAsset }
         ],
-        cache: true,
-        keySeparator: '.',
         defaultLocale: { language: 'en' }
     };
     beforeEach(async () => {
         fixture = TestBed.configureTestingModule({
-            declarations: [HomeComponent],
+            declarations: [AssetComponent],
             imports: [
                 L10nTranslationModule.forRoot(config)
             ]
-        }).createComponent(HomeComponent);
+        }).createComponent(AssetComponent);
         el = fixture.nativeElement.querySelector('p');
         loader = TestBed.inject(L10nLoader);
         translation = TestBed.inject(L10nTranslationService);
@@ -63,44 +57,41 @@ describe('L10nTranslatePipe', () => {
         fixture.detectChanges();
         expect(el.textContent).toContain('Angular localization');
     });
-    it('should render translated text when locale changes', async () => {
+    it('should render translated text when language changes', async () => {
         await translation.setLocale({ language: 'it' });
         fixture.detectChanges();
         expect(el.textContent).toContain('Localizzazione in Angular');
     });
 });
+
 describe('L10nTranslateAsyncPipe', () => {
-    let fixture: ComponentFixture<HomeOnPushComponent>;
+    let fixture: ComponentFixture<AssetOnPushComponent>;
     let el: HTMLElement;
     let loader: L10nLoader;
     let translation: L10nTranslationService;
-    const i18nHome = {
+    const i18nAsset = {
         en: {
-            home: {
-                title: 'Angular localization'
-            }
+            title: 'Angular localization'
         },
         it: {
-            home: {
-                title: 'Localizzazione in Angular'
-            }
+            title: 'Localizzazione in Angular'
         }
     };
     const config: L10nConfig = {
         format: 'language',
         providers: [
-            { name: 'home', asset: i18nHome }
+            { name: 'asset', asset: i18nAsset }
         ],
         keySeparator: '.',
         defaultLocale: { language: 'en' }
     };
     beforeEach(async () => {
         fixture = TestBed.configureTestingModule({
-            declarations: [HomeOnPushComponent],
+            declarations: [AssetOnPushComponent],
             imports: [
                 L10nTranslationModule.forRoot(config)
             ]
-        }).createComponent(HomeOnPushComponent);
+        }).createComponent(AssetOnPushComponent);
         el = fixture.nativeElement.querySelector('p');
         loader = TestBed.inject(L10nLoader);
         translation = TestBed.inject(L10nTranslationService);
@@ -110,7 +101,7 @@ describe('L10nTranslateAsyncPipe', () => {
         fixture.detectChanges();
         expect(el.textContent).toContain('Angular localization');
     });
-    it('should render translated text when locale changes', async () => {
+    it('should render translated text when language changes', async () => {
         await translation.setLocale({ language: 'it' });
         fixture.detectChanges();
         expect(el.textContent).toContain('Localizzazione in Angular');
