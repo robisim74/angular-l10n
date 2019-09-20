@@ -1,3 +1,5 @@
+/// <reference path='../../typings.d.ts'/>
+
 import { Injectable, Inject } from '@angular/core';
 
 import { L10nLocale, L10nDateTimeFormatOptions, L10nNumberFormatOptions, Unit } from '../models/types';
