@@ -128,6 +128,10 @@ export function hasPluralRules(): boolean {
     return hasIntl() && Intl.hasOwnProperty('PluralRules');
 }
 
+export function hasListFormat(): boolean {
+    return hasIntl() && Intl.hasOwnProperty('ListFormat');
+}
+
 export function toNumber(value: any): number {
     return typeof value === 'string' && !isNaN(+value - parseFloat(value)) ? +value : value;
 }

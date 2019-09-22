@@ -1,5 +1,5 @@
 /**
- * Remove when the proposal becomes standard.
+ * Remove when the proposals becomes standard.
  */
 declare namespace Intl {
     interface RelativeTimeFormatOptions {
@@ -11,7 +11,19 @@ declare namespace Intl {
         format(value: number, unit: string): string;
     }
     var RelativeTimeFormat: {
-        new(locales?: string | string[], options?: any): RelativeTimeFormat;
-        (locales?: string | string[], options?: any): RelativeTimeFormat;
+        new(locales?: string | string[], options?: RelativeTimeFormatOptions): RelativeTimeFormat;
+        (locales?: string | string[], options?: RelativeTimeFormatOptions): RelativeTimeFormat;
+    };
+    interface ListFormatOptions {
+        localeMatcher?: string;
+        type?: string;
+        style?: string;
+    }
+    interface ListFormat {
+        format(list?: Iterable<string>): string;
+    }
+    var ListFormat: {
+        new(locales?: string | string[], options?: ListFormatOptions): ListFormat;
+        (locales?: string | string[], options?: ListFormatOptions): ListFormat;
     };
 }

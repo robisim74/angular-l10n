@@ -1,13 +1,26 @@
 import { TestBed } from '@angular/core/testing';
 
-import { L10nLoader, L10nIntlService, L10nConfig, L10nIntlModule } from '../public-api';
+import { L10nLoader, L10nIntlService, L10nTranslationService, L10nConfig, L10nIntlModule } from '../public-api';
 import { L10nTranslationModule } from '../lib/modules/l10n-translation.module';
 
 describe('L10nIntlService', () => {
     let loader: L10nLoader;
     let intl: L10nIntlService;
+    let translation: L10nTranslationService;
+    const i18nAsset = {
+        'it-IT': {
+            systemArchitect: 'Progettista IT',
+            accountant: 'Ragioniere',
+            juniorTechnicalAuthor: 'Scrittore tecnico Junior',
+            seniorJavascriptDeveloper: 'Programmatore Javascript Senior',
+            one: 'Uno'
+        }
+    };
     const config: L10nConfig = {
         format: 'language-region',
+        providers: [
+            { name: 'asset', asset: i18nAsset }
+        ],
         defaultLocale: { language: 'en-US', currency: 'USD', timeZone: 'America/Los_Angeles' }
     };
     beforeEach(async () => {
@@ -19,6 +32,7 @@ describe('L10nIntlService', () => {
         });
         loader = TestBed.inject(L10nLoader);
         intl = TestBed.inject(L10nIntlService);
+        translation = TestBed.inject(L10nTranslationService);
         await loader.init();
     });
     it('should format dates', () => {
@@ -47,5 +61,22 @@ describe('L10nIntlService', () => {
     });
     it('should get the currency symbol', () => {
         expect(intl.getCurrencySymbol()).toEqual('$');
+    });
+    it('should compare', async () => {
+        await translation.setLocale({ language: 'it-IT' });
+        const list = ['systemArchitect', 'accountant', 'juniorTechnicalAuthor', 'seniorJavascriptDeveloper', 'accountant'];
+        const orderedList = list.sort((key1: string, key2: string) => {
+            return intl.compare(key1, key2, { usage: 'sort', sensitivity: 'variant' });
+        });
+        expect(orderedList).toEqual(['systemArchitect', 'seniorJavascriptDeveloper', 'accountant', 'accountant', 'juniorTechnicalAuthor']);
+    });
+    it('should get the plural', async () => {
+        await translation.setLocale({ language: 'it-IT' });
+        expect(intl.plural(1)).toEqual('Uno');
+    });
+    it('should list', async () => {
+        await translation.setLocale({ language: 'it-IT' });
+        const list = ['systemArchitect', 'juniorTechnicalAuthor', 'seniorJavascriptDeveloper'];
+        expect(intl.list(list)).toEqual('Progettista IT, Scrittore tecnico Junior e Programmatore Javascript Senior');
     });
 });

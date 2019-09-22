@@ -40,7 +40,7 @@ describe('L10nTranslationService', () => {
     const config: L10nConfig = {
         format: 'language-region',
         providers: [
-            { name: 'i18nHome', asset: i18nHome }
+            { name: 'home', asset: i18nHome }
         ],
         keySeparator: '.',
         defaultLocale: { language: 'en-US' }

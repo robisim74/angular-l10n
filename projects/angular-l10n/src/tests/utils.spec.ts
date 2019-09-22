@@ -12,9 +12,12 @@ import {
     hasTimeZone,
     hasRelativeTimeFormat,
     hasCollator,
-    hasPluralRules
+    hasPluralRules,
+    hasListFormat,
+    toNumber,
+    toDate,
+    parseDigits
 } from '../public-api';
-import { toNumber, toDate, parseDigits } from '../lib/models/utils';
 
 describe('utils', () => {
     describe('validateLanguage', () => {
@@ -150,6 +153,7 @@ describe('utils', () => {
             expect(hasRelativeTimeFormat()).toBe(true);
             expect(hasCollator()).toBe(true);
             expect(hasPluralRules()).toBe(true);
+            expect(hasListFormat()).toBe(true);
         });
     });
     describe('toNumber', () => {
