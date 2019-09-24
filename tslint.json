@@ -65,6 +65,7 @@
       "single",
       "avoid-escape"
     ],
+    "radix": false,
     "trailing-comma": false,
     "component-class-suffix": true,
     "contextual-lifecycle": true,

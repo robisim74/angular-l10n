@@ -29,7 +29,7 @@ import { L10nTranslationService } from './l10n-translation.service';
     /**
      * Formats a date.
      * @param value A date, a number (milliseconds since UTC epoch) or an ISO 8601 string
-     * @param options A l10n or Intl DateTimeFormatOptions object
+     * @param options A L10n or Intl DateTimeFormatOptions object
      * @param language The current language
      * @param timeZone The current time zone
      */
@@ -66,7 +66,7 @@ import { L10nTranslationService } from './l10n-translation.service';
     /**
      * Formats a number.
      * @param value A number or a string
-     * @param options A l10n or Intl NumberFormatOptions object
+     * @param options A L10n or Intl NumberFormatOptions object
      * @param language The current language
      * @param currency The current currency
      */

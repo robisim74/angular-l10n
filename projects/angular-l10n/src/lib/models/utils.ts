@@ -185,9 +185,9 @@ export function parseDigits(digits: string) {
 
     const groups = match.groups;
     return {
-        minimumIntegerDigits: groups.MIN_INT ? parseInt(groups.MIN_INT, 10) : undefined,
-        minimumFractionDigits: groups.MIN_FRACTION ? parseInt(groups.MIN_FRACTION, 10) : undefined,
-        maximumFractionDigits: groups.MAX_FRACTION ? parseInt(groups.MAX_FRACTION, 10) : undefined,
+        minimumIntegerDigits: groups.MIN_INT ? parseInt(groups.MIN_INT) : undefined,
+        minimumFractionDigits: groups.MIN_FRACTION ? parseInt(groups.MIN_FRACTION) : undefined,
+        maximumFractionDigits: groups.MAX_FRACTION ? parseInt(groups.MAX_FRACTION) : undefined,
     };
 }
 

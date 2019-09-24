@@ -7,8 +7,7 @@ import { Observable } from 'rxjs';
 
 import { L10nTranslationService, L10nConfig, L10nTranslationModule, L10nTranslationLoader, L10nProvider } from '../public-api';
 
-
-@Injectable() class L10nHttpTranslationLoader implements L10nTranslationLoader {
+@Injectable() class HttpTranslationLoader implements L10nTranslationLoader {
     private headers = new HttpHeaders({ 'Content-Type': 'application/json' });
     constructor(@Optional() private http: HttpClient) { }
     public getTranslation(language: string, provider: L10nProvider): Observable<any> {
@@ -117,7 +116,7 @@ describe('Features', () => {
                     HttpClientTestingModule,
                     L10nTranslationModule.forRoot(
                         config,
-                        { translationLoader: L10nHttpTranslationLoader }
+                        { translationLoader: HttpTranslationLoader }
                     )
                 ]
             });
@@ -158,7 +157,7 @@ describe('Features', () => {
                     HttpClientTestingModule,
                     L10nTranslationModule.forRoot(
                         config,
-                        { translationLoader: L10nHttpTranslationLoader }
+                        { translationLoader: HttpTranslationLoader }
                     )
                 ]
             });
@@ -206,7 +205,7 @@ describe('Features', () => {
                     HttpClientTestingModule,
                     L10nTranslationModule.forRoot(
                         config,
-                        { translationLoader: L10nHttpTranslationLoader }
+                        { translationLoader: HttpTranslationLoader }
                     )
                 ]
             });
@@ -255,7 +254,7 @@ describe('Features', () => {
                     HttpClientTestingModule,
                     L10nTranslationModule.forRoot(
                         config,
-                        { translationLoader: L10nHttpTranslationLoader }
+                        { translationLoader: HttpTranslationLoader }
                     )
                 ]
             });
@@ -308,7 +307,7 @@ describe('Features', () => {
                     HttpClientTestingModule,
                     L10nTranslationModule.forRoot(
                         config,
-                        { translationLoader: L10nHttpTranslationLoader }
+                        { translationLoader: HttpTranslationLoader }
                     )
                 ]
             });

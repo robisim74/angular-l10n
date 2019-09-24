@@ -26,3 +26,7 @@ export * from './lib/directives/l10n-date.directive';
 export * from './lib/directives/l10n-number.directive';
 export * from './lib/directives/l10n-time-ago.directive';
 export * from './lib/modules/l10n-intl.module';
+export * from './lib/directives/l10n-validate-number.directive';
+export * from './lib/directives/l10n-validate-date.directive';
+export { L10nValidation } from './lib/services/l10n-validation';
+export * from './lib/modules/l10n-validation.module';

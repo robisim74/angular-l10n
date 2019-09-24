@@ -2,7 +2,7 @@ import { NgModule, ModuleWithProviders } from '@angular/core';
 
 import { L10nTranslatePipe, L10nTranslateAsyncPipe } from '../pipes/l10n-translate.pipe';
 import { L10nTranslateDirective } from '../directives/l10n-translate.directive';
-import { L10nConfig, L10nToken, L10N_CONFIG, L10N_LOCALE } from '../models/l10n-config';
+import { L10nConfig, L10nTranslationToken, L10N_CONFIG, L10N_LOCALE } from '../models/l10n-config';
 import { L10nTranslationService } from '../services/l10n-translation.service';
 import { L10nCache } from '../services/l10n-cache';
 import { L10nStorage, L10nDefaultStorage } from '../services/l10n-storage';
@@ -26,7 +26,7 @@ import { L10nLoader, L10nDefaultLoader } from '../services/l10n-loader';
 })
 export class L10nTranslationModule {
 
-    public static forRoot(config: L10nConfig, token: L10nToken = {}): ModuleWithProviders<L10nTranslationModule> {
+    public static forRoot(config: L10nConfig, token: L10nTranslationToken = {}): ModuleWithProviders<L10nTranslationModule> {
         return {
             ngModule: L10nTranslationModule,
             providers: [
