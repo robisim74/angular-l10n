@@ -10,6 +10,7 @@ import { l10nError } from '../models/l10n-error';
 @Injectable() export abstract class L10nTranslationLoader {
 
     /**
+     * This method must contain the logic to get translation data.
      * @param language The current language
      * @param provider The provider of the translations data
      * @return An object of translation data for the language: {key: value}

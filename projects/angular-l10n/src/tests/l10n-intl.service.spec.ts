@@ -7,7 +7,7 @@ describe('L10nIntlService', () => {
     let loader: L10nLoader;
     let intl: L10nIntlService;
     let translation: L10nTranslationService;
-    const i18nAsset = {
+    const mockAsset = {
         'it-IT': {
             systemArchitect: 'Progettista IT',
             accountant: 'Ragioniere',
@@ -19,7 +19,7 @@ describe('L10nIntlService', () => {
     const config: L10nConfig = {
         format: 'language-region',
         providers: [
-            { name: 'asset', asset: i18nAsset }
+            { name: 'asset', asset: mockAsset }
         ],
         defaultLocale: { language: 'en-US', currency: 'USD', timeZone: 'America/Los_Angeles' }
     };

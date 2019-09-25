@@ -3,10 +3,11 @@ import { Observable, BehaviorSubject, Subject, merge, concat } from 'rxjs';
 
 import { L10nLocale } from '../models/types';
 import { L10N_CONFIG, L10nConfig, L10N_LOCALE } from '../models/l10n-config';
-import { formatLanguage, getBrowserLanguage, lookupMatcher, getValue, mergeDeep } from '../models/utils';
+import { formatLanguage, getSchema, getValue, mergeDeep } from '../models/utils';
 import { l10nError } from '../models/l10n-error';
 import { L10nCache } from './l10n-cache';
 import { L10nStorage } from './l10n-storage';
+import { L10nUserLanguage } from './l10n-user-language';
 import { L10nTranslationFallback } from './l10n-translation-fallback';
 import { L10nTranslationLoader } from './l10n-translation-loader';
 import { L10nTranslationHandler } from './l10n-translation-handler';
@@ -28,6 +29,7 @@ import { L10nMissingTranslationHandler } from './l10n-missing-translation-handle
         @Inject(L10N_LOCALE) private locale: L10nLocale,
         private cache: L10nCache,
         private storage: L10nStorage,
+        private userLanguage: L10nUserLanguage,
         private translationFallback: L10nTranslationFallback,
         private translationLoader: L10nTranslationLoader,
         private translationHandler: L10nTranslationHandler,
@@ -94,18 +96,20 @@ import { L10nMissingTranslationHandler } from './l10n-missing-translation-handle
     }
 
     public async init(): Promise<void> {
-        if (!this.config.defaultLocale) Promise.reject(l10nError(L10nTranslationService, 'Missing default locale'));
+        if (!this.config.defaultLocale) return Promise.reject(l10nError(L10nTranslationService, 'Missing default locale'));
+
+        if (this.locale.language) return Promise.resolve();
 
         // Tries to get the locale from the storage.
-        let locale: L10nLocale | null | undefined = await this.storage.read();
-        // Tries to get the locale from the browser.
+        let locale = await this.storage.read();
+        // Tries to get the locale from the user language.
         if (locale == null) {
             if (this.config.schema && this.config.format) {
-                const browserLanguage = getBrowserLanguage();
+                const browserLanguage = await this.userLanguage.get();
                 if (browserLanguage) {
-                    const matching = lookupMatcher(this.config.schema, this.config.format, browserLanguage);
-                    if (matching) {
-                        locale = { language: browserLanguage };
+                    const schema = getSchema(this.config.schema, this.config.format, browserLanguage);
+                    if (schema) {
+                        locale = schema.locale;
                     }
                 }
             }
@@ -116,7 +120,7 @@ import { L10nMissingTranslationHandler } from './l10n-missing-translation-handle
         }
 
         // Loads translation data.
-        if (locale) await this.loadTranslation(locale);
+        await this.loadTranslation(locale);
     }
 
     public async loadTranslation(locale = this.locale): Promise<void> {

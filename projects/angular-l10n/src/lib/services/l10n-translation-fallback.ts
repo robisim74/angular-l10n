@@ -12,6 +12,7 @@ import { L10nTranslationLoader } from './l10n-translation-loader';
 @Injectable() export abstract class L10nTranslationFallback {
 
     /**
+     * This method must contain the logic to get the ordered loaders.
      * @param language The current language
      * @param provider The provider of the translations data
      * @return An array of loaders

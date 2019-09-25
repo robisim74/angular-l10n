@@ -22,7 +22,7 @@ import { L10nTranslationService, L10nConfig, L10nTranslationModule, L10nTranslat
 
 describe('L10nTranslationService', () => {
     let translation: L10nTranslationService;
-    const i18nHome = {
+    const mockAsset = {
         'en-US': {
             home: {
                 title: 'Angular localization',
@@ -39,7 +39,7 @@ describe('L10nTranslationService', () => {
     const config: L10nConfig = {
         format: 'language-region',
         providers: [
-            { name: 'home', asset: i18nHome }
+            { name: 'asset', asset: mockAsset }
         ],
         keySeparator: '.',
         defaultLocale: { language: 'en-US' }
@@ -126,8 +126,8 @@ describe('Features', () => {
         it('should use json files', fakeAsync(() => {
             translation.init();
             tick();
-            const i18nHomeEn = httpMock.expectOne('./assets/i18n/home-en.json?v=1.0.0');
-            i18nHomeEn.flush({
+            const mockHomeEn = httpMock.expectOne('./assets/i18n/home-en.json?v=1.0.0');
+            mockHomeEn.flush({
                 home: {
                     title: 'Angular localization',
                     subtitle: 'The world is small'
@@ -167,15 +167,15 @@ describe('Features', () => {
         it('should use multiple providers', fakeAsync(() => {
             translation.init();
             tick();
-            const i18nHomeEn = httpMock.expectOne('./assets/i18n/home-en.json?v=1.0.0');
-            i18nHomeEn.flush({
+            const mockHomeEn = httpMock.expectOne('./assets/i18n/home-en.json?v=1.0.0');
+            mockHomeEn.flush({
                 home: {
                     title: 'Angular localization',
                     subtitle: 'The world is small'
                 }
             });
-            const i18nAboutEn = httpMock.expectOne('./assets/i18n/about-en.json?v=1.0.0');
-            i18nAboutEn.flush({
+            const mockAboutEn = httpMock.expectOne('./assets/i18n/about-en.json?v=1.0.0');
+            mockAboutEn.flush({
                 about: {
                     title: 'About'
                 }
@@ -215,15 +215,15 @@ describe('Features', () => {
         it('should fallback', fakeAsync(() => {
             translation.init();
             tick();
-            const i18nHomeEn = httpMock.expectOne('./assets/i18n/home-en.json?v=1.0.0');
-            i18nHomeEn.flush({
+            const mockHomeEn = httpMock.expectOne('./assets/i18n/home-en.json?v=1.0.0');
+            mockHomeEn.flush({
                 home: {
                     title: 'Angular localization',
                     subtitle: 'The world is small'
                 }
             });
-            const i18nHomeEnUs = httpMock.expectOne('./assets/i18n/home-en-US.json?v=1.0.0');
-            i18nHomeEnUs.flush({
+            const mockHomeEnUs = httpMock.expectOne('./assets/i18n/home-en-US.json?v=1.0.0');
+            mockHomeEnUs.flush({
                 home: {
                     subtitle: 'The world is small'
                 }
@@ -264,15 +264,15 @@ describe('Features', () => {
         it('should use cache', fakeAsync(() => {
             translation.init();
             tick();
-            const i18nHomeEn = httpMock.expectOne('./assets/i18n/home-en.json?v=1.0.0');
-            i18nHomeEn.flush({
+            const mockHomeEn = httpMock.expectOne('./assets/i18n/home-en.json?v=1.0.0');
+            mockHomeEn.flush({
                 home: {
                     title: 'Angular localization',
                     subtitle: 'The world is small'
                 }
             });
-            const i18nHomeEnUs = httpMock.expectOne('./assets/i18n/home-en-US.json?v=1.0.0');
-            i18nHomeEnUs.flush({
+            const mockHomeEnUs = httpMock.expectOne('./assets/i18n/home-en-US.json?v=1.0.0');
+            mockHomeEnUs.flush({
                 home: {
                     subtitle: 'The world is small'
                 }
@@ -317,15 +317,15 @@ describe('Features', () => {
         it('should add providers dynamically', fakeAsync(() => {
             translation.init();
             tick();
-            const i18nHomeEn = httpMock.expectOne('./assets/i18n/home-en.json?v=1.0.0');
-            i18nHomeEn.flush({
+            const mockHomeEn = httpMock.expectOne('./assets/i18n/home-en.json?v=1.0.0');
+            mockHomeEn.flush({
                 home: {
                     title: 'Angular localization',
                     subtitle: 'The world is small'
                 }
             });
-            const i18nHomeEnUs = httpMock.expectOne('./assets/i18n/home-en-US.json?v=1.0.0');
-            i18nHomeEnUs.flush({
+            const mockHomeEnUs = httpMock.expectOne('./assets/i18n/home-en-US.json?v=1.0.0');
+            mockHomeEnUs.flush({
                 home: {
                     subtitle: 'The world is small'
                 }
@@ -337,18 +337,18 @@ describe('Features', () => {
                     { name: 'about', asset: './assets/i18n/about', options: { version: '1.0.0' } }
                 ];
             }
-            translation.init();
+            translation.loadTranslation();
             tick();
             httpMock.expectNone('./assets/i18n/home-en.json?v=1.0.0');
             httpMock.expectNone('./assets/i18n/home-en-US.json?v=1.0.0');
-            const i18nAboutEn = httpMock.expectOne('./assets/i18n/about-en.json?v=1.0.0');
-            i18nAboutEn.flush({
+            const mockAboutEn = httpMock.expectOne('./assets/i18n/about-en.json?v=1.0.0');
+            mockAboutEn.flush({
                 about: {
                     title: 'About'
                 }
             });
-            const i18nAboutEnUs = httpMock.expectOne('./assets/i18n/about-en-US.json?v=1.0.0');
-            i18nAboutEnUs.flush({
+            const mockAboutEnUs = httpMock.expectOne('./assets/i18n/about-en-US.json?v=1.0.0');
+            mockAboutEnUs.flush({
                 about: {
                     title: 'About'
                 }

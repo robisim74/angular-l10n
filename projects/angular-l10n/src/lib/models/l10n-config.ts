@@ -2,6 +2,7 @@ import { InjectionToken, Type } from '@angular/core';
 
 import { L10nFormat, L10nProvider, L10nLocale, L10nSchema } from './types';
 import { L10nStorage } from '../services/l10n-storage';
+import { L10nUserLanguage } from '../services/l10n-user-language';
 import { L10nTranslationFallback } from '../services/l10n-translation-fallback';
 import { L10nTranslationLoader } from '../services/l10n-translation-loader';
 import { L10nTranslationHandler } from '../services/l10n-translation-handler';
@@ -41,6 +42,10 @@ export interface L10nConfig {
      * Provides the schema of the supported locales.
      */
     schema?: L10nSchema[];
+    /**
+     * If enabled, does not localize the routing for the default locale.
+     */
+    defaultRouting?: boolean;
 }
 
 /**
@@ -58,6 +63,10 @@ export interface L10nTranslationToken {
      * Defines the storage to be used.
      */
     storage?: Type<L10nStorage>;
+    /**
+     * Defines the user language to be used.
+     */
+    userLanguage?: Type<L10nUserLanguage>;
     /**
      * Defines the translation fallback to be used.
      */

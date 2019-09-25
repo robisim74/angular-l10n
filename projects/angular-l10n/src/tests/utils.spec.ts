@@ -2,7 +2,7 @@ import {
     validateLanguage,
     formatLanguage,
     parseLanguage,
-    lookupMatcher,
+    getSchema,
     getValue,
     handleParams,
     mergeDeep,
@@ -61,12 +61,12 @@ describe('utils', () => {
             }));
         });
     });
-    describe('matchLanguage', () => {
-        it('should match the language', () => {
-            let matchingLanguage = lookupMatcher([{ locale: { language: 'en-US' } }, { locale: { language: 'it-IT' } }], 'language', 'en');
-            expect(matchingLanguage).toBe(true);
-            matchingLanguage = lookupMatcher([{ locale: { language: 'en-US' } }, { locale: { language: 'it-IT' } }], 'language', 'fr');
-            expect(matchingLanguage).toBe(false);
+    describe('getSchema', () => {
+        it('should get the schema', () => {
+            const schema = getSchema([{ locale: { language: 'en-US' } }, { locale: { language: 'it-IT' } }], 'language', 'en');
+            expect(schema).toEqual(jasmine.objectContaining({
+                locale: { language: 'en-US' }
+            }));
         });
     });
     describe('getValue', () => {

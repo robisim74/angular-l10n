@@ -56,7 +56,7 @@ import { L10nLoader, L10nTranslationService, L10nConfig, L10nTranslationModule, 
         </p>
     `
 })
-class AssetComponent {
+class MockComponent {
     key = 'title';
     username = 'robisim74';
     messages = ['Test1', 'Test2'];
@@ -71,13 +71,13 @@ class AssetComponent {
 }
 
 describe('L10nTranslateDirective', () => {
-    let fixture: ComponentFixture<AssetComponent>;
-    let comp: AssetComponent;
+    let fixture: ComponentFixture<MockComponent>;
+    let comp: MockComponent;
     let des: DebugElement[];
     let els: HTMLElement[];
     let loader: L10nLoader;
     let translation: L10nTranslationService;
-    const i18nAsset = {
+    const mockAsset = {
         en: {
             title: 'Angular localization',
             subtitle: "It's a small world",
@@ -100,17 +100,17 @@ describe('L10nTranslateDirective', () => {
     const config: L10nConfig = {
         format: 'language',
         providers: [
-            { name: 'asset', asset: i18nAsset }
+            { name: 'asset', asset: mockAsset }
         ],
         defaultLocale: { language: 'en' }
     };
     beforeEach(async () => {
         fixture = TestBed.configureTestingModule({
-            declarations: [AssetComponent],
+            declarations: [MockComponent],
             imports: [
                 L10nTranslationModule.forRoot(config)
             ]
-        }).createComponent(AssetComponent);
+        }).createComponent(MockComponent);
         comp = fixture.componentInstance;
         des = fixture.debugElement.queryAll(By.directive(L10nTranslateDirective));
         els = des.map(de => de.nativeElement);

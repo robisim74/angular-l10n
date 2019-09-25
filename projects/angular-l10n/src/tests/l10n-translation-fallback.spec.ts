@@ -4,7 +4,7 @@ import { L10nTranslationFallback, L10nConfig, L10nTranslationModule } from '../p
 
 describe('L10nTranslationFallback', () => {
     let translationFallback: L10nTranslationFallback;
-    const i18nAsset = {
+    const mockAsset = {
         en: {
             title: 'Angular localization',
             subtitle: 'The world is small'
@@ -23,7 +23,7 @@ describe('L10nTranslationFallback', () => {
         translationFallback = TestBed.inject(L10nTranslationFallback);
     });
     it('should get the loaders', () => {
-        const loaders = translationFallback.get('en-US', { name: 'asset', asset: i18nAsset });
+        const loaders = translationFallback.get('en-US', { name: 'asset', asset: mockAsset });
         expect(loaders.length).toEqual(2);
         loaders[0].subscribe({
             next: (value) => expect(value).toEqual(jasmine.objectContaining({

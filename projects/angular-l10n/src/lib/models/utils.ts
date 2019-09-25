@@ -8,9 +8,8 @@ export function validateLanguage(language: string): boolean {
         .test(language);
 }
 
-export function formatLanguage(language: string, format?: L10nFormat): string {
+export function formatLanguage(language: string, format: L10nFormat = 'language'): string {
     if (!validateLanguage(language)) throw l10nError(formatLanguage, 'Invalid language');
-    if (format == null) return language;
 
     const [, LANGUAGE = '', SCRIPT = '', REGION = ''] = language.match(/^([a-z]{2,3})(\-[A-Z][a-z]{3})?(\-[A-Z]{2})?/) || [];
     switch (format) {
@@ -51,8 +50,8 @@ export function getBrowserLanguage(): string | null {
     return browserLanguage;
 }
 
-export function lookupMatcher(schema: L10nSchema[], format: L10nFormat, language: string): boolean {
-    return schema.find((element) => formatLanguage(element.locale.language, format) === language) !== undefined;
+export function getSchema(schema: L10nSchema[], format: L10nFormat, language: string): L10nSchema | undefined {
+    return schema.find(element => formatLanguage(element.locale.language, format) === language);
 }
 
 export function getValue(key: string, data: any, keySeparator?: string): string | any | null {

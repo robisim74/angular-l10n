@@ -9,7 +9,7 @@ import { L10nLoader, L10nTranslationService, L10nConfig, L10nTranslationModule, 
         <p>{{ 'title' | translate:locale.language }}</p>
     `
 })
-class AssetComponent {
+class MockComponent {
     constructor(@Inject(L10N_LOCALE) public locale: L10nLocale) { }
 }
 
@@ -19,14 +19,14 @@ class AssetComponent {
     `,
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-class AssetOnPushComponent { }
+class MockOnPushComponent { }
 
 describe('L10nTranslatePipe', () => {
-    let fixture: ComponentFixture<AssetComponent>;
+    let fixture: ComponentFixture<MockComponent>;
     let el: HTMLElement;
     let loader: L10nLoader;
     let translation: L10nTranslationService;
-    const i18nAsset = {
+    const mockAsset = {
         en: {
             title: 'Angular localization'
         },
@@ -37,17 +37,17 @@ describe('L10nTranslatePipe', () => {
     const config: L10nConfig = {
         format: 'language',
         providers: [
-            { name: 'asset', asset: i18nAsset }
+            { name: 'asset', asset: mockAsset }
         ],
         defaultLocale: { language: 'en' }
     };
     beforeEach(async () => {
         fixture = TestBed.configureTestingModule({
-            declarations: [AssetComponent],
+            declarations: [MockComponent],
             imports: [
                 L10nTranslationModule.forRoot(config)
             ]
-        }).createComponent(AssetComponent);
+        }).createComponent(MockComponent);
         el = fixture.nativeElement.querySelector('p');
         loader = TestBed.inject(L10nLoader);
         translation = TestBed.inject(L10nTranslationService);
@@ -65,11 +65,11 @@ describe('L10nTranslatePipe', () => {
 });
 
 describe('L10nTranslateAsyncPipe', () => {
-    let fixture: ComponentFixture<AssetOnPushComponent>;
+    let fixture: ComponentFixture<MockOnPushComponent>;
     let el: HTMLElement;
     let loader: L10nLoader;
     let translation: L10nTranslationService;
-    const i18nAsset = {
+    const mockAsset = {
         en: {
             title: 'Angular localization'
         },
@@ -80,18 +80,18 @@ describe('L10nTranslateAsyncPipe', () => {
     const config: L10nConfig = {
         format: 'language',
         providers: [
-            { name: 'asset', asset: i18nAsset }
+            { name: 'asset', asset: mockAsset }
         ],
         keySeparator: '.',
         defaultLocale: { language: 'en' }
     };
     beforeEach(async () => {
         fixture = TestBed.configureTestingModule({
-            declarations: [AssetOnPushComponent],
+            declarations: [MockOnPushComponent],
             imports: [
                 L10nTranslationModule.forRoot(config)
             ]
-        }).createComponent(AssetOnPushComponent);
+        }).createComponent(MockOnPushComponent);
         el = fixture.nativeElement.querySelector('p');
         loader = TestBed.inject(L10nLoader);
         translation = TestBed.inject(L10nTranslationService);
