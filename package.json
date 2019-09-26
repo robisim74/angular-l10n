@@ -9,7 +9,9 @@
     "build:app": "ng build angular-l10n-app --prod",
     "test": "ng test angular-l10n",
     "lint": "ng lint",
-    "e2e": "ng e2e"
+    "e2e": "ng e2e",
+    "build:docs": "npx compodoc -p projects/angular-l10n/tsconfig.lib.prod.json -d docs -n \"Angular l10n Specification\" --disableCoverage -a images",
+    "serve:docs": "npx compodoc -d docs -s"
   },
   "private": true,
   "dependencies": {
@@ -34,6 +36,7 @@
     "@types/node": "^12.7.3",
     "@types/jasmine": "^3.4.0",
     "@types/jasminewd2": "^2.0.6",
+    "@compodoc/compodoc": "^1.1.10",
     "codelyzer": "^5.1.0",
     "jasmine-core": "^3.4.0",
     "jasmine-spec-reporter": "^4.2.1",
