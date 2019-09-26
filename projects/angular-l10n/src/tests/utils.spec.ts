@@ -63,7 +63,7 @@ describe('utils', () => {
     });
     describe('getSchema', () => {
         it('should get the schema', () => {
-            const schema = getSchema([{ locale: { language: 'en-US' } }, { locale: { language: 'it-IT' } }], 'language', 'en');
+            const schema = getSchema([{ locale: { language: 'en-US' } }, { locale: { language: 'it-IT' } }], 'en', 'language');
             expect(schema).toEqual(jasmine.objectContaining({
                 locale: { language: 'en-US' }
             }));

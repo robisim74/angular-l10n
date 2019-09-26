@@ -64,9 +64,9 @@ import { L10nTranslationService } from './l10n-translation.service';
 
         const segment = this.getLocalizedSegment(path);
         if (segment != null) {
-            if (this.config.schema && this.config.format) {
+            if (this.config.schema) {
                 const language = segment.replace(/\//g, '');
-                const schema = getSchema(this.config.schema, this.config.format, language);
+                const schema = getSchema(this.config.schema, language, this.config.format);
                 if (schema) {
                     await this.translation.setLocale(schema.locale);
                 }

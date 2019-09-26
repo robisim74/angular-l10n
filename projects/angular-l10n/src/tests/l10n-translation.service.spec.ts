@@ -10,7 +10,7 @@ import { L10nTranslationService, L10nConfig, L10nTranslationModule, L10nTranslat
 @Injectable() class HttpTranslationLoader implements L10nTranslationLoader {
     private headers = new HttpHeaders({ 'Content-Type': 'application/json' });
     constructor(@Optional() private http: HttpClient) { }
-    public getTranslation(language: string, provider: L10nProvider): Observable<any> {
+    public get(language: string, provider: L10nProvider): Observable<any> {
         const url = `${provider.asset}-${language}.json`;
         const options = {
             headers: this.headers,

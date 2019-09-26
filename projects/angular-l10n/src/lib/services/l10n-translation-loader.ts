@@ -15,13 +15,13 @@ import { l10nError } from '../models/l10n-error';
      * @param provider The provider of the translations data
      * @return An object of translation data for the language: {key: value}
      */
-    public abstract getTranslation(language: string, provider: L10nProvider): Observable<any>;
+    public abstract get(language: string, provider: L10nProvider): Observable<any>;
 
 }
 
 @Injectable() export class L10nDefaultTranslationLoader implements L10nTranslationLoader {
 
-    public getTranslation(language: string, provider: L10nProvider): Observable<any> {
+    public get(language: string, provider: L10nProvider): Observable<any> {
         return provider.asset[language] ?
             of(provider.asset[language]) :
             throwError(l10nError(L10nDefaultTranslationLoader, 'Asset not found'));

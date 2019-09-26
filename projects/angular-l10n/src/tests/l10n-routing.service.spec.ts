@@ -117,10 +117,9 @@ describe('L10nRoutingService', () => {
                 tick();
                 router.initialNavigation();
                 tick();
-                expect(location.path()).toBe('/it-IT/mock1');
-                /* expect(translation.getLocale()).toEqual(jasmine.objectContaining({
+                expect(translation.getLocale()).toEqual(jasmine.objectContaining({
                     language: 'it-IT', currency: 'EUR'
-                })); */
+                }));
             });
         }));
     });

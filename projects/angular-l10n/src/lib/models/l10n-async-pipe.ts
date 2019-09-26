@@ -8,7 +8,6 @@ export class L10nAsyncPipe implements OnDestroy {
     protected onChanges: Subscription;
 
     constructor(protected translation: L10nTranslationService, protected cdr: ChangeDetectorRef) {
-
         this.onChanges = this.translation.onChange().subscribe({
             next: () => this.cdr.markForCheck()
         });

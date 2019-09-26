@@ -44,10 +44,10 @@ import { L10nTranslationLoader } from './l10n-translation-loader';
             if (this.config.cache) {
                 loaders.push(
                     this.cache.read(`${provider.name}-${fallbackLanguage}`,
-                        this.translationLoader.getTranslation(fallbackLanguage, provider))
+                        this.translationLoader.get(fallbackLanguage, provider))
                 );
             } else {
-                loaders.push(this.translationLoader.getTranslation(fallbackLanguage, provider));
+                loaders.push(this.translationLoader.get(fallbackLanguage, provider));
             }
         }
         return loaders;

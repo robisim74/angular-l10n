@@ -65,7 +65,7 @@ import { L10nMissingTranslationHandler } from './l10n-missing-translation-handle
      * Translates a key or an array of keys.
      * @param keys The key or an array of keys to be translated
      * @param params Optional parameters contained in the key
-     * @param language The current language is used by default
+     * @param language The current language
      * @return The translated value or an object: {key: value}
      */
     public translate(
@@ -89,7 +89,7 @@ import { L10nMissingTranslationHandler } from './l10n-missing-translation-handle
     /**
      * Checks if a translation exists.
      * @param key The key to be tested
-     * @param language The current language is used by default
+     * @param language The current language
      */
     public has(key: string, language = formatLanguage(this.locale.language, this.config.format)): boolean {
         return getValue(key, this.data[language], this.config.keySeparator) !== null;
@@ -102,12 +102,12 @@ import { L10nMissingTranslationHandler } from './l10n-missing-translation-handle
 
         // Tries to get the locale from the storage.
         let locale = await this.storage.read();
-        // Tries to get the locale from the user language.
+        // Tries to get the locale through the user language.
         if (locale == null) {
-            if (this.config.schema && this.config.format) {
+            if (this.config.schema) {
                 const browserLanguage = await this.userLanguage.get();
                 if (browserLanguage) {
-                    const schema = getSchema(this.config.schema, this.config.format, browserLanguage);
+                    const schema = getSchema(this.config.schema, browserLanguage, this.config.format);
                     if (schema) {
                         locale = schema.locale;
                     }
@@ -155,10 +155,10 @@ import { L10nMissingTranslationHandler } from './l10n-missing-translation-handle
                 } else {
                     if (this.config.cache) {
                         lazyLoaders.push(
-                            this.cache.read(`${provider.name}-${language}`, this.translationLoader.getTranslation(language, provider))
+                            this.cache.read(`${provider.name}-${language}`, this.translationLoader.get(language, provider))
                         );
                     } else {
-                        lazyLoaders.push(this.translationLoader.getTranslation(language, provider));
+                        lazyLoaders.push(this.translationLoader.get(language, provider));
                     }
                 }
             }

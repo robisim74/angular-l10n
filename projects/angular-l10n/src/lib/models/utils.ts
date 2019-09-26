@@ -50,7 +50,7 @@ export function getBrowserLanguage(): string | null {
     return browserLanguage;
 }
 
-export function getSchema(schema: L10nSchema[], format: L10nFormat, language: string): L10nSchema | undefined {
+export function getSchema(schema: L10nSchema[], language: string, format: L10nFormat = 'language'): L10nSchema | undefined {
     return schema.find(element => formatLanguage(element.locale.language, format) === language);
 }
 

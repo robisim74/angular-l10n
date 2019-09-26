@@ -3,14 +3,13 @@
  * explores the neighbor nodes first, before moving to the next level neighbors.
  * Time complexity: between O(1) and O(|V|^2).
  */
+export function getTargetNode(rootNode: any): any {
+    return walk(rootNode);
+}
 
 const SELECTOR = new RegExp('^l10n|translate');
 
 const MAX_DEPTH = 10;
-
-export function getTargetNode(rootNode: any): any {
-    return walk(rootNode);
-}
 
 function walk(rootNode: any): any {
     const queue: any[] = [];
