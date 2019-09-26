@@ -61,3 +61,11 @@ import 'zone.js/dist/zone';  // Included with Angular CLI.
 /***************************************************************************************************
  * APPLICATION IMPORTS
  */
+
+/**
+ * Intl RelativeTimeFormat
+ */
+import 'intl-pluralrules';
+import '@formatjs/intl-relativetimeformat/polyfill';
+import '@formatjs/intl-relativetimeformat/dist/locale-data/en';
+import '@formatjs/intl-relativetimeformat/dist/locale-data/it';

@@ -2,10 +2,12 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
 import { HomeComponent } from './home/home.component';
+import { OnPushComponent } from './on-push/on-push.component';
 
 const routes: Routes = [
     { path: '', redirectTo: 'home', pathMatch: 'full' },
     { path: 'home', component: HomeComponent },
+    { path: 'on-push', component: OnPushComponent },
     {
         path: 'lazy', loadChildren: () => import('./lazy/lazy.module').then(m => m.LazyModule)
     },
