@@ -22,7 +22,7 @@ import { L10nMissingTranslationHandler } from './l10n-missing-translation-handle
 
     private translation = new BehaviorSubject<L10nLocale>(this.locale);
 
-    private error = new Subject<any>();
+    private error = new BehaviorSubject<any>(null);
 
     constructor(
         @Inject(L10N_CONFIG) private config: L10nConfig,
@@ -93,6 +93,16 @@ import { L10nMissingTranslationHandler } from './l10n-missing-translation-handle
      */
     public has(key: string, language = formatLanguage(this.locale.language, this.config.format)): boolean {
         return getValue(key, this.data[language], this.config.keySeparator) !== null;
+    }
+
+    /**
+     * Gets the current language direction.
+     */
+    public getLanguageDirection(): 'ltr' | 'rtl' | undefined {
+        if (this.config.schema) {
+            const schema = getSchema(this.config.schema, this.locale.language, this.config.format);
+            if (schema) return schema.dir;
+        }
     }
 
     public async init(): Promise<void> {

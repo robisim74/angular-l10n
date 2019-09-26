@@ -42,7 +42,11 @@ describe('L10nTranslationService', () => {
             { name: 'asset', asset: mockAsset }
         ],
         keySeparator: '.',
-        defaultLocale: { language: 'en-US' }
+        defaultLocale: { language: 'en-US' },
+        schema: [
+            { locale: { language: 'en-US' }, dir: 'ltr' },
+            { locale: { language: 'it-IT' }, dir: 'ltr' }
+        ]
     };
     beforeEach(async () => {
         TestBed.configureTestingModule({
@@ -70,10 +74,10 @@ describe('L10nTranslationService', () => {
         await translation.setLocale({ language: 'en-US' });
     });
     it('should fire onError', async () => {
+        await translation.setLocale({ language: 'fr-FR' });
         translation.onError().subscribe({
             next: (value) => expect(value).toEqual('angular-l10n (L10nDefaultTranslationLoader): Asset not found')
         });
-        await translation.setLocale({ language: 'fr-FR' });
         expect(translation.getLocale()).toEqual(jasmine.objectContaining({ language: 'fr-FR' }));
     });
     it('should load the translation', async () => {
@@ -95,6 +99,10 @@ describe('L10nTranslationService', () => {
         await translation.setLocale({ language: 'it-IT' });
         expect(translation.has('home.title')).toBe(true);
         expect(translation.has('home.text')).toBe(false);
+    });
+    it('should get the current language direction', async () => {
+        await translation.setLocale({ language: 'it-IT' });
+        expect(translation.getLanguageDirection()).toEqual('ltr');
     });
 });
 
