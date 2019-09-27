@@ -25,17 +25,14 @@ export function formatLanguage(language: string, format: L10nFormat): string {
 }
 
 export function parseLanguage(language: string) {
-    const match = language
-        .match(/^(?<LANGUAGE>[a-z]{2,3})(\-(?<SCRIPT>[A-Z][a-z]{3}))?(\-(?<REGION>[A-Z]{2}))?(?<EXTENSION>-u.+)?$/);
+    const groups = language.match(/^([a-z]{2,3})(\-([A-Z][a-z]{3}))?(\-([A-Z]{2}))?(-u.+)?$/);
+    if (groups == null) throw l10nError(parseLanguage, 'Invalid language');
 
-    if (!match || !match.groups) throw l10nError(parseLanguage, 'Invalid language');
-
-    const groups = match.groups;
     return {
-        language: groups.LANGUAGE,
-        script: groups.SCRIPT,
-        region: groups.REGION,
-        extension: groups.EXTENSION
+        language: groups[1],
+        script: groups[3],
+        region: groups[5],
+        extension: groups[6]
     };
 }
 
@@ -171,14 +168,13 @@ export const PARSE_TIME_STYLE: { [format: string]: any } = {
 };
 
 export function parseDigits(digits: string) {
-    const match = digits.match(/^(?<MIN_INT>\d+)?\.((?<MIN_FRACTION>\d+)(\-(?<MAX_FRACTION>\d+))?)?$/);
-    if (!match || !match.groups) throw l10nError(parseDigits, 'Invalid digits');
+    const groups = digits.match(/^(\d+)?\.((\d+)(\-(\d+))?)?$/);
+    if (groups == null) throw l10nError(parseDigits, 'Invalid digits');
 
-    const groups = match.groups;
     return {
-        minimumIntegerDigits: groups.MIN_INT ? parseInt(groups.MIN_INT) : undefined,
-        minimumFractionDigits: groups.MIN_FRACTION ? parseInt(groups.MIN_FRACTION) : undefined,
-        maximumFractionDigits: groups.MAX_FRACTION ? parseInt(groups.MAX_FRACTION) : undefined,
+        minimumIntegerDigits: groups[1] ? parseInt(groups[1]) : undefined,
+        minimumFractionDigits: groups[3] ? parseInt(groups[3]) : undefined,
+        maximumFractionDigits: groups[5] ? parseInt(groups[5]) : undefined,
     };
 }
 
