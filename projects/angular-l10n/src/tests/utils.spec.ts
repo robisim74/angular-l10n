@@ -39,7 +39,7 @@ describe('utils', () => {
             expect(language).toEqual('en-US');
             language = formatLanguage('en-Zzzz-US', 'language-script-region');
             expect(language).toEqual('en-Zzzz-US');
-            language = formatLanguage('en');
+            language = formatLanguage('en', 'language');
             expect(language).toEqual('en');
             language = formatLanguage('en', 'language-region');
             expect(language).toEqual('en');
@@ -71,7 +71,7 @@ describe('utils', () => {
     });
     describe('getValue', () => {
         it('should get the value', () => {
-            let value = getValue('KEY1', { KEY1: 'key1', KEY2: 'key2' });
+            let value = getValue('KEY1', { KEY1: 'key1', KEY2: 'key2' }, '.');
             expect(value).toEqual('key1');
             value = getValue('SUBKEY1.AA', { KEY1: 'key1', SUBKEY1: { AA: 'aa' } }, '.');
             expect(value).toEqual('aa');

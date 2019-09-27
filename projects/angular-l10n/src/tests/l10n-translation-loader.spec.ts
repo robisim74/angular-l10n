@@ -9,7 +9,15 @@ describe('L10nTranslationLoader', () => {
             title: 'Angular localization'
         }
     };
-    const config: L10nConfig = {};
+    const config: L10nConfig = {
+        format: 'language',
+        providers: [],
+        keySeparator: '.',
+        defaultLocale: { language: 'en' },
+        schema: [
+            { locale: { language: 'en' } }
+        ]
+    };
     beforeEach(() => {
         TestBed.configureTestingModule({
             imports: [

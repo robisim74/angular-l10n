@@ -5,7 +5,15 @@ import { L10nLoader, L10nTranslationService, L10nConfig, L10nTranslationModule }
 describe('L10nLoader', () => {
     let loader: L10nLoader;
     let translation: L10nTranslationService;
-    const config: L10nConfig = {};
+    const config: L10nConfig = {
+        format: 'language',
+        providers: [],
+        keySeparator: '.',
+        defaultLocale: { language: 'en' },
+        schema: [
+            { locale: { language: 'en' } }
+        ]
+    };
     beforeEach(() => {
         TestBed.configureTestingModule({
             imports: [

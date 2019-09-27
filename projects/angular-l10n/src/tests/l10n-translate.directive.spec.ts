@@ -11,10 +11,8 @@ import { L10nLoader, L10nTranslationService, L10nConfig, L10nTranslationModule, 
         <p l10nTranslate>
             {{ key }}
         </p>
-
         <p><em>should render translated text using parameters</em></p>
         <p [params]="{ user: username, NoMessages: messages.length }" l10nTranslate>userNotifications</p>
-
         <p><em>should search the key</em></p>
         <p l10nTranslate>
             <em l10nTranslate>title</em>
@@ -32,10 +30,8 @@ import { L10nLoader, L10nTranslationService, L10nConfig, L10nTranslationModule, 
                 title
             </div>
         </a>
-
         <p><em>should use value attribute</em></p>
         <input type="button" [value]="value" l10nTranslate>
-
         <p><em>should not use value attribute</em></p>
         <select>
             <option [value]="value" l10nTranslate>select</option>
@@ -44,10 +40,8 @@ import { L10nLoader, L10nTranslationService, L10nConfig, L10nTranslationModule, 
             <option value="50">50</option>
             <option value="100">100</option>
         </select>
-
         <p><em>should use innerHTML attribute</em></p>
         <p [innerHTML]="innerHTML" l10nTranslate></p>
-
         <p><em>should render translated attributes</em></p>
         <p l10n-title title="title" l10nTranslate></p>
         <p l10n-title title="userNotifications" [params]="{ user: username, NoMessages: messages.length }" l10nTranslate></p>
@@ -102,7 +96,11 @@ describe('L10nTranslateDirective', () => {
         providers: [
             { name: 'asset', asset: mockAsset }
         ],
-        defaultLocale: { language: 'en' }
+        keySeparator: '.',
+        defaultLocale: { language: 'en' },
+        schema: [
+            { locale: { language: 'en' } }
+        ]
     };
     beforeEach(async () => {
         fixture = TestBed.configureTestingModule({

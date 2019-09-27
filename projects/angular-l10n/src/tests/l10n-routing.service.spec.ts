@@ -1,5 +1,4 @@
 import { TestBed, ComponentFixture, fakeAsync, tick } from '@angular/core/testing';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { SpyLocation } from '@angular/common/testing';
 
@@ -30,6 +29,8 @@ describe('L10nRoutingService', () => {
         let spyLocation: SpyLocation;
         const config: L10nConfig = {
             format: 'language-region',
+            providers: [],
+            keySeparator: '.',
             defaultLocale: { language: 'en-US', currency: 'USD' },
             schema: [
                 { locale: { language: 'en-US', currency: 'USD' } },
@@ -132,6 +133,8 @@ describe('L10nRoutingService', () => {
         const config: L10nConfig = {
             format: 'language-region',
             defaultLocale: { language: 'en-US', currency: 'USD' },
+            providers: [],
+            keySeparator: '.',
             schema: [
                 { locale: { language: 'en-US', currency: 'USD' } },
                 { locale: { language: 'it-IT', currency: 'EUR' } },

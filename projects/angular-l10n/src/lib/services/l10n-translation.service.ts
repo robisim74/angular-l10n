@@ -99,28 +99,22 @@ import { L10nMissingTranslationHandler } from './l10n-missing-translation-handle
      * Gets the current language direction.
      */
     public getLanguageDirection(): 'ltr' | 'rtl' | undefined {
-        if (this.config.schema) {
-            const schema = getSchema(this.config.schema, this.locale.language, this.config.format);
-            if (schema) return schema.dir;
-        }
+        const schema = getSchema(this.config.schema, this.locale.language, this.config.format);
+        if (schema) return schema.dir;
     }
 
     public async init(): Promise<void> {
-        if (!this.config.defaultLocale) return Promise.reject(l10nError(L10nTranslationService, 'Missing default locale'));
-
         if (this.locale.language) return Promise.resolve();
 
         // Tries to get the locale from the storage.
         let locale = await this.storage.read();
         // Tries to get the locale through the user language.
         if (locale == null) {
-            if (this.config.schema) {
-                const browserLanguage = await this.userLanguage.get();
-                if (browserLanguage) {
-                    const schema = getSchema(this.config.schema, browserLanguage, this.config.format);
-                    if (schema) {
-                        locale = schema.locale;
-                    }
+            const browserLanguage = await this.userLanguage.get();
+            if (browserLanguage) {
+                const schema = getSchema(this.config.schema, browserLanguage, this.config.format);
+                if (schema) {
+                    locale = schema.locale;
                 }
             }
         }
@@ -155,21 +149,19 @@ import { L10nMissingTranslationHandler } from './l10n-missing-translation-handle
     }
 
     private getTranslation(language: string): Observable<any>[] {
+        const lazyLoaders: Observable<any>[] = [];
         let loaders: Observable<any>[] = [];
 
-        const lazyLoaders: Observable<any>[] = [];
-        if (this.config.providers) {
-            for (const provider of this.config.providers) {
-                if (this.config.fallback) {
-                    loaders = loaders.concat(this.translationFallback.get(language, provider));
+        for (const provider of this.config.providers) {
+            if (this.config.fallback) {
+                loaders = loaders.concat(this.translationFallback.get(language, provider));
+            } else {
+                if (this.config.cache) {
+                    lazyLoaders.push(
+                        this.cache.read(`${provider.name}-${language}`, this.translationLoader.get(language, provider))
+                    );
                 } else {
-                    if (this.config.cache) {
-                        lazyLoaders.push(
-                            this.cache.read(`${provider.name}-${language}`, this.translationLoader.get(language, provider))
-                        );
-                    } else {
-                        lazyLoaders.push(this.translationLoader.get(language, provider));
-                    }
+                    lazyLoaders.push(this.translationLoader.get(language, provider));
                 }
             }
         }

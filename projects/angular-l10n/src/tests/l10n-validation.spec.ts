@@ -4,7 +4,15 @@ import { L10nValidation, L10nConfig, L10nTranslationModule, L10nValidationModule
 
 describe('L10nValidation', () => {
     let validation: L10nValidation;
-    const config: L10nConfig = {};
+    const config: L10nConfig = {
+        format: 'language',
+        providers: [],
+        keySeparator: '.',
+        defaultLocale: { language: 'en' },
+        schema: [
+            { locale: { language: 'en' } }
+        ]
+    };
     beforeEach(() => {
         TestBed.configureTestingModule({
             imports: [

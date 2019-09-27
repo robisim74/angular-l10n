@@ -39,7 +39,11 @@ describe('L10nTranslatePipe', () => {
         providers: [
             { name: 'asset', asset: mockAsset }
         ],
-        defaultLocale: { language: 'en' }
+        keySeparator: '.',
+        defaultLocale: { language: 'en' },
+        schema: [
+            { locale: { language: 'en' } }
+        ]
     };
     beforeEach(async () => {
         fixture = TestBed.configureTestingModule({
@@ -83,7 +87,10 @@ describe('L10nTranslateAsyncPipe', () => {
             { name: 'asset', asset: mockAsset }
         ],
         keySeparator: '.',
-        defaultLocale: { language: 'en' }
+        defaultLocale: { language: 'en' },
+        schema: [
+            { locale: { language: 'en' } }
+        ]
     };
     beforeEach(async () => {
         fixture = TestBed.configureTestingModule({

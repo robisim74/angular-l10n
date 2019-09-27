@@ -64,12 +64,10 @@ import { L10nTranslationService } from './l10n-translation.service';
 
         const segment = this.getLocalizedSegment(path);
         if (segment != null) {
-            if (this.config.schema) {
-                const language = segment.replace(/\//g, '');
-                const schema = getSchema(this.config.schema, language, this.config.format);
-                if (schema) {
-                    await this.translation.setLocale(schema.locale);
-                }
+            const language = segment.replace(/\//g, '');
+            const schema = getSchema(this.config.schema, language, this.config.format);
+            if (schema) {
+                await this.translation.setLocale(schema.locale);
             }
         }
     }
@@ -117,14 +115,12 @@ import { L10nTranslationService } from './l10n-translation.service';
     }
 
     private getLocalizedSegment(path: string): string | null {
-        if (this.config.schema) {
-            for (const element of this.config.schema) {
-                const language = formatLanguage(element.locale.language, this.config.format);
-                const regex = new RegExp(`(\/${language}\/)|(\/${language}$)`);
-                const segments = path.match(regex);
-                if (segments != null) {
-                    return segments[0];
-                }
+        for (const element of this.config.schema) {
+            const language = formatLanguage(element.locale.language, this.config.format);
+            const regex = new RegExp(`(\/${language}\/)|(\/${language}$)`);
+            const segments = path.match(regex);
+            if (segments != null) {
+                return segments[0];
             }
         }
         return null;
@@ -135,7 +131,7 @@ import { L10nTranslationService } from './l10n-translation.service';
     }
 
     private isDefaultRouting(): boolean {
-        if (!this.config.defaultLocale || !this.config.defaultRouting) return false;
+        if (!this.config.defaultRouting) return false;
 
         return formatLanguage(this.locale.language, this.config.format) ===
             formatLanguage(this.config.defaultLocale.language, this.config.format);

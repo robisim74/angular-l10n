@@ -4,7 +4,15 @@ import { L10nTranslationHandler, L10nConfig, L10nTranslationModule } from '../pu
 
 describe('L10nTranslationHandler', () => {
     let translationHandler: L10nTranslationHandler;
-    const config: L10nConfig = {};
+    const config: L10nConfig = {
+        format: 'language',
+        providers: [],
+        keySeparator: '.',
+        defaultLocale: { language: 'en' },
+        schema: [
+            { locale: { language: 'en' } }
+        ]
+    };
     beforeEach(() => {
         TestBed.configureTestingModule({
             imports: [

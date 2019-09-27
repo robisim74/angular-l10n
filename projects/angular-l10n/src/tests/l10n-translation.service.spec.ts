@@ -116,7 +116,10 @@ describe('Features', () => {
                 { name: 'home', asset: './assets/i18n/home', options: { version: '1.0.0' } }
             ],
             keySeparator: '.',
-            defaultLocale: { language: 'en' }
+            defaultLocale: { language: 'en' },
+            schema: [
+                { locale: { language: 'en' } }
+            ]
         };
         beforeEach(() => {
             TestBed.configureTestingModule({
@@ -157,7 +160,10 @@ describe('Features', () => {
                 { name: 'about', asset: './assets/i18n/about', options: { version: '1.0.0' } },
             ],
             keySeparator: '.',
-            defaultLocale: { language: 'en' }
+            defaultLocale: { language: 'en' },
+            schema: [
+                { locale: { language: 'en' } }
+            ]
         };
         beforeEach(() => {
             TestBed.configureTestingModule({
@@ -205,7 +211,10 @@ describe('Features', () => {
             ],
             fallback: true,
             keySeparator: '.',
-            defaultLocale: { language: 'en-US' }
+            defaultLocale: { language: 'en-US' },
+            schema: [
+                { locale: { language: 'en-US' } }
+            ]
         };
         beforeEach(() => {
             TestBed.configureTestingModule({
@@ -254,7 +263,10 @@ describe('Features', () => {
             fallback: true,
             cache: true,
             keySeparator: '.',
-            defaultLocale: { language: 'en-US' }
+            defaultLocale: { language: 'en-US' },
+            schema: [
+                { locale: { language: 'en-US' } }
+            ]
         };
         beforeEach(() => {
             TestBed.configureTestingModule({
@@ -307,7 +319,10 @@ describe('Features', () => {
             fallback: true,
             cache: true,
             keySeparator: '.',
-            defaultLocale: { language: 'en-US' }
+            defaultLocale: { language: 'en-US' },
+            schema: [
+                { locale: { language: 'en-US' } }
+            ]
         };
         beforeEach(() => {
             TestBed.configureTestingModule({

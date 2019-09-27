@@ -15,11 +15,11 @@ export interface L10nConfig {
      * E.g.
      * format: 'language-region';
      */
-    format?: L10nFormat;
+    format: L10nFormat;
     /**
      * The providers of the translations data.
      */
-    providers?: L10nProvider[];
+    providers: L10nProvider[];
     /**
      * Translation fallback.
      */
@@ -31,17 +31,17 @@ export interface L10nConfig {
     /**
      * Sets key separator.
      */
-    keySeparator?: string;
+    keySeparator: string;
     /**
      * Defines the default locale to be used.
      * E.g.
      * defaultLocale: { language: 'en-US', currency: 'USD };
      */
-    defaultLocale?: L10nLocale;
+    defaultLocale: L10nLocale;
     /**
      * Provides the schema of the supported locales.
      */
-    schema?: L10nSchema[];
+    schema: L10nSchema[];
     /**
      * If enabled, does not localize the routing for the default locale.
      */

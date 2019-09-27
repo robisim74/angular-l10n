@@ -21,7 +21,11 @@ describe('L10nIntlService', () => {
         providers: [
             { name: 'asset', asset: mockAsset }
         ],
-        defaultLocale: { language: 'en-US', currency: 'USD', timeZone: 'America/Los_Angeles' }
+        keySeparator: '.',
+        defaultLocale: { language: 'en-US', currency: 'USD', timeZone: 'America/Los_Angeles' },
+        schema: [
+            { locale: { language: 'en-US', currency: 'USD', timeZone: 'America/Los_Angeles' } }
+        ]
     };
     beforeEach(async () => {
         TestBed.configureTestingModule({

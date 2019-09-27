@@ -60,7 +60,13 @@ describe('L10nValidateNumberDirective', () => {
     let comp: MockComponent;
     let loader: L10nLoader;
     const config: L10nConfig = {
+        format: 'language-region',
+        providers: [],
+        keySeparator: '.',
         defaultLocale: { language: 'it-IT' },
+        schema: [
+            { locale: { language: 'it-IT' } }
+        ]
     };
     beforeEach(async () => {
         fixture = TestBed.configureTestingModule({
