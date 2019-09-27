@@ -14,8 +14,6 @@ import {
     hasListFormat,
     toDate,
     toNumber,
-    isL10nDateTimeFormatOptions,
-    isL10nNumberFormatOptions,
     PARSE_DATE_STYLE,
     PARSE_TIME_STYLE,
     parseDigits
@@ -35,7 +33,7 @@ import { L10nTranslationService } from './l10n-translation.service';
      */
     public formatDate(
         value: any,
-        options?: L10nDateTimeFormatOptions | Intl.DateTimeFormatOptions,
+        options?: L10nDateTimeFormatOptions,
         language = this.locale.language,
         timeZone = this.locale.timeZone
     ): string {
@@ -45,18 +43,18 @@ import { L10nTranslationService } from './l10n-translation.service';
 
         let dateTimeFormatOptions: Intl.DateTimeFormatOptions = {};
         if (options) {
-            if (isL10nDateTimeFormatOptions(options)) {
-                if (options.dateStyle) {
-                    dateTimeFormatOptions = { ...dateTimeFormatOptions, ...PARSE_DATE_STYLE[options.dateStyle] };
+            if (options) {
+                const { dateStyle, timeStyle, ...rest } = options;
+                if (dateStyle) {
+                    dateTimeFormatOptions = { ...dateTimeFormatOptions, ...PARSE_DATE_STYLE[dateStyle] };
                 }
-                if (options.timeStyle) {
-                    dateTimeFormatOptions = { ...dateTimeFormatOptions, ...PARSE_TIME_STYLE[options.timeStyle] };
+                if (timeStyle) {
+                    dateTimeFormatOptions = { ...dateTimeFormatOptions, ...PARSE_TIME_STYLE[timeStyle] };
                 }
-            } else {
-                dateTimeFormatOptions = { ...options };
+                dateTimeFormatOptions = { ...dateTimeFormatOptions, ...rest };
             }
         }
-        if (hasTimeZone()) {
+        if (hasTimeZone() && timeZone) {
             dateTimeFormatOptions.timeZone = timeZone;
         }
 
@@ -72,7 +70,7 @@ import { L10nTranslationService } from './l10n-translation.service';
      */
     public formatNumber(
         value: any,
-        options?: L10nNumberFormatOptions | Intl.NumberFormatOptions,
+        options?: L10nNumberFormatOptions,
         language = this.locale.language,
         currency = this.locale.currency
     ): string {
@@ -83,17 +81,13 @@ import { L10nTranslationService } from './l10n-translation.service';
 
         let numberFormatOptions: Intl.NumberFormatOptions = {};
         if (options) {
-            if (isL10nNumberFormatOptions(options)) {
-                if (options.digits) {
-                    numberFormatOptions = { ...numberFormatOptions, ...parseDigits(options.digits) };
-                }
-                numberFormatOptions.style = options.style;
-                numberFormatOptions.currencyDisplay = options.currencyDisplay;
-            } else {
-                numberFormatOptions = { ...options };
+            const { digits, ...rest } = options;
+            if (digits) {
+                numberFormatOptions = { ...numberFormatOptions, ...parseDigits(digits) };
             }
+            numberFormatOptions = { ...numberFormatOptions, ...rest };
         }
-        numberFormatOptions.currency = currency;
+        if (currency) numberFormatOptions.currency = currency;
 
         return new Intl.NumberFormat(language, numberFormatOptions).format(value);
     }

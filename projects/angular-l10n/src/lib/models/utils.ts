@@ -156,14 +156,6 @@ export function toDate(value: any): Date {
     return value;
 }
 
-export function isL10nDateTimeFormatOptions(options: any): options is L10nDateTimeFormatOptions {
-    return (options as L10nDateTimeFormatOptions).dateStyle !== undefined || (options as L10nDateTimeFormatOptions).timeStyle !== undefined;
-}
-
-export function isL10nNumberFormatOptions(options: any): options is L10nNumberFormatOptions {
-    return (options as L10nNumberFormatOptions).digits !== undefined;
-}
-
 export const PARSE_DATE_STYLE: { [format: string]: any } = {
     full: { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' },
     long: { year: 'numeric', month: 'long', day: 'numeric' },

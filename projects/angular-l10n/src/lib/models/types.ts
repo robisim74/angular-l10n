@@ -44,7 +44,7 @@ export interface L10nSchema {
     text?: string;
 }
 
-export interface L10nDateTimeFormatOptions {
+export interface L10nDateTimeFormatOptions extends Intl.DateTimeFormatOptions {
     /**
      * The date formatting style.
      */
@@ -55,19 +55,11 @@ export interface L10nDateTimeFormatOptions {
     timeStyle?: 'full' | 'long' | 'medium' | 'short';
 }
 
-export interface L10nNumberFormatOptions {
+export interface L10nNumberFormatOptions extends Intl.NumberFormatOptions {
     /**
      * The digits formatting.
      */
     digits?: string;
-    /**
-     * The formatting style.
-     */
-    style?: 'decimal' | 'currency' | 'percent';
-    /**
-     * How to display the currency in currency formatting.
-     */
-    currencyDisplay?: 'symbol' | 'code' | 'name';
 }
 
 export type Unit = 'year' | 'quarter' | 'month' | 'week' | 'day' | 'hour' | 'minute' | 'second';
