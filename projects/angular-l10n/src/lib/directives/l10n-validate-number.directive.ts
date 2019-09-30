@@ -1,6 +1,7 @@
 import { Directive, forwardRef, OnInit, Input } from '@angular/core';
 import { NG_VALIDATORS, Validator, ValidatorFn, ValidationErrors, AbstractControl } from '@angular/forms';
 
+import { L10nNumberFormatOptions } from '../models/types';
 import { L10nValidation } from '../services/l10n-validation';
 
 /**
@@ -13,7 +14,7 @@ import { L10nValidation } from '../services/l10n-validation';
  */
 export function l10nValidateNumber(
     validation: L10nValidation,
-    options?: any,
+    options?: L10nNumberFormatOptions,
     minValue = Number.MIN_VALUE,
     maxValue = Number.MAX_VALUE
 ): ValidatorFn {
@@ -42,11 +43,11 @@ export function l10nValidateNumber(
 })
 export class L10nValidateNumberDirective implements Validator, OnInit {
 
-    @Input() set l10nValidateNumber(options: any) {
+    @Input() set l10nValidateNumber(options: L10nNumberFormatOptions) {
         this.options = options;
     }
 
-    @Input() public options: any;
+    @Input() public options: L10nNumberFormatOptions;
 
     @Input() public minValue: number;
     @Input() public maxValue: number;

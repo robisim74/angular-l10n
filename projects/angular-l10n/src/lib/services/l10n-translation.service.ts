@@ -18,7 +18,7 @@ import { L10nMissingTranslationHandler } from './l10n-missing-translation-handle
     /**
      * The translation data: {language: {key: value}}
      */
-    public data: any = {};
+    public data: { [key: string]: any } = {};
 
     private translation = new BehaviorSubject<L10nLocale>(this.locale);
 
@@ -65,7 +65,7 @@ import { L10nMissingTranslationHandler } from './l10n-missing-translation-handle
      * Translates a key or an array of keys.
      * @param keys The key or an array of keys to be translated
      * @param params Optional parameters contained in the key
-     * @param language The current language
+     * @param language The formatted language
      * @return The translated value or an object: {key: value}
      */
     public translate(
@@ -74,7 +74,7 @@ import { L10nMissingTranslationHandler } from './l10n-missing-translation-handle
         language = formatLanguage(this.locale.language, this.config.format)
     ): string | any {
         if (Array.isArray(keys)) {
-            const data: any = {};
+            const data: { [key: string]: any } = {};
             for (const key of keys) {
                 data[key] = this.translate(key, params, language);
             }
@@ -89,7 +89,7 @@ import { L10nMissingTranslationHandler } from './l10n-missing-translation-handle
     /**
      * Checks if a translation exists.
      * @param key The key to be tested
-     * @param language The current language
+     * @param language The formatted language
      */
     public has(key: string, language = formatLanguage(this.locale.language, this.config.format)): boolean {
         return getValue(key, this.data[language], this.config.keySeparator) !== null;
@@ -130,8 +130,6 @@ import { L10nMissingTranslationHandler } from './l10n-missing-translation-handle
     public async loadTranslation(locale = this.locale): Promise<void> {
         const language = formatLanguage(locale.language, this.config.format);
 
-        this.data = {};
-
         return new Promise((resolve) => {
             concat(...this.getTranslation(language)).subscribe({
                 next: (data) => this.addData(data, language),
@@ -170,7 +168,7 @@ import { L10nMissingTranslationHandler } from './l10n-missing-translation-handle
         return loaders;
     }
 
-    private addData(data: any, language: string): void {
+    private addData(data: { [key: string]: any }, language: string): void {
         this.data[language] = this.data[language] !== undefined
             ? mergeDeep(this.data[language], data)
             : data;

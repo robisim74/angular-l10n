@@ -10,13 +10,13 @@ import { L10nIntlService } from '../services/l10n-intl.service';
 })
 export class L10nTimeAgoDirective extends L10nDirective {
 
-    @Input() set l10nTimeAgo(options: any) {
+    @Input() set l10nTimeAgo(options: Intl.RelativeTimeFormatOptions) {
         this.options = options;
     }
 
     @Input() public unit: Unit;
 
-    @Input() public options: any;
+    @Input() public options: Intl.RelativeTimeFormatOptions;
 
     constructor(
         protected el: ElementRef,

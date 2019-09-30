@@ -17,7 +17,7 @@ import { L10N_LOCALE } from '../models/l10n-config';
      */
     public abstract parseNumber(
         value: string,
-        options?: L10nNumberFormatOptions | Intl.NumberFormatOptions,
+        options?: L10nNumberFormatOptions,
         language?: string
     ): number | null;
 
@@ -30,7 +30,7 @@ import { L10N_LOCALE } from '../models/l10n-config';
      */
     public abstract parseDate(
         value: string,
-        options?: L10nDateTimeFormatOptions | Intl.DateTimeFormatOptions,
+        options?: L10nDateTimeFormatOptions,
         language?: string
     ): Date | null;
 
@@ -42,7 +42,7 @@ import { L10N_LOCALE } from '../models/l10n-config';
 
     public parseNumber(
         value: string,
-        options?: L10nNumberFormatOptions | Intl.NumberFormatOptions,
+        options?: L10nNumberFormatOptions,
         language = this.locale.language
     ): number | null {
         return null;
@@ -50,7 +50,7 @@ import { L10N_LOCALE } from '../models/l10n-config';
 
     public parseDate(
         value: string,
-        options?: L10nDateTimeFormatOptions | Intl.DateTimeFormatOptions,
+        options?: L10nDateTimeFormatOptions,
         language = this.locale.language
     ): Date | null {
         return null;

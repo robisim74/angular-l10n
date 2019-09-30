@@ -1,6 +1,7 @@
 import { Directive, forwardRef, OnInit, Input } from '@angular/core';
 import { NG_VALIDATORS, Validator, ValidatorFn, ValidationErrors, AbstractControl } from '@angular/forms';
 
+import { L10nDateTimeFormatOptions } from '../models/types';
 import { L10nValidation } from '../services/l10n-validation';
 
 /**
@@ -9,7 +10,7 @@ import { L10nValidation } from '../services/l10n-validation';
  * @param options A L10n or Intl DateTimeFormatOptions object
  * @return An error object: 'format'; null in case the value is valid
  */
-export function l10nValidateDate(validation: L10nValidation, options?: any): ValidatorFn {
+export function l10nValidateDate(validation: L10nValidation, options?: L10nDateTimeFormatOptions): ValidatorFn {
     return (c: AbstractControl): ValidationErrors | null => {
         if (c.value === '' || c.value == null) return null;
 
@@ -30,11 +31,11 @@ export function l10nValidateDate(validation: L10nValidation, options?: any): Val
 })
 export class L10nValidateDateDirective implements Validator, OnInit {
 
-    @Input() set l10nValidateDate(options: any) {
+    @Input() set l10nValidateDate(options: L10nDateTimeFormatOptions) {
         this.options = options;
     }
 
-    @Input() public options: any;
+    @Input() public options: L10nDateTimeFormatOptions;
 
     protected validator: ValidatorFn;
 
