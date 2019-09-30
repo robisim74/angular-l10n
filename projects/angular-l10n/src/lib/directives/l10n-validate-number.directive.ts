@@ -8,8 +8,8 @@ import { L10nValidation } from '../services/l10n-validation';
  * Function that takes a control and returns either null when it’s valid, or an error object if it’s not.
  * @param validation The instance of L10nValidation service
  * @param options A L10n or Intl NumberFormatOptions object
- * @param minValue The minimum value for the number
- * @param maxValue The maximum value for the number
+ * @param minValue The minimum value
+ * @param maxValue The maximum value
  * @return An error object: 'format', 'minValue' or 'maxValue'; null in case the value is valid
  */
 export function l10nValidateNumber(

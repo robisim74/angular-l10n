@@ -103,6 +103,9 @@ import { L10nMissingTranslationHandler } from './l10n-missing-translation-handle
         if (schema) return schema.dir;
     }
 
+    /**
+     * Should only be called when the service instance is created.
+     */
     public async init(): Promise<void> {
         if (this.locale.language) return Promise.resolve();
 
@@ -127,6 +130,9 @@ import { L10nMissingTranslationHandler } from './l10n-missing-translation-handle
         await this.loadTranslation(locale);
     }
 
+    /**
+     * Can be called at every translation change.
+     */
     public async loadTranslation(locale = this.locale): Promise<void> {
         const language = formatLanguage(locale.language, this.config.format);
 

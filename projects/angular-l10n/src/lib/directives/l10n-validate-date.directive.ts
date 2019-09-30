@@ -8,14 +8,26 @@ import { L10nValidation } from '../services/l10n-validation';
  * Function that takes a control and returns either null when it’s valid, or an error object if it’s not.
  * @param validation The instance of L10nValidation service
  * @param options A L10n or Intl DateTimeFormatOptions object
- * @return An error object: 'format'; null in case the value is valid
+ * @param minDate The minimum date
+ * @param maxDate The maximum date
+ * @return An error object: 'format', 'minDate' or 'maxDate'; null in case the date is valid
  */
-export function l10nValidateDate(validation: L10nValidation, options?: L10nDateTimeFormatOptions): ValidatorFn {
+export function l10nValidateDate(
+    validation: L10nValidation,
+    options?: L10nDateTimeFormatOptions,
+    minDate?: Date,
+    maxDate?: Date
+): ValidatorFn {
     return (c: AbstractControl): ValidationErrors | null => {
         if (c.value === '' || c.value == null) return null;
 
-        const value = validation.parseDate(c.value, options);
-        if (value != null) {
+        const date = validation.parseDate(c.value, options);
+        if (date != null) {
+            if (minDate && date < minDate) {
+                return { mindate: true };
+            } else if (maxDate && date > maxDate) {
+                return { maxDate: true };
+            }
             return null; // The date is valid.
         } else {
             return { format: true };
@@ -37,12 +49,15 @@ export class L10nValidateDateDirective implements Validator, OnInit {
 
     @Input() public options: L10nDateTimeFormatOptions;
 
+    @Input() public minDate: Date;
+    @Input() public maxDate: Date;
+
     protected validator: ValidatorFn;
 
     constructor(protected validation: L10nValidation) { }
 
     public ngOnInit() {
-        this.validator = l10nValidateDate(this.validation, this.options);
+        this.validator = l10nValidateDate(this.validation, this.options, this.minDate, this.maxDate);
     }
 
     public validate(c: AbstractControl): ValidationErrors | null {
