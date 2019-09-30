@@ -66,7 +66,7 @@ export function initL10n(l10nLoader: L10nLoader): () => Promise<void> {
 
     constructor(@Optional() private http: HttpClient) { }
 
-    public get(language: string, provider: L10nProvider): Observable<any> {
+    public get(language: string, provider: L10nProvider): Observable<{ [key: string]: any }> {
         const url = `${provider.asset}-${language}.json`;
         const options = {
             headers: this.headers,
@@ -100,7 +100,7 @@ export function initL10n(l10nLoader: L10nLoader): () => Promise<void> {
 
         const pattern = `^-?[\\d]{${format.minimumIntegerDigits},}(\\${decimalSeparator}[\\d]{${format.minimumFractionDigits},${format.maximumFractionDigits}})?$`;
         const regex = new RegExp(pattern);
-        return regex.test(value) ? parseFloat(value) : null;
+        return regex.test(value) ? parseFloat(value.replace(decimalSeparator, '.')) : null;
     }
 
     public parseDate(value: string, options?: L10nDateTimeFormatOptions, language = this.locale.language): Date | null {

@@ -9,5 +9,15 @@
     },
     "onPush": {
         "title": "OnPush Change detection strategy"
+    },
+    "validation": {
+        "title": "Validation",
+        "numbers": "Numeri",
+        "numberIsInvalid": "Number is invalid. Required format: {{ format }}",
+        "minValueError": "Minimum value: {{ minValue }}",
+        "maxValueError": "Maximum value: {{ maxValue }}",
+        "numberIsRequired": "Number is required",
+        "numberValue": "Number value: {{ parsedValue }}",
+        "submit": "Submit"
     }
 }
