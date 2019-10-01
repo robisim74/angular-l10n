@@ -10,7 +10,7 @@ import { L10N_LOCALE, L10nLocale } from 'angular-l10n';
 export class PipeComponent implements OnInit {
 
     @Input() today: number;
-    @Input() timeAgo: number;
+    @Input() timeAgo: string;
     @Input() value: number;
 
     constructor(@Inject(L10N_LOCALE) public locale: L10nLocale) { }

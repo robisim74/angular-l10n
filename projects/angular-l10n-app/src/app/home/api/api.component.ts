@@ -10,7 +10,7 @@ import { L10nTranslationService, L10nIntlService } from 'angular-l10n';
 export class ApiComponent implements OnInit, OnChanges {
 
     @Input() today: number;
-    @Input() timeAgo: number;
+    @Input() timeAgo: string;
     @Input() value: number;
 
     greeting: string;

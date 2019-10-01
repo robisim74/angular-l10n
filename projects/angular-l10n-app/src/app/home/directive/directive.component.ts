@@ -8,7 +8,7 @@ import { Component, OnInit, Input } from '@angular/core';
 export class DirectiveComponent implements OnInit {
 
     @Input() today: number;
-    @Input() timeAgo: number;
+    @Input() timeAgo: string;
     @Input() value: number;
 
     ngOnInit() {
