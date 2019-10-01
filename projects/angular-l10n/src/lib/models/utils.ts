@@ -51,7 +51,7 @@ export function getSchema(schema: L10nSchema[], language: string, format: L10nFo
     return schema.find(element => formatLanguage(element.locale.language, format) === language);
 }
 
-export function getValue(key: string, data: any, keySeparator: string): string | any | null {
+export function getValue(key: string, data: { [key: string]: any }, keySeparator: string): string | any | null {
     if (data) {
         if (keySeparator) {
             return key.split(keySeparator).reduce((acc, cur) => (acc && acc[cur]) || null, data);
@@ -68,7 +68,7 @@ export function handleParams(value: string, params: any): string {
     });
 }
 
-export function mergeDeep(target: any, source: any): any {
+export function mergeDeep(target: { [key: string]: any }, source: { [key: string]: any }): any {
     const output = Object.assign({}, target);
 
     if (isObject(target) && isObject(source)) {

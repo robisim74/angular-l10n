@@ -3,29 +3,27 @@
  * explores the neighbor nodes first, before moving to the next level neighbors.
  * Time complexity: between O(1) and O(|V|^2).
  */
-export function getTargetNode(rootNode: any): any {
+export function getTargetNode(rootNode: HTMLElement): HTMLElement {
     return walk(rootNode);
 }
 
-const SELECTOR = new RegExp('^l10n|translate');
-
 const MAX_DEPTH = 10;
 
-function walk(rootNode: any): any {
-    const queue: any[] = [];
+function walk(rootNode: HTMLElement): HTMLElement {
+    const queue: HTMLElement[] = [];
 
-    let iNode: any;
+    let iNode: HTMLElement;
     let depth = 0;
     let nodeToDepthIncrease = 1;
 
     queue.push(rootNode);
     while (queue.length > 0 && depth <= MAX_DEPTH) {
-        iNode = queue.shift();
+        iNode = queue.splice(0, 1)[0];
         if (isTargetNode(iNode)) return iNode;
-        if (depth < MAX_DEPTH && iNode.childNodes != null) {
-            for (const child of iNode.childNodes) {
-                if (isValidNode(child)) {
-                    queue.push(child);
+        if (depth < MAX_DEPTH && iNode.childNodes) {
+            for (const child of Array.from(iNode.childNodes)) {
+                if (isValidNode(child as HTMLElement)) {
+                    queue.push(child as HTMLElement);
                 }
             }
         }
@@ -37,17 +35,17 @@ function walk(rootNode: any): any {
     return rootNode;
 }
 
-function isTargetNode(node: any): boolean {
-    return typeof node !== 'undefined' && node.nodeType === 3 && node.nodeValue != null && node.nodeValue.trim() !== '';
+function isTargetNode(node: HTMLElement): boolean {
+    return typeof node !== 'undefined' && node.nodeType === 3 && !!node.nodeValue && node.nodeValue.trim() !== '';
 }
 
 /**
  * A valid node is not marked for translation.
  */
-function isValidNode(node: any): boolean {
+function isValidNode(node: HTMLElement): boolean {
     if (typeof node !== 'undefined' && node.nodeType === 1 && node.attributes) {
-        for (const attr of node.attributes) {
-            if (attr && SELECTOR.test(attr.name)) return false;
+        for (const attr of Array.from(node.attributes)) {
+            if (attr && /^l10n|translate/.test(attr.name)) return false;
         }
     }
     return true;

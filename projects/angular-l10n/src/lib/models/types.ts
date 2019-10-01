@@ -8,7 +8,7 @@ export interface L10nProvider {
     /**
      * The asset of the provider.
      */
-    asset: any | string;
+    asset: any;
     /**
      * Options to pass the loader.
      */

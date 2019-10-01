@@ -12,17 +12,13 @@ export abstract class L10nDirective implements AfterViewInit, OnChanges, OnDestr
     @Input() public innerHTML: string;
 
     private text: string;
-    private attributes: any[];
+    private attributes: { name: string, text: string }[];
 
-    private element: any;
-    private renderNode: any;
+    private element: HTMLElement;
+    private renderNode: HTMLElement;
     private nodeValue: string;
 
     private textObserver: MutationObserver;
-
-    private readonly TEXT_MUTATION_CONFIG = { subtree: true, characterData: true };
-
-    private readonly SELECTOR = /^l10n-/;
 
     private destroy = new Subject<boolean>();
 
@@ -75,17 +71,17 @@ export abstract class L10nDirective implements AfterViewInit, OnChanges, OnDestr
     }
 
     private getNodeValue(): string {
-        this.nodeValue = this.renderNode != null ? this.renderNode.nodeValue as string : '';
+        this.nodeValue = this.renderNode != null && !!this.renderNode.nodeValue ? this.renderNode.nodeValue : '';
         return this.nodeValue ? this.nodeValue.trim() : '';
     }
 
-    private getAttributes(): any[] {
-        const attributes: any[] = [];
+    private getAttributes(): { name: string, text: string }[] {
+        const attributes: { name: string, text: string }[] = [];
         if (this.element.attributes) {
-            for (const attr of this.element.attributes) {
-                if (attr && this.SELECTOR.test(attr.name)) {
+            for (const attr of Array.from(this.element.attributes)) {
+                if (attr && /^l10n-/.test(attr.name)) {
                     const name = attr.name.substr(5);
-                    for (const targetAttr of this.element.attributes) {
+                    for (const targetAttr of Array.from(this.element.attributes)) {
                         if (new RegExp('^' + name + '$').test(targetAttr.name)) {
                             attributes.push({ name, text: targetAttr.value });
                         }
@@ -103,7 +99,7 @@ export abstract class L10nDirective implements AfterViewInit, OnChanges, OnDestr
                 this.text = this.getText();
                 this.replaceText();
             });
-            this.textObserver.observe(this.renderNode, this.TEXT_MUTATION_CONFIG);
+            this.textObserver.observe(this.renderNode, { subtree: true, characterData: true });
         }
     }
 
@@ -148,15 +144,15 @@ export abstract class L10nDirective implements AfterViewInit, OnChanges, OnDestr
         }
     }
 
-    private setAttributes(data: any): void {
+    private setAttributes(data: { [text: string]: string }): void {
         for (const attr of this.attributes) {
             this.renderer.setAttribute(this.element, attr.name, data[attr.text]);
         }
     }
 
-    private getAttributesData(): any {
+    private getAttributesData(): { [text: string]: string } {
         const texts = this.getAttributesTexts();
-        const data: any = {};
+        const data: { [text: string]: string } = {};
         for (const text of texts) {
             data[text] = this.getValue(text);
         }
