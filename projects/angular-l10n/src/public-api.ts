@@ -2,12 +2,13 @@
  * Public API Surface of angular-l10n
  */
 
-// L10nTranslationModule
+// Models
 export * from './lib/models/types';
 export * from './lib/models/l10n-config';
-export * from './lib/models/utils';
 export * from './lib/models/l10n-async-pipe';
 export * from './lib/models/l10n-directive';
+export * from './lib/models/utils';
+// L10nTranslationModule
 export * from './lib/services/l10n-translation.service';
 export * from './lib/services/l10n-cache';
 export { L10nStorage } from './lib/services/l10n-storage';

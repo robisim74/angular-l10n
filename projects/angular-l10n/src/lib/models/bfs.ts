@@ -36,7 +36,7 @@ function walk(rootNode: HTMLElement): HTMLElement {
 }
 
 function isTargetNode(node: HTMLElement): boolean {
-    return typeof node !== 'undefined' && node.nodeType === 3 && !!node.nodeValue && node.nodeValue.trim() !== '';
+    return typeof node !== 'undefined' && node.nodeType === 3 && node.nodeValue != null && node.nodeValue.trim() !== '';
 }
 
 /**

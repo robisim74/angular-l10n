@@ -42,7 +42,7 @@ import { L10nTranslationService } from './l10n-translation.service';
             filter((event: any) => event instanceof NavigationEnd)
         ).subscribe({
             next: (event: NavigationEnd) => {
-                const url = (!!event.url && event.url !== '/' && event.url === event.urlAfterRedirects) ?
+                const url = (event.url && event.url !== '/' && event.url === event.urlAfterRedirects) ?
                     event.url :
                     event.urlAfterRedirects;
                 this.replacePath(this.locale, url);
