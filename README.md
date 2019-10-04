@@ -2,7 +2,7 @@
 [![Build Status](https://travis-ci.org/robisim74/angular-l10n.svg?branch=master)](https://travis-ci.org/robisim74/angular-l10n) [![npm version](https://badge.fury.io/js/angular-l10n.svg)](https://badge.fury.io/js/angular-l10n) [![npm](https://img.shields.io/npm/dm/angular-l10n.svg)](https://www.npmjs.com/package/angular-l10n) [![npm](https://img.shields.io/npm/l/angular-l10n.svg)](https://www.npmjs.com/package/angular-l10n)
 > An Angular library to translate texts, dates and numbers
 
-This library is for localization of **Angular** apps. It allows, in addition to translation, to format dates and numbers through [Internationalization API](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl).
+This library is for localization of **Angular** apps. It allows, in addition to translation, to format dates and numbers through [Internationalization API](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl)
 
 
 ## Documentation
@@ -16,6 +16,7 @@ This library is for localization of **Angular** apps. It allows, in addition to 
 ## Table of Contents
 - [Installation](#installation)
 - [Usage](#usage)
+- [Types](#types)
 - [Intl API](#intl-api)
 - [Previous versions](#previous-versions)
 - [Contributing](#contributing)
@@ -29,7 +30,7 @@ npm install angular-l10n --save
 
 
 ## Usage
-You can find a complete sample app [here](projects/angular-l10n-app):
+You can find a complete sample app [here](projects/angular-l10n-app)
 
 ### Configuration
 Create the configuration:
@@ -123,15 +124,30 @@ export class AppComponent implements OnInit {
     constructor(private translation: L10nTranslationService, private intl: L10nIntlService) { }
 
     ngOnInit() {
+        // Fired every time the translation data has been loaded.
         this.translation.onChange().subscribe({
             next: () => {
+                // Gets the translations.
                 this.greeting = this.translation.translate('greeting');
                 this.whoIAm = this.translation.translate('whoIAm', { name: 'Angular l10n' });
 
+                // Formats dates & numbers.
                 this.formattedToday = this.intl.formatDate(this.today, { dateStyle: 'full', timeStyle: 'short' });
                 this.formattedValue = this.intl.formatNumber(this.value, { digits: '1.2-2', style: 'currency' });
             }
         });
+
+        // Fired when the translation data could not been loaded.
+        this.translation.onError().subscribe({
+            next: (error: any) => {
+                if (error) console.log(error);
+            }
+        });
+    }
+
+    // Changes the current locale and load the translation data.
+    setLocale(locale: L10nLocale): void {
+        this.translation.setLocale(locale);
     }
 
 }
@@ -198,9 +214,9 @@ export const l10nConfig: L10nConfig = {
 };
 ```
 By default, the translation data will be merged in the following order:
-- 'language'
-- 'language[-script]'
-- 'language[-script][-country]'
+- `'language'`
+- `'language[-script]'`
+- `'language[-script][-country]'`
 
 To change it, implement the `L10nTranslationFallback` class-interface.
 #### Translation Handler
@@ -257,7 +273,7 @@ https://example.com/en-US/home
 ```
 If the localized link is called, the _locale_ is also set automatically.
 
-To achieve this, the router configuration in your app is not rewritten: the URL is replaced, in order to provide the different contents localized both to the crawlers and to the users that can refer to the localized links.
+To achieve this, the router configuration in your app is not rewritten: the URL is replaced, in order to provide the different localized contents both to the crawlers and to the users that can refer to the localized links.
 
 If you don't want a localized routing for _default locale_, you can enable it during the configuration:
 ```TypeScript
@@ -268,8 +284,22 @@ export const l10nConfig: L10nConfig = {
 ```
 
 
+## Types
+Angular l10n types that it is useful to know:
+- `L10nLocale`: contains a _language_, in the format `language[-script][-region][-extension]`, where:
+     - language: ISO 639 two-letter or three-letter code
+     - script: ISO 15924 four-letter script code
+     - region: ISO 3166 two-letter, uppercase code
+     - extension: 'u' (Unicode) extensions
+     
+     Optionally a ISO 4217 three-letter code _currency_ and a _timezone_ from the IANA time zone database
+- `L10nFormat`: shows the format of the _language_ to be used for translations. The supported formats are: `'language' | 'language-script' | 'language-region' | 'language-script-region'`. So, for example, you can have a _language_ like `en-US-u-ca-gregory-nu-latn` to format dates and numbers, but only use the `en-US` for translations setting `'language-region'`
+- `L10nDateTimeFormatOptions`: the type of _options_ used to format dates. Extends the Intl `DateTimeFormatOptions` interface, adding the _dateStyle_ and _timeStyle_ attributes
+- `L10nNumberFormatOptions`: the type of _options_ used to format numbers. Extends the Intl `NumberFormatOptions` interface, adding the _digits_ attribute
+
+
 ## Intl API
-To format dates and numbers, this library uses the [Intl API](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl).
+To format dates and numbers, this library uses the [Intl API](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl)
 
 Check the current browser support:
 - [ECMAScript compatibility tables](http://kangax.github.io/compat-table/esintl/)
@@ -312,14 +342,18 @@ The `L10nIntlService` also provides methods for other APIs, such as _Collator_, 
 
 
 ## Contributing
-- In order to build the library:
+- Building the library:
     ```Shell
     npm install
-    npm test
     npm run build
     ```
 
-- In order to serve the sample app:
+- Testing:
+    ```Shell
+    npm test
+    ```
+
+- Serving the sample app:
     ```Shell
     npm start
     ```
