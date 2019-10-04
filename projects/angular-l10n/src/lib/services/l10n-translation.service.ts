@@ -1,10 +1,9 @@
 import { Injectable, Inject } from '@angular/core';
-import { Observable, BehaviorSubject, Subject, merge, concat } from 'rxjs';
+import { Observable, BehaviorSubject, merge, concat } from 'rxjs';
 
 import { L10nLocale } from '../models/types';
 import { L10N_CONFIG, L10nConfig, L10N_LOCALE } from '../models/l10n-config';
 import { formatLanguage, getSchema, getValue, mergeDeep } from '../models/utils';
-import { l10nError } from '../models/l10n-error';
 import { L10nCache } from './l10n-cache';
 import { L10nStorage } from './l10n-storage';
 import { L10nUserLanguage } from './l10n-user-language';
@@ -43,12 +42,16 @@ import { L10nMissingTranslationHandler } from './l10n-missing-translation-handle
         return this.locale;
     }
 
+    /**
+     * Changes the current locale and load the translation data.
+     * @param locale The new locale
+     */
     public async setLocale(locale: L10nLocale): Promise<void> {
         await this.loadTranslation(locale);
     }
 
     /**
-     * Fired when the translation data has been loaded. Returns the locale.
+     * Fired every time the translation data has been loaded. Returns the locale.
      */
     public onChange(): Observable<L10nLocale> {
         return this.translation.asObservable();
@@ -65,14 +68,16 @@ import { L10nMissingTranslationHandler } from './l10n-missing-translation-handle
      * Translates a key or an array of keys.
      * @param keys The key or an array of keys to be translated
      * @param params Optional parameters contained in the key
-     * @param language The formatted language
+     * @param language The current language
      * @return The translated value or an object: {key: value}
      */
     public translate(
         keys: string | string[],
         params?: any,
-        language = formatLanguage(this.locale.language, this.config.format)
+        language = this.locale.language
     ): string | any {
+        language = formatLanguage(language, this.config.format);
+
         if (Array.isArray(keys)) {
             const data: { [key: string]: any } = {};
             for (const key of keys) {
@@ -89,17 +94,19 @@ import { L10nMissingTranslationHandler } from './l10n-missing-translation-handle
     /**
      * Checks if a translation exists.
      * @param key The key to be tested
-     * @param language The formatted language
+     * @param language The current language
      */
-    public has(key: string, language = formatLanguage(this.locale.language, this.config.format)): boolean {
+    public has(key: string, language = this.locale.language): boolean {
+        language = formatLanguage(language, this.config.format);
+
         return getValue(key, this.data[language], this.config.keySeparator) !== null;
     }
 
     /**
-     * Gets the current language direction.
+     * Gets the language direction.
      */
-    public getLanguageDirection(): 'ltr' | 'rtl' | undefined {
-        const schema = getSchema(this.config.schema, this.locale.language, this.config.format);
+    public getLanguageDirection(language = this.locale.language): 'ltr' | 'rtl' | undefined {
+        const schema = getSchema(this.config.schema, language, this.config.format);
         if (schema) return schema.dir;
     }
 

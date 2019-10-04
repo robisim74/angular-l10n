@@ -12,7 +12,7 @@
     },
     "validation": {
         "title": "Validation",
-        "numbers": "Numeri",
+        "numbers": "Numbers",
         "numberIsInvalid": "Number is invalid. Required format: {{ format }}",
         "minValueError": "Minimum value: {{ minValue }}",
         "maxValueError": "Maximum value: {{ maxValue }}",

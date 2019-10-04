@@ -1,4 +1,4 @@
-import { L10nFormat, L10nSchema, L10nDateTimeFormatOptions, L10nNumberFormatOptions } from './types';
+import { L10nFormat, L10nSchema } from './types';
 import { l10nError } from './l10n-error';
 
 export const ISO8601_DATE_REGEX = /^(\d{4})-?(\d\d)-?(\d\d)(?:T(\d\d)(?::?(\d\d)(?::?(\d\d)(?:\.(\d+))?)?)?(Z|([+-])(\d\d):?(\d\d))?)?$/;

@@ -88,6 +88,10 @@ describe('L10nTranslationService', () => {
         await translation.setLocale({ language: 'it-IT' });
         expect(translation.translate('home.title')).toEqual('Localizzazione in Angular');
     });
+    it('should translate using a language with extensions', async () => {
+        await translation.setLocale({ language: 'it-IT-u-ca-gregory-nu-latn' });
+        expect(translation.translate('home.title')).toEqual('Localizzazione in Angular');
+    });
     it('should translate an array', async () => {
         await translation.setLocale({ language: 'it-IT' });
         expect(translation.translate(['home.title', 'home.subtitle'])).toEqual(jasmine.objectContaining({
