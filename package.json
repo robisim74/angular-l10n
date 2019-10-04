@@ -7,11 +7,15 @@
     "build": "ng build angular-l10n --prod",
     "build:watch": "ng build angular-l10n --watch",
     "build:app": "ng build angular-l10n-app --prod",
-    "test": "ng test angular-l10n",
+    "test": "ng test angular-l10n --watch=false",
+    "test:watch": "ng test angular-l10n --watch=true",
     "lint": "ng lint",
     "e2e": "ng e2e",
     "build:docs": "npx compodoc -p projects/angular-l10n/tsconfig.lib.prod.json -d docs -n \"Angular l10n Specification\" --disableCoverage -a images",
-    "serve:docs": "npx compodoc -d docs -s"
+    "serve:docs": "npx compodoc -d docs -s",
+    "pack:lib": "npm pack ./dist/angular-l10n",
+    "publish:lib": "npm publish ./dist/angular-l10n",
+    "publish:lib:next": "npm publish --tag next ./dist/angular-l10n"
   },
   "private": true,
   "dependencies": {
