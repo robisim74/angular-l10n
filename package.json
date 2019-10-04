@@ -15,7 +15,8 @@
     "serve:docs": "npx compodoc -d docs -s",
     "pack:lib": "npm pack ./dist/angular-l10n",
     "publish:lib": "npm publish ./dist/angular-l10n",
-    "publish:lib:next": "npm publish --tag next ./dist/angular-l10n"
+    "publish:lib:next": "npm publish --tag next ./dist/angular-l10n",
+    "analyze": "ng build angular-l10n-app --prod --stats-json && webpack-bundle-analyzer dist/angular-l10n-app/stats-es2015.json"
   },
   "private": true,
   "dependencies": {
@@ -56,6 +57,7 @@
     "ts-node": "^8.3.0",
     "tsickle": "^0.37.0",
     "tslint": "^5.19.0",
-    "typescript": "~3.5.3"
+    "typescript": "~3.5.3",
+    "webpack-bundle-analyzer": "^3.5.2"
   }
 }
