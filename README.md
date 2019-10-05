@@ -124,34 +124,20 @@ export class AppComponent implements OnInit {
     constructor(private translation: L10nTranslationService, private intl: L10nIntlService) { }
 
     ngOnInit() {
-        // Fired every time the translation data has been loaded.
         this.translation.onChange().subscribe({
             next: () => {
-                // Gets the translations.
                 this.greeting = this.translation.translate('greeting');
                 this.whoIAm = this.translation.translate('whoIAm', { name: 'Angular l10n' });
 
-                // Formats dates & numbers.
                 this.formattedToday = this.intl.formatDate(this.today, { dateStyle: 'full', timeStyle: 'short' });
                 this.formattedValue = this.intl.formatNumber(this.value, { digits: '1.2-2', style: 'currency' });
             }
         });
-
-        // Fired when the translation data could not been loaded.
-        this.translation.onError().subscribe({
-            next: (error: any) => {
-                if (error) console.log(error);
-            }
-        });
-    }
-
-    // Changes the current locale and load the translation data.
-    setLocale(locale: L10nLocale): void {
-        this.translation.setLocale(locale);
     }
 
 }
 ```
+
 ### Customize the library
 The following features can be customized. You just have to implement the indicated class-interface and pass the token during configuration.
 
@@ -197,7 +183,6 @@ export const l10nConfig: L10nConfig = {
 })
 export class AppModule { }
 ```
-
 #### Storage
 By default, the library does not store the _locale_. To store it implement the `L10nStorage` class-interface, so that the next time the user has the _locale_ he selected.
 #### User Language
@@ -223,6 +208,7 @@ To change it, implement the `L10nTranslationFallback` class-interface.
 By default, the library only parse the _params_. `L10nTranslationHandler` is the class-interface to implement to modify the behavior.
 #### Missing Translation Handler
 If a key is not found, the same key is returned. To return a different value, you can implement the `L10nMissingTranslationHandler` class-interface.
+
 ### Validation
 There are two directives, that you can use with Template driven or Reactive forms: `l10nValidateNumber` and `l10nValidateDate`. To use them, you have to implement the `L10nValidation` class-interface, and import it with the validation module:
 ```TypeScript
