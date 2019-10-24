@@ -43,11 +43,11 @@ export function l10nValidateNumber(
 })
 export class L10nValidateNumberDirective implements Validator, OnInit {
 
-    @Input() set l10nValidateNumber(options: L10nNumberFormatOptions) {
+    @Input() set l10nValidateNumber(options: any) {
         this.options = options;
     }
 
-    @Input() public options: L10nNumberFormatOptions;
+    @Input() public options: any;
 
     @Input() public minValue: number;
     @Input() public maxValue: number;
