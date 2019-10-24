@@ -34,7 +34,10 @@ import { L10nTranslationService } from './l10n-translation.service';
         this.router.events.pipe(
             filter((event: any) => event instanceof NavigationStart)
         ).subscribe({
-            next: (event: NavigationStart) => this.redirectToPath(event.url)
+            next: (event: NavigationStart) => {
+                // Skips location change on pop state event and on first navigation.
+                this.redirectToPath(event.url, event.navigationTrigger === 'popstate' || event.id === 1);
+            }
         });
 
         // Replaces url when a navigation ends.
@@ -73,15 +76,16 @@ import { L10nTranslationService } from './l10n-translation.service';
     }
 
     /**
-     * Removes the language from the path and navigates without pushing a new state into history.
+     * Removes the language from the path and navigates.
      * @param path Localized path
+     * @param skipLocationChange When true, navigates without pushing a new state into history
      */
-    private redirectToPath(path: string): void {
+    private redirectToPath(path: string, skipLocationChange: boolean): void {
         const segment = this.getLocalizedSegment(path);
         if (segment != null) {
             const url = path.replace(segment, '/');
             // navigateByUrl keeps the query params.
-            this.router.navigateByUrl(url, { skipLocationChange: true });
+            this.router.navigateByUrl(url, { skipLocationChange });
         }
     }
 

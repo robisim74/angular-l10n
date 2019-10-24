@@ -92,6 +92,18 @@ describe('L10nRoutingService', () => {
                 expect(location.path()).toBe('/en-US/mock1');
             });
         }));
+        it('should go back using localized link', fakeAsync(() => {
+            fixture.ngZone.run(() => {
+                loader.init();
+                tick();
+                router.navigate(['/en-US//mock1']);
+                tick();
+                router.navigate(['/en-US//mock2']);
+                tick();
+                location.back();
+                expect(location.path()).toBe('/en-US/mock1');
+            });
+        }));
         it('should keep url query params', fakeAsync(() => {
             fixture.ngZone.run(() => {
                 loader.init();
