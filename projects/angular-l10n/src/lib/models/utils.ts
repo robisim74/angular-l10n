@@ -1,11 +1,9 @@
 import { L10nFormat, L10nSchema } from './types';
 import { l10nError } from './l10n-error';
 
-export const ISO8601_DATE_REGEX = /^(\d{4})-?(\d\d)-?(\d\d)(?:T(\d\d)(?::?(\d\d)(?::?(\d\d)(?:\.(\d+))?)?)?(Z|([+-])(\d\d):?(\d\d))?)?$/;
-
 export function validateLanguage(language: string): boolean {
-    return /^([a-z]{2,3})(\-[A-Z][a-z]{3})?(\-[A-Z]{2})?(-u.+)?$/
-        .test(language);
+    const regExp = new RegExp(/^([a-z]{2,3})(\-[A-Z][a-z]{3})?(\-[A-Z]{2})?(-u.+)?$/);
+    return regExp.test(language);
 }
 
 export function formatLanguage(language: string, format: L10nFormat): string {
@@ -48,7 +46,8 @@ export function getBrowserLanguage(): string | null {
 }
 
 export function getSchema(schema: L10nSchema[], language: string, format: L10nFormat): L10nSchema | undefined {
-    return schema.find(element => formatLanguage(element.locale.language, format) === language);
+    const element = schema.find(item => formatLanguage(item.locale.language, format) === language);
+    return element;
 }
 
 export function getValue(key: string, data: { [key: string]: any }, keySeparator: string): string | any | null {
@@ -62,10 +61,11 @@ export function getValue(key: string, data: { [key: string]: any }, keySeparator
 }
 
 export function handleParams(value: string, params: any): string {
-    return value.replace(/{{\s?([^{}\s]*)\s?}}/g, (substring: string, parsedKey: string) => {
+    const replacedValue = value.replace(/{{\s?([^{}\s]*)\s?}}/g, (substring: string, parsedKey: string) => {
         const replacer = params[parsedKey];
         return replacer !== undefined ? replacer : substring;
     });
+    return replacedValue;
 }
 
 export function mergeDeep(target: { [key: string]: any }, source: { [key: string]: any }): any {
@@ -89,7 +89,8 @@ export function mergeDeep(target: { [key: string]: any }, source: { [key: string
 }
 
 export function hasIntl(): boolean {
-    return typeof Intl === 'object' && !!Intl;
+    const isAvailable = typeof Intl === 'object' && !!Intl;
+    return isAvailable;
 }
 
 export function hasDateTimeFormat(): boolean {
@@ -129,7 +130,8 @@ export function hasListFormat(): boolean {
 }
 
 export function toNumber(value: any): number {
-    return typeof value === 'string' && !isNaN(+value - parseFloat(value)) ? +value : value;
+    const parsedValue = typeof value === 'string' && !isNaN(+value - parseFloat(value)) ? +value : value;
+    return parsedValue;
 }
 
 export function toDate(value: any): Date {
@@ -145,7 +147,7 @@ export function toDate(value: any): Date {
             const [y, m, d] = value.split('-').map((val: string) => +val);
             return new Date(y, m - 1, d);
         }
-        const match = value.match(ISO8601_DATE_REGEX);
+        const match = value.match(/^(\d{4})-?(\d\d)-?(\d\d)(?:T(\d\d)(?::?(\d\d)(?::?(\d\d)(?:\.(\d+))?)?)?(Z|([+-])(\d\d):?(\d\d))?)?$/);
         if (match) {
             return isoStringToDate(match);
         }

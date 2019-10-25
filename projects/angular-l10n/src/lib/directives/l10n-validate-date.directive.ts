@@ -18,7 +18,7 @@ export function l10nValidateDate(
     minDate?: Date,
     maxDate?: Date
 ): ValidatorFn {
-    return (c: AbstractControl): ValidationErrors | null => {
+    const validator = (c: AbstractControl): ValidationErrors | null => {
         if (c.value === '' || c.value == null) return null;
 
         const date = validation.parseDate(c.value, options);
@@ -33,6 +33,7 @@ export function l10nValidateDate(
             return { format: true };
         }
     };
+    return validator;
 }
 
 @Directive({

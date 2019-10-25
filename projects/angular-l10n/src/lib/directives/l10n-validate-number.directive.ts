@@ -18,7 +18,7 @@ export function l10nValidateNumber(
     minValue = Number.MIN_VALUE,
     maxValue = Number.MAX_VALUE
 ): ValidatorFn {
-    return (c: AbstractControl): ValidationErrors | null => {
+    const validator = (c: AbstractControl): ValidationErrors | null => {
         if (c.value === '' || c.value == null) return null;
 
         const value = validation.parseNumber(c.value, options);
@@ -33,6 +33,7 @@ export function l10nValidateNumber(
             return { format: true };
         }
     };
+    return validator;
 }
 
 @Directive({
