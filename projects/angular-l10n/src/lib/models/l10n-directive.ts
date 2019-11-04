@@ -1,10 +1,11 @@
-import { Input, AfterViewInit, OnChanges, OnDestroy, ElementRef, Renderer2 } from '@angular/core';
+import { Directive, Input, AfterViewInit, OnChanges, OnDestroy, ElementRef, Renderer2 } from '@angular/core';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
 import { getTargetNode } from './bfs';
 import { L10nTranslationService } from '../services/l10n-translation.service';
 
+@Directive()
 export abstract class L10nDirective implements AfterViewInit, OnChanges, OnDestroy {
 
     @Input() public value: string;
