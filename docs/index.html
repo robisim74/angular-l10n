@@ -1,0 +1,400 @@
+<!doctype html>
+<html class="no-js" lang="">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title>Angular l10n Specification</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="icon" type="image/x-icon" href="./images/favicon.ico">
+	      <link rel="stylesheet" href="./styles/style.css">
+    </head>
+    <body>
+
+        <div class="navbar navbar-default navbar-fixed-top visible-xs">
+            <a href="./" class="navbar-brand">Angular l10n Specification</a>
+            <button type="button" class="btn btn-default btn-menu ion-ios-menu" id="btn-menu"></button>
+        </div>
+
+        <div class="xs-menu menu" id="mobile-menu">
+                <div id="book-search-input" role="search"><input type="text" placeholder="Type to search"></div>            <compodoc-menu></compodoc-menu>
+        </div>
+
+        <div class="container-fluid main">
+           <div class="row main">
+               <div class="hidden-xs menu">
+                   <compodoc-menu mode="normal"></compodoc-menu>
+               </div>
+               <!-- START CONTENT -->
+               <div class="content getting-started">
+                   <div class="content-data">
+
+<h1 id="angular-l10n">Angular l10n</h1>
+<p><a href="https://travis-ci.org/robisim74/angular-l10n"><img src="https://travis-ci.org/robisim74/angular-l10n.svg?branch=master" alt="Build Status" class="img-responsive"></a> <a href="https://badge.fury.io/js/angular-l10n"><img src="https://badge.fury.io/js/angular-l10n.svg" alt="npm version" class="img-responsive"></a> <a href="https://www.npmjs.com/package/angular-l10n"><img src="https://img.shields.io/npm/dm/angular-l10n.svg" alt="npm" class="img-responsive"></a> <a href="https://www.npmjs.com/package/angular-l10n"><img src="https://img.shields.io/npm/l/angular-l10n.svg" alt="npm" class="img-responsive"></a></p>
+<blockquote>
+<p>An Angular library to translate texts, dates and numbers</p>
+</blockquote>
+<p>This library is for localization of <strong>Angular</strong> apps. It allows, in addition to translation, to format dates and numbers through <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl">Internationalization API</a></p>
+<h2 id="documentation">Documentation</h2>
+<p><a href="https://robisim74.github.io/angular-l10n/">Angular l10n Specification</a></p>
+<h2 id="architecture">Architecture</h2>
+<p><img src="images/architecture.png" alt="Architecture" class="img-responsive"></p>
+<h2 id="table-of-contents">Table of Contents</h2>
+<ul>
+<li><a href="#installation">Installation</a></li>
+<li><a href="#usage">Usage</a></li>
+<li><a href="#types">Types</a></li>
+<li><a href="#intl-api">Intl API</a></li>
+<li><a href="#previous-versions">Previous versions</a></li>
+<li><a href="#contributing">Contributing</a></li>
+<li><a href="#license">License</a></li>
+</ul>
+<h2 id="installation">Installation</h2>
+<div><pre class="line-numbers"><code class="language-Shell">npm install angular-l10n --save </code></pre></div><h2 id="usage">Usage</h2>
+<p>You can find a complete sample app <a href="projects/angular-l10n-app">here</a></p>
+<h3 id="configuration">Configuration</h3>
+<p>Create the configuration:</p>
+<div><pre class="line-numbers"><code class="language-TypeScript">export const l10nConfig: L10nConfig = {
+    format: &#39;language-region&#39;,
+    providers: [
+        { name: &#39;app&#39;, asset: i18nAsset }
+    ],
+    cache: true,
+    keySeparator: &#39;.&#39;,
+    defaultLocale: { language: &#39;en-US&#39;, currency: &#39;USD&#39; },
+    schema: [
+        { locale: { language: &#39;en-US&#39;, currency: &#39;USD&#39; }, dir: &#39;ltr&#39;, text: &#39;United States&#39; },
+        { locale: { language: &#39;it-IT&#39;, currency: &#39;EUR&#39; }, dir: &#39;ltr&#39;, text: &#39;Italia&#39; }
+    ]
+};
+
+export function initL10n(l10nLoader: L10nLoader): () =&gt; Promise&lt;void&gt; {
+    return () =&gt; l10nLoader.init();
+}
+
+const i18nAsset = {
+    &#39;en-US&#39;: {
+        greeting: &quot;Hello world!&quot;,
+        whoIAm: &quot;I am {{name}}&quot;
+    },
+    &#39;it-IT&#39;: {
+        greeting: &quot;Ciao mondo!&quot;,
+        whoIAm: &quot;Sono {{name}}&quot;
+    }
+};</code></pre></div><p>Import the modules and the configuration:</p>
+<div><pre class="line-numbers"><code class="language-TypeScript">&#64;NgModule({
+    ...
+    imports: [
+        ...
+        L10nTranslationModule.forRoot(l10nConfig),
+        L10nIntlModule
+    ],
+    providers: [
+        {
+            provide: APP_INITIALIZER,
+            useFactory: initL10n,
+            deps: [L10nLoader],
+            multi: true
+        }
+    ],
+    bootstrap: [AppComponent]
+})
+export class AppModule { }</code></pre></div><h3 id="getting-the-translation">Getting the translation</h3>
+<h4 id="pure-pipes">Pure Pipes</h4>
+<div><pre class="line-numbers"><code class="language-Html">&lt;p title=&quot;{{ &#39;greeting&#39; | translate:locale.language }}&quot;&gt;{{ &#39;greeting&#39; | translate:locale.language }}&lt;/p&gt;
+&lt;p&gt;{{ &#39;whoIAm&#39; | translate:locale.language:{ name: &#39;Angular l10n&#39; } }}&lt;/p&gt;
+
+&lt;p&gt;{{ today | l10nDate:locale.language:{ dateStyle: &#39;full&#39;, timeStyle: &#39;short&#39; } }}&lt;/p&gt;
+
+&lt;p&gt;{{ value | l10nNumber:locale.language:{ digits: &#39;1.2-2&#39;, style: &#39;currency&#39; } }}&lt;/p&gt;</code></pre></div><p>Pure pipes need to know when the <em>locale</em> changes. So import <code>L10nLocale</code> injection token in the component:</p>
+<div><pre class="line-numbers"><code class="language-TypeScript">export class AppComponent {
+
+    constructor(&#64;Inject(L10N_LOCALE) public locale: L10nLocale) { }
+
+}</code></pre></div><h5 id="onpush-change-detection-strategy">OnPush Change Detection Strategy</h5>
+<p>To support this strategy, there is an async version of each pipe:</p>
+<div><pre class="line-numbers"><code class="language-Html">&lt;p&gt;{{ &#39;greeting&#39; | translateAsync }}&lt;/p&gt;</code></pre></div><h4 id="directives">Directives</h4>
+<div><pre class="line-numbers"><code class="language-Html">&lt;p l10n-title title=&quot;greeting&quot; l10nTranslate&gt;greeting&lt;/p&gt;
+&lt;p [params]=&quot;{ name: &#39;Angular l10n&#39; }&quot; l10nTranslate&gt;whoIAm&lt;/p&gt;
+
+&lt;p [options]=&quot;{ dateStyle: &#39;full&#39;, timeStyle: &#39;short&#39; }&quot; l10nDate&gt;{{ today }}&lt;/p&gt;
+&lt;p [options]=&quot;{ digits: &#39;1.2-2&#39;, style: &#39;currency&#39; }&quot; l10nNumber&gt;{{ value }}&lt;/p&gt;</code></pre></div><h4 id="apis">APIs</h4>
+<div><pre class="line-numbers"><code class="language-TypeScript">export class AppComponent implements OnInit {
+
+    constructor(private translation: L10nTranslationService, private intl: L10nIntlService) { }
+
+    ngOnInit() {
+        this.translation.onChange().subscribe({
+            next: () =&gt; {
+                this.greeting = this.translation.translate(&#39;greeting&#39;);
+                this.whoIAm = this.translation.translate(&#39;whoIAm&#39;, { name: &#39;Angular l10n&#39; });
+
+                this.formattedToday = this.intl.formatDate(this.today, { dateStyle: &#39;full&#39;, timeStyle: &#39;short&#39; });
+                this.formattedValue = this.intl.formatNumber(this.value, { digits: &#39;1.2-2&#39;, style: &#39;currency&#39; });
+            }
+        });
+    }
+
+}</code></pre></div><h3 id="customize-the-library">Customize the library</h3>
+<p>The following features can be customized. You just have to implement the indicated class-interface and pass the token during configuration.</p>
+<p>E.g.</p>
+<div><pre class="line-numbers"><code class="language-TypeScript">&#64;Injectable() export class HttpTranslationLoader implements L10nTranslationLoader {
+
+    private headers = new HttpHeaders({ &#39;Content-Type&#39;: &#39;application/json&#39; });
+
+    constructor(&#64;Optional() private http: HttpClient) { }
+
+    public get(language: string, provider: L10nProvider): Observable&lt;{ [key: string]: any }&gt; {
+        const url = `${provider.asset}-${language}.json`;
+        const options = {
+            headers: this.headers,
+            params: new HttpParams().set(&#39;v&#39;, provider.options.version)
+        };
+        return this.http.get(url, options);
+    }
+
+}
+
+export const l10nConfig: L10nConfig = {
+    ...
+    providers: [
+        { name: &#39;app&#39;, asset: &#39;./assets/i18n/app&#39;, options: { version: &#39;1.0.0&#39; } },
+    ],
+    ...
+};
+
+&#64;NgModule({
+    ...
+    imports: [
+        ...
+        L10nTranslationModule.forRoot(
+            l10nConfig,
+            {
+                translationLoader: HttpTranslationLoader
+            }
+        )
+    ],
+    ...
+})
+export class AppModule { }</code></pre></div><h4 id="storage">Storage</h4>
+<p>By default, the library does not store the <em>locale</em>. To store it implement the <code>L10nStorage</code> class-interface, so that the next time the user has the <em>locale</em> he selected.</p>
+<h4 id="user-language">User Language</h4>
+<p>By default, the library attempts to set the <em>locale</em> using the user&#39;s browser language, before falling back on the <em>default locale</em>. You can change this behavior by implementing the <code>L10nUserLanguage</code> class-interface, for example to get the language via server.</p>
+<h4 id="translation-loader">Translation Loader</h4>
+<p>By default, you can only pass JavaScript objects as translation data provider. To implement a different loader, you can implement the <code>L10nTranslationLoader</code> class-interface, as in the example above.</p>
+<h4 id="translation-fallback">Translation Fallback</h4>
+<p>You can enable translation fallback during configuration:</p>
+<div><pre class="line-numbers"><code class="language-TypeScript">export const l10nConfig: L10nConfig = {
+    ...
+    fallback: true,
+    ...
+};</code></pre></div><p>By default, the translation data will be merged in the following order:</p>
+<ul>
+<li><code>&#39;language&#39;</code></li>
+<li><code>&#39;language[-script]&#39;</code></li>
+<li><code>&#39;language[-script][-country]&#39;</code></li>
+</ul>
+<p>To change it, implement the <code>L10nTranslationFallback</code> class-interface.</p>
+<h4 id="translation-handler">Translation Handler</h4>
+<p>By default, the library only parse the <em>params</em>. <code>L10nTranslationHandler</code> is the class-interface to implement to modify the behavior.</p>
+<h4 id="missing-translation-handler">Missing Translation Handler</h4>
+<p>If a key is not found, the same key is returned. To return a different value, you can implement the <code>L10nMissingTranslationHandler</code> class-interface.</p>
+<h3 id="validation">Validation</h3>
+<p>There are two directives, that you can use with Template driven or Reactive forms: <code>l10nValidateNumber</code> and <code>l10nValidateDate</code>. To use them, you have to implement the <code>L10nValidation</code> class-interface, and import it with the validation module:</p>
+<div><pre class="line-numbers"><code class="language-TypeScript">&#64;Injectable() export class LocaleValidation implements L10nValidation {
+
+    constructor(&#64;Inject(L10N_LOCALE) private locale: L10nLocale) { }
+
+    public parseNumber(value: string, options?: L10nNumberFormatOptions, language = this.locale.language): number | null {
+        ...
+    }
+
+    public parseDate(value: string, options?: L10nDateTimeFormatOptions, language = this.locale.language): Date | null {
+        ...
+    }
+
+}
+
+&#64;NgModule({
+    ...
+    imports: [
+        ...
+        L10nValidationModule.forRoot({ validation: LocaleValidation })
+    ],
+    ...
+})
+export class AppModule { }</code></pre></div><h3 id="routing">Routing</h3>
+<p>You can enable the localized routing importing the routing module after others:</p>
+<div><pre class="line-numbers"><code class="language-TypeScript">&#64;NgModule({
+    ...
+    imports: [
+        ...
+        L10nRoutingModule.forRoot()
+    ],
+    ...
+})
+export class AppModule { }</code></pre></div><p>A prefix containing the language is added to the path of each navigation, creating a semantic URL:</p>
+<div><pre class="line-numbers"><code class="language-none">baseHref/[language][-script][-country]/path
+
+https://example.com/en/home
+https://example.com/en-US/home</code></pre></div><p>If the localized link is called, the <em>locale</em> is also set automatically.</p>
+<p>To achieve this, the router configuration in your app is not rewritten: the URL is replaced, in order to provide the different localized contents both to the crawlers and to the users that can refer to the localized links.</p>
+<p>If you don&#39;t want a localized routing for <em>default locale</em>, you can enable it during the configuration:</p>
+<div><pre class="line-numbers"><code class="language-TypeScript">export const l10nConfig: L10nConfig = {
+    ...
+    defaultRouting: true
+};</code></pre></div><h2 id="types">Types</h2>
+<p>Angular l10n types that it is useful to know:</p>
+<ul>
+<li><p><code>L10nLocale</code>: contains a <em>language</em>, in the format <code>language[-script][-region][-extension]</code>, where:</p>
+<ul>
+<li><p>language: ISO 639 two-letter or three-letter code</p>
+</li>
+<li><p>script: ISO 15924 four-letter script code</p>
+</li>
+<li><p>region: ISO 3166 two-letter, uppercase code</p>
+</li>
+<li><p>extension: &#39;u&#39; (Unicode) extensions</p>
+<p>Optionally a ISO 4217 three-letter code <em>currency</em> and a <em>timezone</em> from the IANA time zone database</p>
+</li>
+</ul>
+</li>
+<li><p><code>L10nFormat</code>: shows the format of the <em>language</em> to be used for translations. The supported formats are: <code>&#39;language&#39; | &#39;language-script&#39; | &#39;language-region&#39; | &#39;language-script-region&#39;</code>. So, for example, you can have a <em>language</em> like <code>en-US-u-ca-gregory-nu-latn</code> to format dates and numbers, but only use the <code>en-US</code> for translations setting <code>&#39;language-region&#39;</code></p>
+</li>
+<li><p><code>L10nDateTimeFormatOptions</code>: the type of <em>options</em> used to format dates. Extends the Intl <code>DateTimeFormatOptions</code> interface, adding the <em>dateStyle</em> and <em>timeStyle</em> attributes</p>
+</li>
+<li><p><code>L10nNumberFormatOptions</code>: the type of <em>options</em> used to format numbers. Extends the Intl <code>NumberFormatOptions</code> interface, adding the <em>digits</em> attribute</p>
+</li>
+</ul>
+<h2 id="intl-api">Intl API</h2>
+<p>To format dates and numbers, this library uses the <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl">Intl API</a></p>
+<p>Check the current browser support:</p>
+<ul>
+<li><a href="http://kangax.github.io/compat-table/esintl/">ECMAScript compatibility tables</a></li>
+<li><a href="http://caniuse.com/#feat=internationalization">Can I use</a></li>
+</ul>
+<p>All modern browsers have implemented this API. You can use a polyfill like <a href="https://polyfill.io/v3/">Polyfill.io</a> to extend support to old browsers.</p>
+<p>Just add one script tag in your <code>index.html</code>:</p>
+<div><pre class="line-numbers"><code class="language-Html">&lt;script crossorigin=&quot;anonymous&quot;
+    src=&quot;https://polyfill.io/v3/polyfill.min.js?flags=gated&amp;features=Intl.~locale.en-US&quot;&gt;&lt;/script&gt;</code></pre></div><p>When specifying the <code>features</code>, you have to specify what languages to load.</p>
+<p>Other polyfills:</p>
+<ul>
+<li>For <em>timezone</em>: <a href="https://github.com/formatjs/date-time-format-timezone">Intl.DateTimeFormat timezone</a></li>
+<li>For <em>timeAgo</em> pipe and directive: <a href="https://www.npmjs.com/package/@formatjs/intl-relativetimeformat">Intl.RelativeTimeFormat</a></li>
+</ul>
+<p>The <code>L10nIntlService</code> also provides methods for other APIs, such as <em>Collator</em>, <em>PluralRules</em> and <em>ListFormat</em>.</p>
+<h2 id="previous-versions">Previous versions</h2>
+<ul>
+<li><p><strong>Angular v8 (Angular l10n v8.1.2)</strong></p>
+<ul>
+<li><a href="https://github.com/robisim74/angular-l10n/tree/angular_v8/docs">Branch</a></li>
+</ul>
+</li>
+<li><p><strong>Angular v7 (Angular l10n v7.2.0)</strong></p>
+<ul>
+<li><a href="https://github.com/robisim74/angular-l10n/tree/angular_v7/docs">Branch</a></li>
+</ul>
+</li>
+<li><p><strong>Angular v6 (Angular l10n v5.2.0)</strong></p>
+<ul>
+<li><a href="https://github.com/robisim74/angular-l10n/tree/angular_v6/docs">Branch</a></li>
+</ul>
+</li>
+<li><p><strong>Angular v5 (Angular l10n v4.2.0)</strong></p>
+<ul>
+<li><a href="https://github.com/robisim74/angular-l10n/tree/angular_v5/docs">Branch</a></li>
+</ul>
+</li>
+<li><p><strong>Angular v4 (Angular l10n v3.5.2)</strong></p>
+<ul>
+<li><a href="https://github.com/robisim74/angular-l10n/tree/angular_v4">Branch</a></li>
+</ul>
+</li>
+<li><p><strong>Angular v2 (Angular l10n v2.0.11)</strong></p>
+<ul>
+<li><a href="https://github.com/robisim74/angular-l10n/tree/angular_v2">Branch</a></li>
+</ul>
+</li>
+</ul>
+<h2 id="contributing">Contributing</h2>
+<ul>
+<li><p>Building the library:</p>
+<div><pre class="line-numbers"><code class="language-Shell">  npm install
+  npm run build</code></pre></div></li>
+<li><p>Testing:</p>
+<div><pre class="line-numbers"><code class="language-Shell">  npm test</code></pre></div></li>
+<li><p>Serving the sample app:</p>
+<div><pre class="line-numbers"><code class="language-Shell">  npm start</code></pre></div></li>
+</ul>
+<h2 id="license">License</h2>
+<p>MIT</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                   
+
+
+
+
+                   </div><div class="search-results">
+    <div class="has-results">
+        <h1 class="search-results-title"><span class='search-results-count'></span> result-matching "<span class='search-query'></span>"</h1>
+        <ul class="search-results-list"></ul>
+    </div>
+    <div class="no-results">
+        <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+    </div>
+</div>
+</div>
+               <!-- END CONTENT -->
+           </div>
+       </div>
+
+       <script>
+            var COMPODOC_CURRENT_PAGE_DEPTH = 0;
+            var COMPODOC_CURRENT_PAGE_CONTEXT = 'getting-started';
+            var COMPODOC_CURRENT_PAGE_URL = 'index.html';
+            var MAX_SEARCH_RESULTS = 15;
+       </script>
+
+       <script src="./js/libs/custom-elements.min.js"></script>
+       <script src="./js/libs/lit-html.js"></script>
+       <!-- Required to polyfill modern browsers as code is ES5 for IE... -->
+       <script src="./js/libs/custom-elements-es5-adapter.js" charset="utf-8" defer></script>
+       <script src="./js/menu-wc.js" defer></script>
+
+       <script src="./js/libs/bootstrap-native.js"></script>
+
+       <script src="./js/libs/es6-shim.min.js"></script>
+       <script src="./js/libs/EventDispatcher.js"></script>
+       <script src="./js/libs/promise.min.js"></script>
+       <script src="./js/libs/zepto.min.js"></script>
+
+       <script src="./js/compodoc.js"></script>
+
+       <script src="./js/tabs.js"></script>
+       <script src="./js/menu.js"></script>
+       <script src="./js/libs/clipboard.min.js"></script>
+       <script src="./js/libs/prism.js"></script>
+       <script src="./js/sourceCode.js"></script>
+          <script src="./js/search/search.js"></script>
+          <script src="./js/search/lunr.min.js"></script>
+          <script src="./js/search/search-lunr.js"></script>
+          <script src="./js/search/search_index.js"></script>
+       <script src="./js/lazy-load-graphs.js"></script>
+
+
+    </body>
+</html>
