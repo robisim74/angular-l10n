@@ -168,8 +168,8 @@ describe('utils', () => {
             expect(toDate(100000000000)).toEqual(new Date(100000000000));
             expect(toDate('100000000000')).toEqual(new Date(100000000000));
             expect(toDate('2019-09-19')).toEqual(new Date(2019, 8, 19));
-            expect(toDate('2019-09-19T16:30:00')).toEqual(new Date('2019-09-19T16:30:00'));
-            expect(toDate(new Date('2019-09-19T16:30:00'))).toEqual(new Date('2019-09-19T16:30:00'));
+            expect(toDate('2019-09-19T16:30:00Z')).toEqual(new Date('2019-09-19T16:30:00Z'));
+            expect(toDate(new Date('2019-09-19T16:30:00Z'))).toEqual(new Date('2019-09-19T16:30:00Z'));
         });
     });
     describe('parseDigits', () => {

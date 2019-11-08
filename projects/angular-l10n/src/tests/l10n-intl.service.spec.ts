@@ -40,14 +40,14 @@ describe('L10nIntlService', () => {
         await loader.init();
     });
     it('should format dates', () => {
-        const value = new Date('2019-09-19T16:30:00');
+        const value = new Date('2019-09-19T16:30:00Z');
         expect(intl.formatDate(value)).toEqual('9/19/2019');
         expect(intl.formatDate(value, { dateStyle: 'full' })).toEqual('Thursday, September 19, 2019');
-        expect(intl.formatDate(value, { dateStyle: 'full', timeStyle: 'short' })).toEqual('Thursday, September 19, 2019, 7:30 AM');
+        expect(intl.formatDate(value, { dateStyle: 'full', timeStyle: 'short' })).toEqual('Thursday, September 19, 2019, 9:30 AM');
         expect(intl.formatDate(
             value,
             { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric' }
-        )).toEqual('Thursday, September 19, 2019, 7:30 AM');
+        )).toEqual('Thursday, September 19, 2019, 9:30 AM');
     });
     it('should format numbers', () => {
         const value = 1234.5;
