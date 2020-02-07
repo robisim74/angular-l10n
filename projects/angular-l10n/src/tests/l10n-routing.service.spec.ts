@@ -46,10 +46,10 @@ describe('L10nRoutingService', () => {
                     L10nRoutingModule.forRoot()
                 ]
             }).createComponent(MockComponent);
-            loader = TestBed.get(L10nLoader);
-            translation = TestBed.get(L10nTranslationService);
-            router = TestBed.get(Router);
-            location = TestBed.get(Location);
+            loader = TestBed.inject(L10nLoader);
+            translation = TestBed.inject(L10nTranslationService);
+            router = TestBed.inject(Router);
+            location = TestBed.inject(Location);
         });
         it('should replace url when the app starts', fakeAsync(() => {
             fixture.ngZone.run(() => {
@@ -162,10 +162,10 @@ describe('L10nRoutingService', () => {
                     L10nRoutingModule.forRoot()
                 ]
             }).createComponent(MockComponent);
-            loader = TestBed.get(L10nLoader);
-            translation = TestBed.get(L10nTranslationService);
-            router = TestBed.get(Router);
-            location = TestBed.get(Location);
+            loader = TestBed.inject(L10nLoader);
+            translation = TestBed.inject(L10nTranslationService);
+            router = TestBed.inject(Router);
+            location = TestBed.inject(Location);
         });
         it('should not replace url when the app starts', fakeAsync(() => {
             fixture.ngZone.run(() => {
