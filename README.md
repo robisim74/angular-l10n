@@ -30,7 +30,7 @@ npm install angular-l10n --save
 
 
 ## Usage
-You can find a complete sample app [here](projects/angular-l10n-app)
+You can find a complete sample app [here](projects/angular-l10n-app), and a [live example](https://stackblitz.com/edit/angular-l10n) on StackBlitz.
 
 ### Configuration
 Create the configuration:
