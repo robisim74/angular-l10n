@@ -135,6 +135,10 @@ export function toNumber(value: any): number {
 }
 
 export function toDate(value: any): Date {
+    if (isDate(value)) {
+        return value;
+    }
+
     if (typeof value === 'number' && !isNaN(value)) {
         return new Date(value);
     }
@@ -152,7 +156,12 @@ export function toDate(value: any): Date {
             return isoStringToDate(match);
         }
     }
-    return value;
+
+    const date = new Date(value as any);
+    if (!isDate(date)) {
+        throw l10nError(toDate, 'Invalid date');
+    }
+    return date;
 }
 
 export const PARSE_DATE_STYLE: { [format: string]: any } = {
@@ -182,6 +191,10 @@ export function parseDigits(digits: string) {
 
 function isObject(item: any): boolean {
     return typeof item === 'object' && !Array.isArray(item);
+}
+
+function isDate(value: any): value is Date {
+    return value instanceof Date && !isNaN(value.valueOf());
 }
 
 /**
