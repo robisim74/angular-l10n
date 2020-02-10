@@ -1,8 +1,9 @@
-import { OnDestroy, ChangeDetectorRef } from '@angular/core';
+import { Injectable, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { Subscription } from 'rxjs';
 
 import { L10nTranslationService } from '../services/l10n-translation.service';
 
+@Injectable()
 export class L10nAsyncPipe implements OnDestroy {
 
     protected onChanges: Subscription;
