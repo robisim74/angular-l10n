@@ -1,6 +1,6 @@
 {
   "name": "angular-l10n",
-  "version": "9.0.0",
+  "version": "9.0.1",
   "scripts": {
     "ng": "ng",
     "start": "ng serve angular-l10n-app --open",

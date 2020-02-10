@@ -361,7 +361,7 @@ export class L10nTranslationModule {
                 { provide: L10N_LOCALE, useValue: { language: &#x27;&#x27; } },
                 { provide: L10nStorage, useClass: token.storage || L10nDefaultStorage },
                 { provide: L10nUserLanguage, useClass: token.userLanguage || L10nDefaultUserLanguage },
-                { provide: L10nTranslationFallback, useClass: token.storage || L10nDefaultTranslationFallback },
+                { provide: L10nTranslationFallback, useClass: token.translationFallback || L10nDefaultTranslationFallback },
                 { provide: L10nTranslationLoader, useClass: token.translationLoader || L10nDefaultTranslationLoader },
                 { provide: L10nTranslationHandler, useClass: token.translationHandler || L10nDefaultTranslationHandler },
                 {
