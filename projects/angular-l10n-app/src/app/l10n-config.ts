@@ -22,7 +22,7 @@ export const l10nConfig: L10nConfig = {
         { name: 'app', asset: './assets/i18n/app', options: { version: '9.0.0' } },
         { name: 'lazy', asset: './assets/i18n/lazy', options: { version: '9.0.0' } }
     ],
-    fallback: true,
+    fallback: false,
     cache: true,
     keySeparator: '.',
     defaultLocale: { language: 'en-US', currency: 'USD', timeZone: 'America/Los_Angeles' },
