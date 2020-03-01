@@ -269,6 +269,31 @@ export const l10nConfig: L10nConfig = {
 };
 ```
 
+### Lazy loading
+If you want to add new providers to a lazy loaded module, you can use `L10nResolver` in your routing module:
+```TypeScript
+const routes: Routes = [
+    ...
+    {
+        path: 'lazy',
+        loadChildren: () => import('./lazy/lazy.module').then(m => m.LazyModule),
+        resolve: { l10n: L10nResolver },
+        data: {
+            l10nProviders: [{ name: 'lazy', asset: './assets/i18n/lazy', options: { version: '9.0.0' } }]
+        }
+    }
+];
+```
+
+### Caching
+Enable caching during configuration if you want to prevent reloading of the already loaded translation data:
+```TypeScript
+export const l10nConfig: L10nConfig = {
+    ...
+    cache: true
+};
+```
+
 
 ## Types
 Angular l10n types that it is useful to know:

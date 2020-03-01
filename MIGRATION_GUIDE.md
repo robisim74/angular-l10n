@@ -28,21 +28,17 @@
 - Update [Validation](https://github.com/robisim74/angular-l10n#validation): the new validation is only a skeleton that needs to be customized. You can find an example in the sample app. The old `LocaleValidation` class is still available [here](https://github.com/robisim74/angular-l10n/blob/angular_v8/src/services/locale-validation.ts)
 
 ### Lazy loading
-
-**Lazy loading is no longer natively supported**: in the new version you should centralize the configuration in the main module and the assets like the sample app.
+**`forChild` method is no longer supported**. Use a resolver as explained [here](https://github.com/robisim74/angular-l10n#lazy-loading)
 
 ### SEO
-
 Except for [routing](https://github.com/robisim74/angular-l10n#routing), **translation of _title_ and meta tags, as well as JSON-LD, are no longer available**. However, these classes and components are still available in the old branch:
 - [SearchService](https://github.com/robisim74/angular-l10n/blob/angular_v8/src/services/search.service.ts)
 - [L10nJsonLdComponent](https://github.com/robisim74/angular-l10n/blob/angular_v8/src/components/l10n-json-ld.component.ts)
 
 ### Locale interceptor
-
 This is no longer available. You can find the old class [here](https://github.com/robisim74/angular-l10n/blob/angular_v8/src/models/locale-interceptor.ts)
 
 ## Resources
-
 - [README](https://github.com/robisim74/angular-l10n/blob/master/README.md)
 - [Documentation](https://robisim74.github.io/angular-l10n/)
 - [Sample app](https://github.com/robisim74/angular-l10n/tree/master/projects/angular-l10n-app)
