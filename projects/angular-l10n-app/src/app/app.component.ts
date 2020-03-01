@@ -19,7 +19,10 @@ export class AppComponent implements OnInit {
 
     ngOnInit() {
         this.translation.onChange().subscribe({
-            next: (locale: L10nLocale) => console.log(locale)
+            next: (locale: L10nLocale) => {
+                console.log(locale);
+                console.log(this.translation.data);
+            }
         });
         this.translation.onError().subscribe({
             next: (error: any) => {

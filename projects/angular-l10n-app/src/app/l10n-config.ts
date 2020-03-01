@@ -19,8 +19,7 @@ import {
 export const l10nConfig: L10nConfig = {
     format: 'language-region',
     providers: [
-        { name: 'app', asset: './assets/i18n/app', options: { version: '9.0.0' } },
-        { name: 'lazy', asset: './assets/i18n/lazy', options: { version: '9.0.0' } }
+        { name: 'app', asset: './assets/i18n/app', options: { version: '9.0.0' } }
     ],
     fallback: false,
     cache: true,
