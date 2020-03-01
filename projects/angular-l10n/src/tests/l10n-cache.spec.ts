@@ -1,5 +1,5 @@
 import { TestBed } from '@angular/core/testing';
-import { from } from 'rxjs';
+import { of } from 'rxjs';
 
 import { L10nCache, L10nConfig, L10nTranslationModule } from '../public-api';
 
@@ -23,10 +23,15 @@ describe('L10nCache', () => {
         cache = TestBed.inject(L10nCache);
     });
     it('should read from cache', () => {
-        const request = cache.read('name', from(['first', 'last']));
-        request.subscribe();
+        let request = cache.read('name', of({ KEY1: 'key1' }));
         request.subscribe({
-            next: (value) => expect(value).toEqual('last')
+            next: (value) => expect(value).toEqual(jasmine.objectContaining({ KEY1: 'key1' }))
+        });
+        request = cache.read('name', of({ KEY1: 'key1' }));
+        request.subscribe({
+            // It doesn't have to happen.
+            next: () => expect(true).toBeFalse(),
+            complete: () => expect(true).toBeTrue()
         });
     });
 });

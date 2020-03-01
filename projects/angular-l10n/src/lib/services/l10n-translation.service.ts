@@ -1,7 +1,7 @@
 import { Injectable, Inject } from '@angular/core';
 import { Observable, BehaviorSubject, merge, concat } from 'rxjs';
 
-import { L10nLocale } from '../models/types';
+import { L10nLocale, L10nProvider } from '../models/types';
 import { L10N_CONFIG, L10nConfig, L10N_LOCALE } from '../models/l10n-config';
 import { formatLanguage, getSchema, getValue, mergeDeep } from '../models/utils';
 import { L10nCache } from './l10n-cache';
@@ -47,7 +47,7 @@ import { L10nMissingTranslationHandler } from './l10n-missing-translation-handle
      * @param locale The new locale
      */
     public async setLocale(locale: L10nLocale): Promise<void> {
-        await this.loadTranslation(locale);
+        await this.loadTranslation(this.config.providers, locale);
     }
 
     /**
@@ -134,17 +134,26 @@ import { L10nMissingTranslationHandler } from './l10n-missing-translation-handle
         }
 
         // Loads translation data.
-        await this.loadTranslation(locale);
+        await this.loadTranslation(this.config.providers, locale);
     }
 
     /**
      * Can be called at every translation change.
+     * @param providers An array of L10nProvider
+     * @param locale The current locale
      */
-    public async loadTranslation(locale = this.locale): Promise<void> {
+    public async loadTranslation(providers: L10nProvider[] = this.config.providers, locale = this.locale): Promise<void> {
+        // Updates providers
+        providers.forEach(provider => {
+            if (!this.config.providers.find(p => p.name === provider.name)) {
+                this.config.providers.push(provider);
+            }
+        });
+
         const language = formatLanguage(locale.language, this.config.format);
 
         return new Promise((resolve) => {
-            concat(...this.getTranslation(language)).subscribe({
+            concat(...this.getTranslation(providers, language)).subscribe({
                 next: (data) => this.addData(data, language),
                 error: (error) => {
                     this.releaseTranslation(locale);
@@ -159,11 +168,11 @@ import { L10nMissingTranslationHandler } from './l10n-missing-translation-handle
         });
     }
 
-    private getTranslation(language: string): Observable<any>[] {
+    private getTranslation(providers: L10nProvider[], language: string): Observable<any>[] {
         const lazyLoaders: Observable<any>[] = [];
         let loaders: Observable<any>[] = [];
 
-        for (const provider of this.config.providers) {
+        for (const provider of providers) {
             if (this.config.fallback) {
                 loaders = loaders.concat(this.translationFallback.get(language, provider));
             } else {

@@ -8,6 +8,8 @@ export * from './lib/models/l10n-config';
 export * from './lib/models/l10n-async-pipe';
 export * from './lib/models/l10n-directive';
 export * from './lib/models/utils';
+// Services
+export * from './lib/services/l10n-resolver';
 // L10nTranslationModule
 export * from './lib/services/l10n-translation.service';
 export * from './lib/services/l10n-cache';
