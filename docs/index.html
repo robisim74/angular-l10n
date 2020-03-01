@@ -244,6 +244,23 @@ https://example.com/en-US/home</code></pre></div><p>If the localized link is cal
 <div><pre class="line-numbers"><code class="language-TypeScript">export const l10nConfig: L10nConfig = {
     ...
     defaultRouting: true
+};</code></pre></div><h3 id="lazy-loading">Lazy loading</h3>
+<p>If you want to add new providers to a lazy loaded module, you can use <code>L10nResolver</code> in your routing module:</p>
+<div><pre class="line-numbers"><code class="language-TypeScript">const routes: Routes = [
+    ...
+    {
+        path: &#39;lazy&#39;,
+        loadChildren: () =&gt; import(&#39;./lazy/lazy.module&#39;).then(m =&gt; m.LazyModule),
+        resolve: { l10n: L10nResolver },
+        data: {
+            l10nProviders: [{ name: &#39;lazy&#39;, asset: &#39;./assets/i18n/lazy&#39;, options: { version: &#39;9.0.0&#39; } }]
+        }
+    }
+];</code></pre></div><h3 id="caching">Caching</h3>
+<p>Enable caching during configuration if you want to prevent reloading of the already loaded translation data:</p>
+<div><pre class="line-numbers"><code class="language-TypeScript">export const l10nConfig: L10nConfig = {
+    ...
+    cache: true
 };</code></pre></div><h2 id="types">Types</h2>
 <p>Angular l10n types that it is useful to know:</p>
 <ul>

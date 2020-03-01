@@ -339,8 +339,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="184"
-                            class="link-to-prism">projects/angular-l10n/src/lib/services/l10n-translation.service.ts:184</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="193"
+                            class="link-to-prism">projects/angular-l10n/src/lib/services/l10n-translation.service.ts:193</a></div>
                 </td>
             </tr>
 
@@ -533,15 +533,15 @@
             <tr>
                 <td class="col-md-4">
                     <span class="modifier-icon icon ion-ios-reset"></span>
-                    <code>getTranslation(language: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>)</code>
+                    <code>getTranslation(providers: <a href="../interfaces/L10nProvider.html">L10nProvider[]</a>, language: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>)</code>
                 </td>
             </tr>
 
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="162"
-                            class="link-to-prism">projects/angular-l10n/src/lib/services/l10n-translation.service.ts:162</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="171"
+                            class="link-to-prism">projects/angular-l10n/src/lib/services/l10n-translation.service.ts:171</a></div>
                 </td>
             </tr>
 
@@ -560,6 +560,18 @@
                                 </tr>
                             </thead>
                             <tbody>
+                                <tr>
+                                    <td>providers</td>
+                                    <td>
+                                                <code><a href="../interfaces/L10nProvider.html" target="_self" >L10nProvider[]</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
                                 <tr>
                                     <td>language</td>
                                     <td>
@@ -612,8 +624,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="190"
-                            class="link-to-prism">projects/angular-l10n/src/lib/services/l10n-translation.service.ts:190</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="199"
+                            class="link-to-prism">projects/angular-l10n/src/lib/services/l10n-translation.service.ts:199</a></div>
                 </td>
             </tr>
 
@@ -822,15 +834,15 @@
             <tr>
                 <td class="col-md-4">
                     <span class="modifier-icon icon ion-ios-reset"></span>
-                    <code>loadTranslation(locale)</code>
+                    <code>loadTranslation(providers: <a href="../interfaces/L10nProvider.html">L10nProvider[]</a>, locale)</code>
                 </td>
             </tr>
 
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="143"
-                            class="link-to-prism">projects/angular-l10n/src/lib/services/l10n-translation.service.ts:143</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="145"
+                            class="link-to-prism">projects/angular-l10n/src/lib/services/l10n-translation.service.ts:145</a></div>
                 </td>
             </tr>
 
@@ -846,13 +858,36 @@
                             <thead>
                                 <tr>
                                     <td>Name</td>
+                                    <td>Type</td>
                                     <td>Optional</td>
                                     <td>Default value</td>
+                                    <td>Description</td>
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr>
+                                    <td>providers</td>
+                                    <td>
+                                                <code><a href="../interfaces/L10nProvider.html" target="_self" >L10nProvider[]</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+                                    <td>
+                                        <code>this.config.providers</code>
+                                    </td>
+
+                                    <td>
+                                        <p>An array of L10nProvider</p>
+
+                                    </td>
+                                </tr>
+                                <tr>
                                     <td>locale</td>
+                                    <td>
+                                    </td>
 
                                     <td>
                                         No
@@ -862,6 +897,10 @@
                                         <code>this.locale</code>
                                     </td>
 
+                                    <td>
+                                        <p>The current locale</p>
+
+                                    </td>
                                 </tr>
                             </tbody>
                         </table>
@@ -989,8 +1028,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="194"
-                            class="link-to-prism">projects/angular-l10n/src/lib/services/l10n-translation.service.ts:194</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="203"
+                            class="link-to-prism">projects/angular-l10n/src/lib/services/l10n-translation.service.ts:203</a></div>
                 </td>
             </tr>
 
@@ -1344,7 +1383,7 @@
         <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { Injectable, Inject } from &#x27;@angular/core&#x27;;
 import { Observable, BehaviorSubject, merge, concat } from &#x27;rxjs&#x27;;
 
-import { L10nLocale } from &#x27;../models/types&#x27;;
+import { L10nLocale, L10nProvider } from &#x27;../models/types&#x27;;
 import { L10N_CONFIG, L10nConfig, L10N_LOCALE } from &#x27;../models/l10n-config&#x27;;
 import { formatLanguage, getSchema, getValue, mergeDeep } from &#x27;../models/utils&#x27;;
 import { L10nCache } from &#x27;./l10n-cache&#x27;;
@@ -1390,7 +1429,7 @@ import { L10nMissingTranslationHandler } from &#x27;./l10n-missing-translation-h
      * @param locale The new locale
      */
     public async setLocale(locale: L10nLocale): Promise&lt;void&gt; {
-        await this.loadTranslation(locale);
+        await this.loadTranslation(this.config.providers, locale);
     }
 
     /**
@@ -1477,17 +1516,26 @@ import { L10nMissingTranslationHandler } from &#x27;./l10n-missing-translation-h
         }
 
         // Loads translation data.
-        await this.loadTranslation(locale);
+        await this.loadTranslation(this.config.providers, locale);
     }
 
     /**
      * Can be called at every translation change.
+     * @param providers An array of L10nProvider
+     * @param locale The current locale
      */
-    public async loadTranslation(locale &#x3D; this.locale): Promise&lt;void&gt; {
+    public async loadTranslation(providers: L10nProvider[] &#x3D; this.config.providers, locale &#x3D; this.locale): Promise&lt;void&gt; {
+        // Updates providers
+        providers.forEach(provider &#x3D;&gt; {
+            if (!this.config.providers.find(p &#x3D;&gt; p.name &#x3D;&#x3D;&#x3D; provider.name)) {
+                this.config.providers.push(provider);
+            }
+        });
+
         const language &#x3D; formatLanguage(locale.language, this.config.format);
 
         return new Promise((resolve) &#x3D;&gt; {
-            concat(...this.getTranslation(language)).subscribe({
+            concat(...this.getTranslation(providers, language)).subscribe({
                 next: (data) &#x3D;&gt; this.addData(data, language),
                 error: (error) &#x3D;&gt; {
                     this.releaseTranslation(locale);
@@ -1502,11 +1550,11 @@ import { L10nMissingTranslationHandler } from &#x27;./l10n-missing-translation-h
         });
     }
 
-    private getTranslation(language: string): Observable&lt;any&gt;[] {
+    private getTranslation(providers: L10nProvider[], language: string): Observable&lt;any&gt;[] {
         const lazyLoaders: Observable&lt;any&gt;[] &#x3D; [];
         let loaders: Observable&lt;any&gt;[] &#x3D; [];
 
-        for (const provider of this.config.providers) {
+        for (const provider of providers) {
             if (this.config.fallback) {
                 loaders &#x3D; loaders.concat(this.translationFallback.get(language, provider));
             } else {
