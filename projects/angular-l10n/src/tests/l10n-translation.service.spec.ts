@@ -44,8 +44,8 @@ describe('L10nTranslationService', () => {
         keySeparator: '.',
         defaultLocale: { language: 'en-US' },
         schema: [
-            { locale: { language: 'en-US' }, dir: 'ltr' },
-            { locale: { language: 'it-IT' }, dir: 'ltr' }
+            { locale: { language: 'en-US-u-nu-latn' }, dir: 'ltr' },
+            { locale: { language: 'it-IT-u-nu-latn' }, dir: 'ltr' }
         ]
     };
     beforeEach(async () => {
@@ -107,6 +107,9 @@ describe('L10nTranslationService', () => {
     it('should get the current language direction', async () => {
         await translation.setLocale({ language: 'it-IT' });
         expect(translation.getLanguageDirection()).toEqual('ltr');
+    });
+    it('should get available languages', async () => {
+        expect(translation.getAvailableLanguages()).toEqual(['en-US', 'it-IT']);
     });
 });
 

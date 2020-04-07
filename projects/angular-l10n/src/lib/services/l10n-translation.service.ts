@@ -110,6 +110,15 @@ import { L10nMissingTranslationHandler } from './l10n-missing-translation-handle
         if (schema) return schema.dir;
     }
 
+    // Gets available languages.
+    public getAvailableLanguages(): string[] {
+        let languages: string[] = [];
+        if (this.config.schema && this.config.format) {
+            languages = this.config.schema.map(item => formatLanguage(item.locale.language, this.config.format));
+        }
+        return languages;
+    }
+
     /**
      * Should only be called when the service instance is created.
      */
