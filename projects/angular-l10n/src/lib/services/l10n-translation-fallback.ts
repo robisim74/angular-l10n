@@ -33,7 +33,7 @@ import { L10nTranslationLoader } from './l10n-translation-loader';
      * Translation data will be merged in the following order:
      * 'language'
      * 'language[-script]'
-     * 'language[-script][-country]'
+     * 'language[-script][-region]'
      */
     public get(language: string, provider: L10nProvider): Observable<any>[] {
         const loaders: Observable<any>[] = [];

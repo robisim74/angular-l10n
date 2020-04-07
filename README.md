@@ -117,6 +117,9 @@ To support this strategy, there is an async version of each pipe:
 <p [options]="{ dateStyle: 'full', timeStyle: 'short' }" l10nDate>{{ today }}</p>
 <p [options]="{ digits: '1.2-2', style: 'currency' }" l10nNumber>{{ value }}</p>
 ```
+
+You can dynamically change parameters and expressions values as with pipes, but not in attributes.
+
 #### APIs
 ```TypeScript
 export class AppComponent implements OnInit {
@@ -201,7 +204,7 @@ export const l10nConfig: L10nConfig = {
 By default, the translation data will be merged in the following order:
 - `'language'`
 - `'language[-script]'`
-- `'language[-script][-country]'`
+- `'language[-script][-region]'`
 
 To change it, implement the `L10nTranslationFallback` class-interface.
 #### Translation Handler
@@ -252,7 +255,7 @@ export class AppModule { }
 ```
 A prefix containing the language is added to the path of each navigation, creating a semantic URL:
 ```
-baseHref/[language][-script][-country]/path
+baseHref/[language][-script][-region]/path
 
 https://example.com/en/home
 https://example.com/en-US/home
