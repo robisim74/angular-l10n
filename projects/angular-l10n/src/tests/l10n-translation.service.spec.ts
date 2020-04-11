@@ -5,7 +5,7 @@ import { Injectable, Optional } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
-import { L10nTranslationService, L10nConfig, L10nTranslationModule, L10nTranslationLoader, L10nProvider } from '../public-api';
+import { L10nTranslationService, L10nConfig, L10nTranslationModule, L10nTranslationLoader, L10nProvider, L10nUserLanguage } from '../public-api';
 
 @Injectable() class HttpTranslationLoader implements L10nTranslationLoader {
     private headers = new HttpHeaders({ 'Content-Type': 'application/json' });
@@ -18,6 +18,14 @@ import { L10nTranslationService, L10nConfig, L10nTranslationModule, L10nTranslat
         };
         return this.http.get(url, options);
     }
+}
+
+@Injectable() export class UserLanguage implements L10nUserLanguage {
+
+    public get(): Promise<string | null> {
+        return Promise.resolve(null);
+    }
+
 }
 
 describe('L10nTranslationService', () => {
@@ -51,7 +59,9 @@ describe('L10nTranslationService', () => {
     beforeEach(async () => {
         TestBed.configureTestingModule({
             imports: [
-                L10nTranslationModule.forRoot(config)
+                L10nTranslationModule.forRoot(config, {
+                    userLanguage: UserLanguage
+                })
             ]
         });
         translation = TestBed.inject(L10nTranslationService);

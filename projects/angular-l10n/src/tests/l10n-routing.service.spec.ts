@@ -2,16 +2,24 @@ import { TestBed, ComponentFixture, fakeAsync, tick } from '@angular/core/testin
 import { RouterTestingModule } from '@angular/router/testing';
 import { SpyLocation } from '@angular/common/testing';
 
-import { Component } from '@angular/core';
+import { Component, Injectable } from '@angular/core';
 import { Router, Route } from '@angular/router';
 import { Location } from '@angular/common';
 
-import { L10nLoader, L10nTranslationService, L10nConfig, L10nTranslationModule, L10nRoutingModule } from '../public-api';
+import { L10nLoader, L10nTranslationService, L10nConfig, L10nTranslationModule, L10nRoutingModule, L10nUserLanguage } from '../public-api';
 
 @Component({
     template: ``
 })
 class MockComponent { }
+
+@Injectable() export class UserLanguage implements L10nUserLanguage {
+
+    public get(): Promise<string | null> {
+        return Promise.resolve(null);
+    }
+
+}
 
 describe('L10nRoutingService', () => {
     const routes: Route[] = [
@@ -42,7 +50,9 @@ describe('L10nRoutingService', () => {
                 declarations: [MockComponent],
                 imports: [
                     RouterTestingModule.withRoutes(routes),
-                    L10nTranslationModule.forRoot(config),
+                    L10nTranslationModule.forRoot(config, {
+                        userLanguage: UserLanguage
+                    }),
                     L10nRoutingModule.forRoot()
                 ]
             }).createComponent(MockComponent);
@@ -158,7 +168,9 @@ describe('L10nRoutingService', () => {
                 declarations: [MockComponent],
                 imports: [
                     RouterTestingModule.withRoutes(routes),
-                    L10nTranslationModule.forRoot(config),
+                    L10nTranslationModule.forRoot(config, {
+                        userLanguage: UserLanguage
+                    }),
                     L10nRoutingModule.forRoot()
                 ]
             }).createComponent(MockComponent);
