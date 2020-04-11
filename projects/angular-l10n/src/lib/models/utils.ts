@@ -7,6 +7,7 @@ export function validateLanguage(language: string): boolean {
 }
 
 export function formatLanguage(language: string, format: L10nFormat): string {
+    if (language == null || language === '') return '';
     if (!validateLanguage(language)) throw l10nError(formatLanguage, 'Invalid language');
 
     const [, LANGUAGE = '', SCRIPT = '', REGION = ''] = language.match(/^([a-z]{2,3})(\-[A-Z][a-z]{3})?(\-[A-Z]{2})?/) || [];
@@ -37,10 +38,7 @@ export function parseLanguage(language: string) {
 export function getBrowserLanguage(): string | null {
     let browserLanguage = null;
     if (navigator !== undefined && navigator.language) {
-        browserLanguage = navigator.language;
-    }
-    if (browserLanguage != null) {
-        browserLanguage = browserLanguage.split('-')[0];
+        browserLanguage = navigator.language.split('-')[0];
     }
     return browserLanguage;
 }

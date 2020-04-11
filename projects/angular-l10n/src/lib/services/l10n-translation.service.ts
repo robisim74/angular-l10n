@@ -110,12 +110,11 @@ import { L10nMissingTranslationHandler } from './l10n-missing-translation-handle
         if (schema) return schema.dir;
     }
 
-    // Gets available languages.
+    /**
+     * Gets available languages.
+     */
     public getAvailableLanguages(): string[] {
-        let languages: string[] = [];
-        if (this.config.schema && this.config.format) {
-            languages = this.config.schema.map(item => formatLanguage(item.locale.language, this.config.format));
-        }
+        const languages = this.config.schema.map(item => formatLanguage(item.locale.language, this.config.format));
         return languages;
     }
 

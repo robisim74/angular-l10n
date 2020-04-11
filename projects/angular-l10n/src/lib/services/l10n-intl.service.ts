@@ -37,7 +37,7 @@ import { L10nTranslationService } from './l10n-translation.service';
         language = this.locale.language,
         timeZone = this.locale.timeZone
     ): string {
-        if (!hasDateTimeFormat) return value;
+        if (!hasDateTimeFormat || language == null || language === '') return value;
 
         value = toDate(value);
 
@@ -75,7 +75,7 @@ import { L10nTranslationService } from './l10n-translation.service';
         currency = this.locale.currency
     ): string {
         if (!hasNumberFormat && options && options.style === 'currency') return `${value} ${currency}`;
-        if (!hasNumberFormat) return value;
+        if (!hasNumberFormat || language == null || language === '') return value;
 
         value = toNumber(value);
 
@@ -105,7 +105,7 @@ import { L10nTranslationService } from './l10n-translation.service';
         options?: Intl.RelativeTimeFormatOptions,
         language = this.locale.language
     ): string {
-        if (!hasRelativeTimeFormat) return value;
+        if (!hasRelativeTimeFormat || language == null || language === '') return value;
 
         value = toNumber(value);
 
@@ -139,7 +139,7 @@ import { L10nTranslationService } from './l10n-translation.service';
      *         0 if they are considered equal or Intl.Collator is not supported
      */
     public compare(key1: string, key2: string, options?: Intl.CollatorOptions, language = this.locale.language): number {
-        if (!hasCollator()) return 0;
+        if (!hasCollator() || language == null || language === '') return 0;
 
         const value1 = this.translation.translate(key1);
         const value2 = this.translation.translate(key2);
@@ -154,7 +154,7 @@ import { L10nTranslationService } from './l10n-translation.service';
      * @param language The current language
      */
     public plural(value: number, options?: Intl.PluralRulesOptions, language = this.locale.language): string {
-        if (!hasPluralRules()) return value.toString();
+        if (!hasPluralRules() || language == null || language === '') return value.toString();
 
         const rule = new Intl.PluralRules(language, options).select(value);
 
@@ -169,7 +169,7 @@ import { L10nTranslationService } from './l10n-translation.service';
      */
     public list(list: string[], options?: Intl.ListFormatOptions, language = this.locale.language): string {
         const values = list.map(key => this.translation.translate(key));
-        if (!hasListFormat()) return values.toString();
+        if (!hasListFormat() || language == null || language === '') return values.toString();
 
         return new Intl.ListFormat(language, options).format(values);
     }
