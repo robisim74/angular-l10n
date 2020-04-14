@@ -59,6 +59,20 @@ import { L10nTranslationService } from './l10n-translation.service';
     }
 
     /**
+     * Removes the language from the path and navigates.
+     * @param path Localized path
+     * @param skipLocationChange When true, navigates without pushing a new state into history
+     */
+    public redirectToPath(path: string, skipLocationChange: boolean): void {
+        const segment = this.getLocalizedSegment(path);
+        if (segment != null) {
+            const url = path.replace(segment, '/');
+            // navigateByUrl keeps the query params.
+            this.router.navigateByUrl(url, { skipLocationChange });
+        }
+    }
+
+    /**
      * Parses path to find the language.
      * @param path The path to be parsed
      */
@@ -72,20 +86,6 @@ import { L10nTranslationService } from './l10n-translation.service';
             if (schema) {
                 await this.translation.setLocale(schema.locale);
             }
-        }
-    }
-
-    /**
-     * Removes the language from the path and navigates.
-     * @param path Localized path
-     * @param skipLocationChange When true, navigates without pushing a new state into history
-     */
-    private redirectToPath(path: string, skipLocationChange: boolean): void {
-        const segment = this.getLocalizedSegment(path);
-        if (segment != null) {
-            const url = path.replace(segment, '/');
-            // navigateByUrl keeps the query params.
-            this.router.navigateByUrl(url, { skipLocationChange });
         }
     }
 
@@ -131,6 +131,9 @@ import { L10nTranslationService } from './l10n-translation.service';
     }
 
     private getLocalizedPath(language: string, path: string): string {
+        const segment = this.getLocalizedSegment(path);
+        if (segment != null && segment.includes(language)) return path;
+
         return Location.stripTrailingSlash('/' + language + path);
     }
 

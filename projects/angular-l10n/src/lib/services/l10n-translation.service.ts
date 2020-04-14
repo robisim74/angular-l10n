@@ -160,6 +160,8 @@ import { L10nMissingTranslationHandler } from './l10n-missing-translation-handle
 
         const language = formatLanguage(locale.language, this.config.format);
 
+        if (language == null || language === '') return Promise.resolve();
+
         return new Promise((resolve) => {
             concat(...this.getTranslation(providers, language)).subscribe({
                 next: (data) => this.addData(data, language),
