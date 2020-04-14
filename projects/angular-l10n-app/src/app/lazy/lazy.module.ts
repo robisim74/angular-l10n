@@ -12,8 +12,8 @@ import { L10nTranslationModule, L10nIntlModule, L10nValidationModule } from 'ang
         CommonModule,
         LazyRoutingModule,
         L10nTranslationModule,
-        L10nIntlModule,
-        L10nValidationModule
+        // L10nIntlModule,
+        // L10nValidationModule
     ]
 })
 export class LazyModule { }

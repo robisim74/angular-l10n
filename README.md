@@ -287,6 +287,17 @@ const routes: Routes = [
     }
 ];
 ```
+Always import the modules you need:
+```TypeScript
+@NgModule({
+    declarations: [LazyComponent],
+    imports: [
+        ...
+        L10nTranslationModule
+    ]
+})
+export class LazyModule { }
+```
 
 ### Caching
 Enable caching during configuration if you want to prevent reloading of the already loaded translation data:
