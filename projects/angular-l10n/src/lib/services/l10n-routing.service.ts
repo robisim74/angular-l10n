@@ -26,10 +26,6 @@ import { L10nTranslationService } from './l10n-translation.service';
     ) { }
 
     public async init(): Promise<void> {
-        // Parses the url to find the language when the app starts.
-        const path = this.location.path(true);
-        await this.parsePath(path);
-
         // Parses the url to find the language when a navigation starts.
         this.router.events.pipe(
             filter((event: any) => event instanceof NavigationStart)
@@ -56,20 +52,11 @@ import { L10nTranslationService } from './l10n-translation.service';
         this.translation.onChange().subscribe({
             next: (locale: L10nLocale) => this.replacePath(locale)
         });
-    }
 
-    /**
-     * Removes the language from the path and navigates.
-     * @param path Localized path
-     * @param skipLocationChange When true, navigates without pushing a new state into history
-     */
-    public redirectToPath(path: string, skipLocationChange: boolean): void {
-        const segment = this.getLocalizedSegment(path);
-        if (segment != null) {
-            const url = path.replace(segment, '/');
-            // navigateByUrl keeps the query params.
-            this.router.navigateByUrl(url, { skipLocationChange });
-        }
+        // Initial navigation.
+        const path = this.location.path(true);
+        // Parses the url to find the language.
+        await this.parsePath(path);
     }
 
     /**
@@ -86,6 +73,20 @@ import { L10nTranslationService } from './l10n-translation.service';
             if (schema) {
                 await this.translation.setLocale(schema.locale);
             }
+        }
+    }
+
+    /**
+     * Removes the language from the path and navigates.
+     * @param path Localized path
+     * @param skipLocationChange When true, navigates without pushing a new state into history
+     */
+    private redirectToPath(path: string, skipLocationChange: boolean): void {
+        const segment = this.getLocalizedSegment(path);
+        if (segment != null) {
+            const url = path.replace(segment, '/');
+            // navigateByUrl keeps the query params.
+            this.router.navigateByUrl(url, { skipLocationChange });
         }
     }
 
