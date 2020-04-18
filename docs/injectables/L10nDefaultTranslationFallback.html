@@ -204,7 +204,7 @@
                     <div class="io-description"><p>Translation data will be merged in the following order:
 &#39;language&#39;
 &#39;language[-script]&#39;
-&#39;language[-script][-country]&#39;</p>
+&#39;language[-script][-region]&#39;</p>
 </div>
 
                     <div class="io-description">
@@ -299,7 +299,7 @@ import { L10nTranslationLoader } from &#x27;./l10n-translation-loader&#x27;;
      * Translation data will be merged in the following order:
      * &#x27;language&#x27;
      * &#x27;language[-script]&#x27;
-     * &#x27;language[-script][-country]&#x27;
+     * &#x27;language[-script][-region]&#x27;
      */
     public get(language: string, provider: L10nProvider): Observable&lt;any&gt;[] {
         const loaders: Observable&lt;any&gt;[] &#x3D; [];

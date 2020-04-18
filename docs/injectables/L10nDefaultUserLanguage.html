@@ -91,6 +91,54 @@
     </table>
 </section>
 
+            <section>
+    <h3 id="constructor">Constructor</h3>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+<code>constructor(config: <a href="../interfaces/L10nConfig.html">L10nConfig</a>)</code>
+                    </td>
+                </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="18" class="link-to-prism">projects/angular-l10n/src/lib/services/l10n-user-language.ts:18</a></div>
+                            </td>
+                        </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                            <div>
+                                    <b>Parameters :</b>
+                                    <table class="params">
+                                        <thead>
+                                            <tr>
+                                                <td>Name</td>
+                                                    <td>Type</td>
+                                                <td>Optional</td>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                                <tr>
+                                                        <td>config</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="../interfaces/L10nConfig.html" target="_self" >L10nConfig</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                        </tbody>
+                                    </table>
+                            </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+</section>
 
             <section>
     
@@ -121,8 +169,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="20"
-                            class="link-to-prism">projects/angular-l10n/src/lib/services/l10n-user-language.ts:20</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="22"
+                            class="link-to-prism">projects/angular-l10n/src/lib/services/l10n-user-language.ts:22</a></div>
                 </td>
             </tr>
 
@@ -144,9 +192,9 @@
 
 
     <div class="tab-pane fade  tab-source-code" id="c-source">
-        <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { Injectable } from &#x27;@angular/core&#x27;;
+        <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { Injectable, Inject } from &#x27;@angular/core&#x27;;
 
-import { getBrowserLanguage } from &#x27;../models/utils&#x27;;
+import { L10N_CONFIG, L10nConfig } from &#x27;../models/l10n-config&#x27;;
 
 /**
  * Implement this class-interface to get the user language.
@@ -163,8 +211,20 @@ import { getBrowserLanguage } from &#x27;../models/utils&#x27;;
 
 @Injectable() export class L10nDefaultUserLanguage implements L10nUserLanguage {
 
+    constructor(@Inject(L10N_CONFIG) private config: L10nConfig) { }
+
     public get(): Promise&lt;string | null&gt; {
-        const browserLanguage &#x3D; getBrowserLanguage();
+        let browserLanguage &#x3D; null;
+        if (navigator !&#x3D;&#x3D; undefined &amp;&amp; navigator.language) {
+            switch (this.config.format) {
+                case &#x27;language&#x27;:
+                    browserLanguage &#x3D; navigator.language.split(&#x27;-&#x27;)[0];
+                    break
+                case &#x27;language-region&#x27;:
+                    browserLanguage &#x3D; navigator.language;
+                    break
+            }
+        }
         return Promise.resolve(browserLanguage);
     }
 

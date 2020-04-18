@@ -248,8 +248,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="133"
-                            class="link-to-prism">projects/angular-l10n/src/lib/services/l10n-routing.service.ts:133</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="134"
+                            class="link-to-prism">projects/angular-l10n/src/lib/services/l10n-routing.service.ts:134</a></div>
                 </td>
             </tr>
 
@@ -332,8 +332,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="121"
-                            class="link-to-prism">projects/angular-l10n/src/lib/services/l10n-routing.service.ts:121</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="122"
+                            class="link-to-prism">projects/angular-l10n/src/lib/services/l10n-routing.service.ts:122</a></div>
                 </td>
             </tr>
 
@@ -446,8 +446,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="137"
-                            class="link-to-prism">projects/angular-l10n/src/lib/services/l10n-routing.service.ts:137</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="141"
+                            class="link-to-prism">projects/angular-l10n/src/lib/services/l10n-routing.service.ts:141</a></div>
                 </td>
             </tr>
 
@@ -488,8 +488,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="65"
-                            class="link-to-prism">projects/angular-l10n/src/lib/services/l10n-routing.service.ts:65</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="66"
+                            class="link-to-prism">projects/angular-l10n/src/lib/services/l10n-routing.service.ts:66</a></div>
                 </td>
             </tr>
 
@@ -567,8 +567,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="83"
-                            class="link-to-prism">projects/angular-l10n/src/lib/services/l10n-routing.service.ts:83</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="84"
+                            class="link-to-prism">projects/angular-l10n/src/lib/services/l10n-routing.service.ts:84</a></div>
                 </td>
             </tr>
 
@@ -662,8 +662,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="97"
-                            class="link-to-prism">projects/angular-l10n/src/lib/services/l10n-routing.service.ts:97</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="98"
+                            class="link-to-prism">projects/angular-l10n/src/lib/services/l10n-routing.service.ts:98</a></div>
                 </td>
             </tr>
 
@@ -816,10 +816,6 @@ import { L10nTranslationService } from &#x27;./l10n-translation.service&#x27;;
     ) { }
 
     public async init(): Promise&lt;void&gt; {
-        // Parses the url to find the language when the app starts.
-        const path &#x3D; this.location.path(true);
-        await this.parsePath(path);
-
         // Parses the url to find the language when a navigation starts.
         this.router.events.pipe(
             filter((event: any) &#x3D;&gt; event instanceof NavigationStart)
@@ -846,6 +842,11 @@ import { L10nTranslationService } from &#x27;./l10n-translation.service&#x27;;
         this.translation.onChange().subscribe({
             next: (locale: L10nLocale) &#x3D;&gt; this.replacePath(locale)
         });
+
+        // Initial navigation.
+        const path &#x3D; this.location.path(true);
+        // Parses the url to find the language.
+        await this.parsePath(path);
     }
 
     /**
@@ -921,6 +922,9 @@ import { L10nTranslationService } from &#x27;./l10n-translation.service&#x27;;
     }
 
     private getLocalizedPath(language: string, path: string): string {
+        const segment &#x3D; this.getLocalizedSegment(path);
+        if (segment !&#x3D; null &amp;&amp; segment.includes(language)) return path;
+
         return Location.stripTrailingSlash(&#x27;/&#x27; + language + path);
     }
 

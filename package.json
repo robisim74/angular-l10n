@@ -12,13 +12,16 @@
     "test:app": "ng test angular-l10n-app",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "build:docs": "npx compodoc -p projects/angular-l10n/tsconfig.lib.prod.json -d docs -n \"Angular l10n Specification\" --disableCoverage -a images",
+    "build:docs": "npx compodoc -p projects/angular-l10n/tsconfig.lib.prod.json -d docs --disableCoverage -a images",
     "serve:docs": "npx compodoc -d docs -s",
     "pack:lib": "npm pack ./dist/angular-l10n",
     "publish:lib": "npm publish ./dist/angular-l10n",
     "publish:lib:next": "npm publish --tag next ./dist/angular-l10n",
     "analyze": "ng build angular-l10n-app --prod --stats-json && webpack-bundle-analyzer dist/angular-l10n-app/stats-es2015.json",
     "postinstall": "ngcc --properties es2015 browser module main --first-only --create-ivy-entry-points"
+  },
+  "compodoc": {
+    "name": "Angular l10n Specification"
   },
   "private": true,
   "dependencies": {

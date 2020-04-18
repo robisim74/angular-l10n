@@ -104,6 +104,10 @@
                             </li>
                             <li>
                                     <span class="modifier">Public</span>
+                                <a href="#getAvailableLanguages">getAvailableLanguages</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Public</span>
                                 <a href="#getLanguageDirection">getLanguageDirection</a>
                             </li>
                             <li>
@@ -339,8 +343,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="193"
-                            class="link-to-prism">projects/angular-l10n/src/lib/services/l10n-translation.service.ts:193</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="203"
+                            class="link-to-prism">projects/angular-l10n/src/lib/services/l10n-translation.service.ts:203</a></div>
                 </td>
             </tr>
 
@@ -394,6 +398,49 @@
                     </div>
                     <div class="io-description">
                         
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getAvailableLanguages"></a>
+                    <span class="name">
+                        <b>
+                            <span class="modifier">Public</span>
+                            getAvailableLanguages
+                        </b>
+                        <a href="#getAvailableLanguages"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                    <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>getAvailableLanguages()</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="116"
+                            class="link-to-prism">projects/angular-l10n/src/lib/services/l10n-translation.service.ts:116</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>Gets available languages.</p>
+</div>
+
+                    <div class="io-description">
+                        <b>Returns : </b>    <code>string[]</code>
+
                     </div>
                 </td>
             </tr>
@@ -540,8 +587,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="171"
-                            class="link-to-prism">projects/angular-l10n/src/lib/services/l10n-translation.service.ts:171</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="181"
+                            class="link-to-prism">projects/angular-l10n/src/lib/services/l10n-translation.service.ts:181</a></div>
                 </td>
             </tr>
 
@@ -624,8 +671,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="199"
-                            class="link-to-prism">projects/angular-l10n/src/lib/services/l10n-translation.service.ts:199</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="209"
+                            class="link-to-prism">projects/angular-l10n/src/lib/services/l10n-translation.service.ts:209</a></div>
                 </td>
             </tr>
 
@@ -797,8 +844,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="116"
-                            class="link-to-prism">projects/angular-l10n/src/lib/services/l10n-translation.service.ts:116</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="124"
+                            class="link-to-prism">projects/angular-l10n/src/lib/services/l10n-translation.service.ts:124</a></div>
                 </td>
             </tr>
 
@@ -841,8 +888,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="145"
-                            class="link-to-prism">projects/angular-l10n/src/lib/services/l10n-translation.service.ts:145</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="153"
+                            class="link-to-prism">projects/angular-l10n/src/lib/services/l10n-translation.service.ts:153</a></div>
                 </td>
             </tr>
 
@@ -1028,8 +1075,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="203"
-                            class="link-to-prism">projects/angular-l10n/src/lib/services/l10n-translation.service.ts:203</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="213"
+                            class="link-to-prism">projects/angular-l10n/src/lib/services/l10n-translation.service.ts:213</a></div>
                 </td>
             </tr>
 
@@ -1493,6 +1540,14 @@ import { L10nMissingTranslationHandler } from &#x27;./l10n-missing-translation-h
     }
 
     /**
+     * Gets available languages.
+     */
+    public getAvailableLanguages(): string[] {
+        const languages &#x3D; this.config.schema.map(item &#x3D;&gt; formatLanguage(item.locale.language, this.config.format));
+        return languages;
+    }
+
+    /**
      * Should only be called when the service instance is created.
      */
     public async init(): Promise&lt;void&gt; {
@@ -1533,6 +1588,8 @@ import { L10nMissingTranslationHandler } from &#x27;./l10n-missing-translation-h
         });
 
         const language &#x3D; formatLanguage(locale.language, this.config.format);
+
+        if (language &#x3D;&#x3D; null || language &#x3D;&#x3D;&#x3D; &#x27;&#x27;) return Promise.resolve();
 
         return new Promise((resolve) &#x3D;&gt; {
             concat(...this.getTranslation(providers, language)).subscribe({

@@ -119,7 +119,8 @@ export class AppModule { }</code></pre></div><h3 id="getting-the-translation">Ge
 &lt;p [params]=&quot;{ name: &#39;Angular l10n&#39; }&quot; l10nTranslate&gt;whoIAm&lt;/p&gt;
 
 &lt;p [options]=&quot;{ dateStyle: &#39;full&#39;, timeStyle: &#39;short&#39; }&quot; l10nDate&gt;{{ today }}&lt;/p&gt;
-&lt;p [options]=&quot;{ digits: &#39;1.2-2&#39;, style: &#39;currency&#39; }&quot; l10nNumber&gt;{{ value }}&lt;/p&gt;</code></pre></div><h4 id="apis">APIs</h4>
+&lt;p [options]=&quot;{ digits: &#39;1.2-2&#39;, style: &#39;currency&#39; }&quot; l10nNumber&gt;{{ value }}&lt;/p&gt;</code></pre></div><p>You can dynamically change parameters and expressions values as with pipes, but not in attributes.</p>
+<h4 id="apis">APIs</h4>
 <div><pre class="line-numbers"><code class="language-TypeScript">export class AppComponent implements OnInit {
 
     constructor(private translation: L10nTranslationService, private intl: L10nIntlService) { }
@@ -193,7 +194,7 @@ export class AppModule { }</code></pre></div><h4 id="storage">Storage</h4>
 <ul>
 <li><code>&#39;language&#39;</code></li>
 <li><code>&#39;language[-script]&#39;</code></li>
-<li><code>&#39;language[-script][-country]&#39;</code></li>
+<li><code>&#39;language[-script][-region]&#39;</code></li>
 </ul>
 <p>To change it, implement the <code>L10nTranslationFallback</code> class-interface.</p>
 <h4 id="translation-handler">Translation Handler</h4>
@@ -235,7 +236,7 @@ export class AppModule { }</code></pre></div><h3 id="routing">Routing</h3>
     ...
 })
 export class AppModule { }</code></pre></div><p>A prefix containing the language is added to the path of each navigation, creating a semantic URL:</p>
-<div><pre class="line-numbers"><code class="language-none">baseHref/[language][-script][-country]/path
+<div><pre class="line-numbers"><code class="language-none">baseHref/[language][-script][-region]/path
 
 https://example.com/en/home
 https://example.com/en-US/home</code></pre></div><p>If the localized link is called, the <em>locale</em> is also set automatically.</p>
@@ -256,7 +257,15 @@ https://example.com/en-US/home</code></pre></div><p>If the localized link is cal
             l10nProviders: [{ name: &#39;lazy&#39;, asset: &#39;./assets/i18n/lazy&#39;, options: { version: &#39;9.0.0&#39; } }]
         }
     }
-];</code></pre></div><h3 id="caching">Caching</h3>
+];</code></pre></div><p>Always import the modules you need:</p>
+<div><pre class="line-numbers"><code class="language-TypeScript">&#64;NgModule({
+    declarations: [LazyComponent],
+    imports: [
+        ...
+        L10nTranslationModule
+    ]
+})
+export class LazyModule { }</code></pre></div><h3 id="caching">Caching</h3>
 <p>Enable caching during configuration if you want to prevent reloading of the already loaded translation data:</p>
 <div><pre class="line-numbers"><code class="language-TypeScript">export const l10nConfig: L10nConfig = {
     ...
