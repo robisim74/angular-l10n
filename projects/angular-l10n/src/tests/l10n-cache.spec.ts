@@ -27,11 +27,9 @@ describe('L10nCache', () => {
         request.subscribe({
             next: (value) => expect(value).toEqual(jasmine.objectContaining({ KEY1: 'key1' }))
         });
-        request = cache.read('name', of({ KEY1: 'key1' }));
+        request = cache.read('name', null);
         request.subscribe({
-            // It doesn't have to happen.
-            next: () => expect(true).toBeFalse(),
-            complete: () => expect(true).toBeTrue()
+            next: (value) => expect(value).toEqual(jasmine.objectContaining({ KEY1: 'key1' }))
         });
     });
 });
