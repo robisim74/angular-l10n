@@ -16,7 +16,7 @@ export class L10nDatePipe implements PipeTransform {
     public transform(value: any, language: string, options?: L10nDateTimeFormatOptions, timezone?: string): string | null {
         if (value == null || value === '') return null;
 
-        return this.intl.formatDate(value, options, language, timezone);
+        return this.intl.formatDate(value, options, true, language, timezone);
     }
 
 }

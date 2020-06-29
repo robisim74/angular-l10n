@@ -35,4 +35,11 @@ export class AppComponent implements OnInit {
         this.translation.setLocale(locale);
     }
 
+    setDateLocale(locale: L10nLocale): void {
+        this.translation.setLocale( {
+            language: this.translation.getLocale().language,
+            dateLanguage: locale.dateLanguage
+        });
+    }
+
 }

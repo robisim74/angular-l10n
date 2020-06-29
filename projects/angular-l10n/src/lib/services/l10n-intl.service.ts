@@ -28,13 +28,15 @@ import { L10nTranslationService } from './l10n-translation.service';
      * Formats a date.
      * @param value A date, a number (milliseconds since UTC epoch) or an ISO 8601 string
      * @param options A L10n or Intl DateTimeFormatOptions object
+     * @param useDateLanguage A boolean, should a 'dateLanguage' be used or not
      * @param language The current language
      * @param timeZone The current time zone
      */
     public formatDate(
         value: any,
         options?: L10nDateTimeFormatOptions,
-        language = this.locale.language,
+        useDateLanguage = true,
+        language = useDateLanguage ? this.locale.dateLanguage || this.locale.language : this.locale.language,
         timeZone = this.locale.timeZone
     ): string {
         if (!hasDateTimeFormat || language == null || language === '') return value;
@@ -103,7 +105,7 @@ import { L10nTranslationService } from './l10n-translation.service';
         value: any,
         unit: Unit,
         options?: Intl.RelativeTimeFormatOptions,
-        language = this.locale.language
+        language = this.locale.dateLanguage || this.locale.language
     ): string {
         if (!hasRelativeTimeFormat || language == null || language === '') return value;
 

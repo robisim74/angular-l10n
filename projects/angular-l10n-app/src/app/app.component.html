@@ -10,6 +10,7 @@
 
 <h3>{{ 'changeLocale' | translate:locale.language }}</h3>
 
-<button *ngFor="let item of schema" (click)="setLocale(item.locale)">{{ item.text }}</button>
+<button *ngFor="let item of schema" (click)="setLocale(item.locale)">{{ item.text }}</button> &nbsp;
+<button *ngFor="let item of schema" (click)="setDateLocale(item.locale)">{{ item.text }} Dates</button>
 
 <router-outlet></router-outlet>

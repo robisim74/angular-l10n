@@ -14,6 +14,7 @@ export class L10nDateDirective extends L10nDirective {
     }
 
     @Input() public options: any;
+    @Input() public useDateLanguage = true;
 
     constructor(
         protected el: ElementRef,
@@ -25,7 +26,7 @@ export class L10nDateDirective extends L10nDirective {
     }
 
     protected getValue(text: string): string {
-        return this.intl.formatDate(text, this.options);
+        return this.intl.formatDate(text, this.options, this.useDateLanguage);
     }
 
 }

@@ -26,6 +26,15 @@ export interface L10nLocale {
      */
     language: string;
     /**
+     * language[-script][-region][-extension]
+     * Where:
+     * - language: ISO 639 two-letter or three-letter code
+     * - script: ISO 15924 four-letter script code
+     * - region: ISO 3166 two-letter, uppercase code
+     * - extension: 'u' (Unicode) extensions
+     */
+    dateLanguage?: string;
+    /**
      * ISO 4217 three-letter code.
      */
     currency?: string;
