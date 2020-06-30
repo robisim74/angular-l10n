@@ -18,6 +18,8 @@ export class L10nTimeAgoDirective extends L10nDirective {
 
     @Input() public options: any;
 
+    @Input() public useDateLanguage = true;
+
     constructor(
         protected el: ElementRef,
         protected renderer: Renderer2,
@@ -28,7 +30,7 @@ export class L10nTimeAgoDirective extends L10nDirective {
     }
 
     protected getValue(text: string): string {
-        return this.intl.formatRelativeTime(text, this.unit, this.options);
+        return this.intl.formatRelativeTime(text, this.unit, this.options, this.useDateLanguage);
     }
 
 }

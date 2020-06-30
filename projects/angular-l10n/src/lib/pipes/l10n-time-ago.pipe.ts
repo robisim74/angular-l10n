@@ -16,7 +16,7 @@ export class L10nTimeAgoPipe implements PipeTransform {
     public transform(value: any, language: string, unit: Unit, options?: Intl.RelativeTimeFormatOptions): string | null {
         if (value == null || value === '') return null;
 
-        return this.intl.formatRelativeTime(value, unit, options, language);
+        return this.intl.formatRelativeTime(value, unit, options, true, language);
     }
 
 }

@@ -48,6 +48,12 @@ describe('L10nIntlService', () => {
             value,
             { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric' }
         )).toEqual('Thursday, September 19, 2019, 9:30 AM');
+
+        translation.setLocale({language: 'en-US', dateLanguage: 'it-IT'});
+        expect(intl.formatDate(value)).toEqual('19/9/2019');
+        expect(intl.formatDate(value, { dateStyle: 'full' }, false)).toEqual('Thursday, September 19, 2019');
+        expect(intl.formatDate(value, { dateStyle: 'full' })).toEqual('giovedì 19 settembre 2019');
+
     });
     it('should format numbers', () => {
         const value = 1234.5;
@@ -62,6 +68,10 @@ describe('L10nIntlService', () => {
     it('should format relative times', () => {
         expect(intl.formatRelativeTime(-1, 'day')).toEqual('1 day ago');
         expect(intl.formatRelativeTime(-1, 'day', { numeric: 'auto', style: 'long' })).toEqual('yesterday');
+
+        translation.setLocale({language: 'en-US', dateLanguage: 'it-IT'});
+        expect(intl.formatRelativeTime(-1, 'day')).toEqual('1 giorno fa');
+        expect(intl.formatRelativeTime(-1, 'day', {}, false)).toEqual('1 day ago');
     });
     it('should get the currency symbol', () => {
         expect(intl.getCurrencySymbol()).toEqual('$');

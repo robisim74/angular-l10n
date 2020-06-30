@@ -99,13 +99,15 @@ import { L10nTranslationService } from './l10n-translation.service';
      * @param value A negative (or positive) number
      * @param unit The unit of the value
      * @param options A Intl RelativeTimeFormatOptions object
+     * @param useDateLanguage A boolean, should a 'dateLanguage' be used or not
      * @param language The current language
      */
     public formatRelativeTime(
         value: any,
         unit: Unit,
         options?: Intl.RelativeTimeFormatOptions,
-        language = this.locale.dateLanguage || this.locale.language
+        useDateLanguage = true,
+        language = useDateLanguage ? this.locale.dateLanguage || this.locale.language : this.locale.language
     ): string {
         if (!hasRelativeTimeFormat || language == null || language === '') return value;
 

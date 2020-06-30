@@ -20,6 +20,7 @@ export class ApiComponent implements OnInit, OnChanges {
     formattedToday: string;
     formattedTimeAgo: string;
     formattedValue: string;
+    dateLanguage: string;
 
     constructor(private translation: L10nTranslationService, private intl: L10nIntlService) { }
 
@@ -30,15 +31,16 @@ export class ApiComponent implements OnInit, OnChanges {
                 this.whoIAm = this.translation.translate('home.whoIAm', { name: 'Angular l10n' });
                 this.description = this.translation.translate('home.description');
 
-                this.formattedToday = this.intl.formatDate(this.today, { dateStyle: 'full', timeStyle: 'short' });
-                this.formattedTimeAgo = this.intl.formatRelativeTime(this.timeAgo, 'second', { numeric: 'always', style: 'long' });
+                this.formattedToday = this.intl.formatDate(this.today, { dateStyle: 'full', timeStyle: 'short' }, false);
+                this.formattedTimeAgo = this.intl.formatRelativeTime(this.timeAgo, 'second', { numeric: 'always', style: 'long' }, false);
                 this.formattedValue = this.intl.formatNumber(this.value, { digits: '1.2-2', style: 'currency' });
+                this.dateLanguage = this.intl.formatDate(this.today);
             }
         });
     }
 
     ngOnChanges(changes: SimpleChanges) {
-        this.formattedTimeAgo = this.intl.formatRelativeTime(changes.timeAgo.currentValue, 'second', { numeric: 'always', style: 'long' });
+        this.formattedTimeAgo = this.intl.formatRelativeTime(changes.timeAgo.currentValue, 'second', { numeric: 'always', style: 'long' }, false);
     }
 
 }

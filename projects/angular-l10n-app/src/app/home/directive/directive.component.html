@@ -4,9 +4,9 @@
 <p innerHTML="home.description" l10nTranslate></p>
 <br>
 <p [useDateLanguage]="false" [options]="{ dateStyle: 'full', timeStyle: 'short' }" l10nDate>{{ today }}</p>
-<p [options]="{ numeric:'always', style:'long' }" unit="second" l10nTimeAgo>{{ timeAgo }}</p>
+<p [useDateLanguage]="false" [options]="{ numeric:'always', style:'long' }" unit="second" l10nTimeAgo>{{ timeAgo }}</p>
 <br>
 <p [options]="{ digits: '1.2-2', style: 'currency' }" l10nNumber>{{ value }}</p>
 
-<h4>Dates locale:</h4>
+<h4>Date language:</h4>
 <p l10nDate>{{ today }}</p>
