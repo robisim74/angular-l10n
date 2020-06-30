@@ -326,6 +326,59 @@ Angular l10n types that it is useful to know:
 ## Intl API
 To format dates and numbers, this library uses the [Intl API](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl)
 
+Same as _language_ property, there is a _dateLanguage_ property. It gives us a possibility to use a separate locale (other than the one used for translations) to format dates.
+#### Pure Pipes
+```Html
+<p>{{ today | l10nDate:locale.dateLanguage:{ dateStyle: 'full', timeStyle: 'short' } }}</p>
+```
+Pure pipes need to know when the _locale_ changes. So import `L10nLocale` injection token in the component:
+```TypeScript
+export class AppComponent {
+
+    constructor(@Inject(L10N_LOCALE) public locale: L10nLocale) { }
+
+}
+```
+##### OnPush Change Detection Strategy
+To support this strategy, there is an async version of each pipe:
+```Html
+<p>{{ 'greeting' | translateAsync }}</p>
+```
+#### Directives
+```Html
+<p [options]="{ dateStyle: 'full', timeStyle: 'short' }" l10nDate>{{ today }}</p>
+```
+
+If you set a _dateLanguage_, the directives will use it by default (it will fallback to _language_ id not set). There is a possibility to pass a prop to the directive if you want to use _language_ instead of _dateLanguage_.
+
+```Html
+<p [useDateLanguage]="false" [options]="{ dateStyle: 'full', timeStyle: 'short' }" l10nDate>{{ today }}</p>
+```
+
+#### APIs
+```TypeScript
+export class AppComponent implements OnInit {
+
+    constructor(private translation: L10nTranslationService, private intl: L10nIntlService) { }
+
+    ngOnInit() {
+        this.translation.onChange().subscribe({
+            next: () => {
+                this.formattedToday = this.intl.formatDate(this.today, { dateStyle: 'full', timeStyle: 'short' });
+            }
+        });
+    }
+
+}
+```
+
+To use _language_ over _dateLanguage_ just pass it to the `formatDate` method (note the last param - `false`).
+
+```TypeScript
+this.intl.formatDate(this.today, { dateStyle: 'full', timeStyle: 'short' }, false);
+     
+```
+
 Check the current browser support:
 - [ECMAScript compatibility tables](http://kangax.github.io/compat-table/esintl/)
 - [Can I use](http://caniuse.com/#feat=internationalization)
