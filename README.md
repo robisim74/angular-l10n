@@ -331,19 +331,6 @@ Same as _language_ property, there is a _dateLanguage_ property. It gives us a p
 ```Html
 <p>{{ today | l10nDate:locale.dateLanguage:{ dateStyle: 'full', timeStyle: 'short' } }}</p>
 ```
-Pure pipes need to know when the _locale_ changes. So import `L10nLocale` injection token in the component:
-```TypeScript
-export class AppComponent {
-
-    constructor(@Inject(L10N_LOCALE) public locale: L10nLocale) { }
-
-}
-```
-##### OnPush Change Detection Strategy
-To support this strategy, there is an async version of each pipe:
-```Html
-<p>{{ 'greeting' | translateAsync }}</p>
-```
 #### Directives
 ```Html
 <p [options]="{ dateStyle: 'full', timeStyle: 'short' }" l10nDate>{{ today }}</p>
