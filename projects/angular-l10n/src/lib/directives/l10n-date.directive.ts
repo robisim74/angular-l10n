@@ -25,7 +25,7 @@ export class L10nDateDirective extends L10nDirective {
     }
 
     protected getValue(text: string): string {
-        return this.intl.formatDate(text, this.options);
+        return this.intl.formatDate(text, this.options, this.language);
     }
 
 }
