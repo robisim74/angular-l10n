@@ -113,6 +113,7 @@ To support this strategy, there is an async version of each pipe:
 ```Html
 <p l10n-title title="greeting" l10nTranslate>greeting</p>
 <p [params]="{ name: 'Angular l10n' }" l10nTranslate>whoIAm</p>
+<!-- <p [l10nTranslate]="{ name: 'Angular l10n' }">whoIAm</p> -->
 
 <p [options]="{ dateStyle: 'full', timeStyle: 'short' }" l10nDate>{{ today }}</p>
 <p [options]="{ digits: '1.2-2', style: 'currency' }" l10nNumber>{{ value }}</p>
