@@ -12,6 +12,8 @@ export abstract class L10nDirective implements AfterViewInit, OnChanges, OnDestr
 
     @Input() public innerHTML: string;
 
+    @Input() language: string;
+
     private text: string;
     private attributes: any[];
 
@@ -32,7 +34,12 @@ export abstract class L10nDirective implements AfterViewInit, OnChanges, OnDestr
             this.text = this.getText();
             this.attributes = this.getAttributes();
             this.addTextListener();
-            this.addTranslationListener();
+            if ( this.language ) {
+                this.replaceText()
+                this.replaceAttributes();
+            } else {
+                this.addTranslationListener();
+            }
         }
     }
 
