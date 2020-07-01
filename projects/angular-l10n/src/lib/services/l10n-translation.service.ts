@@ -166,7 +166,6 @@ import { L10nMissingTranslationHandler } from './l10n-missing-translation-handle
             concat(...this.getTranslation(providers, language)).subscribe({
                 next: (data) => this.addData(data, language),
                 error: (error) => {
-                    this.releaseTranslation(locale);
                     this.handleError(error);
                     resolve();
                 },
@@ -176,6 +175,17 @@ import { L10nMissingTranslationHandler } from './l10n-missing-translation-handle
                 }
             });
         });
+    }
+
+    /**
+     * Can be called to add translation data.
+     * @param data The translation data {key: value}
+     * @param language The language to add data
+     */
+    public addData(data: { [key: string]: any }, language: string): void {
+        this.data[language] = this.data[language] !== undefined
+            ? mergeDeep(this.data[language], data)
+            : data;
     }
 
     private getTranslation(providers: L10nProvider[], language: string): Observable<any>[] {
@@ -198,12 +208,6 @@ import { L10nMissingTranslationHandler } from './l10n-missing-translation-handle
         loaders.push(merge(...lazyLoaders));
 
         return loaders;
-    }
-
-    private addData(data: { [key: string]: any }, language: string): void {
-        this.data[language] = this.data[language] !== undefined
-            ? mergeDeep(this.data[language], data)
-            : data;
     }
 
     private handleError(error: any): void {

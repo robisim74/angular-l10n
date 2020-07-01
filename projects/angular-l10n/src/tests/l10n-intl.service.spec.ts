@@ -14,7 +14,8 @@ describe('L10nIntlService', () => {
             juniorTechnicalAuthor: 'Scrittore tecnico Junior',
             seniorJavascriptDeveloper: 'Programmatore Javascript Senior',
             one: 'Uno'
-        }
+        },
+        'en-US': {}
     };
     const config: L10nConfig = {
         format: 'language-region',

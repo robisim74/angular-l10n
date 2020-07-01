@@ -37,7 +37,7 @@ import { L10nTranslationService } from './l10n-translation.service';
         language = this.locale.language,
         timeZone = this.locale.timeZone
     ): string {
-        if (!hasDateTimeFormat || language == null || language === '') return value;
+        if (!hasDateTimeFormat() || language == null || language === '') return value;
 
         value = toDate(value);
 
@@ -74,8 +74,8 @@ import { L10nTranslationService } from './l10n-translation.service';
         language = this.locale.language,
         currency = this.locale.currency
     ): string {
-        if (!hasNumberFormat && options && options.style === 'currency') return `${value} ${currency}`;
-        if (!hasNumberFormat || language == null || language === '') return value;
+        if (!hasNumberFormat() && options && options.style === 'currency') return `${value} ${currency}`;
+        if (!hasNumberFormat() || language == null || language === '') return value;
 
         value = toNumber(value);
 
@@ -105,7 +105,7 @@ import { L10nTranslationService } from './l10n-translation.service';
         options?: Intl.RelativeTimeFormatOptions,
         language = this.locale.language
     ): string {
-        if (!hasRelativeTimeFormat || language == null || language === '') return value;
+        if (!hasRelativeTimeFormat() || language == null || language === '') return value;
 
         value = toNumber(value);
 

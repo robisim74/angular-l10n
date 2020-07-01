@@ -88,7 +88,7 @@ describe('L10nTranslationService', () => {
         translation.onError().subscribe({
             next: (value) => expect(value).toEqual('angular-l10n (L10nDefaultTranslationLoader): Asset not found')
         });
-        expect(translation.getLocale()).toEqual(jasmine.objectContaining({ language: 'fr-FR' }));
+        expect(translation.getLocale()).toEqual(jasmine.objectContaining({ language: 'en-US' }));
     });
     it('should load the translation', async () => {
         await translation.setLocale({ language: 'it-IT' });
