@@ -8,14 +8,13 @@ describe('L10nIntlService', () => {
     let intl: L10nIntlService;
     let translation: L10nTranslationService;
     const mockAsset = {
-        'it-IT': {
-            systemArchitect: 'Progettista IT',
-            accountant: 'Ragioniere',
-            juniorTechnicalAuthor: 'Scrittore tecnico Junior',
-            seniorJavascriptDeveloper: 'Programmatore Javascript Senior',
-            one: 'Uno'
-        },
-        'en-US': {}
+        'en-US': {
+            systemArchitect: 'System Architect',
+            accountant: 'Accountant',
+            juniorTechnicalAuthor: 'Junior Technical Author',
+            seniorJavascriptDeveloper: 'Senior Javascript Developer',
+            one: 'One'
+        }
     };
     const config: L10nConfig = {
         format: 'language-region',
@@ -68,20 +67,17 @@ describe('L10nIntlService', () => {
         expect(intl.getCurrencySymbol()).toEqual('$');
     });
     it('should compare', async () => {
-        await translation.setLocale({ language: 'it-IT' });
         const list = ['systemArchitect', 'accountant', 'juniorTechnicalAuthor', 'seniorJavascriptDeveloper', 'accountant'];
         const orderedList = list.sort((key1: string, key2: string) => {
             return intl.compare(key1, key2, { usage: 'sort', sensitivity: 'variant' });
         });
-        expect(orderedList).toEqual(['systemArchitect', 'seniorJavascriptDeveloper', 'accountant', 'accountant', 'juniorTechnicalAuthor']);
+        expect(orderedList).toEqual(['accountant', 'accountant', 'juniorTechnicalAuthor', 'seniorJavascriptDeveloper', 'systemArchitect']);
     });
     it('should get the plural', async () => {
-        await translation.setLocale({ language: 'it-IT' });
-        expect(intl.plural(1)).toEqual('Uno');
+        expect(intl.plural(1)).toEqual('One');
     });
     it('should list', async () => {
-        await translation.setLocale({ language: 'it-IT' });
         const list = ['systemArchitect', 'juniorTechnicalAuthor', 'seniorJavascriptDeveloper'];
-        expect(intl.list(list)).toEqual('Progettista IT, Scrittore tecnico Junior e Programmatore Javascript Senior');
+        expect(intl.list(list)).toEqual('System Architect, Junior Technical Author, and Senior Javascript Developer');
     });
 });
