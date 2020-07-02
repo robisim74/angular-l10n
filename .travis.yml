@@ -1,8 +1,7 @@
+language: node_js
 sudo: required
-dist: trusty
 addons:
   chrome: stable
-language: node_js
 node_js:
   - "10"
 before_install:
@@ -12,9 +11,7 @@ install:
 script:
   - npm test
   - npm run build
-before_script:
-  - export DISPLAY=:99.0
-  - sh -e /etc/init.d/xvfb start
-  - sleep 3
+services:
+  - xvfb
 notifications:
   email: false
