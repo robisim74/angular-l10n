@@ -220,11 +220,11 @@ There are two directives, that you can use with Template driven or Reactive form
 
     constructor(@Inject(L10N_LOCALE) private locale: L10nLocale) { }
 
-    public parseNumber(value: string, options?: L10nNumberFormatOptions, language = this.locale.language): number | null {
+    public parseNumber(value: string, options?: L10nNumberFormatOptions, language = this.locale.numberLanguage || this.locale.language): number | null {
         ...
     }
 
-    public parseDate(value: string, options?: L10nDateTimeFormatOptions, language = this.locale.language): Date | null {
+    public parseDate(value: string, options?: L10nDateTimeFormatOptions, language = this.locale.dateLanguage || this.locale.language): Date | null {
         ...
     }
 
@@ -283,7 +283,7 @@ const routes: Routes = [
         loadChildren: () => import('./lazy/lazy.module').then(m => m.LazyModule),
         resolve: { l10n: L10nResolver },
         data: {
-            l10nProviders: [{ name: 'lazy', asset: './assets/i18n/lazy', options: { version: '9.0.0' } }]
+            l10nProviders: [{ name: 'lazy', asset: './assets/i18n/lazy', options: { version: '1.0.0' } }]
         }
     }
 ];
@@ -309,6 +309,33 @@ export const l10nConfig: L10nConfig = {
 };
 ```
 
+### Preloading data
+If you need to preload some translation data, for example to use for missing values, `L10nTranslationService` exposes the translation data in the `data` attribute. You can merge data by calling the `addData` method:
+
+```TypeScript
+export function l10nPreload(translation: L10nTranslationService, translationLoader: L10nTranslationLoader): () => Promise<void> {
+    return () => new Promise((resolve) => {
+        translationLoader.get('en-US', { name: 'app', asset: './assets/i18n/app', options: { version: '1.0.0' } })
+            .subscribe({
+                next: (data) => translation.addData(data, 'en-US'),
+                complete: () => resolve()
+            });
+    });
+}
+```
+Then add the function to providers, before `initL10n`:
+```TypeScript
+providers: [
+    {
+        provide: APP_INITIALIZER,
+        useFactory: l10nPreload,
+        deps: [L10nTranslationService, L10nTranslationLoader],
+        multi: true
+    },
+    ...
+],
+```
+
 
 ## Types
 Angular l10n types that it is useful to know:
@@ -318,7 +345,12 @@ Angular l10n types that it is useful to know:
      - region: ISO 3166 two-letter, uppercase code
      - extension: 'u' (Unicode) extensions
      
-     Optionally a ISO 4217 three-letter code _currency_ and a _timezone_ from the IANA time zone database
+     Optionally:
+     - _dateLanguage_: alternative language to translate dates
+     - _numberLanguage_: alternative language to translate numbers
+     - _currency_: ISO 4217 three-letter code
+     - _timezone_: from the IANA time zone database
+
 - `L10nFormat`: shows the format of the _language_ to be used for translations. The supported formats are: `'language' | 'language-script' | 'language-region' | 'language-script-region'`. So, for example, you can have a _language_ like `en-US-u-ca-gregory-nu-latn` to format dates and numbers, but only use the `en-US` for translations setting `'language-region'`
 - `L10nDateTimeFormatOptions`: the type of _options_ used to format dates. Extends the Intl `DateTimeFormatOptions` interface, adding the _dateStyle_ and _timeStyle_ attributes
 - `L10nNumberFormatOptions`: the type of _options_ used to format numbers. Extends the Intl `NumberFormatOptions` interface, adding the _digits_ attribute
