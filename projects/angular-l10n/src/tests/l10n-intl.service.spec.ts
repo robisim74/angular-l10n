@@ -1,7 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 
-import { L10nLoader, L10nIntlService, L10nTranslationService, L10nConfig, L10nIntlModule } from '../public-api';
-import { L10nTranslationModule } from '../lib/modules/l10n-translation.module';
+import { L10nLoader, L10nIntlService, L10nTranslationService, L10nConfig, L10nTranslationModule, L10nIntlModule } from '../public-api';
 
 describe('L10nIntlService', () => {
     let loader: L10nLoader;

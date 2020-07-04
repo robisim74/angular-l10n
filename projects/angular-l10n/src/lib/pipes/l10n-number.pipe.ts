@@ -31,10 +31,10 @@ export class L10nNumberAsyncPipe extends L10nAsyncPipe implements PipeTransform 
         super(translation, cdr);
     }
 
-    public transform(value: any, options?: L10nNumberFormatOptions): string | null {
+    public transform(value: any, options?: L10nNumberFormatOptions, language?: string): string | null {
         if (value == null || value === '') return null;
 
-        return this.intl.formatNumber(value, options);
+        return this.intl.formatNumber(value, options, language);
     }
 
 }

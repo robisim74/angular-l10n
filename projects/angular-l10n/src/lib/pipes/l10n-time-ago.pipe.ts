@@ -31,10 +31,10 @@ export class L10nTimeAgoAsyncPipe extends L10nAsyncPipe implements PipeTransform
         super(translation, cdr);
     }
 
-    public transform(value: any, unit: Unit, options?: Intl.RelativeTimeFormatOptions): string | null {
+    public transform(value: any, unit: Unit, options?: Intl.RelativeTimeFormatOptions, language?: string): string | null {
         if (value == null || value === '') return null;
 
-        return this.intl.formatRelativeTime(value, unit, options);
+        return this.intl.formatRelativeTime(value, unit, options, language);
     }
 
 }

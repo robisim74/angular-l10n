@@ -25,7 +25,7 @@ export class L10nNumberDirective extends L10nDirective {
     }
 
     protected getValue(text: string): string {
-        return this.intl.formatNumber(text, this.options);
+        return this.intl.formatNumber(text, this.options, this.language);
     }
 
 }

@@ -26,9 +26,13 @@ export interface L10nLocale {
      */
     language: string;
     /**
-     * Used as an alternative language to translate dates.
+     * Alternative language to translate dates.
      */
     dateLanguage?: string;
+    /**
+     * Alternative language to translate numbers.
+     */
+    numberLanguage?: string;
     /**
      * ISO 4217 three-letter code.
      */

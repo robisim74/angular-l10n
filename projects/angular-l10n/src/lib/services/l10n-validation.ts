@@ -43,7 +43,7 @@ import { L10N_LOCALE } from '../models/l10n-config';
     public parseNumber(
         value: string,
         options?: L10nNumberFormatOptions,
-        language = this.locale.language
+        language = this.locale.numberLanguage || this.locale.language
     ): number | null {
         return null;
     }
@@ -51,7 +51,7 @@ import { L10N_LOCALE } from '../models/l10n-config';
     public parseDate(
         value: string,
         options?: L10nDateTimeFormatOptions,
-        language = this.locale.language
+        language = this.locale.dateLanguage || this.locale.language
     ): Date | null {
         return null;
     }

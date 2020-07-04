@@ -34,7 +34,7 @@ import { L10nTranslationService } from './l10n-translation.service';
     public formatDate(
         value: any,
         options?: L10nDateTimeFormatOptions,
-        language = this.locale.language,
+        language = this.locale.dateLanguage || this.locale.language,
         timeZone = this.locale.timeZone
     ): string {
         if (!hasDateTimeFormat() || language == null || language === '') return value;
@@ -71,7 +71,7 @@ import { L10nTranslationService } from './l10n-translation.service';
     public formatNumber(
         value: any,
         options?: L10nNumberFormatOptions,
-        language = this.locale.language,
+        language = this.locale.numberLanguage || this.locale.language,
         currency = this.locale.currency
     ): string {
         if (!hasNumberFormat() && options && options.style === 'currency') return `${value} ${currency}`;
@@ -103,7 +103,7 @@ import { L10nTranslationService } from './l10n-translation.service';
         value: any,
         unit: Unit,
         options?: Intl.RelativeTimeFormatOptions,
-        language = this.locale.language
+        language = this.locale.dateLanguage || this.locale.language
     ): string {
         if (!hasRelativeTimeFormat() || language == null || language === '') return value;
 
@@ -115,11 +115,11 @@ import { L10nTranslationService } from './l10n-translation.service';
     public getCurrencySymbol(locale = this.locale): string | undefined {
         let symbol = locale.currency;
         if (hasNumberFormat()) {
-            const decimal = this.formatNumber(0, { digits: '1.0-0' }, locale.language);
+            const decimal = this.formatNumber(0, { digits: '1.0-0' }, locale.numberLanguage || locale.language);
             const currency = this.formatNumber(
                 0,
                 { digits: '1.0-0', style: 'currency', currencyDisplay: 'symbol' },
-                locale.language,
+                locale.numberLanguage || locale.language,
                 locale.currency
             );
             symbol = currency.replace(decimal, '');
