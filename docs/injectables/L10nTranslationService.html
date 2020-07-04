@@ -99,7 +99,7 @@
                     <td class="col-md-4">
                         <ul class="index-list">
                             <li>
-                                    <span class="modifier">Private</span>
+                                    <span class="modifier">Public</span>
                                 <a href="#addData">addData</a>
                             </li>
                             <li>
@@ -326,7 +326,7 @@
                     <a name="addData"></a>
                     <span class="name">
                         <b>
-                            <span class="modifier">Private</span>
+                            <span class="modifier">Public</span>
                             addData
                         </b>
                         <a href="#addData"><span class="icon ion-ios-link"></span></a>
@@ -343,14 +343,16 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="203"
-                            class="link-to-prism">projects/angular-l10n/src/lib/services/l10n-translation.service.ts:203</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="185"
+                            class="link-to-prism">projects/angular-l10n/src/lib/services/l10n-translation.service.ts:185</a></div>
                 </td>
             </tr>
 
 
             <tr>
                 <td class="col-md-4">
+                    <div class="io-description"><p>Can be called to add translation data.</p>
+</div>
 
                     <div class="io-description">
                         <b>Parameters :</b>
@@ -360,6 +362,7 @@
                                     <td>Name</td>
                                     <td>Type</td>
                                     <td>Optional</td>
+                                    <td>Description</td>
                                 </tr>
                             </thead>
                             <tbody>
@@ -374,6 +377,10 @@
                                     </td>
 
 
+                                    <td>
+                                        <p>The translation data {key: value}</p>
+
+                                    </td>
                                 </tr>
                                 <tr>
                                     <td>language</td>
@@ -386,6 +393,10 @@
                                     </td>
 
 
+                                    <td>
+                                        <p>The language to add data</p>
+
+                                    </td>
                                 </tr>
                             </tbody>
                         </table>
@@ -587,8 +598,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="181"
-                            class="link-to-prism">projects/angular-l10n/src/lib/services/l10n-translation.service.ts:181</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="191"
+                            class="link-to-prism">projects/angular-l10n/src/lib/services/l10n-translation.service.ts:191</a></div>
                 </td>
             </tr>
 
@@ -671,8 +682,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="209"
-                            class="link-to-prism">projects/angular-l10n/src/lib/services/l10n-translation.service.ts:209</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="213"
+                            class="link-to-prism">projects/angular-l10n/src/lib/services/l10n-translation.service.ts:213</a></div>
                 </td>
             </tr>
 
@@ -1075,8 +1086,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="213"
-                            class="link-to-prism">projects/angular-l10n/src/lib/services/l10n-translation.service.ts:213</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="217"
+                            class="link-to-prism">projects/angular-l10n/src/lib/services/l10n-translation.service.ts:217</a></div>
                 </td>
             </tr>
 
@@ -1595,7 +1606,6 @@ import { L10nMissingTranslationHandler } from &#x27;./l10n-missing-translation-h
             concat(...this.getTranslation(providers, language)).subscribe({
                 next: (data) &#x3D;&gt; this.addData(data, language),
                 error: (error) &#x3D;&gt; {
-                    this.releaseTranslation(locale);
                     this.handleError(error);
                     resolve();
                 },
@@ -1605,6 +1615,17 @@ import { L10nMissingTranslationHandler } from &#x27;./l10n-missing-translation-h
                 }
             });
         });
+    }
+
+    /**
+     * Can be called to add translation data.
+     * @param data The translation data {key: value}
+     * @param language The language to add data
+     */
+    public addData(data: { [key: string]: any }, language: string): void {
+        this.data[language] &#x3D; this.data[language] !&#x3D;&#x3D; undefined
+            ? mergeDeep(this.data[language], data)
+            : data;
     }
 
     private getTranslation(providers: L10nProvider[], language: string): Observable&lt;any&gt;[] {
@@ -1627,12 +1648,6 @@ import { L10nMissingTranslationHandler } from &#x27;./l10n-missing-translation-h
         loaders.push(merge(...lazyLoaders));
 
         return loaders;
-    }
-
-    private addData(data: { [key: string]: any }, language: string): void {
-        this.data[language] &#x3D; this.data[language] !&#x3D;&#x3D; undefined
-            ? mergeDeep(this.data[language], data)
-            : data;
     }
 
     private handleError(error: any): void {

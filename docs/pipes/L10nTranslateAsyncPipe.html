@@ -99,7 +99,7 @@
             <tr>
                 <td class="col-md-4">
                     <span class="modifier-icon icon ion-ios-reset"></span>
-                    <code>transform(key: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>, params?: <a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank">any</a>)</code>
+                    <code>transform(key: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>, params?: <a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank">any</a>, language?: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>)</code>
                 </td>
             </tr>
 
@@ -142,6 +142,18 @@
                                     <td>params</td>
                                     <td>
                                                 <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+                                    </td>
+
+                                    <td>
+                                        Yes
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>language</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
                                     </td>
 
                                     <td>
@@ -203,10 +215,10 @@ export class L10nTranslateAsyncPipe extends L10nAsyncPipe implements PipeTransfo
         super(translation, cdr);
     }
 
-    public transform(key: string, params?: any): string | null {
+    public transform(key: string, params?: any, language?: string): string | null {
         if (key &#x3D;&#x3D; null || key &#x3D;&#x3D;&#x3D; &#x27;&#x27;) return null;
 
-        return this.translation.translate(key, params);
+        return this.translation.translate(key, params, language);
     }
 
 }

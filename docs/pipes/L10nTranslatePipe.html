@@ -219,10 +219,10 @@ export class L10nTranslateAsyncPipe extends L10nAsyncPipe implements PipeTransfo
         super(translation, cdr);
     }
 
-    public transform(key: string, params?: any): string | null {
+    public transform(key: string, params?: any, language?: string): string | null {
         if (key &#x3D;&#x3D; null || key &#x3D;&#x3D;&#x3D; &#x27;&#x27;) return null;
 
-        return this.translation.translate(key, params);
+        return this.translation.translate(key, params, language);
     }
 
 }

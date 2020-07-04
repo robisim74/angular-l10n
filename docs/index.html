@@ -117,6 +117,7 @@ export class AppModule { }</code></pre></div><h3 id="getting-the-translation">Ge
 <div><pre class="line-numbers"><code class="language-Html">&lt;p&gt;{{ &#39;greeting&#39; | translateAsync }}&lt;/p&gt;</code></pre></div><h4 id="directives">Directives</h4>
 <div><pre class="line-numbers"><code class="language-Html">&lt;p l10n-title title=&quot;greeting&quot; l10nTranslate&gt;greeting&lt;/p&gt;
 &lt;p [params]=&quot;{ name: &#39;Angular l10n&#39; }&quot; l10nTranslate&gt;whoIAm&lt;/p&gt;
+&lt;!-- &lt;p [l10nTranslate]=&quot;{ name: &#39;Angular l10n&#39; }&quot;&gt;whoIAm&lt;/p&gt; --&gt;
 
 &lt;p [options]=&quot;{ dateStyle: &#39;full&#39;, timeStyle: &#39;short&#39; }&quot; l10nDate&gt;{{ today }}&lt;/p&gt;
 &lt;p [options]=&quot;{ digits: &#39;1.2-2&#39;, style: &#39;currency&#39; }&quot; l10nNumber&gt;{{ value }}&lt;/p&gt;</code></pre></div><p>You can dynamically change parameters and expressions values as with pipes, but not in attributes.</p>
@@ -207,11 +208,11 @@ export class AppModule { }</code></pre></div><h4 id="storage">Storage</h4>
 
     constructor(&#64;Inject(L10N_LOCALE) private locale: L10nLocale) { }
 
-    public parseNumber(value: string, options?: L10nNumberFormatOptions, language = this.locale.language): number | null {
+    public parseNumber(value: string, options?: L10nNumberFormatOptions, language = this.locale.numberLanguage || this.locale.language): number | null {
         ...
     }
 
-    public parseDate(value: string, options?: L10nDateTimeFormatOptions, language = this.locale.language): Date | null {
+    public parseDate(value: string, options?: L10nDateTimeFormatOptions, language = this.locale.dateLanguage || this.locale.language): Date | null {
         ...
     }
 
@@ -254,7 +255,7 @@ https://example.com/en-US/home</code></pre></div><p>If the localized link is cal
         loadChildren: () =&gt; import(&#39;./lazy/lazy.module&#39;).then(m =&gt; m.LazyModule),
         resolve: { l10n: L10nResolver },
         data: {
-            l10nProviders: [{ name: &#39;lazy&#39;, asset: &#39;./assets/i18n/lazy&#39;, options: { version: &#39;9.0.0&#39; } }]
+            l10nProviders: [{ name: &#39;lazy&#39;, asset: &#39;./assets/i18n/lazy&#39;, options: { version: &#39;1.0.0&#39; } }]
         }
     }
 ];</code></pre></div><p>Always import the modules you need:</p>
@@ -270,7 +271,26 @@ export class LazyModule { }</code></pre></div><h3 id="caching">Caching</h3>
 <div><pre class="line-numbers"><code class="language-TypeScript">export const l10nConfig: L10nConfig = {
     ...
     cache: true
-};</code></pre></div><h2 id="types">Types</h2>
+};</code></pre></div><h3 id="preloading-data">Preloading data</h3>
+<p>If you need to preload some translation data, for example to use for missing values, <code>L10nTranslationService</code> exposes the translation data in the <code>data</code> attribute. You can merge data by calling the <code>addData</code> method:</p>
+<div><pre class="line-numbers"><code class="language-TypeScript">export function l10nPreload(translation: L10nTranslationService, translationLoader: L10nTranslationLoader): () =&gt; Promise&lt;void&gt; {
+    return () =&gt; new Promise((resolve) =&gt; {
+        translationLoader.get(&#39;en-US&#39;, { name: &#39;app&#39;, asset: &#39;./assets/i18n/app&#39;, options: { version: &#39;1.0.0&#39; } })
+            .subscribe({
+                next: (data) =&gt; translation.addData(data, &#39;en-US&#39;),
+                complete: () =&gt; resolve()
+            });
+    });
+}</code></pre></div><p>Then add the function to providers, before <code>initL10n</code>:</p>
+<div><pre class="line-numbers"><code class="language-TypeScript">providers: [
+    {
+        provide: APP_INITIALIZER,
+        useFactory: l10nPreload,
+        deps: [L10nTranslationService, L10nTranslationLoader],
+        multi: true
+    },
+    ...
+],</code></pre></div><h2 id="types">Types</h2>
 <p>Angular l10n types that it is useful to know:</p>
 <ul>
 <li><p><code>L10nLocale</code>: contains a <em>language</em>, in the format <code>language[-script][-region][-extension]</code>, where:</p>
@@ -282,7 +302,15 @@ export class LazyModule { }</code></pre></div><h3 id="caching">Caching</h3>
 <li><p>region: ISO 3166 two-letter, uppercase code</p>
 </li>
 <li><p>extension: &#39;u&#39; (Unicode) extensions</p>
-<p>Optionally a ISO 4217 three-letter code <em>currency</em> and a <em>timezone</em> from the IANA time zone database</p>
+<p>Optionally:</p>
+</li>
+<li><p><em>dateLanguage</em>: alternative language to translate dates</p>
+</li>
+<li><p><em>numberLanguage</em>: alternative language to translate numbers</p>
+</li>
+<li><p><em>currency</em>: ISO 4217 three-letter code</p>
+</li>
+<li><p><em>timezone</em>: from the IANA time zone database</p>
 </li>
 </ul>
 </li>

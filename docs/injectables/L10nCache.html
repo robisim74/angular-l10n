@@ -136,8 +136,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="8"
-                            class="link-to-prism">projects/angular-l10n/src/lib/services/l10n-cache.ts:8</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="9"
+                            class="link-to-prism">projects/angular-l10n/src/lib/services/l10n-cache.ts:9</a></div>
                 </td>
             </tr>
 
@@ -228,7 +228,7 @@
                     </tr>
                         <tr>
                             <td class="col-md-4">
-                                    <div class="io-line">Defined in <a href="" data-line="6" class="link-to-prism">projects/angular-l10n/src/lib/services/l10n-cache.ts:6</a></div>
+                                    <div class="io-line">Defined in <a href="" data-line="7" class="link-to-prism">projects/angular-l10n/src/lib/services/l10n-cache.ts:7</a></div>
                             </td>
                         </tr>
 
@@ -242,17 +242,22 @@
 
     <div class="tab-pane fade  tab-source-code" id="c-source">
         <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { Injectable } from &#x27;@angular/core&#x27;;
-import { Observable, EMPTY } from &#x27;rxjs&#x27;;
+import { Observable } from &#x27;rxjs&#x27;;
+import { shareReplay } from &#x27;rxjs/operators&#x27;;
 
 @Injectable() export class L10nCache {
 
-    private cache: { [key: string]: boolean } &#x3D; {};
+    private cache: { [key: string]: Observable&lt;any&gt; } &#x3D; {};
 
     public read(key: string, request: Observable&lt;any&gt;): Observable&lt;any&gt; {
-        if (this.cache[key]) return EMPTY;
+        if (this.cache[key]) return this.cache[key];
 
-        this.cache[key] &#x3D; true;
-        return request;
+        const response &#x3D; request.pipe(
+            shareReplay(1)
+        );
+
+        this.cache[key] &#x3D; response;
+        return response;
     }
 
 }

@@ -83,7 +83,15 @@
                                         <a href="#currency">currency</a>
                                 </li>
                                 <li>
+                                            <span class="modifier">Optional</span>
+                                        <a href="#dateLanguage">dateLanguage</a>
+                                </li>
+                                <li>
                                         <a href="#language">language</a>
+                                </li>
+                                <li>
+                                            <span class="modifier">Optional</span>
+                                        <a href="#numberLanguage">numberLanguage</a>
                                 </li>
                                 <li>
                                             <span class="modifier">Optional</span>
@@ -144,6 +152,46 @@
                         <tbody>
                                 <tr>
                                     <td class="col-md-4">
+                                        <a name="dateLanguage"></a>
+                                        <span class="name"><b>dateLanguage</b><a href="#dateLanguage"><span class="icon ion-ios-link"></span></a></span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="col-md-4">
+                                        <code>dateLanguage:         <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+</code>
+                                    </td>
+                                </tr>
+
+
+                                    <tr>
+                                        <td class="col-md-4">
+                                            <i>Type : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td class="col-md-4">
+                                            <i>Optional</i>
+                                        </td>
+                                    </tr>
+
+
+
+
+                            <tr>
+                                <td class="col-md-4">
+                                    <div class="io-description"><p>Alternative language to translate dates.</p>
+</div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <table class="table table-sm table-bordered">
+                        <tbody>
+                                <tr>
+                                    <td class="col-md-4">
                                         <a name="language"></a>
                                         <span class="name"><b>language</b><a href="#language"><span class="icon ion-ios-link"></span></a></span>
                                     </td>
@@ -177,6 +225,46 @@ Where:</p>
 <li>region: ISO 3166 two-letter, uppercase code</li>
 <li>extension: &#39;u&#39; (Unicode) extensions</li>
 </ul>
+</div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <table class="table table-sm table-bordered">
+                        <tbody>
+                                <tr>
+                                    <td class="col-md-4">
+                                        <a name="numberLanguage"></a>
+                                        <span class="name"><b>numberLanguage</b><a href="#numberLanguage"><span class="icon ion-ios-link"></span></a></span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="col-md-4">
+                                        <code>numberLanguage:         <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+</code>
+                                    </td>
+                                </tr>
+
+
+                                    <tr>
+                                        <td class="col-md-4">
+                                            <i>Type : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td class="col-md-4">
+                                            <i>Optional</i>
+                                        </td>
+                                    </tr>
+
+
+
+
+                            <tr>
+                                <td class="col-md-4">
+                                    <div class="io-description"><p>Alternative language to translate numbers.</p>
 </div>
                                 </td>
                             </tr>
@@ -254,6 +342,14 @@ export interface L10nLocale {
      * - extension: &#x27;u&#x27; (Unicode) extensions
      */
     language: string;
+    /**
+     * Alternative language to translate dates.
+     */
+    dateLanguage?: string;
+    /**
+     * Alternative language to translate numbers.
+     */
+    numberLanguage?: string;
     /**
      * ISO 4217 three-letter code.
      */

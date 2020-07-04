@@ -470,7 +470,7 @@ export class L10nTimeAgoDirective extends L10nDirective {
     }
 
     protected getValue(text: string): string {
-        return this.intl.formatRelativeTime(text, this.unit, this.options);
+        return this.intl.formatRelativeTime(text, this.unit, this.options, this.language);
     }
 
 }

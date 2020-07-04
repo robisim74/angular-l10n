@@ -99,7 +99,7 @@
             <tr>
                 <td class="col-md-4">
                     <span class="modifier-icon icon ion-ios-reset"></span>
-                    <code>transform(value: <a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank">any</a>, options?: <a href="../interfaces/L10nDateTimeFormatOptions.html">L10nDateTimeFormatOptions</a>)</code>
+                    <code>transform(value: <a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank">any</a>, options?: <a href="../interfaces/L10nDateTimeFormatOptions.html">L10nDateTimeFormatOptions</a>, language?: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>)</code>
                 </td>
             </tr>
 
@@ -142,6 +142,18 @@
                                     <td>options</td>
                                     <td>
                                                 <code><a href="../interfaces/L10nDateTimeFormatOptions.html" target="_self" >L10nDateTimeFormatOptions</a></code>
+                                    </td>
+
+                                    <td>
+                                        Yes
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>language</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
                                     </td>
 
                                     <td>
@@ -205,10 +217,10 @@ export class L10nDateAsyncPipe extends L10nAsyncPipe implements PipeTransform {
         super(translation, cdr);
     }
 
-    public transform(value: any, options?: L10nDateTimeFormatOptions): string | null {
+    public transform(value: any, options?: L10nDateTimeFormatOptions, language?: string): string | null {
         if (value &#x3D;&#x3D; null || value &#x3D;&#x3D;&#x3D; &#x27;&#x27;) return null;
 
-        return this.intl.formatDate(value, options);
+        return this.intl.formatDate(value, options, language);
     }
 
 }

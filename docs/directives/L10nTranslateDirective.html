@@ -514,7 +514,7 @@ export class L10nTranslateDirective extends L10nDirective {
     }
 
     protected getValue(text: string): string {
-        return this.translation.translate(text, this.params);
+        return this.translation.translate(text, this.params, this.language);
     }
 
 }

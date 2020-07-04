@@ -412,7 +412,7 @@ a positive value if key1 comes after key2;
                                     </td>
 
                                     <td>
-                                        <code>this.locale.language</code>
+                                        <code>this.locale.dateLanguage || this.locale.language</code>
                                     </td>
 
                                     <td>
@@ -548,7 +548,7 @@ a positive value if key1 comes after key2;
                                     </td>
 
                                     <td>
-                                        <code>this.locale.language</code>
+                                        <code>this.locale.numberLanguage || this.locale.language</code>
                                     </td>
 
                                     <td>
@@ -702,7 +702,7 @@ a positive value if key1 comes after key2;
                                     </td>
 
                                     <td>
-                                        <code>this.locale.language</code>
+                                        <code>this.locale.dateLanguage || this.locale.language</code>
                                     </td>
 
                                     <td>
@@ -1074,10 +1074,10 @@ import { L10nTranslationService } from &#x27;./l10n-translation.service&#x27;;
     public formatDate(
         value: any,
         options?: L10nDateTimeFormatOptions,
-        language &#x3D; this.locale.language,
+        language &#x3D; this.locale.dateLanguage || this.locale.language,
         timeZone &#x3D; this.locale.timeZone
     ): string {
-        if (!hasDateTimeFormat || language &#x3D;&#x3D; null || language &#x3D;&#x3D;&#x3D; &#x27;&#x27;) return value;
+        if (!hasDateTimeFormat() || language &#x3D;&#x3D; null || language &#x3D;&#x3D;&#x3D; &#x27;&#x27;) return value;
 
         value &#x3D; toDate(value);
 
@@ -1111,11 +1111,11 @@ import { L10nTranslationService } from &#x27;./l10n-translation.service&#x27;;
     public formatNumber(
         value: any,
         options?: L10nNumberFormatOptions,
-        language &#x3D; this.locale.language,
+        language &#x3D; this.locale.numberLanguage || this.locale.language,
         currency &#x3D; this.locale.currency
     ): string {
-        if (!hasNumberFormat &amp;&amp; options &amp;&amp; options.style &#x3D;&#x3D;&#x3D; &#x27;currency&#x27;) return &#x60;${value} ${currency}&#x60;;
-        if (!hasNumberFormat || language &#x3D;&#x3D; null || language &#x3D;&#x3D;&#x3D; &#x27;&#x27;) return value;
+        if (!hasNumberFormat() &amp;&amp; options &amp;&amp; options.style &#x3D;&#x3D;&#x3D; &#x27;currency&#x27;) return &#x60;${value} ${currency}&#x60;;
+        if (!hasNumberFormat() || language &#x3D;&#x3D; null || language &#x3D;&#x3D;&#x3D; &#x27;&#x27;) return value;
 
         value &#x3D; toNumber(value);
 
@@ -1143,9 +1143,9 @@ import { L10nTranslationService } from &#x27;./l10n-translation.service&#x27;;
         value: any,
         unit: Unit,
         options?: Intl.RelativeTimeFormatOptions,
-        language &#x3D; this.locale.language
+        language &#x3D; this.locale.dateLanguage || this.locale.language
     ): string {
-        if (!hasRelativeTimeFormat || language &#x3D;&#x3D; null || language &#x3D;&#x3D;&#x3D; &#x27;&#x27;) return value;
+        if (!hasRelativeTimeFormat() || language &#x3D;&#x3D; null || language &#x3D;&#x3D;&#x3D; &#x27;&#x27;) return value;
 
         value &#x3D; toNumber(value);
 
@@ -1155,11 +1155,11 @@ import { L10nTranslationService } from &#x27;./l10n-translation.service&#x27;;
     public getCurrencySymbol(locale &#x3D; this.locale): string | undefined {
         let symbol &#x3D; locale.currency;
         if (hasNumberFormat()) {
-            const decimal &#x3D; this.formatNumber(0, { digits: &#x27;1.0-0&#x27; }, locale.language);
+            const decimal &#x3D; this.formatNumber(0, { digits: &#x27;1.0-0&#x27; }, locale.numberLanguage || locale.language);
             const currency &#x3D; this.formatNumber(
                 0,
                 { digits: &#x27;1.0-0&#x27;, style: &#x27;currency&#x27;, currencyDisplay: &#x27;symbol&#x27; },
-                locale.language,
+                locale.numberLanguage || locale.language,
                 locale.currency
             );
             symbol &#x3D; currency.replace(decimal, &#x27;&#x27;);
