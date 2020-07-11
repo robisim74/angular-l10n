@@ -36,7 +36,7 @@ export abstract class L10nDirective implements AfterViewInit, OnChanges, OnDestr
             this.addTextListener();
 
             if (this.language) {
-                this.replaceText()
+                this.replaceText();
                 this.replaceAttributes();
             } else {
                 this.addTranslationListener();

@@ -1,5 +1,3 @@
-/// <reference path='../../typings.d.ts'/>
-
 import { Injectable, Inject } from '@angular/core';
 
 import { L10nLocale, L10nDateTimeFormatOptions, L10nNumberFormatOptions, Unit } from '../models/types';
@@ -102,14 +100,14 @@ import { L10nTranslationService } from './l10n-translation.service';
     public formatRelativeTime(
         value: any,
         unit: Unit,
-        options?: Intl.RelativeTimeFormatOptions,
+        options?: any,
         language = this.locale.dateLanguage || this.locale.language
     ): string {
         if (!hasRelativeTimeFormat() || language == null || language === '') return value;
 
         value = toNumber(value);
 
-        return new Intl.RelativeTimeFormat(language, options).format(value, unit);
+        return new (Intl as any).RelativeTimeFormat(language, options).format(value, unit);
     }
 
     public getCurrencySymbol(locale = this.locale): string | undefined {
@@ -167,11 +165,11 @@ import { L10nTranslationService } from './l10n-translation.service';
      * @param options A Intl ListFormatOptions object
      * @param language The current language
      */
-    public list(list: string[], options?: Intl.ListFormatOptions, language = this.locale.language): string {
+    public list(list: string[], options?: any, language = this.locale.language): string {
         const values = list.map(key => this.translation.translate(key));
         if (!hasListFormat() || language == null || language === '') return values.toString();
 
-        return new Intl.ListFormat(language, options).format(values);
+        return new (Intl as any).ListFormat(language, options).format(values);
     }
 
 }

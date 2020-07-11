@@ -25,10 +25,10 @@ import { L10N_CONFIG, L10nConfig } from '../models/l10n-config';
             switch (this.config.format) {
                 case 'language':
                     browserLanguage = navigator.language.split('-')[0];
-                    break
+                    break;
                 case 'language-region':
                     browserLanguage = navigator.language;
-                    break
+                    break;
             }
         }
         return Promise.resolve(browserLanguage);
