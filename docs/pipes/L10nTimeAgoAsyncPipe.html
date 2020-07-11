@@ -99,7 +99,7 @@
             <tr>
                 <td class="col-md-4">
                     <span class="modifier-icon icon ion-ios-reset"></span>
-                    <code>transform(value: <a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank">any</a>, unit: <a href="../undefineds/Unit.html">Unit</a>, options?: Intl.RelativeTimeFormatOptions, language?: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>)</code>
+                    <code>transform(value: <a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank">any</a>, unit: <a href="../undefineds/Unit.html">Unit</a>, options?: <a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank">any</a>, language?: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>)</code>
                 </td>
             </tr>
 
@@ -153,7 +153,7 @@
                                 <tr>
                                     <td>options</td>
                                     <td>
-                                            <code>Intl.RelativeTimeFormatOptions</code>
+                                                <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
                                     </td>
 
                                     <td>
@@ -211,7 +211,7 @@ export class L10nTimeAgoPipe implements PipeTransform {
 
     constructor(protected intl: L10nIntlService) { }
 
-    public transform(value: any, language: string, unit: Unit, options?: Intl.RelativeTimeFormatOptions): string | null {
+    public transform(value: any, language: string, unit: Unit, options?: any): string | null {
         if (value &#x3D;&#x3D; null || value &#x3D;&#x3D;&#x3D; &#x27;&#x27;) return null;
 
         return this.intl.formatRelativeTime(value, unit, options, language);
@@ -229,7 +229,7 @@ export class L10nTimeAgoAsyncPipe extends L10nAsyncPipe implements PipeTransform
         super(translation, cdr);
     }
 
-    public transform(value: any, unit: Unit, options?: Intl.RelativeTimeFormatOptions, language?: string): string | null {
+    public transform(value: any, unit: Unit, options?: any, language?: string): string | null {
         if (value &#x3D;&#x3D; null || value &#x3D;&#x3D;&#x3D; &#x27;&#x27;) return null;
 
         return this.intl.formatRelativeTime(value, unit, options, language);
