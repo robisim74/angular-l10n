@@ -373,24 +373,26 @@ Just add one script tag in your `index.html`:
 When specifying the `features`, you have to specify what languages to load.
 
 Other polyfills:
-- For _timezone_: [Intl.DateTimeFormat timezone](https://github.com/formatjs/date-time-format-timezone)
-- For _timeAgo_ pipe and directive: [Intl.RelativeTimeFormat](https://www.npmjs.com/package/@formatjs/intl-relativetimeformat)
+- [Format.JS](https://formatjs.io/docs/polyfills)
 
 The `L10nIntlService` also provides methods for other APIs, such as _Collator_, _PluralRules_ and _ListFormat_.
 
 
 ## Previous versions
+- **Angular v9 (Angular l10n v9.3.0)**
+    - [Branch](https://github.com/robisim74/angular-l10n/tree/angular_v9)
+
 - **Angular v8 (Angular l10n v8.1.2)**
-    - [Branch](https://github.com/robisim74/angular-l10n/tree/angular_v8/docs)
+    - [Branch](https://github.com/robisim74/angular-l10n/tree/angular_v8)
 
 - **Angular v7 (Angular l10n v7.2.0)**
-    - [Branch](https://github.com/robisim74/angular-l10n/tree/angular_v7/docs)
+    - [Branch](https://github.com/robisim74/angular-l10n/tree/angular_v7)
 
 - **Angular v6 (Angular l10n v5.2.0)**
-    - [Branch](https://github.com/robisim74/angular-l10n/tree/angular_v6/docs)
+    - [Branch](https://github.com/robisim74/angular-l10n/tree/angular_v6)
 
 - **Angular v5 (Angular l10n v4.2.0)**
-    - [Branch](https://github.com/robisim74/angular-l10n/tree/angular_v5/docs)
+    - [Branch](https://github.com/robisim74/angular-l10n/tree/angular_v5)
 
 - **Angular v4 (Angular l10n v3.5.2)**
     - [Branch](https://github.com/robisim74/angular-l10n/tree/angular_v4)
