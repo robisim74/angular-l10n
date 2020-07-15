@@ -18,9 +18,11 @@ export class HomeComponent implements OnInit {
     constructor(@Inject(L10N_LOCALE) public locale: L10nLocale) { }
 
     ngOnInit() {
-        setInterval(() => {
-            this.timeAgo = `-${++this.count}`;
-        }, 1000);
+        if (typeof window !== 'undefined') {
+            setInterval(() => {
+                this.timeAgo = `-${++this.count}`;
+            }, 1000);
+        }
     }
 
 }

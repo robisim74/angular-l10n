@@ -55,12 +55,12 @@ export function initL10n(l10nLoader: L10nLoader): () => Promise<void> {
 
 const i18nAsset = {
     'en-US': {
-        greeting: "Hello world!",
-        whoIAm: "I am {{name}}"
+        greeting: 'Hello world!',
+        whoIAm: 'I am {{name}}'
     },
     'it-IT': {
-        greeting: "Ciao mondo!",
-        whoIAm: "Sono {{name}}"
+        greeting: 'Ciao mondo!',
+        whoIAm: 'Sono {{name}}'
     }
 };
 ```
@@ -377,6 +377,8 @@ Other polyfills:
 
 The `L10nIntlService` also provides methods for other APIs, such as _Collator_, _PluralRules_ and _ListFormat_.
 
+### Intl API in Node.js environment
+To use _Intl_ in _Node.js_, check the support according to the version in the official documentation: [Internationalization Support](https://nodejs.org/api/intl.html)
 
 ## Previous versions
 - **Angular v9 (Angular l10n v9.3.0)**

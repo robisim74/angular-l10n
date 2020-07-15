@@ -37,7 +37,7 @@ export function parseLanguage(language: string) {
 
 export function getBrowserLanguage(): string | null {
     let browserLanguage = null;
-    if (navigator !== undefined && navigator.language) {
+    if (typeof navigator !== 'undefined' && navigator.language) {
         browserLanguage = navigator.language.split('-')[0];
     }
     return browserLanguage;

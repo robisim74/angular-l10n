@@ -122,10 +122,13 @@ import { L10nMissingTranslationHandler } from './l10n-missing-translation-handle
      * Should only be called when the service instance is created.
      */
     public async init(): Promise<void> {
-        if (this.locale.language) return Promise.resolve();
+        // Checks whether the L10nRoutingService has already initialized the locale.
+        let locale: L10nLocale | null = this.locale.language ? this.locale : null;
 
         // Tries to get the locale from the storage.
-        let locale = await this.storage.read();
+        if (locale == null) {
+            locale = await this.storage.read();
+        }
         // Tries to get the locale through the user language.
         if (locale == null) {
             const browserLanguage = await this.userLanguage.get();

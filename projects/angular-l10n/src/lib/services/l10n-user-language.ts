@@ -21,7 +21,7 @@ import { L10N_CONFIG, L10nConfig } from '../models/l10n-config';
 
     public get(): Promise<string | null> {
         let browserLanguage = null;
-        if (navigator !== undefined && navigator.language) {
+        if (typeof navigator !== 'undefined' && navigator.language) {
             switch (this.config.format) {
                 case 'language':
                     browserLanguage = navigator.language.split('-')[0];

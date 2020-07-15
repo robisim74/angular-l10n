@@ -10,7 +10,7 @@
     "test": "ng test angular-l10n --watch=false",
     "test:watch": "ng test angular-l10n --watch=true",
     "test:app": "ng test angular-l10n-app",
-    "lint": "ng lint",
+    "lint": "ng lint angular-l10n",
     "e2e": "ng e2e",
     "build:docs": "npx compodoc -p projects/angular-l10n/tsconfig.lib.prod.json -d docs --disableCoverage -a images",
     "serve:docs": "npx compodoc -d docs -s",
