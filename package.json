@@ -1,6 +1,6 @@
 {
   "name": "angular-l10n",
-  "version": "10.0.0",
+  "version": "10.0.1",
   "scripts": {
     "ng": "ng",
     "start": "ng serve angular-l10n-app --open",
@@ -46,11 +46,12 @@
     "@angular/cli": "10.0.1",
     "@angular/compiler-cli": "10.0.2",
     "@angular/language-service": "10.0.2",
-    "@types/node": "^14.0.8",
+    "@compodoc/compodoc": "^1.1.11",
     "@types/jasmine": "~3.5.0",
     "@types/jasminewd2": "~2.0.3",
-    "@compodoc/compodoc": "^1.1.11",
+    "@types/node": "^14.0.8",
     "codelyzer": "^6.0.0",
+    "husky": "^4.2.1",
     "jasmine-core": "~3.5.0",
     "jasmine-spec-reporter": "~5.0.0",
     "karma": "~5.0.0",
@@ -63,8 +64,7 @@
     "ts-node": "~8.3.0",
     "tslint": "~6.1.0",
     "typescript": "~3.9.6",
-    "webpack-bundle-analyzer": "^3.6.0",
-    "husky": "^4.2.1"
+    "webpack-bundle-analyzer": "^3.8.0"
   },
   "husky": {
     "hooks": {
