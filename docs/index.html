@@ -75,12 +75,12 @@ export function initL10n(l10nLoader: L10nLoader): () =&gt; Promise&lt;void&gt; {
 
 const i18nAsset = {
     &#39;en-US&#39;: {
-        greeting: &quot;Hello world!&quot;,
-        whoIAm: &quot;I am {{name}}&quot;
+        greeting: &#39;Hello world!&#39;,
+        whoIAm: &#39;I am {{name}}&#39;
     },
     &#39;it-IT&#39;: {
-        greeting: &quot;Ciao mondo!&quot;,
-        whoIAm: &quot;Sono {{name}}&quot;
+        greeting: &#39;Ciao mondo!&#39;,
+        whoIAm: &#39;Sono {{name}}&#39;
     }
 };</code></pre></div><p>Import the modules and the configuration:</p>
 <div><pre class="line-numbers"><code class="language-TypeScript">&#64;NgModule({
@@ -337,6 +337,8 @@ export class LazyModule { }</code></pre></div><h3 id="caching">Caching</h3>
 <li><a href="https://formatjs.io/docs/polyfills">Format.JS</a></li>
 </ul>
 <p>The <code>L10nIntlService</code> also provides methods for other APIs, such as <em>Collator</em>, <em>PluralRules</em> and <em>ListFormat</em>.</p>
+<h3 id="intl-api-in-nodejs-environment">Intl API in Node.js environment</h3>
+<p>To use <em>Intl</em> in <em>Node.js</em>, check the support according to the version in the official documentation: <a href="https://nodejs.org/api/intl.html">Internationalization Support</a></p>
 <h2 id="previous-versions">Previous versions</h2>
 <ul>
 <li><p><strong>Angular v9 (Angular l10n v9.3.0)</strong></p>

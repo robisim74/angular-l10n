@@ -184,7 +184,7 @@ import { L10N_CONFIG, L10nConfig } from &#x27;../models/l10n-config&#x27;;
 
     public get(): Promise&lt;string | null&gt; {
         let browserLanguage &#x3D; null;
-        if (navigator !&#x3D;&#x3D; undefined &amp;&amp; navigator.language) {
+        if (typeof navigator !&#x3D;&#x3D; &#x27;undefined&#x27; &amp;&amp; navigator.language) {
             switch (this.config.format) {
                 case &#x27;language&#x27;:
                     browserLanguage &#x3D; navigator.language.split(&#x27;-&#x27;)[0];

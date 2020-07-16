@@ -343,8 +343,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="185"
-                            class="link-to-prism">projects/angular-l10n/src/lib/services/l10n-translation.service.ts:185</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="188"
+                            class="link-to-prism">projects/angular-l10n/src/lib/services/l10n-translation.service.ts:188</a></div>
                 </td>
             </tr>
 
@@ -598,8 +598,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="191"
-                            class="link-to-prism">projects/angular-l10n/src/lib/services/l10n-translation.service.ts:191</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="194"
+                            class="link-to-prism">projects/angular-l10n/src/lib/services/l10n-translation.service.ts:194</a></div>
                 </td>
             </tr>
 
@@ -682,8 +682,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="213"
-                            class="link-to-prism">projects/angular-l10n/src/lib/services/l10n-translation.service.ts:213</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="216"
+                            class="link-to-prism">projects/angular-l10n/src/lib/services/l10n-translation.service.ts:216</a></div>
                 </td>
             </tr>
 
@@ -899,8 +899,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="153"
-                            class="link-to-prism">projects/angular-l10n/src/lib/services/l10n-translation.service.ts:153</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="156"
+                            class="link-to-prism">projects/angular-l10n/src/lib/services/l10n-translation.service.ts:156</a></div>
                 </td>
             </tr>
 
@@ -1086,8 +1086,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="217"
-                            class="link-to-prism">projects/angular-l10n/src/lib/services/l10n-translation.service.ts:217</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="220"
+                            class="link-to-prism">projects/angular-l10n/src/lib/services/l10n-translation.service.ts:220</a></div>
                 </td>
             </tr>
 
@@ -1562,10 +1562,13 @@ import { L10nMissingTranslationHandler } from &#x27;./l10n-missing-translation-h
      * Should only be called when the service instance is created.
      */
     public async init(): Promise&lt;void&gt; {
-        if (this.locale.language) return Promise.resolve();
+        // Checks whether the L10nRoutingService has already initialized the locale.
+        let locale: L10nLocale | null &#x3D; this.locale.language ? this.locale : null;
 
         // Tries to get the locale from the storage.
-        let locale &#x3D; await this.storage.read();
+        if (locale &#x3D;&#x3D; null) {
+            locale &#x3D; await this.storage.read();
+        }
         // Tries to get the locale through the user language.
         if (locale &#x3D;&#x3D; null) {
             const browserLanguage &#x3D; await this.userLanguage.get();
