@@ -15,6 +15,8 @@ export class L10nDateDirective extends L10nDirective {
 
     @Input() public options: any;
 
+    @Input() public timezone: string;
+
     constructor(
         protected el: ElementRef,
         protected renderer: Renderer2,
@@ -25,7 +27,7 @@ export class L10nDateDirective extends L10nDirective {
     }
 
     protected getValue(text: string): string {
-        return this.intl.formatDate(text, this.options, this.language);
+        return this.intl.formatDate(text, this.options, this.language, this.timezone);
     }
 
 }

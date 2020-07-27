@@ -31,10 +31,10 @@ export class L10nDateAsyncPipe extends L10nAsyncPipe implements PipeTransform {
         super(translation, cdr);
     }
 
-    public transform(value: any, options?: L10nDateTimeFormatOptions, language?: string): string | null {
+    public transform(value: any, options?: L10nDateTimeFormatOptions, language?: string, timezone?: string): string | null {
         if (value == null || value === '') return null;
 
-        return this.intl.formatDate(value, options, language);
+        return this.intl.formatDate(value, options, language, timezone);
     }
 
 }
