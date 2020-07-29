@@ -22,6 +22,14 @@ class MockComponent { }
 }
 
 describe('L10nRoutingService', () => {
+    const mockAsset = {
+        'en-US': {
+            title: 'Angular localization',
+        },
+        'it-IT': {
+            title: 'Localizzazione in Angular'
+        }
+    };
     const routes: Route[] = [
         { path: '', redirectTo: 'mock1', pathMatch: 'full' },
         { path: 'mock1', component: MockComponent },
@@ -37,7 +45,9 @@ describe('L10nRoutingService', () => {
         let spyLocation: SpyLocation;
         const config: L10nConfig = {
             format: 'language-region',
-            providers: [],
+            providers: [
+                { name: 'asset', asset: mockAsset }
+            ],
             keySeparator: '.',
             defaultLocale: { language: 'en-US', currency: 'USD' },
             schema: [
