@@ -18,6 +18,18 @@
     },
     {
       "path": "./projects/angular-l10n-app/tsconfig.spec.json"
+    },
+    {
+      "path": "./projects/angular-l10n-app-ssr/tsconfig.app.json"
+    },
+    {
+      "path": "./projects/angular-l10n-app-ssr/tsconfig.spec.json"
+    },
+    {
+      "path": "./projects/angular-l10n-app-ssr/e2e/tsconfig.json"
+    },
+    {
+      "path": "./projects/angular-l10n-app-ssr/tsconfig.server.json"
     }
   ]
 }
