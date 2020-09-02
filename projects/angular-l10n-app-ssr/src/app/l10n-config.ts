@@ -1,5 +1,6 @@
-import { Injectable, Inject, Optional } from '@angular/core';
+import { Injectable, Inject, Optional, PLATFORM_ID, Injector } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
+import { isPlatformBrowser } from '@angular/common';
 import { Observable } from 'rxjs';
 
 import {
@@ -13,9 +14,13 @@ import {
     L10N_LOCALE,
     L10nNumberFormatOptions,
     L10nDateTimeFormatOptions,
-    parseDigits
+    parseDigits,
+    L10nUserLanguage,
+    L10N_CONFIG,
+    L10nTranslationService
 } from 'angular-l10n';
 import { CookieService } from 'ngx-cookie';
+import { REQUEST } from '@nguniversal/express-engine/tokens';
 
 export const l10nConfig: L10nConfig = {
     format: 'language-region',
@@ -37,29 +42,6 @@ export function initL10n(l10nLoader: L10nLoader): () => Promise<void> {
     return () => l10nLoader.init();
 }
 
-/* @Injectable() export class AppStorage implements L10nStorage {
-
-    private hasStorage: boolean;
-
-    constructor() {
-        this.hasStorage = typeof Storage !== 'undefined';
-    }
-
-    public async read(): Promise<L10nLocale | null> {
-        if (this.hasStorage) {
-            return Promise.resolve(JSON.parse(sessionStorage.getItem('locale')));
-        }
-        return Promise.resolve(null);
-    }
-
-    public async write(locale: L10nLocale): Promise<void> {
-        if (this.hasStorage) {
-            sessionStorage.setItem('locale', JSON.stringify(locale));
-        }
-    }
-
-} */
-
 @Injectable() export class AppStorage implements L10nStorage {
 
     constructor(private cookieService: CookieService) { }
@@ -70,6 +52,36 @@ export function initL10n(l10nLoader: L10nLoader): () => Promise<void> {
 
     public async write(locale: L10nLocale): Promise<void> {
         this.cookieService.putObject('locale', locale);
+    }
+
+}
+
+@Injectable() export class AppUserLanguage implements L10nUserLanguage {
+
+    private get translation(): L10nTranslationService {
+        return this.injector.get(L10nTranslationService);
+    }
+
+    constructor(
+        @Optional() @Inject(REQUEST) protected request: any,
+        @Inject(PLATFORM_ID) private platformId: Object,
+        @Inject(L10N_CONFIG) private config: L10nConfig,
+        private injector: Injector
+    ) { }
+
+    public async get(): Promise<string | null> {
+        let browserLanguage = null;
+
+        if (isPlatformBrowser(this.platformId)) {
+            browserLanguage = navigator.language;
+        } else {
+            if (this.request) {
+                const acceptsLanguages = this.translation.getAvailableLanguages();
+                browserLanguage = this.request.acceptsLanguages(acceptsLanguages) ?? null;
+            }
+        }
+
+        return Promise.resolve(browserLanguage);
     }
 
 }

@@ -7,7 +7,7 @@ import { Request } from 'express';
 
 @Injectable() export class UniversalInterceptor implements HttpInterceptor {
 
-    constructor(@Optional() @Inject(REQUEST) protected request: Request) { }
+    constructor(@Optional() @Inject(REQUEST) protected request: any) { }
 
     public intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
         let serverReq: HttpRequest<any> = req;

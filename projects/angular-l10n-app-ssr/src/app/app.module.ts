@@ -15,7 +15,7 @@ import { ApiComponent } from './home/api/api.component';
 import { ValidationComponent } from './validation/validation.component';
 import { OnPushComponent } from './on-push/on-push.component';
 
-import { l10nConfig, initL10n, AppStorage, HttpTranslationLoader, LocaleValidation } from './l10n-config';
+import { l10nConfig, initL10n, AppStorage, HttpTranslationLoader, LocaleValidation, AppUserLanguage } from './l10n-config';
 
 @NgModule({
     declarations: [
@@ -36,12 +36,13 @@ import { l10nConfig, initL10n, AppStorage, HttpTranslationLoader, LocaleValidati
             l10nConfig,
             {
                 storage: AppStorage,
+                userLanguage: AppUserLanguage,
                 translationLoader: HttpTranslationLoader
             }
         ),
         L10nIntlModule,
         L10nValidationModule.forRoot({ validation: LocaleValidation }),
-        /* L10nRoutingModule.forRoot(), */
+        L10nRoutingModule.forRoot(),
         CookieModule.forRoot()
     ],
     providers: [
