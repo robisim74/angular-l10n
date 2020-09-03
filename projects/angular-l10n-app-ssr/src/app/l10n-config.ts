@@ -1,8 +1,10 @@
 import { Injectable, Inject, Optional, PLATFORM_ID, Injector } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { isPlatformBrowser } from '@angular/common';
+import { REQUEST } from '@nguniversal/express-engine/tokens';
 import { Observable } from 'rxjs';
 
+import { CookieService } from 'ngx-cookie';
 import {
     L10nConfig,
     L10nLoader,
@@ -16,11 +18,8 @@ import {
     L10nDateTimeFormatOptions,
     parseDigits,
     L10nUserLanguage,
-    L10N_CONFIG,
     L10nTranslationService
 } from 'angular-l10n';
-import { CookieService } from 'ngx-cookie';
-import { REQUEST } from '@nguniversal/express-engine/tokens';
 
 export const l10nConfig: L10nConfig = {
     format: 'language-region',
@@ -63,9 +62,8 @@ export function initL10n(l10nLoader: L10nLoader): () => Promise<void> {
     }
 
     constructor(
-        @Optional() @Inject(REQUEST) protected request: any,
+        @Optional() @Inject(REQUEST) private request: any,
         @Inject(PLATFORM_ID) private platformId: Object,
-        @Inject(L10N_CONFIG) private config: L10nConfig,
         private injector: Injector
     ) { }
 
@@ -77,6 +75,7 @@ export function initL10n(l10nLoader: L10nLoader): () => Promise<void> {
         } else {
             if (this.request) {
                 const acceptsLanguages = this.translation.getAvailableLanguages();
+                // Returns the first accepted language of the specified languages.
                 browserLanguage = this.request.acceptsLanguages(acceptsLanguages) ?? null;
             }
         }

@@ -3,11 +3,9 @@ import { HttpInterceptor, HttpHandler, HttpEvent, HttpRequest } from '@angular/c
 import { REQUEST } from '@nguniversal/express-engine/tokens';
 import { Observable } from 'rxjs';
 
-import { Request } from 'express';
-
 @Injectable() export class UniversalInterceptor implements HttpInterceptor {
 
-    constructor(@Optional() @Inject(REQUEST) protected request: any) { }
+    constructor(@Optional() @Inject(REQUEST) private request: any) { }
 
     public intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
         let serverReq: HttpRequest<any> = req;
