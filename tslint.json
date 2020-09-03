@@ -13,6 +13,7 @@
     "array-type": false,
     "arrow-parens": false,
     "arrow-return-shorthand": true,
+    "ban-types": false,
     "curly": [
       true,
       "ignore-same-line"

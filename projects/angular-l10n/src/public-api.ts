@@ -40,3 +40,4 @@ export * from './lib/modules/l10n-validation.module';
 // L10nRoutingModule
 export * from './lib/services/l10n-routing.service';
 export * from './lib/modules/l10n-routing.module';
+export { L10nLocation } from './lib/services/l10n-location';

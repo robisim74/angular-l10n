@@ -1,4 +1,4 @@
-import { Injectable, Inject } from '@angular/core';
+import { Injectable, Inject, Optional } from '@angular/core';
 import { Observable, BehaviorSubject, merge, concat } from 'rxjs';
 
 import { L10nLocale, L10nProvider } from '../models/types';
@@ -11,6 +11,7 @@ import { L10nTranslationFallback } from './l10n-translation-fallback';
 import { L10nTranslationLoader } from './l10n-translation-loader';
 import { L10nTranslationHandler } from './l10n-translation-handler';
 import { L10nMissingTranslationHandler } from './l10n-missing-translation-handler';
+import { L10nLocation } from './l10n-location';
 
 @Injectable() export class L10nTranslationService {
 
@@ -32,7 +33,8 @@ import { L10nMissingTranslationHandler } from './l10n-missing-translation-handle
         private translationFallback: L10nTranslationFallback,
         private translationLoader: L10nTranslationLoader,
         private translationHandler: L10nTranslationHandler,
-        private missingTranslationHandler: L10nMissingTranslationHandler
+        private missingTranslationHandler: L10nMissingTranslationHandler,
+        @Optional() private location: L10nLocation
     ) { }
 
     /**
@@ -122,12 +124,24 @@ import { L10nMissingTranslationHandler } from './l10n-missing-translation-handle
      * Should only be called when the service instance is created.
      */
     public async init(): Promise<void> {
-        // Checks if the service has already been initialized.
-        if (this.locale.language && Object.keys(this.data).length > 0) return Promise.resolve();
+        let locale: L10nLocale | null = null;
 
-        // Tries to get the locale from the storage.
-        let locale = await this.storage.read();
-        // Tries to get the locale through the user language.
+        // Tries to get locale from path if localized routing is used.
+        if (this.location) {
+            const path = this.location.path();
+            const pathLanguage = await this.location.parsePath(path);
+            if (pathLanguage) {
+                const schema = getSchema(this.config.schema, pathLanguage, this.config.format);
+                if (schema) {
+                    locale = schema.locale;
+                }
+            }
+        }
+        // Tries to get locale from storage.
+        if (locale == null) {
+            locale = await this.storage.read();
+        }
+        // Tries to get locale through the user language.
         if (locale == null) {
             const browserLanguage = await this.userLanguage.get();
             if (browserLanguage) {

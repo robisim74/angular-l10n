@@ -1,12 +1,13 @@
-import { Injectable, Inject, Injector } from '@angular/core';
+import { Injectable, Inject, Injector, PLATFORM_ID } from '@angular/core';
 import { Router, NavigationStart, NavigationEnd } from '@angular/router';
-import { Location } from '@angular/common';
+import { Location, isPlatformBrowser } from '@angular/common';
 import { filter } from 'rxjs/operators';
 
 import { L10nLocale } from '../models/types';
 import { L10N_CONFIG, L10nConfig, L10N_LOCALE } from '../models/l10n-config';
-import { formatLanguage, getSchema } from '../models/utils';
+import { formatLanguage } from '../models/utils';
 import { L10nTranslationService } from './l10n-translation.service';
+import { L10nLocation } from './l10n-location';
 
 @Injectable() export class L10nRoutingService {
 
@@ -19,9 +20,11 @@ import { L10nTranslationService } from './l10n-translation.service';
     }
 
     constructor(
+        @Inject(PLATFORM_ID) private platformId: Object,
         @Inject(L10N_CONFIG) private config: L10nConfig,
         @Inject(L10N_LOCALE) private locale: L10nLocale,
         private translation: L10nTranslationService,
+        private l10nLocation: L10nLocation,
         private injector: Injector
     ) { }
 
@@ -48,31 +51,11 @@ import { L10nTranslationService } from './l10n-translation.service';
             }
         });
 
-        // Replaces url when locale changes.
-        this.translation.onChange().subscribe({
-            next: (locale: L10nLocale) => this.replacePath(locale)
-        });
-
-        // Initial navigation.
-        const path = this.location.path(true);
-        // Parses the url to find the language.
-        await this.parsePath(path);
-    }
-
-    /**
-     * Parses path to find the language.
-     * @param path The path to be parsed
-     */
-    private async parsePath(path?: string): Promise<void> {
-        if (!path) return Promise.resolve();
-
-        const segment = this.getLocalizedSegment(path);
-        if (segment != null) {
-            const language = segment.replace(/\//g, '');
-            const schema = getSchema(this.config.schema, language, this.config.format);
-            if (schema) {
-                await this.translation.setLocale(schema.locale);
-            }
+        if (isPlatformBrowser(this.platformId)) {
+            // Replaces url when locale changes.
+            this.translation.onChange().subscribe({
+                next: (locale: L10nLocale) => this.replacePath(locale)
+            });
         }
     }
 
@@ -82,7 +65,7 @@ import { L10nTranslationService } from './l10n-translation.service';
      * @param skipLocationChange When true, navigates without pushing a new state into history
      */
     private redirectToPath(path: string, skipLocationChange: boolean): void {
-        const segment = this.getLocalizedSegment(path);
+        const segment = this.l10nLocation.getLocalizedSegment(path);
         if (segment != null) {
             const url = path.replace(segment, '/');
             // navigateByUrl keeps the query params.
@@ -101,11 +84,11 @@ import { L10nTranslationService } from './l10n-translation.service';
         const language = formatLanguage(locale.language, this.config.format);
         if (path) {
             if (!this.isDefaultRouting()) {
-                this.location.replaceState(this.getLocalizedPath(language, path));
+                this.location.replaceState(this.l10nLocation.toLocalizedPath(language, path));
             }
         } else {
-            path = this.location.path(true);
-            const segment = this.getLocalizedSegment(path);
+            path = this.l10nLocation.path();
+            const segment = this.l10nLocation.getLocalizedSegment(path);
             if (segment != null) {
                 path = path.replace(segment, '/');
 
@@ -114,28 +97,9 @@ import { L10nTranslationService } from './l10n-translation.service';
                 }
             }
             if (!this.isDefaultRouting()) {
-                this.location.replaceState(this.getLocalizedPath(language, path));
+                this.location.replaceState(this.l10nLocation.toLocalizedPath(language, path));
             }
         }
-    }
-
-    private getLocalizedSegment(path: string): string | null {
-        for (const element of this.config.schema) {
-            const language = formatLanguage(element.locale.language, this.config.format);
-            const regex = new RegExp(`(\/${language}\/)|(\/${language}$)`);
-            const segments = path.match(regex);
-            if (segments != null) {
-                return segments[0];
-            }
-        }
-        return null;
-    }
-
-    private getLocalizedPath(language: string, path: string): string {
-        const segment = this.getLocalizedSegment(path);
-        if (segment != null && segment.includes(language)) return path;
-
-        return Location.stripTrailingSlash('/' + language + path);
     }
 
     private isDefaultRouting(): boolean {
