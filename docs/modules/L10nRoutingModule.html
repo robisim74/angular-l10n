@@ -87,15 +87,15 @@
             <tr>
                 <td class="col-md-4">
                     <span class="modifier-icon icon ion-ios-reset"></span>
-                    <code>forRoot()</code>
+                    <code>forRoot(token: <a href="../interfaces/L10nRoutingToken.html">L10nRoutingToken</a>)</code>
                 </td>
             </tr>
 
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="9"
-                            class="link-to-prism">projects/angular-l10n/src/lib/modules/l10n-routing.module.ts:9</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="11"
+                            class="link-to-prism">projects/angular-l10n/src/lib/modules/l10n-routing.module.ts:11</a></div>
                 </td>
             </tr>
 
@@ -104,8 +104,43 @@
                 <td class="col-md-4">
 
                     <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                    <td>Default value</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>token</td>
+                                    <td>
+                                                <code><a href="../interfaces/L10nRoutingToken.html" target="_self" >L10nRoutingToken</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+                                    <td>
+                                        <code>{}</code>
+                                    </td>
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
                         <b>Returns : </b>    <code>ModuleWithProviders&lt;L10nRoutingModule&gt;</code>
 
+                    </div>
+                    <div class="io-description">
+                        
                     </div>
                 </td>
             </tr>
@@ -118,17 +153,20 @@
     <div class="tab-pane fade  tab-source-code" id="c-source">
         <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { NgModule, ModuleWithProviders } from &#x27;@angular/core&#x27;;
 
+import { L10nRoutingToken } from &#x27;../models/l10n-config&#x27;;
 import { L10nRoutingService } from &#x27;../services/l10n-routing.service&#x27;;
 import { L10nLoader, L10nRoutingLoader } from &#x27;../services/l10n-loader&#x27;;
+import { L10nLocation, L10nDefaultLocation } from &#x27;../services/l10n-location&#x27;;
 
 @NgModule({})
 export class L10nRoutingModule {
 
-    public static forRoot(): ModuleWithProviders&lt;L10nRoutingModule&gt; {
+    public static forRoot(token: L10nRoutingToken &#x3D; {}): ModuleWithProviders&lt;L10nRoutingModule&gt; {
         return {
             ngModule: L10nRoutingModule,
             providers: [
                 L10nRoutingService,
+                { provide: L10nLocation, useClass: token.location || L10nDefaultLocation },
                 { provide: L10nLoader, useClass: L10nRoutingLoader }
             ]
         };

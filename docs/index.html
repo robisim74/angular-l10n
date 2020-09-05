@@ -46,6 +46,7 @@
 <li><a href="#usage">Usage</a></li>
 <li><a href="#types">Types</a></li>
 <li><a href="#intl-api">Intl API</a></li>
+<li><a href="#server-side-rendering">Server Side Rendering</a></li>
 <li><a href="#previous-versions">Previous versions</a></li>
 <li><a href="#contributing">Contributing</a></li>
 <li><a href="#license">License</a></li>
@@ -246,7 +247,36 @@ https://example.com/en-US/home</code></pre></div><p>If the localized link is cal
 <div><pre class="line-numbers"><code class="language-TypeScript">export const l10nConfig: L10nConfig = {
     ...
     defaultRouting: true
-};</code></pre></div><h3 id="lazy-loading">Lazy loading</h3>
+};</code></pre></div><p>You can change the localized path, implementing the <code>L10nLocation</code> class-interface, and import it with the routing module:</p>
+<div><pre class="line-numbers"><code class="language-TypeScript">&#64;Injectable() export class AppLocation implements L10nLocation {
+
+    public path(): string {
+        ...
+    }
+
+    public parsePath(path: string): string | null {
+        ...
+    }
+
+    public getLocalizedSegment(path: string): string | null {
+        ...
+    }
+
+    public toLocalizedPath(language: string, path: string): string {
+        ...
+    }
+
+}
+
+&#64;NgModule({
+    ...
+    imports: [
+        ...
+        L10nRoutingModule.forRoot({ location: AppLocation })
+    ],
+    ...
+})
+export class AppModule { }</code></pre></div><h3 id="lazy-loading">Lazy loading</h3>
 <p>If you want to add new providers to a lazy loaded module, you can use <code>L10nResolver</code> in your routing module:</p>
 <div><pre class="line-numbers"><code class="language-TypeScript">const routes: Routes = [
     ...
@@ -337,8 +367,20 @@ export class LazyModule { }</code></pre></div><h3 id="caching">Caching</h3>
 <li><a href="https://formatjs.io/docs/polyfills">Format.JS</a></li>
 </ul>
 <p>The <code>L10nIntlService</code> also provides methods for other APIs, such as <em>Collator</em>, <em>PluralRules</em> and <em>ListFormat</em>.</p>
-<h3 id="intl-api-in-nodejs-environment">Intl API in Node.js environment</h3>
+<h3 id="intl-api-in-nodejs">Intl API in Node.js</h3>
 <p>To use <em>Intl</em> in <em>Node.js</em>, check the support according to the version in the official documentation: <a href="https://nodejs.org/api/intl.html">Internationalization Support</a></p>
+<h2 id="server-side-rendering">Server Side Rendering</h2>
+<p>You can find a complete sample app with <em>@nguniversal/express-engine</em> <a href="projects/angular-l10n-app-ssr">here</a>.</p>
+<p>SSR doesn&#39;t work out of the box, so it is important to know:</p>
+<ul>
+<li><code>src\app\universal-interceptor.ts</code>: used to handle absolute URLs for HTTP requests on the server</li>
+<li><code>src\app\l10n-config.ts</code>:<ul>
+<li><code>AppStorage (implements L10nStorage)</code>: uses a cookie to store the <em>locale</em> client &amp; server side</li>
+<li><code>AppUserLanguage (implements L10nUserLanguage)</code>: server side, negotiates the language through <code>acceptsLanguages</code> to get the user language when the app starts</li>
+</ul>
+</li>
+<li><em>prerender</em> &amp; <em>serve:ssr</em> commands set <code>NODE_ICU_DATA</code> to <em>full-icu</em> to support <em>Intl</em> in <em>Node.js</em></li>
+</ul>
 <h2 id="previous-versions">Previous versions</h2>
 <ul>
 <li><p><strong>Angular v9 (Angular l10n v9.3.0)</strong></p>

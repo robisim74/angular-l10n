@@ -214,6 +214,9 @@ customElements.define('compodoc-menu', class extends HTMLElement {
                                     <a href="injectables/L10nDefaultLoader.html" data-type="entity-link">L10nDefaultLoader</a>
                                 </li>
                                 <li class="link">
+                                    <a href="injectables/L10nDefaultLocation.html" data-type="entity-link">L10nDefaultLocation</a>
+                                </li>
+                                <li class="link">
                                     <a href="injectables/L10nDefaultMissingTranslationHandler.html" data-type="entity-link">L10nDefaultMissingTranslationHandler</a>
                                 </li>
                                 <li class="link">
@@ -239,6 +242,9 @@ customElements.define('compodoc-menu', class extends HTMLElement {
                                 </li>
                                 <li class="link">
                                     <a href="injectables/L10nLoader.html" data-type="entity-link">L10nLoader</a>
+                                </li>
+                                <li class="link">
+                                    <a href="injectables/L10nLocation.html" data-type="entity-link">L10nLocation</a>
                                 </li>
                                 <li class="link">
                                     <a href="injectables/L10nMissingTranslationHandler.html" data-type="entity-link">L10nMissingTranslationHandler</a>
@@ -307,6 +313,9 @@ customElements.define('compodoc-menu', class extends HTMLElement {
                             </li>
                             <li class="link">
                                 <a href="interfaces/L10nProvider.html" data-type="entity-link">L10nProvider</a>
+                            </li>
+                            <li class="link">
+                                <a href="interfaces/L10nRoutingToken.html" data-type="entity-link">L10nRoutingToken</a>
                             </li>
                             <li class="link">
                                 <a href="interfaces/L10nSchema.html" data-type="entity-link">L10nSchema</a>

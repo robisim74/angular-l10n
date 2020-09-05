@@ -368,6 +368,7 @@ import { L10nTranslationLoader } from &#x27;../services/l10n-translation-loader&
 import { L10nTranslationHandler } from &#x27;../services/l10n-translation-handler&#x27;;
 import { L10nMissingTranslationHandler } from &#x27;../services/l10n-missing-translation-handler&#x27;;
 import { L10nValidation } from &#x27;../services/l10n-validation&#x27;;
+import { L10nLocation } from &#x27;../services/l10n-location&#x27;;
 
 export interface L10nConfig {
     /**
@@ -450,6 +451,13 @@ export interface L10nValidationToken {
      * Defines the validation service to be used.
      */
     validation?: Type&lt;L10nValidation&gt;;
+}
+
+export interface L10nRoutingToken {
+    /**
+     * Defines the location service to be used.
+     */
+    location?: Type&lt;L10nLocation&gt;;
 }
 </code></pre>
     </div>

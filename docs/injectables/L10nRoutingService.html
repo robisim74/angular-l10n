@@ -76,14 +76,6 @@
                     <td class="col-md-4">
                         <ul class="index-list">
                             <li>
-                                    <span class="modifier">Private</span>
-                                <a href="#getLocalizedPath">getLocalizedPath</a>
-                            </li>
-                            <li>
-                                    <span class="modifier">Private</span>
-                                <a href="#getLocalizedSegment">getLocalizedSegment</a>
-                            </li>
-                            <li>
                                     <span class="modifier">Public</span>
                                     <span class="modifier">Async</span>
                                 <a href="#init">init</a>
@@ -91,11 +83,6 @@
                             <li>
                                     <span class="modifier">Private</span>
                                 <a href="#isDefaultRouting">isDefaultRouting</a>
-                            </li>
-                            <li>
-                                    <span class="modifier">Private</span>
-                                    <span class="modifier">Async</span>
-                                <a href="#parsePath">parsePath</a>
                             </li>
                             <li>
                                     <span class="modifier">Private</span>
@@ -140,12 +127,12 @@
             <tbody>
                 <tr>
                     <td class="col-md-4">
-<code>constructor(config: <a href="../interfaces/L10nConfig.html">L10nConfig</a>, locale: <a href="../interfaces/L10nLocale.html">L10nLocale</a>, translation: <a href="../injectables/L10nTranslationService.html">L10nTranslationService</a>, injector: <a href="https://angular.io/api/core/Injector" target="_blank">Injector</a>)</code>
+<code>constructor(platformId: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object" target="_blank">Object</a>, config: <a href="../interfaces/L10nConfig.html">L10nConfig</a>, locale: <a href="../interfaces/L10nLocale.html">L10nLocale</a>, translation: <a href="../injectables/L10nTranslationService.html">L10nTranslationService</a>, l10nLocation: <a href="../injectables/L10nLocation.html">L10nLocation</a>, injector: <a href="https://angular.io/api/core/Injector" target="_blank">Injector</a>)</code>
                     </td>
                 </tr>
                         <tr>
                             <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="19" class="link-to-prism">projects/angular-l10n/src/lib/services/l10n-routing.service.ts:19</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="20" class="link-to-prism">projects/angular-l10n/src/lib/services/l10n-routing.service.ts:20</a></div>
                             </td>
                         </tr>
 
@@ -162,6 +149,18 @@
                                             </tr>
                                         </thead>
                                         <tbody>
+                                                <tr>
+                                                        <td>platformId</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object" target="_blank" >Object</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
                                                 <tr>
                                                         <td>config</td>
                                                   
@@ -199,6 +198,18 @@
                                                     
                                                 </tr>
                                                 <tr>
+                                                        <td>l10nLocation</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="../injectables/L10nLocation.html" target="_self" >L10nLocation</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                                <tr>
                                                         <td>injector</td>
                                                   
                                                         <td>
@@ -228,162 +239,6 @@
         <tbody>
             <tr>
                 <td class="col-md-4">
-                    <a name="getLocalizedPath"></a>
-                    <span class="name">
-                        <b>
-                            <span class="modifier">Private</span>
-                            getLocalizedPath
-                        </b>
-                        <a href="#getLocalizedPath"><span class="icon ion-ios-link"></span></a>
-                    </span>
-                </td>
-            </tr>
-            <tr>
-                <td class="col-md-4">
-                    <span class="modifier-icon icon ion-ios-reset"></span>
-                    <code>getLocalizedPath(language: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>, path: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>)</code>
-                </td>
-            </tr>
-
-
-            <tr>
-                <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="134"
-                            class="link-to-prism">projects/angular-l10n/src/lib/services/l10n-routing.service.ts:134</a></div>
-                </td>
-            </tr>
-
-
-            <tr>
-                <td class="col-md-4">
-
-                    <div class="io-description">
-                        <b>Parameters :</b>
-                        <table class="params">
-                            <thead>
-                                <tr>
-                                    <td>Name</td>
-                                    <td>Type</td>
-                                    <td>Optional</td>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>language</td>
-                                    <td>
-                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
-                                    </td>
-
-                                    <td>
-                                        No
-                                    </td>
-
-
-                                </tr>
-                                <tr>
-                                    <td>path</td>
-                                    <td>
-                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
-                                    </td>
-
-                                    <td>
-                                        No
-                                    </td>
-
-
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                    <div>
-                    </div>
-                    <div class="io-description">
-                        <b>Returns : </b>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
-
-                    </div>
-                    <div class="io-description">
-                        
-                    </div>
-                </td>
-            </tr>
-        </tbody>
-    </table>
-    <table class="table table-sm table-bordered">
-        <tbody>
-            <tr>
-                <td class="col-md-4">
-                    <a name="getLocalizedSegment"></a>
-                    <span class="name">
-                        <b>
-                            <span class="modifier">Private</span>
-                            getLocalizedSegment
-                        </b>
-                        <a href="#getLocalizedSegment"><span class="icon ion-ios-link"></span></a>
-                    </span>
-                </td>
-            </tr>
-            <tr>
-                <td class="col-md-4">
-                    <span class="modifier-icon icon ion-ios-reset"></span>
-                    <code>getLocalizedSegment(path: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>)</code>
-                </td>
-            </tr>
-
-
-            <tr>
-                <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="122"
-                            class="link-to-prism">projects/angular-l10n/src/lib/services/l10n-routing.service.ts:122</a></div>
-                </td>
-            </tr>
-
-
-            <tr>
-                <td class="col-md-4">
-
-                    <div class="io-description">
-                        <b>Parameters :</b>
-                        <table class="params">
-                            <thead>
-                                <tr>
-                                    <td>Name</td>
-                                    <td>Type</td>
-                                    <td>Optional</td>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>path</td>
-                                    <td>
-                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
-                                    </td>
-
-                                    <td>
-                                        No
-                                    </td>
-
-
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                    <div>
-                    </div>
-                    <div class="io-description">
-                        <b>Returns : </b>    <code>string | null</code>
-
-                    </div>
-                    <div class="io-description">
-                        
-                    </div>
-                </td>
-            </tr>
-        </tbody>
-    </table>
-    <table class="table table-sm table-bordered">
-        <tbody>
-            <tr>
-                <td class="col-md-4">
                     <a name="init"></a>
                     <span class="name">
                         <b>
@@ -405,8 +260,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="28"
-                            class="link-to-prism">projects/angular-l10n/src/lib/services/l10n-routing.service.ts:28</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="31"
+                            class="link-to-prism">projects/angular-l10n/src/lib/services/l10n-routing.service.ts:31</a></div>
                 </td>
             </tr>
 
@@ -446,8 +301,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="141"
-                            class="link-to-prism">projects/angular-l10n/src/lib/services/l10n-routing.service.ts:141</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="105"
+                            class="link-to-prism">projects/angular-l10n/src/lib/services/l10n-routing.service.ts:105</a></div>
                 </td>
             </tr>
 
@@ -458,86 +313,6 @@
                     <div class="io-description">
                         <b>Returns : </b>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/boolean" target="_blank" >boolean</a></code>
 
-                    </div>
-                </td>
-            </tr>
-        </tbody>
-    </table>
-    <table class="table table-sm table-bordered">
-        <tbody>
-            <tr>
-                <td class="col-md-4">
-                    <a name="parsePath"></a>
-                    <span class="name">
-                        <b>
-                            <span class="modifier">Private</span>
-                            <span class="modifier">Async</span>
-                            parsePath
-                        </b>
-                        <a href="#parsePath"><span class="icon ion-ios-link"></span></a>
-                    </span>
-                </td>
-            </tr>
-            <tr>
-                <td class="col-md-4">
-                    <span class="modifier-icon icon ion-ios-reset"></span>
-                    <code>parsePath(path?: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>)</code>
-                </td>
-            </tr>
-
-
-            <tr>
-                <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="66"
-                            class="link-to-prism">projects/angular-l10n/src/lib/services/l10n-routing.service.ts:66</a></div>
-                </td>
-            </tr>
-
-
-            <tr>
-                <td class="col-md-4">
-                    <div class="io-description"><p>Parses path to find the language.</p>
-</div>
-
-                    <div class="io-description">
-                        <b>Parameters :</b>
-                        <table class="params">
-                            <thead>
-                                <tr>
-                                    <td>Name</td>
-                                    <td>Type</td>
-                                    <td>Optional</td>
-                                    <td>Description</td>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>path</td>
-                                    <td>
-                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
-                                    </td>
-
-                                    <td>
-                                        Yes
-                                    </td>
-
-
-                                    <td>
-                                        <p>The path to be parsed</p>
-
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                    <div>
-                    </div>
-                    <div class="io-description">
-                        <b>Returns : </b>    <code>Promise&lt;void&gt;</code>
-
-                    </div>
-                    <div class="io-description">
-                        
                     </div>
                 </td>
             </tr>
@@ -567,8 +342,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="84"
-                            class="link-to-prism">projects/angular-l10n/src/lib/services/l10n-routing.service.ts:84</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="67"
+                            class="link-to-prism">projects/angular-l10n/src/lib/services/l10n-routing.service.ts:67</a></div>
                 </td>
             </tr>
 
@@ -662,8 +437,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="98"
-                            class="link-to-prism">projects/angular-l10n/src/lib/services/l10n-routing.service.ts:98</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="81"
+                            class="link-to-prism">projects/angular-l10n/src/lib/services/l10n-routing.service.ts:81</a></div>
                 </td>
             </tr>
 
@@ -755,7 +530,7 @@
                 </tr>
                             <tr>
                                 <td class="col-md-4">
-                                    <div class="io-line">Defined in <a href="" data-line="13" class="link-to-prism">projects/angular-l10n/src/lib/services/l10n-routing.service.ts:13</a></div>
+                                    <div class="io-line">Defined in <a href="" data-line="14" class="link-to-prism">projects/angular-l10n/src/lib/services/l10n-routing.service.ts:14</a></div>
                                 </td>
                             </tr>
 
@@ -777,7 +552,7 @@
                 </tr>
                             <tr>
                                 <td class="col-md-4">
-                                    <div class="io-line">Defined in <a href="" data-line="17" class="link-to-prism">projects/angular-l10n/src/lib/services/l10n-routing.service.ts:17</a></div>
+                                    <div class="io-line">Defined in <a href="" data-line="18" class="link-to-prism">projects/angular-l10n/src/lib/services/l10n-routing.service.ts:18</a></div>
                                 </td>
                             </tr>
 
@@ -788,15 +563,16 @@
 
 
     <div class="tab-pane fade  tab-source-code" id="c-source">
-        <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { Injectable, Inject, Injector } from &#x27;@angular/core&#x27;;
+        <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { Injectable, Inject, Injector, PLATFORM_ID } from &#x27;@angular/core&#x27;;
 import { Router, NavigationStart, NavigationEnd } from &#x27;@angular/router&#x27;;
-import { Location } from &#x27;@angular/common&#x27;;
+import { Location, isPlatformBrowser } from &#x27;@angular/common&#x27;;
 import { filter } from &#x27;rxjs/operators&#x27;;
 
 import { L10nLocale } from &#x27;../models/types&#x27;;
 import { L10N_CONFIG, L10nConfig, L10N_LOCALE } from &#x27;../models/l10n-config&#x27;;
-import { formatLanguage, getSchema } from &#x27;../models/utils&#x27;;
+import { formatLanguage } from &#x27;../models/utils&#x27;;
 import { L10nTranslationService } from &#x27;./l10n-translation.service&#x27;;
+import { L10nLocation } from &#x27;./l10n-location&#x27;;
 
 @Injectable() export class L10nRoutingService {
 
@@ -809,9 +585,11 @@ import { L10nTranslationService } from &#x27;./l10n-translation.service&#x27;;
     }
 
     constructor(
+        @Inject(PLATFORM_ID) private platformId: Object,
         @Inject(L10N_CONFIG) private config: L10nConfig,
         @Inject(L10N_LOCALE) private locale: L10nLocale,
         private translation: L10nTranslationService,
+        private l10nLocation: L10nLocation,
         private injector: Injector
     ) { }
 
@@ -838,31 +616,11 @@ import { L10nTranslationService } from &#x27;./l10n-translation.service&#x27;;
             }
         });
 
-        // Replaces url when locale changes.
-        this.translation.onChange().subscribe({
-            next: (locale: L10nLocale) &#x3D;&gt; this.replacePath(locale)
-        });
-
-        // Initial navigation.
-        const path &#x3D; this.location.path(true);
-        // Parses the url to find the language.
-        await this.parsePath(path);
-    }
-
-    /**
-     * Parses path to find the language.
-     * @param path The path to be parsed
-     */
-    private async parsePath(path?: string): Promise&lt;void&gt; {
-        if (!path) return Promise.resolve();
-
-        const segment &#x3D; this.getLocalizedSegment(path);
-        if (segment !&#x3D; null) {
-            const language &#x3D; segment.replace(/\//g, &#x27;&#x27;);
-            const schema &#x3D; getSchema(this.config.schema, language, this.config.format);
-            if (schema) {
-                await this.translation.setLocale(schema.locale);
-            }
+        if (isPlatformBrowser(this.platformId)) {
+            // Replaces url when locale changes.
+            this.translation.onChange().subscribe({
+                next: (locale: L10nLocale) &#x3D;&gt; this.replacePath(locale)
+            });
         }
     }
 
@@ -872,7 +630,7 @@ import { L10nTranslationService } from &#x27;./l10n-translation.service&#x27;;
      * @param skipLocationChange When true, navigates without pushing a new state into history
      */
     private redirectToPath(path: string, skipLocationChange: boolean): void {
-        const segment &#x3D; this.getLocalizedSegment(path);
+        const segment &#x3D; this.l10nLocation.getLocalizedSegment(path);
         if (segment !&#x3D; null) {
             const url &#x3D; path.replace(segment, &#x27;/&#x27;);
             // navigateByUrl keeps the query params.
@@ -891,11 +649,11 @@ import { L10nTranslationService } from &#x27;./l10n-translation.service&#x27;;
         const language &#x3D; formatLanguage(locale.language, this.config.format);
         if (path) {
             if (!this.isDefaultRouting()) {
-                this.location.replaceState(this.getLocalizedPath(language, path));
+                this.location.replaceState(this.l10nLocation.toLocalizedPath(language, path));
             }
         } else {
-            path &#x3D; this.location.path(true);
-            const segment &#x3D; this.getLocalizedSegment(path);
+            path &#x3D; this.l10nLocation.path();
+            const segment &#x3D; this.l10nLocation.getLocalizedSegment(path);
             if (segment !&#x3D; null) {
                 path &#x3D; path.replace(segment, &#x27;/&#x27;);
 
@@ -904,28 +662,9 @@ import { L10nTranslationService } from &#x27;./l10n-translation.service&#x27;;
                 }
             }
             if (!this.isDefaultRouting()) {
-                this.location.replaceState(this.getLocalizedPath(language, path));
+                this.location.replaceState(this.l10nLocation.toLocalizedPath(language, path));
             }
         }
-    }
-
-    private getLocalizedSegment(path: string): string | null {
-        for (const element of this.config.schema) {
-            const language &#x3D; formatLanguage(element.locale.language, this.config.format);
-            const regex &#x3D; new RegExp(&#x60;(\/${language}\/)|(\/${language}$)&#x60;);
-            const segments &#x3D; path.match(regex);
-            if (segments !&#x3D; null) {
-                return segments[0];
-            }
-        }
-        return null;
-    }
-
-    private getLocalizedPath(language: string, path: string): string {
-        const segment &#x3D; this.getLocalizedSegment(path);
-        if (segment !&#x3D; null &amp;&amp; segment.includes(language)) return path;
-
-        return Location.stripTrailingSlash(&#x27;/&#x27; + language + path);
     }
 
     private isDefaultRouting(): boolean {

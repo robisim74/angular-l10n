@@ -77,6 +77,7 @@
                         <ul class="index-list">
                             <li>
                                     <span class="modifier">Public</span>
+                                    <span class="modifier">Async</span>
                                 <a href="#get">get</a>
                             </li>
                         </ul>
@@ -153,6 +154,7 @@
                     <span class="name">
                         <b>
                             <span class="modifier">Public</span>
+                            <span class="modifier">Async</span>
                             get
                         </b>
                         <a href="#get"><span class="icon ion-ios-link"></span></a>
@@ -205,7 +207,7 @@ import { L10N_CONFIG, L10nConfig } from &#x27;../models/l10n-config&#x27;;
      * This method must contain the logic to get the user language.
      * @return The user language
      */
-    public abstract get(): Promise&lt;string | null&gt;;
+    public abstract async get(): Promise&lt;string | null&gt;;
 
 }
 
@@ -213,7 +215,7 @@ import { L10N_CONFIG, L10nConfig } from &#x27;../models/l10n-config&#x27;;
 
     constructor(@Inject(L10N_CONFIG) private config: L10nConfig) { }
 
-    public get(): Promise&lt;string | null&gt; {
+    public async get(): Promise&lt;string | null&gt; {
         let browserLanguage &#x3D; null;
         if (typeof navigator !&#x3D;&#x3D; &#x27;undefined&#x27; &amp;&amp; navigator.language) {
             switch (this.config.format) {
