@@ -18,6 +18,7 @@ This library is for localization of **Angular** apps. It allows, in addition to 
 - [Usage](#usage)
 - [Types](#types)
 - [Intl API](#intl-api)
+- [Server Side Rendering](#server-side-rendering)
 - [Previous versions](#previous-versions)
 - [Contributing](#contributing)
 - [License](#license)
@@ -273,6 +274,39 @@ export const l10nConfig: L10nConfig = {
 };
 ```
 
+You can change the localized path, implementing the `L10nLocation` class-interface, and import it with the routing module:
+```TypeScript
+@Injectable() export class AppLocation implements L10nLocation {
+
+    public path(): string {
+        ...
+    }
+
+    public parsePath(path: string): string | null {
+        ...
+    }
+
+    public getLocalizedSegment(path: string): string | null {
+        ...
+    }
+
+    public toLocalizedPath(language: string, path: string): string {
+        ...
+    }
+
+}
+
+@NgModule({
+    ...
+    imports: [
+        ...
+        L10nRoutingModule.forRoot({ location: AppLocation })
+    ],
+    ...
+})
+export class AppModule { }
+```
+
 ### Lazy loading
 If you want to add new providers to a lazy loaded module, you can use `L10nResolver` in your routing module:
 ```TypeScript
@@ -377,8 +411,20 @@ Other polyfills:
 
 The `L10nIntlService` also provides methods for other APIs, such as _Collator_, _PluralRules_ and _ListFormat_.
 
-### Intl API in Node.js environment
+### Intl API in Node.js
 To use _Intl_ in _Node.js_, check the support according to the version in the official documentation: [Internationalization Support](https://nodejs.org/api/intl.html)
+
+
+## Server Side Rendering
+You can find a complete sample app with _@nguniversal/express-engine_ [here](projects/angular-l10n-app-ssr).
+
+SSR doesn't work out of the box, so it is important to know:
+- `src\app\universal-interceptor.ts`: used to handle absolute URLs for HTTP requests on the server
+- `src\app\l10n-config.ts`:
+    - `AppStorage (implements L10nStorage)`: uses a cookie to store the _locale_ client & server side
+    - `AppUserLanguage (implements L10nUserLanguage)`: server side, negotiates the language through `acceptsLanguages` to get the user language when the app starts
+- _prerender_ & _serve:ssr_ commands set `NODE_ICU_DATA` to _full-icu_ to support _Intl_ in _Node.js_
+
 
 ## Previous versions
 - **Angular v9 (Angular l10n v9.3.0)**
