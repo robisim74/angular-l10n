@@ -43,14 +43,16 @@ export function initL10n(l10nLoader: L10nLoader): () => Promise<void> {
 
 @Injectable() export class AppStorage implements L10nStorage {
 
-    constructor(private cookieService: CookieService) { }
+    constructor(@Inject(PLATFORM_ID) private platformId: Object, private cookieService: CookieService) { }
 
     public async read(): Promise<L10nLocale | null> {
         return Promise.resolve(this.cookieService.getObject('locale') as L10nLocale);
     }
 
     public async write(locale: L10nLocale): Promise<void> {
-        this.cookieService.putObject('locale', locale);
+        if (isPlatformBrowser(this.platformId)) {
+            this.cookieService.putObject('locale', locale);
+        }
     }
 
 }

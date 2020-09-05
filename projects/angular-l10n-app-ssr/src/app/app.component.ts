@@ -1,6 +1,6 @@
 import { Component, OnInit, Inject } from '@angular/core';
 
-import { L10N_CONFIG, L10nConfig, L10N_LOCALE, L10nLocale, L10nTranslationService } from 'angular-l10n';
+import { L10N_CONFIG, L10nConfig, L10N_LOCALE, L10nLocale, L10nTranslationService, formatLanguage } from 'angular-l10n';
 
 @Component({
     selector: 'app-root',
@@ -33,6 +33,12 @@ export class AppComponent implements OnInit {
 
     setLocale(locale: L10nLocale): void {
         this.translation.setLocale(locale);
+    }
+
+    routeLanguage(): string {
+        return this.locale.language !== this.l10nConfig.defaultLocale.language ?
+            formatLanguage(this.locale.language, this.l10nConfig.format) :
+            '';
     }
 
 }
