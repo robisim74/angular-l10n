@@ -83,6 +83,15 @@ describe('L10nLocation', () => {
         it('should get localized segment', () => {
             expect(location.getLocalizedSegment('/en-US/mock1')).toBe('/en-US/');
         });
+        it('should get localized segment when root url', () => {
+            expect(location.getLocalizedSegment('/en-US')).toBe('/en-US');
+        });
+        it('should get localized segment when root url with query string', () => {
+            expect(location.getLocalizedSegment('/en-US?aaa=111')).toBe('/en-US');
+        });
+        it('should get localized segment with query string', () => {
+            expect(location.getLocalizedSegment('/en-US/mock1/?aaa=111')).toBe('/en-US/');
+        });
         it('should localize the path', () => {
             expect(location.toLocalizedPath('it-IT', '/mock1')).toBe('/it-IT/mock1');
         });
