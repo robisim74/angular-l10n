@@ -36,6 +36,11 @@ describe('L10nRoutingService', () => {
         { path: 'mock2', component: MockComponent },
         { path: '**', redirectTo: 'mock1' }
     ];
+    const rootRoutes: Route[] = [
+        { path: '', component: MockComponent },
+        { path: 'mock2', component: MockComponent },
+        { path: '**', redirectTo: '' }
+    ];
     describe('Navigation', () => {
         let fixture: ComponentFixture<MockComponent>;
         let loader: L10nLoader;
@@ -124,7 +129,7 @@ describe('L10nRoutingService', () => {
                 expect(location.path()).toBe('/en-US/mock1');
             });
         }));
-        it('should keep url query params', fakeAsync(() => {
+        it('should keep url with query params', fakeAsync(() => {
             fixture.ngZone.run(() => {
                 loader.init();
                 tick();
@@ -229,6 +234,74 @@ describe('L10nRoutingService', () => {
                 translation.setLocale({ language: 'en-US' });
                 tick();
                 expect(location.path()).toBe('/mock1');
+            });
+        }));
+    });
+    describe('root', () => {
+        let fixture: ComponentFixture<MockComponent>;
+        let loader: L10nLoader;
+        let translation: L10nTranslationService;
+        let router: Router;
+        let location: Location;
+        const config: L10nConfig = {
+            format: 'language-region',
+            defaultLocale: { language: 'en-US', currency: 'USD' },
+            providers: [],
+            keySeparator: '.',
+            schema: [
+                { locale: { language: 'en-US', currency: 'USD' } },
+                { locale: { language: 'it-IT', currency: 'EUR' } },
+            ],
+        };
+        beforeEach(() => {
+            fixture = TestBed.configureTestingModule({
+                declarations: [MockComponent],
+                imports: [
+                    RouterTestingModule.withRoutes(rootRoutes),
+                    L10nTranslationModule.forRoot(config, {
+                        userLanguage: UserLanguage
+                    }),
+                    L10nRoutingModule.forRoot()
+                ]
+            }).createComponent(MockComponent);
+            loader = TestBed.inject(L10nLoader);
+            translation = TestBed.inject(L10nTranslationService);
+            router = TestBed.inject(Router);
+            location = TestBed.inject(Location);
+        });
+        it('should keep root path', fakeAsync(() => {
+            fixture.ngZone.run(() => {
+                loader.init();
+                tick();
+                router.initialNavigation();
+                tick();
+                expect(location.path()).toBe('/en-US');
+            });
+        }));
+        it('should keep url with query params or fragment', fakeAsync(() => {
+            fixture.ngZone.run(() => {
+                loader.init();
+                tick();
+                router.navigateByUrl('?id=1');
+                tick();
+                expect(location.path()).toBe('/en-US?id=1');
+                router.navigateByUrl('/?id=1');
+                tick();
+                expect(location.path()).toBe('/en-US?id=1');
+                router.navigateByUrl('#1');
+                tick();
+                expect(location.path()).toBe('/en-US#1');
+            });
+        }));
+        it('should keep url with query params when language changes', fakeAsync(() => {
+            fixture.ngZone.run(() => {
+                loader.init();
+                tick();
+                router.navigateByUrl('?id=1');
+                tick();
+                translation.setLocale({ language: 'it-IT' });
+                tick();
+                expect(location.path()).toBe('/it-IT?id=1');
             });
         }));
     });
