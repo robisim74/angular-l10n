@@ -23,7 +23,7 @@ import { L10N_CONFIG, L10nConfig } from '../models/l10n-config';
     public abstract parsePath(path: string): string | null;
 
     /**
-     * This method must contain the logic toget the localized segment in the path.
+     * This method must contain the logic to get the localized segment in the path.
      * @param path The localized path
      */
     public abstract getLocalizedSegment(path: string): string | null;
@@ -63,7 +63,7 @@ import { L10N_CONFIG, L10nConfig } from '../models/l10n-config';
     public getLocalizedSegment(path: string): string | null {
         for (const element of this.config.schema) {
             const language = formatLanguage(element.locale.language, this.config.format);
-            const regex = new RegExp(`(\/${language}\/)|(\/${language}$)|(\/(${language})(?=\\?))`);
+            const regex = new RegExp(`(\/${language}\/)|(\/${language}$)|(\/(${language})(?=\\?))|(\/(${language})(?=\\#))`);
             const segments = path.match(regex);
             if (segments != null) {
                 return segments[0];
