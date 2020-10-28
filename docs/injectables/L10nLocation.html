@@ -153,7 +153,7 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-description"><p>This method must contain the logic toget the localized segment in the path.</p>
+                    <div class="io-description"><p>This method must contain the logic to get the localized segment in the path.</p>
 </div>
 
                     <div class="io-description">
@@ -458,7 +458,7 @@ import { L10N_CONFIG, L10nConfig } from &#x27;../models/l10n-config&#x27;;
     public abstract parsePath(path: string): string | null;
 
     /**
-     * This method must contain the logic toget the localized segment in the path.
+     * This method must contain the logic to get the localized segment in the path.
      * @param path The localized path
      */
     public abstract getLocalizedSegment(path: string): string | null;
@@ -498,7 +498,7 @@ import { L10N_CONFIG, L10nConfig } from &#x27;../models/l10n-config&#x27;;
     public getLocalizedSegment(path: string): string | null {
         for (const element of this.config.schema) {
             const language &#x3D; formatLanguage(element.locale.language, this.config.format);
-            const regex &#x3D; new RegExp(&#x60;(\/${language}\/)|(\/${language}$)&#x60;);
+            const regex &#x3D; new RegExp(&#x60;(\/${language}\/)|(\/${language}$)|(\/(${language})(?&#x3D;\\?))|(\/(${language})(?&#x3D;\\#))&#x60;);
             const segments &#x3D; path.match(regex);
             if (segments !&#x3D; null) {
                 return segments[0];
