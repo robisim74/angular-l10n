@@ -51,9 +51,9 @@ export function getSchema(schema: L10nSchema[], language: string, format: L10nFo
 export function getValue(key: string, data: { [key: string]: any }, keySeparator: string): string | any | null {
     if (data) {
         if (keySeparator) {
-            return key.split(keySeparator).reduce((acc, cur) => (acc && acc[cur]) || null, data);
+            return key.split(keySeparator).reduce((acc, cur) => (acc && acc[cur]) != null ? acc[cur] : null, data);
         }
-        return data[key];
+        return data[key] != null ? data[key] : null;
     }
     return null;
 }

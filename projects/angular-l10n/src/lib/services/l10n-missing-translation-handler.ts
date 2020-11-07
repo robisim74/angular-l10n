@@ -10,13 +10,13 @@ import { Injectable } from '@angular/core';
      * @param key The key that has been requested
      * @return The value
      */
-    public abstract handle(key: string): string | any;
+    public abstract handle(key: string, value?: string): string | any;
 
 }
 
 @Injectable() export class L10nDefaultMissingTranslationHandler implements L10nMissingTranslationHandler {
 
-    public handle(key: string): string | any {
+    public handle(key: string, value?: string): string | any {
         return key;
     }
 

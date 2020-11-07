@@ -90,7 +90,7 @@ import { L10nLocation } from './l10n-location';
 
         const value = getValue(keys, this.data[language], this.config.keySeparator);
 
-        return value ? this.translationHandler.parseValue(keys, params, value) : this.missingTranslationHandler.handle(keys);
+        return value ? this.translationHandler.parseValue(keys, params, value) : this.missingTranslationHandler.handle(keys, value);
     }
 
     /**
