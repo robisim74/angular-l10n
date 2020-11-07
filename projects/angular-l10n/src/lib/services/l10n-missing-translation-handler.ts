@@ -8,6 +8,7 @@ import { Injectable } from '@angular/core';
     /**
      * This method must contain the logic to handle missing values.
      * @param key The key that has been requested
+     * @param value Null or empty string
      * @return The value
      */
     public abstract handle(key: string, value?: string): string | any;

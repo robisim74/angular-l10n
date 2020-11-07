@@ -114,15 +114,15 @@
             <tr>
                 <td class="col-md-4">
                     <span class="modifier-icon icon ion-ios-reset"></span>
-                    <code>handle(key: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>)</code>
+                    <code>handle(key: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>, value?: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>)</code>
                 </td>
             </tr>
 
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="19"
-                            class="link-to-prism">projects/angular-l10n/src/lib/services/l10n-missing-translation-handler.ts:19</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="20"
+                            class="link-to-prism">projects/angular-l10n/src/lib/services/l10n-missing-translation-handler.ts:20</a></div>
                 </td>
             </tr>
 
@@ -149,6 +149,18 @@
 
                                     <td>
                                         No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>value</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                    </td>
+
+                                    <td>
+                                        Yes
                                     </td>
 
 
@@ -185,15 +197,16 @@
     /**
      * This method must contain the logic to handle missing values.
      * @param key The key that has been requested
+     * @param value Null or empty string
      * @return The value
      */
-    public abstract handle(key: string): string | any;
+    public abstract handle(key: string, value?: string): string | any;
 
 }
 
 @Injectable() export class L10nDefaultMissingTranslationHandler implements L10nMissingTranslationHandler {
 
-    public handle(key: string): string | any {
+    public handle(key: string, value?: string): string | any {
         return key;
     }
 

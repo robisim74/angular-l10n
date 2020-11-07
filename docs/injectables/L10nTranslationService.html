@@ -1542,7 +1542,7 @@ import { L10nLocation } from &#x27;./l10n-location&#x27;;
 
         const value &#x3D; getValue(keys, this.data[language], this.config.keySeparator);
 
-        return value ? this.translationHandler.parseValue(keys, params, value) : this.missingTranslationHandler.handle(keys);
+        return value ? this.translationHandler.parseValue(keys, params, value) : this.missingTranslationHandler.handle(keys, value);
     }
 
     /**
