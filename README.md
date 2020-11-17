@@ -423,7 +423,6 @@ SSR doesn't work out of the box, so it is important to know:
 - `src\app\l10n-config.ts`:
     - `AppStorage (implements L10nStorage)`: uses a cookie to store the _locale_ client & server side
     - `AppUserLanguage (implements L10nUserLanguage)`: server side, negotiates the language through `acceptsLanguages` to get the user language when the app starts
-- _prerender_ & _serve:ssr_ commands set `NODE_ICU_DATA` to _full-icu_ to support _Intl_ in _Node.js_
 
 
 ## Previous versions

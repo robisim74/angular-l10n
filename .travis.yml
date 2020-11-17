@@ -3,9 +3,9 @@ sudo: required
 addons:
   chrome: stable
 node_js:
-  - "12"
+  - "14"
 before_install:
-  - npm i npm@^6 -g
+  - npm i npm@^7 -g
 install:
   - npm install
 script:
