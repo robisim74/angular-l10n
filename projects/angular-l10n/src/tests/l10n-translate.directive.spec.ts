@@ -1,4 +1,4 @@
-import { TestBed, ComponentFixture, async } from '@angular/core/testing';
+import { TestBed, ComponentFixture, waitForAsync } from '@angular/core/testing';
 
 import { Component, DebugElement } from '@angular/core';
 import { By } from '@angular/platform-browser';
@@ -167,7 +167,7 @@ describe('L10nTranslateDirective', () => {
         expect(els[12].getAttribute('title')).toContain('Localizzazione in Angular');
         expect(els[13].textContent).toContain('robisim74, tu hai 2 nuovi messaggi');
     });
-    it('should change keys & params dynamically', async(() => {
+    it('should change keys & params dynamically', waitForAsync(() => {
         comp.change();
         fixture.detectChanges();
         fixture.whenStable().then(() => {

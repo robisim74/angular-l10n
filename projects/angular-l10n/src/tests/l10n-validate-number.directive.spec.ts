@@ -1,4 +1,4 @@
-import { TestBed, ComponentFixture, async } from '@angular/core/testing';
+import { TestBed, ComponentFixture, waitForAsync } from '@angular/core/testing';
 
 import { Injectable, Inject, Component, ViewChild } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
@@ -81,7 +81,7 @@ describe('L10nValidateNumberDirective', () => {
         loader = TestBed.inject(L10nLoader);
         await loader.init();
     });
-    it('should validate format', async(() => {
+    it('should validate format', waitForAsync(() => {
         comp.value = '12,34';
         fixture.detectChanges();
         fixture.whenStable().then(() => {
@@ -92,7 +92,7 @@ describe('L10nValidateNumberDirective', () => {
             expect(control.hasError('maxValue')).toBe(false);
         });
     }));
-    it('should validate minValue', async(() => {
+    it('should validate minValue', waitForAsync(() => {
         comp.value = '-1234.56';
         fixture.detectChanges();
         fixture.whenStable().then(() => {
@@ -103,7 +103,7 @@ describe('L10nValidateNumberDirective', () => {
             expect(control.hasError('maxValue')).toBe(false);
         });
     }));
-    it('should validate maxValue', async(() => {
+    it('should validate maxValue', waitForAsync(() => {
         comp.value = '1234.56';
         fixture.detectChanges();
         fixture.whenStable().then(() => {
@@ -114,7 +114,7 @@ describe('L10nValidateNumberDirective', () => {
             expect(control.hasError('maxValue')).toBe(true);
         });
     }));
-    it('should validate', async(() => {
+    it('should validate', waitForAsync(() => {
         comp.value = '12.34';
         fixture.detectChanges();
         fixture.whenStable().then(() => {
