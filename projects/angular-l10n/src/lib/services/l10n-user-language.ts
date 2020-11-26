@@ -1,6 +1,7 @@
 import { Injectable, Inject } from '@angular/core';
 
 import { L10N_CONFIG, L10nConfig } from '../models/l10n-config';
+import { getBrowserLanguage } from '../models/utils';
 
 /**
  * Implement this class-interface to get the user language.
@@ -20,17 +21,7 @@ import { L10N_CONFIG, L10nConfig } from '../models/l10n-config';
     constructor(@Inject(L10N_CONFIG) private config: L10nConfig) { }
 
     public async get(): Promise<string | null> {
-        let browserLanguage = null;
-        if (typeof navigator !== 'undefined' && navigator.language) {
-            switch (this.config.format) {
-                case 'language':
-                    browserLanguage = navigator.language.split('-')[0];
-                    break;
-                case 'language-region':
-                    browserLanguage = navigator.language;
-                    break;
-            }
-        }
+        const browserLanguage = getBrowserLanguage(this.config.format);
         return Promise.resolve(browserLanguage);
     }
 
