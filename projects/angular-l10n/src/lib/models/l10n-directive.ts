@@ -10,9 +10,14 @@ export abstract class L10nDirective implements AfterViewInit, OnChanges, OnDestr
 
     @Input() public value: string;
 
-    @Input() public innerHTML: string;
+    @Input() set innerHTML(content: any) {
+        // Handle TrustedHTML
+        this.content = content.toString();
+    }
 
     @Input() public language: string;
+
+    private content: string;
 
     private text: string;
     private attributes: any[];
@@ -49,8 +54,8 @@ export abstract class L10nDirective implements AfterViewInit, OnChanges, OnDestr
             if (this.nodeValue == null || this.nodeValue === '') {
                 if (this.value) {
                     this.text = this.value;
-                } else if (this.innerHTML) {
-                    this.text = this.innerHTML;
+                } else if (this.content) {
+                    this.text = this.content;
                 }
             }
             this.replaceText();
@@ -73,8 +78,8 @@ export abstract class L10nDirective implements AfterViewInit, OnChanges, OnDestr
             text = this.getNodeValue();
         } else if (this.value) {
             text = this.value;
-        } else if (this.innerHTML) {
-            text = this.innerHTML;
+        } else if (this.content) {
+            text = this.content;
         }
         return text;
     }
@@ -146,7 +151,7 @@ export abstract class L10nDirective implements AfterViewInit, OnChanges, OnDestr
                 this.addTextListener();
             } else if (this.value) {
                 this.renderer.setAttribute(this.element, 'value', value);
-            } else if (this.innerHTML) {
+            } else if (this.content) {
                 this.renderer.setProperty(this.element, 'innerHTML', value);
             }
         }
