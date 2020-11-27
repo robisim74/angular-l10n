@@ -12,7 +12,10 @@ describe('L10nIntlService', () => {
             accountant: 'Accountant',
             juniorTechnicalAuthor: 'Junior Technical Author',
             seniorJavascriptDeveloper: 'Senior Javascript Developer',
-            one: 'One'
+            devPlurals: {
+                one: 'developer',
+                other: 'developers'
+            }
         }
     };
     const config: L10nConfig = {
@@ -73,7 +76,8 @@ describe('L10nIntlService', () => {
         expect(orderedList).toEqual(['accountant', 'accountant', 'juniorTechnicalAuthor', 'seniorJavascriptDeveloper', 'systemArchitect']);
     });
     it('should get the plural', async () => {
-        expect(intl.plural(1)).toEqual('One');
+        expect(intl.plural(1, { type: 'cardinal' }, 'devPlurals')).toEqual('developer');
+        expect(intl.plural(2, { type: 'cardinal' }, 'devPlurals')).toEqual('developers');
     });
     it('should list', async () => {
         const list = ['systemArchitect', 'juniorTechnicalAuthor', 'seniorJavascriptDeveloper'];

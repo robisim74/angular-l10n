@@ -39,14 +39,12 @@ export function getBrowserLanguage(format: L10nFormat): string | null {
     let browserLanguage = null;
     if (typeof navigator !== 'undefined' && navigator.language) {
         switch (format) {
-            case 'language':
-            case 'language-script':
-                browserLanguage = navigator.language.split('-')[0];
-                break;
             case 'language-region':
             case 'language-script-region':
                 browserLanguage = navigator.language;
                 break;
+            default:
+                browserLanguage = navigator.language.split('-')[0];
         }
     }
     return browserLanguage;

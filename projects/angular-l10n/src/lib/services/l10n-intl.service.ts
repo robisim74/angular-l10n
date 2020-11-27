@@ -1,7 +1,7 @@
 import { Injectable, Inject } from '@angular/core';
 
 import { L10nLocale, L10nDateTimeFormatOptions, L10nNumberFormatOptions, Unit } from '../models/types';
-import { L10N_LOCALE } from '../models/l10n-config';
+import { L10nConfig, L10N_CONFIG, L10N_LOCALE } from '../models/l10n-config';
 import {
     hasDateTimeFormat,
     hasTimeZone,
@@ -20,7 +20,11 @@ import { L10nTranslationService } from './l10n-translation.service';
 
 @Injectable() export class L10nIntlService {
 
-    constructor(@Inject(L10N_LOCALE) private locale: L10nLocale, private translation: L10nTranslationService) { }
+    constructor(
+        @Inject(L10N_CONFIG) private config: L10nConfig,
+        @Inject(L10N_LOCALE) private locale: L10nLocale,
+        private translation: L10nTranslationService
+    ) { }
 
     /**
      * Formats a date.
@@ -128,8 +132,8 @@ import { L10nTranslationService } from './l10n-translation.service';
 
     /**
      * Compares two keys by the value of translation.
-     * @param key1, First key to compare
-     * @param key1, Second key to compare
+     * @param key1 First key to compare
+     * @param key1 Second key to compare
      * @param options A Intl CollatorOptions object
      * @param language The current language
      * @return A negative value if the value of translation of key1 comes before the value of translation of key2;
@@ -149,14 +153,17 @@ import { L10nTranslationService } from './l10n-translation.service';
      * Gets the plural for a number.
      * @param value The number to get the plural
      * @param options A Intl PluralRulesOptions object
+     * @param keyPrefix Optional prefix to find the key
      * @param language The current language
      */
-    public plural(value: number, options?: Intl.PluralRulesOptions, language = this.locale.language): string {
+    public plural(value: number, options?: Intl.PluralRulesOptions, keyPrefix: string = '', language = this.locale.language): string {
         if (!hasPluralRules() || language == null || language === '') return value.toString();
 
         const rule = new Intl.PluralRules(language, options).select(value);
 
-        return this.translation.has(rule) ? this.translation.translate(rule) : rule;
+        const key = keyPrefix ? `${keyPrefix}${this.config.keySeparator}${rule}` : rule;
+
+        return this.translation.has(key) ? this.translation.translate(key) : rule;
     }
 
     /**
@@ -167,7 +174,7 @@ import { L10nTranslationService } from './l10n-translation.service';
      */
     public list(list: string[], options?: any, language = this.locale.language): string {
         const values = list.map(key => this.translation.translate(key));
-        if (!hasListFormat() || language == null || language === '') return values.toString();
+        if (!hasListFormat() || language == null || language === '') return values.join(', ');
 
         return new (Intl as any).ListFormat(language, options).format(values);
     }
