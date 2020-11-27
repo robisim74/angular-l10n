@@ -5,7 +5,9 @@
         "subtitle": "The world is small",
         "greeting": "Hello world!",
         "whoIAm": "I am {{name}}",
-        "description": "<em>An Angular library to translate texts, dates and numbers</em>"
+        "description": "<em>An Angular library to translate texts, dates and numbers</em>",
+        "one": "software developer",
+        "other": "software developers"
     },
     "onPush": {
         "title": "OnPush Change detection strategy"

@@ -7,3 +7,6 @@
 <p>{{ timeAgo | l10nTimeAgo:locale.language:'second':{ numeric:'always', style:'long' } }}</p>
 <br>
 <p>{{ value | l10nNumber:locale.language:{ digits: '1.2-2', style: 'currency' } }}</p>
+<br>
+<p>1 {{ 1 | l10nPlural:locale.language:{ type: 'cardinal' }:'home' }}</p>
+<p>2 {{ 2 | l10nPlural:locale.language:{ type: 'cardinal' }:'home' }}</p>

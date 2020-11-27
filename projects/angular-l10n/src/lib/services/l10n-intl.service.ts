@@ -157,8 +157,10 @@ import { L10nTranslationService } from './l10n-translation.service';
      * @param keyPrefix Optional prefix to find the key
      * @param language The current language
      */
-    public plural(value: number, options?: Intl.PluralRulesOptions, keyPrefix: string = '', language = this.locale.language): string {
+    public plural(value: any, options?: Intl.PluralRulesOptions, keyPrefix: string = '', language = this.locale.language): string {
         if (!hasPluralRules() || language == null || language === '') return value.toString();
+
+        value = toNumber(value);
 
         const rule = new Intl.PluralRules(language, options).select(value);
 

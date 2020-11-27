@@ -5,7 +5,9 @@
         "subtitle": "Il mondo è piccolo",
         "greeting": "Ciao mondo!",
         "whoIAm": "Sono {{name}}",
-        "description": "<em>Una libreria Angular per tradurre testi, date e numeri</em>"
+        "description": "<em>Una libreria Angular per tradurre testi, date e numeri</em>",
+        "one": "sviluppatore software",
+        "other": "sviluppatori software"
     },
     "onPush": {
         "title": "Strategia di rilevamento del cambiamento OnPush"

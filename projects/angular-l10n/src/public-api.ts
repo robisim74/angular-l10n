@@ -28,6 +28,8 @@ export * from './lib/services/l10n-intl.service';
 export * from './lib/pipes/l10n-date.pipe';
 export * from './lib/pipes/l10n-number.pipe';
 export * from './lib/pipes/l10n-time-ago.pipe';
+export * from './lib/pipes/l10n-plural.pipe';
+export * from './lib/pipes/l10n-display-names.pipe';
 export * from './lib/directives/l10n-date.directive';
 export * from './lib/directives/l10n-number.directive';
 export * from './lib/directives/l10n-time-ago.directive';

@@ -3,6 +3,8 @@ import { NgModule } from '@angular/core';
 import { L10nDatePipe, L10nDateAsyncPipe } from '../pipes/l10n-date.pipe';
 import { L10nNumberPipe, L10nNumberAsyncPipe } from '../pipes/l10n-number.pipe';
 import { L10nTimeAgoPipe, L10nTimeAgoAsyncPipe } from '../pipes/l10n-time-ago.pipe';
+import { L10nPluralAsyncPipe, L10nPluralPipe } from '../pipes/l10n-plural.pipe';
+import { L10nDisplayNamesAsyncPipe, L10nDisplayNamesPipe } from '../pipes/l10n-display-names.pipe';
 import { L10nDateDirective } from '../directives/l10n-date.directive';
 import { L10nNumberDirective } from '../directives/l10n-number.directive';
 import { L10nTimeAgoDirective } from '../directives/l10n-time-ago.directive';
@@ -13,9 +15,13 @@ import { L10nIntlService } from '../services/l10n-intl.service';
         L10nDatePipe,
         L10nNumberPipe,
         L10nTimeAgoPipe,
+        L10nPluralPipe,
+        L10nDisplayNamesPipe,
         L10nDateAsyncPipe,
         L10nNumberAsyncPipe,
         L10nTimeAgoAsyncPipe,
+        L10nPluralAsyncPipe,
+        L10nDisplayNamesAsyncPipe,
         L10nDateDirective,
         L10nNumberDirective,
         L10nTimeAgoDirective
@@ -24,9 +30,13 @@ import { L10nIntlService } from '../services/l10n-intl.service';
         L10nDatePipe,
         L10nNumberPipe,
         L10nTimeAgoPipe,
+        L10nPluralPipe,
+        L10nDisplayNamesPipe,
         L10nDateAsyncPipe,
         L10nNumberAsyncPipe,
         L10nTimeAgoAsyncPipe,
+        L10nPluralAsyncPipe,
+        L10nDisplayNamesAsyncPipe,
         L10nDateDirective,
         L10nNumberDirective,
         L10nTimeAgoDirective
