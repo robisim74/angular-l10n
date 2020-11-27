@@ -134,6 +134,10 @@ export function hasListFormat(): boolean {
     return hasIntl() && Intl.hasOwnProperty('ListFormat');
 }
 
+export function hasDisplayNames(): boolean {
+    return hasIntl() && Intl.hasOwnProperty('DisplayNames');
+}
+
 export function toNumber(value: any): number {
     const parsedValue = typeof value === 'string' && !isNaN(+value - parseFloat(value)) ? +value : value;
     return parsedValue;

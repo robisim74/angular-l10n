@@ -83,4 +83,10 @@ describe('L10nIntlService', () => {
         const list = ['systemArchitect', 'juniorTechnicalAuthor', 'seniorJavascriptDeveloper'];
         expect(intl.list(list)).toEqual('System Architect, Junior Technical Author, and Senior Javascript Developer');
     });
+    it('should display names', async () => {
+        expect(intl.displayNames('US', { type: 'region' })).toEqual('United States');
+        expect(intl.displayNames('en-US', { type: 'language' })).toEqual('American English');
+        expect(intl.displayNames('Latn', { type: 'script' })).toEqual('Latin');
+        expect(intl.displayNames('USD', { type: 'currency' })).toEqual('US Dollar');
+    });
 });

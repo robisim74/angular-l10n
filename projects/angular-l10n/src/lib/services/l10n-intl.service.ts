@@ -10,6 +10,7 @@ import {
     hasCollator,
     hasPluralRules,
     hasListFormat,
+    hasDisplayNames,
     toDate,
     toNumber,
     PARSE_DATE_STYLE,
@@ -98,7 +99,7 @@ import { L10nTranslationService } from './l10n-translation.service';
      * Formats a relative time.
      * @param value A negative (or positive) number
      * @param unit The unit of the value
-     * @param options A Intl RelativeTimeFormatOptions object
+     * @param options An Intl RelativeTimeFormatOptions object
      * @param language The current language
      */
     public formatRelativeTime(
@@ -134,7 +135,7 @@ import { L10nTranslationService } from './l10n-translation.service';
      * Compares two keys by the value of translation.
      * @param key1 First key to compare
      * @param key1 Second key to compare
-     * @param options A Intl CollatorOptions object
+     * @param options An Intl CollatorOptions object
      * @param language The current language
      * @return A negative value if the value of translation of key1 comes before the value of translation of key2;
      *         a positive value if key1 comes after key2;
@@ -152,7 +153,7 @@ import { L10nTranslationService } from './l10n-translation.service';
     /**
      * Gets the plural for a number.
      * @param value The number to get the plural
-     * @param options A Intl PluralRulesOptions object
+     * @param options An Intl PluralRulesOptions object
      * @param keyPrefix Optional prefix to find the key
      * @param language The current language
      */
@@ -169,7 +170,7 @@ import { L10nTranslationService } from './l10n-translation.service';
     /**
      * Returns the representation of a list.
      * @param list An array of keys
-     * @param options A Intl ListFormatOptions object
+     * @param options An Intl ListFormatOptions object
      * @param language The current language
      */
     public list(list: string[], options?: any, language = this.locale.language): string {
@@ -177,6 +178,18 @@ import { L10nTranslationService } from './l10n-translation.service';
         if (!hasListFormat() || language == null || language === '') return values.join(', ');
 
         return new (Intl as any).ListFormat(language, options).format(values);
+    }
+
+    /**
+     * Returns translation of language, region, script or currency display names
+     * @param code ISO code of language, region, script or currency
+     * @param options A DisplayNamesOptions object
+     * @param language The current language
+     */
+    public displayNames(code: string, options?: any, language = this.locale.language): string {
+        if (!hasDisplayNames() || language == null || language === '') return code;
+
+        return new (Intl as any).DisplayNames(language, options).of(code);
     }
 
 }

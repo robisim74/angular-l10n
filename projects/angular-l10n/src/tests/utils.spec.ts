@@ -14,6 +14,7 @@ import {
     hasCollator,
     hasPluralRules,
     hasListFormat,
+    hasDisplayNames,
     toNumber,
     toDate,
     parseDigits
@@ -154,6 +155,7 @@ describe('utils', () => {
             expect(hasCollator()).toBe(true);
             expect(hasPluralRules()).toBe(true);
             expect(hasListFormat()).toBe(true);
+            expect(hasDisplayNames()).toBe(true);
         });
     });
     describe('toNumber', () => {
