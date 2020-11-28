@@ -1,7 +1,7 @@
 import { TestBed, ComponentFixture } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 
-import { L10nConfig, L10nTranslationModule, L10nLoader } from 'angular-l10n';
+import { L10nConfig, L10nTranslationModule, L10nIntlModule, L10nLoader } from 'angular-l10n';
 
 import { AppComponent } from './app.component';
 
@@ -36,7 +36,8 @@ describe('AppComponent', () => {
         TestBed.configureTestingModule({
             imports: [
                 RouterTestingModule,
-                L10nTranslationModule.forRoot(l10nConfig)
+                L10nTranslationModule.forRoot(l10nConfig),
+                L10nIntlModule
             ],
             declarations: [
                 AppComponent

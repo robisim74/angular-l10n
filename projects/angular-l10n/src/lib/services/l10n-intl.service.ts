@@ -154,17 +154,17 @@ import { L10nTranslationService } from './l10n-translation.service';
      * Gets the plural for a number.
      * @param value The number to get the plural
      * @param options An Intl PluralRulesOptions object
-     * @param keyPrefix Optional prefix to find the key
+     * @param prefix Optional prefix for the key
      * @param language The current language
      */
-    public plural(value: any, options?: Intl.PluralRulesOptions, keyPrefix: string = '', language = this.locale.language): string {
+    public plural(value: any, prefix: string = '', options?: Intl.PluralRulesOptions, language = this.locale.language): string {
         if (!hasPluralRules() || language == null || language === '') return value.toString();
 
         value = toNumber(value);
 
         const rule = new Intl.PluralRules(language, options).select(value);
 
-        const key = keyPrefix ? `${keyPrefix}${this.config.keySeparator}${rule}` : rule;
+        const key = prefix ? `${prefix}${this.config.keySeparator}${rule}` : rule;
 
         return this.translation.has(key) ? this.translation.translate(key) : rule;
     }

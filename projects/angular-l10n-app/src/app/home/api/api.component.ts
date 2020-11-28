@@ -35,8 +35,8 @@ export class ApiComponent implements OnInit, OnChanges {
                 this.formattedToday = this.intl.formatDate(this.today, { dateStyle: 'full', timeStyle: 'short' });
                 this.formattedTimeAgo = this.intl.formatRelativeTime(this.timeAgo, 'second', { numeric: 'always', style: 'long' });
                 this.formattedValue = this.intl.formatNumber(this.value, { digits: '1.2-2', style: 'currency' });
-                this.formattedOnePlural = this.intl.plural(1, { type: 'cardinal' }, 'home');
-                this.formattedOtherPlural = this.intl.plural(2, { type: 'cardinal' }, 'home');
+                this.formattedOnePlural = this.intl.plural(1, 'home', { type: 'cardinal' });
+                this.formattedOtherPlural = this.intl.plural(2, 'home', { type: 'cardinal' });
             }
         });
     }

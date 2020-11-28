@@ -12,7 +12,7 @@ describe('L10nIntlService', () => {
             accountant: 'Accountant',
             juniorTechnicalAuthor: 'Junior Technical Author',
             seniorJavascriptDeveloper: 'Senior Javascript Developer',
-            devPlurals: {
+            dev: {
                 one: 'developer',
                 other: 'developers'
             }
@@ -76,8 +76,8 @@ describe('L10nIntlService', () => {
         expect(orderedList).toEqual(['accountant', 'accountant', 'juniorTechnicalAuthor', 'seniorJavascriptDeveloper', 'systemArchitect']);
     });
     it('should get the plural', async () => {
-        expect(intl.plural(1, { type: 'cardinal' }, 'devPlurals')).toEqual('developer');
-        expect(intl.plural(2, { type: 'cardinal' }, 'devPlurals')).toEqual('developers');
+        expect(intl.plural(1, 'dev', { type: 'cardinal' })).toEqual('developer');
+        expect(intl.plural(2, 'dev', { type: 'cardinal' })).toEqual('developers');
     });
     it('should list', async () => {
         const list = ['systemArchitect', 'juniorTechnicalAuthor', 'seniorJavascriptDeveloper'];

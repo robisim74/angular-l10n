@@ -17,7 +17,7 @@
     "pack:lib": "npm pack ./dist/angular-l10n",
     "publish:lib": "npm publish ./dist/angular-l10n",
     "publish:lib:next": "npm publish --tag next ./dist/angular-l10n",
-    "analyze": "ng build angular-l10n-app --prod --stats-json && webpack-bundle-analyzer dist/angular-l10n-app/stats-es2015.json",
+    "analyze": "ng build angular-l10n-app --prod --stats-json && webpack-bundle-analyzer dist/angular-l10n-app/stats.json",
     "postinstall": "ngcc",
     "dev:ssr": "ng run angular-l10n-app-ssr:serve-ssr",
     "serve:ssr": "node dist/angular-l10n-app-ssr/server/main.js",

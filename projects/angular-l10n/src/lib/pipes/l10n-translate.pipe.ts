@@ -11,7 +11,7 @@ export class L10nTranslatePipe implements PipeTransform {
 
     constructor(protected translation: L10nTranslationService) { }
 
-    public transform(key: string, language: string, params?: any): string | null {
+    public transform(key: any, language: string, params?: any): string | null {
         if (key == null || key === '') return null;
 
         return this.translation.translate(key, params, language);
@@ -29,7 +29,7 @@ export class L10nTranslateAsyncPipe extends L10nAsyncPipe implements PipeTransfo
         super(translation, cdr);
     }
 
-    public transform(key: string, params?: any, language?: string): string | null {
+    public transform(key: any, params?: any, language?: string): string | null {
         if (key == null || key === '') return null;
 
         return this.translation.translate(key, params, language);
