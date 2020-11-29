@@ -57,11 +57,13 @@ export function initL10n(l10nLoader: L10nLoader): () => Promise<void> {
 const i18nAsset = {
     'en-US': {
         greeting: 'Hello world!',
-        whoIAm: 'I am {{name}}'
+        whoIAm: 'I am {{name}}',
+        one: 'software developer'
     },
     'it-IT': {
         greeting: 'Ciao mondo!',
-        whoIAm: 'Sono {{name}}'
+        whoIAm: 'Sono {{name}}',
+        one: 'sviluppatore software'
     }
 };
 ```
@@ -98,7 +100,7 @@ export class AppModule { }
 
 <p>{{ value | l10nNumber:locale.language:{ digits: '1.2-2', style: 'currency' } }}</p>
 
-<p>1 {{ 1 | l10nPlural:locale.language:'home':{ type: 'cardinal' } }}</p>
+<p>1 {{ 1 | l10nPlural:locale.language }}</p>
 
 <button *ngFor="let item of schema"
     (click)="setLocale(item.locale)">{{ item.locale.language | l10nDisplayNames:locale.language:{ type: 'language' } }}</button>
@@ -145,7 +147,7 @@ export class AppComponent implements OnInit {
                 this.formattedToday = this.intl.formatDate(this.today, { dateStyle: 'full', timeStyle: 'short' });
                 this.formattedTimeAgo = this.intl.formatRelativeTime(this.timeAgo, 'second', { numeric: 'always', style: 'long' });
                 this.formattedValue = this.intl.formatNumber(this.value, { digits: '1.2-2', style: 'currency' });
-                this.formattedOnePlural = this.intl.plural(1, 'home', { type: 'cardinal' });
+                this.formattedOnePlural = this.intl.plural(1);
             }
         });
     }
