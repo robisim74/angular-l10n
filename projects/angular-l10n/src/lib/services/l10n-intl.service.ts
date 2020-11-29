@@ -116,18 +116,18 @@ import { L10nTranslationService } from './l10n-translation.service';
     }
 
     public getCurrencySymbol(locale = this.locale): string | undefined {
-        let symbol = locale.currency;
-        if (hasNumberFormat()) {
-            const decimal = this.formatNumber(0, { digits: '1.0-0' }, locale.numberLanguage || locale.language);
-            const currency = this.formatNumber(
-                0,
-                { digits: '1.0-0', style: 'currency', currencyDisplay: 'symbol' },
-                locale.numberLanguage || locale.language,
-                locale.currency
-            );
-            symbol = currency.replace(decimal, '');
-            symbol = symbol.trim();
-        }
+        if (!hasNumberFormat()) return locale.currency;
+
+        const decimal = this.formatNumber(0, { digits: '1.0-0' }, locale.numberLanguage || locale.language);
+        const currency = this.formatNumber(
+            0,
+            { digits: '1.0-0', style: 'currency', currencyDisplay: 'symbol' },
+            locale.numberLanguage || locale.language,
+            locale.currency
+        );
+        let symbol = currency.replace(decimal, '');
+        symbol = symbol.trim();
+
         return symbol;
     }
 
@@ -151,7 +151,7 @@ import { L10nTranslationService } from './l10n-translation.service';
     }
 
     /**
-     * Gets the plural for a number.
+     * Gets the plural by a number.
      * @param value The number to get the plural
      * @param options An Intl PluralRulesOptions object
      * @param prefix Optional prefix for the key
@@ -166,7 +166,7 @@ import { L10nTranslationService } from './l10n-translation.service';
 
         const key = prefix ? `${prefix}${this.config.keySeparator}${rule}` : rule;
 
-        return this.translation.has(key) ? this.translation.translate(key) : rule;
+        return this.translation.translate(key);
     }
 
     /**
