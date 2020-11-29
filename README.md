@@ -94,8 +94,14 @@ export class AppModule { }
 <p>{{ 'whoIAm' | translate:locale.language:{ name: 'Angular l10n' } }}</p>
 
 <p>{{ today | l10nDate:locale.language:{ dateStyle: 'full', timeStyle: 'short' } }}</p>
+<p>{{ timeAgo | l10nTimeAgo:locale.language:'second':{ numeric:'always', style:'long' } }}</p>
 
 <p>{{ value | l10nNumber:locale.language:{ digits: '1.2-2', style: 'currency' } }}</p>
+
+<p>1 {{ 1 | l10nPlural:locale.language:'home':{ type: 'cardinal' } }}</p>
+
+<button *ngFor="let item of schema"
+    (click)="setLocale(item.locale)">{{ item.locale.language | l10nDisplayNames:locale.language:{ type: 'language' } }}</button>
 ```
 Pure pipes need to know when the _locale_ changes. So import `L10nLocale` injection token in the component:
 ```TypeScript
@@ -117,6 +123,8 @@ To support this strategy, there is an async version of each pipe:
 <!-- <p [l10nTranslate]="{ name: 'Angular l10n' }">whoIAm</p> -->
 
 <p [options]="{ dateStyle: 'full', timeStyle: 'short' }" l10nDate>{{ today }}</p>
+<p [options]="{ numeric:'always', style:'long' }" unit="second" l10nTimeAgo>{{ timeAgo }}</p>
+
 <p [options]="{ digits: '1.2-2', style: 'currency' }" l10nNumber>{{ value }}</p>
 ```
 
@@ -135,13 +143,16 @@ export class AppComponent implements OnInit {
                 this.whoIAm = this.translation.translate('whoIAm', { name: 'Angular l10n' });
 
                 this.formattedToday = this.intl.formatDate(this.today, { dateStyle: 'full', timeStyle: 'short' });
+                this.formattedTimeAgo = this.intl.formatRelativeTime(this.timeAgo, 'second', { numeric: 'always', style: 'long' });
                 this.formattedValue = this.intl.formatNumber(this.value, { digits: '1.2-2', style: 'currency' });
+                this.formattedOnePlural = this.intl.plural(1, 'home', { type: 'cardinal' });
             }
         });
     }
 
 }
 ```
+The `L10nIntlService` also provides methods for other Intl APIs, such as _Collator_ & _ListFormat_.
 
 ### Customize the library
 The following features can be customized. You just have to implement the indicated class-interface and pass the token during configuration.
@@ -396,27 +407,28 @@ To format dates and numbers, this library uses the [Intl API](https://developer.
 Check the current browser support:
 - [ECMAScript compatibility tables](http://kangax.github.io/compat-table/esintl/)
 - [Can I use](http://caniuse.com/#feat=internationalization)
+- [Intl](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl#Browser_compatibility)
 
-All modern browsers have implemented this API. You can use a polyfill like [Polyfill.io](https://polyfill.io/v3/) to extend support to old browsers.
+You can use polyfills to extend support to old browsers, or to use newest features:
+- [Polyfill.io](https://polyfill.io/v3/)
 
-Just add one script tag in your `index.html`:
-```Html
-<script crossorigin="anonymous"
-    src="https://polyfill.io/v3/polyfill.min.js?flags=gated&features=Intl.~locale.en-US"></script>
-```
-When specifying the `features`, you have to specify what languages to load.
+    Just add one script tag in your `index.html`, for example:
+    ```Html
+    <script crossorigin="anonymous"
+        src="https://polyfill.io/v3/polyfill.min.js?flags=gated&features=Intl.~locale.en-US"></script>
+    ```
+    When specifying the `features`, you have to specify what languages to load
 
-Other polyfills:
 - [Format.JS](https://formatjs.io/docs/polyfills)
 
-The `L10nIntlService` also provides methods for other APIs, such as _Collator_, _PluralRules_ and _ListFormat_.
+    Import polyfills you need as in the sample app
 
 ### Intl API in Node.js
 To use _Intl_ in _Node.js_, check the support according to the version in the official documentation: [Internationalization Support](https://nodejs.org/api/intl.html)
 
 
 ## Server Side Rendering
-You can find a complete sample app with _@nguniversal/express-engine_ [here](projects/angular-l10n-app-ssr).
+You can find a complete sample app with _@nguniversal/express-engine_ [here](projects/angular-l10n-app-ssr)
 
 SSR doesn't work out of the box, so it is important to know:
 - `src\app\universal-interceptor.ts`: used to handle absolute URLs for HTTP requests on the server
@@ -426,6 +438,9 @@ SSR doesn't work out of the box, so it is important to know:
 
 
 ## Previous versions
+- **Angular v10 (Angular l10n v10.1.2)**
+    - [Branch](https://github.com/robisim74/angular-l10n/tree/angular_v10)
+
 - **Angular v9 (Angular l10n v9.3.0)**
     - [Branch](https://github.com/robisim74/angular-l10n/tree/angular_v9)
 
@@ -449,7 +464,7 @@ SSR doesn't work out of the box, so it is important to know:
 
 
 ## Contributing
-- Building the library:
+- First, install the packages & build the library:
     ```Shell
     npm install
     npm run build
@@ -463,6 +478,11 @@ SSR doesn't work out of the box, so it is important to know:
 - Serving the sample app:
     ```Shell
     npm start
+    ```
+
+- Serving the sample ssr app:
+    ```Shell
+    npm run dev:ssr
     ```
 
 

@@ -1,6 +1,6 @@
 {
   "name": "angular-l10n",
-  "version": "10.1.2",
+  "version": "11.0.0",
   "author": "Roberto Simonetti",
   "description": "An Angular library to translate texts, dates and numbers",
   "repository": {

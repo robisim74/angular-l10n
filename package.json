@@ -1,6 +1,6 @@
 {
   "name": "angular-l10n",
-  "version": "10.1.2",
+  "version": "11.0.0",
   "scripts": {
     "ng": "ng",
     "start": "ng serve angular-l10n-app --open",
@@ -77,7 +77,7 @@
     "ts-node": "~8.3.0",
     "tslint": "~6.1.0",
     "typescript": "~4.0.5",
-    "webpack-bundle-analyzer": "^3.9.0"
+    "webpack-bundle-analyzer": "^4.1.0"
   },
   "husky": {
     "hooks": {
