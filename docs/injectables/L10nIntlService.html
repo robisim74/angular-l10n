@@ -81,6 +81,10 @@
                             </li>
                             <li>
                                     <span class="modifier">Public</span>
+                                <a href="#displayNames">displayNames</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Public</span>
                                 <a href="#formatDate">formatDate</a>
                             </li>
                             <li>
@@ -121,12 +125,12 @@
             <tbody>
                 <tr>
                     <td class="col-md-4">
-<code>constructor(locale: <a href="../interfaces/L10nLocale.html">L10nLocale</a>, translation: <a href="../injectables/L10nTranslationService.html">L10nTranslationService</a>)</code>
+<code>constructor(config: <a href="../interfaces/L10nConfig.html">L10nConfig</a>, locale: <a href="../interfaces/L10nLocale.html">L10nLocale</a>, translation: <a href="../injectables/L10nTranslationService.html">L10nTranslationService</a>)</code>
                     </td>
                 </tr>
                         <tr>
                             <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="21" class="link-to-prism">projects/angular-l10n/src/lib/services/l10n-intl.service.ts:21</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="22" class="link-to-prism">projects/angular-l10n/src/lib/services/l10n-intl.service.ts:22</a></div>
                             </td>
                         </tr>
 
@@ -143,6 +147,18 @@
                                             </tr>
                                         </thead>
                                         <tbody>
+                                                <tr>
+                                                        <td>config</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="../interfaces/L10nConfig.html" target="_self" >L10nConfig</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
                                                 <tr>
                                                         <td>locale</td>
                                                   
@@ -205,8 +221,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="139"
-                            class="link-to-prism">projects/angular-l10n/src/lib/services/l10n-intl.service.ts:139</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="144"
+                            class="link-to-prism">projects/angular-l10n/src/lib/services/l10n-intl.service.ts:144</a></div>
                 </td>
             </tr>
 
@@ -243,7 +259,7 @@
                                     </td>
 
                                     <td>
-                                        <p>, First key to compare</p>
+                                        <p>First key to compare</p>
 
                                     </td>
                                 </tr>
@@ -277,7 +293,7 @@
                                     </td>
 
                                     <td>
-                                        <p>A Intl CollatorOptions object</p>
+                                        <p>An Intl CollatorOptions object</p>
 
                                     </td>
                                 </tr>
@@ -322,6 +338,124 @@ a positive value if key1 comes after key2;
         <tbody>
             <tr>
                 <td class="col-md-4">
+                    <a name="displayNames"></a>
+                    <span class="name">
+                        <b>
+                            <span class="modifier">Public</span>
+                            displayNames
+                        </b>
+                        <a href="#displayNames"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                    <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>displayNames(code: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>, options?: <a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank">any</a>, language)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="191"
+                            class="link-to-prism">projects/angular-l10n/src/lib/services/l10n-intl.service.ts:191</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>Returns translation of language, region, script or currency display names</p>
+</div>
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                    <td>Default value</td>
+                                    <td>Description</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>code</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+                                    <td>
+                                    </td>
+
+                                    <td>
+                                        <p>ISO code of language, region, script or currency</p>
+
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>options</td>
+                                    <td>
+                                                <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+                                    </td>
+
+                                    <td>
+                                        Yes
+                                    </td>
+
+                                    <td>
+                                    </td>
+
+                                    <td>
+                                        <p>A DisplayNamesOptions object</p>
+
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>language</td>
+                                    <td>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+                                    <td>
+                                        <code>this.locale.language</code>
+                                    </td>
+
+                                    <td>
+                                        <p>The current language</p>
+
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
                     <a name="formatDate"></a>
                     <span class="name">
                         <b>
@@ -342,8 +476,8 @@ a positive value if key1 comes after key2;
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="32"
-                            class="link-to-prism">projects/angular-l10n/src/lib/services/l10n-intl.service.ts:32</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="37"
+                            class="link-to-prism">projects/angular-l10n/src/lib/services/l10n-intl.service.ts:37</a></div>
                 </td>
             </tr>
 
@@ -478,8 +612,8 @@ a positive value if key1 comes after key2;
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="69"
-                            class="link-to-prism">projects/angular-l10n/src/lib/services/l10n-intl.service.ts:69</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="74"
+                            class="link-to-prism">projects/angular-l10n/src/lib/services/l10n-intl.service.ts:74</a></div>
                 </td>
             </tr>
 
@@ -614,8 +748,8 @@ a positive value if key1 comes after key2;
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="100"
-                            class="link-to-prism">projects/angular-l10n/src/lib/services/l10n-intl.service.ts:100</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="105"
+                            class="link-to-prism">projects/angular-l10n/src/lib/services/l10n-intl.service.ts:105</a></div>
                 </td>
             </tr>
 
@@ -688,7 +822,7 @@ a positive value if key1 comes after key2;
                                     </td>
 
                                     <td>
-                                        <p>A Intl RelativeTimeFormatOptions object</p>
+                                        <p>An Intl RelativeTimeFormatOptions object</p>
 
                                     </td>
                                 </tr>
@@ -750,8 +884,8 @@ a positive value if key1 comes after key2;
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="113"
-                            class="link-to-prism">projects/angular-l10n/src/lib/services/l10n-intl.service.ts:113</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="118"
+                            class="link-to-prism">projects/angular-l10n/src/lib/services/l10n-intl.service.ts:118</a></div>
                 </td>
             </tr>
 
@@ -822,8 +956,8 @@ a positive value if key1 comes after key2;
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="168"
-                            class="link-to-prism">projects/angular-l10n/src/lib/services/l10n-intl.service.ts:168</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="178"
+                            class="link-to-prism">projects/angular-l10n/src/lib/services/l10n-intl.service.ts:178</a></div>
                 </td>
             </tr>
 
@@ -878,7 +1012,7 @@ a positive value if key1 comes after key2;
                                     </td>
 
                                     <td>
-                                        <p>A Intl ListFormatOptions object</p>
+                                        <p>An Intl ListFormatOptions object</p>
 
                                     </td>
                                 </tr>
@@ -933,22 +1067,22 @@ a positive value if key1 comes after key2;
             <tr>
                 <td class="col-md-4">
                     <span class="modifier-icon icon ion-ios-reset"></span>
-                    <code>plural(value: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank">number</a>, options?: Intl.PluralRulesOptions, language)</code>
+                    <code>plural(value: <a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank">any</a>, prefix: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>, options?: Intl.PluralRulesOptions, language)</code>
                 </td>
             </tr>
 
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="154"
-                            class="link-to-prism">projects/angular-l10n/src/lib/services/l10n-intl.service.ts:154</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="160"
+                            class="link-to-prism">projects/angular-l10n/src/lib/services/l10n-intl.service.ts:160</a></div>
                 </td>
             </tr>
 
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-description"><p>Gets the plural for a number.</p>
+                    <div class="io-description"><p>Gets the plural by a number.</p>
 </div>
 
                     <div class="io-description">
@@ -967,7 +1101,7 @@ a positive value if key1 comes after key2;
                                 <tr>
                                     <td>value</td>
                                     <td>
-                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+                                                <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
                                     </td>
 
                                     <td>
@@ -979,6 +1113,25 @@ a positive value if key1 comes after key2;
 
                                     <td>
                                         <p>The number to get the plural</p>
+
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>prefix</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+                                    <td>
+                                        <code>&#x27;&#x27;</code>
+                                    </td>
+
+                                    <td>
+                                        <p>Optional prefix for the key</p>
 
                                     </td>
                                 </tr>
@@ -996,7 +1149,7 @@ a positive value if key1 comes after key2;
                                     </td>
 
                                     <td>
-                                        <p>A Intl PluralRulesOptions object</p>
+                                        <p>An Intl PluralRulesOptions object</p>
 
                                     </td>
                                 </tr>
@@ -1043,7 +1196,7 @@ a positive value if key1 comes after key2;
         <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { Injectable, Inject } from &#x27;@angular/core&#x27;;
 
 import { L10nLocale, L10nDateTimeFormatOptions, L10nNumberFormatOptions, Unit } from &#x27;../models/types&#x27;;
-import { L10N_LOCALE } from &#x27;../models/l10n-config&#x27;;
+import { L10nConfig, L10N_CONFIG, L10N_LOCALE } from &#x27;../models/l10n-config&#x27;;
 import {
     hasDateTimeFormat,
     hasTimeZone,
@@ -1052,6 +1205,7 @@ import {
     hasCollator,
     hasPluralRules,
     hasListFormat,
+    hasDisplayNames,
     toDate,
     toNumber,
     PARSE_DATE_STYLE,
@@ -1062,7 +1216,11 @@ import { L10nTranslationService } from &#x27;./l10n-translation.service&#x27;;
 
 @Injectable() export class L10nIntlService {
 
-    constructor(@Inject(L10N_LOCALE) private locale: L10nLocale, private translation: L10nTranslationService) { }
+    constructor(
+        @Inject(L10N_CONFIG) private config: L10nConfig,
+        @Inject(L10N_LOCALE) private locale: L10nLocale,
+        private translation: L10nTranslationService
+    ) { }
 
     /**
      * Formats a date.
@@ -1136,7 +1294,7 @@ import { L10nTranslationService } from &#x27;./l10n-translation.service&#x27;;
      * Formats a relative time.
      * @param value A negative (or positive) number
      * @param unit The unit of the value
-     * @param options A Intl RelativeTimeFormatOptions object
+     * @param options An Intl RelativeTimeFormatOptions object
      * @param language The current language
      */
     public formatRelativeTime(
@@ -1153,26 +1311,26 @@ import { L10nTranslationService } from &#x27;./l10n-translation.service&#x27;;
     }
 
     public getCurrencySymbol(locale &#x3D; this.locale): string | undefined {
-        let symbol &#x3D; locale.currency;
-        if (hasNumberFormat()) {
-            const decimal &#x3D; this.formatNumber(0, { digits: &#x27;1.0-0&#x27; }, locale.numberLanguage || locale.language);
-            const currency &#x3D; this.formatNumber(
-                0,
-                { digits: &#x27;1.0-0&#x27;, style: &#x27;currency&#x27;, currencyDisplay: &#x27;symbol&#x27; },
-                locale.numberLanguage || locale.language,
-                locale.currency
-            );
-            symbol &#x3D; currency.replace(decimal, &#x27;&#x27;);
-            symbol &#x3D; symbol.trim();
-        }
+        if (!hasNumberFormat()) return locale.currency;
+
+        const decimal &#x3D; this.formatNumber(0, { digits: &#x27;1.0-0&#x27; }, locale.numberLanguage || locale.language);
+        const currency &#x3D; this.formatNumber(
+            0,
+            { digits: &#x27;1.0-0&#x27;, style: &#x27;currency&#x27;, currencyDisplay: &#x27;symbol&#x27; },
+            locale.numberLanguage || locale.language,
+            locale.currency
+        );
+        let symbol &#x3D; currency.replace(decimal, &#x27;&#x27;);
+        symbol &#x3D; symbol.trim();
+
         return symbol;
     }
 
     /**
      * Compares two keys by the value of translation.
-     * @param key1, First key to compare
-     * @param key1, Second key to compare
-     * @param options A Intl CollatorOptions object
+     * @param key1 First key to compare
+     * @param key1 Second key to compare
+     * @param options An Intl CollatorOptions object
      * @param language The current language
      * @return A negative value if the value of translation of key1 comes before the value of translation of key2;
      *         a positive value if key1 comes after key2;
@@ -1188,30 +1346,47 @@ import { L10nTranslationService } from &#x27;./l10n-translation.service&#x27;;
     }
 
     /**
-     * Gets the plural for a number.
+     * Gets the plural by a number.
      * @param value The number to get the plural
-     * @param options A Intl PluralRulesOptions object
+     * @param options An Intl PluralRulesOptions object
+     * @param prefix Optional prefix for the key
      * @param language The current language
      */
-    public plural(value: number, options?: Intl.PluralRulesOptions, language &#x3D; this.locale.language): string {
+    public plural(value: any, prefix: string &#x3D; &#x27;&#x27;, options?: Intl.PluralRulesOptions, language &#x3D; this.locale.language): string {
         if (!hasPluralRules() || language &#x3D;&#x3D; null || language &#x3D;&#x3D;&#x3D; &#x27;&#x27;) return value.toString();
+
+        value &#x3D; toNumber(value);
 
         const rule &#x3D; new Intl.PluralRules(language, options).select(value);
 
-        return this.translation.has(rule) ? this.translation.translate(rule) : rule;
+        const key &#x3D; prefix ? &#x60;${prefix}${this.config.keySeparator}${rule}&#x60; : rule;
+
+        return this.translation.translate(key);
     }
 
     /**
      * Returns the representation of a list.
      * @param list An array of keys
-     * @param options A Intl ListFormatOptions object
+     * @param options An Intl ListFormatOptions object
      * @param language The current language
      */
     public list(list: string[], options?: any, language &#x3D; this.locale.language): string {
         const values &#x3D; list.map(key &#x3D;&gt; this.translation.translate(key));
-        if (!hasListFormat() || language &#x3D;&#x3D; null || language &#x3D;&#x3D;&#x3D; &#x27;&#x27;) return values.toString();
+        if (!hasListFormat() || language &#x3D;&#x3D; null || language &#x3D;&#x3D;&#x3D; &#x27;&#x27;) return values.join(&#x27;, &#x27;);
 
         return new (Intl as any).ListFormat(language, options).format(values);
+    }
+
+    /**
+     * Returns translation of language, region, script or currency display names
+     * @param code ISO code of language, region, script or currency
+     * @param options A DisplayNamesOptions object
+     * @param language The current language
+     */
+    public displayNames(code: string, options?: any, language &#x3D; this.locale.language): string {
+        if (!hasDisplayNames() || language &#x3D;&#x3D; null || language &#x3D;&#x3D;&#x3D; &#x27;&#x27;) return code;
+
+        return new (Intl as any).DisplayNames(language, options).of(code);
     }
 
 }

@@ -132,8 +132,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="14"
-                            class="link-to-prism">projects/angular-l10n/src/lib/services/l10n-user-language.ts:14</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="15"
+                            class="link-to-prism">projects/angular-l10n/src/lib/services/l10n-user-language.ts:15</a></div>
                 </td>
             </tr>
 
@@ -166,6 +166,7 @@
         <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { Injectable, Inject } from &#x27;@angular/core&#x27;;
 
 import { L10N_CONFIG, L10nConfig } from &#x27;../models/l10n-config&#x27;;
+import { getBrowserLanguage } from &#x27;../models/utils&#x27;;
 
 /**
  * Implement this class-interface to get the user language.
@@ -185,17 +186,7 @@ import { L10N_CONFIG, L10nConfig } from &#x27;../models/l10n-config&#x27;;
     constructor(@Inject(L10N_CONFIG) private config: L10nConfig) { }
 
     public async get(): Promise&lt;string | null&gt; {
-        let browserLanguage &#x3D; null;
-        if (typeof navigator !&#x3D;&#x3D; &#x27;undefined&#x27; &amp;&amp; navigator.language) {
-            switch (this.config.format) {
-                case &#x27;language&#x27;:
-                    browserLanguage &#x3D; navigator.language.split(&#x27;-&#x27;)[0];
-                    break;
-                case &#x27;language-region&#x27;:
-                    browserLanguage &#x3D; navigator.language;
-                    break;
-            }
-        }
+        const browserLanguage &#x3D; getBrowserLanguage(this.config.format);
         return Promise.resolve(browserLanguage);
     }
 

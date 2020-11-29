@@ -99,7 +99,7 @@
             <tr>
                 <td class="col-md-4">
                     <span class="modifier-icon icon ion-ios-reset"></span>
-                    <code>transform(key: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>, params?: <a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank">any</a>, language?: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>)</code>
+                    <code>transform(key: <a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank">any</a>, params?: <a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank">any</a>, language?: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>)</code>
                 </td>
             </tr>
 
@@ -129,7 +129,7 @@
                                 <tr>
                                     <td>key</td>
                                     <td>
-                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                                <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
                                     </td>
 
                                     <td>
@@ -197,7 +197,7 @@ export class L10nTranslatePipe implements PipeTransform {
 
     constructor(protected translation: L10nTranslationService) { }
 
-    public transform(key: string, language: string, params?: any): string | null {
+    public transform(key: any, language: string, params?: any): string | null {
         if (key &#x3D;&#x3D; null || key &#x3D;&#x3D;&#x3D; &#x27;&#x27;) return null;
 
         return this.translation.translate(key, params, language);
@@ -215,7 +215,7 @@ export class L10nTranslateAsyncPipe extends L10nAsyncPipe implements PipeTransfo
         super(translation, cdr);
     }
 
-    public transform(key: string, params?: any, language?: string): string | null {
+    public transform(key: any, params?: any, language?: string): string | null {
         if (key &#x3D;&#x3D; null || key &#x3D;&#x3D;&#x3D; &#x27;&#x27;) return null;
 
         return this.translation.translate(key, params, language);
