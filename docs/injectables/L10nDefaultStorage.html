@@ -237,13 +237,13 @@ import { L10nLocale } from &#x27;../models/types&#x27;;
      * This method must contain the logic to read the storage.
      * @return A promise with the value of the locale
      */
-    public abstract async read(): Promise&lt;L10nLocale | null&gt;;
+    public abstract read(): Promise&lt;L10nLocale | null&gt;;
 
     /**
      * This method must contain the logic to write the storage.
      * @param locale The current locale
      */
-    public abstract async write(locale: L10nLocale): Promise&lt;void&gt;;
+    public abstract write(locale: L10nLocale): Promise&lt;void&gt;;
 
 }
 

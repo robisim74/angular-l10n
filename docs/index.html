@@ -77,13 +77,18 @@ export function initL10n(l10nLoader: L10nLoader): () =&gt; Promise&lt;void&gt; {
 const i18nAsset = {
     &#39;en-US&#39;: {
         greeting: &#39;Hello world!&#39;,
-        whoIAm: &#39;I am {{name}}&#39;
+        whoIAm: &#39;I am {{name}}&#39;,
+        one: &#39;software developer&#39;
     },
     &#39;it-IT&#39;: {
         greeting: &#39;Ciao mondo!&#39;,
-        whoIAm: &#39;Sono {{name}}&#39;
+        whoIAm: &#39;Sono {{name}}&#39;,
+        one: &#39;sviluppatore software&#39;
     }
-};</code></pre></div><p>Import the modules and the configuration:</p>
+};</code></pre></div><blockquote>
+<p>Do you only need to localize and not translate? Give the <code>providers</code> an empty array, but provide the supported locales in the <code>schema</code> anyway</p>
+</blockquote>
+<p>Import the modules and the configuration:</p>
 <div><pre class="line-numbers"><code class="language-TypeScript">&#64;NgModule({
     ...
     imports: [
@@ -111,7 +116,7 @@ export class AppModule { }</code></pre></div><h3 id="getting-the-translation">Ge
 
 &lt;p&gt;{{ value | l10nNumber:locale.language:{ digits: &#39;1.2-2&#39;, style: &#39;currency&#39; } }}&lt;/p&gt;
 
-&lt;p&gt;1 {{ 1 | l10nPlural:locale.language:&#39;home&#39;:{ type: &#39;cardinal&#39; } }}&lt;/p&gt;
+&lt;p&gt;1 {{ 1 | l10nPlural:locale.language }}&lt;/p&gt;
 
 &lt;button *ngFor=&quot;let item of schema&quot;
     (click)=&quot;setLocale(item.locale)&quot;&gt;{{ item.locale.language | l10nDisplayNames:locale.language:{ type: &#39;language&#39; } }}&lt;/button&gt;</code></pre></div><p>Pure pipes need to know when the <em>locale</em> changes. So import <code>L10nLocale</code> injection token in the component:</p>
@@ -144,7 +149,7 @@ export class AppModule { }</code></pre></div><h3 id="getting-the-translation">Ge
                 this.formattedToday = this.intl.formatDate(this.today, { dateStyle: &#39;full&#39;, timeStyle: &#39;short&#39; });
                 this.formattedTimeAgo = this.intl.formatRelativeTime(this.timeAgo, &#39;second&#39;, { numeric: &#39;always&#39;, style: &#39;long&#39; });
                 this.formattedValue = this.intl.formatNumber(this.value, { digits: &#39;1.2-2&#39;, style: &#39;currency&#39; });
-                this.formattedOnePlural = this.intl.plural(1, &#39;home&#39;, { type: &#39;cardinal&#39; });
+                this.formattedOnePlural = this.intl.plural(1);
             }
         });
     }

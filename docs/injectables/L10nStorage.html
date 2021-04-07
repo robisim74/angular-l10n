@@ -85,13 +85,11 @@
                             <li>
                                     <span class="modifier">Public</span>
                                     <span class="modifier">Abstract</span>
-                                    <span class="modifier">Async</span>
                                 <a href="#read">read</a>
                             </li>
                             <li>
                                     <span class="modifier">Public</span>
                                     <span class="modifier">Abstract</span>
-                                    <span class="modifier">Async</span>
                                 <a href="#write">write</a>
                             </li>
                         </ul>
@@ -121,7 +119,6 @@
                         <b>
                             <span class="modifier">Public</span>
                             <span class="modifier">Abstract</span>
-                            <span class="modifier">Async</span>
                             read
                         </b>
                         <a href="#read"><span class="icon ion-ios-link"></span></a>
@@ -172,7 +169,6 @@
                         <b>
                             <span class="modifier">Public</span>
                             <span class="modifier">Abstract</span>
-                            <span class="modifier">Async</span>
                             write
                         </b>
                         <a href="#write"><span class="icon ion-ios-link"></span></a>
@@ -263,13 +259,13 @@ import { L10nLocale } from &#x27;../models/types&#x27;;
      * This method must contain the logic to read the storage.
      * @return A promise with the value of the locale
      */
-    public abstract async read(): Promise&lt;L10nLocale | null&gt;;
+    public abstract read(): Promise&lt;L10nLocale | null&gt;;
 
     /**
      * This method must contain the logic to write the storage.
      * @param locale The current locale
      */
-    public abstract async write(locale: L10nLocale): Promise&lt;void&gt;;
+    public abstract write(locale: L10nLocale): Promise&lt;void&gt;;
 
 }
 

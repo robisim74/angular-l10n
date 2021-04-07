@@ -24,13 +24,13 @@
 <title>cluster_L10nTranslationModule</title>
 <polygon fill="none" stroke="black" stroke-dasharray="1,5" points="8,-70 8,-268 518,-268 518,-70 8,-70"/>
 </g>
-<g id="clust7" class="cluster">
-<title>cluster_L10nTranslationModule_exports</title>
-<polygon fill="none" stroke="black" points="16,-208 16,-260 510,-260 510,-208 16,-208"/>
-</g>
 <g id="clust2" class="cluster">
 <title>cluster_L10nTranslationModule_declarations</title>
 <polygon fill="none" stroke="black" points="22,-78 22,-130 504,-130 504,-78 22,-78"/>
+</g>
+<g id="clust7" class="cluster">
+<title>cluster_L10nTranslationModule_exports</title>
+<polygon fill="none" stroke="black" points="16,-208 16,-260 510,-260 510,-208 16,-208"/>
 </g>
 <!-- L10nTranslateAsyncPipe -->
 <g id="node1" class="node">
