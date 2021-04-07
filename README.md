@@ -67,6 +67,9 @@ const i18nAsset = {
     }
 };
 ```
+
+> Do you only need to localize and not translate? Give the `providers` an empty array, but provide the supported locales in the `schema` anyway
+
 Import the modules and the configuration:
 ```TypeScript
 @NgModule({
