@@ -11,7 +11,7 @@ import { L10nRoutingService } from './l10n-routing.service';
     /**
      * This method must contain the logic to init L10n.
      */
-    public abstract async init(): Promise<void>;
+    public abstract init(): Promise<void>;
 
 }
 

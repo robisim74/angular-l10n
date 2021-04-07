@@ -12,7 +12,7 @@ import { getBrowserLanguage } from '../models/utils';
      * This method must contain the logic to get the user language.
      * @return The user language
      */
-    public abstract async get(): Promise<string | null>;
+    public abstract get(): Promise<string | null>;
 
 }
 
