@@ -9,15 +9,16 @@ import { Injectable } from '@angular/core';
      * This method must contain the logic to handle missing values.
      * @param key The key that has been requested
      * @param value Null or empty string
+     * @param params Optional parameters contained in the key
      * @return The value
      */
-    public abstract handle(key: string, value?: string): string | any;
+    public abstract handle(key: string, value?: string, params?: any): string | any;
 
 }
 
 @Injectable() export class L10nDefaultMissingTranslationHandler implements L10nMissingTranslationHandler {
 
-    public handle(key: string, value?: string): string | any {
+    public handle(key: string, value?: string, params?: any): string | any {
         return key;
     }
 
