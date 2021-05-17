@@ -62,7 +62,6 @@
             "main": "projects/angular-l10n-app/src/main.ts",
             "polyfills": "projects/angular-l10n-app/src/polyfills.ts",
             "tsConfig": "projects/angular-l10n-app/tsconfig.app.json",
-            "aot": true,
             "assets": [
               "projects/angular-l10n-app/src/favicon.ico",
               "projects/angular-l10n-app/src/assets"
@@ -70,7 +69,13 @@
             "styles": [
               "projects/angular-l10n-app/src/styles.scss"
             ],
-            "scripts": []
+            "scripts": [],
+            "vendorChunk": true,
+            "extractLicenses": false,
+            "buildOptimizer": false,
+            "sourceMap": true,
+            "optimization": false,
+            "namedChunks": true
           },
           "configurations": {
             "production": {
@@ -182,7 +187,6 @@
             "main": "projects/angular-l10n-app-ssr/src/main.ts",
             "polyfills": "projects/angular-l10n-app-ssr/src/polyfills.ts",
             "tsConfig": "projects/angular-l10n-app-ssr/tsconfig.app.json",
-            "aot": true,
             "assets": [
               "projects/angular-l10n-app-ssr/src/favicon.ico",
               "projects/angular-l10n-app-ssr/src/assets"
@@ -190,7 +194,13 @@
             "styles": [
               "projects/angular-l10n-app-ssr/src/styles.scss"
             ],
-            "scripts": []
+            "scripts": [],
+            "vendorChunk": true,
+            "extractLicenses": false,
+            "buildOptimizer": false,
+            "sourceMap": true,
+            "optimization": false,
+            "namedChunks": true
           },
           "configurations": {
             "production": {
@@ -287,7 +297,9 @@
           "options": {
             "outputPath": "dist/angular-l10n-app-ssr/server",
             "main": "projects/angular-l10n-app-ssr/server.ts",
-            "tsConfig": "projects/angular-l10n-app-ssr/tsconfig.server.json"
+            "tsConfig": "projects/angular-l10n-app-ssr/tsconfig.server.json",
+            "sourceMap": true,
+            "optimization": false
           },
           "configurations": {
             "production": {

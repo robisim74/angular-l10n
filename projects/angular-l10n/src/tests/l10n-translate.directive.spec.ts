@@ -171,7 +171,7 @@ describe('L10nTranslateDirective', () => {
         comp.change();
         fixture.detectChanges();
         fixture.whenStable().then(() => {
-            process.nextTick(() => {
+            setTimeout(() => {
                 expect(els[0].textContent).toContain("It's a small world");
                 expect(els[1].textContent).toContain('robisim74, you have 3 new messages');
                 expect(els[7].getAttribute('value')).toContain('Select');
@@ -179,7 +179,7 @@ describe('L10nTranslateDirective', () => {
                 expect(els[9].childNodes[0].nodeName.toLowerCase()).toBe('strong');
                 expect(els[11].getAttribute('title')).toContain('robisim74, you have 3 new messages');
                 expect(els[13].textContent).toContain('robisim74, you have 3 new messages');
-            });
+            }, 0);
         });
     }));
 });
