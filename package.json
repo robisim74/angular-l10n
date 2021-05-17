@@ -4,9 +4,9 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve angular-l10n-app --open",
-    "build": "ng build angular-l10n --prod",
+    "build": "ng build angular-l10n",
     "build:watch": "ng build angular-l10n --watch",
-    "build:app": "ng build angular-l10n-app --prod",
+    "build:app": "ng build angular-l10n-app",
     "test": "ng test angular-l10n --watch=false",
     "test:watch": "ng test angular-l10n --watch=true",
     "test:app": "ng test angular-l10n-app",
@@ -17,11 +17,11 @@
     "pack:lib": "npm pack ./dist/angular-l10n",
     "publish:lib": "npm publish ./dist/angular-l10n",
     "publish:lib:next": "npm publish --tag next ./dist/angular-l10n",
-    "analyze": "ng build angular-l10n-app --prod --stats-json && webpack-bundle-analyzer dist/angular-l10n-app/stats.json",
+    "analyze": "ng build angular-l10n-app --stats-json && webpack-bundle-analyzer dist/angular-l10n-app/stats.json",
     "postinstall": "ngcc",
     "dev:ssr": "ng run angular-l10n-app-ssr:serve-ssr",
     "serve:ssr": "node dist/angular-l10n-app-ssr/server/main.js",
-    "build:ssr": "ng build --prod && ng run angular-l10n-app-ssr:server:production",
+    "build:ssr": "ng build && ng run angular-l10n-app-ssr:server:production",
     "prerender": "concurrently \"npx http-server ./dist/angular-l10n-app-ssr/browser -p 5000 \" \"ng run angular-l10n-app-ssr:prerender\""
   },
   "compodoc": {

@@ -18,8 +18,10 @@
           "configurations": {
             "production": {
               "tsConfig": "projects/angular-l10n/tsconfig.lib.prod.json"
-            }
-          }
+            },
+            "development": {}
+          },
+          "defaultConfiguration": "production"
         },
         "test": {
           "builder": "@angular-devkit/build-angular:karma",
@@ -104,19 +106,24 @@
                   "maximumError": "10kb"
                 }
               ]
-            }
-          }
+            },
+            "development": {}
+          },
+          "defaultConfiguration": "production"
         },
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "angular-l10n-app:build"
           },
           "configurations": {
             "production": {
               "browserTarget": "angular-l10n-app:build:production"
+            },
+            "development": {
+              "browserTarget": "angular-l10n-app:build:development"
             }
-          }
+          },
+          "defaultConfiguration": "development"
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
@@ -157,14 +164,17 @@
         "e2e": {
           "builder": "@angular-devkit/build-angular:protractor",
           "options": {
-            "protractorConfig": "projects/angular-l10n-app/e2e/protractor.conf.js",
-            "devServerTarget": "angular-l10n-app:serve"
+            "protractorConfig": "projects/angular-l10n-app/e2e/protractor.conf.js"
           },
           "configurations": {
             "production": {
               "devServerTarget": "angular-l10n-app:serve:production"
+            },
+            "development": {
+              "devServerTarget": "angular-l10n-app:serve:development"
             }
-          }
+          },
+          "defaultConfiguration": "development"
         }
       }
     },
@@ -229,19 +239,24 @@
                   "maximumError": "10kb"
                 }
               ]
-            }
-          }
+            },
+            "development": {}
+          },
+          "defaultConfiguration": "production"
         },
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "angular-l10n-app-ssr:build"
           },
           "configurations": {
             "production": {
               "browserTarget": "angular-l10n-app-ssr:build:production"
+            },
+            "development": {
+              "browserTarget": "angular-l10n-app-ssr:build:development"
             }
-          }
+          },
+          "defaultConfiguration": "development"
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
@@ -283,14 +298,17 @@
         "e2e": {
           "builder": "@angular-devkit/build-angular:protractor",
           "options": {
-            "protractorConfig": "projects/angular-l10n-app-ssr/e2e/protractor.conf.js",
-            "devServerTarget": "angular-l10n-app-ssr:serve"
+            "protractorConfig": "projects/angular-l10n-app-ssr/e2e/protractor.conf.js"
           },
           "configurations": {
             "production": {
               "devServerTarget": "angular-l10n-app-ssr:serve:production"
+            },
+            "development": {
+              "devServerTarget": "angular-l10n-app-ssr:serve:development"
             }
-          }
+          },
+          "defaultConfiguration": "development"
         },
         "server": {
           "builder": "@angular-devkit/build-angular:server",
@@ -312,21 +330,26 @@
               ],
               "sourceMap": false,
               "optimization": true
-            }
-          }
+            },
+            "development": {}
+          },
+          "defaultConfiguration": "production"
         },
         "serve-ssr": {
           "builder": "@nguniversal/builders:ssr-dev-server",
           "options": {
-            "browserTarget": "angular-l10n-app-ssr:build",
-            "serverTarget": "angular-l10n-app-ssr:server"
           },
           "configurations": {
             "production": {
               "browserTarget": "angular-l10n-app-ssr:build:production",
               "serverTarget": "angular-l10n-app-ssr:server:production"
+            },
+            "development": {
+              "serverTarget": "angular-l10n-app-ssr:server:development",
+              "browserTarget": "angular-l10n-app-ssr:build:development"
             }
-          }
+          },
+          "defaultConfiguration": "development"
         },
         "prerender": {
           "builder": "@nguniversal/builders:prerender",
