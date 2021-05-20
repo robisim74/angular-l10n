@@ -8,25 +8,25 @@ import { L10nTranslationService } from '../services/l10n-translation.service';
 @Directive()
 export abstract class L10nDirective implements AfterViewInit, OnChanges, OnDestroy {
 
-    @Input() public value: string;
+    @Input() public value: string | null = null;
 
     @Input() set innerHTML(content: any) {
         // Handle TrustedHTML
         this.content = content.toString();
     }
 
-    @Input() public language: string;
+    @Input() public language: string | undefined = undefined;
 
-    private content: string;
+    private content: string | null = null;
 
-    private text: string;
-    private attributes: any[];
+    private text: string | null = null;
+    private attributes: any[] = [];
 
-    private element: HTMLElement;
-    private renderNode: HTMLElement;
-    private nodeValue: string;
+    private element: HTMLElement | null = null;
+    private renderNode: HTMLElement | null = null;
+    private nodeValue: string | null = null;
 
-    private textObserver: MutationObserver;
+    private textObserver: MutationObserver | null = null;
 
     private destroy = new Subject<boolean>();
 
@@ -35,7 +35,7 @@ export abstract class L10nDirective implements AfterViewInit, OnChanges, OnDestr
     public ngAfterViewInit(): void {
         if (this.el && this.el.nativeElement) {
             this.element = this.el.nativeElement;
-            this.renderNode = getTargetNode(this.element);
+            this.renderNode = getTargetNode(this.el.nativeElement);
             this.text = this.getText();
             this.attributes = this.getAttributes();
             this.addTextListener();
@@ -74,7 +74,7 @@ export abstract class L10nDirective implements AfterViewInit, OnChanges, OnDestr
 
     private getText(): string {
         let text = '';
-        if (this.element.childNodes.length > 0) {
+        if (this.element && this.element.childNodes.length > 0) {
             text = this.getNodeValue();
         } else if (this.value) {
             text = this.value;
@@ -91,7 +91,7 @@ export abstract class L10nDirective implements AfterViewInit, OnChanges, OnDestr
 
     private getAttributes(): any[] {
         const attributes: any[] = [];
-        if (this.element.attributes) {
+        if (this.element && this.element.attributes) {
             for (const attr of Array.from(this.element.attributes)) {
                 if (attr && attr.name) {
                     const [, name = ''] = attr.name.match(/^l10n-(.+)$/) || [];
@@ -108,16 +108,20 @@ export abstract class L10nDirective implements AfterViewInit, OnChanges, OnDestr
     private addTextListener(): void {
         if (typeof MutationObserver !== 'undefined') {
             this.textObserver = new MutationObserver(() => {
-                this.renderNode = getTargetNode(this.element);
-                this.text = this.getText();
-                this.replaceText();
+                if (this.element) {
+                    this.renderNode = getTargetNode(this.element);
+                    this.text = this.getText();
+                    this.replaceText();
+                }
             });
-            this.textObserver.observe(this.renderNode, { subtree: true, characterData: true });
+            if (this.renderNode) {
+                this.textObserver.observe(this.renderNode, { subtree: true, characterData: true });
+            }
         }
     }
 
     private removeTextListener(): void {
-        if (typeof this.textObserver !== 'undefined') {
+        if (this.textObserver && typeof this.textObserver !== 'undefined') {
             this.textObserver.disconnect();
         }
     }

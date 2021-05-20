@@ -52,12 +52,12 @@ export class L10nValidateDateDirective implements Validator, OnInit, OnChanges {
 
     @Input() public options: any;
 
-    @Input() public minDate: Date;
-    @Input() public maxDate: Date;
+    @Input() public minDate: Date | undefined = undefined;
+    @Input() public maxDate: Date | undefined = undefined;
 
-    @Input() public language: string;
+    @Input() public language: string | undefined = undefined;
 
-    protected validator: ValidatorFn;
+    protected validator: ValidatorFn | null = null;
 
     constructor(protected validation: L10nValidation) { }
 
@@ -70,7 +70,7 @@ export class L10nValidateDateDirective implements Validator, OnInit, OnChanges {
     }
 
     public validate(c: AbstractControl): ValidationErrors | null {
-        return this.validator(c);
+        return this.validator ? this.validator(c) : null;
     }
 
 }

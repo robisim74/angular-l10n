@@ -15,7 +15,7 @@ export class L10nNumberDirective extends L10nDirective {
 
     @Input() public options: any;
 
-    @Input() public currency: string;
+    @Input() public currency: string | undefined = undefined;
 
     constructor(
         protected el: ElementRef,

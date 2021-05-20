@@ -15,7 +15,7 @@ export class L10nDateDirective extends L10nDirective {
 
     @Input() public options: any;
 
-    @Input() public timezone: string;
+    @Input() public timezone: string | undefined = undefined;
 
     constructor(
         protected el: ElementRef,

@@ -14,7 +14,7 @@ export class L10nTimeAgoDirective extends L10nDirective {
         this.options = options;
     }
 
-    @Input() public unit: Unit;
+    @Input() public unit: any;
 
     @Input() public options: any;
 
