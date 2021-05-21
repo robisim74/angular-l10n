@@ -443,6 +443,9 @@ SSR doesn't work out of the box, so it is important to know:
 
 
 ## Previous versions
+- **Angular v11 (Angular l10n v11.1.0)**
+    - [Branch](https://github.com/robisim74/angular-l10n/tree/angular_v11)
+
 - **Angular v10 (Angular l10n v10.1.2)**
     - [Branch](https://github.com/robisim74/angular-l10n/tree/angular_v10)
 
