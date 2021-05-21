@@ -32,14 +32,11 @@
           }
         },
         "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
+          "builder": "@angular-eslint/builder:lint",
           "options": {
-            "tsConfig": [
-              "projects/angular-l10n/tsconfig.lib.json",
-              "projects/angular-l10n/tsconfig.spec.json"
-            ],
-            "exclude": [
-              "**/node_modules/**"
+            "lintFilePatterns": [
+              "projects/angular-l10n/**/*.ts",
+              "projects/angular-l10n/**/*.html"
             ]
           }
         }
@@ -113,8 +110,7 @@
         },
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
-          "options": {
-          },
+          "options": {},
           "configurations": {
             "production": {
               "browserTarget": "angular-l10n-app:build:production"
@@ -149,15 +145,11 @@
           }
         },
         "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
+          "builder": "@angular-eslint/builder:lint",
           "options": {
-            "tsConfig": [
-              "projects/angular-l10n-app/tsconfig.app.json",
-              "projects/angular-l10n-app/tsconfig.spec.json",
-              "projects/angular-l10n-app/e2e/tsconfig.json"
-            ],
-            "exclude": [
-              "**/node_modules/**"
+            "lintFilePatterns": [
+              "projects/angular-l10n-app/**/*.ts",
+              "projects/angular-l10n-app/**/*.html"
             ]
           }
         },
@@ -246,8 +238,7 @@
         },
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
-          "options": {
-          },
+          "options": {},
           "configurations": {
             "production": {
               "browserTarget": "angular-l10n-app-ssr:build:production"
@@ -282,16 +273,11 @@
           }
         },
         "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
+          "builder": "@angular-eslint/builder:lint",
           "options": {
-            "tsConfig": [
-              "projects/angular-l10n-app-ssr/tsconfig.app.json",
-              "projects/angular-l10n-app-ssr/tsconfig.spec.json",
-              "projects/angular-l10n-app-ssr/e2e/tsconfig.json",
-              "projects/angular-l10n-app-ssr/tsconfig.server.json"
-            ],
-            "exclude": [
-              "**/node_modules/**"
+            "lintFilePatterns": [
+              "projects/angular-l10n-app-ssr/**/*.ts",
+              "projects/angular-l10n-app-ssr/**/*.html"
             ]
           }
         },
@@ -337,8 +323,7 @@
         },
         "serve-ssr": {
           "builder": "@nguniversal/builders:ssr-dev-server",
-          "options": {
-          },
+          "options": {},
           "configurations": {
             "production": {
               "browserTarget": "angular-l10n-app-ssr:build:production",
@@ -372,6 +357,10 @@
           }
         }
       }
-    }},
-  "defaultProject": "angular-l10n-app"
+    }
+  },
+  "defaultProject": "angular-l10n-app",
+  "cli": {
+    "defaultCollection": "@angular-eslint/schematics"
+  }
 }
