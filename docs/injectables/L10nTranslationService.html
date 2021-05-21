@@ -1561,7 +1561,7 @@ import { L10nLocation } from &#x27;./l10n-location&#x27;;
      */
     public getLanguageDirection(language &#x3D; this.locale.language): &#x27;ltr&#x27; | &#x27;rtl&#x27; | undefined {
         const schema &#x3D; getSchema(this.config.schema, language, this.config.format);
-        if (schema) return schema.dir;
+        return schema ? schema.dir : undefined;
     }
 
     /**
