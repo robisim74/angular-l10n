@@ -121,9 +121,9 @@ describe('L10nRoutingService', () => {
             fixture.ngZone.run(() => {
                 loader.init();
                 tick();
-                router.navigate(['/en-US//mock1']);
+                router.navigate(['/en-US/mock1']);
                 tick();
-                router.navigate(['/en-US//mock2']);
+                router.navigate(['/en-US/mock2']);
                 tick();
                 location.back();
                 expect(location.path()).toBe('/en-US/mock1');
