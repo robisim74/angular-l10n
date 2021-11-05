@@ -12,6 +12,6 @@ export class L10nResolver implements Resolve<Promise<void>> {
 
     async resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Promise<void> {
         await this.translation.init();
-        await this.translation.loadTranslation(route.data.l10nProviders);
+        await this.translation.loadTranslation(route.data['l10nProviders']);
     }
 }

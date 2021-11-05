@@ -18,9 +18,9 @@ export class L10nNumberDirective extends L10nDirective {
     @Input() public currency: string | undefined = undefined;
 
     constructor(
-        protected el: ElementRef,
-        protected renderer: Renderer2,
-        protected translation: L10nTranslationService,
+        protected override el: ElementRef,
+        protected override renderer: Renderer2,
+        protected override translation: L10nTranslationService,
         protected intl: L10nIntlService
     ) {
         super(el, renderer, translation);

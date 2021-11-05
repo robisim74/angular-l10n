@@ -25,7 +25,7 @@ export class L10nTranslatePipe implements PipeTransform {
 })
 export class L10nTranslateAsyncPipe extends L10nAsyncPipe implements PipeTransform {
 
-    constructor(protected translation: L10nTranslationService, protected cdr: ChangeDetectorRef) {
+    constructor(protected override translation: L10nTranslationService, protected override cdr: ChangeDetectorRef) {
         super(translation, cdr);
     }
 

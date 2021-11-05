@@ -11,8 +11,7 @@
       "parserOptions": {
         "project": [
           "projects/angular-l10n-app/tsconfig.app.json",
-          "projects/angular-l10n-app/tsconfig.spec.json",
-          "projects/angular-l10n-app/e2e/tsconfig.json"
+          "projects/angular-l10n-app/tsconfig.spec.json"
         ],
         "createDefaultProgram": true
       },

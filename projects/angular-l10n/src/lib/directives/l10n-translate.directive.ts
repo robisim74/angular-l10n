@@ -17,7 +17,11 @@ export class L10nTranslateDirective extends L10nDirective {
 
     @Input() public params: any;
 
-    constructor(protected el: ElementRef, protected renderer: Renderer2, protected translation: L10nTranslationService) {
+    constructor(
+        protected override el: ElementRef,
+        protected override renderer: Renderer2,
+        protected override translation: L10nTranslationService
+    ) {
         super(el, renderer, translation);
     }
 
