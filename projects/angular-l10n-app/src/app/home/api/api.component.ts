@@ -42,7 +42,7 @@ export class ApiComponent implements OnInit, OnChanges {
     }
 
     ngOnChanges(changes: SimpleChanges) {
-        this.formattedTimeAgo = this.intl.formatRelativeTime(changes.timeAgo.currentValue, 'second', { numeric: 'always', style: 'long' });
+        this.formattedTimeAgo = this.intl.formatRelativeTime(changes['timeAgo']['currentValue'], 'second', { numeric: 'always', style: 'long' });
     }
 
 }

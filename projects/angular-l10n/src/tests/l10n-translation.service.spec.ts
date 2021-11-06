@@ -75,7 +75,7 @@ describe('L10nTranslationService', () => {
         expect(translation.getLocale()).toEqual(jasmine.objectContaining({ language: 'it-IT' }));
     });
     it('should throw an error if the language is not valid', async () => {
-        await expectAsync(translation.setLocale({ language: 'it-it' })).toBeRejectedWith('angular-l10n (formatLanguage): Invalid language');
+        await expectAsync(translation.setLocale({ language: 'it-it' })).toBeRejectedWith(new Error('angular-l10n (formatLanguage): Invalid language'));
     });
     it('should fire onChanges', async () => {
         translation.onChange().subscribe({
@@ -86,7 +86,7 @@ describe('L10nTranslationService', () => {
     it('should fire onError', async () => {
         await translation.setLocale({ language: 'fr-FR' });
         translation.onError().subscribe({
-            next: (value) => expect(value).toEqual('angular-l10n (L10nDefaultTranslationLoader): Asset not found')
+            next: (value) => expect(value).toEqual(new Error('angular-l10n (L10nDefaultTranslationLoader): Asset not found'))
         });
         expect(translation.getLocale()).toEqual(jasmine.objectContaining({ language: 'en-US' }));
     });

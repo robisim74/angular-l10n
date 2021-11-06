@@ -24,7 +24,7 @@ import { l10nError } from '../models/l10n-error';
     public get(language: string, provider: L10nProvider): Observable<{ [key: string]: any }> {
         return provider.asset[language] ?
             of(provider.asset[language]) :
-            throwError(l10nError(L10nDefaultTranslationLoader, 'Asset not found'));
+            throwError(() => l10nError(L10nDefaultTranslationLoader, 'Asset not found'));
     }
 
 }
