@@ -166,13 +166,6 @@ import { L10nLocation } from './l10n-location';
      * @param locale The current locale
      */
     public async loadTranslation(providers: L10nProvider[] = this.config.providers, locale = this.locale): Promise<void> {
-        // Updates providers
-        providers.forEach(provider => {
-            if (!this.config.providers.find(p => p.name === provider.name)) {
-                this.config.providers.push(provider);
-            }
-        });
-
         const language = formatLanguage(locale.language, this.config.format);
 
         return new Promise((resolve) => {
@@ -199,6 +192,18 @@ import { L10nLocation } from './l10n-location';
         this.data[language] = this.data[language] !== undefined
             ? mergeDeep(this.data[language], data)
             : data;
+    }
+
+    /**
+     * Adds providers to configuration
+     * @param providers The providers of the translations data
+     */
+    public addProviders(providers: L10nProvider[]): void {
+        providers.forEach(provider => {
+            if (!this.config.providers.find(p => p.name === provider.name)) {
+                this.config.providers.push(provider);
+            }
+        });
     }
 
     private getTranslation(providers: L10nProvider[], language: string): Observable<any>[] {

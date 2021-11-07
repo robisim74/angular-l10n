@@ -205,7 +205,7 @@ export const l10nConfig: L10nConfig = {
 export class AppModule { }
 ```
 #### Storage
-By default, the library does not store the _locale_. To store it implement the `L10nStorage` class-interface, so that the next time the user has the _locale_ he selected.
+By default, the library does not store the _locale_. To store it implement the `L10nStorage` class-interface using what you need, such as web storage or cookie, so that the next time the user has the _locale_ he selected.
 #### User Language
 By default, the library attempts to set the _locale_ using the user's browser language, before falling back on the _default locale_. You can change this behavior by implementing the `L10nUserLanguage` class-interface, for example to get the language via server.
 #### Translation Loader
@@ -348,6 +348,12 @@ Always import the modules you need:
     ]
 })
 export class LazyModule { }
+```
+#### Add providers dynamically
+In general, you can add translation providers dynamically by updating the configuration and calling the `loadTranslation` method:
+```TypeScript
+this.translation.addProviders([{ name: 'lazy', asset: i18nLazyAsset}]);
+this.translation.loadTranslation([{ name: 'lazy', asset: i18nLazyAsset}]);
 ```
 
 ### Caching
