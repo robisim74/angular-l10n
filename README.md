@@ -352,6 +352,8 @@ export class LazyModule { }
 #### Add providers dynamically
 In general, you can add translation providers dynamically by updating the configuration and calling the `loadTranslation` method:
 ```TypeScript
+const i18nLazyAsset = { 'en-US': {...}, 'it-IT': {...} };
+
 this.translation.addProviders([{ name: 'lazy', asset: i18nLazyAsset}]);
 this.translation.loadTranslation([{ name: 'lazy', asset: i18nLazyAsset}]);
 ```
@@ -408,34 +410,22 @@ Angular l10n types that it is useful to know:
      - _timezone_: from the IANA time zone database
 
 - `L10nFormat`: shows the format of the _language_ to be used for translations. The supported formats are: `'language' | 'language-script' | 'language-region' | 'language-script-region'`. So, for example, you can have a _language_ like `en-US-u-ca-gregory-nu-latn` to format dates and numbers, but only use the `en-US` for translations setting `'language-region'`
-- `L10nDateTimeFormatOptions`: the type of _options_ used to format dates. Extends the Intl `DateTimeFormatOptions` interface, adding the _dateStyle_ and _timeStyle_ attributes. See [DateTimeFormat](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/DateTimeFormat/DateTimeFormat) for more details on available options
+- `L10nDateTimeFormatOptions`: the type of _options_ used to format dates. Extends the Intl `DateTimeFormatOptions` interface, replacing the _dateStyle_ and _timeStyle_ attributes. See [DateTimeFormat](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/DateTimeFormat/DateTimeFormat) for more details on available options
 - `L10nNumberFormatOptions`: the type of _options_ used to format numbers. Extends the Intl `NumberFormatOptions` interface, adding the _digits_ attribute. See [NumberFormat](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/NumberFormat/NumberFormat) for more details on available options
 
 
 ## Intl API
 To format dates and numbers, this library uses the [Intl API](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl)
 
-Check the current browser support:
+Current browser support:
 - [ECMAScript compatibility tables](http://kangax.github.io/compat-table/esintl/)
 - [Can I use](http://caniuse.com/#feat=internationalization)
 - [Intl](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl#Browser_compatibility)
 
-You can use polyfills to extend support to old browsers, or to use newest features:
-- [Polyfill.io](https://polyfill.io/v3/)
-
-    Just add one script tag in your `index.html`, for example:
-    ```Html
-    <script crossorigin="anonymous"
-        src="https://polyfill.io/v3/polyfill.min.js?flags=gated&features=Intl.~locale.en-US"></script>
-    ```
-    When specifying the `features`, you have to specify what languages to load
-
-- [Format.JS](https://formatjs.io/docs/polyfills)
-
-    Import polyfills you need as in the sample app
+If you need to support previous versions of browsers, or to use newest features see [Format.JS](https://formatjs.io/docs/polyfills)
 
 ### Intl API in Node.js
-To use _Intl_ in _Node.js_, check the support according to the version in the official documentation: [Internationalization Support](https://nodejs.org/api/intl.html)
+To use Intl in _Node.js_, check the support according to the version in the official documentation: [Internationalization Support](https://nodejs.org/api/intl.html)
 
 
 ## Server Side Rendering
