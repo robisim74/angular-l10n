@@ -1,5 +1,6 @@
 import { Directive, Input, ElementRef, Renderer2 } from '@angular/core';
 
+import { L10nDateTimeFormatOptions } from '../models/types';
 import { L10nDirective } from '../models/l10n-directive';
 import { L10nTranslationService } from '../services/l10n-translation.service';
 import { L10nIntlService } from '../services/l10n-intl.service';
@@ -9,13 +10,13 @@ import { L10nIntlService } from '../services/l10n-intl.service';
 })
 export class L10nDateDirective extends L10nDirective {
 
-    @Input() set l10nDate(options: any) {
+    @Input() set l10nDate(options: L10nDateTimeFormatOptions) {
         this.options = options;
     }
 
-    @Input() public options: any;
+    @Input() public options?: L10nDateTimeFormatOptions;
 
-    @Input() public timezone: string | undefined = undefined;
+    @Input() public timezone?: string;
 
     constructor(
         protected override el: ElementRef,

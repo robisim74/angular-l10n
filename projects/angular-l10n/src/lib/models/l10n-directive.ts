@@ -8,25 +8,25 @@ import { L10nTranslationService } from '../services/l10n-translation.service';
 @Directive()
 export abstract class L10nDirective implements AfterViewInit, OnChanges, OnDestroy {
 
-    @Input() public value: string | null = null;
+    @Input() public value?: string;
 
     @Input() set innerHTML(content: any) {
         // Handle TrustedHTML
         this.content = content.toString();
     }
 
-    @Input() public language: string | undefined = undefined;
+    @Input() public language?: string;
 
-    private content: string | null = null;
+    private content?: string;
 
-    private text: string | null = null;
+    private text?: string;
     private attributes: any[] = [];
 
-    private element: HTMLElement | null = null;
-    private renderNode: HTMLElement | null = null;
-    private nodeValue: string | null = null;
+    private element?: HTMLElement;
+    private renderNode?: HTMLElement;
+    private nodeValue?: string;
 
-    private textObserver: MutationObserver | null = null;
+    private textObserver?: MutationObserver;
 
     private destroy = new Subject<boolean>();
 
@@ -121,7 +121,7 @@ export abstract class L10nDirective implements AfterViewInit, OnChanges, OnDestr
     }
 
     private removeTextListener(): void {
-        if (this.textObserver && typeof this.textObserver !== 'undefined') {
+        if (this.textObserver) {
             this.textObserver.disconnect();
         }
     }

@@ -1,6 +1,6 @@
 import { Injectable, Inject } from '@angular/core';
 
-import { L10nLocale, L10nDateTimeFormatOptions, L10nNumberFormatOptions, Unit } from '../models/types';
+import { L10nLocale, L10nDateTimeFormatOptions, L10nNumberFormatOptions } from '../models/types';
 import { L10nConfig, L10N_CONFIG, L10N_LOCALE } from '../models/l10n-config';
 import {
     hasDateTimeFormat,
@@ -98,21 +98,21 @@ import { L10nTranslationService } from './l10n-translation.service';
     /**
      * Formats a relative time.
      * @param value A negative (or positive) number
-     * @param unit The unit of the value
+     * @param unit An Intl RelativeTimeFormatUnit value
      * @param options An Intl RelativeTimeFormatOptions object
      * @param language The current language
      */
     public formatRelativeTime(
         value: any,
-        unit: Unit,
-        options?: any,
+        unit: Intl.RelativeTimeFormatUnit,
+        options?: Intl.RelativeTimeFormatOptions,
         language = this.locale.dateLanguage || this.locale.language
     ): string {
         if (!hasRelativeTimeFormat() || language == null || language === '') return value;
 
         value = toNumber(value);
 
-        return new (Intl as any).RelativeTimeFormat(language, options).format(value, unit);
+        return new Intl.RelativeTimeFormat(language, options).format(value, unit);
     }
 
     public getCurrencySymbol(locale = this.locale): string | undefined {
@@ -153,8 +153,8 @@ import { L10nTranslationService } from './l10n-translation.service';
     /**
      * Gets the plural by a number.
      * @param value The number to get the plural
-     * @param options An Intl PluralRulesOptions object
      * @param prefix Optional prefix for the key
+     * @param options An Intl PluralRulesOptions object
      * @param language The current language
      */
     public plural(value: any, prefix: string = '', options?: Intl.PluralRulesOptions, language = this.locale.language): string {
@@ -185,7 +185,7 @@ import { L10nTranslationService } from './l10n-translation.service';
     /**
      * Returns translation of language, region, script or currency display names
      * @param code ISO code of language, region, script or currency
-     * @param options A DisplayNamesOptions object
+     * @param options An Intl DisplayNamesOptions object
      * @param language The current language
      */
     public displayNames(code: string, options?: any, language = this.locale.language): string {

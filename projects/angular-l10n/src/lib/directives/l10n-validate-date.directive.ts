@@ -46,18 +46,18 @@ export function l10nValidateDate(
 })
 export class L10nValidateDateDirective implements Validator, OnInit, OnChanges {
 
-    @Input() set l10nValidateDate(options: any) {
+    @Input() set l10nValidateDate(options: L10nDateTimeFormatOptions) {
         this.options = options;
     }
 
-    @Input() public options: any;
+    @Input() public options?: L10nDateTimeFormatOptions;
 
-    @Input() public minDate: Date | undefined = undefined;
-    @Input() public maxDate: Date | undefined = undefined;
+    @Input() public minDate?: Date;
+    @Input() public maxDate?: Date;
 
-    @Input() public language: string | undefined = undefined;
+    @Input() public language?: string;
 
-    protected validator: ValidatorFn | null = null;
+    protected validator?: ValidatorFn;
 
     constructor(protected validation: L10nValidation) { }
 

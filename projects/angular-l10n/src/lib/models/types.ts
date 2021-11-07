@@ -69,5 +69,3 @@ export interface L10nNumberFormatOptions extends Intl.NumberFormatOptions {
      */
     digits?: string;
 }
-
-export type Unit = 'year' | 'quarter' | 'month' | 'week' | 'day' | 'hour' | 'minute' | 'second';

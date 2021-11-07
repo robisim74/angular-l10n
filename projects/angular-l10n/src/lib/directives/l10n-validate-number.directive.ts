@@ -46,18 +46,18 @@ export function l10nValidateNumber(
 })
 export class L10nValidateNumberDirective implements Validator, OnInit, OnChanges {
 
-    @Input() set l10nValidateNumber(options: any) {
+    @Input() set l10nValidateNumber(options: L10nNumberFormatOptions) {
         this.options = options;
     }
 
-    @Input() public options: any;
+    @Input() public options?: L10nNumberFormatOptions;
 
-    @Input() public minValue: number | undefined = undefined;
-    @Input() public maxValue: number | undefined = undefined;
+    @Input() public minValue?: number;
+    @Input() public maxValue?: number;
 
-    @Input() public language: string | undefined = undefined;
+    @Input() public language?: string;
 
-    protected validator: ValidatorFn | null = null;
+    protected validator?: ValidatorFn;
 
     constructor(protected validation: L10nValidation) { }
 

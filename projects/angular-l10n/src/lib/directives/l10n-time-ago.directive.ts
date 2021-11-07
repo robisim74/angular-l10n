@@ -1,6 +1,5 @@
 import { Directive, Input, ElementRef, Renderer2 } from '@angular/core';
 
-import { Unit } from '../models/types';
 import { L10nDirective } from '../models/l10n-directive';
 import { L10nTranslationService } from '../services/l10n-translation.service';
 import { L10nIntlService } from '../services/l10n-intl.service';
@@ -10,13 +9,13 @@ import { L10nIntlService } from '../services/l10n-intl.service';
 })
 export class L10nTimeAgoDirective extends L10nDirective {
 
-    @Input() set l10nTimeAgo(options: any) {
+    @Input() set l10nTimeAgo(options: Intl.RelativeTimeFormatOptions) {
         this.options = options;
     }
 
-    @Input() public unit: any;
+    @Input() public unit!: Intl.RelativeTimeFormatUnit;
 
-    @Input() public options: any;
+    @Input() public options?: Intl.RelativeTimeFormatOptions;
 
     constructor(
         protected override el: ElementRef,
