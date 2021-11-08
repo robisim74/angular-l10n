@@ -10,16 +10,16 @@ import { AppModule } from './app.module';
 import { AppComponent } from './app.component';
 
 @NgModule({
-  imports: [
-    AppModule,
-    ServerModule,
-    CookieBackendModule.forRoot()
-  ],
-  providers: [{
-    provide: HTTP_INTERCEPTORS,
-    useClass: UniversalInterceptor,
-    multi: true
-  }],
-  bootstrap: [AppComponent],
+    imports: [
+        AppModule,
+        ServerModule,
+        CookieBackendModule.forRoot()
+    ],
+    providers: [{
+        provide: HTTP_INTERCEPTORS,
+        useClass: UniversalInterceptor,
+        multi: true
+    }],
+    bootstrap: [AppComponent],
 })
 export class AppServerModule { }
