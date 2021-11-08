@@ -8,14 +8,14 @@ import { L10nTranslationService } from '../services/l10n-translation.service';
 })
 export class L10nTranslateDirective extends L10nDirective {
 
-    @Input() set l10nTranslate(params: any) {
-        this.params = params;
+    @Input() set l10nTranslate(params: any | '') {
+        if (params) this.params = params;
     }
-    @Input() set translate(params: any) {
-        this.params = params;
+    @Input() set translate(params: any | '') {
+        if (params) this.params = params;
     }
 
-    @Input() public params: any;
+    @Input() public params?: any;
 
     constructor(
         protected override el: ElementRef,

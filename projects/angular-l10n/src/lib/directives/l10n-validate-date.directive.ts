@@ -46,8 +46,8 @@ export function l10nValidateDate(
 })
 export class L10nValidateDateDirective implements Validator, OnInit, OnChanges {
 
-    @Input() set l10nValidateDate(options: L10nDateTimeFormatOptions) {
-        this.options = options;
+    @Input() set l10nValidateDate(options: L10nDateTimeFormatOptions | '') {
+        if (options) this.options = options;
     }
 
     @Input() public options?: L10nDateTimeFormatOptions;

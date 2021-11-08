@@ -46,8 +46,8 @@ export function l10nValidateNumber(
 })
 export class L10nValidateNumberDirective implements Validator, OnInit, OnChanges {
 
-    @Input() set l10nValidateNumber(options: L10nNumberFormatOptions) {
-        this.options = options;
+    @Input() set l10nValidateNumber(options: L10nNumberFormatOptions | '') {
+        if (options) this.options = options;
     }
 
     @Input() public options?: L10nNumberFormatOptions;

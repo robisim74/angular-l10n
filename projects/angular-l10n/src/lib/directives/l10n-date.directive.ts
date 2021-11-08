@@ -10,8 +10,8 @@ import { L10nIntlService } from '../services/l10n-intl.service';
 })
 export class L10nDateDirective extends L10nDirective {
 
-    @Input() set l10nDate(options: L10nDateTimeFormatOptions) {
-        this.options = options;
+    @Input() set l10nDate(options: L10nDateTimeFormatOptions | '') {
+        if (options) this.options = options;
     }
 
     @Input() public options?: L10nDateTimeFormatOptions;

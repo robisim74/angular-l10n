@@ -10,8 +10,8 @@ import { L10nIntlService } from '../services/l10n-intl.service';
 })
 export class L10nNumberDirective extends L10nDirective {
 
-    @Input() set l10nNumber(options: L10nNumberFormatOptions) {
-        this.options = options;
+    @Input() set l10nNumber(options: L10nNumberFormatOptions | '') {
+        if (options) this.options = options;
     }
 
     @Input() public options?: L10nNumberFormatOptions;
