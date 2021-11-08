@@ -15,27 +15,11 @@
         "createDefaultProgram": true
       },
       "extends": [
+        "plugin:@typescript-eslint/recommended",
         "plugin:@angular-eslint/recommended",
         "plugin:@angular-eslint/template/process-inline-templates"
       ],
-      "rules": {
-        "@angular-eslint/component-selector": [
-          "error",
-          {
-            "prefix": "l10n",
-            "style": "kebab-case",
-            "type": "element"
-          }
-        ],
-        "@angular-eslint/directive-selector": [
-          "error",
-          {
-            "prefix": "l10n",
-            "style": "camelCase",
-            "type": "attribute"
-          }
-        ]
-      }
+      "rules": {}
     },
     {
       "files": [

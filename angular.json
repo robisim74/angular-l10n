@@ -143,30 +143,6 @@
             ],
             "scripts": []
           }
-        },
-        "lint": {
-          "builder": "@angular-eslint/builder:lint",
-          "options": {
-            "lintFilePatterns": [
-              "projects/angular-l10n-app/**/*.ts",
-              "projects/angular-l10n-app/**/*.html"
-            ]
-          }
-        },
-        "e2e": {
-          "builder": "@angular-devkit/build-angular:protractor",
-          "options": {
-            "protractorConfig": "projects/angular-l10n-app/e2e/protractor.conf.js"
-          },
-          "configurations": {
-            "production": {
-              "devServerTarget": "angular-l10n-app:serve:production"
-            },
-            "development": {
-              "devServerTarget": "angular-l10n-app:serve:development"
-            }
-          },
-          "defaultConfiguration": "development"
         }
       }
     },
@@ -271,30 +247,6 @@
             ],
             "scripts": []
           }
-        },
-        "lint": {
-          "builder": "@angular-eslint/builder:lint",
-          "options": {
-            "lintFilePatterns": [
-              "projects/angular-l10n-app-ssr/**/*.ts",
-              "projects/angular-l10n-app-ssr/**/*.html"
-            ]
-          }
-        },
-        "e2e": {
-          "builder": "@angular-devkit/build-angular:protractor",
-          "options": {
-            "protractorConfig": "projects/angular-l10n-app-ssr/e2e/protractor.conf.js"
-          },
-          "configurations": {
-            "production": {
-              "devServerTarget": "angular-l10n-app-ssr:serve:production"
-            },
-            "development": {
-              "devServerTarget": "angular-l10n-app-ssr:serve:development"
-            }
-          },
-          "defaultConfiguration": "development"
         },
         "server": {
           "builder": "@angular-devkit/build-angular:server",

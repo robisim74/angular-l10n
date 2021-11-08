@@ -157,7 +157,7 @@ import { L10nTranslationService } from './l10n-translation.service';
      * @param options An Intl PluralRulesOptions object
      * @param language The current language
      */
-    public plural(value: any, prefix: string = '', options?: Intl.PluralRulesOptions, language = this.locale.language): string {
+    public plural(value: any, prefix = '', options?: Intl.PluralRulesOptions, language = this.locale.language): string {
         if (!hasPluralRules() || language == null || language === '') return value.toString();
 
         value = toNumber(value);
