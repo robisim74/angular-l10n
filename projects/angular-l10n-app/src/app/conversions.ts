@@ -8,3 +8,14 @@ export const convertCurrency = (currency: string) => {
         }
     };
 };
+
+export const convertLength = (to: string) => {
+    return (value: number) => {
+        switch (to) {
+            case "mile":
+                return value * 0.621371;
+            default:
+                return value;
+        }
+    };
+};

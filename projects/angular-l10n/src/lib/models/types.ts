@@ -41,6 +41,11 @@ export interface L10nLocale {
      * Time zone name from the IANA time zone database.
      */
     timeZone?: string;
+
+    /**
+     * Key value pairs of unit identifiers
+     */
+    units?: { [key: string]: string }
 }
 
 export interface L10nSchema {

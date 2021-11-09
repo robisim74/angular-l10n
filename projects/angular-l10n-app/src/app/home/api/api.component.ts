@@ -2,7 +2,7 @@ import { Component, OnInit, OnChanges, SimpleChanges, Input } from '@angular/cor
 
 import { L10nTranslationService, L10nIntlService } from 'angular-l10n';
 
-import { convertCurrency } from '../../conversions';
+import { convertCurrency, convertLength } from '../../conversions';
 
 @Component({
     selector: 'app-api',
@@ -22,6 +22,7 @@ export class ApiComponent implements OnInit, OnChanges {
     formattedToday: string;
     formattedTimeAgo: string;
     formattedValue: string;
+    formattedLength: string;
     formattedOnePlural: string;
     formattedOtherPlural: string;
 
@@ -42,9 +43,16 @@ export class ApiComponent implements OnInit, OnChanges {
                 this.formattedValue = this.intl.formatNumber(
                     this.value,
                     { digits: '1.2-2', style: 'currency' },
-                    this.translation.getLocale().language,
-                    this.translation.getLocale().currency,
+                    undefined,
+                    undefined,
                     convertCurrency(this.translation.getLocale().currency)
+                );
+                this.formattedLength = this.intl.formatNumber(
+                    1,
+                    { digits: '1.0-2', style: 'unit', unit: this.translation.getLocale().units['length'] },
+                    undefined,
+                    undefined,
+                    convertLength(this.translation.getLocale().units['length'])
                 );
                 this.formattedOnePlural = this.intl.plural(1, 'home', { type: 'cardinal' });
                 this.formattedOtherPlural = this.intl.plural(2, 'home', { type: 'cardinal' });

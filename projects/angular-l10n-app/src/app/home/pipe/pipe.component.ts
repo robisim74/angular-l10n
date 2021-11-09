@@ -2,7 +2,7 @@ import { Component, OnInit, Inject, Input } from '@angular/core';
 
 import { L10N_LOCALE, L10nLocale } from 'angular-l10n';
 
-import { convertCurrency } from '../../conversions';
+import { convertCurrency, convertLength } from '../../conversions';
 
 @Component({
     selector: 'app-pipe',
@@ -16,6 +16,7 @@ export class PipeComponent implements OnInit {
     @Input() value: number;
 
     convertCurrency = convertCurrency;
+    convertLength = convertLength;
 
     constructor(@Inject(L10N_LOCALE) public locale: L10nLocale) { }
 

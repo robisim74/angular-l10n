@@ -8,3 +8,4 @@
 <p [options]="{ numeric:'always', style:'long' }" unit="second" l10nTimeAgo>{{ timeAgo }}</p>
 <br>
 <p [options]="{ digits: '1.2-2', style: 'currency' }" [convert]="convertCurrency(locale.currency)" l10nNumber>{{ value }}</p>
+<p [options]="{ digits: '1.0-2', style: 'unit', unit: locale.units['length'] }" [convert]="convertLength(locale.units['length'])" l10nNumber>1</p>
