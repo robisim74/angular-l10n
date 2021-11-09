@@ -2,6 +2,8 @@ import { Component, OnInit, OnChanges, SimpleChanges, Input } from '@angular/cor
 
 import { L10nTranslationService, L10nIntlService } from 'angular-l10n';
 
+import { convertCurrency } from '../../conversions';
+
 @Component({
     selector: 'app-api',
     templateUrl: './api.component.html',
@@ -23,7 +25,10 @@ export class ApiComponent implements OnInit, OnChanges {
     formattedOnePlural: string;
     formattedOtherPlural: string;
 
-    constructor(private translation: L10nTranslationService, private intl: L10nIntlService) { }
+    constructor(
+        private translation: L10nTranslationService,
+        private intl: L10nIntlService
+    ) { }
 
     ngOnInit() {
         this.translation.onChange().subscribe({
@@ -34,7 +39,13 @@ export class ApiComponent implements OnInit, OnChanges {
 
                 this.formattedToday = this.intl.formatDate(this.today, { dateStyle: 'full', timeStyle: 'short' });
                 this.formattedTimeAgo = this.intl.formatRelativeTime(this.timeAgo, 'second', { numeric: 'always', style: 'long' });
-                this.formattedValue = this.intl.formatNumber(this.value, { digits: '1.2-2', style: 'currency' });
+                this.formattedValue = this.intl.formatNumber(
+                    this.value,
+                    { digits: '1.2-2', style: 'currency' },
+                    this.translation.getLocale().language,
+                    this.translation.getLocale().currency,
+                    convertCurrency(this.translation.getLocale().currency)
+                );
                 this.formattedOnePlural = this.intl.plural(1, 'home', { type: 'cardinal' });
                 this.formattedOtherPlural = this.intl.plural(2, 'home', { type: 'cardinal' });
             }

@@ -70,17 +70,28 @@ import { L10nTranslationService } from './l10n-translation.service';
      * @param options A L10n or Intl NumberFormatOptions object
      * @param language The current language
      * @param currency The current currency
+     * @param convert An optional function to convert the value, that returns an arrow function with value in the signature. 
+     * For example:
+     * ```
+     * const convert = (factor: number) => { return (value: number) => value * factor; };
+     * ```
      */
     public formatNumber(
         value: any,
         options?: L10nNumberFormatOptions,
         language = this.locale.numberLanguage || this.locale.language,
-        currency = this.locale.currency
+        currency = this.locale.currency,
+        convert?: (...rest: any) => number
     ): string {
         if (!hasNumberFormat() && options && options.style === 'currency') return `${value} ${currency}`;
         if (!hasNumberFormat() || language == null || language === '') return value;
 
         value = toNumber(value);
+
+        // Optional conversion
+        if (typeof convert === 'function') {
+            value = convert(value);
+        }
 
         let numberFormatOptions: Intl.NumberFormatOptions = {};
         if (options) {

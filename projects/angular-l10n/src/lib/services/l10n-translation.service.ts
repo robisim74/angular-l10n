@@ -129,7 +129,7 @@ import { L10nLocation } from './l10n-location';
         // Tries to get locale from path if localized routing is used.
         if (this.location) {
             const path = this.location.path();
-            const pathLanguage = await this.location.parsePath(path);
+            const pathLanguage = this.location.parsePath(path);
             if (pathLanguage) {
                 const schema = getSchema(this.config.schema, pathLanguage, this.config.format);
                 if (schema) {
@@ -156,7 +156,7 @@ import { L10nLocation } from './l10n-location';
             locale = this.config.defaultLocale;
         }
 
-        // Storage locale
+        // Saves locale
         Object.assign(this.locale, locale);
         this.storage.write(this.locale);
     }

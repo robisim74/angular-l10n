@@ -34,7 +34,7 @@ export class L10nPluralAsyncPipe extends L10nAsyncPipe implements PipeTransform 
         super(translation, cdr);
     }
 
-    public transform(value: any, language: string, prefix?: string, options?: Intl.PluralRulesOptions): string | null {
+    public transform(value: any, prefix?: string, options?: Intl.PluralRulesOptions, language?: string): string | null {
         if (value == null || value === '') return null;
 
         return this.intl.plural(value, prefix, options, language);

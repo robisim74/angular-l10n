@@ -61,6 +61,13 @@ describe('L10nIntlService', () => {
             { minimumIntegerDigits: 1, minimumFractionDigits: 2, maximumFractionDigits: 2 }
         )).toEqual('1,234.50');
     });
+    it('should format and convert numbers', () => {
+        const value = 1234.5;
+        const convert = (factor: number) => {
+            return (value: number) => value * factor;
+        };
+        expect(intl.formatNumber(value, { digits: '1.2-2' }, undefined, undefined, convert(2))).toEqual('2,469.00');
+    });
     it('should format relative times', () => {
         expect(intl.formatRelativeTime(-1, 'day')).toEqual('1 day ago');
         expect(intl.formatRelativeTime(-1, 'day', { numeric: 'auto', style: 'long' })).toEqual('yesterday');

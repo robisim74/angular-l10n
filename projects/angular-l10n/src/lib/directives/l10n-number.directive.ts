@@ -18,6 +18,8 @@ export class L10nNumberDirective extends L10nDirective {
 
     @Input() public currency?: string;
 
+    @Input() public convert?: (...rest: any) => number;
+
     constructor(
         protected override el: ElementRef,
         protected override renderer: Renderer2,
@@ -28,7 +30,7 @@ export class L10nNumberDirective extends L10nDirective {
     }
 
     protected getValue(text: string): string {
-        return this.intl.formatNumber(text, this.options, this.language, this.currency);
+        return this.intl.formatNumber(text, this.options, this.language, this.currency, this.convert);
     }
 
 }

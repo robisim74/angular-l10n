@@ -1,4 +1,7 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Inject } from '@angular/core';
+import { L10nLocale, L10N_LOCALE } from 'angular-l10n';
+
+import { convertCurrency } from '../../conversions';
 
 @Component({
     selector: 'app-directive',
@@ -10,6 +13,11 @@ export class DirectiveComponent implements OnInit {
     @Input() today: number;
     @Input() timeAgo: string;
     @Input() value: number;
+
+    convertCurrency = convertCurrency;
+
+    constructor(@Inject(L10N_LOCALE) public locale: L10nLocale) {
+    }
 
     ngOnInit() {
     }

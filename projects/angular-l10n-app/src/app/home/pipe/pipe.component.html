@@ -6,7 +6,7 @@
 <p>{{ today | l10nDate:locale.language:{ dateStyle: 'full', timeStyle: 'short' } }}</p>
 <p>{{ timeAgo | l10nTimeAgo:locale.language:'second':{ numeric:'always', style:'long' } }}</p>
 <br>
-<p>{{ value | l10nNumber:locale.language:{ digits: '1.2-2', style: 'currency' } }}</p>
+<p>{{ value | l10nNumber:locale.language:{ digits: '1.2-2', style: 'currency' }:locale.currency:convertCurrency(locale.currency) }}</p>
 <br>
 <p>1 {{ 1 | l10nPlural:locale.language:'home':{ type: 'cardinal' } }}</p>
 <p>2 {{ 2 | l10nPlural:locale.language:'home':{ type: 'cardinal' } }}</p>
