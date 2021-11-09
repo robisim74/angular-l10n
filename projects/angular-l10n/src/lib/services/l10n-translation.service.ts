@@ -156,8 +156,9 @@ import { L10nLocation } from './l10n-location';
             locale = this.config.defaultLocale;
         }
 
-        // Loads translation data.
-        await this.loadTranslation(this.config.providers, locale);
+        // Storage locale
+        Object.assign(this.locale, locale);
+        this.storage.write(this.locale);
     }
 
     /**

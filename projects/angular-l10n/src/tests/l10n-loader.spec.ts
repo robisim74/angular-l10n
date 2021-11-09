@@ -23,9 +23,11 @@ describe('L10nLoader', () => {
         loader = TestBed.inject(L10nLoader);
         translation = TestBed.inject(L10nTranslationService);
         spyOn(translation, 'init').and.returnValue(Promise.resolve());
+        spyOn(translation, 'loadTranslation').and.returnValue(Promise.resolve());
     });
     it('should call translation service', async () => {
         await loader.init();
         expect(translation.init).toHaveBeenCalled();
+        expect(translation.loadTranslation).toHaveBeenCalled();
     });
 });
