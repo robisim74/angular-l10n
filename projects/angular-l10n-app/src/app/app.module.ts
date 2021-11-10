@@ -1,9 +1,9 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule, APP_INITIALIZER } from '@angular/core';
+import { NgModule } from '@angular/core';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 
-import { L10nTranslationModule, L10nIntlModule, L10nValidationModule, L10nRoutingModule, L10nLoader } from 'angular-l10n';
+import { L10nTranslationModule, L10nIntlModule, L10nValidationModule, L10nRoutingModule } from 'angular-l10n';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -14,7 +14,7 @@ import { ApiComponent } from './home/api/api.component';
 import { ValidationComponent } from './validation/validation.component';
 import { OnPushComponent } from './on-push/on-push.component';
 
-import { l10nConfig, initL10n, AppStorage, HttpTranslationLoader, LocaleValidation } from './l10n-config';
+import { l10nConfig, AppStorage, HttpTranslationLoader, LocaleValidation } from './l10n-config';
 
 @NgModule({
     declarations: [
@@ -41,14 +41,6 @@ import { l10nConfig, initL10n, AppStorage, HttpTranslationLoader, LocaleValidati
         L10nIntlModule,
         L10nValidationModule.forRoot({ validation: LocaleValidation }),
         L10nRoutingModule.forRoot()
-    ],
-    providers: [
-        {
-            provide: APP_INITIALIZER,
-            useFactory: initL10n,
-            deps: [L10nLoader],
-            multi: true
-        }
     ],
     bootstrap: [AppComponent]
 })

@@ -1,4 +1,4 @@
-import { NgModule, ModuleWithProviders } from '@angular/core';
+import { NgModule, ModuleWithProviders, APP_INITIALIZER } from '@angular/core';
 
 import { L10nTranslatePipe, L10nTranslateAsyncPipe } from '../pipes/l10n-translate.pipe';
 import { L10nTranslateDirective } from '../directives/l10n-translate.directive';
@@ -12,6 +12,10 @@ import { L10nTranslationLoader, L10nDefaultTranslationLoader } from '../services
 import { L10nTranslationHandler, L10nDefaultTranslationHandler } from '../services/l10n-translation-handler';
 import { L10nMissingTranslationHandler, L10nDefaultMissingTranslationHandler } from '../services/l10n-missing-translation-handler';
 import { L10nLoader, L10nDefaultLoader } from '../services/l10n-loader';
+
+export function initL10n(l10nLoader: L10nLoader): () => Promise<void> {
+    return () => l10nLoader.init();
+}
 
 @NgModule({
     declarations: [
@@ -44,7 +48,13 @@ export class L10nTranslationModule {
                     provide: L10nMissingTranslationHandler,
                     useClass: token.missingTranslationHandler || L10nDefaultMissingTranslationHandler
                 },
-                { provide: L10nLoader, useClass: L10nDefaultLoader }
+                { provide: L10nLoader, useClass: L10nDefaultLoader },
+                {
+                    provide: APP_INITIALIZER,
+                    useFactory: initL10n,
+                    deps: [L10nLoader],
+                    multi: true
+                }
             ]
         };
     }

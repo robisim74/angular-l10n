@@ -1,4 +1,5 @@
 import { TestBed } from '@angular/core/testing';
+import { RouterTestingModule } from '@angular/router/testing';
 
 import { L10nConfig, L10nTranslationModule, L10nLocation, L10nRoutingModule } from '../public-api';
 
@@ -18,6 +19,7 @@ describe('L10nLocation', () => {
         beforeEach(() => {
             TestBed.configureTestingModule({
                 imports: [
+                    RouterTestingModule,
                     L10nTranslationModule.forRoot(config),
                     L10nRoutingModule.forRoot()
                 ]

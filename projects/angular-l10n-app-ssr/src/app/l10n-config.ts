@@ -7,7 +7,6 @@ import { Observable } from 'rxjs';
 import { CookieService } from 'ngx-cookie';
 import {
     L10nConfig,
-    L10nLoader,
     L10nStorage,
     L10nLocale,
     L10nTranslationLoader,
@@ -24,7 +23,7 @@ import {
 export const l10nConfig: L10nConfig = {
     format: 'language-region',
     providers: [
-        { name: 'app', asset: './assets/i18n/app', options: { version: '12.0.0' } }
+        { name: 'app', asset: './assets/i18n/app', options: { version: '13.0.0' } }
     ],
     fallback: false,
     cache: true,
@@ -36,10 +35,6 @@ export const l10nConfig: L10nConfig = {
     ],
     defaultRouting: true
 };
-
-export function initL10n(l10nLoader: L10nLoader): () => Promise<void> {
-    return () => l10nLoader.init();
-}
 
 @Injectable() export class AppStorage implements L10nStorage {
 
