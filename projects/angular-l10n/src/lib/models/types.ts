@@ -43,7 +43,7 @@ export interface L10nLocale {
     timeZone?: string;
 
     /**
-     * Key value pairs of unit identifiers
+     * Key value pairs of unit identifiers.
      */
     units?: { [key: string]: string }
 }

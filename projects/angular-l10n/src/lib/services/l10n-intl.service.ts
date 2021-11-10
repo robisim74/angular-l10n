@@ -81,14 +81,16 @@ import { L10nTranslationService } from './l10n-translation.service';
         options?: L10nNumberFormatOptions,
         language = this.locale.numberLanguage || this.locale.language,
         currency = this.locale.currency,
-        convert?: (...rest: any) => number
+        convert?: (...args: any) => number
     ): string {
         if (!hasNumberFormat() && options && options.style === 'currency') return `${value} ${currency}`;
+        if (!hasNumberFormat() && options && options.style === 'unit') return `${value} ${options.unit}`;
         if (!hasNumberFormat() || language == null || language === '') return value;
+        if (options && options.style === 'unit' && !options.unit) return value;
 
         value = toNumber(value);
 
-        // Optional conversion
+        // Optional conversion.
         if (typeof convert === 'function') {
             value = convert(value);
         }

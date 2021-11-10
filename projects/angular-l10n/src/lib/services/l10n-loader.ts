@@ -21,7 +21,6 @@ import { L10nRoutingService } from './l10n-routing.service';
 
     public async init(): Promise<void> {
         await this.translation.init();
-        await this.translation.loadTranslation();
     }
 
 }
@@ -33,7 +32,6 @@ import { L10nRoutingService } from './l10n-routing.service';
     public async init(): Promise<void> {
         await this.routing.init();
         await this.translation.init();
-        await this.translation.loadTranslation();
     }
 
 }

@@ -18,7 +18,7 @@ export class L10nNumberDirective extends L10nDirective {
 
     @Input() public currency?: string;
 
-    @Input() public convert?: (...rest: any) => number;
+    @Input() public convert?: (...args: any) => number;
 
     constructor(
         protected override el: ElementRef,

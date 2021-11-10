@@ -121,9 +121,11 @@ import { L10nLocation } from './l10n-location';
     }
 
     /**
-     * Should only be called when the service instance is created.
+     * Should only be called when the service instance is created
+     * or in lazy loaded modules when initialNavigation is enabled.
+     * @param providers An array of L10nProvider
      */
-    public async init(): Promise<void> {
+    public async init(providers: L10nProvider[] = this.config.providers): Promise<void> {
         let locale: L10nLocale | null = null;
 
         // Tries to get locale from path if localized routing is used.
@@ -156,9 +158,8 @@ import { L10nLocation } from './l10n-location';
             locale = this.config.defaultLocale;
         }
 
-        // Saves locale
-        Object.assign(this.locale, locale);
-        this.storage.write(this.locale);
+        // Loads translation data.
+        await this.loadTranslation(providers, locale);
     }
 
     /**

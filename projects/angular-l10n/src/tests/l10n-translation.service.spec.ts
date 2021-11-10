@@ -154,8 +154,6 @@ describe('Features', () => {
         it('should use json files', fakeAsync(() => {
             translation.init();
             tick();
-            translation.loadTranslation();
-            tick();
             const mockHomeEn = httpMock.expectOne('./assets/i18n/home-en.json?v=1.0.0');
             mockHomeEn.flush({
                 home: {
@@ -199,8 +197,6 @@ describe('Features', () => {
         });
         it('should use multiple providers', fakeAsync(() => {
             translation.init();
-            tick();
-            translation.loadTranslation();
             tick();
             const mockHomeEn = httpMock.expectOne('./assets/i18n/home-en.json?v=1.0.0');
             mockHomeEn.flush({
@@ -253,8 +249,6 @@ describe('Features', () => {
         it('should fallback', fakeAsync(() => {
             translation.init();
             tick();
-            translation.loadTranslation();
-            tick();
             const mockHomeEn = httpMock.expectOne('./assets/i18n/home-en.json?v=1.0.0');
             mockHomeEn.flush({
                 home: {
@@ -306,8 +300,6 @@ describe('Features', () => {
         });
         it('should use cache', fakeAsync(() => {
             translation.init();
-            tick();
-            translation.loadTranslation();
             tick();
             const mockHomeEn = httpMock.expectOne('./assets/i18n/home-en.json?v=1.0.0');
             mockHomeEn.flush({
@@ -364,8 +356,6 @@ describe('Features', () => {
         });
         it('should add providers dynamically', fakeAsync(() => {
             translation.init();
-            tick();
-            translation.loadTranslation();
             tick();
             const mockHomeEn = httpMock.expectOne('./assets/i18n/home-en.json?v=1.0.0');
             mockHomeEn.flush({

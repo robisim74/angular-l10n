@@ -18,7 +18,7 @@ export class L10nNumberPipe implements PipeTransform {
         language: string,
         options?: L10nNumberFormatOptions,
         currency?: string,
-        convert?: (...rest: any) => number
+        convert?: (...args: any) => number
     ): string | null {
         if (value == null || value === '') return null;
 
@@ -46,7 +46,7 @@ export class L10nNumberAsyncPipe extends L10nAsyncPipe implements PipeTransform 
         options?: L10nNumberFormatOptions,
         language?: string,
         currency?: string,
-        convert?: (...rest: any) => number
+        convert?: (...args: any) => number
     ): string | null {
         if (value == null || value === '') return null;
 

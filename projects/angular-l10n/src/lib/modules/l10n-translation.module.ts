@@ -34,7 +34,7 @@ export class L10nTranslationModule {
                 L10nTranslationService,
                 L10nCache,
                 { provide: L10N_CONFIG, useValue: config },
-                { provide: L10N_LOCALE, useValue: { language: '' } },
+                { provide: L10N_LOCALE, useValue: { language: '', units: {} } },
                 { provide: L10nStorage, useClass: token.storage || L10nDefaultStorage },
                 { provide: L10nUserLanguage, useClass: token.userLanguage || L10nDefaultUserLanguage },
                 { provide: L10nTranslationFallback, useClass: token.translationFallback || L10nDefaultTranslationFallback },

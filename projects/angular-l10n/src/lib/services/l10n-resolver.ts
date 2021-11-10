@@ -14,7 +14,6 @@ export class L10nResolver implements Resolve<Promise<void>> {
         const providers = route.data['l10nProviders'];
         this.translation.addProviders(providers);
 
-        await this.translation.init();
-        await this.translation.loadTranslation(providers);
+        await this.translation.init(providers);
     }
 }
