@@ -1,6 +1,6 @@
 import { Directive, Input, ElementRef, Renderer2 } from '@angular/core';
 
-import { L10nNumberFormatOptions } from '../models/types';
+import { L10nLocale, L10nNumberFormatOptions } from '../models/types';
 import { L10nDirective } from '../models/l10n-directive';
 import { L10nTranslationService } from '../services/l10n-translation.service';
 import { L10nIntlService } from '../services/l10n-intl.service';
@@ -18,7 +18,8 @@ export class L10nNumberDirective extends L10nDirective {
 
     @Input() public currency?: string;
 
-    @Input() public convert?: (...args: any) => number;
+    @Input() public convert?: (value: number, locale: L10nLocale, params: any) => number;
+    @Input() public convertParams?: any;
 
     constructor(
         protected override el: ElementRef,
@@ -30,7 +31,7 @@ export class L10nNumberDirective extends L10nDirective {
     }
 
     protected getValue(text: string): string {
-        return this.intl.formatNumber(text, this.options, this.language, this.currency, this.convert);
+        return this.intl.formatNumber(text, this.options, this.language, this.currency, this.convert, this.convertParams);
     }
 
 }

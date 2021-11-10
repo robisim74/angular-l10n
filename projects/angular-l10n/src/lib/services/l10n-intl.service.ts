@@ -70,29 +70,31 @@ import { L10nTranslationService } from './l10n-translation.service';
      * @param options A L10n or Intl NumberFormatOptions object
      * @param language The current language
      * @param currency The current currency
-     * @param convert An optional function to convert the value, that returns an arrow function with value in the signature. 
+     * @param convert An optional function to convert the value, with value and locale in the signature. 
      * For example:
      * ```
-     * const convert = (factor: number) => { return (value: number) => value * factor; };
+     * const convert = (value: number, locale: L10nLocale) => { return ... };
      * ```
+     * @param convertParams Optional parameters for the convert function
      */
     public formatNumber(
         value: any,
         options?: L10nNumberFormatOptions,
         language = this.locale.numberLanguage || this.locale.language,
         currency = this.locale.currency,
-        convert?: (...args: any) => number
+        convert?: (value: number, locale: L10nLocale, params: any) => number,
+        convertParams?: any
     ): string {
         if (!hasNumberFormat() && options && options.style === 'currency') return `${value} ${currency}`;
+        if (options && options.style === 'unit' && !options.unit) return value;
         if (!hasNumberFormat() && options && options.style === 'unit') return `${value} ${options.unit}`;
         if (!hasNumberFormat() || language == null || language === '') return value;
-        if (options && options.style === 'unit' && !options.unit) return value;
 
         value = toNumber(value);
 
         // Optional conversion.
         if (typeof convert === 'function') {
-            value = convert(value);
+            value = convert(value, this.locale, Object.values(convertParams || {})); // Destructures params
         }
 
         let numberFormatOptions: Intl.NumberFormatOptions = {};

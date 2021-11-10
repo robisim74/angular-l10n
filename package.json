@@ -21,7 +21,7 @@
     "analyze": "ng build angular-l10n-app --stats-json && webpack-bundle-analyzer dist/angular-l10n-app/stats.json",
     "dev:ssr": "ng run angular-l10n-app-ssr:serve-ssr",
     "serve:ssr": "node dist/angular-l10n-app-ssr/server/main.js",
-    "build:ssr": "ng build && ng run angular-l10n-app-ssr:server:production",
+    "build:ssr": "ng build angular-l10n-app-ssr && ng run angular-l10n-app-ssr:server",
     "prerender": "concurrently \"npx http-server ./dist/angular-l10n-app-ssr/browser -p 5000 \" \"ng run angular-l10n-app-ssr:prerender\"",
     "prepare": "husky install"
   },

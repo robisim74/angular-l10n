@@ -1,6 +1,6 @@
 import { Pipe, PipeTransform, ChangeDetectorRef } from '@angular/core';
 
-import { L10nNumberFormatOptions } from '../models/types';
+import { L10nLocale, L10nNumberFormatOptions } from '../models/types';
 import { L10nAsyncPipe } from '../models/l10n-async-pipe';
 import { L10nIntlService } from '../services/l10n-intl.service';
 import { L10nTranslationService } from '../services/l10n-translation.service';
@@ -18,11 +18,12 @@ export class L10nNumberPipe implements PipeTransform {
         language: string,
         options?: L10nNumberFormatOptions,
         currency?: string,
-        convert?: (...args: any) => number
+        convert?: (value: number, locale: L10nLocale, params: any) => number,
+        convertParams?: any
     ): string | null {
         if (value == null || value === '') return null;
 
-        return this.intl.formatNumber(value, options, language, currency, convert);
+        return this.intl.formatNumber(value, options, language, currency, convert, convertParams);
     }
 
 }
@@ -46,11 +47,12 @@ export class L10nNumberAsyncPipe extends L10nAsyncPipe implements PipeTransform 
         options?: L10nNumberFormatOptions,
         language?: string,
         currency?: string,
-        convert?: (...args: any) => number
+        convert?: (value: number, locale: L10nLocale, params: any) => number,
+        convertParams?: any
     ): string | null {
         if (value == null || value === '') return null;
 
-        return this.intl.formatNumber(value, options, language, currency, convert);
+        return this.intl.formatNumber(value, options, language, currency, convert, convertParams);
     }
 
 }

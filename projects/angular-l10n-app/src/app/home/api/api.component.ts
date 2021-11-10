@@ -45,14 +45,15 @@ export class ApiComponent implements OnInit, OnChanges {
                     { digits: '1.2-2', style: 'currency' },
                     undefined,
                     undefined,
-                    convertCurrency(this.translation.getLocale().currency)
+                    convertCurrency,
+                    { rate: 1.16 }
                 );
                 this.formattedLength = this.intl.formatNumber(
                     1,
                     { digits: '1.0-2', style: 'unit', unit: this.translation.getLocale().units['length'] },
                     undefined,
                     undefined,
-                    convertLength(this.translation.getLocale().units['length'])
+                    convertLength
                 );
                 this.formattedOnePlural = this.intl.plural(1, 'home', { type: 'cardinal' });
                 this.formattedOtherPlural = this.intl.plural(2, 'home', { type: 'cardinal' });

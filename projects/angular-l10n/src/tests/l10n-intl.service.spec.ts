@@ -1,6 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 
-import { L10nLoader, L10nIntlService, L10nTranslationService, L10nConfig, L10nTranslationModule, L10nIntlModule } from '../public-api';
+import { L10nLoader, L10nIntlService, L10nTranslationService, L10nConfig, L10nTranslationModule, L10nIntlModule, L10nLocale } from '../public-api';
 
 describe('L10nIntlService', () => {
     let loader: L10nLoader;
@@ -63,10 +63,17 @@ describe('L10nIntlService', () => {
     });
     it('should format and convert numbers', () => {
         const value = 1234.5;
-        const convert = (factor: number) => {
-            return (value: number) => value * factor;
+        const convert = (value: number, locale: L10nLocale) => {
+            return value * 2;
         };
-        expect(intl.formatNumber(value, { digits: '1.2-2' }, undefined, undefined, convert(2))).toEqual('2,469.00');
+        expect(intl.formatNumber(value, { digits: '1.2-2' }, undefined, undefined, convert)).toEqual('2,469.00');
+    });
+    it('should format and convert numbers with parameters', () => {
+        const value = 1234.5;
+        const convert = (value: number, locale: L10nLocale, rate: number) => {
+            return value * rate;
+        };
+        expect(intl.formatNumber(value, { digits: '1.2-2' }, undefined, undefined, convert, { rate: 2 })).toEqual('2,469.00');
     });
     it('should format relative times', () => {
         expect(intl.formatRelativeTime(-1, 'day')).toEqual('1 day ago');
