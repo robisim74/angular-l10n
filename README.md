@@ -31,7 +31,7 @@ npm install angular-l10n --save
 
 
 ## Usage
-You can find a complete sample app [here](projects/angular-l10n-app), and a [live example](https://stackblitz.com/edit/angular-l10n) on StackBlitz.
+You can find a complete sample app [here](projects/angular-l10n-app)
 
 ### Configuration
 Create the configuration:
@@ -43,27 +43,29 @@ export const l10nConfig: L10nConfig = {
     ],
     cache: true,
     keySeparator: '.',
-    defaultLocale: { language: 'en-US', currency: 'USD' },
+    defaultLocale: { language: 'en-US', currency: 'USD', timeZone: 'America/Los_Angeles' },
     schema: [
-        { locale: { language: 'en-US', currency: 'USD' }, dir: 'ltr', text: 'United States' },
-        { locale: { language: 'it-IT', currency: 'EUR' }, dir: 'ltr', text: 'Italia' }
-    ]
+        { locale: { language: 'en-US', currency: 'USD', timeZone: 'America/Los_Angeles', units: { 'length': 'mile' } }, dir: 'ltr', text: 'United States' },
+        { locale: { language: 'it-IT', currency: 'EUR', timeZone: 'Europe/Rome', units: { 'length': 'kilometer' } }, dir: 'ltr', text: 'Italia' }
+    ],
 };
-
-export function initL10n(l10nLoader: L10nLoader): () => Promise<void> {
-    return () => l10nLoader.init();
-}
 
 const i18nAsset = {
     'en-US': {
         greeting: 'Hello world!',
         whoIAm: 'I am {{name}}',
-        one: 'software developer'
+        devs: {
+            one: 'software developer',
+            other: 'software developers'
+        }
     },
     'it-IT': {
         greeting: 'Ciao mondo!',
         whoIAm: 'Sono {{name}}',
-        one: 'sviluppatore software'
+        devs: {
+            one: 'sviluppatori software',
+            other: "sviluppatori software"
+        }
     }
 };
 ```
@@ -79,14 +81,6 @@ Import the modules and the configuration:
         L10nTranslationModule.forRoot(l10nConfig),
         L10nIntlModule
     ],
-    providers: [
-        {
-            provide: APP_INITIALIZER,
-            useFactory: initL10n,
-            deps: [L10nLoader],
-            multi: true
-        }
-    ],
     bootstrap: [AppComponent]
 })
 export class AppModule { }
@@ -95,69 +89,156 @@ export class AppModule { }
 ### Getting the translation
 #### Pure Pipes
 ```Html
+<!-- translate pipe -->
+<p>{{ 'greeting' | translate:locale.language }}</p>
+<!-- translate pipe with attributes -->
 <p title="{{ 'greeting' | translate:locale.language }}">{{ 'greeting' | translate:locale.language }}</p>
+<!-- Hello world! -->
+
+<!-- translate pipe with params -->
 <p>{{ 'whoIAm' | translate:locale.language:{ name: 'Angular l10n' } }}</p>
+<!-- I am Angular l10n -->
 
+<!-- l10nDate pipe -->
 <p>{{ today | l10nDate:locale.language:{ dateStyle: 'full', timeStyle: 'short' } }}</p>
-<p>{{ timeAgo | l10nTimeAgo:locale.language:'second':{ numeric:'always', style:'long' } }}</p>
+<!-- Wednesday, November 10, 2021, 2:17 PM -->
 
-<p>{{ value | l10nNumber:locale.language:{ digits: '1.2-2', style: 'currency' } }}</p>
+<!-- l10nTimeAgo pipe -->
+<p>{{ -4 | l10nTimeAgo:locale.language:'second':{ numeric:'always', style:'long' } }}</p>
+<!-- 4 seconds ago -->
 
-<p>1 {{ 1 | l10nPlural:locale.language }}</p>
+<!-- l10nNumber pipe -->
+<p>{{ 1000 | l10nNumber:locale.language:{ digits: '1.2-2', style: 'currency' } }}</p>
+<!-- $1,000.00 -->
 
-<button *ngFor="let item of schema"
-    (click)="setLocale(item.locale)">{{ item.locale.language | l10nDisplayNames:locale.language:{ type: 'language' } }}</button>
+<!-- l10nNumber pipe with convert function -->
+<p>{{ 1000 | l10nNumber:locale.language:{ digits: '1.2-2', style: 'currency' }:locale.currency:convertCurrency:{ rate: 1.16 } }}</p>
+<!-- $1,160.00 -->
+
+<!-- l10nNumber pipe with unit & convert function -->
+<p>{{ 1 | l10nNumber:locale.language:{ digits: '1.0-2', style: 'unit', unit: locale.units['length'] }:undefined:convertLength }}</p>
+<!-- 0.62 mi -->
+
+<!-- l10nPlural pipe -->
+<p>2 {{ 2 | l10nPlural:locale.language:'devs':{ type: 'cardinal' } }}</p>
+<!-- 2 software developers -->
+
+<!-- l10nDisplayNames pipe -->
+<p>{{ 'en-US' | l10nDisplayNames:locale.language:{ type: 'language' } }}</p>
+<!-- American English -->
 ```
-Pure pipes need to know when the _locale_ changes. So import `L10nLocale` injection token in the component:
+Pure pipes need to know when the _locale_ changes. So import `L10nLocale` injection token in every component that uses them:
 ```TypeScript
-export class AppComponent {
+export class PipeComponent {
 
     constructor(@Inject(L10N_LOCALE) public locale: L10nLocale) { }
 
 }
 ```
+##### Convert function
+An optional function to convert the value of numbers, with the same _value_, _locale_ and destructured optional parameters in the signature:
+```TypeScript
+export const convertCurrency = (value: number, locale: L10nLocale, rate: number) => {
+    switch (locale.currency) {
+        case "USD":
+            return value * rate;
+        default:
+            return value;
+    }
+};
+```
+
 ##### OnPush Change Detection Strategy
-To support this strategy, there is an async version of each pipe:
+To support this strategy, there is an `Async` version of each pipe, which recognizes by itself when the _locale_ changes:
 ```Html
 <p>{{ 'greeting' | translateAsync }}</p>
 ```
 #### Directives
 ```Html
+<!-- l10nTranslate directive -->
+<p l10nTranslate>greeting</p>
+<!-- l10nTranslate directive with attributes -->
 <p l10n-title title="greeting" l10nTranslate>greeting</p>
+<!-- l10nTranslate directive with params -->
 <p [params]="{ name: 'Angular l10n' }" l10nTranslate>whoIAm</p>
-<!-- <p [l10nTranslate]="{ name: 'Angular l10n' }">whoIAm</p> -->
 
+<!-- l10nDate directive -->
 <p [options]="{ dateStyle: 'full', timeStyle: 'short' }" l10nDate>{{ today }}</p>
-<p [options]="{ numeric:'always', style:'long' }" unit="second" l10nTimeAgo>{{ timeAgo }}</p>
 
-<p [options]="{ digits: '1.2-2', style: 'currency' }" l10nNumber>{{ value }}</p>
+<!-- l10nTimeAgo directive -->
+<p [options]="{ numeric:'always', style:'long' }" unit="second" l10nTimeAgo>-4</p>
+
+<!-- l10nNumber directive -->
+<p [options]="{ digits: '1.2-2', style: 'currency' }" l10nNumber>1000</p>
+<!-- l10nNumber directive with convert function -->
+<p [options]="{ digits: '1.2-2', style: 'currency' }" [convert]="convertCurrency" [convertParams]="{ rate: 1.16 }" l10nNumber>1000</p>
+<!-- l10nNumber directive with unit & convert function -->
+<p [options]="{ digits: '1.0-2', style: 'unit', unit: locale.units['length'] }" [convert]="convertLength" l10nNumber>1</p>
 ```
 
 You can dynamically change parameters and expressions values as with pipes, but not in attributes.
 
 #### APIs
+`L10nTranslationService` provides an `onChange` event, which is fired whenever the _locale_ changes.
 ```TypeScript
-export class AppComponent implements OnInit {
+export class ApiComponent implements OnInit {
 
     constructor(private translation: L10nTranslationService, private intl: L10nIntlService) { }
 
     ngOnInit() {
         this.translation.onChange().subscribe({
-            next: () => {
+            next: (locale: L10nLocale) => {
+                // Texts
                 this.greeting = this.translation.translate('greeting');
                 this.whoIAm = this.translation.translate('whoIAm', { name: 'Angular l10n' });
-
+                // Dates
                 this.formattedToday = this.intl.formatDate(this.today, { dateStyle: 'full', timeStyle: 'short' });
-                this.formattedTimeAgo = this.intl.formatRelativeTime(this.timeAgo, 'second', { numeric: 'always', style: 'long' });
-                this.formattedValue = this.intl.formatNumber(this.value, { digits: '1.2-2', style: 'currency' });
-                this.formattedOnePlural = this.intl.plural(1);
+                this.formattedTimeAgo = this.intl.formatRelativeTime(-4, 'second', { numeric: 'always', style: 'long' });
+                // Numbers
+                this.formattedValue = this.intl.formatNumber(
+                    1000,
+                    { digits: '1.2-2', style: 'currency' },
+                    undefined,
+                    undefined,
+                    convertCurrency,
+                    { rate: 1.16 }
+                );
+                this.formattedLength = this.intl.formatNumber(
+                    1,
+                    { digits: '1.0-2', style: 'unit', unit: locale.units['length'] },
+                    undefined,
+                    undefined,
+                    convertLength
+                );
+                ...
             }
         });
     }
 
 }
 ```
-The `L10nIntlService` also provides methods for other Intl APIs, such as _Collator_ & _ListFormat_.
+`L10nIntlService` provides methods for all Intl APIs, including _Collator_ & _ListFormat_.
+
+### Changing the locale
+You can change the _locale_ at runtime at any time by calling the `setLocale` method of `L10nTranslationService`:
+```Html
+<button *ngFor="let item of schema" (click)="setLocale(item.locale)">{{ item.locale.language | l10nDisplayNames:locale.language:{ type: 'language' } }}</button>
+```
+
+```TypeScript
+export class AppComponent {
+
+    schema = this.l10nConfig.schema;
+
+    constructor(@Inject(L10N_CONFIG) private l10nConfig: L10nConfig, private translation: L10nTranslationService) { }
+
+    setLocale(locale: L10nLocale): void {
+        this.translation.setLocale(locale);
+    }
+
+}
+```
+It is not mandatory to use the _schema_ provided during the configuration: it is possible to set the _language_ or _currency_, or any other property of `L10nLocale` separately.
 
 ### Customize the library
 The following features can be customized. You just have to implement the indicated class-interface and pass the token during configuration.
@@ -349,8 +430,8 @@ Always import the modules you need:
 })
 export class LazyModule { }
 ```
-#### Add providers dynamically
-In general, you can add translation providers dynamically by updating the configuration and calling the `loadTranslation` method:
+#### Lazy loading with bundled data
+If you are bundling translation data using the default `L10nTranslationLoader`, you can add translation providers to lazy modules by updating the configuration and calling the `loadTranslation` method:
 ```TypeScript
 const i18nLazyAsset = { 'en-US': {...}, 'it-IT': {...} };
 
@@ -381,7 +462,7 @@ export function l10nPreload(translation: L10nTranslationService, translationLoad
     });
 }
 ```
-Then add the function to providers, before `initL10n`:
+Then add the function to providers:
 ```TypeScript
 providers: [
     {
@@ -408,6 +489,7 @@ Angular l10n types that it is useful to know:
      - _numberLanguage_: alternative language to translate numbers
      - _currency_: ISO 4217 three-letter code
      - _timezone_: from the IANA time zone database
+     - _units_: key value pairs of unit identifiers
 
 - `L10nFormat`: shows the format of the _language_ to be used for translations. The supported formats are: `'language' | 'language-script' | 'language-region' | 'language-script-region'`. So, for example, you can have a _language_ like `en-US-u-ca-gregory-nu-latn` to format dates and numbers, but only use the `en-US` for translations setting `'language-region'`
 - `L10nDateTimeFormatOptions`: the type of _options_ used to format dates. Extends the Intl `DateTimeFormatOptions` interface, replacing the _dateStyle_ and _timeStyle_ attributes. See [DateTimeFormat](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/DateTimeFormat/DateTimeFormat) for more details on available options
@@ -415,7 +497,7 @@ Angular l10n types that it is useful to know:
 
 
 ## Intl API
-To format dates and numbers, this library uses the [Intl API](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl)
+To format dates and numbers, this library uses [Intl API](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl)
 
 Current browser support:
 - [ECMAScript compatibility tables](http://kangax.github.io/compat-table/esintl/)
@@ -439,6 +521,9 @@ SSR doesn't work out of the box, so it is important to know:
 
 
 ## Previous versions
+- **Angular v12 (Angular l10n v12.0.1)**
+    - [Branch](https://github.com/robisim74/angular-l10n/tree/angular_v12)
+
 - **Angular v11 (Angular l10n v11.1.0)**
     - [Branch](https://github.com/robisim74/angular-l10n/tree/angular_v11)
 
@@ -471,12 +556,12 @@ SSR doesn't work out of the box, so it is important to know:
 - First, install the packages & build the library:
     ```Shell
     npm install
-    npm run build
+    npm run build:watch
     ```
 
 - Testing:
     ```Shell
-    npm test
+    npm run test:watch
     ```
 
 - Serving the sample app:
