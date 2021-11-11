@@ -8,7 +8,8 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
         <link rel="icon" type="image/x-icon" href="../images/favicon.ico">
-	      <link rel="stylesheet" href="../styles/style.css">
+	   <link rel="stylesheet" href="../styles/style.css">
+        <link rel="stylesheet" href="../styles/dark.css" media="(prefers-color-scheme: dark)">
     </head>
     <body>
 
@@ -38,7 +39,7 @@
 
 <ol class="breadcrumb">
   <li>Injectables</li>
-  <li>L10nRoutingService</li>
+  <li >L10nRoutingService</li>
 </ol>
 
 <ul class="nav nav-tabs" role="tablist">
@@ -62,6 +63,7 @@
 
 
 
+
             <section>
     <h3 id="index">Index</h3>
     <table class="table table-sm table-bordered index-table">
@@ -78,19 +80,19 @@
                             <li>
                                     <span class="modifier">Public</span>
                                     <span class="modifier">Async</span>
-                                <a href="#init">init</a>
+                                <a href="#init" >init</a>
                             </li>
                             <li>
                                     <span class="modifier">Private</span>
-                                <a href="#isDefaultRouting">isDefaultRouting</a>
+                                <a href="#isDefaultRouting" >isDefaultRouting</a>
                             </li>
                             <li>
                                     <span class="modifier">Private</span>
-                                <a href="#redirectToPath">redirectToPath</a>
+                                <a href="#redirectToPath" >redirectToPath</a>
                             </li>
                             <li>
                                     <span class="modifier">Private</span>
-                                <a href="#replacePath">replacePath</a>
+                                <a href="#replacePath" >replacePath</a>
                             </li>
                         </ul>
                     </td>
@@ -109,10 +111,10 @@
                         <td class="col-md-4">
                             <ul class="index-list">
                                 <li>
-                                    <a href="#router">router</a>
+                                    <a href="#router" >router</a>
                                 </li>
                                 <li>
-                                    <a href="#location">location</a>
+                                    <a href="#location" >location</a>
                                 </li>
                             </ul>
                         </td>
@@ -127,7 +129,7 @@
             <tbody>
                 <tr>
                     <td class="col-md-4">
-<code>constructor(platformId: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object" target="_blank">Object</a>, config: <a href="../interfaces/L10nConfig.html">L10nConfig</a>, locale: <a href="../interfaces/L10nLocale.html">L10nLocale</a>, translation: <a href="../injectables/L10nTranslationService.html">L10nTranslationService</a>, l10nLocation: <a href="../injectables/L10nLocation.html">L10nLocation</a>, injector: <a href="https://angular.io/api/core/Injector" target="_blank">Injector</a>)</code>
+<code>constructor(platformId: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object" target="_blank">Object</a>, config: <a href="../interfaces/L10nConfig.html" target="_self">L10nConfig</a>, locale: <a href="../interfaces/L10nLocale.html" target="_self">L10nLocale</a>, translation: <a href="../injectables/L10nTranslationService.html" target="_self">L10nTranslationService</a>, l10nLocation: <a href="../injectables/L10nLocation.html" target="_self">L10nLocation</a>, injector: <a href="https://angular.io/api/core/Injector" target="_blank">Injector</a>)</code>
                     </td>
                 </tr>
                         <tr>
@@ -241,11 +243,9 @@
                 <td class="col-md-4">
                     <a name="init"></a>
                     <span class="name">
-                        <b>
-                            <span class="modifier">Public</span>
-                            <span class="modifier">Async</span>
-                            init
-                        </b>
+                        <span class="modifier">Public</span>
+                        <span class="modifier">Async</span>
+                        <span ><b>init</b></span>
                         <a href="#init"><span class="icon ion-ios-link"></span></a>
                     </span>
                 </td>
@@ -283,10 +283,8 @@
                 <td class="col-md-4">
                     <a name="isDefaultRouting"></a>
                     <span class="name">
-                        <b>
-                            <span class="modifier">Private</span>
-                            isDefaultRouting
-                        </b>
+                        <span class="modifier">Private</span>
+                        <span ><b>isDefaultRouting</b></span>
                         <a href="#isDefaultRouting"><span class="icon ion-ios-link"></span></a>
                     </span>
                 </td>
@@ -324,10 +322,8 @@
                 <td class="col-md-4">
                     <a name="redirectToPath"></a>
                     <span class="name">
-                        <b>
-                            <span class="modifier">Private</span>
-                            redirectToPath
-                        </b>
+                        <span class="modifier">Private</span>
+                        <span ><b>redirectToPath</b></span>
                         <a href="#redirectToPath"><span class="icon ion-ios-link"></span></a>
                     </span>
                 </td>
@@ -355,6 +351,7 @@
 
                     <div class="io-description">
                         <b>Parameters :</b>
+                        
                         <table class="params">
                             <thead>
                                 <tr>
@@ -419,10 +416,8 @@
                 <td class="col-md-4">
                     <a name="replacePath"></a>
                     <span class="name">
-                        <b>
-                            <span class="modifier">Private</span>
-                            replacePath
-                        </b>
+                        <span class="modifier">Private</span>
+                        <span ><b>replacePath</b></span>
                         <a href="#replacePath"><span class="icon ion-ios-link"></span></a>
                     </span>
                 </td>
@@ -430,7 +425,7 @@
             <tr>
                 <td class="col-md-4">
                     <span class="modifier-icon icon ion-ios-reset"></span>
-                    <code>replacePath(locale: <a href="../interfaces/L10nLocale.html">L10nLocale</a>, path?: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>)</code>
+                    <code>replacePath(locale: <a href="../interfaces/L10nLocale.html" target="_self">L10nLocale</a>, path?: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>)</code>
                 </td>
             </tr>
 
@@ -450,6 +445,7 @@
 
                     <div class="io-description">
                         <b>Parameters :</b>
+                        
                         <table class="params">
                             <thead>
                                 <tr>
@@ -686,14 +682,14 @@ import { L10nLocation } from &#x27;./l10n-location&#x27;;
 
 
 
-                   
+
 
 
 
 
                    </div><div class="search-results">
     <div class="has-results">
-        <h1 class="search-results-title"><span class='search-results-count'></span> result-matching "<span class='search-query'></span>"</h1>
+        <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
         <ul class="search-results-list"></ul>
     </div>
     <div class="no-results">
@@ -714,9 +710,9 @@ import { L10nLocation } from &#x27;./l10n-location&#x27;;
 
        <script src="../js/libs/custom-elements.min.js"></script>
        <script src="../js/libs/lit-html.js"></script>
-       <!-- Required to polyfill modern browsers as code is ES5 for IE... -->
-       <script src="../js/libs/custom-elements-es5-adapter.js" charset="utf-8" defer></script>
+
        <script src="../js/menu-wc.js" defer></script>
+       <script nomodule src="../js/menu-wc_es5.js" defer></script>
 
        <script src="../js/libs/bootstrap-native.js"></script>
 

@@ -1,6 +1,5 @@
 'use strict';
 
-
 customElements.define('compodoc-menu', class extends HTMLElement {
     constructor() {
         super();
@@ -57,7 +56,7 @@ customElements.define('compodoc-menu', class extends HTMLElement {
                         </a>
                         <ul class="links collapse " ${ isNormalMode ? 'id="modules-links"' : 'id="xs-modules-links"' }>
                             <li class="link">
-                                <a href="modules/L10nIntlModule.html" data-type="entity-link">L10nIntlModule</a>
+                                <a href="modules/L10nIntlModule.html" data-type="entity-link" >L10nIntlModule</a>
                                 <li class="chapter inner">
                                     <div class="simple menu-toggler" data-toggle="collapse" ${ isNormalMode ?
                                         'data-target="#directives-links-module-L10nIntlModule-890f2f0c69961f7c8fd5657c03ecc46f"' : 'data-target="#xs-directives-links-module-L10nIntlModule-890f2f0c69961f7c8fd5657c03ecc46f"' }>
@@ -68,16 +67,13 @@ customElements.define('compodoc-menu', class extends HTMLElement {
                                     <ul class="links collapse" ${ isNormalMode ? 'id="directives-links-module-L10nIntlModule-890f2f0c69961f7c8fd5657c03ecc46f"' :
                                         'id="xs-directives-links-module-L10nIntlModule-890f2f0c69961f7c8fd5657c03ecc46f"' }>
                                         <li class="link">
-                                            <a href="directives/L10nDateDirective.html"
-                                                data-type="entity-link" data-context="sub-entity" data-context-id="modules">L10nDateDirective</a>
+                                            <a href="directives/L10nDateDirective.html" data-type="entity-link" data-context="sub-entity" data-context-id="modules" >L10nDateDirective</a>
                                         </li>
                                         <li class="link">
-                                            <a href="directives/L10nNumberDirective.html"
-                                                data-type="entity-link" data-context="sub-entity" data-context-id="modules">L10nNumberDirective</a>
+                                            <a href="directives/L10nNumberDirective.html" data-type="entity-link" data-context="sub-entity" data-context-id="modules" >L10nNumberDirective</a>
                                         </li>
                                         <li class="link">
-                                            <a href="directives/L10nTimeAgoDirective.html"
-                                                data-type="entity-link" data-context="sub-entity" data-context-id="modules">L10nTimeAgoDirective</a>
+                                            <a href="directives/L10nTimeAgoDirective.html" data-type="entity-link" data-context="sub-entity" data-context-id="modules" >L10nTimeAgoDirective</a>
                                         </li>
                                     </ul>
                                 </li>
@@ -91,8 +87,7 @@ customElements.define('compodoc-menu', class extends HTMLElement {
                                     <ul class="links collapse" ${ isNormalMode ? 'id="injectables-links-module-L10nIntlModule-890f2f0c69961f7c8fd5657c03ecc46f"' :
                                         'id="xs-injectables-links-module-L10nIntlModule-890f2f0c69961f7c8fd5657c03ecc46f"' }>
                                         <li class="link">
-                                            <a href="injectables/L10nIntlService.html"
-                                                data-type="entity-link" data-context="sub-entity" data-context-id="modules" }>L10nIntlService</a>
+                                            <a href="injectables/L10nIntlService.html" data-type="entity-link" data-context="sub-entity" data-context-id="modules" >L10nIntlService</a>
                                         </li>
                                     </ul>
                                 </li>
@@ -106,90 +101,77 @@ customElements.define('compodoc-menu', class extends HTMLElement {
                                         <ul class="links collapse" ${ isNormalMode ? 'id="pipes-links-module-L10nIntlModule-890f2f0c69961f7c8fd5657c03ecc46f"' :
                                             'id="xs-pipes-links-module-L10nIntlModule-890f2f0c69961f7c8fd5657c03ecc46f"' }>
                                             <li class="link">
-                                                <a href="pipes/L10nDateAsyncPipe.html"
-                                                    data-type="entity-link" data-context="sub-entity" data-context-id="modules">L10nDateAsyncPipe</a>
+                                                <a href="pipes/L10nDateAsyncPipe.html" data-type="entity-link" data-context="sub-entity" data-context-id="modules" >L10nDateAsyncPipe</a>
                                             </li>
                                             <li class="link">
-                                                <a href="pipes/L10nDatePipe.html"
-                                                    data-type="entity-link" data-context="sub-entity" data-context-id="modules">L10nDatePipe</a>
+                                                <a href="pipes/L10nDatePipe.html" data-type="entity-link" data-context="sub-entity" data-context-id="modules" >L10nDatePipe</a>
                                             </li>
                                             <li class="link">
-                                                <a href="pipes/L10nDisplayNamesAsyncPipe.html"
-                                                    data-type="entity-link" data-context="sub-entity" data-context-id="modules">L10nDisplayNamesAsyncPipe</a>
+                                                <a href="pipes/L10nDisplayNamesAsyncPipe.html" data-type="entity-link" data-context="sub-entity" data-context-id="modules" >L10nDisplayNamesAsyncPipe</a>
                                             </li>
                                             <li class="link">
-                                                <a href="pipes/L10nDisplayNamesPipe.html"
-                                                    data-type="entity-link" data-context="sub-entity" data-context-id="modules">L10nDisplayNamesPipe</a>
+                                                <a href="pipes/L10nDisplayNamesPipe.html" data-type="entity-link" data-context="sub-entity" data-context-id="modules" >L10nDisplayNamesPipe</a>
                                             </li>
                                             <li class="link">
-                                                <a href="pipes/L10nNumberAsyncPipe.html"
-                                                    data-type="entity-link" data-context="sub-entity" data-context-id="modules">L10nNumberAsyncPipe</a>
+                                                <a href="pipes/L10nNumberAsyncPipe.html" data-type="entity-link" data-context="sub-entity" data-context-id="modules" >L10nNumberAsyncPipe</a>
                                             </li>
                                             <li class="link">
-                                                <a href="pipes/L10nNumberPipe.html"
-                                                    data-type="entity-link" data-context="sub-entity" data-context-id="modules">L10nNumberPipe</a>
+                                                <a href="pipes/L10nNumberPipe.html" data-type="entity-link" data-context="sub-entity" data-context-id="modules" >L10nNumberPipe</a>
                                             </li>
                                             <li class="link">
-                                                <a href="pipes/L10nPluralAsyncPipe.html"
-                                                    data-type="entity-link" data-context="sub-entity" data-context-id="modules">L10nPluralAsyncPipe</a>
+                                                <a href="pipes/L10nPluralAsyncPipe.html" data-type="entity-link" data-context="sub-entity" data-context-id="modules" >L10nPluralAsyncPipe</a>
                                             </li>
                                             <li class="link">
-                                                <a href="pipes/L10nPluralPipe.html"
-                                                    data-type="entity-link" data-context="sub-entity" data-context-id="modules">L10nPluralPipe</a>
+                                                <a href="pipes/L10nPluralPipe.html" data-type="entity-link" data-context="sub-entity" data-context-id="modules" >L10nPluralPipe</a>
                                             </li>
                                             <li class="link">
-                                                <a href="pipes/L10nTimeAgoAsyncPipe.html"
-                                                    data-type="entity-link" data-context="sub-entity" data-context-id="modules">L10nTimeAgoAsyncPipe</a>
+                                                <a href="pipes/L10nTimeAgoAsyncPipe.html" data-type="entity-link" data-context="sub-entity" data-context-id="modules" >L10nTimeAgoAsyncPipe</a>
                                             </li>
                                             <li class="link">
-                                                <a href="pipes/L10nTimeAgoPipe.html"
-                                                    data-type="entity-link" data-context="sub-entity" data-context-id="modules">L10nTimeAgoPipe</a>
+                                                <a href="pipes/L10nTimeAgoPipe.html" data-type="entity-link" data-context="sub-entity" data-context-id="modules" >L10nTimeAgoPipe</a>
                                             </li>
                                         </ul>
                                     </li>
                             </li>
                             <li class="link">
-                                <a href="modules/L10nRoutingModule.html" data-type="entity-link">L10nRoutingModule</a>
+                                <a href="modules/L10nRoutingModule.html" data-type="entity-link" >L10nRoutingModule</a>
                             </li>
                             <li class="link">
-                                <a href="modules/L10nTranslationModule.html" data-type="entity-link">L10nTranslationModule</a>
+                                <a href="modules/L10nTranslationModule.html" data-type="entity-link" >L10nTranslationModule</a>
                                 <li class="chapter inner">
                                     <div class="simple menu-toggler" data-toggle="collapse" ${ isNormalMode ?
-                                        'data-target="#directives-links-module-L10nTranslationModule-cb79618540767fe5003d5c7ef2367caf"' : 'data-target="#xs-directives-links-module-L10nTranslationModule-cb79618540767fe5003d5c7ef2367caf"' }>
+                                        'data-target="#directives-links-module-L10nTranslationModule-f2f52f1b54d14a3cebeb5cf01e5774d6"' : 'data-target="#xs-directives-links-module-L10nTranslationModule-f2f52f1b54d14a3cebeb5cf01e5774d6"' }>
                                         <span class="icon ion-md-code-working"></span>
                                         <span>Directives</span>
                                         <span class="icon ion-ios-arrow-down"></span>
                                     </div>
-                                    <ul class="links collapse" ${ isNormalMode ? 'id="directives-links-module-L10nTranslationModule-cb79618540767fe5003d5c7ef2367caf"' :
-                                        'id="xs-directives-links-module-L10nTranslationModule-cb79618540767fe5003d5c7ef2367caf"' }>
+                                    <ul class="links collapse" ${ isNormalMode ? 'id="directives-links-module-L10nTranslationModule-f2f52f1b54d14a3cebeb5cf01e5774d6"' :
+                                        'id="xs-directives-links-module-L10nTranslationModule-f2f52f1b54d14a3cebeb5cf01e5774d6"' }>
                                         <li class="link">
-                                            <a href="directives/L10nTranslateDirective.html"
-                                                data-type="entity-link" data-context="sub-entity" data-context-id="modules">L10nTranslateDirective</a>
+                                            <a href="directives/L10nTranslateDirective.html" data-type="entity-link" data-context="sub-entity" data-context-id="modules" >L10nTranslateDirective</a>
                                         </li>
                                     </ul>
                                 </li>
                                     <li class="chapter inner">
                                         <div class="simple menu-toggler" data-toggle="collapse" ${ isNormalMode ?
-                                            'data-target="#pipes-links-module-L10nTranslationModule-cb79618540767fe5003d5c7ef2367caf"' : 'data-target="#xs-pipes-links-module-L10nTranslationModule-cb79618540767fe5003d5c7ef2367caf"' }>
+                                            'data-target="#pipes-links-module-L10nTranslationModule-f2f52f1b54d14a3cebeb5cf01e5774d6"' : 'data-target="#xs-pipes-links-module-L10nTranslationModule-f2f52f1b54d14a3cebeb5cf01e5774d6"' }>
                                             <span class="icon ion-md-add"></span>
                                             <span>Pipes</span>
                                             <span class="icon ion-ios-arrow-down"></span>
                                         </div>
-                                        <ul class="links collapse" ${ isNormalMode ? 'id="pipes-links-module-L10nTranslationModule-cb79618540767fe5003d5c7ef2367caf"' :
-                                            'id="xs-pipes-links-module-L10nTranslationModule-cb79618540767fe5003d5c7ef2367caf"' }>
+                                        <ul class="links collapse" ${ isNormalMode ? 'id="pipes-links-module-L10nTranslationModule-f2f52f1b54d14a3cebeb5cf01e5774d6"' :
+                                            'id="xs-pipes-links-module-L10nTranslationModule-f2f52f1b54d14a3cebeb5cf01e5774d6"' }>
                                             <li class="link">
-                                                <a href="pipes/L10nTranslateAsyncPipe.html"
-                                                    data-type="entity-link" data-context="sub-entity" data-context-id="modules">L10nTranslateAsyncPipe</a>
+                                                <a href="pipes/L10nTranslateAsyncPipe.html" data-type="entity-link" data-context="sub-entity" data-context-id="modules" >L10nTranslateAsyncPipe</a>
                                             </li>
                                             <li class="link">
-                                                <a href="pipes/L10nTranslatePipe.html"
-                                                    data-type="entity-link" data-context="sub-entity" data-context-id="modules">L10nTranslatePipe</a>
+                                                <a href="pipes/L10nTranslatePipe.html" data-type="entity-link" data-context="sub-entity" data-context-id="modules" >L10nTranslatePipe</a>
                                             </li>
                                         </ul>
                                     </li>
                             </li>
                             <li class="link">
-                                <a href="modules/L10nValidationModule.html" data-type="entity-link">L10nValidationModule</a>
+                                <a href="modules/L10nValidationModule.html" data-type="entity-link" >L10nValidationModule</a>
                                 <li class="chapter inner">
                                     <div class="simple menu-toggler" data-toggle="collapse" ${ isNormalMode ?
                                         'data-target="#directives-links-module-L10nValidationModule-6a932b2c4cc561b6981c34bb7aad4dd9"' : 'data-target="#xs-directives-links-module-L10nValidationModule-6a932b2c4cc561b6981c34bb7aad4dd9"' }>
@@ -200,18 +182,29 @@ customElements.define('compodoc-menu', class extends HTMLElement {
                                     <ul class="links collapse" ${ isNormalMode ? 'id="directives-links-module-L10nValidationModule-6a932b2c4cc561b6981c34bb7aad4dd9"' :
                                         'id="xs-directives-links-module-L10nValidationModule-6a932b2c4cc561b6981c34bb7aad4dd9"' }>
                                         <li class="link">
-                                            <a href="directives/L10nValidateDateDirective.html"
-                                                data-type="entity-link" data-context="sub-entity" data-context-id="modules">L10nValidateDateDirective</a>
+                                            <a href="directives/L10nValidateDateDirective.html" data-type="entity-link" data-context="sub-entity" data-context-id="modules" >L10nValidateDateDirective</a>
                                         </li>
                                         <li class="link">
-                                            <a href="directives/L10nValidateNumberDirective.html"
-                                                data-type="entity-link" data-context="sub-entity" data-context-id="modules">L10nValidateNumberDirective</a>
+                                            <a href="directives/L10nValidateNumberDirective.html" data-type="entity-link" data-context="sub-entity" data-context-id="modules" >L10nValidateNumberDirective</a>
                                         </li>
                                     </ul>
                                 </li>
                             </li>
                 </ul>
                 </li>
+                        <li class="chapter">
+                            <div class="simple menu-toggler" data-toggle="collapse" ${ isNormalMode ? 'data-target="#directives-links"' :
+                                'data-target="#xs-directives-links"' }>
+                                <span class="icon ion-md-code-working"></span>
+                                <span>Directives</span>
+                                <span class="icon ion-ios-arrow-down"></span>
+                            </div>
+                            <ul class="links collapse " ${ isNormalMode ? 'id="directives-links"' : 'id="xs-directives-links"' }>
+                                <li class="link">
+                                    <a href="directives/L10nDirective.html" data-type="entity-link" >L10nDirective</a>
+                                </li>
+                            </ul>
+                        </li>
                         <li class="chapter">
                             <div class="simple menu-toggler" data-toggle="collapse" ${ isNormalMode ? 'data-target="#injectables-links"' :
                                 'data-target="#xs-injectables-links"' }>
@@ -221,76 +214,76 @@ customElements.define('compodoc-menu', class extends HTMLElement {
                             </div>
                             <ul class="links collapse " ${ isNormalMode ? 'id="injectables-links"' : 'id="xs-injectables-links"' }>
                                 <li class="link">
-                                    <a href="injectables/L10nAsyncPipe.html" data-type="entity-link">L10nAsyncPipe</a>
+                                    <a href="injectables/L10nAsyncPipe.html" data-type="entity-link" >L10nAsyncPipe</a>
                                 </li>
                                 <li class="link">
-                                    <a href="injectables/L10nCache.html" data-type="entity-link">L10nCache</a>
+                                    <a href="injectables/L10nCache.html" data-type="entity-link" >L10nCache</a>
                                 </li>
                                 <li class="link">
-                                    <a href="injectables/L10nDefaultLoader.html" data-type="entity-link">L10nDefaultLoader</a>
+                                    <a href="injectables/L10nDefaultLoader.html" data-type="entity-link" >L10nDefaultLoader</a>
                                 </li>
                                 <li class="link">
-                                    <a href="injectables/L10nDefaultLocation.html" data-type="entity-link">L10nDefaultLocation</a>
+                                    <a href="injectables/L10nDefaultLocation.html" data-type="entity-link" >L10nDefaultLocation</a>
                                 </li>
                                 <li class="link">
-                                    <a href="injectables/L10nDefaultMissingTranslationHandler.html" data-type="entity-link">L10nDefaultMissingTranslationHandler</a>
+                                    <a href="injectables/L10nDefaultMissingTranslationHandler.html" data-type="entity-link" >L10nDefaultMissingTranslationHandler</a>
                                 </li>
                                 <li class="link">
-                                    <a href="injectables/L10nDefaultStorage.html" data-type="entity-link">L10nDefaultStorage</a>
+                                    <a href="injectables/L10nDefaultStorage.html" data-type="entity-link" >L10nDefaultStorage</a>
                                 </li>
                                 <li class="link">
-                                    <a href="injectables/L10nDefaultTranslationFallback.html" data-type="entity-link">L10nDefaultTranslationFallback</a>
+                                    <a href="injectables/L10nDefaultTranslationFallback.html" data-type="entity-link" >L10nDefaultTranslationFallback</a>
                                 </li>
                                 <li class="link">
-                                    <a href="injectables/L10nDefaultTranslationHandler.html" data-type="entity-link">L10nDefaultTranslationHandler</a>
+                                    <a href="injectables/L10nDefaultTranslationHandler.html" data-type="entity-link" >L10nDefaultTranslationHandler</a>
                                 </li>
                                 <li class="link">
-                                    <a href="injectables/L10nDefaultTranslationLoader.html" data-type="entity-link">L10nDefaultTranslationLoader</a>
+                                    <a href="injectables/L10nDefaultTranslationLoader.html" data-type="entity-link" >L10nDefaultTranslationLoader</a>
                                 </li>
                                 <li class="link">
-                                    <a href="injectables/L10nDefaultUserLanguage.html" data-type="entity-link">L10nDefaultUserLanguage</a>
+                                    <a href="injectables/L10nDefaultUserLanguage.html" data-type="entity-link" >L10nDefaultUserLanguage</a>
                                 </li>
                                 <li class="link">
-                                    <a href="injectables/L10nDefaultValidation.html" data-type="entity-link">L10nDefaultValidation</a>
+                                    <a href="injectables/L10nDefaultValidation.html" data-type="entity-link" >L10nDefaultValidation</a>
                                 </li>
                                 <li class="link">
-                                    <a href="injectables/L10nIntlService.html" data-type="entity-link">L10nIntlService</a>
+                                    <a href="injectables/L10nIntlService.html" data-type="entity-link" >L10nIntlService</a>
                                 </li>
                                 <li class="link">
-                                    <a href="injectables/L10nLoader.html" data-type="entity-link">L10nLoader</a>
+                                    <a href="injectables/L10nLoader.html" data-type="entity-link" >L10nLoader</a>
                                 </li>
                                 <li class="link">
-                                    <a href="injectables/L10nLocation.html" data-type="entity-link">L10nLocation</a>
+                                    <a href="injectables/L10nLocation.html" data-type="entity-link" >L10nLocation</a>
                                 </li>
                                 <li class="link">
-                                    <a href="injectables/L10nMissingTranslationHandler.html" data-type="entity-link">L10nMissingTranslationHandler</a>
+                                    <a href="injectables/L10nMissingTranslationHandler.html" data-type="entity-link" >L10nMissingTranslationHandler</a>
                                 </li>
                                 <li class="link">
-                                    <a href="injectables/L10nRoutingLoader.html" data-type="entity-link">L10nRoutingLoader</a>
+                                    <a href="injectables/L10nRoutingLoader.html" data-type="entity-link" >L10nRoutingLoader</a>
                                 </li>
                                 <li class="link">
-                                    <a href="injectables/L10nRoutingService.html" data-type="entity-link">L10nRoutingService</a>
+                                    <a href="injectables/L10nRoutingService.html" data-type="entity-link" >L10nRoutingService</a>
                                 </li>
                                 <li class="link">
-                                    <a href="injectables/L10nStorage.html" data-type="entity-link">L10nStorage</a>
+                                    <a href="injectables/L10nStorage.html" data-type="entity-link" >L10nStorage</a>
                                 </li>
                                 <li class="link">
-                                    <a href="injectables/L10nTranslationFallback.html" data-type="entity-link">L10nTranslationFallback</a>
+                                    <a href="injectables/L10nTranslationFallback.html" data-type="entity-link" >L10nTranslationFallback</a>
                                 </li>
                                 <li class="link">
-                                    <a href="injectables/L10nTranslationHandler.html" data-type="entity-link">L10nTranslationHandler</a>
+                                    <a href="injectables/L10nTranslationHandler.html" data-type="entity-link" >L10nTranslationHandler</a>
                                 </li>
                                 <li class="link">
-                                    <a href="injectables/L10nTranslationLoader.html" data-type="entity-link">L10nTranslationLoader</a>
+                                    <a href="injectables/L10nTranslationLoader.html" data-type="entity-link" >L10nTranslationLoader</a>
                                 </li>
                                 <li class="link">
-                                    <a href="injectables/L10nTranslationService.html" data-type="entity-link">L10nTranslationService</a>
+                                    <a href="injectables/L10nTranslationService.html" data-type="entity-link" >L10nTranslationService</a>
                                 </li>
                                 <li class="link">
-                                    <a href="injectables/L10nUserLanguage.html" data-type="entity-link">L10nUserLanguage</a>
+                                    <a href="injectables/L10nUserLanguage.html" data-type="entity-link" >L10nUserLanguage</a>
                                 </li>
                                 <li class="link">
-                                    <a href="injectables/L10nValidation.html" data-type="entity-link">L10nValidation</a>
+                                    <a href="injectables/L10nValidation.html" data-type="entity-link" >L10nValidation</a>
                                 </li>
                             </ul>
                         </li>
@@ -303,7 +296,7 @@ customElements.define('compodoc-menu', class extends HTMLElement {
                         </div>
                         <ul class="links collapse " ${ isNormalMode ? 'id="guards-links"' : 'id="xs-guards-links"' }>
                             <li class="link">
-                                <a href="guards/L10nResolver.html" data-type="entity-link">L10nResolver</a>
+                                <a href="guards/L10nResolver.html" data-type="entity-link" >L10nResolver</a>
                             </li>
                         </ul>
                     </li>
@@ -316,31 +309,31 @@ customElements.define('compodoc-menu', class extends HTMLElement {
                         </div>
                         <ul class="links collapse " ${ isNormalMode ? ' id="interfaces-links"' : 'id="xs-interfaces-links"' }>
                             <li class="link">
-                                <a href="interfaces/L10nConfig.html" data-type="entity-link">L10nConfig</a>
+                                <a href="interfaces/L10nConfig.html" data-type="entity-link" >L10nConfig</a>
                             </li>
                             <li class="link">
-                                <a href="interfaces/L10nDateTimeFormatOptions.html" data-type="entity-link">L10nDateTimeFormatOptions</a>
+                                <a href="interfaces/L10nDateTimeFormatOptions.html" data-type="entity-link" >L10nDateTimeFormatOptions</a>
                             </li>
                             <li class="link">
-                                <a href="interfaces/L10nLocale.html" data-type="entity-link">L10nLocale</a>
+                                <a href="interfaces/L10nLocale.html" data-type="entity-link" >L10nLocale</a>
                             </li>
                             <li class="link">
-                                <a href="interfaces/L10nNumberFormatOptions.html" data-type="entity-link">L10nNumberFormatOptions</a>
+                                <a href="interfaces/L10nNumberFormatOptions.html" data-type="entity-link" >L10nNumberFormatOptions</a>
                             </li>
                             <li class="link">
-                                <a href="interfaces/L10nProvider.html" data-type="entity-link">L10nProvider</a>
+                                <a href="interfaces/L10nProvider.html" data-type="entity-link" >L10nProvider</a>
                             </li>
                             <li class="link">
-                                <a href="interfaces/L10nRoutingToken.html" data-type="entity-link">L10nRoutingToken</a>
+                                <a href="interfaces/L10nRoutingToken.html" data-type="entity-link" >L10nRoutingToken</a>
                             </li>
                             <li class="link">
-                                <a href="interfaces/L10nSchema.html" data-type="entity-link">L10nSchema</a>
+                                <a href="interfaces/L10nSchema.html" data-type="entity-link" >L10nSchema</a>
                             </li>
                             <li class="link">
-                                <a href="interfaces/L10nTranslationToken.html" data-type="entity-link">L10nTranslationToken</a>
+                                <a href="interfaces/L10nTranslationToken.html" data-type="entity-link" >L10nTranslationToken</a>
                             </li>
                             <li class="link">
-                                <a href="interfaces/L10nValidationToken.html" data-type="entity-link">L10nValidationToken</a>
+                                <a href="interfaces/L10nValidationToken.html" data-type="entity-link" >L10nValidationToken</a>
                             </li>
                         </ul>
                     </li>

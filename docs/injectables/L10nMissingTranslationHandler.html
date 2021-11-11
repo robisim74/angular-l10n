@@ -8,7 +8,8 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
         <link rel="icon" type="image/x-icon" href="../images/favicon.ico">
-	      <link rel="stylesheet" href="../styles/style.css">
+	   <link rel="stylesheet" href="../styles/style.css">
+        <link rel="stylesheet" href="../styles/dark.css" media="(prefers-color-scheme: dark)">
     </head>
     <body>
 
@@ -38,7 +39,7 @@
 
 <ol class="breadcrumb">
   <li>Injectables</li>
-  <li>L10nMissingTranslationHandler</li>
+  <li >L10nMissingTranslationHandler</li>
 </ol>
 
 <ul class="nav nav-tabs" role="tablist">
@@ -58,6 +59,7 @@
         <p class="comment">
             <code>projects/angular-l10n/src/lib/services/l10n-missing-translation-handler.ts</code>
         </p>
+
 
             <p class="comment">
                 <h3>Description</h3>
@@ -85,7 +87,7 @@
                             <li>
                                     <span class="modifier">Public</span>
                                     <span class="modifier">Abstract</span>
-                                <a href="#handle">handle</a>
+                                <a href="#handle" >handle</a>
                             </li>
                         </ul>
                     </td>
@@ -111,11 +113,9 @@
                 <td class="col-md-4">
                     <a name="handle"></a>
                     <span class="name">
-                        <b>
-                            <span class="modifier">Public</span>
-                            <span class="modifier">Abstract</span>
-                            handle
-                        </b>
+                        <span class="modifier">Public</span>
+                        <span class="modifier">Abstract</span>
+                        <span ><b>handle</b></span>
                         <a href="#handle"><span class="icon ion-ios-link"></span></a>
                     </span>
                 </td>
@@ -143,6 +143,7 @@
 
                     <div class="io-description">
                         <b>Parameters :</b>
+                        
                         <table class="params">
                             <thead>
                                 <tr>
@@ -260,14 +261,14 @@
 
 
 
-                   
+
 
 
 
 
                    </div><div class="search-results">
     <div class="has-results">
-        <h1 class="search-results-title"><span class='search-results-count'></span> result-matching "<span class='search-query'></span>"</h1>
+        <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
         <ul class="search-results-list"></ul>
     </div>
     <div class="no-results">
@@ -288,9 +289,9 @@
 
        <script src="../js/libs/custom-elements.min.js"></script>
        <script src="../js/libs/lit-html.js"></script>
-       <!-- Required to polyfill modern browsers as code is ES5 for IE... -->
-       <script src="../js/libs/custom-elements-es5-adapter.js" charset="utf-8" defer></script>
+
        <script src="../js/menu-wc.js" defer></script>
+       <script nomodule src="../js/menu-wc_es5.js" defer></script>
 
        <script src="../js/libs/bootstrap-native.js"></script>
 

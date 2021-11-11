@@ -8,7 +8,8 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
         <link rel="icon" type="image/x-icon" href="../images/favicon.ico">
-	      <link rel="stylesheet" href="../styles/style.css">
+	   <link rel="stylesheet" href="../styles/style.css">
+        <link rel="stylesheet" href="../styles/dark.css" media="(prefers-color-scheme: dark)">
     </head>
     <body>
 
@@ -43,7 +44,9 @@
 
 <ol class="breadcrumb">
   <li>Interfaces</li>
-  <li>L10nProvider</li>
+  <li
+  >
+  L10nProvider</li>
 </ol>
 
 <ul class="nav nav-tabs" role="tablist">
@@ -66,6 +69,7 @@
 
 
 
+
         <section>
             <h3 id="index">Index</h3>
             <table class="table table-sm table-bordered index-table">
@@ -79,14 +83,23 @@
                         <td class="col-md-4">
                             <ul class="index-list">
                                 <li>
-                                        <a href="#asset">asset</a>
+                                        <a href="#asset" 
+>
+                                            asset
+                                        </a>
                                 </li>
                                 <li>
-                                        <a href="#name">name</a>
+                                        <a href="#name" 
+>
+                                            name
+                                        </a>
                                 </li>
                                 <li>
                                             <span class="modifier">Optional</span>
-                                        <a href="#options">options</a>
+                                        <a href="#options" 
+>
+                                            options
+                                        </a>
                                 </li>
                             </ul>
                         </td>
@@ -104,7 +117,11 @@
                                 <tr>
                                     <td class="col-md-4">
                                         <a name="asset"></a>
-                                        <span class="name"><b>asset</b><a href="#asset"><span class="icon ion-ios-link"></span></a></span>
+                                        <span class="name "><b>asset</b>
+                                            <a href="#asset">
+                                                <span class="icon ion-ios-link"></span>
+                                            </a>
+                                        </span>
                                     </td>
                                 </tr>
                                 <tr>
@@ -139,7 +156,11 @@
                                 <tr>
                                     <td class="col-md-4">
                                         <a name="name"></a>
-                                        <span class="name"><b>name</b><a href="#name"><span class="icon ion-ios-link"></span></a></span>
+                                        <span class="name "><b>name</b>
+                                            <a href="#name">
+                                                <span class="icon ion-ios-link"></span>
+                                            </a>
+                                        </span>
                                     </td>
                                 </tr>
                                 <tr>
@@ -174,7 +195,11 @@
                                 <tr>
                                     <td class="col-md-4">
                                         <a name="options"></a>
-                                        <span class="name"><b>options</b><a href="#options"><span class="icon ion-ios-link"></span></a></span>
+                                        <span class="name "><b>options</b>
+                                            <a href="#options">
+                                                <span class="icon ion-ios-link"></span>
+                                            </a>
+                                        </span>
                                     </td>
                                 </tr>
                                 <tr>
@@ -257,6 +282,11 @@ export interface L10nLocale {
      * Time zone name from the IANA time zone database.
      */
     timeZone?: string;
+
+    /**
+     * Key value pairs of unit identifiers.
+     */
+    units?: { [key: string]: string }
 }
 
 export interface L10nSchema {
@@ -285,21 +315,19 @@ export interface L10nNumberFormatOptions extends Intl.NumberFormatOptions {
      */
     digits?: string;
 }
-
-export type Unit &#x3D; &#x27;year&#x27; | &#x27;quarter&#x27; | &#x27;month&#x27; | &#x27;week&#x27; | &#x27;day&#x27; | &#x27;hour&#x27; | &#x27;minute&#x27; | &#x27;second&#x27;;
 </code></pre>
     </div>
 </div>
 
 
-                   
+
 
 
 
 
                    </div><div class="search-results">
     <div class="has-results">
-        <h1 class="search-results-title"><span class='search-results-count'></span> result-matching "<span class='search-query'></span>"</h1>
+        <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
         <ul class="search-results-list"></ul>
     </div>
     <div class="no-results">
@@ -320,9 +348,9 @@ export type Unit &#x3D; &#x27;year&#x27; | &#x27;quarter&#x27; | &#x27;month&#x2
 
        <script src="../js/libs/custom-elements.min.js"></script>
        <script src="../js/libs/lit-html.js"></script>
-       <!-- Required to polyfill modern browsers as code is ES5 for IE... -->
-       <script src="../js/libs/custom-elements-es5-adapter.js" charset="utf-8" defer></script>
+
        <script src="../js/menu-wc.js" defer></script>
+       <script nomodule src="../js/menu-wc_es5.js" defer></script>
 
        <script src="../js/libs/bootstrap-native.js"></script>
 

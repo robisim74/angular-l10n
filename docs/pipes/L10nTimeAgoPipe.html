@@ -8,7 +8,8 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
         <link rel="icon" type="image/x-icon" href="../images/favicon.ico">
-	      <link rel="stylesheet" href="../styles/style.css">
+	   <link rel="stylesheet" href="../styles/style.css">
+        <link rel="stylesheet" href="../styles/dark.css" media="(prefers-color-scheme: dark)">
     </head>
     <body>
 
@@ -41,7 +42,7 @@
 
 <ol class="breadcrumb">
   <li>Pipes</li>
-  <li>L10nTimeAgoPipe</li>
+  <li >L10nTimeAgoPipe</li>
 </ol>
 
 <ul class="nav nav-tabs" role="tablist">
@@ -62,6 +63,7 @@
         <p class="comment">
             <code>projects/angular-l10n/src/lib/pipes/l10n-time-ago.pipe.ts</code>
         </p>
+
 
 
 
@@ -92,10 +94,8 @@
                 <td class="col-md-4">
                     <a name="transform"></a>
                     <span class="name">
-                        <b>
-                            <span class="modifier">Public</span>
-                            transform
-                        </b>
+                        <span class="modifier">Public</span>
+                        <span ><b>transform</b></span>
                         <a href="#transform"><span class="icon ion-ios-link"></span></a>
                     </span>
                 </td>
@@ -103,15 +103,15 @@
             <tr>
                 <td class="col-md-4">
                     <span class="modifier-icon icon ion-ios-reset"></span>
-                    <code>transform(value: <a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank">any</a>, language: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>, unit: <a href="../undefineds/Unit.html">Unit</a>, options?: <a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank">any</a>)</code>
+                    <code>transform(value: <a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank">any</a>, language: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>, unit: Intl.RelativeTimeFormatUnit, options?: Intl.RelativeTimeFormatOptions)</code>
                 </td>
             </tr>
 
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="16"
-                            class="link-to-prism">projects/angular-l10n/src/lib/pipes/l10n-time-ago.pipe.ts:16</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="15"
+                            class="link-to-prism">projects/angular-l10n/src/lib/pipes/l10n-time-ago.pipe.ts:15</a></div>
                 </td>
             </tr>
 
@@ -121,6 +121,7 @@
 
                     <div class="io-description">
                         <b>Parameters :</b>
+                        
                         <table class="params">
                             <thead>
                                 <tr>
@@ -157,7 +158,7 @@
                                 <tr>
                                     <td>unit</td>
                                     <td>
-                                                <code><a href="../miscellaneous/typealiases.html#Unit" target="_self" >Unit</a></code>
+                                            <code>Intl.RelativeTimeFormatUnit</code>
                                     </td>
 
                                     <td>
@@ -169,7 +170,7 @@
                                 <tr>
                                     <td>options</td>
                                     <td>
-                                                <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+                                            <code>Intl.RelativeTimeFormatOptions</code>
                                     </td>
 
                                     <td>
@@ -202,7 +203,6 @@
     <div class="tab-pane fade  tab-source-code" id="c-source">
         <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { Pipe, PipeTransform, ChangeDetectorRef } from &#x27;@angular/core&#x27;;
 
-import { Unit } from &#x27;../models/types&#x27;;
 import { L10nAsyncPipe } from &#x27;../models/l10n-async-pipe&#x27;;
 import { L10nIntlService } from &#x27;../services/l10n-intl.service&#x27;;
 import { L10nTranslationService } from &#x27;../services/l10n-translation.service&#x27;;
@@ -215,7 +215,12 @@ export class L10nTimeAgoPipe implements PipeTransform {
 
     constructor(protected intl: L10nIntlService) { }
 
-    public transform(value: any, language: string, unit: Unit, options?: any): string | null {
+    public transform(
+        value: any,
+        language: string,
+        unit: Intl.RelativeTimeFormatUnit,
+        options?: Intl.RelativeTimeFormatOptions
+    ): string | null {
         if (value &#x3D;&#x3D; null || value &#x3D;&#x3D;&#x3D; &#x27;&#x27;) return null;
 
         return this.intl.formatRelativeTime(value, unit, options, language);
@@ -229,11 +234,20 @@ export class L10nTimeAgoPipe implements PipeTransform {
 })
 export class L10nTimeAgoAsyncPipe extends L10nAsyncPipe implements PipeTransform {
 
-    constructor(protected translation: L10nTranslationService, protected cdr: ChangeDetectorRef, protected intl: L10nIntlService) {
+    constructor(
+        protected override translation: L10nTranslationService,
+        protected override cdr: ChangeDetectorRef,
+        protected intl: L10nIntlService
+    ) {
         super(translation, cdr);
     }
 
-    public transform(value: any, unit: Unit, options?: any, language?: string): string | null {
+    public transform(
+        value: any,
+        unit: Intl.RelativeTimeFormatUnit,
+        options?: Intl.RelativeTimeFormatOptions,
+        language?: string
+    ): string | null {
         if (value &#x3D;&#x3D; null || value &#x3D;&#x3D;&#x3D; &#x27;&#x27;) return null;
 
         return this.intl.formatRelativeTime(value, unit, options, language);
@@ -248,14 +262,14 @@ export class L10nTimeAgoAsyncPipe extends L10nAsyncPipe implements PipeTransform
 
 
 
-                   
+
 
 
 
 
                    </div><div class="search-results">
     <div class="has-results">
-        <h1 class="search-results-title"><span class='search-results-count'></span> result-matching "<span class='search-query'></span>"</h1>
+        <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
         <ul class="search-results-list"></ul>
     </div>
     <div class="no-results">
@@ -276,9 +290,9 @@ export class L10nTimeAgoAsyncPipe extends L10nAsyncPipe implements PipeTransform
 
        <script src="../js/libs/custom-elements.min.js"></script>
        <script src="../js/libs/lit-html.js"></script>
-       <!-- Required to polyfill modern browsers as code is ES5 for IE... -->
-       <script src="../js/libs/custom-elements-es5-adapter.js" charset="utf-8" defer></script>
+
        <script src="../js/menu-wc.js" defer></script>
+       <script nomodule src="../js/menu-wc_es5.js" defer></script>
 
        <script src="../js/libs/bootstrap-native.js"></script>
 

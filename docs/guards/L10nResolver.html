@@ -8,7 +8,8 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
         <link rel="icon" type="image/x-icon" href="../images/favicon.ico">
-	      <link rel="stylesheet" href="../styles/style.css">
+	   <link rel="stylesheet" href="../styles/style.css">
+        <link rel="stylesheet" href="../styles/dark.css" media="(prefers-color-scheme: dark)">
     </head>
     <body>
 
@@ -40,7 +41,7 @@
 
 <ol class="breadcrumb">
     <li>Guards</li>
-    <li>L10nResolver</li>
+    <li >L10nResolver</li>
 </ol>
 
 <ul class="nav nav-tabs" role="tablist">
@@ -65,6 +66,7 @@
 
 
 
+
                 <section>
     <h3 id="index">Index</h3>
     <table class="table table-sm table-bordered index-table">
@@ -80,7 +82,7 @@
                         <ul class="index-list">
                             <li>
                                     <span class="modifier">Async</span>
-                                <a href="#resolve">resolve</a>
+                                <a href="#resolve" >resolve</a>
                             </li>
                         </ul>
                     </td>
@@ -100,7 +102,7 @@
             <tbody>
                 <tr>
                     <td class="col-md-4">
-<code>constructor(translation: <a href="../injectables/L10nTranslationService.html">L10nTranslationService</a>)</code>
+<code>constructor(translation: <a href="../injectables/L10nTranslationService.html" target="_self">L10nTranslationService</a>)</code>
                     </td>
                 </tr>
                         <tr>
@@ -154,10 +156,8 @@
                 <td class="col-md-4">
                     <a name="resolve"></a>
                     <span class="name">
-                        <b>
-                            <span class="modifier">Async</span>
-                            resolve
-                        </b>
+                        <span class="modifier">Async</span>
+                        <span ><b>resolve</b></span>
                         <a href="#resolve"><span class="icon ion-ios-link"></span></a>
                     </span>
                 </td>
@@ -183,6 +183,7 @@
 
                     <div class="io-description">
                         <b>Parameters :</b>
+                        
                         <table class="params">
                             <thead>
                                 <tr>
@@ -250,8 +251,10 @@ export class L10nResolver implements Resolve&lt;Promise&lt;void&gt;&gt; {
     constructor(private translation: L10nTranslationService) { }
 
     async resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Promise&lt;void&gt; {
-        await this.translation.init();
-        await this.translation.loadTranslation(route.data.l10nProviders);
+        const providers &#x3D; route.data[&#x27;l10nProviders&#x27;];
+        this.translation.addProviders(providers);
+
+        await this.translation.init(providers);
     }
 }
 </code></pre>
@@ -262,14 +265,14 @@ export class L10nResolver implements Resolve&lt;Promise&lt;void&gt;&gt; {
 
 
 
-                   
+
 
 
 
 
                    </div><div class="search-results">
     <div class="has-results">
-        <h1 class="search-results-title"><span class='search-results-count'></span> result-matching "<span class='search-query'></span>"</h1>
+        <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
         <ul class="search-results-list"></ul>
     </div>
     <div class="no-results">
@@ -290,9 +293,9 @@ export class L10nResolver implements Resolve&lt;Promise&lt;void&gt;&gt; {
 
        <script src="../js/libs/custom-elements.min.js"></script>
        <script src="../js/libs/lit-html.js"></script>
-       <!-- Required to polyfill modern browsers as code is ES5 for IE... -->
-       <script src="../js/libs/custom-elements-es5-adapter.js" charset="utf-8" defer></script>
+
        <script src="../js/menu-wc.js" defer></script>
+       <script nomodule src="../js/menu-wc_es5.js" defer></script>
 
        <script src="../js/libs/bootstrap-native.js"></script>
 

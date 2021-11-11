@@ -8,7 +8,8 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
         <link rel="icon" type="image/x-icon" href="../images/favicon.ico">
-	      <link rel="stylesheet" href="../styles/style.css">
+	   <link rel="stylesheet" href="../styles/style.css">
+        <link rel="stylesheet" href="../styles/dark.css" media="(prefers-color-scheme: dark)">
     </head>
     <body>
 
@@ -38,7 +39,7 @@
 
 <ol class="breadcrumb">
   <li>Injectables</li>
-  <li>L10nTranslationLoader</li>
+  <li >L10nTranslationLoader</li>
 </ol>
 
 <ul class="nav nav-tabs" role="tablist">
@@ -58,6 +59,7 @@
         <p class="comment">
             <code>projects/angular-l10n/src/lib/services/l10n-translation-loader.ts</code>
         </p>
+
 
             <p class="comment">
                 <h3>Description</h3>
@@ -85,7 +87,7 @@
                             <li>
                                     <span class="modifier">Public</span>
                                     <span class="modifier">Abstract</span>
-                                <a href="#get">get</a>
+                                <a href="#get" >get</a>
                             </li>
                         </ul>
                     </td>
@@ -111,11 +113,9 @@
                 <td class="col-md-4">
                     <a name="get"></a>
                     <span class="name">
-                        <b>
-                            <span class="modifier">Public</span>
-                            <span class="modifier">Abstract</span>
-                            get
-                        </b>
+                        <span class="modifier">Public</span>
+                        <span class="modifier">Abstract</span>
+                        <span ><b>get</b></span>
                         <a href="#get"><span class="icon ion-ios-link"></span></a>
                     </span>
                 </td>
@@ -123,7 +123,7 @@
             <tr>
                 <td class="col-md-4">
                     <span class="modifier-icon icon ion-ios-reset"></span>
-                    <code>get(language: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>, provider: <a href="../interfaces/L10nProvider.html">L10nProvider</a>)</code>
+                    <code>get(language: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>, provider: <a href="../interfaces/L10nProvider.html" target="_self">L10nProvider</a>)</code>
                 </td>
             </tr>
 
@@ -143,6 +143,7 @@
 
                     <div class="io-description">
                         <b>Parameters :</b>
+                        
                         <table class="params">
                             <thead>
                                 <tr>
@@ -234,7 +235,7 @@ import { l10nError } from &#x27;../models/l10n-error&#x27;;
     public get(language: string, provider: L10nProvider): Observable&lt;{ [key: string]: any }&gt; {
         return provider.asset[language] ?
             of(provider.asset[language]) :
-            throwError(l10nError(L10nDefaultTranslationLoader, &#x27;Asset not found&#x27;));
+            throwError(() &#x3D;&gt; l10nError(L10nDefaultTranslationLoader, &#x27;Asset not found&#x27;));
     }
 
 }
@@ -249,14 +250,14 @@ import { l10nError } from &#x27;../models/l10n-error&#x27;;
 
 
 
-                   
+
 
 
 
 
                    </div><div class="search-results">
     <div class="has-results">
-        <h1 class="search-results-title"><span class='search-results-count'></span> result-matching "<span class='search-query'></span>"</h1>
+        <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
         <ul class="search-results-list"></ul>
     </div>
     <div class="no-results">
@@ -277,9 +278,9 @@ import { l10nError } from &#x27;../models/l10n-error&#x27;;
 
        <script src="../js/libs/custom-elements.min.js"></script>
        <script src="../js/libs/lit-html.js"></script>
-       <!-- Required to polyfill modern browsers as code is ES5 for IE... -->
-       <script src="../js/libs/custom-elements-es5-adapter.js" charset="utf-8" defer></script>
+
        <script src="../js/menu-wc.js" defer></script>
+       <script nomodule src="../js/menu-wc_es5.js" defer></script>
 
        <script src="../js/libs/bootstrap-native.js"></script>
 

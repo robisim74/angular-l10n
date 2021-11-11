@@ -8,7 +8,8 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
         <link rel="icon" type="image/x-icon" href="../images/favicon.ico">
-	      <link rel="stylesheet" href="../styles/style.css">
+	   <link rel="stylesheet" href="../styles/style.css">
+        <link rel="stylesheet" href="../styles/dark.css" media="(prefers-color-scheme: dark)">
     </head>
     <body>
 
@@ -38,7 +39,7 @@
 
 <ol class="breadcrumb">
   <li>Injectables</li>
-  <li>L10nDefaultLocation</li>
+  <li >L10nDefaultLocation</li>
 </ol>
 
 <ul class="nav nav-tabs" role="tablist">
@@ -62,6 +63,7 @@
 
 
 
+
             <section>
     <h3 id="index">Index</h3>
     <table class="table table-sm table-bordered index-table">
@@ -77,19 +79,19 @@
                         <ul class="index-list">
                             <li>
                                     <span class="modifier">Public</span>
-                                <a href="#getLocalizedSegment">getLocalizedSegment</a>
+                                <a href="#getLocalizedSegment" >getLocalizedSegment</a>
                             </li>
                             <li>
                                     <span class="modifier">Public</span>
-                                <a href="#parsePath">parsePath</a>
+                                <a href="#parsePath" >parsePath</a>
                             </li>
                             <li>
                                     <span class="modifier">Public</span>
-                                <a href="#path">path</a>
+                                <a href="#path" >path</a>
                             </li>
                             <li>
                                     <span class="modifier">Public</span>
-                                <a href="#toLocalizedPath">toLocalizedPath</a>
+                                <a href="#toLocalizedPath" >toLocalizedPath</a>
                             </li>
                         </ul>
                     </td>
@@ -108,7 +110,7 @@
                         <td class="col-md-4">
                             <ul class="index-list">
                                 <li>
-                                    <a href="#location">location</a>
+                                    <a href="#location" >location</a>
                                 </li>
                             </ul>
                         </td>
@@ -123,7 +125,7 @@
             <tbody>
                 <tr>
                     <td class="col-md-4">
-<code>constructor(config: <a href="../interfaces/L10nConfig.html">L10nConfig</a>, injector: <a href="https://angular.io/api/core/Injector" target="_blank">Injector</a>)</code>
+<code>constructor(config: <a href="../interfaces/L10nConfig.html" target="_self">L10nConfig</a>, injector: <a href="https://angular.io/api/core/Injector" target="_blank">Injector</a>)</code>
                     </td>
                 </tr>
                         <tr>
@@ -189,10 +191,8 @@
                 <td class="col-md-4">
                     <a name="getLocalizedSegment"></a>
                     <span class="name">
-                        <b>
-                            <span class="modifier">Public</span>
-                            getLocalizedSegment
-                        </b>
+                        <span class="modifier">Public</span>
+                        <span ><b>getLocalizedSegment</b></span>
                         <a href="#getLocalizedSegment"><span class="icon ion-ios-link"></span></a>
                     </span>
                 </td>
@@ -218,6 +218,7 @@
 
                     <div class="io-description">
                         <b>Parameters :</b>
+                        
                         <table class="params">
                             <thead>
                                 <tr>
@@ -261,10 +262,8 @@
                 <td class="col-md-4">
                     <a name="parsePath"></a>
                     <span class="name">
-                        <b>
-                            <span class="modifier">Public</span>
-                            parsePath
-                        </b>
+                        <span class="modifier">Public</span>
+                        <span ><b>parsePath</b></span>
                         <a href="#parsePath"><span class="icon ion-ios-link"></span></a>
                     </span>
                 </td>
@@ -290,6 +289,7 @@
 
                     <div class="io-description">
                         <b>Parameters :</b>
+                        
                         <table class="params">
                             <thead>
                                 <tr>
@@ -333,10 +333,8 @@
                 <td class="col-md-4">
                     <a name="path"></a>
                     <span class="name">
-                        <b>
-                            <span class="modifier">Public</span>
-                            path
-                        </b>
+                        <span class="modifier">Public</span>
+                        <span ><b>path</b></span>
                         <a href="#path"><span class="icon ion-ios-link"></span></a>
                     </span>
                 </td>
@@ -374,10 +372,8 @@
                 <td class="col-md-4">
                     <a name="toLocalizedPath"></a>
                     <span class="name">
-                        <b>
-                            <span class="modifier">Public</span>
-                            toLocalizedPath
-                        </b>
+                        <span class="modifier">Public</span>
+                        <span ><b>toLocalizedPath</b></span>
                         <a href="#toLocalizedPath"><span class="icon ion-ios-link"></span></a>
                     </span>
                 </td>
@@ -403,6 +399,7 @@
 
                     <div class="io-description">
                         <b>Parameters :</b>
+                        
                         <table class="params">
                             <thead>
                                 <tr>
@@ -578,14 +575,14 @@ import { L10N_CONFIG, L10nConfig } from &#x27;../models/l10n-config&#x27;;
 
 
 
-                   
+
 
 
 
 
                    </div><div class="search-results">
     <div class="has-results">
-        <h1 class="search-results-title"><span class='search-results-count'></span> result-matching "<span class='search-query'></span>"</h1>
+        <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
         <ul class="search-results-list"></ul>
     </div>
     <div class="no-results">
@@ -606,9 +603,9 @@ import { L10N_CONFIG, L10nConfig } from &#x27;../models/l10n-config&#x27;;
 
        <script src="../js/libs/custom-elements.min.js"></script>
        <script src="../js/libs/lit-html.js"></script>
-       <!-- Required to polyfill modern browsers as code is ES5 for IE... -->
-       <script src="../js/libs/custom-elements-es5-adapter.js" charset="utf-8" defer></script>
+
        <script src="../js/menu-wc.js" defer></script>
+       <script nomodule src="../js/menu-wc_es5.js" defer></script>
 
        <script src="../js/libs/bootstrap-native.js"></script>
 

@@ -8,7 +8,8 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
         <link rel="icon" type="image/x-icon" href="../images/favicon.ico">
-	      <link rel="stylesheet" href="../styles/style.css">
+	   <link rel="stylesheet" href="../styles/style.css">
+        <link rel="stylesheet" href="../styles/dark.css" media="(prefers-color-scheme: dark)">
     </head>
     <body>
 
@@ -37,7 +38,7 @@
 
 <ol class="breadcrumb">
   <li>Directives</li>
-  <li>L10nValidateDateDirective</li>
+  <li >L10nValidateDateDirective</li>
 </ol>
 
 <ul class="nav nav-tabs" role="tablist">
@@ -57,6 +58,7 @@
         <p class="comment">
             <code>projects/angular-l10n/src/lib/directives/l10n-validate-date.directive.ts</code>
         </p>
+
 
 
             <p class="comment">
@@ -105,7 +107,8 @@
                         <ul class="index-list">
                             <li>
                                     <span class="modifier">Protected</span>
-                                <a href="#validator">validator</a>
+                                    <span class="modifier">Optional</span>
+                                <a href="#validator" >validator</a>
                             </li>
                         </ul>
                     </td>
@@ -121,15 +124,15 @@
                         <ul class="index-list">
                             <li>
                                     <span class="modifier">Public</span>
-                                <a href="#ngOnChanges">ngOnChanges</a>
+                                <a href="#ngOnChanges" >ngOnChanges</a>
                             </li>
                             <li>
                                     <span class="modifier">Public</span>
-                                <a href="#ngOnInit">ngOnInit</a>
+                                <a href="#ngOnInit" >ngOnInit</a>
                             </li>
                             <li>
                                     <span class="modifier">Public</span>
-                                <a href="#validate">validate</a>
+                                <a href="#validate" >validate</a>
                             </li>
                         </ul>
                     </td>
@@ -144,19 +147,19 @@
                     <td class="col-md-4">
                         <ul class="index-list">
                             <li>
-                                <a href="#l10nValidateDate">l10nValidateDate</a>
+                                <a href="#l10nValidateDate" >l10nValidateDate</a>
                             </li>
                             <li>
-                                <a href="#language">language</a>
+                                <a href="#language" >language</a>
                             </li>
                             <li>
-                                <a href="#maxDate">maxDate</a>
+                                <a href="#maxDate" >maxDate</a>
                             </li>
                             <li>
-                                <a href="#minDate">minDate</a>
+                                <a href="#minDate" >minDate</a>
                             </li>
                             <li>
-                                <a href="#options">options</a>
+                                <a href="#options" >options</a>
                             </li>
                         </ul>
                     </td>
@@ -174,7 +177,7 @@
                         <td class="col-md-4">
                             <ul class="index-list">
                                 <li>
-                                    <a href="#l10nValidateDate">l10nValidateDate</a>
+                                    <a href="#l10nValidateDate" >l10nValidateDate</a>
                                 </li>
                             </ul>
                         </td>
@@ -189,7 +192,7 @@
             <tbody>
                 <tr>
                     <td class="col-md-4">
-<code>constructor(validation: <a href="../injectables/L10nValidation.html">L10nValidation</a>)</code>
+<code>constructor(validation: <a href="../injectables/L10nValidation.html" target="_self">L10nValidation</a>)</code>
                     </td>
                 </tr>
                         <tr>
@@ -242,12 +245,6 @@
                         <b>l10nValidateDate</b>
                     </td>
                 </tr>
-                <tr>
-                    <td class="col-md-4">
-                        <i>Type : </i>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
-
-                    </td>
-                </tr>
                         <tr>
                             <td class="col-md-2" colspan="2">
                                     <div class="io-line">Defined in <a href="" data-line="49" class="link-to-prism">projects/angular-l10n/src/lib/directives/l10n-validate-date.directive.ts:49</a></div>
@@ -265,13 +262,8 @@
                 </tr>
                 <tr>
                     <td class="col-md-4">
-                        <i>Type : </i>    <code>string | undefined</code>
+                        <i>Type : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
 
-                    </td>
-                </tr>
-                <tr>
-                    <td class="col-md-4">
-                        <i>Default value : </i><code>undefined</code>
                     </td>
                 </tr>
                         <tr>
@@ -291,13 +283,8 @@
                 </tr>
                 <tr>
                     <td class="col-md-4">
-                        <i>Type : </i>    <code>Date | undefined</code>
+                        <i>Type : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date" target="_blank" >Date</a></code>
 
-                    </td>
-                </tr>
-                <tr>
-                    <td class="col-md-4">
-                        <i>Default value : </i><code>undefined</code>
                     </td>
                 </tr>
                         <tr>
@@ -317,13 +304,8 @@
                 </tr>
                 <tr>
                     <td class="col-md-4">
-                        <i>Type : </i>    <code>Date | undefined</code>
+                        <i>Type : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date" target="_blank" >Date</a></code>
 
-                    </td>
-                </tr>
-                <tr>
-                    <td class="col-md-4">
-                        <i>Default value : </i><code>undefined</code>
                     </td>
                 </tr>
                         <tr>
@@ -343,7 +325,7 @@
                 </tr>
                 <tr>
                     <td class="col-md-4">
-                        <i>Type : </i>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+                        <i>Type : </i>        <code><a href="../interfaces/L10nDateTimeFormatOptions.html" target="_self" >L10nDateTimeFormatOptions</a></code>
 
                     </td>
                 </tr>
@@ -369,10 +351,8 @@
                 <td class="col-md-4">
                     <a name="ngOnChanges"></a>
                     <span class="name">
-                        <b>
-                            <span class="modifier">Public</span>
-                            ngOnChanges
-                        </b>
+                        <span class="modifier">Public</span>
+                        <span ><b>ngOnChanges</b></span>
                         <a href="#ngOnChanges"><span class="icon ion-ios-link"></span></a>
                     </span>
                 </td>
@@ -410,10 +390,8 @@
                 <td class="col-md-4">
                     <a name="ngOnInit"></a>
                     <span class="name">
-                        <b>
-                            <span class="modifier">Public</span>
-                            ngOnInit
-                        </b>
+                        <span class="modifier">Public</span>
+                        <span ><b>ngOnInit</b></span>
                         <a href="#ngOnInit"><span class="icon ion-ios-link"></span></a>
                     </span>
                 </td>
@@ -451,10 +429,8 @@
                 <td class="col-md-4">
                     <a name="validate"></a>
                     <span class="name">
-                        <b>
-                            <span class="modifier">Public</span>
-                            validate
-                        </b>
+                        <span class="modifier">Public</span>
+                        <span ><b>validate</b></span>
                         <a href="#validate"><span class="icon ion-ios-link"></span></a>
                     </span>
                 </td>
@@ -480,6 +456,7 @@
 
                     <div class="io-description">
                         <b>Parameters :</b>
+                        
                         <table class="params">
                             <thead>
                                 <tr>
@@ -520,42 +497,37 @@
 </section>
             <section>
     
-        <h3 id="inputs">
-            Properties
-        </h3>
-        <table class="table table-sm table-bordered">
-            <tbody>
+    <h3 id="inputs">
+        Properties
+    </h3>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="validator"></a>
+                    <span class="name">
+                            <span class="modifier">Protected</span>
+                            <span class="modifier">Optional</span>
+                        <span ><b>validator</b></span>
+                        <a href="#validator"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
                 <tr>
                     <td class="col-md-4">
-                        <a name="validator"></a>
-                        <span class="name">
-                            <b>
-                                <span class="modifier">Protected</span>
-                            validator</b>
-                            <a href="#validator"><span class="icon ion-ios-link"></span></a>
-                        </span>
+                        <i>Type : </i>        <code><a href="https://angular.io/api/forms/ValidatorFn" target="_blank" >ValidatorFn</a></code>
+
                     </td>
                 </tr>
                     <tr>
                         <td class="col-md-4">
-                            <i>Type : </i>    <code>ValidatorFn | null</code>
-
+                                <div class="io-line">Defined in <a href="" data-line="60" class="link-to-prism">projects/angular-l10n/src/lib/directives/l10n-validate-date.directive.ts:60</a></div>
                         </td>
                     </tr>
-                    <tr>
-                        <td class="col-md-4">
-                            <i>Default value : </i><code>null</code>
-                        </td>
-                    </tr>
-                        <tr>
-                            <td class="col-md-4">
-                                    <div class="io-line">Defined in <a href="" data-line="60" class="link-to-prism">projects/angular-l10n/src/lib/directives/l10n-validate-date.directive.ts:60</a></div>
-                            </td>
-                        </tr>
 
 
-            </tbody>
-        </table>
+        </tbody>
+    </table>
 </section>
 
             <section>
@@ -574,7 +546,7 @@
 
                 <tr>
                     <td class="col-md-4">
-                        <span class="accessor"><b>set</b><code>l10nValidateDate(options: <a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank">any</a>)</code></span>
+                        <span class="accessor"><b>set</b><code>l10nValidateDate(options: <a href="../interfaces/L10nDateTimeFormatOptions.html" target="_self">L10nDateTimeFormatOptions | string</a>)</code></span>
                     </td>
                 </tr>
                             <tr>
@@ -600,7 +572,7 @@
                                                             <td>options</td>
                                                     
                                                             <td>
-                                                                            <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+                                                                            <code><a href="../interfaces/L10nDateTimeFormatOptions.html" target="_self" >L10nDateTimeFormatOptions | string</a></code>
                                                             </td>
                                                     
                                                         <td>
@@ -675,18 +647,18 @@ export function l10nValidateDate(
 })
 export class L10nValidateDateDirective implements Validator, OnInit, OnChanges {
 
-    @Input() set l10nValidateDate(options: any) {
-        this.options &#x3D; options;
+    @Input() set l10nValidateDate(options: L10nDateTimeFormatOptions | &#x27;&#x27;) {
+        if (options) this.options &#x3D; options;
     }
 
-    @Input() public options: any;
+    @Input() public options?: L10nDateTimeFormatOptions;
 
-    @Input() public minDate: Date | undefined &#x3D; undefined;
-    @Input() public maxDate: Date | undefined &#x3D; undefined;
+    @Input() public minDate?: Date;
+    @Input() public maxDate?: Date;
 
-    @Input() public language: string | undefined &#x3D; undefined;
+    @Input() public language?: string;
 
-    protected validator: ValidatorFn | null &#x3D; null;
+    protected validator?: ValidatorFn;
 
     constructor(protected validation: L10nValidation) { }
 
@@ -715,14 +687,14 @@ export class L10nValidateDateDirective implements Validator, OnInit, OnChanges {
 
 
 
-                   
+
 
 
 
 
                    </div><div class="search-results">
     <div class="has-results">
-        <h1 class="search-results-title"><span class='search-results-count'></span> result-matching "<span class='search-query'></span>"</h1>
+        <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
         <ul class="search-results-list"></ul>
     </div>
     <div class="no-results">
@@ -743,9 +715,9 @@ export class L10nValidateDateDirective implements Validator, OnInit, OnChanges {
 
        <script src="../js/libs/custom-elements.min.js"></script>
        <script src="../js/libs/lit-html.js"></script>
-       <!-- Required to polyfill modern browsers as code is ES5 for IE... -->
-       <script src="../js/libs/custom-elements-es5-adapter.js" charset="utf-8" defer></script>
+
        <script src="../js/menu-wc.js" defer></script>
+       <script nomodule src="../js/menu-wc_es5.js" defer></script>
 
        <script src="../js/libs/bootstrap-native.js"></script>
 

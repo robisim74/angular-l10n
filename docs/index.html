@@ -8,7 +8,8 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
         <link rel="icon" type="image/x-icon" href="./images/favicon.ico">
-	      <link rel="stylesheet" href="./styles/style.css">
+	   <link rel="stylesheet" href="./styles/style.css">
+        <link rel="stylesheet" href="./styles/dark.css" media="(prefers-color-scheme: dark)">
     </head>
     <body>
 
@@ -53,7 +54,7 @@
 </ul>
 <h2 id="installation">Installation</h2>
 <div><pre class="line-numbers"><code class="language-Shell">npm install angular-l10n --save </code></pre></div><h2 id="usage">Usage</h2>
-<p>You can find a complete sample app <a href="projects/angular-l10n-app">here</a>, and a <a href="https://stackblitz.com/edit/angular-l10n">live example</a> on StackBlitz.</p>
+<p>You can find a complete sample app <a href="projects/angular-l10n-app">here</a></p>
 <h3 id="configuration">Configuration</h3>
 <p>Create the configuration:</p>
 <div><pre class="line-numbers"><code class="language-TypeScript">export const l10nConfig: L10nConfig = {
@@ -63,27 +64,29 @@
     ],
     cache: true,
     keySeparator: &#39;.&#39;,
-    defaultLocale: { language: &#39;en-US&#39;, currency: &#39;USD&#39; },
+    defaultLocale: { language: &#39;en-US&#39;, currency: &#39;USD&#39;, timeZone: &#39;America/Los_Angeles&#39; },
     schema: [
-        { locale: { language: &#39;en-US&#39;, currency: &#39;USD&#39; }, dir: &#39;ltr&#39;, text: &#39;United States&#39; },
-        { locale: { language: &#39;it-IT&#39;, currency: &#39;EUR&#39; }, dir: &#39;ltr&#39;, text: &#39;Italia&#39; }
-    ]
+        { locale: { language: &#39;en-US&#39;, currency: &#39;USD&#39;, timeZone: &#39;America/Los_Angeles&#39;, units: { &#39;length&#39;: &#39;mile&#39; } }, dir: &#39;ltr&#39;, text: &#39;United States&#39; },
+        { locale: { language: &#39;it-IT&#39;, currency: &#39;EUR&#39;, timeZone: &#39;Europe/Rome&#39;, units: { &#39;length&#39;: &#39;kilometer&#39; } }, dir: &#39;ltr&#39;, text: &#39;Italia&#39; }
+    ],
 };
-
-export function initL10n(l10nLoader: L10nLoader): () =&gt; Promise&lt;void&gt; {
-    return () =&gt; l10nLoader.init();
-}
 
 const i18nAsset = {
     &#39;en-US&#39;: {
         greeting: &#39;Hello world!&#39;,
         whoIAm: &#39;I am {{name}}&#39;,
-        one: &#39;software developer&#39;
+        devs: {
+            one: &#39;software developer&#39;,
+            other: &#39;software developers&#39;
+        }
     },
     &#39;it-IT&#39;: {
         greeting: &#39;Ciao mondo!&#39;,
         whoIAm: &#39;Sono {{name}}&#39;,
-        one: &#39;sviluppatore software&#39;
+        devs: {
+            one: &#39;sviluppatori software&#39;,
+            other: &quot;sviluppatori software&quot;
+        }
     }
 };</code></pre></div><blockquote>
 <p>Do you only need to localize and not translate? Give the <code>providers</code> an empty array, but provide the supported locales in the <code>schema</code> anyway</p>
@@ -96,65 +99,132 @@ const i18nAsset = {
         L10nTranslationModule.forRoot(l10nConfig),
         L10nIntlModule
     ],
-    providers: [
-        {
-            provide: APP_INITIALIZER,
-            useFactory: initL10n,
-            deps: [L10nLoader],
-            multi: true
-        }
-    ],
     bootstrap: [AppComponent]
 })
 export class AppModule { }</code></pre></div><h3 id="getting-the-translation">Getting the translation</h3>
 <h4 id="pure-pipes">Pure Pipes</h4>
-<div><pre class="line-numbers"><code class="language-Html">&lt;p title=&quot;{{ &#39;greeting&#39; | translate:locale.language }}&quot;&gt;{{ &#39;greeting&#39; | translate:locale.language }}&lt;/p&gt;
+<div><pre class="line-numbers"><code class="language-Html">&lt;!-- translate pipe --&gt;
+&lt;p&gt;{{ &#39;greeting&#39; | translate:locale.language }}&lt;/p&gt;
+&lt;!-- translate pipe with attributes --&gt;
+&lt;p title=&quot;{{ &#39;greeting&#39; | translate:locale.language }}&quot;&gt;{{ &#39;greeting&#39; | translate:locale.language }}&lt;/p&gt;
+&lt;!-- Hello world! --&gt;
+
+&lt;!-- translate pipe with params --&gt;
 &lt;p&gt;{{ &#39;whoIAm&#39; | translate:locale.language:{ name: &#39;Angular l10n&#39; } }}&lt;/p&gt;
+&lt;!-- I am Angular l10n --&gt;
 
+&lt;!-- l10nDate pipe --&gt;
 &lt;p&gt;{{ today | l10nDate:locale.language:{ dateStyle: &#39;full&#39;, timeStyle: &#39;short&#39; } }}&lt;/p&gt;
-&lt;p&gt;{{ timeAgo | l10nTimeAgo:locale.language:&#39;second&#39;:{ numeric:&#39;always&#39;, style:&#39;long&#39; } }}&lt;/p&gt;
+&lt;!-- Wednesday, November 10, 2021, 2:17 PM --&gt;
 
-&lt;p&gt;{{ value | l10nNumber:locale.language:{ digits: &#39;1.2-2&#39;, style: &#39;currency&#39; } }}&lt;/p&gt;
+&lt;!-- l10nTimeAgo pipe --&gt;
+&lt;p&gt;{{ -4 | l10nTimeAgo:locale.language:&#39;second&#39;:{ numeric:&#39;always&#39;, style:&#39;long&#39; } }}&lt;/p&gt;
+&lt;!-- 4 seconds ago --&gt;
 
-&lt;p&gt;1 {{ 1 | l10nPlural:locale.language }}&lt;/p&gt;
+&lt;!-- l10nNumber pipe --&gt;
+&lt;p&gt;{{ 1000 | l10nNumber:locale.language:{ digits: &#39;1.2-2&#39;, style: &#39;currency&#39; } }}&lt;/p&gt;
+&lt;!-- $1,000.00 --&gt;
 
-&lt;button *ngFor=&quot;let item of schema&quot;
-    (click)=&quot;setLocale(item.locale)&quot;&gt;{{ item.locale.language | l10nDisplayNames:locale.language:{ type: &#39;language&#39; } }}&lt;/button&gt;</code></pre></div><p>Pure pipes need to know when the <em>locale</em> changes. So import <code>L10nLocale</code> injection token in the component:</p>
-<div><pre class="line-numbers"><code class="language-TypeScript">export class AppComponent {
+&lt;!-- l10nNumber pipe with convert function --&gt;
+&lt;p&gt;{{ 1000 | l10nNumber:locale.language:{ digits: &#39;1.2-2&#39;, style: &#39;currency&#39; }:locale.currency:convertCurrency:{ rate: 1.16 } }}&lt;/p&gt;
+&lt;!-- $1,160.00 --&gt;
+
+&lt;!-- l10nNumber pipe with unit &amp; convert function --&gt;
+&lt;p&gt;{{ 1 | l10nNumber:locale.language:{ digits: &#39;1.0-2&#39;, style: &#39;unit&#39;, unit: locale.units[&#39;length&#39;] }:undefined:convertLength }}&lt;/p&gt;
+&lt;!-- 0.62 mi --&gt;
+
+&lt;!-- l10nPlural pipe --&gt;
+&lt;p&gt;2 {{ 2 | l10nPlural:locale.language:&#39;devs&#39;:{ type: &#39;cardinal&#39; } }}&lt;/p&gt;
+&lt;!-- 2 software developers --&gt;
+
+&lt;!-- l10nDisplayNames pipe --&gt;
+&lt;p&gt;{{ &#39;en-US&#39; | l10nDisplayNames:locale.language:{ type: &#39;language&#39; } }}&lt;/p&gt;
+&lt;!-- American English --&gt;</code></pre></div><p>Pure pipes need to know when the <em>locale</em> changes. So import <code>L10nLocale</code> injection token in every component that uses them:</p>
+<div><pre class="line-numbers"><code class="language-TypeScript">export class PipeComponent {
 
     constructor(&#64;Inject(L10N_LOCALE) public locale: L10nLocale) { }
 
-}</code></pre></div><h5 id="onpush-change-detection-strategy">OnPush Change Detection Strategy</h5>
-<p>To support this strategy, there is an async version of each pipe:</p>
+}</code></pre></div><h5 id="convert-function">Convert function</h5>
+<p>An optional function to convert the value of numbers, with the same <em>value</em>, <em>locale</em> and destructured optional parameters in the signature:</p>
+<div><pre class="line-numbers"><code class="language-TypeScript">export const convertCurrency = (value: number, locale: L10nLocale, rate: number) =&gt; {
+    switch (locale.currency) {
+        case &quot;USD&quot;:
+            return value * rate;
+        default:
+            return value;
+    }
+};</code></pre></div><h5 id="onpush-change-detection-strategy">OnPush Change Detection Strategy</h5>
+<p>To support this strategy, there is an <code>Async</code> version of each pipe, which recognizes by itself when the <em>locale</em> changes:</p>
 <div><pre class="line-numbers"><code class="language-Html">&lt;p&gt;{{ &#39;greeting&#39; | translateAsync }}&lt;/p&gt;</code></pre></div><h4 id="directives">Directives</h4>
-<div><pre class="line-numbers"><code class="language-Html">&lt;p l10n-title title=&quot;greeting&quot; l10nTranslate&gt;greeting&lt;/p&gt;
+<div><pre class="line-numbers"><code class="language-Html">&lt;!-- l10nTranslate directive --&gt;
+&lt;p l10nTranslate&gt;greeting&lt;/p&gt;
+&lt;!-- l10nTranslate directive with attributes --&gt;
+&lt;p l10n-title title=&quot;greeting&quot; l10nTranslate&gt;greeting&lt;/p&gt;
+&lt;!-- l10nTranslate directive with params --&gt;
 &lt;p [params]=&quot;{ name: &#39;Angular l10n&#39; }&quot; l10nTranslate&gt;whoIAm&lt;/p&gt;
-&lt;!-- &lt;p [l10nTranslate]=&quot;{ name: &#39;Angular l10n&#39; }&quot;&gt;whoIAm&lt;/p&gt; --&gt;
 
+&lt;!-- l10nDate directive --&gt;
 &lt;p [options]=&quot;{ dateStyle: &#39;full&#39;, timeStyle: &#39;short&#39; }&quot; l10nDate&gt;{{ today }}&lt;/p&gt;
-&lt;p [options]=&quot;{ numeric:&#39;always&#39;, style:&#39;long&#39; }&quot; unit=&quot;second&quot; l10nTimeAgo&gt;{{ timeAgo }}&lt;/p&gt;
 
-&lt;p [options]=&quot;{ digits: &#39;1.2-2&#39;, style: &#39;currency&#39; }&quot; l10nNumber&gt;{{ value }}&lt;/p&gt;</code></pre></div><p>You can dynamically change parameters and expressions values as with pipes, but not in attributes.</p>
+&lt;!-- l10nTimeAgo directive --&gt;
+&lt;p [options]=&quot;{ numeric:&#39;always&#39;, style:&#39;long&#39; }&quot; unit=&quot;second&quot; l10nTimeAgo&gt;-4&lt;/p&gt;
+
+&lt;!-- l10nNumber directive --&gt;
+&lt;p [options]=&quot;{ digits: &#39;1.2-2&#39;, style: &#39;currency&#39; }&quot; l10nNumber&gt;1000&lt;/p&gt;
+&lt;!-- l10nNumber directive with convert function --&gt;
+&lt;p [options]=&quot;{ digits: &#39;1.2-2&#39;, style: &#39;currency&#39; }&quot; [convert]=&quot;convertCurrency&quot; [convertParams]=&quot;{ rate: 1.16 }&quot; l10nNumber&gt;1000&lt;/p&gt;
+&lt;!-- l10nNumber directive with unit &amp; convert function --&gt;
+&lt;p [options]=&quot;{ digits: &#39;1.0-2&#39;, style: &#39;unit&#39;, unit: locale.units[&#39;length&#39;] }&quot; [convert]=&quot;convertLength&quot; l10nNumber&gt;1&lt;/p&gt;</code></pre></div><p>You can dynamically change parameters and expressions values as with pipes, but not in attributes.</p>
 <h4 id="apis">APIs</h4>
-<div><pre class="line-numbers"><code class="language-TypeScript">export class AppComponent implements OnInit {
+<p><code>L10nTranslationService</code> provides an <code>onChange</code> event, which is fired whenever the <em>locale</em> changes.</p>
+<div><pre class="line-numbers"><code class="language-TypeScript">export class ApiComponent implements OnInit {
 
     constructor(private translation: L10nTranslationService, private intl: L10nIntlService) { }
 
     ngOnInit() {
         this.translation.onChange().subscribe({
-            next: () =&gt; {
+            next: (locale: L10nLocale) =&gt; {
+                // Texts
                 this.greeting = this.translation.translate(&#39;greeting&#39;);
                 this.whoIAm = this.translation.translate(&#39;whoIAm&#39;, { name: &#39;Angular l10n&#39; });
-
+                // Dates
                 this.formattedToday = this.intl.formatDate(this.today, { dateStyle: &#39;full&#39;, timeStyle: &#39;short&#39; });
-                this.formattedTimeAgo = this.intl.formatRelativeTime(this.timeAgo, &#39;second&#39;, { numeric: &#39;always&#39;, style: &#39;long&#39; });
-                this.formattedValue = this.intl.formatNumber(this.value, { digits: &#39;1.2-2&#39;, style: &#39;currency&#39; });
-                this.formattedOnePlural = this.intl.plural(1);
+                this.formattedTimeAgo = this.intl.formatRelativeTime(-4, &#39;second&#39;, { numeric: &#39;always&#39;, style: &#39;long&#39; });
+                // Numbers
+                this.formattedValue = this.intl.formatNumber(
+                    1000,
+                    { digits: &#39;1.2-2&#39;, style: &#39;currency&#39; },
+                    undefined,
+                    undefined,
+                    convertCurrency,
+                    { rate: 1.16 }
+                );
+                this.formattedLength = this.intl.formatNumber(
+                    1,
+                    { digits: &#39;1.0-2&#39;, style: &#39;unit&#39;, unit: locale.units[&#39;length&#39;] },
+                    undefined,
+                    undefined,
+                    convertLength
+                );
+                ...
             }
         });
     }
 
-}</code></pre></div><p>The <code>L10nIntlService</code> also provides methods for other Intl APIs, such as <em>Collator</em> &amp; <em>ListFormat</em>.</p>
+}</code></pre></div><p><code>L10nIntlService</code> provides methods for all Intl APIs, including <em>Collator</em> &amp; <em>ListFormat</em>.</p>
+<h3 id="changing-the-locale">Changing the locale</h3>
+<p>You can change the <em>locale</em> at runtime at any time by calling the <code>setLocale</code> method of <code>L10nTranslationService</code>:</p>
+<div><pre class="line-numbers"><code class="language-Html">&lt;button *ngFor=&quot;let item of schema&quot; (click)=&quot;setLocale(item.locale)&quot;&gt;{{ item.locale.language | l10nDisplayNames:locale.language:{ type: &#39;language&#39; } }}&lt;/button&gt;</code></pre></div><div><pre class="line-numbers"><code class="language-TypeScript">export class AppComponent {
+
+    schema = this.l10nConfig.schema;
+
+    constructor(&#64;Inject(L10N_CONFIG) private l10nConfig: L10nConfig, private translation: L10nTranslationService) { }
+
+    setLocale(locale: L10nLocale): void {
+        this.translation.setLocale(locale);
+    }
+
+}</code></pre></div><p>It is not mandatory to use the <em>schema</em> provided during the configuration: it is possible to set the <em>language</em> or <em>currency</em>, or any other property of <code>L10nLocale</code> separately.</p>
 <h3 id="customize-the-library">Customize the library</h3>
 <p>The following features can be customized. You just have to implement the indicated class-interface and pass the token during configuration.</p>
 <p>E.g.</p>
@@ -197,7 +267,7 @@ export const l10nConfig: L10nConfig = {
     ...
 })
 export class AppModule { }</code></pre></div><h4 id="storage">Storage</h4>
-<p>By default, the library does not store the <em>locale</em>. To store it implement the <code>L10nStorage</code> class-interface, so that the next time the user has the <em>locale</em> he selected.</p>
+<p>By default, the library does not store the <em>locale</em>. To store it implement the <code>L10nStorage</code> class-interface using what you need, such as web storage or cookie, so that the next time the user has the <em>locale</em> he selected.</p>
 <h4 id="user-language">User Language</h4>
 <p>By default, the library attempts to set the <em>locale</em> using the user&#39;s browser language, before falling back on the <em>default locale</em>. You can change this behavior by implementing the <code>L10nUserLanguage</code> class-interface, for example to get the language via server.</p>
 <h4 id="translation-loader">Translation Loader</h4>
@@ -312,7 +382,12 @@ export class AppModule { }</code></pre></div><h3 id="lazy-loading">Lazy loading<
         L10nTranslationModule
     ]
 })
-export class LazyModule { }</code></pre></div><h3 id="caching">Caching</h3>
+export class LazyModule { }</code></pre></div><h4 id="lazy-loading-with-bundled-data">Lazy loading with bundled data</h4>
+<p>If you are bundling translation data using the default <code>L10nTranslationLoader</code>, you can add translation providers to lazy modules by updating the configuration and calling the <code>loadTranslation</code> method:</p>
+<div><pre class="line-numbers"><code class="language-TypeScript">const i18nLazyAsset = { &#39;en-US&#39;: {...}, &#39;it-IT&#39;: {...} };
+
+this.translation.addProviders([{ name: &#39;lazy&#39;, asset: i18nLazyAsset}]);
+this.translation.loadTranslation([{ name: &#39;lazy&#39;, asset: i18nLazyAsset}]);</code></pre></div><h3 id="caching">Caching</h3>
 <p>Enable caching during configuration if you want to prevent reloading of the already loaded translation data:</p>
 <div><pre class="line-numbers"><code class="language-TypeScript">export const l10nConfig: L10nConfig = {
     ...
@@ -327,7 +402,7 @@ export class LazyModule { }</code></pre></div><h3 id="caching">Caching</h3>
                 complete: () =&gt; resolve()
             });
     });
-}</code></pre></div><p>Then add the function to providers, before <code>initL10n</code>:</p>
+}</code></pre></div><p>Then add the function to providers:</p>
 <div><pre class="line-numbers"><code class="language-TypeScript">providers: [
     {
         provide: APP_INITIALIZER,
@@ -341,53 +416,38 @@ export class LazyModule { }</code></pre></div><h3 id="caching">Caching</h3>
 <ul>
 <li><p><code>L10nLocale</code>: contains a <em>language</em>, in the format <code>language[-script][-region][-extension]</code>, where:</p>
 <ul>
-<li><p>language: ISO 639 two-letter or three-letter code</p>
-</li>
-<li><p>script: ISO 15924 four-letter script code</p>
-</li>
-<li><p>region: ISO 3166 two-letter, uppercase code</p>
-</li>
-<li><p>extension: &#39;u&#39; (Unicode) extensions</p>
-<p>Optionally:</p>
-</li>
-<li><p><em>dateLanguage</em>: alternative language to translate dates</p>
-</li>
-<li><p><em>numberLanguage</em>: alternative language to translate numbers</p>
-</li>
-<li><p><em>currency</em>: ISO 4217 three-letter code</p>
-</li>
-<li><p><em>timezone</em>: from the IANA time zone database</p>
-</li>
+<li>language: ISO 639 two-letter or three-letter code</li>
+<li>script: ISO 15924 four-letter script code</li>
+<li>region: ISO 3166 two-letter, uppercase code</li>
+<li>extension: &#39;u&#39; (Unicode) extensions</li>
+</ul>
+<p>   Optionally:</p>
+<ul>
+<li><em>dateLanguage</em>: alternative language to translate dates</li>
+<li><em>numberLanguage</em>: alternative language to translate numbers</li>
+<li><em>currency</em>: ISO 4217 three-letter code</li>
+<li><em>timezone</em>: from the IANA time zone database</li>
+<li><em>units</em>: key value pairs of unit identifiers</li>
 </ul>
 </li>
 <li><p><code>L10nFormat</code>: shows the format of the <em>language</em> to be used for translations. The supported formats are: <code>&#39;language&#39; | &#39;language-script&#39; | &#39;language-region&#39; | &#39;language-script-region&#39;</code>. So, for example, you can have a <em>language</em> like <code>en-US-u-ca-gregory-nu-latn</code> to format dates and numbers, but only use the <code>en-US</code> for translations setting <code>&#39;language-region&#39;</code></p>
 </li>
-<li><p><code>L10nDateTimeFormatOptions</code>: the type of <em>options</em> used to format dates. Extends the Intl <code>DateTimeFormatOptions</code> interface, adding the <em>dateStyle</em> and <em>timeStyle</em> attributes. See <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/DateTimeFormat/DateTimeFormat">DateTimeFormat</a> for more details on available options</p>
+<li><p><code>L10nDateTimeFormatOptions</code>: the type of <em>options</em> used to format dates. Extends the Intl <code>DateTimeFormatOptions</code> interface, replacing the <em>dateStyle</em> and <em>timeStyle</em> attributes. See <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/DateTimeFormat/DateTimeFormat">DateTimeFormat</a> for more details on available options</p>
 </li>
 <li><p><code>L10nNumberFormatOptions</code>: the type of <em>options</em> used to format numbers. Extends the Intl <code>NumberFormatOptions</code> interface, adding the <em>digits</em> attribute. See <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/NumberFormat/NumberFormat">NumberFormat</a> for more details on available options</p>
 </li>
 </ul>
 <h2 id="intl-api">Intl API</h2>
-<p>To format dates and numbers, this library uses the <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl">Intl API</a></p>
-<p>Check the current browser support:</p>
+<p>To format dates and numbers, this library uses <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl">Intl API</a></p>
+<p>Current browser support:</p>
 <ul>
 <li><a href="http://kangax.github.io/compat-table/esintl/">ECMAScript compatibility tables</a></li>
 <li><a href="http://caniuse.com/#feat=internationalization">Can I use</a></li>
 <li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl#Browser_compatibility">Intl</a></li>
 </ul>
-<p>You can use polyfills to extend support to old browsers, or to use newest features:</p>
-<ul>
-<li><p><a href="https://polyfill.io/v3/">Polyfill.io</a></p>
-<p>  Just add one script tag in your <code>index.html</code>, for example:</p>
-<div><pre class="line-numbers"><code class="language-Html">  &lt;script crossorigin=&quot;anonymous&quot;
-      src=&quot;https://polyfill.io/v3/polyfill.min.js?flags=gated&amp;features=Intl.~locale.en-US&quot;&gt;&lt;/script&gt;</code></pre></div><p>  When specifying the <code>features</code>, you have to specify what languages to load</p>
-</li>
-<li><p><a href="https://formatjs.io/docs/polyfills">Format.JS</a></p>
-<p>  Import polyfills you need as in the sample app</p>
-</li>
-</ul>
+<p>If you need to support previous versions of browsers, or to use newest features see <a href="https://formatjs.io/docs/polyfills">Format.JS</a></p>
 <h3 id="intl-api-in-nodejs">Intl API in Node.js</h3>
-<p>To use <em>Intl</em> in <em>Node.js</em>, check the support according to the version in the official documentation: <a href="https://nodejs.org/api/intl.html">Internationalization Support</a></p>
+<p>To use Intl in <em>Node.js</em>, check the support according to the version in the official documentation: <a href="https://nodejs.org/api/intl.html">Internationalization Support</a></p>
 <h2 id="server-side-rendering">Server Side Rendering</h2>
 <p>You can find a complete sample app with <em>@nguniversal/express-engine</em> <a href="projects/angular-l10n-app-ssr">here</a></p>
 <p>SSR doesn&#39;t work out of the box, so it is important to know:</p>
@@ -401,6 +461,11 @@ export class LazyModule { }</code></pre></div><h3 id="caching">Caching</h3>
 </ul>
 <h2 id="previous-versions">Previous versions</h2>
 <ul>
+<li><p><strong>Angular v12 (Angular l10n v12.0.1)</strong></p>
+<ul>
+<li><a href="https://github.com/robisim74/angular-l10n/tree/angular_v12">Branch</a></li>
+</ul>
+</li>
 <li><p><strong>Angular v11 (Angular l10n v11.1.0)</strong></p>
 <ul>
 <li><a href="https://github.com/robisim74/angular-l10n/tree/angular_v11">Branch</a></li>
@@ -450,14 +515,14 @@ export class LazyModule { }</code></pre></div><h3 id="caching">Caching</h3>
 <h2 id="contributing">Contributing</h2>
 <ul>
 <li><p>First, install the packages &amp; build the library:</p>
-<div><pre class="line-numbers"><code class="language-Shell">  npm install
-  npm run build</code></pre></div></li>
+<div><pre class="line-numbers"><code class="language-Shell">npm install
+npm run build:watch</code></pre></div></li>
 <li><p>Testing:</p>
-<div><pre class="line-numbers"><code class="language-Shell">  npm test</code></pre></div></li>
+<div><pre class="line-numbers"><code class="language-Shell">npm run test:watch</code></pre></div></li>
 <li><p>Serving the sample app:</p>
-<div><pre class="line-numbers"><code class="language-Shell">  npm start</code></pre></div></li>
+<div><pre class="line-numbers"><code class="language-Shell">npm start</code></pre></div></li>
 <li><p>Serving the sample ssr app:</p>
-<div><pre class="line-numbers"><code class="language-Shell">  npm run dev:ssr</code></pre></div></li>
+<div><pre class="line-numbers"><code class="language-Shell">npm run dev:ssr</code></pre></div></li>
 </ul>
 <h2 id="license">License</h2>
 <p>MIT</p>
@@ -475,14 +540,14 @@ export class LazyModule { }</code></pre></div><h3 id="caching">Caching</h3>
 
 
 
-                   
+
 
 
 
 
                    </div><div class="search-results">
     <div class="has-results">
-        <h1 class="search-results-title"><span class='search-results-count'></span> result-matching "<span class='search-query'></span>"</h1>
+        <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
         <ul class="search-results-list"></ul>
     </div>
     <div class="no-results">
@@ -503,9 +568,9 @@ export class LazyModule { }</code></pre></div><h3 id="caching">Caching</h3>
 
        <script src="./js/libs/custom-elements.min.js"></script>
        <script src="./js/libs/lit-html.js"></script>
-       <!-- Required to polyfill modern browsers as code is ES5 for IE... -->
-       <script src="./js/libs/custom-elements-es5-adapter.js" charset="utf-8" defer></script>
+
        <script src="./js/menu-wc.js" defer></script>
+       <script nomodule src="./js/menu-wc_es5.js" defer></script>
 
        <script src="./js/libs/bootstrap-native.js"></script>
 
