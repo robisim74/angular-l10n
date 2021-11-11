@@ -1,6 +1,6 @@
 import { Component, OnInit, OnChanges, SimpleChanges, Input } from '@angular/core';
 
-import { L10nTranslationService, L10nIntlService } from 'angular-l10n';
+import { L10nTranslationService, L10nIntlService, L10nLocale } from 'angular-l10n';
 
 import { convertCurrency, convertLength } from '../../conversions';
 
@@ -13,7 +13,6 @@ export class ApiComponent implements OnInit, OnChanges {
 
     @Input() today: number;
     @Input() timeAgo: string;
-    @Input() value: number;
 
     greeting: string;
     whoIAm: string;
@@ -33,7 +32,7 @@ export class ApiComponent implements OnInit, OnChanges {
 
     ngOnInit() {
         this.translation.onChange().subscribe({
-            next: () => {
+            next: (locale: L10nLocale) => {
                 this.greeting = this.translation.translate('home.greeting');
                 this.whoIAm = this.translation.translate('home.whoIAm', { name: 'Angular l10n' });
                 this.description = this.translation.translate('home.description');
@@ -41,7 +40,7 @@ export class ApiComponent implements OnInit, OnChanges {
                 this.formattedToday = this.intl.formatDate(this.today, { dateStyle: 'full', timeStyle: 'short' });
                 this.formattedTimeAgo = this.intl.formatRelativeTime(this.timeAgo, 'second', { numeric: 'always', style: 'long' });
                 this.formattedValue = this.intl.formatNumber(
-                    this.value,
+                    1000,
                     { digits: '1.2-2', style: 'currency' },
                     undefined,
                     undefined,
@@ -50,13 +49,13 @@ export class ApiComponent implements OnInit, OnChanges {
                 );
                 this.formattedLength = this.intl.formatNumber(
                     1,
-                    { digits: '1.0-2', style: 'unit', unit: this.translation.getLocale().units['length'] },
+                    { digits: '1.0-2', style: 'unit', unit: locale.units['length'] },
                     undefined,
                     undefined,
                     convertLength
                 );
-                this.formattedOnePlural = this.intl.plural(1, 'home', { type: 'cardinal' });
-                this.formattedOtherPlural = this.intl.plural(2, 'home', { type: 'cardinal' });
+                this.formattedOnePlural = this.intl.plural(1, 'home.devs', { type: 'cardinal' });
+                this.formattedOtherPlural = this.intl.plural(2, 'home.devs', { type: 'cardinal' });
             }
         });
     }

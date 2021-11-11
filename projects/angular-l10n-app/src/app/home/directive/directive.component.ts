@@ -12,7 +12,6 @@ export class DirectiveComponent implements OnInit {
 
     @Input() today: number;
     @Input() timeAgo: string;
-    @Input() value: number;
 
     convertCurrency = convertCurrency;
     convertLength = convertLength;

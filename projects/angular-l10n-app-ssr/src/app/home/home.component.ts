@@ -13,7 +13,6 @@ export class HomeComponent implements OnInit {
 
     today = Date.now();
     timeAgo = '-0';
-    value = Math.round(Math.random() * 1000000) / 100;
 
     constructor(@Inject(L10N_LOCALE) public locale: L10nLocale) { }
 

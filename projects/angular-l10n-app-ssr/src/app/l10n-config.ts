@@ -30,8 +30,8 @@ export const l10nConfig: L10nConfig = {
     keySeparator: '.',
     defaultLocale: { language: 'en-US', currency: 'USD', timeZone: 'America/Los_Angeles' },
     schema: [
-        { locale: { language: 'en-US', currency: 'USD', timeZone: 'America/Los_Angeles' }, dir: 'ltr', text: 'United States' },
-        { locale: { language: 'it-IT', currency: 'EUR', timeZone: 'Europe/Rome' }, dir: 'ltr', text: 'Italia' }
+        { locale: { language: 'en-US', currency: 'USD', timeZone: 'America/Los_Angeles', units: { 'length': 'mile' } }, dir: 'ltr', text: 'United States' },
+        { locale: { language: 'it-IT', currency: 'EUR', timeZone: 'Europe/Rome', units: { 'length': 'kilometer' } }, dir: 'ltr', text: 'Italia' }
     ],
     defaultRouting: true
 };

@@ -13,7 +13,6 @@ export class PipeComponent implements OnInit {
 
     @Input() today: number;
     @Input() timeAgo: string;
-    @Input() value: number;
 
     convertCurrency = convertCurrency;
     convertLength = convertLength;
