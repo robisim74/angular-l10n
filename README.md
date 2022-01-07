@@ -310,6 +310,49 @@ To change it, implement the `L10nTranslationFallback` class-interface.
 By default, the library only parse the _params_. `L10nTranslationHandler` is the class-interface to implement to modify the behavior.
 #### Missing Translation Handler
 If a key is not found, the same key is returned. To return a different value, you can implement the `L10nMissingTranslationHandler` class-interface.
+#### Loader
+If you need to preload some data before initialization of the library, you can implement the `L10nLoader` class-interface:
+```TypeScript
+@Injectable() export class AppLoader implements L10nLoader {
+    constructor(private translation: L10nTranslationService) { }
+
+    public async init(): Promise<void> {
+        await ... // Some custom data loading action
+        await this.translation.init();
+    }
+}
+
+@NgModule({
+    imports: [
+        L10nTranslationModule.forRoot(
+            l10nConfig,
+            {
+                loader: AppLoader
+            }
+        ),
+    ],
+})
+```
+or if you are using `L10nRouting`:
+```TypeScript
+@Injectable() export class AppRoutingLoader implements L10nLoader {
+    constructor(private routing: L10nRoutingService, private translation: L10nTranslationService) { }
+
+    public async init(): Promise<void> {
+        await ... // Some custom data loading action
+        await this.routing.init();
+        await this.translation.init();
+    }
+}
+
+@NgModule({
+    imports: [
+        L10nRoutingModule.forRoot({
+            loader: AppRoutingLoader
+        })
+    ],
+})
+```
 
 ### Validation
 There are two directives, that you can use with Template driven or Reactive forms: `l10nValidateNumber` and `l10nValidateDate`. To use them, you have to implement the `L10nValidation` class-interface, and import it with the validation module:
@@ -452,27 +495,20 @@ export const l10nConfig: L10nConfig = {
 If you need to preload some translation data, for example to use for missing values, `L10nTranslationService` exposes the translation data in the `data` attribute. You can merge data by calling the `addData` method:
 
 ```TypeScript
-export function l10nPreload(translation: L10nTranslationService, translationLoader: L10nTranslationLoader): () => Promise<void> {
-    return () => new Promise((resolve) => {
-        translationLoader.get('en-US', { name: 'app', asset: './assets/i18n/app', options: { version: '1.0.0' } })
-            .subscribe({
-                next: (data) => translation.addData(data, 'en-US'),
-                complete: () => resolve()
-            });
-    });
+@Injectable() export class AppLoader implements L10nLoader {
+    constructor(private translation: L10nTranslationService, private translationLoader: L10nTranslationLoader) { }
+
+    public async init(): Promise<void> {
+        await new Promise((resolve) => {
+            this.translationLoader.get('en-US', { name: 'app', asset: './assets/i18n/app', options: { version: '1.0.0' } })
+                .subscribe({
+                    next: (data) => this.translation.addData(data, 'en-US'),
+                    complete: () => resolve(null)
+                });
+        });
+        await this.translation.init();
+    }
 }
-```
-Then add the function to providers:
-```TypeScript
-providers: [
-    {
-        provide: APP_INITIALIZER,
-        useFactory: l10nPreload,
-        deps: [L10nTranslationService, L10nTranslationLoader],
-        multi: true
-    },
-    ...
-],
 ```
 
 

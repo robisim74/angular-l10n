@@ -1,6 +1,6 @@
 {
   "name": "angular-l10n",
-  "version": "13.0.0",
+  "version": "13.1.0",
   "scripts": {
     "ng": "ng",
     "start": "ng serve angular-l10n-app --open",
@@ -49,11 +49,11 @@
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "13.0.1",
-    "@angular-eslint/builder": "13.0.0-alpha.0",
-    "@angular-eslint/eslint-plugin": "13.0.0-alpha.0",
-    "@angular-eslint/eslint-plugin-template": "13.0.0-alpha.0",
-    "@angular-eslint/schematics": "13.0.0-alpha.0",
-    "@angular-eslint/template-parser": "13.0.0-alpha.0",
+    "@angular-eslint/builder": "13.0.1",
+    "@angular-eslint/eslint-plugin": "13.0.1",
+    "@angular-eslint/eslint-plugin-template": "13.0.1",
+    "@angular-eslint/schematics": "13.0.1",
+    "@angular-eslint/template-parser": "13.0.1",
     "@angular/cli": "13.0.1",
     "@angular/compiler-cli": "13.0.0",
     "@angular/language-service": "13.0.0",
