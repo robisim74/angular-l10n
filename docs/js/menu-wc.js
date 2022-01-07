@@ -140,13 +140,13 @@ customElements.define('compodoc-menu', class extends HTMLElement {
                                 <a href="modules/L10nTranslationModule.html" data-type="entity-link" >L10nTranslationModule</a>
                                 <li class="chapter inner">
                                     <div class="simple menu-toggler" data-toggle="collapse" ${ isNormalMode ?
-                                        'data-target="#directives-links-module-L10nTranslationModule-f2f52f1b54d14a3cebeb5cf01e5774d6"' : 'data-target="#xs-directives-links-module-L10nTranslationModule-f2f52f1b54d14a3cebeb5cf01e5774d6"' }>
+                                        'data-target="#directives-links-module-L10nTranslationModule-951828adedb13d9d63614c0711644323"' : 'data-target="#xs-directives-links-module-L10nTranslationModule-951828adedb13d9d63614c0711644323"' }>
                                         <span class="icon ion-md-code-working"></span>
                                         <span>Directives</span>
                                         <span class="icon ion-ios-arrow-down"></span>
                                     </div>
-                                    <ul class="links collapse" ${ isNormalMode ? 'id="directives-links-module-L10nTranslationModule-f2f52f1b54d14a3cebeb5cf01e5774d6"' :
-                                        'id="xs-directives-links-module-L10nTranslationModule-f2f52f1b54d14a3cebeb5cf01e5774d6"' }>
+                                    <ul class="links collapse" ${ isNormalMode ? 'id="directives-links-module-L10nTranslationModule-951828adedb13d9d63614c0711644323"' :
+                                        'id="xs-directives-links-module-L10nTranslationModule-951828adedb13d9d63614c0711644323"' }>
                                         <li class="link">
                                             <a href="directives/L10nTranslateDirective.html" data-type="entity-link" data-context="sub-entity" data-context-id="modules" >L10nTranslateDirective</a>
                                         </li>
@@ -154,13 +154,13 @@ customElements.define('compodoc-menu', class extends HTMLElement {
                                 </li>
                                     <li class="chapter inner">
                                         <div class="simple menu-toggler" data-toggle="collapse" ${ isNormalMode ?
-                                            'data-target="#pipes-links-module-L10nTranslationModule-f2f52f1b54d14a3cebeb5cf01e5774d6"' : 'data-target="#xs-pipes-links-module-L10nTranslationModule-f2f52f1b54d14a3cebeb5cf01e5774d6"' }>
+                                            'data-target="#pipes-links-module-L10nTranslationModule-951828adedb13d9d63614c0711644323"' : 'data-target="#xs-pipes-links-module-L10nTranslationModule-951828adedb13d9d63614c0711644323"' }>
                                             <span class="icon ion-md-add"></span>
                                             <span>Pipes</span>
                                             <span class="icon ion-ios-arrow-down"></span>
                                         </div>
-                                        <ul class="links collapse" ${ isNormalMode ? 'id="pipes-links-module-L10nTranslationModule-f2f52f1b54d14a3cebeb5cf01e5774d6"' :
-                                            'id="xs-pipes-links-module-L10nTranslationModule-f2f52f1b54d14a3cebeb5cf01e5774d6"' }>
+                                        <ul class="links collapse" ${ isNormalMode ? 'id="pipes-links-module-L10nTranslationModule-951828adedb13d9d63614c0711644323"' :
+                                            'id="xs-pipes-links-module-L10nTranslationModule-951828adedb13d9d63614c0711644323"' }>
                                             <li class="link">
                                                 <a href="pipes/L10nTranslateAsyncPipe.html" data-type="entity-link" data-context="sub-entity" data-context-id="modules" >L10nTranslateAsyncPipe</a>
                                             </li>

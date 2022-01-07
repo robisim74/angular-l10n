@@ -289,7 +289,44 @@ export class AppModule { }</code></pre></div><h4 id="storage">Storage</h4>
 <p>By default, the library only parse the <em>params</em>. <code>L10nTranslationHandler</code> is the class-interface to implement to modify the behavior.</p>
 <h4 id="missing-translation-handler">Missing Translation Handler</h4>
 <p>If a key is not found, the same key is returned. To return a different value, you can implement the <code>L10nMissingTranslationHandler</code> class-interface.</p>
-<h3 id="validation">Validation</h3>
+<h4 id="loader">Loader</h4>
+<p>If you need to preload some data before initialization of the library, you can implement the <code>L10nLoader</code> class-interface:</p>
+<div><pre class="line-numbers"><code class="language-TypeScript">&#64;Injectable() export class AppLoader implements L10nLoader {
+    constructor(private translation: L10nTranslationService) { }
+
+    public async init(): Promise&lt;void&gt; {
+        await ... // Some custom data loading action
+        await this.translation.init();
+    }
+}
+
+&#64;NgModule({
+    imports: [
+        L10nTranslationModule.forRoot(
+            l10nConfig,
+            {
+                loader: AppLoader
+            }
+        ),
+    ],
+})</code></pre></div><p>or if you are using <code>L10nRouting</code>:</p>
+<div><pre class="line-numbers"><code class="language-TypeScript">&#64;Injectable() export class AppRoutingLoader implements L10nLoader {
+    constructor(private routing: L10nRoutingService, private translation: L10nTranslationService) { }
+
+    public async init(): Promise&lt;void&gt; {
+        await ... // Some custom data loading action
+        await this.routing.init();
+        await this.translation.init();
+    }
+}
+
+&#64;NgModule({
+    imports: [
+        L10nRoutingModule.forRoot({
+            loader: AppRoutingLoader
+        })
+    ],
+})</code></pre></div><h3 id="validation">Validation</h3>
 <p>There are two directives, that you can use with Template driven or Reactive forms: <code>l10nValidateNumber</code> and <code>l10nValidateDate</code>. To use them, you have to implement the <code>L10nValidation</code> class-interface, and import it with the validation module:</p>
 <div><pre class="line-numbers"><code class="language-TypeScript">&#64;Injectable() export class LocaleValidation implements L10nValidation {
 
@@ -394,24 +431,20 @@ this.translation.loadTranslation([{ name: &#39;lazy&#39;, asset: i18nLazyAsset}]
     cache: true
 };</code></pre></div><h3 id="preloading-data">Preloading data</h3>
 <p>If you need to preload some translation data, for example to use for missing values, <code>L10nTranslationService</code> exposes the translation data in the <code>data</code> attribute. You can merge data by calling the <code>addData</code> method:</p>
-<div><pre class="line-numbers"><code class="language-TypeScript">export function l10nPreload(translation: L10nTranslationService, translationLoader: L10nTranslationLoader): () =&gt; Promise&lt;void&gt; {
-    return () =&gt; new Promise((resolve) =&gt; {
-        translationLoader.get(&#39;en-US&#39;, { name: &#39;app&#39;, asset: &#39;./assets/i18n/app&#39;, options: { version: &#39;1.0.0&#39; } })
-            .subscribe({
-                next: (data) =&gt; translation.addData(data, &#39;en-US&#39;),
-                complete: () =&gt; resolve()
-            });
-    });
-}</code></pre></div><p>Then add the function to providers:</p>
-<div><pre class="line-numbers"><code class="language-TypeScript">providers: [
-    {
-        provide: APP_INITIALIZER,
-        useFactory: l10nPreload,
-        deps: [L10nTranslationService, L10nTranslationLoader],
-        multi: true
-    },
-    ...
-],</code></pre></div><h2 id="types">Types</h2>
+<div><pre class="line-numbers"><code class="language-TypeScript">&#64;Injectable() export class AppLoader implements L10nLoader {
+    constructor(private translation: L10nTranslationService, private translationLoader: L10nTranslationLoader) { }
+
+    public async init(): Promise&lt;void&gt; {
+        await new Promise((resolve) =&gt; {
+            this.translationLoader.get(&#39;en-US&#39;, { name: &#39;app&#39;, asset: &#39;./assets/i18n/app&#39;, options: { version: &#39;1.0.0&#39; } })
+                .subscribe({
+                    next: (data) =&gt; this.translation.addData(data, &#39;en-US&#39;),
+                    complete: () =&gt; resolve(null)
+                });
+        });
+        await this.translation.init();
+    }
+}</code></pre></div><h2 id="types">Types</h2>
 <p>Angular l10n types that it is useful to know:</p>
 <ul>
 <li><p><code>L10nLocale</code>: contains a <em>language</em>, in the format <code>language[-script][-region][-extension]</code>, where:</p>

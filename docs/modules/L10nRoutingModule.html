@@ -168,7 +168,7 @@ export class L10nRoutingModule {
             providers: [
                 L10nRoutingService,
                 { provide: L10nLocation, useClass: token.location || L10nDefaultLocation },
-                { provide: L10nLoader, useClass: L10nRoutingLoader }
+                { provide: L10nLoader, useClass: token.loader || L10nRoutingLoader },
             ]
         };
     }
