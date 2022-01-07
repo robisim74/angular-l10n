@@ -48,7 +48,7 @@ export class L10nTranslationModule {
                     provide: L10nMissingTranslationHandler,
                     useClass: token.missingTranslationHandler || L10nDefaultMissingTranslationHandler
                 },
-                { provide: L10nLoader, useClass: L10nDefaultLoader },
+                { provide: L10nLoader, useClass: token.loader || L10nDefaultLoader },
                 {
                     provide: APP_INITIALIZER,
                     useFactory: initL10n,
