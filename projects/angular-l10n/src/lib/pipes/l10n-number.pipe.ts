@@ -1,9 +1,8 @@
-import { Pipe, PipeTransform, ChangeDetectorRef } from '@angular/core';
+import { Pipe, PipeTransform } from '@angular/core';
 
 import { L10nLocale, L10nNumberFormatOptions } from '../models/types';
 import { L10nAsyncPipe } from '../models/l10n-async-pipe';
 import { L10nIntlService } from '../services/l10n-intl.service';
-import { L10nTranslationService } from '../services/l10n-translation.service';
 
 @Pipe({
     name: 'l10nNumber',
@@ -34,12 +33,8 @@ export class L10nNumberPipe implements PipeTransform {
 })
 export class L10nNumberAsyncPipe extends L10nAsyncPipe implements PipeTransform {
 
-    constructor(
-        protected override translation: L10nTranslationService,
-        protected override cdr: ChangeDetectorRef,
-        protected intl: L10nIntlService
-    ) {
-        super(translation, cdr);
+    constructor(protected intl: L10nIntlService) {
+        super();
     }
 
     public transform(

@@ -1,9 +1,8 @@
-import { Pipe, PipeTransform, ChangeDetectorRef } from '@angular/core';
+import { Pipe, PipeTransform } from '@angular/core';
 
 import { L10nDateTimeFormatOptions } from '../models/types';
 import { L10nAsyncPipe } from '../models/l10n-async-pipe';
 import { L10nIntlService } from '../services/l10n-intl.service';
-import { L10nTranslationService } from '../services/l10n-translation.service';
 
 @Pipe({
     name: 'l10nDate',
@@ -27,12 +26,8 @@ export class L10nDatePipe implements PipeTransform {
 })
 export class L10nDateAsyncPipe extends L10nAsyncPipe implements PipeTransform {
 
-    constructor(
-        protected override translation: L10nTranslationService,
-        protected override cdr: ChangeDetectorRef,
-        protected intl: L10nIntlService
-    ) {
-        super(translation, cdr);
+    constructor(protected intl: L10nIntlService) {
+        super();
     }
 
     public transform(value: any, options?: L10nDateTimeFormatOptions, language?: string, timezone?: string): string | null {

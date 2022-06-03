@@ -1,8 +1,7 @@
-import { Pipe, PipeTransform, ChangeDetectorRef } from '@angular/core';
+import { Pipe, PipeTransform } from '@angular/core';
 
 import { L10nAsyncPipe } from '../models/l10n-async-pipe';
 import { L10nIntlService } from '../services/l10n-intl.service';
-import { L10nTranslationService } from '../services/l10n-translation.service';
 
 @Pipe({
     name: 'l10nDisplayNames',
@@ -26,12 +25,8 @@ export class L10nDisplayNamesPipe implements PipeTransform {
 })
 export class L10nDisplayNamesAsyncPipe extends L10nAsyncPipe implements PipeTransform {
 
-    constructor(
-        protected override translation: L10nTranslationService,
-        protected override cdr: ChangeDetectorRef,
-        protected intl: L10nIntlService
-    ) {
-        super(translation, cdr);
+    constructor(protected intl: L10nIntlService) {
+        super();
     }
 
     public transform(value: any, options?: any, language?: string): string | null {
