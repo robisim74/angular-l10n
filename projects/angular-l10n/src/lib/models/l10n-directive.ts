@@ -1,4 +1,4 @@
-import { Directive, Input, AfterViewInit, OnChanges, OnDestroy, ElementRef, Renderer2 } from '@angular/core';
+import { Directive, Input, AfterViewInit, OnChanges, OnDestroy, ElementRef, Renderer2, inject } from '@angular/core';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
@@ -17,6 +17,10 @@ export abstract class L10nDirective implements AfterViewInit, OnChanges, OnDestr
 
     @Input() public language?: string;
 
+    protected el = inject(ElementRef);
+    protected renderer = inject(Renderer2);
+    protected translation = inject(L10nTranslationService);
+
     private content?: string;
 
     private text?: string;
@@ -29,8 +33,6 @@ export abstract class L10nDirective implements AfterViewInit, OnChanges, OnDestr
     private textObserver?: MutationObserver;
 
     private destroy = new Subject<boolean>();
-
-    constructor(protected el: ElementRef, protected renderer: Renderer2, protected translation: L10nTranslationService) { }
 
     public ngAfterViewInit(): void {
         if (this.el && this.el.nativeElement) {

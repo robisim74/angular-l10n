@@ -1,7 +1,6 @@
-import { Directive, Input, ElementRef, Renderer2 } from '@angular/core';
+import { Directive, Input } from '@angular/core';
 
 import { L10nDirective } from '../models/l10n-directive';
-import { L10nTranslationService } from '../services/l10n-translation.service';
 import { L10nIntlService } from '../services/l10n-intl.service';
 
 @Directive({
@@ -17,13 +16,8 @@ export class L10nTimeAgoDirective extends L10nDirective {
 
     @Input() public options?: Intl.RelativeTimeFormatOptions;
 
-    constructor(
-        protected override el: ElementRef,
-        protected override renderer: Renderer2,
-        protected override translation: L10nTranslationService,
-        protected intl: L10nIntlService
-    ) {
-        super(el, renderer, translation);
+    constructor(protected intl: L10nIntlService) {
+        super();
     }
 
     protected getValue(text: string): string {

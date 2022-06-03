@@ -1,7 +1,6 @@
-import { Directive, Input, ElementRef, Renderer2 } from '@angular/core';
+import { Directive, Input } from '@angular/core';
 
 import { L10nDirective } from '../models/l10n-directive';
-import { L10nTranslationService } from '../services/l10n-translation.service';
 
 @Directive({
     selector: '[l10nTranslate],[translate]'
@@ -16,14 +15,6 @@ export class L10nTranslateDirective extends L10nDirective {
     }
 
     @Input() public params?: any;
-
-    constructor(
-        protected override el: ElementRef,
-        protected override renderer: Renderer2,
-        protected override translation: L10nTranslationService
-    ) {
-        super(el, renderer, translation);
-    }
 
     protected getValue(text: string): string {
         return this.translation.translate(text, this.params, this.language);
