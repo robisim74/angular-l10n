@@ -66,6 +66,10 @@ export interface L10nDateTimeFormatOptions extends Intl.DateTimeFormatOptions {
      * The time formatting style.
      */
     timeStyle?: 'full' | 'long' | 'medium' | 'short';
+    /**
+     * To handle missing properties in ts definition files.
+     */
+    [key: string]: any;
 }
 
 export interface L10nNumberFormatOptions extends Intl.NumberFormatOptions {
@@ -73,4 +77,8 @@ export interface L10nNumberFormatOptions extends Intl.NumberFormatOptions {
      * The digits formatting.
      */
     digits?: string;
+    /**
+     * To handle missing properties in ts definition files.
+     */
+    [key: string]: any;
 }

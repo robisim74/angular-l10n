@@ -21,8 +21,8 @@ import {
     public parseNumber(value: string, options?: L10nNumberFormatOptions, language = this.locale.language): number | null {
         if (value === '' || value == null) return null;
         let format = { minimumIntegerDigits: 1, minimumFractionDigits: 0, maximumFractionDigits: 0 };
-        if (options && options.digits) {
-            format = { ...format, ...parseDigits(options.digits) };
+        if (options && options['digits']) {
+            format = { ...format, ...parseDigits(options['digits']) };
         }
         switch (language) {
             default:

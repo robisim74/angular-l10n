@@ -85,9 +85,9 @@ import { L10nTranslationService } from './l10n-translation.service';
         convert?: (value: number, locale: L10nLocale, params: any) => number,
         convertParams?: any
     ): string {
-        if (!hasNumberFormat() && options && options.style === 'currency') return `${value} ${currency}`;
-        if (options && options.style === 'unit' && !options.unit) return value;
-        if (!hasNumberFormat() && options && options.style === 'unit') return `${value} ${options.unit}`;
+        if (!hasNumberFormat() && options && options['style'] === 'currency') return `${value} ${currency}`;
+        if (options && options['style'] === 'unit' && !options['unit']) return value;
+        if (!hasNumberFormat() && options && options['style'] === 'unit') return `${value} ${options['unit']}`;
         if (!hasNumberFormat() || language == null || language === '') return value;
 
         value = toNumber(value);
