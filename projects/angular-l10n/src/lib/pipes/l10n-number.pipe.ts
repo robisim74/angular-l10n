@@ -40,10 +40,10 @@ export class L10nNumberAsyncPipe extends L10nAsyncPipe implements PipeTransform 
     public transform(
         value: any,
         options?: L10nNumberFormatOptions,
-        language?: string,
-        currency?: string,
         convert?: (value: number, locale: L10nLocale, params: any) => number,
-        convertParams?: any
+        convertParams?: any,
+        language?: string,
+        currency?: string
     ): string | null {
         if (value == null || value === '') return null;
 
