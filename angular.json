@@ -311,8 +311,9 @@
       }
     }
   },
-  "defaultProject": "angular-l10n-app",
   "cli": {
-    "defaultCollection": "@angular-eslint/schematics"
+    "schematicCollections": [
+      "@angular-eslint/schematics"
+    ]
   }
 }
