@@ -130,6 +130,37 @@ import { L10nTranslationService } from './l10n-translation.service';
         return new Intl.RelativeTimeFormat(language, options).format(value, unit);
     }
 
+    /**
+     * Gets the plural by a number.
+     * @param value The number to get the plural
+     * @param prefix Optional prefix for the key
+     * @param options An Intl PluralRulesOptions object
+     * @param language The current language
+     */
+    public plural(value: any, prefix = '', options?: Intl.PluralRulesOptions, language = this.locale.language): string {
+        if (!hasPluralRules() || language == null || language === '') return value.toString();
+
+        value = toNumber(value);
+
+        const rule = new Intl.PluralRules(language, options).select(value);
+
+        const key = prefix ? `${prefix}${this.config.keySeparator}${rule}` : rule;
+
+        return this.translation.translate(key);
+    }
+
+    /**
+     * Returns translation of language, region, script or currency display names
+     * @param code ISO code of language, region, script or currency
+     * @param options An Intl DisplayNamesOptions object
+     * @param language The current language
+     */
+    public displayNames(code: string, options?: any, language = this.locale.language): string {
+        if (!hasDisplayNames() || language == null || language === '') return code;
+
+        return new (Intl as any).DisplayNames(language, options).of(code);
+    }
+
     public getCurrencySymbol(locale = this.locale): string | undefined {
         if (!hasNumberFormat()) return locale.currency;
 
@@ -166,25 +197,6 @@ import { L10nTranslationService } from './l10n-translation.service';
     }
 
     /**
-     * Gets the plural by a number.
-     * @param value The number to get the plural
-     * @param prefix Optional prefix for the key
-     * @param options An Intl PluralRulesOptions object
-     * @param language The current language
-     */
-    public plural(value: any, prefix = '', options?: Intl.PluralRulesOptions, language = this.locale.language): string {
-        if (!hasPluralRules() || language == null || language === '') return value.toString();
-
-        value = toNumber(value);
-
-        const rule = new Intl.PluralRules(language, options).select(value);
-
-        const key = prefix ? `${prefix}${this.config.keySeparator}${rule}` : rule;
-
-        return this.translation.translate(key);
-    }
-
-    /**
      * Returns the representation of a list.
      * @param list An array of keys
      * @param options An Intl ListFormatOptions object
@@ -195,18 +207,6 @@ import { L10nTranslationService } from './l10n-translation.service';
         if (!hasListFormat() || language == null || language === '') return values.join(', ');
 
         return new (Intl as any).ListFormat(language, options).format(values);
-    }
-
-    /**
-     * Returns translation of language, region, script or currency display names
-     * @param code ISO code of language, region, script or currency
-     * @param options An Intl DisplayNamesOptions object
-     * @param language The current language
-     */
-    public displayNames(code: string, options?: any, language = this.locale.language): string {
-        if (!hasDisplayNames() || language == null || language === '') return code;
-
-        return new (Intl as any).DisplayNames(language, options).of(code);
     }
 
 }

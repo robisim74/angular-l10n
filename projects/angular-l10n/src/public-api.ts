@@ -33,6 +33,8 @@ export * from './lib/pipes/l10n-display-names.pipe';
 export * from './lib/directives/l10n-date.directive';
 export * from './lib/directives/l10n-number.directive';
 export * from './lib/directives/l10n-time-ago.directive';
+export * from './lib/directives/l10n-plural.directive';
+export * from './lib/directives/l10n-display-names.directive';
 export * from './lib/modules/l10n-intl.module';
 // L10nValidationModule
 export * from './lib/directives/l10n-validate-number.directive';

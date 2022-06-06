@@ -1,6 +1,6 @@
-import { Component, OnInit, Inject, Input } from '@angular/core';
+import { Component, OnInit, Input, inject } from '@angular/core';
 
-import { L10N_LOCALE, L10nLocale } from 'angular-l10n';
+import { L10N_LOCALE } from 'angular-l10n';
 
 import { convertCurrency, convertLength } from '../../conversions';
 
@@ -17,7 +17,7 @@ export class PipeComponent implements OnInit {
     convertCurrency = convertCurrency;
     convertLength = convertLength;
 
-    constructor(@Inject(L10N_LOCALE) public locale: L10nLocale) { }
+    locale = inject(L10N_LOCALE); // Alternative to inject in constructor
 
     ngOnInit() {
     }
