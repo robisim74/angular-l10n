@@ -7,8 +7,8 @@
         "whoIAm": "Sono {{name}}",
         "description": "<em>Una libreria Angular per tradurre testi, date e numeri</em>",
         "devs":{
-            "one": "sviluppatore software",
-            "other": "sviluppatori software"
+            "one": "Uno sviluppatore software",
+            "other": "{{ value }} sviluppatori software"
         }
     },
     "onPush": {

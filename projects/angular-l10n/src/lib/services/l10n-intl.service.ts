@@ -132,6 +132,7 @@ import { L10nTranslationService } from './l10n-translation.service';
 
     /**
      * Gets the plural by a number.
+     * The 'value' is passed as a parameter to the translation function.
      * @param value The number to get the plural
      * @param prefix Optional prefix for the key
      * @param options An Intl PluralRulesOptions object
@@ -146,7 +147,7 @@ import { L10nTranslationService } from './l10n-translation.service';
 
         const key = prefix ? `${prefix}${this.config.keySeparator}${rule}` : rule;
 
-        return this.translation.translate(key);
+        return this.translation.translate(key, { value });
     }
 
     /**
