@@ -189,7 +189,7 @@
 
 
     <div class="tab-pane fade  tab-source-code" id="c-source">
-        <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { Pipe, PipeTransform, ChangeDetectorRef } from &#x27;@angular/core&#x27;;
+        <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { Pipe, PipeTransform } from &#x27;@angular/core&#x27;;
 
 import { L10nAsyncPipe } from &#x27;../models/l10n-async-pipe&#x27;;
 import { L10nTranslationService } from &#x27;../services/l10n-translation.service&#x27;;
@@ -215,10 +215,6 @@ export class L10nTranslatePipe implements PipeTransform {
     pure: false
 })
 export class L10nTranslateAsyncPipe extends L10nAsyncPipe implements PipeTransform {
-
-    constructor(protected override translation: L10nTranslationService, protected override cdr: ChangeDetectorRef) {
-        super(translation, cdr);
-    }
 
     public transform(key: any, params?: any, language?: string): string | null {
         if (key &#x3D;&#x3D; null || key &#x3D;&#x3D;&#x3D; &#x27;&#x27;) return null;

@@ -110,8 +110,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="16"
-                            class="link-to-prism">projects/angular-l10n/src/lib/pipes/l10n-date.pipe.ts:16</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="15"
+                            class="link-to-prism">projects/angular-l10n/src/lib/pipes/l10n-date.pipe.ts:15</a></div>
                 </td>
             </tr>
 
@@ -201,12 +201,11 @@
 
 
     <div class="tab-pane fade  tab-source-code" id="c-source">
-        <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { Pipe, PipeTransform, ChangeDetectorRef } from &#x27;@angular/core&#x27;;
+        <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { Pipe, PipeTransform } from &#x27;@angular/core&#x27;;
 
 import { L10nDateTimeFormatOptions } from &#x27;../models/types&#x27;;
 import { L10nAsyncPipe } from &#x27;../models/l10n-async-pipe&#x27;;
 import { L10nIntlService } from &#x27;../services/l10n-intl.service&#x27;;
-import { L10nTranslationService } from &#x27;../services/l10n-translation.service&#x27;;
 
 @Pipe({
     name: &#x27;l10nDate&#x27;,
@@ -230,15 +229,11 @@ export class L10nDatePipe implements PipeTransform {
 })
 export class L10nDateAsyncPipe extends L10nAsyncPipe implements PipeTransform {
 
-    constructor(
-        protected override translation: L10nTranslationService,
-        protected override cdr: ChangeDetectorRef,
-        protected intl: L10nIntlService
-    ) {
-        super(translation, cdr);
+    constructor(protected intl: L10nIntlService) {
+        super();
     }
 
-    public transform(value: any, options?: L10nDateTimeFormatOptions, language?: string, timezone?: string): string | null {
+    public transform(value: any, options?: L10nDateTimeFormatOptions, timezone?: string, language?: string): string | null {
         if (value &#x3D;&#x3D; null || value &#x3D;&#x3D;&#x3D; &#x27;&#x27;) return null;
 
         return this.intl.formatDate(value, options, language, timezone);

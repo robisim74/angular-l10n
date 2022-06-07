@@ -104,6 +104,30 @@
         </section>
 
 
+            <section>
+    <h3 id="inputs">Indexable</h3>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <code>[key: string]:        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+</code>
+                    </td>
+                </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="68" class="link-to-prism">projects/angular-l10n/src/lib/models/types.ts:68</a></div>
+                            </td>
+                        </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <div class="io-description"><p>To handle missing properties in ts definition files.</p>
+</div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+</section>
 
             <section>
                 <h3 id="inputs">Properties</h3>
@@ -268,6 +292,10 @@ export interface L10nDateTimeFormatOptions extends Intl.DateTimeFormatOptions {
      * The time formatting style.
      */
     timeStyle?: &#x27;full&#x27; | &#x27;long&#x27; | &#x27;medium&#x27; | &#x27;short&#x27;;
+    /**
+     * To handle missing properties in ts definition files.
+     */
+    [key: string]: any;
 }
 
 export interface L10nNumberFormatOptions extends Intl.NumberFormatOptions {
@@ -275,6 +303,10 @@ export interface L10nNumberFormatOptions extends Intl.NumberFormatOptions {
      * The digits formatting.
      */
     digits?: string;
+    /**
+     * To handle missing properties in ts definition files.
+     */
+    [key: string]: any;
 }
 </code></pre>
     </div>

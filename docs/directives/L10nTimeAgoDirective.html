@@ -146,12 +146,12 @@
             <tbody>
                 <tr>
                     <td class="col-md-4">
-<code>constructor(el: <a href="https://angular.io/api/core/ElementRef" target="_blank">ElementRef</a>, renderer: <a href="https://angular.io/api/core/Renderer2" target="_blank">Renderer2</a>, translation: <a href="../injectables/L10nTranslationService.html" target="_self">L10nTranslationService</a>, intl: <a href="../injectables/L10nIntlService.html" target="_self">L10nIntlService</a>)</code>
+<code>constructor(intl: <a href="../injectables/L10nIntlService.html" target="_self">L10nIntlService</a>)</code>
                     </td>
                 </tr>
                         <tr>
                             <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="18" class="link-to-prism">projects/angular-l10n/src/lib/directives/l10n-time-ago.directive.ts:18</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="17" class="link-to-prism">projects/angular-l10n/src/lib/directives/l10n-time-ago.directive.ts:17</a></div>
                             </td>
                         </tr>
 
@@ -168,42 +168,6 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                                <tr>
-                                                        <td>el</td>
-                                                  
-                                                        <td>
-                                                                        <code><a href="https://angular.io/api/core/ElementRef" target="_blank" >ElementRef</a></code>
-                                                        </td>
-                                                  
-                                                    <td>
-                                                            No
-                                                    </td>
-                                                    
-                                                </tr>
-                                                <tr>
-                                                        <td>renderer</td>
-                                                  
-                                                        <td>
-                                                                        <code><a href="https://angular.io/api/core/Renderer2" target="_blank" >Renderer2</a></code>
-                                                        </td>
-                                                  
-                                                    <td>
-                                                            No
-                                                    </td>
-                                                    
-                                                </tr>
-                                                <tr>
-                                                        <td>translation</td>
-                                                  
-                                                        <td>
-                                                                        <code><a href="../injectables/L10nTranslationService.html" target="_self" >L10nTranslationService</a></code>
-                                                        </td>
-                                                  
-                                                    <td>
-                                                            No
-                                                    </td>
-                                                    
-                                                </tr>
                                                 <tr>
                                                         <td>intl</td>
                                                   
@@ -237,7 +201,7 @@
                 </tr>
                         <tr>
                             <td class="col-md-2" colspan="2">
-                                    <div class="io-line">Defined in <a href="" data-line="12" class="link-to-prism">projects/angular-l10n/src/lib/directives/l10n-time-ago.directive.ts:12</a></div>
+                                    <div class="io-line">Defined in <a href="" data-line="11" class="link-to-prism">projects/angular-l10n/src/lib/directives/l10n-time-ago.directive.ts:11</a></div>
                             </td>
                         </tr>
             </tbody>
@@ -258,7 +222,7 @@
                 </tr>
                         <tr>
                             <td class="col-md-2" colspan="2">
-                                    <div class="io-line">Defined in <a href="" data-line="18" class="link-to-prism">projects/angular-l10n/src/lib/directives/l10n-time-ago.directive.ts:18</a></div>
+                                    <div class="io-line">Defined in <a href="" data-line="17" class="link-to-prism">projects/angular-l10n/src/lib/directives/l10n-time-ago.directive.ts:17</a></div>
                             </td>
                         </tr>
             </tbody>
@@ -279,7 +243,7 @@
                 </tr>
                         <tr>
                             <td class="col-md-2" colspan="2">
-                                    <div class="io-line">Defined in <a href="" data-line="16" class="link-to-prism">projects/angular-l10n/src/lib/directives/l10n-time-ago.directive.ts:16</a></div>
+                                    <div class="io-line">Defined in <a href="" data-line="15" class="link-to-prism">projects/angular-l10n/src/lib/directives/l10n-time-ago.directive.ts:15</a></div>
                             </td>
                         </tr>
             </tbody>
@@ -315,8 +279,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="29"
-                            class="link-to-prism">projects/angular-l10n/src/lib/directives/l10n-time-ago.directive.ts:29</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="23"
+                            class="link-to-prism">projects/angular-l10n/src/lib/directives/l10n-time-ago.directive.ts:23</a></div>
                 </td>
             </tr>
 
@@ -387,7 +351,7 @@
                 </tr>
                             <tr>
                                 <td class="col-md-4">
-                                    <div class="io-line">Defined in <a href="" data-line="12" class="link-to-prism">projects/angular-l10n/src/lib/directives/l10n-time-ago.directive.ts:12</a></div>
+                                    <div class="io-line">Defined in <a href="" data-line="11" class="link-to-prism">projects/angular-l10n/src/lib/directives/l10n-time-ago.directive.ts:11</a></div>
                                 </td>
                             </tr>
                     <tr>
@@ -435,10 +399,9 @@
 
 
     <div class="tab-pane fade  tab-source-code" id="c-source">
-        <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { Directive, Input, ElementRef, Renderer2 } from &#x27;@angular/core&#x27;;
+        <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { Directive, Input } from &#x27;@angular/core&#x27;;
 
 import { L10nDirective } from &#x27;../models/l10n-directive&#x27;;
-import { L10nTranslationService } from &#x27;../services/l10n-translation.service&#x27;;
 import { L10nIntlService } from &#x27;../services/l10n-intl.service&#x27;;
 
 @Directive({
@@ -454,13 +417,8 @@ export class L10nTimeAgoDirective extends L10nDirective {
 
     @Input() public options?: Intl.RelativeTimeFormatOptions;
 
-    constructor(
-        protected override el: ElementRef,
-        protected override renderer: Renderer2,
-        protected override translation: L10nTranslationService,
-        protected intl: L10nIntlService
-    ) {
-        super(el, renderer, translation);
+    constructor(protected intl: L10nIntlService) {
+        super();
     }
 
     protected getValue(text: string): string {

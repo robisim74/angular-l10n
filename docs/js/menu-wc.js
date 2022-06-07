@@ -59,18 +59,24 @@ customElements.define('compodoc-menu', class extends HTMLElement {
                                 <a href="modules/L10nIntlModule.html" data-type="entity-link" >L10nIntlModule</a>
                                 <li class="chapter inner">
                                     <div class="simple menu-toggler" data-toggle="collapse" ${ isNormalMode ?
-                                        'data-target="#directives-links-module-L10nIntlModule-890f2f0c69961f7c8fd5657c03ecc46f"' : 'data-target="#xs-directives-links-module-L10nIntlModule-890f2f0c69961f7c8fd5657c03ecc46f"' }>
+                                        'data-target="#directives-links-module-L10nIntlModule-23e42247239c2cc2e91000281a8a49f9"' : 'data-target="#xs-directives-links-module-L10nIntlModule-23e42247239c2cc2e91000281a8a49f9"' }>
                                         <span class="icon ion-md-code-working"></span>
                                         <span>Directives</span>
                                         <span class="icon ion-ios-arrow-down"></span>
                                     </div>
-                                    <ul class="links collapse" ${ isNormalMode ? 'id="directives-links-module-L10nIntlModule-890f2f0c69961f7c8fd5657c03ecc46f"' :
-                                        'id="xs-directives-links-module-L10nIntlModule-890f2f0c69961f7c8fd5657c03ecc46f"' }>
+                                    <ul class="links collapse" ${ isNormalMode ? 'id="directives-links-module-L10nIntlModule-23e42247239c2cc2e91000281a8a49f9"' :
+                                        'id="xs-directives-links-module-L10nIntlModule-23e42247239c2cc2e91000281a8a49f9"' }>
                                         <li class="link">
                                             <a href="directives/L10nDateDirective.html" data-type="entity-link" data-context="sub-entity" data-context-id="modules" >L10nDateDirective</a>
                                         </li>
                                         <li class="link">
+                                            <a href="directives/L10nDisplayNamesDirective.html" data-type="entity-link" data-context="sub-entity" data-context-id="modules" >L10nDisplayNamesDirective</a>
+                                        </li>
+                                        <li class="link">
                                             <a href="directives/L10nNumberDirective.html" data-type="entity-link" data-context="sub-entity" data-context-id="modules" >L10nNumberDirective</a>
+                                        </li>
+                                        <li class="link">
+                                            <a href="directives/L10nPluralDirective.html" data-type="entity-link" data-context="sub-entity" data-context-id="modules" >L10nPluralDirective</a>
                                         </li>
                                         <li class="link">
                                             <a href="directives/L10nTimeAgoDirective.html" data-type="entity-link" data-context="sub-entity" data-context-id="modules" >L10nTimeAgoDirective</a>
@@ -79,13 +85,13 @@ customElements.define('compodoc-menu', class extends HTMLElement {
                                 </li>
                                 <li class="chapter inner">
                                     <div class="simple menu-toggler" data-toggle="collapse" ${ isNormalMode ?
-                                        'data-target="#injectables-links-module-L10nIntlModule-890f2f0c69961f7c8fd5657c03ecc46f"' : 'data-target="#xs-injectables-links-module-L10nIntlModule-890f2f0c69961f7c8fd5657c03ecc46f"' }>
+                                        'data-target="#injectables-links-module-L10nIntlModule-23e42247239c2cc2e91000281a8a49f9"' : 'data-target="#xs-injectables-links-module-L10nIntlModule-23e42247239c2cc2e91000281a8a49f9"' }>
                                         <span class="icon ion-md-arrow-round-down"></span>
                                         <span>Injectables</span>
                                         <span class="icon ion-ios-arrow-down"></span>
                                     </div>
-                                    <ul class="links collapse" ${ isNormalMode ? 'id="injectables-links-module-L10nIntlModule-890f2f0c69961f7c8fd5657c03ecc46f"' :
-                                        'id="xs-injectables-links-module-L10nIntlModule-890f2f0c69961f7c8fd5657c03ecc46f"' }>
+                                    <ul class="links collapse" ${ isNormalMode ? 'id="injectables-links-module-L10nIntlModule-23e42247239c2cc2e91000281a8a49f9"' :
+                                        'id="xs-injectables-links-module-L10nIntlModule-23e42247239c2cc2e91000281a8a49f9"' }>
                                         <li class="link">
                                             <a href="injectables/L10nIntlService.html" data-type="entity-link" data-context="sub-entity" data-context-id="modules" >L10nIntlService</a>
                                         </li>
@@ -93,13 +99,13 @@ customElements.define('compodoc-menu', class extends HTMLElement {
                                 </li>
                                     <li class="chapter inner">
                                         <div class="simple menu-toggler" data-toggle="collapse" ${ isNormalMode ?
-                                            'data-target="#pipes-links-module-L10nIntlModule-890f2f0c69961f7c8fd5657c03ecc46f"' : 'data-target="#xs-pipes-links-module-L10nIntlModule-890f2f0c69961f7c8fd5657c03ecc46f"' }>
+                                            'data-target="#pipes-links-module-L10nIntlModule-23e42247239c2cc2e91000281a8a49f9"' : 'data-target="#xs-pipes-links-module-L10nIntlModule-23e42247239c2cc2e91000281a8a49f9"' }>
                                             <span class="icon ion-md-add"></span>
                                             <span>Pipes</span>
                                             <span class="icon ion-ios-arrow-down"></span>
                                         </div>
-                                        <ul class="links collapse" ${ isNormalMode ? 'id="pipes-links-module-L10nIntlModule-890f2f0c69961f7c8fd5657c03ecc46f"' :
-                                            'id="xs-pipes-links-module-L10nIntlModule-890f2f0c69961f7c8fd5657c03ecc46f"' }>
+                                        <ul class="links collapse" ${ isNormalMode ? 'id="pipes-links-module-L10nIntlModule-23e42247239c2cc2e91000281a8a49f9"' :
+                                            'id="xs-pipes-links-module-L10nIntlModule-23e42247239c2cc2e91000281a8a49f9"' }>
                                             <li class="link">
                                                 <a href="pipes/L10nDateAsyncPipe.html" data-type="entity-link" data-context="sub-entity" data-context-id="modules" >L10nDateAsyncPipe</a>
                                             </li>

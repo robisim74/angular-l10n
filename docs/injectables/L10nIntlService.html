@@ -221,8 +221,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="159"
-                            class="link-to-prism">projects/angular-l10n/src/lib/services/l10n-intl.service.ts:159</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="191"
+                            class="link-to-prism">projects/angular-l10n/src/lib/services/l10n-intl.service.ts:191</a></div>
                 </td>
             </tr>
 
@@ -359,8 +359,8 @@ a positive value if key1 comes after key2;
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="206"
-                            class="link-to-prism">projects/angular-l10n/src/lib/services/l10n-intl.service.ts:206</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="159"
+                            class="link-to-prism">projects/angular-l10n/src/lib/services/l10n-intl.service.ts:159</a></div>
                 </td>
             </tr>
 
@@ -921,8 +921,8 @@ For example:</p>
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="133"
-                            class="link-to-prism">projects/angular-l10n/src/lib/services/l10n-intl.service.ts:133</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="165"
+                            class="link-to-prism">projects/angular-l10n/src/lib/services/l10n-intl.service.ts:165</a></div>
                 </td>
             </tr>
 
@@ -992,8 +992,8 @@ For example:</p>
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="193"
-                            class="link-to-prism">projects/angular-l10n/src/lib/services/l10n-intl.service.ts:193</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="206"
+                            class="link-to-prism">projects/angular-l10n/src/lib/services/l10n-intl.service.ts:206</a></div>
                 </td>
             </tr>
 
@@ -1109,15 +1109,16 @@ For example:</p>
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="175"
-                            class="link-to-prism">projects/angular-l10n/src/lib/services/l10n-intl.service.ts:175</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="141"
+                            class="link-to-prism">projects/angular-l10n/src/lib/services/l10n-intl.service.ts:141</a></div>
                 </td>
             </tr>
 
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-description"><p>Gets the plural by a number.</p>
+                    <div class="io-description"><p>Gets the plural by a number.
+The &#39;value&#39; is passed as a parameter to the translation function.</p>
 </div>
 
                     <div class="io-description">
@@ -1316,9 +1317,9 @@ import { L10nTranslationService } from &#x27;./l10n-translation.service&#x27;;
         convert?: (value: number, locale: L10nLocale, params: any) &#x3D;&gt; number,
         convertParams?: any
     ): string {
-        if (!hasNumberFormat() &amp;&amp; options &amp;&amp; options.style &#x3D;&#x3D;&#x3D; &#x27;currency&#x27;) return &#x60;${value} ${currency}&#x60;;
-        if (options &amp;&amp; options.style &#x3D;&#x3D;&#x3D; &#x27;unit&#x27; &amp;&amp; !options.unit) return value;
-        if (!hasNumberFormat() &amp;&amp; options &amp;&amp; options.style &#x3D;&#x3D;&#x3D; &#x27;unit&#x27;) return &#x60;${value} ${options.unit}&#x60;;
+        if (!hasNumberFormat() &amp;&amp; options &amp;&amp; options[&#x27;style&#x27;] &#x3D;&#x3D;&#x3D; &#x27;currency&#x27;) return &#x60;${value} ${currency}&#x60;;
+        if (options &amp;&amp; options[&#x27;style&#x27;] &#x3D;&#x3D;&#x3D; &#x27;unit&#x27; &amp;&amp; !options[&#x27;unit&#x27;]) return value;
+        if (!hasNumberFormat() &amp;&amp; options &amp;&amp; options[&#x27;style&#x27;] &#x3D;&#x3D;&#x3D; &#x27;unit&#x27;) return &#x60;${value} ${options[&#x27;unit&#x27;]}&#x60;;
         if (!hasNumberFormat() || language &#x3D;&#x3D; null || language &#x3D;&#x3D;&#x3D; &#x27;&#x27;) return value;
 
         value &#x3D; toNumber(value);
@@ -1361,6 +1362,38 @@ import { L10nTranslationService } from &#x27;./l10n-translation.service&#x27;;
         return new Intl.RelativeTimeFormat(language, options).format(value, unit);
     }
 
+    /**
+     * Gets the plural by a number.
+     * The &#x27;value&#x27; is passed as a parameter to the translation function.
+     * @param value The number to get the plural
+     * @param prefix Optional prefix for the key
+     * @param options An Intl PluralRulesOptions object
+     * @param language The current language
+     */
+    public plural(value: any, prefix &#x3D; &#x27;&#x27;, options?: Intl.PluralRulesOptions, language &#x3D; this.locale.language): string {
+        if (!hasPluralRules() || language &#x3D;&#x3D; null || language &#x3D;&#x3D;&#x3D; &#x27;&#x27;) return value.toString();
+
+        value &#x3D; toNumber(value);
+
+        const rule &#x3D; new Intl.PluralRules(language, options).select(value);
+
+        const key &#x3D; prefix ? &#x60;${prefix}${this.config.keySeparator}${rule}&#x60; : rule;
+
+        return this.translation.translate(key, { value });
+    }
+
+    /**
+     * Returns translation of language, region, script or currency display names
+     * @param code ISO code of language, region, script or currency
+     * @param options An Intl DisplayNamesOptions object
+     * @param language The current language
+     */
+    public displayNames(code: string, options?: any, language &#x3D; this.locale.language): string {
+        if (!hasDisplayNames() || language &#x3D;&#x3D; null || language &#x3D;&#x3D;&#x3D; &#x27;&#x27;) return code;
+
+        return new (Intl as any).DisplayNames(language, options).of(code);
+    }
+
     public getCurrencySymbol(locale &#x3D; this.locale): string | undefined {
         if (!hasNumberFormat()) return locale.currency;
 
@@ -1397,25 +1430,6 @@ import { L10nTranslationService } from &#x27;./l10n-translation.service&#x27;;
     }
 
     /**
-     * Gets the plural by a number.
-     * @param value The number to get the plural
-     * @param prefix Optional prefix for the key
-     * @param options An Intl PluralRulesOptions object
-     * @param language The current language
-     */
-    public plural(value: any, prefix &#x3D; &#x27;&#x27;, options?: Intl.PluralRulesOptions, language &#x3D; this.locale.language): string {
-        if (!hasPluralRules() || language &#x3D;&#x3D; null || language &#x3D;&#x3D;&#x3D; &#x27;&#x27;) return value.toString();
-
-        value &#x3D; toNumber(value);
-
-        const rule &#x3D; new Intl.PluralRules(language, options).select(value);
-
-        const key &#x3D; prefix ? &#x60;${prefix}${this.config.keySeparator}${rule}&#x60; : rule;
-
-        return this.translation.translate(key);
-    }
-
-    /**
      * Returns the representation of a list.
      * @param list An array of keys
      * @param options An Intl ListFormatOptions object
@@ -1426,18 +1440,6 @@ import { L10nTranslationService } from &#x27;./l10n-translation.service&#x27;;
         if (!hasListFormat() || language &#x3D;&#x3D; null || language &#x3D;&#x3D;&#x3D; &#x27;&#x27;) return values.join(&#x27;, &#x27;);
 
         return new (Intl as any).ListFormat(language, options).format(values);
-    }
-
-    /**
-     * Returns translation of language, region, script or currency display names
-     * @param code ISO code of language, region, script or currency
-     * @param options An Intl DisplayNamesOptions object
-     * @param language The current language
-     */
-    public displayNames(code: string, options?: any, language &#x3D; this.locale.language): string {
-        if (!hasDisplayNames() || language &#x3D;&#x3D; null || language &#x3D;&#x3D;&#x3D; &#x27;&#x27;) return code;
-
-        return new (Intl as any).DisplayNames(language, options).of(code);
     }
 
 }

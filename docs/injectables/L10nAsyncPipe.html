@@ -78,7 +78,15 @@
                         <ul class="index-list">
                             <li>
                                     <span class="modifier">Protected</span>
+                                <a href="#cdr" >cdr</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Protected</span>
                                 <a href="#onChanges" >onChanges</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Protected</span>
+                                <a href="#translation" >translation</a>
                             </li>
                         </ul>
                     </td>
@@ -113,57 +121,15 @@
             <tbody>
                 <tr>
                     <td class="col-md-4">
-<code>constructor(translation: <a href="../injectables/L10nTranslationService.html" target="_self">L10nTranslationService</a>, cdr: <a href="https://angular.io/api/core/ChangeDetectorRef" target="_blank">ChangeDetectorRef</a>)</code>
+<code>constructor()</code>
                     </td>
                 </tr>
                         <tr>
                             <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="9" class="link-to-prism">projects/angular-l10n/src/lib/models/l10n-async-pipe.ts:9</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="12" class="link-to-prism">projects/angular-l10n/src/lib/models/l10n-async-pipe.ts:12</a></div>
                             </td>
                         </tr>
 
-                <tr>
-                    <td class="col-md-4">
-                            <div>
-                                    <b>Parameters :</b>
-                                    <table class="params">
-                                        <thead>
-                                            <tr>
-                                                <td>Name</td>
-                                                    <td>Type</td>
-                                                <td>Optional</td>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                                <tr>
-                                                        <td>translation</td>
-                                                  
-                                                        <td>
-                                                                        <code><a href="../injectables/L10nTranslationService.html" target="_self" >L10nTranslationService</a></code>
-                                                        </td>
-                                                  
-                                                    <td>
-                                                            No
-                                                    </td>
-                                                    
-                                                </tr>
-                                                <tr>
-                                                        <td>cdr</td>
-                                                  
-                                                        <td>
-                                                                        <code><a href="https://angular.io/api/core/ChangeDetectorRef" target="_blank" >ChangeDetectorRef</a></code>
-                                                        </td>
-                                                  
-                                                    <td>
-                                                            No
-                                                    </td>
-                                                    
-                                                </tr>
-                                        </tbody>
-                                    </table>
-                            </div>
-                    </td>
-                </tr>
             </tbody>
         </table>
 </section>
@@ -193,8 +159,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="17"
-                            class="link-to-prism">projects/angular-l10n/src/lib/models/l10n-async-pipe.ts:17</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="20"
+                            class="link-to-prism">projects/angular-l10n/src/lib/models/l10n-async-pipe.ts:20</a></div>
                 </td>
             </tr>
 
@@ -216,6 +182,32 @@
     <h3 id="inputs">
         Properties
     </h3>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="cdr"></a>
+                    <span class="name">
+                            <span class="modifier">Protected</span>
+                        <span ><b>cdr</b></span>
+                        <a href="#cdr"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>inject(ChangeDetectorRef)</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="12" class="link-to-prism">projects/angular-l10n/src/lib/models/l10n-async-pipe.ts:12</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
     <table class="table table-sm table-bordered">
         <tbody>
             <tr>
@@ -243,13 +235,39 @@
 
         </tbody>
     </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="translation"></a>
+                    <span class="name">
+                            <span class="modifier">Protected</span>
+                        <span ><b>translation</b></span>
+                        <a href="#translation"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>inject(L10nTranslationService)</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="11" class="link-to-prism">projects/angular-l10n/src/lib/models/l10n-async-pipe.ts:11</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
 </section>
 
     </div>
 
 
     <div class="tab-pane fade  tab-source-code" id="c-source">
-        <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { Injectable, OnDestroy, ChangeDetectorRef } from &#x27;@angular/core&#x27;;
+        <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { Injectable, OnDestroy, ChangeDetectorRef, inject } from &#x27;@angular/core&#x27;;
 import { Subscription } from &#x27;rxjs&#x27;;
 
 import { L10nTranslationService } from &#x27;../services/l10n-translation.service&#x27;;
@@ -259,7 +277,10 @@ export class L10nAsyncPipe implements OnDestroy {
 
     protected onChanges: Subscription;
 
-    constructor(protected translation: L10nTranslationService, protected cdr: ChangeDetectorRef) {
+    protected translation &#x3D; inject(L10nTranslationService);
+    protected cdr &#x3D; inject(ChangeDetectorRef);
+
+    constructor() {
         this.onChanges &#x3D; this.translation.onChange().subscribe({
             next: () &#x3D;&gt; this.cdr.markForCheck()
         });

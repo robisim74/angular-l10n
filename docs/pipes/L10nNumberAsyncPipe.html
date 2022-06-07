@@ -99,15 +99,15 @@
             <tr>
                 <td class="col-md-4">
                     <span class="modifier-icon icon ion-ios-reset"></span>
-                    <code>transform(value: <a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank">any</a>, options?: <a href="../interfaces/L10nNumberFormatOptions.html" target="_self">L10nNumberFormatOptions</a>, language?: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>, currency?: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>, convert?: (value?: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank">number</a>,locale?: <a href="../interfaces/L10nLocale.html">L10nLocale</a>,params?: <a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank">any</a>) => void, convertParams?: <a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank">any</a>)</code>
+                    <code>transform(value: <a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank">any</a>, options?: <a href="../interfaces/L10nNumberFormatOptions.html" target="_self">L10nNumberFormatOptions</a>, convert?: (value?: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank">number</a>,locale?: <a href="../interfaces/L10nLocale.html">L10nLocale</a>,params?: <a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank">any</a>) => void, convertParams?: <a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank">any</a>, language?: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>, currency?: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>)</code>
                 </td>
             </tr>
 
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="45"
-                            class="link-to-prism">projects/angular-l10n/src/lib/pipes/l10n-number.pipe.ts:45</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="40"
+                            class="link-to-prism">projects/angular-l10n/src/lib/pipes/l10n-number.pipe.ts:40</a></div>
                 </td>
             </tr>
 
@@ -152,30 +152,6 @@
 
                                 </tr>
                                 <tr>
-                                    <td>language</td>
-                                    <td>
-                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
-                                    </td>
-
-                                    <td>
-                                        Yes
-                                    </td>
-
-
-                                </tr>
-                                <tr>
-                                    <td>currency</td>
-                                    <td>
-                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
-                                    </td>
-
-                                    <td>
-                                        Yes
-                                    </td>
-
-
-                                </tr>
-                                <tr>
                                     <td>convert</td>
                                     <td>
                                                 <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/function" target="_blank" >function</a></code>
@@ -191,6 +167,30 @@
                                     <td>convertParams</td>
                                     <td>
                                                 <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+                                    </td>
+
+                                    <td>
+                                        Yes
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>language</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                    </td>
+
+                                    <td>
+                                        Yes
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>currency</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
                                     </td>
 
                                     <td>
@@ -221,12 +221,11 @@
 
 
     <div class="tab-pane fade  tab-source-code" id="c-source">
-        <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { Pipe, PipeTransform, ChangeDetectorRef } from &#x27;@angular/core&#x27;;
+        <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { Pipe, PipeTransform } from &#x27;@angular/core&#x27;;
 
 import { L10nLocale, L10nNumberFormatOptions } from &#x27;../models/types&#x27;;
 import { L10nAsyncPipe } from &#x27;../models/l10n-async-pipe&#x27;;
 import { L10nIntlService } from &#x27;../services/l10n-intl.service&#x27;;
-import { L10nTranslationService } from &#x27;../services/l10n-translation.service&#x27;;
 
 @Pipe({
     name: &#x27;l10nNumber&#x27;,
@@ -257,21 +256,17 @@ export class L10nNumberPipe implements PipeTransform {
 })
 export class L10nNumberAsyncPipe extends L10nAsyncPipe implements PipeTransform {
 
-    constructor(
-        protected override translation: L10nTranslationService,
-        protected override cdr: ChangeDetectorRef,
-        protected intl: L10nIntlService
-    ) {
-        super(translation, cdr);
+    constructor(protected intl: L10nIntlService) {
+        super();
     }
 
     public transform(
         value: any,
         options?: L10nNumberFormatOptions,
-        language?: string,
-        currency?: string,
         convert?: (value: number, locale: L10nLocale, params: any) &#x3D;&gt; number,
-        convertParams?: any
+        convertParams?: any,
+        language?: string,
+        currency?: string
     ): string | null {
         if (value &#x3D;&#x3D; null || value &#x3D;&#x3D;&#x3D; &#x27;&#x27;) return null;
 

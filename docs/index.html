@@ -54,7 +54,7 @@
 </ul>
 <h2 id="installation">Installation</h2>
 <div><pre class="line-numbers"><code class="language-Shell">npm install angular-l10n --save </code></pre></div><h2 id="usage">Usage</h2>
-<p>You can find a complete sample app <a href="projects/angular-l10n-app">here</a></p>
+<p>You can find a complete sample app <a href="projects/angular-l10n-app">here</a> and a live example on <a href="https://stackblitz.com/edit/angular-l10n">StackBlitz</a></p>
 <h3 id="configuration">Configuration</h3>
 <p>Create the configuration:</p>
 <div><pre class="line-numbers"><code class="language-TypeScript">export const l10nConfig: L10nConfig = {
@@ -76,16 +76,16 @@ const i18nAsset = {
         greeting: &#39;Hello world!&#39;,
         whoIAm: &#39;I am {{name}}&#39;,
         devs: {
-            one: &#39;software developer&#39;,
-            other: &#39;software developers&#39;
+            one: &#39;One software developer&#39;,
+            other: &#39;{{value}} software developers&#39;
         }
     },
     &#39;it-IT&#39;: {
         greeting: &#39;Ciao mondo!&#39;,
         whoIAm: &#39;Sono {{name}}&#39;,
         devs: {
-            one: &#39;sviluppatori software&#39;,
-            other: &quot;sviluppatori software&quot;
+            one: &#39;Uno sviluppatore software&#39;,
+            other: &quot;{{ value }} sviluppatori software&quot;
         }
     }
 };</code></pre></div><blockquote>
@@ -134,7 +134,7 @@ export class AppModule { }</code></pre></div><h3 id="getting-the-translation">Ge
 &lt;!-- 0.62 mi --&gt;
 
 &lt;!-- l10nPlural pipe --&gt;
-&lt;p&gt;2 {{ 2 | l10nPlural:locale.language:&#39;devs&#39;:{ type: &#39;cardinal&#39; } }}&lt;/p&gt;
+&lt;p&gt;{{ 2 | l10nPlural:locale.language:&#39;devs&#39;:{ type: &#39;cardinal&#39; } }}&lt;/p&gt;
 &lt;!-- 2 software developers --&gt;
 
 &lt;!-- l10nDisplayNames pipe --&gt;
@@ -143,6 +143,11 @@ export class AppModule { }</code></pre></div><h3 id="getting-the-translation">Ge
 <div><pre class="line-numbers"><code class="language-TypeScript">export class PipeComponent {
 
     constructor(&#64;Inject(L10N_LOCALE) public locale: L10nLocale) { }
+
+}</code></pre></div><p>or if you prefer the shortest <code>inject</code> function:</p>
+<div><pre class="line-numbers"><code class="language-TypeScript">export class PipeComponent {
+
+    locale = inject(L10N_LOCALE);
 
 }</code></pre></div><h5 id="convert-function">Convert function</h5>
 <p>An optional function to convert the value of numbers, with the same <em>value</em>, <em>locale</em> and destructured optional parameters in the signature:</p>
@@ -174,7 +179,13 @@ export class AppModule { }</code></pre></div><h3 id="getting-the-translation">Ge
 &lt;!-- l10nNumber directive with convert function --&gt;
 &lt;p [options]=&quot;{ digits: &#39;1.2-2&#39;, style: &#39;currency&#39; }&quot; [convert]=&quot;convertCurrency&quot; [convertParams]=&quot;{ rate: 1.16 }&quot; l10nNumber&gt;1000&lt;/p&gt;
 &lt;!-- l10nNumber directive with unit &amp; convert function --&gt;
-&lt;p [options]=&quot;{ digits: &#39;1.0-2&#39;, style: &#39;unit&#39;, unit: locale.units[&#39;length&#39;] }&quot; [convert]=&quot;convertLength&quot; l10nNumber&gt;1&lt;/p&gt;</code></pre></div><p>You can dynamically change parameters and expressions values as with pipes, but not in attributes.</p>
+&lt;p [options]=&quot;{ digits: &#39;1.0-2&#39;, style: &#39;unit&#39;, unit: locale.units[&#39;length&#39;] }&quot; [convert]=&quot;convertLength&quot; l10nNumber&gt;1&lt;/p&gt;
+
+&lt;!-- l10nPlural directive --&gt;
+&lt;p [options]=&quot;{ type: &#39;cardinal&#39; }&quot; prefix=&quot;devs&quot; l10nPlural&gt;2&lt;/p&gt;
+
+&lt;!-- l10nDisplayNames directive --&gt;
+&lt;p [options]=&quot;{ type: &#39;language&#39; }&quot; l10nDisplayNames&gt;en-US&lt;/p&gt;</code></pre></div><p>You can dynamically change parameters and expressions values as with pipes, but not in attributes.</p>
 <h4 id="apis">APIs</h4>
 <p><code>L10nTranslationService</code> provides an <code>onChange</code> event, which is fired whenever the <em>locale</em> changes.</p>
 <div><pre class="line-numbers"><code class="language-TypeScript">export class ApiComponent implements OnInit {
@@ -206,12 +217,15 @@ export class AppModule { }</code></pre></div><h3 id="getting-the-translation">Ge
                     undefined,
                     convertLength
                 );
-                ...
+                this.formattedOnePlural = this.intl.plural(1, &#39;devs&#39;, { type: &#39;cardinal&#39; });
+                this.formattedOtherPlural = this.intl.plural(2, &#39;devs&#39;, { type: &#39;cardinal&#39; });
             }
         });
     }
 
-}</code></pre></div><p><code>L10nIntlService</code> provides methods for all Intl APIs, including <em>Collator</em> &amp; <em>ListFormat</em>.</p>
+}</code></pre></div><blockquote>
+<p><code>L10nIntlService</code> provides methods for all Intl APIs, including <em>Collator</em> &amp; <em>ListFormat</em>.</p>
+</blockquote>
 <h3 id="changing-the-locale">Changing the locale</h3>
 <p>You can change the <em>locale</em> at runtime at any time by calling the <code>setLocale</code> method of <code>L10nTranslationService</code>:</p>
 <div><pre class="line-numbers"><code class="language-Html">&lt;button *ngFor=&quot;let item of schema&quot; (click)=&quot;setLocale(item.locale)&quot;&gt;{{ item.locale.language | l10nDisplayNames:locale.language:{ type: &#39;language&#39; } }}&lt;/button&gt;</code></pre></div><div><pre class="line-numbers"><code class="language-TypeScript">export class AppComponent {
@@ -494,6 +508,11 @@ this.translation.loadTranslation([{ name: &#39;lazy&#39;, asset: i18nLazyAsset}]
 </ul>
 <h2 id="previous-versions">Previous versions</h2>
 <ul>
+<li><p><strong>Angular v13 (Angular l10n v13.1.0)</strong></p>
+<ul>
+<li><a href="https://github.com/robisim74/angular-l10n/tree/angular_v13">Branch</a></li>
+</ul>
+</li>
 <li><p><strong>Angular v12 (Angular l10n v12.0.1)</strong></p>
 <ul>
 <li><a href="https://github.com/robisim74/angular-l10n/tree/angular_v12">Branch</a></li>
