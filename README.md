@@ -31,7 +31,7 @@ npm install angular-l10n --save
 
 
 ## Usage
-You can find a complete sample app [here](projects/angular-l10n-app)
+You can find a complete sample app [here](projects/angular-l10n-app) and a live example on [StackBlitz](https://stackblitz.com/edit/angular-l10n)
 
 ### Configuration
 Create the configuration:
@@ -55,16 +55,16 @@ const i18nAsset = {
         greeting: 'Hello world!',
         whoIAm: 'I am {{name}}',
         devs: {
-            one: 'software developer',
-            other: 'software developers'
+            one: 'One software developer',
+            other: '{{value}} software developers'
         }
     },
     'it-IT': {
         greeting: 'Ciao mondo!',
         whoIAm: 'Sono {{name}}',
         devs: {
-            one: 'sviluppatori software',
-            other: "sviluppatori software"
+            one: 'Uno sviluppatore software',
+            other: "{{ value }} sviluppatori software"
         }
     }
 };
@@ -120,7 +120,7 @@ export class AppModule { }
 <!-- 0.62 mi -->
 
 <!-- l10nPlural pipe -->
-<p>2 {{ 2 | l10nPlural:locale.language:'devs':{ type: 'cardinal' } }}</p>
+<p>{{ 2 | l10nPlural:locale.language:'devs':{ type: 'cardinal' } }}</p>
 <!-- 2 software developers -->
 
 <!-- l10nDisplayNames pipe -->
@@ -132,6 +132,14 @@ Pure pipes need to know when the _locale_ changes. So import `L10nLocale` inject
 export class PipeComponent {
 
     constructor(@Inject(L10N_LOCALE) public locale: L10nLocale) { }
+
+}
+```
+or if you prefer the shortest `inject` function:
+```TypeScript
+export class PipeComponent {
+
+    locale = inject(L10N_LOCALE);
 
 }
 ```
@@ -153,6 +161,7 @@ To support this strategy, there is an `Async` version of each pipe, which recogn
 ```Html
 <p>{{ 'greeting' | translateAsync }}</p>
 ```
+
 #### Directives
 ```Html
 <!-- l10nTranslate directive -->
@@ -174,6 +183,12 @@ To support this strategy, there is an `Async` version of each pipe, which recogn
 <p [options]="{ digits: '1.2-2', style: 'currency' }" [convert]="convertCurrency" [convertParams]="{ rate: 1.16 }" l10nNumber>1000</p>
 <!-- l10nNumber directive with unit & convert function -->
 <p [options]="{ digits: '1.0-2', style: 'unit', unit: locale.units['length'] }" [convert]="convertLength" l10nNumber>1</p>
+
+<!-- l10nPlural directive -->
+<p [options]="{ type: 'cardinal' }" prefix="devs" l10nPlural>2</p>
+
+<!-- l10nDisplayNames directive -->
+<p [options]="{ type: 'language' }" l10nDisplayNames>en-US</p>
 ```
 
 You can dynamically change parameters and expressions values as with pipes, but not in attributes.
@@ -210,14 +225,15 @@ export class ApiComponent implements OnInit {
                     undefined,
                     convertLength
                 );
-                ...
+                this.formattedOnePlural = this.intl.plural(1, 'devs', { type: 'cardinal' });
+                this.formattedOtherPlural = this.intl.plural(2, 'devs', { type: 'cardinal' });
             }
         });
     }
 
 }
 ```
-`L10nIntlService` provides methods for all Intl APIs, including _Collator_ & _ListFormat_.
+> `L10nIntlService` provides methods for all Intl APIs, including _Collator_ & _ListFormat_.
 
 ### Changing the locale
 You can change the _locale_ at runtime at any time by calling the `setLocale` method of `L10nTranslationService`:
@@ -557,6 +573,9 @@ SSR doesn't work out of the box, so it is important to know:
 
 
 ## Previous versions
+- **Angular v13 (Angular l10n v13.1.0)**
+    - [Branch](https://github.com/robisim74/angular-l10n/tree/angular_v13)
+
 - **Angular v12 (Angular l10n v12.0.1)**
     - [Branch](https://github.com/robisim74/angular-l10n/tree/angular_v12)
 
