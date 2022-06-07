@@ -1,6 +1,6 @@
 {
   "name": "angular-l10n",
-  "version": "13.1.0",
+  "version": "14.0.0",
   "author": "Roberto Simonetti",
   "description": "An Angular library to translate texts, dates and numbers",
   "repository": {
@@ -23,10 +23,10 @@
   ],
   "license": "MIT",
   "peerDependencies": {
-    "@angular/core": ">= 13.0.0",
-    "@angular/forms": ">= 13.0.0",
-    "@angular/router": ">= 13.0.0",
-    "@angular/common": ">= 13.0.0"
+    "@angular/core": ">= 14.0.0",
+    "@angular/forms": ">= 14.0.0",
+    "@angular/router": ">= 14.0.0",
+    "@angular/common": ">= 14.0.0"
   },
   "dependencies": {
     "tslib": "^2.3.0"
