@@ -60,13 +60,13 @@ describe('L10nDateDirective', () => {
         fixture.detectChanges();
     });
     it('should render localized date using dateLanguage', () => {
-        expect(els[0].textContent).toContain('giovedì 19 settembre 2019, 18:30');
-        expect(els[1].textContent).toContain('giovedì 19 settembre 2019, 18:30');
+        expect(els[0].textContent).toContain('giovedì 19 settembre 2019 18:30');
+        expect(els[1].textContent).toContain('giovedì 19 settembre 2019 18:30');
     });
     it('should render localized date when dateLanguage changes', async () => {
         await translation.setLocale({ language: 'it-IT', dateLanguage: 'en-US', timeZone: 'America/Los_Angeles' });
         fixture.detectChanges();
-        expect(els[0].textContent).toContain('Thursday, September 19, 2019, 9:30 AM');
-        expect(els[1].textContent).toContain('Thursday, September 19, 2019, 9:30 AM');
+        expect(els[0].textContent).toContain('Thursday, September 19, 2019 at 9:30 AM');
+        expect(els[1].textContent).toContain('Thursday, September 19, 2019 at 9:30 AM');
     });
 });
