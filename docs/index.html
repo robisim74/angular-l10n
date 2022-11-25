@@ -9,7 +9,7 @@
 
         <link rel="icon" type="image/x-icon" href="./images/favicon.ico">
 	   <link rel="stylesheet" href="./styles/style.css">
-        <link rel="stylesheet" href="./styles/dark.css" media="(prefers-color-scheme: dark)">
+        <link rel="stylesheet" href="./styles/dark.css">
     </head>
     <body>
 
@@ -102,7 +102,7 @@ const i18nAsset = {
     bootstrap: [AppComponent]
 })
 export class AppModule { }</code></pre></div><h3 id="getting-the-translation">Getting the translation</h3>
-<h4 id="pure-pipes">Pure Pipes</h4>
+<h4 id="pure-pipes-standalone-as-well">Pure Pipes (standalone as well)</h4>
 <div><pre class="line-numbers"><code class="language-Html">&lt;!-- translate pipe --&gt;
 &lt;p&gt;{{ &#39;greeting&#39; | translate:locale.language }}&lt;/p&gt;
 &lt;!-- translate pipe with attributes --&gt;
@@ -160,7 +160,7 @@ export class AppModule { }</code></pre></div><h3 id="getting-the-translation">Ge
     }
 };</code></pre></div><h5 id="onpush-change-detection-strategy">OnPush Change Detection Strategy</h5>
 <p>To support this strategy, there is an <code>Async</code> version of each pipe, which recognizes by itself when the <em>locale</em> changes:</p>
-<div><pre class="line-numbers"><code class="language-Html">&lt;p&gt;{{ &#39;greeting&#39; | translateAsync }}&lt;/p&gt;</code></pre></div><h4 id="directives">Directives</h4>
+<div><pre class="line-numbers"><code class="language-Html">&lt;p&gt;{{ &#39;greeting&#39; | translateAsync }}&lt;/p&gt;</code></pre></div><h4 id="directives-standalone-as-well">Directives (standalone as well)</h4>
 <div><pre class="line-numbers"><code class="language-Html">&lt;!-- l10nTranslate directive --&gt;
 &lt;p l10nTranslate&gt;greeting&lt;/p&gt;
 &lt;!-- l10nTranslate directive with attributes --&gt;
@@ -414,18 +414,19 @@ https://example.com/en-US/home</code></pre></div><p>If the localized link is cal
     ...
 })
 export class AppModule { }</code></pre></div><h3 id="lazy-loading">Lazy loading</h3>
-<p>If you want to add new providers to a lazy loaded module, you can use <code>L10nResolver</code> in your routing module:</p>
+<p>If you want to add new providers to a lazy loaded module or component, you can use <code>L10nResolver</code> in your routing module:</p>
 <div><pre class="line-numbers"><code class="language-TypeScript">const routes: Routes = [
     ...
     {
         path: &#39;lazy&#39;,
         loadChildren: () =&gt; import(&#39;./lazy/lazy.module&#39;).then(m =&gt; m.LazyModule),
+        // loadComponent: () =&gt; import(&#39;./lazy/lazy.component&#39;).then(m =&gt; m.LazyComponent),
         resolve: { l10n: L10nResolver },
         data: {
             l10nProviders: [{ name: &#39;lazy&#39;, asset: &#39;./assets/i18n/lazy&#39;, options: { version: &#39;1.0.0&#39; } }]
         }
     }
-];</code></pre></div><p>Always import the modules you need:</p>
+];</code></pre></div><p>If it is a module, import the modules you need:</p>
 <div><pre class="line-numbers"><code class="language-TypeScript">&#64;NgModule({
     declarations: [LazyComponent],
     imports: [
@@ -508,6 +509,11 @@ this.translation.loadTranslation([{ name: &#39;lazy&#39;, asset: i18nLazyAsset}]
 </ul>
 <h2 id="previous-versions">Previous versions</h2>
 <ul>
+<li><p><strong>Angular v14 (Angular l10n v14.0.0)</strong></p>
+<ul>
+<li><a href="https://github.com/robisim74/angular-l10n/tree/angular_v14">Branch</a></li>
+</ul>
+</li>
 <li><p><strong>Angular v13 (Angular l10n v13.1.0)</strong></p>
 <ul>
 <li><a href="https://github.com/robisim74/angular-l10n/tree/angular_v13">Branch</a></li>
@@ -597,6 +603,8 @@ npm run build:watch</code></pre></div></li>
 
 
 
+
+
                    </div><div class="search-results">
     <div class="has-results">
         <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
@@ -610,6 +618,15 @@ npm run build:watch</code></pre></div></li>
                <!-- END CONTENT -->
            </div>
        </div>
+
+          <label class="dark-mode-switch">
+               <input type="checkbox">
+               <span class="slider">
+                    <svg class="slider-icon" viewBox="0 0 24 24" fill="none" height="20" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" width="20" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"></path>
+                    </svg>
+               </span>
+          </label>
 
        <script>
             var COMPODOC_CURRENT_PAGE_DEPTH = 0;

@@ -9,7 +9,7 @@
 
         <link rel="icon" type="image/x-icon" href="../images/favicon.ico">
 	   <link rel="stylesheet" href="../styles/style.css">
-        <link rel="stylesheet" href="../styles/dark.css" media="(prefers-color-scheme: dark)">
+        <link rel="stylesheet" href="../styles/dark.css">
     </head>
     <body>
 
@@ -30,6 +30,7 @@
                <!-- START CONTENT -->
                <div class="content injectable">
                    <div class="content-data">
+
 
 
 
@@ -352,7 +353,7 @@ a positive value if key1 comes after key2;
             <tr>
                 <td class="col-md-4">
                     <span class="modifier-icon icon ion-ios-reset"></span>
-                    <code>displayNames(code: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>, options?: <a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank">any</a>, language)</code>
+                    <code>displayNames(code: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>, options: Intl.DisplayNamesOptions, language)</code>
                 </td>
             </tr>
 
@@ -405,11 +406,11 @@ a positive value if key1 comes after key2;
                                 <tr>
                                     <td>options</td>
                                     <td>
-                                                <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+                                            <code>Intl.DisplayNamesOptions</code>
                                     </td>
 
                                     <td>
-                                        Yes
+                                        No
                                     </td>
 
                                     <td>
@@ -985,7 +986,7 @@ For example:</p>
             <tr>
                 <td class="col-md-4">
                     <span class="modifier-icon icon ion-ios-reset"></span>
-                    <code>list(list: string[], options?: <a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank">any</a>, language)</code>
+                    <code>list(list: string[], options?: Intl.ListFormatOptions, language)</code>
                 </td>
             </tr>
 
@@ -1038,7 +1039,7 @@ For example:</p>
                                 <tr>
                                     <td>options</td>
                                     <td>
-                                                <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+                                            <code>Intl.ListFormatOptions</code>
                                     </td>
 
                                     <td>
@@ -1388,10 +1389,10 @@ import { L10nTranslationService } from &#x27;./l10n-translation.service&#x27;;
      * @param options An Intl DisplayNamesOptions object
      * @param language The current language
      */
-    public displayNames(code: string, options?: any, language &#x3D; this.locale.language): string {
+    public displayNames(code: string, options: Intl.DisplayNamesOptions, language &#x3D; this.locale.language): string {
         if (!hasDisplayNames() || language &#x3D;&#x3D; null || language &#x3D;&#x3D;&#x3D; &#x27;&#x27;) return code;
 
-        return new (Intl as any).DisplayNames(language, options).of(code);
+        return new Intl.DisplayNames(language, options).of(code) || code;
     }
 
     public getCurrencySymbol(locale &#x3D; this.locale): string | undefined {
@@ -1435,11 +1436,11 @@ import { L10nTranslationService } from &#x27;./l10n-translation.service&#x27;;
      * @param options An Intl ListFormatOptions object
      * @param language The current language
      */
-    public list(list: string[], options?: any, language &#x3D; this.locale.language): string {
+    public list(list: string[], options?: Intl.ListFormatOptions, language &#x3D; this.locale.language): string {
         const values &#x3D; list.map(key &#x3D;&gt; this.translation.translate(key));
         if (!hasListFormat() || language &#x3D;&#x3D; null || language &#x3D;&#x3D;&#x3D; &#x27;&#x27;) return values.join(&#x27;, &#x27;);
 
-        return new (Intl as any).ListFormat(language, options).format(values);
+        return new Intl.ListFormat(language, options).format(values);
     }
 
 }
@@ -1447,6 +1448,7 @@ import { L10nTranslationService } from &#x27;./l10n-translation.service&#x27;;
     </div>
 
 </div>
+
 
 
 
@@ -1472,6 +1474,15 @@ import { L10nTranslationService } from &#x27;./l10n-translation.service&#x27;;
                <!-- END CONTENT -->
            </div>
        </div>
+
+          <label class="dark-mode-switch">
+               <input type="checkbox">
+               <span class="slider">
+                    <svg class="slider-icon" viewBox="0 0 24 24" fill="none" height="20" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" width="20" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"></path>
+                    </svg>
+               </span>
+          </label>
 
        <script>
             var COMPODOC_CURRENT_PAGE_DEPTH = 1;

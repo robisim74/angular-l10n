@@ -43,6 +43,11 @@ customElements.define('compodoc-menu', class extends HTMLElement {
                                         <span class="icon ion-ios-list"></span>Dependencies
                                     </a>
                                 </li>
+                                <li class="link">
+                                    <a href="properties.html" data-type="chapter-link">
+                                        <span class="icon ion-ios-apps"></span>Properties
+                                    </a>
+                                </li>
                     </ul>
                 </li>
                     <li class="chapter modules">
@@ -59,13 +64,13 @@ customElements.define('compodoc-menu', class extends HTMLElement {
                                 <a href="modules/L10nIntlModule.html" data-type="entity-link" >L10nIntlModule</a>
                                 <li class="chapter inner">
                                     <div class="simple menu-toggler" data-toggle="collapse" ${ isNormalMode ?
-                                        'data-target="#directives-links-module-L10nIntlModule-23e42247239c2cc2e91000281a8a49f9"' : 'data-target="#xs-directives-links-module-L10nIntlModule-23e42247239c2cc2e91000281a8a49f9"' }>
+                                        'data-target="#directives-links-module-L10nIntlModule-ea6996ea84fd0976e320dda4b622758c74181c62072c55bfbf68bf817705cd6ce998977cb2400e96a2247362bc04603d85dedc157d37ccfe7598500381855c37"' : 'data-target="#xs-directives-links-module-L10nIntlModule-ea6996ea84fd0976e320dda4b622758c74181c62072c55bfbf68bf817705cd6ce998977cb2400e96a2247362bc04603d85dedc157d37ccfe7598500381855c37"' }>
                                         <span class="icon ion-md-code-working"></span>
                                         <span>Directives</span>
                                         <span class="icon ion-ios-arrow-down"></span>
                                     </div>
-                                    <ul class="links collapse" ${ isNormalMode ? 'id="directives-links-module-L10nIntlModule-23e42247239c2cc2e91000281a8a49f9"' :
-                                        'id="xs-directives-links-module-L10nIntlModule-23e42247239c2cc2e91000281a8a49f9"' }>
+                                    <ul class="links collapse" ${ isNormalMode ? 'id="directives-links-module-L10nIntlModule-ea6996ea84fd0976e320dda4b622758c74181c62072c55bfbf68bf817705cd6ce998977cb2400e96a2247362bc04603d85dedc157d37ccfe7598500381855c37"' :
+                                        'id="xs-directives-links-module-L10nIntlModule-ea6996ea84fd0976e320dda4b622758c74181c62072c55bfbf68bf817705cd6ce998977cb2400e96a2247362bc04603d85dedc157d37ccfe7598500381855c37"' }>
                                         <li class="link">
                                             <a href="directives/L10nDateDirective.html" data-type="entity-link" data-context="sub-entity" data-context-id="modules" >L10nDateDirective</a>
                                         </li>
@@ -85,13 +90,13 @@ customElements.define('compodoc-menu', class extends HTMLElement {
                                 </li>
                                 <li class="chapter inner">
                                     <div class="simple menu-toggler" data-toggle="collapse" ${ isNormalMode ?
-                                        'data-target="#injectables-links-module-L10nIntlModule-23e42247239c2cc2e91000281a8a49f9"' : 'data-target="#xs-injectables-links-module-L10nIntlModule-23e42247239c2cc2e91000281a8a49f9"' }>
+                                        'data-target="#injectables-links-module-L10nIntlModule-ea6996ea84fd0976e320dda4b622758c74181c62072c55bfbf68bf817705cd6ce998977cb2400e96a2247362bc04603d85dedc157d37ccfe7598500381855c37"' : 'data-target="#xs-injectables-links-module-L10nIntlModule-ea6996ea84fd0976e320dda4b622758c74181c62072c55bfbf68bf817705cd6ce998977cb2400e96a2247362bc04603d85dedc157d37ccfe7598500381855c37"' }>
                                         <span class="icon ion-md-arrow-round-down"></span>
                                         <span>Injectables</span>
                                         <span class="icon ion-ios-arrow-down"></span>
                                     </div>
-                                    <ul class="links collapse" ${ isNormalMode ? 'id="injectables-links-module-L10nIntlModule-23e42247239c2cc2e91000281a8a49f9"' :
-                                        'id="xs-injectables-links-module-L10nIntlModule-23e42247239c2cc2e91000281a8a49f9"' }>
+                                    <ul class="links collapse" ${ isNormalMode ? 'id="injectables-links-module-L10nIntlModule-ea6996ea84fd0976e320dda4b622758c74181c62072c55bfbf68bf817705cd6ce998977cb2400e96a2247362bc04603d85dedc157d37ccfe7598500381855c37"' :
+                                        'id="xs-injectables-links-module-L10nIntlModule-ea6996ea84fd0976e320dda4b622758c74181c62072c55bfbf68bf817705cd6ce998977cb2400e96a2247362bc04603d85dedc157d37ccfe7598500381855c37"' }>
                                         <li class="link">
                                             <a href="injectables/L10nIntlService.html" data-type="entity-link" data-context="sub-entity" data-context-id="modules" >L10nIntlService</a>
                                         </li>
@@ -99,13 +104,13 @@ customElements.define('compodoc-menu', class extends HTMLElement {
                                 </li>
                                     <li class="chapter inner">
                                         <div class="simple menu-toggler" data-toggle="collapse" ${ isNormalMode ?
-                                            'data-target="#pipes-links-module-L10nIntlModule-23e42247239c2cc2e91000281a8a49f9"' : 'data-target="#xs-pipes-links-module-L10nIntlModule-23e42247239c2cc2e91000281a8a49f9"' }>
+                                            'data-target="#pipes-links-module-L10nIntlModule-ea6996ea84fd0976e320dda4b622758c74181c62072c55bfbf68bf817705cd6ce998977cb2400e96a2247362bc04603d85dedc157d37ccfe7598500381855c37"' : 'data-target="#xs-pipes-links-module-L10nIntlModule-ea6996ea84fd0976e320dda4b622758c74181c62072c55bfbf68bf817705cd6ce998977cb2400e96a2247362bc04603d85dedc157d37ccfe7598500381855c37"' }>
                                             <span class="icon ion-md-add"></span>
                                             <span>Pipes</span>
                                             <span class="icon ion-ios-arrow-down"></span>
                                         </div>
-                                        <ul class="links collapse" ${ isNormalMode ? 'id="pipes-links-module-L10nIntlModule-23e42247239c2cc2e91000281a8a49f9"' :
-                                            'id="xs-pipes-links-module-L10nIntlModule-23e42247239c2cc2e91000281a8a49f9"' }>
+                                        <ul class="links collapse" ${ isNormalMode ? 'id="pipes-links-module-L10nIntlModule-ea6996ea84fd0976e320dda4b622758c74181c62072c55bfbf68bf817705cd6ce998977cb2400e96a2247362bc04603d85dedc157d37ccfe7598500381855c37"' :
+                                            'id="xs-pipes-links-module-L10nIntlModule-ea6996ea84fd0976e320dda4b622758c74181c62072c55bfbf68bf817705cd6ce998977cb2400e96a2247362bc04603d85dedc157d37ccfe7598500381855c37"' }>
                                             <li class="link">
                                                 <a href="pipes/L10nDateAsyncPipe.html" data-type="entity-link" data-context="sub-entity" data-context-id="modules" >L10nDateAsyncPipe</a>
                                             </li>
@@ -146,13 +151,13 @@ customElements.define('compodoc-menu', class extends HTMLElement {
                                 <a href="modules/L10nTranslationModule.html" data-type="entity-link" >L10nTranslationModule</a>
                                 <li class="chapter inner">
                                     <div class="simple menu-toggler" data-toggle="collapse" ${ isNormalMode ?
-                                        'data-target="#directives-links-module-L10nTranslationModule-951828adedb13d9d63614c0711644323"' : 'data-target="#xs-directives-links-module-L10nTranslationModule-951828adedb13d9d63614c0711644323"' }>
+                                        'data-target="#directives-links-module-L10nTranslationModule-e25e2073ece0bcf41fd31003a925b217cf34348f061ff13fa8417bea7f0ea8ac30d1bbefb713c97a6c7ec7c2118b36a679f446fca07ca9b285cf89a4572979e3"' : 'data-target="#xs-directives-links-module-L10nTranslationModule-e25e2073ece0bcf41fd31003a925b217cf34348f061ff13fa8417bea7f0ea8ac30d1bbefb713c97a6c7ec7c2118b36a679f446fca07ca9b285cf89a4572979e3"' }>
                                         <span class="icon ion-md-code-working"></span>
                                         <span>Directives</span>
                                         <span class="icon ion-ios-arrow-down"></span>
                                     </div>
-                                    <ul class="links collapse" ${ isNormalMode ? 'id="directives-links-module-L10nTranslationModule-951828adedb13d9d63614c0711644323"' :
-                                        'id="xs-directives-links-module-L10nTranslationModule-951828adedb13d9d63614c0711644323"' }>
+                                    <ul class="links collapse" ${ isNormalMode ? 'id="directives-links-module-L10nTranslationModule-e25e2073ece0bcf41fd31003a925b217cf34348f061ff13fa8417bea7f0ea8ac30d1bbefb713c97a6c7ec7c2118b36a679f446fca07ca9b285cf89a4572979e3"' :
+                                        'id="xs-directives-links-module-L10nTranslationModule-e25e2073ece0bcf41fd31003a925b217cf34348f061ff13fa8417bea7f0ea8ac30d1bbefb713c97a6c7ec7c2118b36a679f446fca07ca9b285cf89a4572979e3"' }>
                                         <li class="link">
                                             <a href="directives/L10nTranslateDirective.html" data-type="entity-link" data-context="sub-entity" data-context-id="modules" >L10nTranslateDirective</a>
                                         </li>
@@ -160,13 +165,13 @@ customElements.define('compodoc-menu', class extends HTMLElement {
                                 </li>
                                     <li class="chapter inner">
                                         <div class="simple menu-toggler" data-toggle="collapse" ${ isNormalMode ?
-                                            'data-target="#pipes-links-module-L10nTranslationModule-951828adedb13d9d63614c0711644323"' : 'data-target="#xs-pipes-links-module-L10nTranslationModule-951828adedb13d9d63614c0711644323"' }>
+                                            'data-target="#pipes-links-module-L10nTranslationModule-e25e2073ece0bcf41fd31003a925b217cf34348f061ff13fa8417bea7f0ea8ac30d1bbefb713c97a6c7ec7c2118b36a679f446fca07ca9b285cf89a4572979e3"' : 'data-target="#xs-pipes-links-module-L10nTranslationModule-e25e2073ece0bcf41fd31003a925b217cf34348f061ff13fa8417bea7f0ea8ac30d1bbefb713c97a6c7ec7c2118b36a679f446fca07ca9b285cf89a4572979e3"' }>
                                             <span class="icon ion-md-add"></span>
                                             <span>Pipes</span>
                                             <span class="icon ion-ios-arrow-down"></span>
                                         </div>
-                                        <ul class="links collapse" ${ isNormalMode ? 'id="pipes-links-module-L10nTranslationModule-951828adedb13d9d63614c0711644323"' :
-                                            'id="xs-pipes-links-module-L10nTranslationModule-951828adedb13d9d63614c0711644323"' }>
+                                        <ul class="links collapse" ${ isNormalMode ? 'id="pipes-links-module-L10nTranslationModule-e25e2073ece0bcf41fd31003a925b217cf34348f061ff13fa8417bea7f0ea8ac30d1bbefb713c97a6c7ec7c2118b36a679f446fca07ca9b285cf89a4572979e3"' :
+                                            'id="xs-pipes-links-module-L10nTranslationModule-e25e2073ece0bcf41fd31003a925b217cf34348f061ff13fa8417bea7f0ea8ac30d1bbefb713c97a6c7ec7c2118b36a679f446fca07ca9b285cf89a4572979e3"' }>
                                             <li class="link">
                                                 <a href="pipes/L10nTranslateAsyncPipe.html" data-type="entity-link" data-context="sub-entity" data-context-id="modules" >L10nTranslateAsyncPipe</a>
                                             </li>
@@ -180,13 +185,13 @@ customElements.define('compodoc-menu', class extends HTMLElement {
                                 <a href="modules/L10nValidationModule.html" data-type="entity-link" >L10nValidationModule</a>
                                 <li class="chapter inner">
                                     <div class="simple menu-toggler" data-toggle="collapse" ${ isNormalMode ?
-                                        'data-target="#directives-links-module-L10nValidationModule-6a932b2c4cc561b6981c34bb7aad4dd9"' : 'data-target="#xs-directives-links-module-L10nValidationModule-6a932b2c4cc561b6981c34bb7aad4dd9"' }>
+                                        'data-target="#directives-links-module-L10nValidationModule-75ebb2d48917166aa3caf989345bff2c802cf31b244c5608cbe46df33d7a3a42d89c68be2e8e0c3582bf1b0fcdb766d3a40583262045f1dd9adeb92cd189e06a"' : 'data-target="#xs-directives-links-module-L10nValidationModule-75ebb2d48917166aa3caf989345bff2c802cf31b244c5608cbe46df33d7a3a42d89c68be2e8e0c3582bf1b0fcdb766d3a40583262045f1dd9adeb92cd189e06a"' }>
                                         <span class="icon ion-md-code-working"></span>
                                         <span>Directives</span>
                                         <span class="icon ion-ios-arrow-down"></span>
                                     </div>
-                                    <ul class="links collapse" ${ isNormalMode ? 'id="directives-links-module-L10nValidationModule-6a932b2c4cc561b6981c34bb7aad4dd9"' :
-                                        'id="xs-directives-links-module-L10nValidationModule-6a932b2c4cc561b6981c34bb7aad4dd9"' }>
+                                    <ul class="links collapse" ${ isNormalMode ? 'id="directives-links-module-L10nValidationModule-75ebb2d48917166aa3caf989345bff2c802cf31b244c5608cbe46df33d7a3a42d89c68be2e8e0c3582bf1b0fcdb766d3a40583262045f1dd9adeb92cd189e06a"' :
+                                        'id="xs-directives-links-module-L10nValidationModule-75ebb2d48917166aa3caf989345bff2c802cf31b244c5608cbe46df33d7a3a42d89c68be2e8e0c3582bf1b0fcdb766d3a40583262045f1dd9adeb92cd189e06a"' }>
                                         <li class="link">
                                             <a href="directives/L10nValidateDateDirective.html" data-type="entity-link" data-context="sub-entity" data-context-id="modules" >L10nValidateDateDirective</a>
                                         </li>
@@ -207,7 +212,31 @@ customElements.define('compodoc-menu', class extends HTMLElement {
                             </div>
                             <ul class="links collapse " ${ isNormalMode ? 'id="directives-links"' : 'id="xs-directives-links"' }>
                                 <li class="link">
+                                    <a href="directives/L10nDateDirective.html" data-type="entity-link" >L10nDateDirective</a>
+                                </li>
+                                <li class="link">
                                     <a href="directives/L10nDirective.html" data-type="entity-link" >L10nDirective</a>
+                                </li>
+                                <li class="link">
+                                    <a href="directives/L10nDisplayNamesDirective.html" data-type="entity-link" >L10nDisplayNamesDirective</a>
+                                </li>
+                                <li class="link">
+                                    <a href="directives/L10nNumberDirective.html" data-type="entity-link" >L10nNumberDirective</a>
+                                </li>
+                                <li class="link">
+                                    <a href="directives/L10nPluralDirective.html" data-type="entity-link" >L10nPluralDirective</a>
+                                </li>
+                                <li class="link">
+                                    <a href="directives/L10nTimeAgoDirective.html" data-type="entity-link" >L10nTimeAgoDirective</a>
+                                </li>
+                                <li class="link">
+                                    <a href="directives/L10nTranslateDirective.html" data-type="entity-link" >L10nTranslateDirective</a>
+                                </li>
+                                <li class="link">
+                                    <a href="directives/L10nValidateDateDirective.html" data-type="entity-link" >L10nValidateDateDirective</a>
+                                </li>
+                                <li class="link">
+                                    <a href="directives/L10nValidateNumberDirective.html" data-type="entity-link" >L10nValidateNumberDirective</a>
                                 </li>
                             </ul>
                         </li>
@@ -343,6 +372,52 @@ customElements.define('compodoc-menu', class extends HTMLElement {
                             </li>
                         </ul>
                     </li>
+                        <li class="chapter">
+                            <div class="simple menu-toggler" data-toggle="collapse" ${ isNormalMode ? 'data-target="#pipes-links"' :
+                                'data-target="#xs-pipes-links"' }>
+                                <span class="icon ion-md-add"></span>
+                                <span>Pipes</span>
+                                <span class="icon ion-ios-arrow-down"></span>
+                            </div>
+                            <ul class="links collapse " ${ isNormalMode ? 'id="pipes-links"' : 'id="xs-pipes-links"' }>
+                                <li class="link">
+                                    <a href="pipes/L10nDateAsyncPipe.html" data-type="entity-link" >L10nDateAsyncPipe</a>
+                                </li>
+                                <li class="link">
+                                    <a href="pipes/L10nDatePipe.html" data-type="entity-link" >L10nDatePipe</a>
+                                </li>
+                                <li class="link">
+                                    <a href="pipes/L10nDisplayNamesAsyncPipe.html" data-type="entity-link" >L10nDisplayNamesAsyncPipe</a>
+                                </li>
+                                <li class="link">
+                                    <a href="pipes/L10nDisplayNamesPipe.html" data-type="entity-link" >L10nDisplayNamesPipe</a>
+                                </li>
+                                <li class="link">
+                                    <a href="pipes/L10nNumberAsyncPipe.html" data-type="entity-link" >L10nNumberAsyncPipe</a>
+                                </li>
+                                <li class="link">
+                                    <a href="pipes/L10nNumberPipe.html" data-type="entity-link" >L10nNumberPipe</a>
+                                </li>
+                                <li class="link">
+                                    <a href="pipes/L10nPluralAsyncPipe.html" data-type="entity-link" >L10nPluralAsyncPipe</a>
+                                </li>
+                                <li class="link">
+                                    <a href="pipes/L10nPluralPipe.html" data-type="entity-link" >L10nPluralPipe</a>
+                                </li>
+                                <li class="link">
+                                    <a href="pipes/L10nTimeAgoAsyncPipe.html" data-type="entity-link" >L10nTimeAgoAsyncPipe</a>
+                                </li>
+                                <li class="link">
+                                    <a href="pipes/L10nTimeAgoPipe.html" data-type="entity-link" >L10nTimeAgoPipe</a>
+                                </li>
+                                <li class="link">
+                                    <a href="pipes/L10nTranslateAsyncPipe.html" data-type="entity-link" >L10nTranslateAsyncPipe</a>
+                                </li>
+                                <li class="link">
+                                    <a href="pipes/L10nTranslatePipe.html" data-type="entity-link" >L10nTranslatePipe</a>
+                                </li>
+                            </ul>
+                        </li>
                     <li class="chapter">
                         <div class="simple menu-toggler" data-toggle="collapse" ${ isNormalMode ? 'data-target="#miscellaneous-links"'
                             : 'data-target="#xs-miscellaneous-links"' }>
