@@ -13,7 +13,7 @@ const routes: Routes = [
     { path: 'validation', component: ValidationComponent },
     {
         path: 'lazy',
-        loadChildren: () => import('./lazy/lazy.module').then(m => m.LazyModule),
+        loadComponent: () => import('./lazy/lazy.component').then(m => m.LazyComponent),
         resolve: { l10n: L10nResolver },
         data: {
             l10nProviders: [{ name: 'lazy', asset: './assets/i18n/lazy', options: { version: '15.0.0' } }]

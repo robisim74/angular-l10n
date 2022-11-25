@@ -87,7 +87,7 @@ export class AppModule { }
 ```
 
 ### Getting the translation
-#### Pure Pipes
+#### Pure Pipes (standalone as well)
 ```Html
 <!-- translate pipe -->
 <p>{{ 'greeting' | translate:locale.language }}</p>
@@ -162,7 +162,7 @@ To support this strategy, there is an `Async` version of each pipe, which recogn
 <p>{{ 'greeting' | translateAsync }}</p>
 ```
 
-#### Directives
+#### Directives (standalone as well)
 ```Html
 <!-- l10nTranslate directive -->
 <p l10nTranslate>greeting</p>
@@ -464,13 +464,14 @@ export class AppModule { }
 ```
 
 ### Lazy loading
-If you want to add new providers to a lazy loaded module, you can use `L10nResolver` in your routing module:
+If you want to add new providers to a lazy loaded module or component, you can use `L10nResolver` in your routing module:
 ```TypeScript
 const routes: Routes = [
     ...
     {
         path: 'lazy',
         loadChildren: () => import('./lazy/lazy.module').then(m => m.LazyModule),
+        // loadComponent: () => import('./lazy/lazy.component').then(m => m.LazyComponent),
         resolve: { l10n: L10nResolver },
         data: {
             l10nProviders: [{ name: 'lazy', asset: './assets/i18n/lazy', options: { version: '1.0.0' } }]
@@ -478,7 +479,7 @@ const routes: Routes = [
     }
 ];
 ```
-Always import the modules you need:
+If it is a module, import the modules you need:
 ```TypeScript
 @NgModule({
     declarations: [LazyComponent],
@@ -573,7 +574,7 @@ SSR doesn't work out of the box, so it is important to know:
 
 
 ## Previous versions
-- **Angular v13 (Angular l10n v14.0.0)**
+- **Angular v14 (Angular l10n v14.0.0)**
     - [Branch](https://github.com/robisim74/angular-l10n/tree/angular_v14)
 
 - **Angular v13 (Angular l10n v13.1.0)**
