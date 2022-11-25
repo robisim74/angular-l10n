@@ -16,7 +16,7 @@ const routes: Routes = [
         loadChildren: () => import('./lazy/lazy.module').then(m => m.LazyModule),
         resolve: { l10n: L10nResolver },
         data: {
-            l10nProviders: [{ name: 'lazy', asset: './assets/i18n/lazy', options: { version: '14.0.0' } }]
+            l10nProviders: [{ name: 'lazy', asset: './assets/i18n/lazy', options: { version: '15.0.0' } }]
         }
     },
     { path: '**', redirectTo: 'home' }
@@ -25,9 +25,8 @@ const routes: Routes = [
 @NgModule({
     imports: [
         RouterModule.forRoot(routes, {
-            initialNavigation: 'enabledBlocking',
-            relativeLinkResolution: 'corrected'
-        })
+    initialNavigation: 'enabledBlocking'
+})
     ],
     exports: [RouterModule]
 })

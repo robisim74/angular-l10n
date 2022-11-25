@@ -573,6 +573,9 @@ SSR doesn't work out of the box, so it is important to know:
 
 
 ## Previous versions
+- **Angular v13 (Angular l10n v14.0.0)**
+    - [Branch](https://github.com/robisim74/angular-l10n/tree/angular_v14)
+
 - **Angular v13 (Angular l10n v13.1.0)**
     - [Branch](https://github.com/robisim74/angular-l10n/tree/angular_v13)
 
