@@ -13,7 +13,7 @@ import { L10nDisplayNamesDirective } from '../directives/l10n-display-names.dire
 import { L10nIntlService } from '../services/l10n-intl.service';
 
 @NgModule({
-    declarations: [
+    imports: [
         L10nDatePipe,
         L10nNumberPipe,
         L10nTimeAgoPipe,

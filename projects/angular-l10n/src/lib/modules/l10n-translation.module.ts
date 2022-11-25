@@ -18,7 +18,7 @@ export function initL10n(l10nLoader: L10nLoader): () => Promise<void> {
 }
 
 @NgModule({
-    declarations: [
+    imports: [
         L10nTranslatePipe,
         L10nTranslateAsyncPipe,
         L10nTranslateDirective

@@ -6,7 +6,8 @@ import { L10nIntlService } from '../services/l10n-intl.service';
 
 @Pipe({
     name: 'l10nDate',
-    pure: true
+    pure: true,
+    standalone: true
 })
 export class L10nDatePipe implements PipeTransform {
 
@@ -22,7 +23,8 @@ export class L10nDatePipe implements PipeTransform {
 
 @Pipe({
     name: 'l10nDateAsync',
-    pure: false
+    pure: false,
+    standalone: true
 })
 export class L10nDateAsyncPipe extends L10nAsyncPipe implements PipeTransform {
 

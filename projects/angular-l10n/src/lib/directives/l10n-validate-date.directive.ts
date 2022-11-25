@@ -42,7 +42,8 @@ export function l10nValidateDate(
     selector: '[l10nValidateDate][ngModel],[l10nValidateDate][formControl],[l10nValidateDate][formControlName]',
     providers: [
         { provide: NG_VALIDATORS, useExisting: forwardRef(() => L10nValidateDateDirective), multi: true }
-    ]
+    ],
+    standalone: true
 })
 export class L10nValidateDateDirective implements Validator, OnInit, OnChanges {
 

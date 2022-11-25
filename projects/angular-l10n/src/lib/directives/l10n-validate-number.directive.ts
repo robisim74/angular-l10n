@@ -42,7 +42,8 @@ export function l10nValidateNumber(
     selector: '[l10nValidateNumber][ngModel],[l10nValidateNumber][formControl],[l10nValidateNumber][formControlName]',
     providers: [
         { provide: NG_VALIDATORS, useExisting: forwardRef(() => L10nValidateNumberDirective), multi: true }
-    ]
+    ],
+    standalone: true
 })
 export class L10nValidateNumberDirective implements Validator, OnInit, OnChanges {
 

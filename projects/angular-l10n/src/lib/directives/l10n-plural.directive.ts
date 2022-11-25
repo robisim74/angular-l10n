@@ -4,7 +4,8 @@ import { L10nDirective } from '../models/l10n-directive';
 import { L10nIntlService } from '../services/l10n-intl.service';
 
 @Directive({
-    selector: '[l10nPlural]'
+    selector: '[l10nPlural]',
+    standalone: true
 })
 export class L10nPluralDirective extends L10nDirective {
 

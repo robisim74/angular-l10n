@@ -6,7 +6,7 @@ import { L10nValidationToken } from '../models/l10n-config';
 import { L10nValidation, L10nDefaultValidation } from '../services/l10n-validation';
 
 @NgModule({
-    declarations: [
+    imports: [
         L10nValidateNumberDirective,
         L10nValidateDateDirective
     ],

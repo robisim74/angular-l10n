@@ -5,7 +5,8 @@ import { L10nTranslationService } from '../services/l10n-translation.service';
 
 @Pipe({
     name: 'translate',
-    pure: true
+    pure: true,
+    standalone: true
 })
 export class L10nTranslatePipe implements PipeTransform {
 
@@ -21,7 +22,8 @@ export class L10nTranslatePipe implements PipeTransform {
 
 @Pipe({
     name: 'translateAsync',
-    pure: false
+    pure: false,
+    standalone: true
 })
 export class L10nTranslateAsyncPipe extends L10nAsyncPipe implements PipeTransform {
 

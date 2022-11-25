@@ -5,7 +5,8 @@ import { L10nIntlService } from '../services/l10n-intl.service';
 
 @Pipe({
     name: 'l10nPlural',
-    pure: true
+    pure: true,
+    standalone: true
 })
 export class L10nPluralPipe implements PipeTransform {
 
@@ -21,7 +22,8 @@ export class L10nPluralPipe implements PipeTransform {
 
 @Pipe({
     name: 'l10nPluralAsync',
-    pure: false
+    pure: false,
+    standalone: true
 })
 export class L10nPluralAsyncPipe extends L10nAsyncPipe implements PipeTransform {
 

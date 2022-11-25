@@ -5,7 +5,8 @@ import { L10nDirective } from '../models/l10n-directive';
 import { L10nIntlService } from '../services/l10n-intl.service';
 
 @Directive({
-    selector: '[l10nNumber]'
+    selector: '[l10nNumber]',
+    standalone: true
 })
 export class L10nNumberDirective extends L10nDirective {
 

@@ -20,7 +20,6 @@ import { l10nConfig, AppStorage, HttpTranslationLoader, LocaleValidation } from 
     declarations: [
         AppComponent,
         HomeComponent,
-        PipeComponent,
         DirectiveComponent,
         ApiComponent,
         ValidationComponent,
@@ -40,7 +39,8 @@ import { l10nConfig, AppStorage, HttpTranslationLoader, LocaleValidation } from 
         ),
         L10nIntlModule,
         L10nValidationModule.forRoot({ validation: LocaleValidation }),
-        L10nRoutingModule.forRoot()
+        L10nRoutingModule.forRoot(),
+        PipeComponent // Standalone sample
     ],
     bootstrap: [AppComponent]
 })

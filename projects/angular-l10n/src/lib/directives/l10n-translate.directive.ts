@@ -3,7 +3,8 @@ import { Directive, Input } from '@angular/core';
 import { L10nDirective } from '../models/l10n-directive';
 
 @Directive({
-    selector: '[l10nTranslate],[translate]'
+    selector: '[l10nTranslate],[translate]',
+    standalone: true
 })
 export class L10nTranslateDirective extends L10nDirective {
 

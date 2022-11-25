@@ -156,10 +156,10 @@ import { L10nTranslationService } from './l10n-translation.service';
      * @param options An Intl DisplayNamesOptions object
      * @param language The current language
      */
-    public displayNames(code: string, options?: any, language = this.locale.language): string {
+    public displayNames(code: string, options: Intl.DisplayNamesOptions, language = this.locale.language): string {
         if (!hasDisplayNames() || language == null || language === '') return code;
 
-        return new (Intl as any).DisplayNames(language, options).of(code);
+        return new Intl.DisplayNames(language, options).of(code) || code;
     }
 
     public getCurrencySymbol(locale = this.locale): string | undefined {
@@ -203,11 +203,11 @@ import { L10nTranslationService } from './l10n-translation.service';
      * @param options An Intl ListFormatOptions object
      * @param language The current language
      */
-    public list(list: string[], options?: any, language = this.locale.language): string {
+    public list(list: string[], options?: Intl.ListFormatOptions, language = this.locale.language): string {
         const values = list.map(key => this.translation.translate(key));
         if (!hasListFormat() || language == null || language === '') return values.join(', ');
 
-        return new (Intl as any).ListFormat(language, options).format(values);
+        return new Intl.ListFormat(language, options).format(values);
     }
 
 }
