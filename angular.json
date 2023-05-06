@@ -255,7 +255,8 @@
             "main": "projects/angular-l10n-app-ssr/server.ts",
             "tsConfig": "projects/angular-l10n-app-ssr/tsconfig.server.json",
             "sourceMap": true,
-            "optimization": false
+            "optimization": false,
+            "buildOptimizer": false
           },
           "configurations": {
             "production": {
@@ -267,7 +268,8 @@
                 }
               ],
               "sourceMap": false,
-              "optimization": true
+              "optimization": true,
+              "buildOptimizer": true
             },
             "development": {
               "vendorChunk": true

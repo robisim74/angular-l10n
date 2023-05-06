@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
-import { Resolve, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
+import { ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
 
 import { L10nTranslationService } from './l10n-translation.service';
 
 @Injectable({
     providedIn: 'root'
 })
-export class L10nResolver implements Resolve<Promise<void>> {
+export class L10nResolver  {
 
     constructor(private translation: L10nTranslationService) { }
 
