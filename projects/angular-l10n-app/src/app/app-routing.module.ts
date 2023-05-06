@@ -4,7 +4,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { HomeComponent } from './home/home.component';
 import { OnPushComponent } from './on-push/on-push.component';
 import { ValidationComponent } from './validation/validation.component';
-import { L10nResolver } from 'angular-l10n';
+import { l10nResolver } from 'angular-l10n';
 
 const routes: Routes = [
     { path: '', redirectTo: 'home', pathMatch: 'full' },
@@ -14,7 +14,7 @@ const routes: Routes = [
     {
         path: 'lazy',
         loadComponent: () => import('./lazy/lazy.component').then(m => m.LazyComponent),
-        resolve: { l10n: L10nResolver },
+        resolve: { l10n: l10nResolver },
         data: {
             l10nProviders: [{ name: 'lazy', asset: './assets/i18n/lazy', options: { version: '15.0.0' } }]
         }

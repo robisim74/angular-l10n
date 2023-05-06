@@ -372,7 +372,7 @@ describe('Features', () => {
             });
             expect(translation.has('home.title')).toBe(true);
             const providers = [{ name: 'about', asset: './assets/i18n/about', options: { version: '1.0.0' } }];
-            translation.loadTranslation(providers);
+            translation.loadTranslations(providers);
             tick();
             httpMock.expectNone('./assets/i18n/home-en.json?v=1.0.0');
             httpMock.expectNone('./assets/i18n/home-en-US.json?v=1.0.0');

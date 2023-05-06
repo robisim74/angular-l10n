@@ -49,7 +49,7 @@ import { L10nLocation } from './l10n-location';
      * @param locale The new locale
      */
     public async setLocale(locale: L10nLocale): Promise<void> {
-        await this.loadTranslation(this.config.providers, locale);
+        await this.loadTranslations(this.config.providers, locale);
     }
 
     /**
@@ -159,7 +159,7 @@ import { L10nLocation } from './l10n-location';
         }
 
         // Loads translation data.
-        await this.loadTranslation(providers, locale);
+        await this.loadTranslations(providers, locale);
     }
 
     /**
@@ -167,7 +167,7 @@ import { L10nLocation } from './l10n-location';
      * @param providers An array of L10nProvider
      * @param locale The current locale
      */
-    public async loadTranslation(providers: L10nProvider[] = this.config.providers, locale = this.locale): Promise<void> {
+    public async loadTranslations(providers: L10nProvider[] = this.config.providers, locale = this.locale): Promise<void> {
         const language = formatLanguage(locale.language, this.config.format);
 
         return new Promise((resolve) => {
