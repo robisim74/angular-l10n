@@ -13,8 +13,6 @@
     "test:watch": "ng test angular-l10n --watch=true --browsers=Chrome",
     "test:app": "ng test angular-l10n-app",
     "lint": "ng lint angular-l10n",
-    "build:docs": "npx compodoc -p projects/angular-l10n/tsconfig.lib.prod.json -d docs --disableCoverage -a images",
-    "serve:docs": "npx compodoc -d docs -s",
     "pack:lib": "npm pack ./dist/angular-l10n",
     "publish:lib": "npm publish ./dist/angular-l10n",
     "publish:lib:next": "npm publish --tag next ./dist/angular-l10n",
@@ -23,9 +21,6 @@
     "serve:ssr": "node dist/angular-l10n-app-ssr/server/main.js",
     "build:ssr": "ng build angular-l10n-app-ssr && ng run angular-l10n-app-ssr:server",
     "prerender": "concurrently \"npx http-server ./dist/angular-l10n-app-ssr/browser -p 5000 \" \"ng run angular-l10n-app-ssr:prerender\""
-  },
-  "compodoc": {
-    "name": "Angular l10n Specification"
   },
   "private": true,
   "dependencies": {
@@ -56,7 +51,6 @@
     "@angular/cli": "16.0.0",
     "@angular/compiler-cli": "16.0.0",
     "@angular/language-service": "16.0.0",
-    "@compodoc/compodoc": "^1.1.19",
     "@nguniversal/builders": "15.0.0",
     "@types/express": "^4.17.13",
     "@types/jasmine": "~4.0.0",

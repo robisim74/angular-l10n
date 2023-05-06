@@ -5,10 +5,6 @@
 This library is for localization of **Angular** apps. It allows, in addition to translation, to format dates and numbers through [Internationalization API](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl)
 
 
-## Documentation
-[Angular l10n Specification](https://robisim74.github.io/angular-l10n/)
-
-
 ## Architecture
 ![Architecture](images/architecture.png)
 
