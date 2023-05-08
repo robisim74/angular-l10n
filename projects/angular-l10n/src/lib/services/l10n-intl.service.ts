@@ -92,6 +92,8 @@ import { L10nTranslationService } from './l10n-translation.service';
 
         value = toNumber(value);
 
+        if (typeof value !== 'number') return value; // Hydration
+
         // Optional conversion.
         if (typeof convert === 'function') {
             value = convert(value, this.locale, Object.values(convertParams || {})); // Destructures params
@@ -127,6 +129,8 @@ import { L10nTranslationService } from './l10n-translation.service';
 
         value = toNumber(value);
 
+        if (typeof value !== 'number') return value; // Hydration
+
         return new Intl.RelativeTimeFormat(language, options).format(value, unit);
     }
 
@@ -142,6 +146,8 @@ import { L10nTranslationService } from './l10n-translation.service';
         if (!hasPluralRules() || language == null || language === '') return value.toString();
 
         value = toNumber(value);
+
+        if (typeof value !== 'number') return value; // Hydration
 
         const rule = new Intl.PluralRules(language, options).select(value);
 

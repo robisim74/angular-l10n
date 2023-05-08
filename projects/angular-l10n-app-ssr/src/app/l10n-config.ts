@@ -1,13 +1,11 @@
-import { Injectable, Inject, Optional, PLATFORM_ID, Injector } from '@angular/core';
+import { Injectable, Inject, Optional } from '@angular/core';
+import { Location } from '@angular/common';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
-import { isPlatformBrowser } from '@angular/common';
-import { REQUEST } from '@nguniversal/express-engine/tokens';
 import { Observable } from 'rxjs';
 
-import { CookieService } from 'ngx-cookie';
 import {
     L10nConfig,
-    L10nStorage,
+    L10nResolveLocale,
     L10nLocale,
     L10nTranslationLoader,
     L10nProvider,
@@ -16,68 +14,43 @@ import {
     L10nNumberFormatOptions,
     L10nDateTimeFormatOptions,
     parseDigits,
-    L10nUserLanguage,
-    L10nTranslationService
+    L10N_CONFIG,
+    formatLanguage,
+    getSchema
 } from 'angular-l10n';
 
 export const l10nConfig: L10nConfig = {
     format: 'language-region',
     providers: [
-        { name: 'app', asset: './assets/i18n/app', options: { version: '15.0.0' } }
+        { name: 'app', asset: './assets/i18n/app', options: { version: '16.0.0' } }
     ],
     fallback: false,
     cache: true,
     keySeparator: '.',
-    defaultLocale: { language: 'en-US', currency: 'USD', timeZone: 'America/Los_Angeles' },
+    defaultLocale: { language: 'en-US', currency: 'USD', timeZone: 'America/Los_Angeles', units: { length: 'mile' } },
     schema: [
         { locale: { language: 'en-US', currency: 'USD', timeZone: 'America/Los_Angeles', units: { 'length': 'mile' } }, dir: 'ltr', text: 'United States' },
         { locale: { language: 'it-IT', currency: 'EUR', timeZone: 'Europe/Rome', units: { 'length': 'kilometer' } }, dir: 'ltr', text: 'Italia' }
-    ],
-    defaultRouting: true
+    ]
 };
 
-@Injectable() export class AppStorage implements L10nStorage {
+@Injectable() export class ResolveLocale implements L10nResolveLocale {
 
-    constructor(@Inject(PLATFORM_ID) private platformId: Object, private cookieService: CookieService) { }
+    constructor(@Inject(L10N_CONFIG) private config: L10nConfig, private location: Location) { }
 
-    public async read(): Promise<L10nLocale | null> {
-        return Promise.resolve(this.cookieService.getObject('locale') as L10nLocale);
-    }
+    public async get(): Promise<L10nLocale | null> {
+        const path = this.location.path();
 
-    public async write(locale: L10nLocale): Promise<void> {
-        if (isPlatformBrowser(this.platformId)) {
-            this.cookieService.putObject('locale', locale);
-        }
-    }
-
-}
-
-@Injectable() export class AppUserLanguage implements L10nUserLanguage {
-
-    private get translation(): L10nTranslationService {
-        return this.injector.get(L10nTranslationService);
-    }
-
-    constructor(
-        @Optional() @Inject(REQUEST) private request: any,
-        @Inject(PLATFORM_ID) private platformId: Object,
-        private injector: Injector
-    ) { }
-
-    public async get(): Promise<string | null> {
-        let browserLanguage = null;
-
-        if (isPlatformBrowser(this.platformId)) {
-            browserLanguage = navigator.language;
-        } else {
-            if (this.request) {
-                const acceptsLanguages = this.translation.getAvailableLanguages();
-                // Returns the first accepted language of the specified languages.
-                browserLanguage = this.request.acceptsLanguages(acceptsLanguages) ?? null;
+        for (const element of this.config.schema) {
+            const language = formatLanguage(element.locale.language, this.config.format);
+            if (new RegExp(`(\/${language}\/)|(\/${language}$)|(\/(${language})(?=\\?))`).test(path)) {
+                const schema = getSchema(this.config.schema, language, this.config.format);
+                if (schema) {
+                    return Promise.resolve(schema.locale);
+                }
             }
         }
-
-        return Promise.resolve(browserLanguage);
+        return Promise.resolve(null);
     }
 
 }

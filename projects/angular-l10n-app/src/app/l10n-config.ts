@@ -22,17 +22,16 @@ import {
 export const l10nConfig: L10nConfig = {
     format: 'language-region',
     providers: [
-        { name: 'app', asset: './assets/i18n/app', options: { version: '15.0.0' } }
+        { name: 'app', asset: './assets/i18n/app', options: { version: '16.0.0' } }
     ],
     fallback: false,
     cache: true,
     keySeparator: '.',
-    defaultLocale: { language: 'en-US', currency: 'USD', timeZone: 'America/Los_Angeles' },
+    defaultLocale: { language: 'en-US', currency: 'USD', timeZone: 'America/Los_Angeles', units: { length: 'mile' } },
     schema: [
         { locale: { language: 'en-US', currency: 'USD', timeZone: 'America/Los_Angeles', units: { 'length': 'mile' } }, dir: 'ltr', text: 'United States' },
         { locale: { language: 'it-IT', currency: 'EUR', timeZone: 'Europe/Rome', units: { 'length': 'kilometer' } }, dir: 'ltr', text: 'Italia' }
-    ],
-    defaultRouting: true
+    ]
 };
 
 @Injectable() export class ResolveLocale implements L10nResolveLocale {

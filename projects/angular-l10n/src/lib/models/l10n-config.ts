@@ -43,10 +43,6 @@ export interface L10nConfig {
      * Provides the schema of the supported locales.
      */
     schema: L10nSchema[];
-    /**
-     * If enabled, does not localize the routing for the default locale.
-     */
-    defaultRouting?: boolean;
 }
 
 /**

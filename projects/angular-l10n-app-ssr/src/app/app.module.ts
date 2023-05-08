@@ -1,10 +1,9 @@
-import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import { BrowserModule, provideClientHydration } from '@angular/platform-browser';
+import { APP_ID, NgModule } from '@angular/core';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 
-import { L10nTranslationModule, L10nIntlModule, L10nValidationModule, L10nRoutingModule } from 'angular-l10n';
-import { CookieModule } from 'ngx-cookie';
+import { L10nTranslationModule, L10nIntlModule, L10nValidationModule } from 'angular-l10n';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -15,7 +14,7 @@ import { ApiComponent } from './home/api/api.component';
 import { ValidationComponent } from './validation/validation.component';
 import { OnPushComponent } from './on-push/on-push.component';
 
-import { l10nConfig, AppStorage, HttpTranslationLoader, LocaleValidation, AppUserLanguage } from './l10n-config';
+import { l10nConfig, HttpTranslationLoader, LocaleValidation, ResolveLocale } from './l10n-config';
 
 @NgModule({
     declarations: [
@@ -28,22 +27,23 @@ import { l10nConfig, AppStorage, HttpTranslationLoader, LocaleValidation, AppUse
         OnPushComponent
     ],
     imports: [
-        BrowserModule.withServerTransition({ appId: 'serverApp' }),
+        BrowserModule,
         FormsModule,
         AppRoutingModule,
         HttpClientModule,
         L10nTranslationModule.forRoot(
             l10nConfig,
             {
-                storage: AppStorage,
-                userLanguage: AppUserLanguage,
+                resolveLocale: ResolveLocale,
                 translationLoader: HttpTranslationLoader
             }
         ),
         L10nIntlModule,
-        L10nValidationModule.forRoot({ validation: LocaleValidation }),
-        L10nRoutingModule.forRoot(),
-        CookieModule.forRoot()
+        L10nValidationModule.forRoot({ validation: LocaleValidation })
+    ],
+    providers: [
+        { provide: APP_ID, useValue: 'serverApp' },
+        provideClientHydration()
     ],
     bootstrap: [AppComponent]
 })

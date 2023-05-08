@@ -1,20 +1,11 @@
-<!-- <a routerLink="home">Home</a>&nbsp;
-<a routerLink="on-push">OnPush</a>&nbsp;
-<a routerLink="validation">Validation</a>&nbsp;
-<a routerLink="lazy">Lazy</a>&nbsp; -->
-
-<a routerLink="{{routeLanguage()}/home">Home</a>&nbsp;
-<a routerLink="{{routeLanguage()}}/on-push">OnPush</a>&nbsp;
-<a routerLink="{{routeLanguage()}}/validation">Validation</a>&nbsp;
-<a routerLink="{{routeLanguage()}}/lazy">Lazy</a>&nbsp;
+<a routerLink="{{pathLang}}/home">Home</a>&nbsp;
+<a routerLink="{{pathLang}}/on-push">OnPush</a>&nbsp;
+<a routerLink="{{pathLang}}/validation">Validation</a>&nbsp;
+<a routerLink="{{pathLang}}/lazy">Lazy</a>&nbsp;
 
 <h3>{{ 'changeLocale' | translate:locale.language }}</h3>
 
-<!-- <button *ngFor="let item of schema"
-    (click)="setLocale(item.locale)">{{ item.locale.language | l10nDisplayNames:locale.language:{ type: 'language' } }}</button> -->
-    <button *ngFor="let item of schema" (click)="setLocale(item.locale)" [options]="{ type: 'language' }"
+<button *ngFor="let item of schema" (click)="navigateByLocale(item.locale)" [options]="{ type: 'language' }"
     l10nDisplayNames>{{ item.locale.language }}</button>
-
-<!-- <button *ngFor="let item of schema" (click)="setLocale(item.locale)">{{ item.text }}</button> -->
 
 <router-outlet></router-outlet>

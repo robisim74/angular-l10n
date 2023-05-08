@@ -15,7 +15,7 @@ const routes: Routes = [
         loadComponent: () => import('./lazy/lazy.component').then(m => m.LazyComponent),
         resolve: { l10n: l10nResolver },
         data: {
-            l10nProviders: [{ name: 'lazy', asset: './assets/i18n/lazy', options: { version: '15.0.0' } }]
+            l10nProviders: [{ name: 'lazy', asset: './assets/i18n/lazy', options: { version: '16.0.0' } }]
         }
     }
 ];
