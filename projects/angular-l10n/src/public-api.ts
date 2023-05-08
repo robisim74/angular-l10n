@@ -14,7 +14,7 @@ export * from './lib/functions/l10nResolver';
 export * from './lib/services/l10n-translation.service';
 export * from './lib/services/l10n-cache';
 export { L10nStorage } from './lib/services/l10n-storage';
-export { L10nUserLanguage } from './lib/services/l10n-user-language';
+export { L10nResolveLocale } from './lib/services/l10n-resolve-locale';
 export { L10nTranslationFallback } from './lib/services/l10n-translation-fallback';
 export { L10nTranslationLoader } from './lib/services/l10n-translation-loader';
 export { L10nTranslationHandler } from './lib/services/l10n-translation-handler';
@@ -41,7 +41,3 @@ export * from './lib/directives/l10n-validate-number.directive';
 export * from './lib/directives/l10n-validate-date.directive';
 export { L10nValidation } from './lib/services/l10n-validation';
 export * from './lib/modules/l10n-validation.module';
-// L10nRoutingModule
-export * from './lib/services/l10n-routing.service';
-export * from './lib/modules/l10n-routing.module';
-export { L10nLocation } from './lib/services/l10n-location';

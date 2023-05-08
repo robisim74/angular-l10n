@@ -1,10 +1,11 @@
 import { Injectable, Inject, Optional } from '@angular/core';
+import { Location } from '@angular/common';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 import {
     L10nConfig,
-    L10nStorage,
+    L10nResolveLocale,
     L10nLocale,
     L10nTranslationLoader,
     L10nProvider,
@@ -12,7 +13,10 @@ import {
     L10N_LOCALE,
     L10nNumberFormatOptions,
     L10nDateTimeFormatOptions,
-    parseDigits
+    parseDigits,
+    L10N_CONFIG,
+    formatLanguage,
+    getSchema
 } from 'angular-l10n';
 
 export const l10nConfig: L10nConfig = {
@@ -31,25 +35,23 @@ export const l10nConfig: L10nConfig = {
     defaultRouting: true
 };
 
-@Injectable() export class AppStorage implements L10nStorage {
+@Injectable() export class ResolveLocale implements L10nResolveLocale {
 
-    private hasStorage: boolean;
+    constructor(@Inject(L10N_CONFIG) private config: L10nConfig, private location: Location) { }
 
-    constructor() {
-        this.hasStorage = typeof Storage !== 'undefined';
-    }
+    public async get(): Promise<L10nLocale | null> {
+        const path = this.location.path();
 
-    public async read(): Promise<L10nLocale | null> {
-        if (this.hasStorage) {
-            return Promise.resolve(JSON.parse(sessionStorage.getItem('locale')));
+        for (const element of this.config.schema) {
+            const language = formatLanguage(element.locale.language, this.config.format);
+            if (new RegExp(`(\/${language}\/)|(\/${language}$)|(\/(${language})(?=\\?))`).test(path)) {
+                const schema = getSchema(this.config.schema, language, this.config.format);
+                if (schema) {
+                    return Promise.resolve(schema.locale);
+                }
+            }
         }
         return Promise.resolve(null);
-    }
-
-    public async write(locale: L10nLocale): Promise<void> {
-        if (this.hasStorage) {
-            sessionStorage.setItem('locale', JSON.stringify(locale));
-        }
     }
 
 }

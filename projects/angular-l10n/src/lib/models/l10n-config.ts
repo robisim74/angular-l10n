@@ -2,13 +2,12 @@ import { InjectionToken, Type } from '@angular/core';
 
 import { L10nFormat, L10nProvider, L10nLocale, L10nSchema } from './types';
 import { L10nStorage } from '../services/l10n-storage';
-import { L10nUserLanguage } from '../services/l10n-user-language';
+import { L10nResolveLocale } from '../services/l10n-resolve-locale';
 import { L10nTranslationFallback } from '../services/l10n-translation-fallback';
 import { L10nTranslationLoader } from '../services/l10n-translation-loader';
 import { L10nTranslationHandler } from '../services/l10n-translation-handler';
 import { L10nMissingTranslationHandler } from '../services/l10n-missing-translation-handler';
 import { L10nValidation } from '../services/l10n-validation';
-import { L10nLocation } from '../services/l10n-location';
 import { L10nLoader } from '../services/l10n-loader';
 
 export interface L10nConfig {
@@ -66,9 +65,9 @@ export interface L10nTranslationToken {
      */
     storage?: Type<L10nStorage>;
     /**
-     * Defines the user language to be used.
+     * Defines the locale to be used.
      */
-    userLanguage?: Type<L10nUserLanguage>;
+    resolveLocale?: Type<L10nResolveLocale>;
     /**
      * Defines the translation fallback to be used.
      */
@@ -96,15 +95,4 @@ export interface L10nValidationToken {
      * Defines the validation service to be used.
      */
     validation?: Type<L10nValidation>;
-}
-
-export interface L10nRoutingToken {
-    /**
-     * Defines the location service to be used.
-     */
-    location?: Type<L10nLocation>;
-    /**
-     * Defines the loader to be used.
-     */
-    loader?: Type<L10nLoader>;
 }

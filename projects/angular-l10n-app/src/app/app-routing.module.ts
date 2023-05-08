@@ -7,7 +7,6 @@ import { ValidationComponent } from './validation/validation.component';
 import { l10nResolver } from 'angular-l10n';
 
 const routes: Routes = [
-    { path: '', redirectTo: 'home', pathMatch: 'full' },
     { path: 'home', component: HomeComponent },
     { path: 'on-push', component: OnPushComponent },
     { path: 'validation', component: ValidationComponent },
@@ -18,13 +17,22 @@ const routes: Routes = [
         data: {
             l10nProviders: [{ name: 'lazy', asset: './assets/i18n/lazy', options: { version: '15.0.0' } }]
         }
+    }
+];
+
+const localizedRoutes: Routes = [
+    { path: '', redirectTo: 'home', pathMatch: 'full' },
+    ...routes,
+    {
+        path: ':lang',
+        children: routes
     },
     { path: '**', redirectTo: 'home' }
 ];
 
 @NgModule({
     imports: [
-        RouterModule.forRoot(routes, {})
+        RouterModule.forRoot(localizedRoutes, {})
     ],
     exports: [RouterModule]
 })
