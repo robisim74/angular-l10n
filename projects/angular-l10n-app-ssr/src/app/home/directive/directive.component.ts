@@ -6,7 +6,8 @@ import { convertCurrency, convertLength } from '../../conversions';
 @Component({
     selector: 'app-directive',
     templateUrl: './directive.component.html',
-    styleUrls: ['./directive.component.scss']
+    styleUrls: ['./directive.component.scss'],
+    host: { ngSkipHydration: 'true' }
 })
 export class DirectiveComponent implements OnInit {
 
