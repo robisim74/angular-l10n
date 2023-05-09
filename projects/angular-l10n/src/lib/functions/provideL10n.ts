@@ -12,10 +12,7 @@ import { L10nTranslationLoader, L10nDefaultTranslationLoader } from '../services
 import { L10nTranslationService } from '../services/l10n-translation.service';
 import { L10nIntlService } from '../services/l10n-intl.service';
 import { L10nDefaultValidation, L10nValidation } from '../services/l10n-validation';
-
-export function initL10n(l10nLoader: L10nLoader): () => Promise<void> {
-    return () => l10nLoader.init();
-}
+import { initL10n } from './initL10n';
 
 export function provideL10nTranslation(config: L10nConfig, token: L10nTranslationToken = {}): EnvironmentProviders {
     return makeEnvironmentProviders([
