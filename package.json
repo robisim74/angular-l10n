@@ -4,6 +4,7 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve angular-l10n-app --open",
+    "start:standalone": "ng serve angular-l10n-app-standalone --open",
     "build": "ng build angular-l10n",
     "build:watch": "ng build angular-l10n --watch --configuration development",
     "build:app": "ng build angular-l10n-app",

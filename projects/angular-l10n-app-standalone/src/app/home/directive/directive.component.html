@@ -1,0 +1,14 @@
+<h3>Directives</h3>
+<p l10n-title title="home.greeting" l10nTranslate>home.greeting</p>
+<p [params]="{ name: 'Angular l10n' }" l10nTranslate>home.whoIAm</p>
+<!-- <p [l10nTranslate]="{ name: 'Angular l10n' }">home.whoIAm</p> -->
+<p innerHTML="home.description" l10nTranslate></p>
+<br>
+<p [options]="{ dateStyle: 'full', timeStyle: 'short' }" l10nDate>{{ today }}</p>
+<p [options]="{ numeric:'always', style:'long' }" unit="second" l10nTimeAgo>{{ timeAgo }}</p>
+<br>
+<p [options]="{ digits: '1.2-2', style: 'currency' }" [convert]="convertCurrency" [convertParams]="{ rate: 1.16 }" l10nNumber>1000</p>
+<p [options]="{ digits: '1.0-2', style: 'unit', unit: locale.units['length'] }" [convert]="convertLength" l10nNumber>1</p>
+<br>
+<p [options]="{ type: 'cardinal' }" prefix="home.devs" l10nPlural>1</p>
+<p [options]="{ type: 'cardinal' }" prefix="home.devs" l10nPlural>2</p>

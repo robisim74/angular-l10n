@@ -313,6 +313,119 @@
           }
         }
       }
+    },
+    "angular-l10n-app-standalone": {
+      "projectType": "application",
+      "schematics": {
+        "@schematics/angular:component": {
+          "style": "scss",
+          "standalone": true
+        },
+        "@schematics/angular:directive": {
+          "standalone": true
+        },
+        "@schematics/angular:pipe": {
+          "standalone": true
+        }
+      },
+      "root": "projects/angular-l10n-app-standalone",
+      "sourceRoot": "projects/angular-l10n-app-standalone/src",
+      "prefix": "app",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:browser",
+          "options": {
+            "outputPath": "dist/angular-l10n-app-standalone",
+            "index": "projects/angular-l10n-app-standalone/src/index.html",
+            "main": "projects/angular-l10n-app-standalone/src/main.ts",
+            "polyfills": [
+              "zone.js"
+            ],
+            "tsConfig": "projects/angular-l10n-app-standalone/tsconfig.app.json",
+            "inlineStyleLanguage": "scss",
+            "assets": [
+              "projects/angular-l10n-app-standalone/src/favicon.ico",
+              "projects/angular-l10n-app-standalone/src/assets"
+            ],
+            "styles": [
+              "projects/angular-l10n-app-standalone/src/styles.scss"
+            ],
+            "scripts": []
+          },
+          "configurations": {
+            "production": {
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "500kb",
+                  "maximumError": "1mb"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "2kb",
+                  "maximumError": "4kb"
+                }
+              ],
+              "outputHashing": "all"
+            },
+            "development": {
+              "buildOptimizer": false,
+              "optimization": false,
+              "vendorChunk": true,
+              "extractLicenses": false,
+              "sourceMap": true,
+              "namedChunks": true
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "serve": {
+          "builder": "@angular-devkit/build-angular:dev-server",
+          "configurations": {
+            "production": {
+              "browserTarget": "angular-l10n-app-standalone:build:production"
+            },
+            "development": {
+              "browserTarget": "angular-l10n-app-standalone:build:development"
+            }
+          },
+          "defaultConfiguration": "development"
+        },
+        "extract-i18n": {
+          "builder": "@angular-devkit/build-angular:extract-i18n",
+          "options": {
+            "browserTarget": "angular-l10n-app-standalone:build"
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "polyfills": [
+              "zone.js",
+              "zone.js/testing"
+            ],
+            "tsConfig": "projects/angular-l10n-app-standalone/tsconfig.spec.json",
+            "inlineStyleLanguage": "scss",
+            "assets": [
+              "projects/angular-l10n-app-standalone/src/favicon.ico",
+              "projects/angular-l10n-app-standalone/src/assets"
+            ],
+            "styles": [
+              "projects/angular-l10n-app-standalone/src/styles.scss"
+            ],
+            "scripts": []
+          }
+        },
+        "lint": {
+          "builder": "@angular-eslint/builder:lint",
+          "options": {
+            "lintFilePatterns": [
+              "projects/angular-l10n-app-standalone/**/*.ts",
+              "projects/angular-l10n-app-standalone/**/*.html"
+            ]
+          }
+        }
+      }
     }
   },
   "cli": {

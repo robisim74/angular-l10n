@@ -10,6 +10,7 @@ export * from './lib/models/l10n-directive';
 export * from './lib/models/utils';
 // Functions
 export * from './lib/functions/l10nResolver';
+export { provideL10nTranslation, provideL10nIntl, provideL10nValidation } from './lib/functions/provideL10n';
 // L10nTranslationModule
 export * from './lib/services/l10n-translation.service';
 export * from './lib/services/l10n-cache';
