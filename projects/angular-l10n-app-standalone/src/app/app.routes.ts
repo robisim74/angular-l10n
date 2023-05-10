@@ -1,6 +1,6 @@
 import { Routes } from '@angular/router';
 
-import { l10nResolver } from 'angular-l10n';
+import { resolveL10n } from 'angular-l10n';
 
 import { HomeComponent } from './home/home.component';
 import { OnPushComponent } from './on-push/on-push.component';
@@ -13,7 +13,7 @@ const routes: Routes = [
     {
         path: 'lazy',
         loadComponent: () => import('./lazy/lazy.component').then(m => m.LazyComponent),
-        resolve: { l10n: l10nResolver },
+        resolve: { l10n: resolveL10n },
         data: {
             l10nProviders: [{ name: 'lazy', asset: './assets/i18n/lazy', options: { version: '16.0.0' } }]
         }

@@ -4,7 +4,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { HomeComponent } from './home/home.component';
 import { OnPushComponent } from './on-push/on-push.component';
 import { ValidationComponent } from './validation/validation.component';
-import { l10nResolver } from 'angular-l10n';
+import { resolveL10n } from 'angular-l10n';
 
 const routes: Routes = [
     { path: 'home', component: HomeComponent },
@@ -13,7 +13,7 @@ const routes: Routes = [
     {
         path: 'lazy',
         loadChildren: () => import('./lazy/lazy.module').then(m => m.LazyModule),
-        resolve: { l10n: l10nResolver },
+        resolve: { l10n: resolveL10n },
         data: {
             l10nProviders: [{ name: 'lazy', asset: './assets/i18n/lazy', options: { version: '16.0.0' } }]
         }

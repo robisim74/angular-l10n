@@ -9,7 +9,7 @@ export * from './lib/models/l10n-async-pipe';
 export * from './lib/models/l10n-directive';
 export * from './lib/models/utils';
 // Functions
-export * from './lib/functions/l10nResolver';
+export * from './lib/functions/resolveL10n';
 export { provideL10nTranslation, provideL10nIntl, provideL10nValidation } from './lib/functions/provideL10n';
 // L10nTranslationModule
 export * from './lib/services/l10n-translation.service';

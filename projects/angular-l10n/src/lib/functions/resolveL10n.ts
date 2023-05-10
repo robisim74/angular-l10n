@@ -3,7 +3,7 @@ import { ActivatedRouteSnapshot, ResolveFn, RouterStateSnapshot } from '@angular
 
 import { L10nTranslationService } from '../services/l10n-translation.service';
 
-export const l10nResolver: ResolveFn<void> = async (route: ActivatedRouteSnapshot, state: RouterStateSnapshot) => {
+export const resolveL10n: ResolveFn<void> = async (route: ActivatedRouteSnapshot, state: RouterStateSnapshot) => {
     const translation = inject(L10nTranslationService);
 
     const providers = route.data['l10nProviders'];
