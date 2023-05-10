@@ -7,7 +7,7 @@ import { L10nLocale } from '../models/types';
 /**
  * Implement this class-interface to resolve the locale.
  */
-@Injectable() export abstract class L10nResolveLocale {
+@Injectable() export abstract class L10nLocaleResolver {
 
     /**
      * This method must contain the logic to get the locale.
@@ -17,7 +17,7 @@ import { L10nLocale } from '../models/types';
 
 }
 
-@Injectable() export class L10nDefaultResolveLocale implements L10nResolveLocale {
+@Injectable() export class L10nDefaultLocaleResolver implements L10nLocaleResolver {
 
     constructor(@Inject(L10N_CONFIG) private config: L10nConfig) { }
 

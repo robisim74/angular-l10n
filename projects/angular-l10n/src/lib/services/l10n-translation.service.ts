@@ -6,7 +6,7 @@ import { L10N_CONFIG, L10nConfig, L10N_LOCALE } from '../models/l10n-config';
 import { formatLanguage, getSchema, getValue, mergeDeep } from '../models/utils';
 import { L10nCache } from './l10n-cache';
 import { L10nStorage } from './l10n-storage';
-import { L10nResolveLocale } from './l10n-resolve-locale';
+import { L10nLocaleResolver } from './l10n-locale-resolver';
 import { L10nTranslationFallback } from './l10n-translation-fallback';
 import { L10nTranslationLoader } from './l10n-translation-loader';
 import { L10nTranslationHandler } from './l10n-translation-handler';
@@ -28,7 +28,7 @@ import { L10nMissingTranslationHandler } from './l10n-missing-translation-handle
         @Inject(L10N_LOCALE) private locale: L10nLocale,
         private cache: L10nCache,
         private storage: L10nStorage,
-        private resolveLocale: L10nResolveLocale,
+        private resolveLocale: L10nLocaleResolver,
         private translationFallback: L10nTranslationFallback,
         private translationLoader: L10nTranslationLoader,
         private translationHandler: L10nTranslationHandler,

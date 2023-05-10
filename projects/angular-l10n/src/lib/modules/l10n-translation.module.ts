@@ -6,7 +6,7 @@ import { L10nConfig, L10nTranslationToken, L10N_CONFIG, L10N_LOCALE } from '../m
 import { L10nTranslationService } from '../services/l10n-translation.service';
 import { L10nCache } from '../services/l10n-cache';
 import { L10nStorage, L10nDefaultStorage } from '../services/l10n-storage';
-import { L10nResolveLocale, L10nDefaultResolveLocale } from '../services/l10n-resolve-locale';
+import { L10nLocaleResolver, L10nDefaultLocaleResolver } from '../services/l10n-locale-resolver';
 import { L10nTranslationFallback, L10nDefaultTranslationFallback } from '../services/l10n-translation-fallback';
 import { L10nTranslationLoader, L10nDefaultTranslationLoader } from '../services/l10n-translation-loader';
 import { L10nTranslationHandler, L10nDefaultTranslationHandler } from '../services/l10n-translation-handler';
@@ -37,7 +37,7 @@ export class L10nTranslationModule {
                 { provide: L10N_CONFIG, useValue: config },
                 { provide: L10N_LOCALE, useValue: { language: '', units: {} } },
                 { provide: L10nStorage, useClass: token.storage || L10nDefaultStorage },
-                { provide: L10nResolveLocale, useClass: token.resolveLocale || L10nDefaultResolveLocale },
+                { provide: L10nLocaleResolver, useClass: token.localeResolver || L10nDefaultLocaleResolver },
                 { provide: L10nTranslationFallback, useClass: token.translationFallback || L10nDefaultTranslationFallback },
                 { provide: L10nTranslationLoader, useClass: token.translationLoader || L10nDefaultTranslationLoader },
                 { provide: L10nTranslationHandler, useClass: token.translationHandler || L10nDefaultTranslationHandler },

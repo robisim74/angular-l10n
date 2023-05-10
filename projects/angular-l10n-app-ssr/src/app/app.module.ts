@@ -14,7 +14,7 @@ import { ApiComponent } from './home/api/api.component';
 import { ValidationComponent } from './validation/validation.component';
 import { OnPushComponent } from './on-push/on-push.component';
 
-import { l10nConfig, HttpTranslationLoader, LocaleValidation, ResolveLocale } from './l10n-config';
+import { l10nConfig, HttpTranslationLoader, LocaleValidation, LocaleResolver } from './l10n-config';
 
 @NgModule({
     declarations: [
@@ -34,7 +34,7 @@ import { l10nConfig, HttpTranslationLoader, LocaleValidation, ResolveLocale } fr
         L10nTranslationModule.forRoot(
             l10nConfig,
             {
-                resolveLocale: ResolveLocale,
+                localeResolver: LocaleResolver,
                 translationLoader: HttpTranslationLoader
             }
         ),

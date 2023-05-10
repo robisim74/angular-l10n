@@ -15,7 +15,7 @@ export { provideL10nTranslation, provideL10nIntl, provideL10nValidation } from '
 export * from './lib/services/l10n-translation.service';
 export * from './lib/services/l10n-cache';
 export { L10nStorage } from './lib/services/l10n-storage';
-export { L10nResolveLocale } from './lib/services/l10n-resolve-locale';
+export { L10nLocaleResolver } from './lib/services/l10n-locale-resolver';
 export { L10nTranslationFallback } from './lib/services/l10n-translation-fallback';
 export { L10nTranslationLoader } from './lib/services/l10n-translation-loader';
 export { L10nTranslationHandler } from './lib/services/l10n-translation-handler';

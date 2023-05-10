@@ -5,7 +5,6 @@ import { Observable } from 'rxjs';
 
 import {
     L10nConfig,
-    L10nResolveLocale,
     L10nLocale,
     L10nTranslationLoader,
     L10nProvider,
@@ -16,7 +15,8 @@ import {
     parseDigits,
     L10N_CONFIG,
     formatLanguage,
-    getSchema
+    getSchema,
+    L10nLocaleResolver
 } from 'angular-l10n';
 
 export const l10nConfig: L10nConfig = {
@@ -34,7 +34,7 @@ export const l10nConfig: L10nConfig = {
     ]
 };
 
-@Injectable() export class ResolveLocale implements L10nResolveLocale {
+@Injectable() export class LocaleResolver implements L10nLocaleResolver {
 
     constructor(@Inject(L10N_CONFIG) private config: L10nConfig, private location: Location) { }
 

@@ -5,7 +5,7 @@ import { Injectable, Optional } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
-import { L10nTranslationService, L10nConfig, L10nTranslationModule, L10nTranslationLoader, L10nProvider, L10nResolveLocale, L10nLocale } from '../public-api';
+import { L10nTranslationService, L10nConfig, L10nTranslationModule, L10nTranslationLoader, L10nProvider, L10nLocaleResolver, L10nLocale } from '../public-api';
 
 @Injectable() class HttpTranslationLoader implements L10nTranslationLoader {
     private headers = new HttpHeaders({ 'Content-Type': 'application/json' });
@@ -20,7 +20,7 @@ import { L10nTranslationService, L10nConfig, L10nTranslationModule, L10nTranslat
     }
 }
 
-@Injectable() export class ResolveLocale implements L10nResolveLocale {
+@Injectable() export class LocaleResolver implements L10nLocaleResolver {
 
     public get(): Promise<L10nLocale | null> {
         return Promise.resolve(null);
@@ -60,7 +60,7 @@ describe('L10nTranslationService', () => {
         TestBed.configureTestingModule({
             imports: [
                 L10nTranslationModule.forRoot(config, {
-                    resolveLocale: ResolveLocale
+                    localeResolver: LocaleResolver
                 })
             ]
         });

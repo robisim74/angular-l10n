@@ -2,7 +2,7 @@ import { InjectionToken, Type } from '@angular/core';
 
 import { L10nFormat, L10nProvider, L10nLocale, L10nSchema } from './types';
 import { L10nStorage } from '../services/l10n-storage';
-import { L10nResolveLocale } from '../services/l10n-resolve-locale';
+import { L10nLocaleResolver } from '../services/l10n-locale-resolver';
 import { L10nTranslationFallback } from '../services/l10n-translation-fallback';
 import { L10nTranslationLoader } from '../services/l10n-translation-loader';
 import { L10nTranslationHandler } from '../services/l10n-translation-handler';
@@ -63,7 +63,7 @@ export interface L10nTranslationToken {
     /**
      * Defines the locale to be used.
      */
-    resolveLocale?: Type<L10nResolveLocale>;
+    localeResolver?: Type<L10nLocaleResolver>;
     /**
      * Defines the translation fallback to be used.
      */
