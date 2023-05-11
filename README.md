@@ -5,13 +5,10 @@
 This library is for localization of **Angular** apps. It allows, in addition to translation, to format dates and numbers through [Internationalization API](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl)
 
 
-## Architecture
-![Architecture](images/architecture.png)
-
-
 ## Table of Contents
 - [Installation](#installation)
 - [Usage](#usage)
+- [Localized routing](#localized-routing)
 - [Types](#types)
 - [Intl API](#intl-api)
 - [Server Side Rendering](#server-side-rendering)
@@ -27,7 +24,10 @@ npm install angular-l10n --save
 
 
 ## Usage
-You can find a complete sample app [here](projects/angular-l10n-app) and a live example on [StackBlitz](https://stackblitz.com/edit/angular-l10n)
+- Sample [app](projects/angular-l10n-app)
+- Sample [standalone app](projects/angular-l10n-app-standalone)
+- Sample [SSR app](projects/angular-l10n-app-ssr)
+- Live example on [StackBlitz](https://stackblitz.com/edit/angular-l10n)
 
 ### Configuration
 Create the configuration:
@@ -39,7 +39,7 @@ export const l10nConfig: L10nConfig = {
     ],
     cache: true,
     keySeparator: '.',
-    defaultLocale: { language: 'en-US', currency: 'USD', timeZone: 'America/Los_Angeles' },
+    defaultLocale: { language: 'en-US', currency: 'USD', timeZone: 'America/Los_Angeles', units: { 'length': 'mile' } },
     schema: [
         { locale: { language: 'en-US', currency: 'USD', timeZone: 'America/Los_Angeles', units: { 'length': 'mile' } }, dir: 'ltr', text: 'United States' },
         { locale: { language: 'it-IT', currency: 'EUR', timeZone: 'Europe/Rome', units: { 'length': 'kilometer' } }, dir: 'ltr', text: 'Italia' }
@@ -66,9 +66,7 @@ const i18nAsset = {
 };
 ```
 
-> Do you only need to localize and not translate? Give the `providers` an empty array, but provide the supported locales in the `schema` anyway
-
-Import the modules and the configuration:
+Register the providers and the configuration:
 ```TypeScript
 @NgModule({
     ...
@@ -81,9 +79,19 @@ Import the modules and the configuration:
 })
 export class AppModule { }
 ```
+or in standalone app:
+```TypeScript
+export const appConfig: ApplicationConfig = {
+  providers: [
+    ...
+    provideL10nTranslation(l10nConfig),
+    provideL10nIntl()
+  ]
+};
+```
 
 ### Getting the translation
-#### Pure Pipes (standalone as well)
+#### Pure Pipes (standalone)
 ```Html
 <!-- translate pipe -->
 <p>{{ 'greeting' | translate:locale.language }}</p>
@@ -126,19 +134,24 @@ export class AppModule { }
 Pure pipes need to know when the _locale_ changes. So import `L10nLocale` injection token in every component that uses them:
 ```TypeScript
 export class PipeComponent {
-
-    constructor(@Inject(L10N_LOCALE) public locale: L10nLocale) { }
-
-}
-```
-or if you prefer the shortest `inject` function:
-```TypeScript
-export class PipeComponent {
-
     locale = inject(L10N_LOCALE);
-
 }
 ```
+or in standalone components:
+```TypeScript
+@Component({
+    ...
+    imports: [
+        L10nTranslatePipe,
+        ...
+    ]
+})
+export class PipeComponent {
+    locale = inject(L10N_LOCALE);
+}
+```
+
+
 ##### Convert function
 An optional function to convert the value of numbers, with the same _value_, _locale_ and destructured optional parameters in the signature:
 ```TypeScript
@@ -158,7 +171,8 @@ To support this strategy, there is an `Async` version of each pipe, which recogn
 <p>{{ 'greeting' | translateAsync }}</p>
 ```
 
-#### Directives (standalone as well)
+#### Directives (standalone)
+> Don't use directives in SSR apps with client hydration, since they manipulate the DOM
 ```Html
 <!-- l10nTranslate directive -->
 <p l10nTranslate>greeting</p>
@@ -299,8 +313,8 @@ export class AppModule { }
 ```
 #### Storage
 By default, the library does not store the _locale_. To store it implement the `L10nStorage` class-interface using what you need, such as web storage or cookie, so that the next time the user has the _locale_ he selected.
-#### User Language
-By default, the library attempts to set the _locale_ using the user's browser language, before falling back on the _default locale_. You can change this behavior by implementing the `L10nUserLanguage` class-interface, for example to get the language via server.
+#### Resolve locale
+By default, the library attempts to set the _locale_ using the user's browser language, before falling back on the _default locale_. You can change this behavior by implementing the `L10nResolveLocale` class-interface, for example to get the language from the URL.
 #### Translation Loader
 By default, you can only pass JavaScript objects as translation data provider. To implement a different loader, you can implement the `L10nTranslationLoader` class-interface, as in the example above.
 #### Translation Fallback
@@ -345,26 +359,6 @@ If you need to preload some data before initialization of the library, you can i
     ],
 })
 ```
-or if you are using `L10nRouting`:
-```TypeScript
-@Injectable() export class AppRoutingLoader implements L10nLoader {
-    constructor(private routing: L10nRoutingService, private translation: L10nTranslationService) { }
-
-    public async init(): Promise<void> {
-        await ... // Some custom data loading action
-        await this.routing.init();
-        await this.translation.init();
-    }
-}
-
-@NgModule({
-    imports: [
-        L10nRoutingModule.forRoot({
-            loader: AppRoutingLoader
-        })
-    ],
-})
-```
 
 ### Validation
 There are two directives, that you can use with Template driven or Reactive forms: `l10nValidateNumber` and `l10nValidateDate`. To use them, you have to implement the `L10nValidation` class-interface, and import it with the validation module:
@@ -394,73 +388,8 @@ There are two directives, that you can use with Template driven or Reactive form
 export class AppModule { }
 ```
 
-### Routing
-You can enable the localized routing importing the routing module after others:
-```TypeScript
-@NgModule({
-    ...
-    imports: [
-        ...
-        L10nRoutingModule.forRoot()
-    ],
-    ...
-})
-export class AppModule { }
-```
-A prefix containing the language is added to the path of each navigation, creating a semantic URL:
-```
-baseHref/[language][-script][-region]/path
-
-https://example.com/en/home
-https://example.com/en-US/home
-```
-If the localized link is called, the _locale_ is also set automatically.
-
-To achieve this, the router configuration in your app is not rewritten: the URL is replaced, in order to provide the different localized contents both to the crawlers and to the users that can refer to the localized links.
-
-If you don't want a localized routing for _default locale_, you can enable it during the configuration:
-```TypeScript
-export const l10nConfig: L10nConfig = {
-    ...
-    defaultRouting: true
-};
-```
-
-You can change the localized path, implementing the `L10nLocation` class-interface, and import it with the routing module:
-```TypeScript
-@Injectable() export class AppLocation implements L10nLocation {
-
-    public path(): string {
-        ...
-    }
-
-    public parsePath(path: string): string | null {
-        ...
-    }
-
-    public getLocalizedSegment(path: string): string | null {
-        ...
-    }
-
-    public toLocalizedPath(language: string, path: string): string {
-        ...
-    }
-
-}
-
-@NgModule({
-    ...
-    imports: [
-        ...
-        L10nRoutingModule.forRoot({ location: AppLocation })
-    ],
-    ...
-})
-export class AppModule { }
-```
-
 ### Lazy loading
-If you want to add new providers to a lazy loaded module or component, you can use `L10nResolver` in your routing module:
+If you want to add new providers to a lazy loaded module or component, you can use `l10nResolver` function in your routing module:
 ```TypeScript
 const routes: Routes = [
     ...
@@ -468,7 +397,7 @@ const routes: Routes = [
         path: 'lazy',
         loadChildren: () => import('./lazy/lazy.module').then(m => m.LazyModule),
         // loadComponent: () => import('./lazy/lazy.component').then(m => m.LazyComponent),
-        resolve: { l10n: L10nResolver },
+        resolve: { l10n: l10nResolver },
         data: {
             l10nProviders: [{ name: 'lazy', asset: './assets/i18n/lazy', options: { version: '1.0.0' } }]
         }
@@ -525,6 +454,12 @@ If you need to preload some translation data, for example to use for missing val
 ```
 
 
+## Localized routing
+
+
+
+
+
 ## Types
 Angular l10n types that it is useful to know:
 - `L10nLocale`: contains a _language_, in the format `language[-script][-region][-extension]`, where:
@@ -553,8 +488,6 @@ Current browser support:
 - [Can I use](http://caniuse.com/#feat=internationalization)
 - [Intl](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl#Browser_compatibility)
 
-If you need to support previous versions of browsers, or to use newest features see [Format.JS](https://formatjs.io/docs/polyfills)
-
 ### Intl API in Node.js
 To use Intl in _Node.js_, check the support according to the version in the official documentation: [Internationalization Support](https://nodejs.org/api/intl.html)
 
@@ -564,12 +497,13 @@ You can find a complete sample app with _@nguniversal/express-engine_ [here](pro
 
 SSR doesn't work out of the box, so it is important to know:
 - `src\app\universal-interceptor.ts`: used to handle absolute URLs for HTTP requests on the server
-- `src\app\l10n-config.ts`:
-    - `AppStorage (implements L10nStorage)`: uses a cookie to store the _locale_ client & server side
-    - `AppUserLanguage (implements L10nUserLanguage)`: server side, negotiates the language through `acceptsLanguages` to get the user language when the app starts
+- `DirectiveComponent` ha `ngSkipHydration` enabled because directives manipolate the DOM
 
 
 ## Previous versions
+- **Angular v15 (Angular l10n v15.0.0)**
+    - [Branch](https://github.com/robisim74/angular-l10n/tree/angular_v15)
+
 - **Angular v14 (Angular l10n v14.0.0)**
     - [Branch](https://github.com/robisim74/angular-l10n/tree/angular_v14)
 
@@ -622,6 +556,11 @@ SSR doesn't work out of the box, so it is important to know:
 - Serving the sample app:
     ```Shell
     npm start
+    ```
+
+- Serving the stanalone app:
+    ```Shell
+    npm start:standalone
     ```
 
 - Serving the sample ssr app:

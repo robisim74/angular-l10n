@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 
 @Component({
     selector: 'app-on-push',
@@ -6,11 +6,4 @@ import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
     styleUrls: ['./on-push.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class OnPushComponent implements OnInit {
-
-    constructor() { }
-
-    ngOnInit() {
-    }
-
-}
+export class OnPushComponent { }

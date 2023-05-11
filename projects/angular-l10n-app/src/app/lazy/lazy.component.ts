@@ -1,6 +1,6 @@
-import { Component, OnInit, Inject } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 
-import { L10N_LOCALE, L10nLocale, L10N_CONFIG, L10nConfig, L10nTranslatePipe } from 'angular-l10n';
+import { L10N_LOCALE, L10N_CONFIG, L10nTranslatePipe } from 'angular-l10n';
 
 /**
  * Standalone sample
@@ -14,10 +14,11 @@ import { L10N_LOCALE, L10nLocale, L10N_CONFIG, L10nConfig, L10nTranslatePipe } f
 })
 export class LazyComponent implements OnInit {
 
-    constructor(@Inject(L10N_LOCALE) public locale: L10nLocale, @Inject(L10N_CONFIG) private l10nConfig: L10nConfig) { }
+    locale = inject(L10N_LOCALE);
+    config = inject(L10N_CONFIG);
 
     ngOnInit() {
-        console.log(this.l10nConfig.providers);
+        console.log(this.config.providers);
     }
 
 }

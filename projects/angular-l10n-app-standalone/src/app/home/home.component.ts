@@ -1,10 +1,9 @@
-import { Component, OnInit, Inject } from '@angular/core';
+import { Component, inject } from '@angular/core';
 
-import { L10N_LOCALE, L10nLocale, L10nTranslatePipe } from 'angular-l10n';
+import { L10N_LOCALE, L10nTranslatePipe } from 'angular-l10n';
 
 import { PipeComponent } from './pipe/pipe.component';
 import { DirectiveComponent } from './directive/directive.component';
-import { ApiComponent } from './api/api.component';
 
 @Component({
     selector: 'app-home',
@@ -14,25 +13,11 @@ import { ApiComponent } from './api/api.component';
     imports: [
         L10nTranslatePipe,
         PipeComponent,
-        DirectiveComponent,
-        ApiComponent
+        DirectiveComponent
     ]
 })
-export class HomeComponent implements OnInit {
+export class HomeComponent {
 
-    count = 0;
-
-    today = Date.now();
-    timeAgo = '-0';
-
-    constructor(@Inject(L10N_LOCALE) public locale: L10nLocale) { }
-
-    ngOnInit() {
-        if (typeof window !== 'undefined') {
-            setInterval(() => {
-                this.timeAgo = `-${++this.count}`;
-            }, 1000);
-        }
-    }
+    locale = inject(L10N_LOCALE);
 
 }

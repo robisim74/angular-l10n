@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 
 import { L10nTranslateAsyncPipe } from 'angular-l10n';
 
@@ -12,11 +12,4 @@ import { L10nTranslateAsyncPipe } from 'angular-l10n';
         L10nTranslateAsyncPipe
     ]
 })
-export class OnPushComponent implements OnInit {
-
-    constructor() { }
-
-    ngOnInit() {
-    }
-
-}
+export class OnPushComponent { }

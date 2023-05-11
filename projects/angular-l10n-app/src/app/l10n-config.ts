@@ -14,23 +14,20 @@ import {
     L10nDateTimeFormatOptions,
     parseDigits,
     L10N_CONFIG,
-    formatLanguage,
-    getSchema,
     L10nLocaleResolver
 } from 'angular-l10n';
 
 export const l10nConfig: L10nConfig = {
     format: 'language-region',
     providers: [
-        { name: 'app', asset: './assets/i18n/app', options: { version: '16.0.0' } }
+        { name: 'app', asset: 'app' }
     ],
-    fallback: false,
     cache: true,
     keySeparator: '.',
     defaultLocale: { language: 'en-US', currency: 'USD', timeZone: 'America/Los_Angeles', units: { length: 'mile' } },
     schema: [
-        { locale: { language: 'en-US', currency: 'USD', timeZone: 'America/Los_Angeles', units: { 'length': 'mile' } }, dir: 'ltr', text: 'United States' },
-        { locale: { language: 'it-IT', currency: 'EUR', timeZone: 'Europe/Rome', units: { 'length': 'kilometer' } }, dir: 'ltr', text: 'Italia' }
+        { locale: { language: 'en-US', currency: 'USD', timeZone: 'America/Los_Angeles', units: { 'length': 'mile' } } },
+        { locale: { language: 'it-IT', currency: 'EUR', timeZone: 'Europe/Rome', units: { 'length': 'kilometer' } } }
     ]
 };
 
@@ -41,13 +38,10 @@ export const l10nConfig: L10nConfig = {
     public async get(): Promise<L10nLocale | null> {
         const path = this.location.path();
 
-        for (const element of this.config.schema) {
-            const language = formatLanguage(element.locale.language, this.config.format);
+        for (const schema of this.config.schema) {
+            const language = schema.locale.language;
             if (new RegExp(`(\/${language}\/)|(\/${language}$)|(\/(${language})(?=\\?))`).test(path)) {
-                const schema = getSchema(this.config.schema, language, this.config.format);
-                if (schema) {
-                    return Promise.resolve(schema.locale);
-                }
+                return Promise.resolve(schema.locale);
             }
         }
         return Promise.resolve(null);
@@ -62,10 +56,9 @@ export const l10nConfig: L10nConfig = {
     constructor(@Optional() private http: HttpClient) { }
 
     public get(language: string, provider: L10nProvider): Observable<{ [key: string]: any }> {
-        const url = `${provider.asset}-${language}.json`;
+        const url = `./assets/i18n/${language}/${provider.asset}.json`;
         const options = {
-            headers: this.headers,
-            params: new HttpParams().set('v', provider.options.version)
+            headers: this.headers
         };
         return this.http.get(url, options);
     }

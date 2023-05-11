@@ -1,0 +1,8 @@
+/home
+/on-push
+/validation
+/lazy
+/it-IT/home
+/it-IT/on-push
+/it-IT/validation
+/it-IT/lazy

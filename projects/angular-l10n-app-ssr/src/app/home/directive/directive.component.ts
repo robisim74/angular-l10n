@@ -1,7 +1,6 @@
-import { Component, OnInit, Input, Inject } from '@angular/core';
-import { L10nLocale, L10N_LOCALE } from 'angular-l10n';
+import { Component, inject } from '@angular/core';
 
-import { convertCurrency, convertLength } from '../../conversions';
+import { L10N_LOCALE } from 'angular-l10n';
 
 @Component({
     selector: 'app-directive',
@@ -9,18 +8,10 @@ import { convertCurrency, convertLength } from '../../conversions';
     styleUrls: ['./directive.component.scss'],
     host: { ngSkipHydration: 'true' }
 })
-export class DirectiveComponent implements OnInit {
+export class DirectiveComponent {
 
-    @Input() today: number;
-    @Input() timeAgo: string;
+    locale = inject(L10N_LOCALE);
 
-    convertCurrency = convertCurrency;
-    convertLength = convertLength;
-
-    constructor(@Inject(L10N_LOCALE) public locale: L10nLocale) {
-    }
-
-    ngOnInit() {
-    }
+    today = Date.now();
 
 }

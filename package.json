@@ -13,7 +13,6 @@
     "test:coverage": "ng test angular-l10n --watch=false --browsers=Chrome --code-coverage",
     "test": "ng test angular-l10n --watch=false --browsers=Chrome",
     "test:watch": "ng test angular-l10n --watch=true --browsers=Chrome",
-    "test:app": "ng test angular-l10n-app",
     "lint": "ng lint angular-l10n",
     "pack:lib": "npm pack ./dist/angular-l10n",
     "publish:lib": "npm publish ./dist/angular-l10n",
@@ -22,7 +21,7 @@
     "dev:ssr": "ng run angular-l10n-app-ssr:serve-ssr",
     "serve:ssr": "node dist/angular-l10n-app-ssr/server/main.js",
     "build:ssr": "ng build angular-l10n-app-ssr && ng run angular-l10n-app-ssr:server",
-    "prerender": "concurrently \"npx http-server ./dist/angular-l10n-app-ssr/browser -p 5000 \" \"ng run angular-l10n-app-ssr:prerender\""
+    "prerender": "ng run angular-l10n-app-ssr:prerender --routes-file ./projects/angular-l10n-app-ssr/routes.txt"
   },
   "private": true,
   "dependencies": {
@@ -58,7 +57,6 @@
     "@types/node": "^20.1.0",
     "@typescript-eslint/eslint-plugin": "^5.59.2",
     "@typescript-eslint/parser": "^5.59.2",
-    "concurrently": "^7.2.1",
     "eslint": "^8.40.0",
     "jasmine-core": "~4.6.0",
     "karma": "~6.4.0",

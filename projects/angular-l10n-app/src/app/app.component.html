@@ -5,7 +5,8 @@
 
 <h3>{{ 'changeLocale' | translate:locale.language }}</h3>
 
-<button *ngFor="let item of schema" (click)="navigateByLocale(item.locale)" [options]="{ type: 'language' }"
-    l10nDisplayNames>{{ item.locale.language }}</button>
+<button *ngFor="let item of schema" (click)="navigateByLocale(item.locale)">
+    {{ item.locale.language | l10nDisplayNames:locale.language:{ type: 'language' } }}
+</button>
 
 <router-outlet></router-outlet>

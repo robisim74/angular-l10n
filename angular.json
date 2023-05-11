@@ -297,16 +297,7 @@
           "options": {
             "browserTarget": "angular-l10n-app-ssr:build:production",
             "serverTarget": "angular-l10n-app-ssr:server:production",
-            "routes": [
-              "/home",
-              "/on-push",
-              "/validation",
-              "/lazy",
-              "/it-IT/home",
-              "/it-IT/on-push",
-              "/it-IT/validation",
-              "/it-IT/lazy"
-            ]
+            "routes": []
           },
           "configurations": {
             "production": {}

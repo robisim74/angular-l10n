@@ -10,11 +10,10 @@ import { AppComponent } from './app.component';
 import { HomeComponent } from './home/home.component';
 import { PipeComponent } from './home/pipe/pipe.component';
 import { DirectiveComponent } from './home/directive/directive.component';
-import { ApiComponent } from './home/api/api.component';
 import { ValidationComponent } from './validation/validation.component';
 import { OnPushComponent } from './on-push/on-push.component';
 
-import { l10nConfig, HttpTranslationLoader, LocaleValidation, LocaleResolver } from './l10n-config';
+import { l10nConfig, TranslationLoader, LocaleValidation, LocaleResolver } from './l10n-config';
 
 @NgModule({
     declarations: [
@@ -22,7 +21,6 @@ import { l10nConfig, HttpTranslationLoader, LocaleValidation, LocaleResolver } f
         HomeComponent,
         PipeComponent,
         DirectiveComponent,
-        ApiComponent,
         ValidationComponent,
         OnPushComponent
     ],
@@ -35,7 +33,7 @@ import { l10nConfig, HttpTranslationLoader, LocaleValidation, LocaleResolver } f
             l10nConfig,
             {
                 localeResolver: LocaleResolver,
-                translationLoader: HttpTranslationLoader
+                translationLoader: TranslationLoader
             }
         ),
         L10nIntlModule,

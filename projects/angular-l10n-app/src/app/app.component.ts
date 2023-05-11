@@ -2,7 +2,7 @@ import { Component, OnInit, Inject, HostListener } from '@angular/core';
 import { Location } from '@angular/common';
 import { Router } from '@angular/router';
 
-import { L10N_CONFIG, L10nConfig, L10N_LOCALE, L10nLocale, L10nTranslationService, formatLanguage } from 'angular-l10n';
+import { L10N_CONFIG, L10nConfig, L10N_LOCALE, L10nLocale, L10nTranslationService } from 'angular-l10n';
 
 @Component({
     selector: 'app-root',
@@ -19,13 +19,13 @@ export class AppComponent implements OnInit {
         this.translation.init();
     }
 
-    schema = this.l10nConfig.schema;
+    schema = this.config.schema;
 
     pathLang = this.getPathLang();
 
     constructor(
         @Inject(L10N_LOCALE) public locale: L10nLocale,
-        @Inject(L10N_CONFIG) private l10nConfig: L10nConfig,
+        @Inject(L10N_CONFIG) private config: L10nConfig,
         private translation: L10nTranslationService,
         private location: Location,
         private router: Router
@@ -57,13 +57,13 @@ export class AppComponent implements OnInit {
      */
     navigateByLocale(locale: L10nLocale) {
         let path = this.location.path();
-        if (this.locale.language !== this.l10nConfig.defaultLocale.language) {
-            if (locale.language !== this.l10nConfig.defaultLocale.language) {
+        if (this.locale.language !== this.config.defaultLocale.language) {
+            if (locale.language !== this.config.defaultLocale.language) {
                 path = path.replace(`/${this.locale.language}`, `/${locale.language}`);
             } else {
                 path = path.replace(`/${this.locale.language}`, '');
             }
-        } else if (locale.language !== this.l10nConfig.defaultLocale.language) {
+        } else if (locale.language !== this.config.defaultLocale.language) {
             path = `/${locale.language}${path}`;
         }
 
@@ -73,8 +73,8 @@ export class AppComponent implements OnInit {
     }
 
     getPathLang() {
-        return this.locale.language !== this.l10nConfig.defaultLocale.language ?
-            formatLanguage(this.locale.language, this.l10nConfig.format) :
+        return this.locale.language !== this.config.defaultLocale.language ?
+            this.locale.language :
             '';
     }
 }

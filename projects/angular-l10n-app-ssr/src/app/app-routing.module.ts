@@ -12,10 +12,10 @@ const routes: Routes = [
     { path: 'validation', component: ValidationComponent },
     {
         path: 'lazy',
-        loadChildren: () => import('./lazy/lazy.module').then(m => m.LazyModule),
+        loadComponent: () => import('./lazy/lazy.component').then(m => m.LazyComponent),
         resolve: { l10n: resolveL10n },
         data: {
-            l10nProviders: [{ name: 'lazy', asset: './assets/i18n/lazy', options: { version: '16.0.0' } }]
+            l10nProviders: [{ name: 'lazy', asset: 'lazy' }]
         }
     }
 ];
@@ -33,8 +33,8 @@ const localizedRoutes: Routes = [
 @NgModule({
     imports: [
         RouterModule.forRoot(localizedRoutes, {
-    initialNavigation: 'enabledBlocking'
-})
+            initialNavigation: 'enabledBlocking'
+        })
     ],
     exports: [RouterModule]
 })

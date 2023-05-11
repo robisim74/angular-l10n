@@ -1,25 +1,16 @@
-import { Component, OnInit, Input, inject } from '@angular/core';
+import { Component, inject } from '@angular/core';
 
 import { L10N_LOCALE } from 'angular-l10n';
-
-import { convertCurrency, convertLength } from '../../conversions';
 
 @Component({
     selector: 'app-pipe',
     templateUrl: './pipe.component.html',
     styleUrls: ['./pipe.component.scss']
 })
-export class PipeComponent implements OnInit {
+export class PipeComponent {
 
-    @Input() today: number;
-    @Input() timeAgo: string;
+    locale = inject(L10N_LOCALE);
 
-    convertCurrency = convertCurrency;
-    convertLength = convertLength;
-
-    locale = inject(L10N_LOCALE); // Alternative to inject in constructor
-
-    ngOnInit() {
-    }
+    today = Date.now();
 
 }
