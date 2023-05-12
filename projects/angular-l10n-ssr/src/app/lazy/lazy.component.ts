@@ -7,9 +7,7 @@ import { L10N_LOCALE, L10nTranslatePipe } from 'angular-l10n';
   templateUrl: './lazy.component.html',
   styleUrls: ['./lazy.component.scss'],
   standalone: true,
-  imports: [
-    L10nTranslatePipe
-  ]
+  imports: [L10nTranslatePipe]
 })
 export class LazyComponent {
 

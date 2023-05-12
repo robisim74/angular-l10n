@@ -46,7 +46,14 @@
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
-          "style": "scss"
+          "style": "scss",
+          "standalone": true
+        },
+        "@schematics/angular:directive": {
+          "standalone": true
+        },
+        "@schematics/angular:pipe": {
+          "standalone": true
         }
       },
       "root": "projects/angular-l10n-app",
@@ -59,287 +66,17 @@
             "outputPath": "dist/angular-l10n-app",
             "index": "projects/angular-l10n-app/src/index.html",
             "main": "projects/angular-l10n-app/src/main.ts",
-            "polyfills": "projects/angular-l10n-app/src/polyfills.ts",
-            "tsConfig": "projects/angular-l10n-app/tsconfig.app.json",
-            "assets": [
-              "projects/angular-l10n-app/src/favicon.ico",
-              "projects/angular-l10n-app/src/assets"
-            ],
-            "styles": [
-              "projects/angular-l10n-app/src/styles.scss"
-            ],
-            "scripts": [],
-            "vendorChunk": true,
-            "extractLicenses": false,
-            "buildOptimizer": false,
-            "sourceMap": true,
-            "optimization": false,
-            "namedChunks": true
-          },
-          "configurations": {
-            "production": {
-              "fileReplacements": [
-                {
-                  "replace": "projects/angular-l10n-app/src/environments/environment.ts",
-                  "with": "projects/angular-l10n-app/src/environments/environment.prod.ts"
-                }
-              ],
-              "optimization": true,
-              "outputHashing": "all",
-              "sourceMap": false,
-              "namedChunks": false,
-              "extractLicenses": true,
-              "vendorChunk": false,
-              "buildOptimizer": true,
-              "budgets": [
-                {
-                  "type": "initial",
-                  "maximumWarning": "2mb",
-                  "maximumError": "5mb"
-                },
-                {
-                  "type": "anyComponentStyle",
-                  "maximumWarning": "6kb",
-                  "maximumError": "10kb"
-                }
-              ]
-            },
-            "development": {}
-          },
-          "defaultConfiguration": "production"
-        },
-        "serve": {
-          "builder": "@angular-devkit/build-angular:dev-server",
-          "options": {},
-          "configurations": {
-            "production": {
-              "browserTarget": "angular-l10n-app:build:production"
-            },
-            "development": {
-              "browserTarget": "angular-l10n-app:build:development"
-            }
-          },
-          "defaultConfiguration": "development"
-        },
-        "extract-i18n": {
-          "builder": "@angular-devkit/build-angular:extract-i18n",
-          "options": {
-            "browserTarget": "angular-l10n-app:build"
-          }
-        },
-        "test": {
-          "builder": "@angular-devkit/build-angular:karma",
-          "options": {
-            "main": "projects/angular-l10n-app/src/test.ts",
-            "polyfills": "projects/angular-l10n-app/src/polyfills.ts",
-            "tsConfig": "projects/angular-l10n-app/tsconfig.spec.json",
-            "karmaConfig": "projects/angular-l10n-app/karma.conf.js",
-            "assets": [
-              "projects/angular-l10n-app/src/favicon.ico",
-              "projects/angular-l10n-app/src/assets"
-            ],
-            "styles": [
-              "projects/angular-l10n-app/src/styles.scss"
-            ],
-            "scripts": []
-          }
-        }
-      }
-    },
-    "angular-l10n-app-ssr": {
-      "projectType": "application",
-      "schematics": {
-        "@schematics/angular:component": {
-          "style": "scss"
-        }
-      },
-      "root": "projects/angular-l10n-app-ssr",
-      "sourceRoot": "projects/angular-l10n-app-ssr/src",
-      "prefix": "app",
-      "architect": {
-        "build": {
-          "builder": "@angular-devkit/build-angular:browser",
-          "options": {
-            "outputPath": "dist/angular-l10n-app-ssr/browser",
-            "index": "projects/angular-l10n-app-ssr/src/index.html",
-            "main": "projects/angular-l10n-app-ssr/src/main.ts",
-            "polyfills": "projects/angular-l10n-app-ssr/src/polyfills.ts",
-            "tsConfig": "projects/angular-l10n-app-ssr/tsconfig.app.json",
-            "assets": [
-              "projects/angular-l10n-app-ssr/src/favicon.ico",
-              "projects/angular-l10n-app-ssr/src/assets"
-            ],
-            "styles": [
-              "projects/angular-l10n-app-ssr/src/styles.scss"
-            ],
-            "scripts": [],
-            "vendorChunk": true,
-            "extractLicenses": false,
-            "buildOptimizer": false,
-            "sourceMap": true,
-            "optimization": false,
-            "namedChunks": true
-          },
-          "configurations": {
-            "production": {
-              "fileReplacements": [
-                {
-                  "replace": "projects/angular-l10n-app-ssr/src/environments/environment.ts",
-                  "with": "projects/angular-l10n-app-ssr/src/environments/environment.prod.ts"
-                }
-              ],
-              "optimization": true,
-              "outputHashing": "all",
-              "sourceMap": false,
-              "namedChunks": false,
-              "extractLicenses": true,
-              "vendorChunk": false,
-              "buildOptimizer": true,
-              "budgets": [
-                {
-                  "type": "initial",
-                  "maximumWarning": "2mb",
-                  "maximumError": "5mb"
-                },
-                {
-                  "type": "anyComponentStyle",
-                  "maximumWarning": "6kb",
-                  "maximumError": "10kb"
-                }
-              ]
-            },
-            "development": {}
-          },
-          "defaultConfiguration": "production"
-        },
-        "serve": {
-          "builder": "@angular-devkit/build-angular:dev-server",
-          "options": {},
-          "configurations": {
-            "production": {
-              "browserTarget": "angular-l10n-app-ssr:build:production"
-            },
-            "development": {
-              "browserTarget": "angular-l10n-app-ssr:build:development"
-            }
-          },
-          "defaultConfiguration": "development"
-        },
-        "extract-i18n": {
-          "builder": "@angular-devkit/build-angular:extract-i18n",
-          "options": {
-            "browserTarget": "angular-l10n-app-ssr:build"
-          }
-        },
-        "test": {
-          "builder": "@angular-devkit/build-angular:karma",
-          "options": {
-            "main": "projects/angular-l10n-app-ssr/src/test.ts",
-            "polyfills": "projects/angular-l10n-app-ssr/src/polyfills.ts",
-            "tsConfig": "projects/angular-l10n-app-ssr/tsconfig.spec.json",
-            "karmaConfig": "projects/angular-l10n-app-ssr/karma.conf.js",
-            "assets": [
-              "projects/angular-l10n-app-ssr/src/favicon.ico",
-              "projects/angular-l10n-app-ssr/src/assets"
-            ],
-            "styles": [
-              "projects/angular-l10n-app-ssr/src/styles.scss"
-            ],
-            "scripts": []
-          }
-        },
-        "server": {
-          "builder": "@angular-devkit/build-angular:server",
-          "options": {
-            "outputPath": "dist/angular-l10n-app-ssr/server",
-            "main": "projects/angular-l10n-app-ssr/server.ts",
-            "tsConfig": "projects/angular-l10n-app-ssr/tsconfig.server.json",
-            "sourceMap": true,
-            "optimization": false,
-            "buildOptimizer": false
-          },
-          "configurations": {
-            "production": {
-              "outputHashing": "media",
-              "fileReplacements": [
-                {
-                  "replace": "projects/angular-l10n-app-ssr/src/environments/environment.ts",
-                  "with": "projects/angular-l10n-app-ssr/src/environments/environment.prod.ts"
-                }
-              ],
-              "sourceMap": false,
-              "optimization": true,
-              "buildOptimizer": true
-            },
-            "development": {
-              "vendorChunk": true
-            }
-          },
-          "defaultConfiguration": "production"
-        },
-        "serve-ssr": {
-          "builder": "@nguniversal/builders:ssr-dev-server",
-          "options": {},
-          "configurations": {
-            "production": {
-              "browserTarget": "angular-l10n-app-ssr:build:production",
-              "serverTarget": "angular-l10n-app-ssr:server:production"
-            },
-            "development": {
-              "serverTarget": "angular-l10n-app-ssr:server:development",
-              "browserTarget": "angular-l10n-app-ssr:build:development"
-            }
-          },
-          "defaultConfiguration": "development"
-        },
-        "prerender": {
-          "builder": "@nguniversal/builders:prerender",
-          "options": {
-            "browserTarget": "angular-l10n-app-ssr:build:production",
-            "serverTarget": "angular-l10n-app-ssr:server:production",
-            "routes": []
-          },
-          "configurations": {
-            "production": {}
-          }
-        }
-      }
-    },
-    "angular-l10n-app-standalone": {
-      "projectType": "application",
-      "schematics": {
-        "@schematics/angular:component": {
-          "style": "scss",
-          "standalone": true
-        },
-        "@schematics/angular:directive": {
-          "standalone": true
-        },
-        "@schematics/angular:pipe": {
-          "standalone": true
-        }
-      },
-      "root": "projects/angular-l10n-app-standalone",
-      "sourceRoot": "projects/angular-l10n-app-standalone/src",
-      "prefix": "app",
-      "architect": {
-        "build": {
-          "builder": "@angular-devkit/build-angular:browser",
-          "options": {
-            "outputPath": "dist/angular-l10n-app-standalone",
-            "index": "projects/angular-l10n-app-standalone/src/index.html",
-            "main": "projects/angular-l10n-app-standalone/src/main.ts",
             "polyfills": [
               "zone.js"
             ],
-            "tsConfig": "projects/angular-l10n-app-standalone/tsconfig.app.json",
+            "tsConfig": "projects/angular-l10n-app/tsconfig.app.json",
             "inlineStyleLanguage": "scss",
             "assets": [
-              "projects/angular-l10n-app-standalone/src/favicon.ico",
-              "projects/angular-l10n-app-standalone/src/assets"
+              "projects/angular-l10n-app/src/favicon.ico",
+              "projects/angular-l10n-app/src/assets"
             ],
             "styles": [
-              "projects/angular-l10n-app-standalone/src/styles.scss"
+              "projects/angular-l10n-app/src/styles.scss"
             ],
             "scripts": []
           },
@@ -374,10 +111,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "browserTarget": "angular-l10n-app-standalone:build:production"
+              "browserTarget": "angular-l10n-app:build:production"
             },
             "development": {
-              "browserTarget": "angular-l10n-app-standalone:build:development"
+              "browserTarget": "angular-l10n-app:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -385,7 +122,7 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "angular-l10n-app-standalone:build"
+            "browserTarget": "angular-l10n-app:build"
           }
         },
         "test": {
@@ -395,14 +132,14 @@
               "zone.js",
               "zone.js/testing"
             ],
-            "tsConfig": "projects/angular-l10n-app-standalone/tsconfig.spec.json",
+            "tsConfig": "projects/angular-l10n-app/tsconfig.spec.json",
             "inlineStyleLanguage": "scss",
             "assets": [
-              "projects/angular-l10n-app-standalone/src/favicon.ico",
-              "projects/angular-l10n-app-standalone/src/assets"
+              "projects/angular-l10n-app/src/favicon.ico",
+              "projects/angular-l10n-app/src/assets"
             ],
             "styles": [
-              "projects/angular-l10n-app-standalone/src/styles.scss"
+              "projects/angular-l10n-app/src/styles.scss"
             ],
             "scripts": []
           }
@@ -411,10 +148,171 @@
           "builder": "@angular-eslint/builder:lint",
           "options": {
             "lintFilePatterns": [
-              "projects/angular-l10n-app-standalone/**/*.ts",
-              "projects/angular-l10n-app-standalone/**/*.html"
+              "projects/angular-l10n-app/**/*.ts",
+              "projects/angular-l10n-app/**/*.html"
             ]
           }
+        }
+      }
+    },
+    "angular-l10n-ssr": {
+      "projectType": "application",
+      "schematics": {
+        "@schematics/angular:component": {
+          "style": "scss"
+        }
+      },
+      "root": "projects/angular-l10n-ssr",
+      "sourceRoot": "projects/angular-l10n-ssr/src",
+      "prefix": "app",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:browser",
+          "options": {
+            "outputPath": "dist/angular-l10n-ssr/browser",
+            "index": "projects/angular-l10n-ssr/src/index.html",
+            "main": "projects/angular-l10n-ssr/src/main.ts",
+            "polyfills": [
+              "zone.js"
+            ],
+            "tsConfig": "projects/angular-l10n-ssr/tsconfig.app.json",
+            "inlineStyleLanguage": "scss",
+            "assets": [
+              "projects/angular-l10n-ssr/src/favicon.ico",
+              "projects/angular-l10n-ssr/src/assets"
+            ],
+            "styles": [
+              "projects/angular-l10n-ssr/src/styles.scss"
+            ],
+            "scripts": []
+          },
+          "configurations": {
+            "production": {
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "500kb",
+                  "maximumError": "1mb"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "2kb",
+                  "maximumError": "4kb"
+                }
+              ],
+              "outputHashing": "all"
+            },
+            "development": {
+              "buildOptimizer": false,
+              "optimization": false,
+              "vendorChunk": true,
+              "extractLicenses": false,
+              "sourceMap": true,
+              "namedChunks": true
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "serve": {
+          "builder": "@angular-devkit/build-angular:dev-server",
+          "configurations": {
+            "production": {
+              "browserTarget": "angular-l10n-ssr:build:production"
+            },
+            "development": {
+              "browserTarget": "angular-l10n-ssr:build:development"
+            }
+          },
+          "defaultConfiguration": "development"
+        },
+        "extract-i18n": {
+          "builder": "@angular-devkit/build-angular:extract-i18n",
+          "options": {
+            "browserTarget": "angular-l10n-ssr:build"
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "polyfills": [
+              "zone.js",
+              "zone.js/testing"
+            ],
+            "tsConfig": "projects/angular-l10n-ssr/tsconfig.spec.json",
+            "inlineStyleLanguage": "scss",
+            "assets": [
+              "projects/angular-l10n-ssr/src/favicon.ico",
+              "projects/angular-l10n-ssr/src/assets"
+            ],
+            "styles": [
+              "projects/angular-l10n-ssr/src/styles.scss"
+            ],
+            "scripts": []
+          }
+        },
+        "lint": {
+          "builder": "@angular-eslint/builder:lint",
+          "options": {
+            "lintFilePatterns": [
+              "projects/angular-l10n-ssr/**/*.ts",
+              "projects/angular-l10n-ssr/**/*.html"
+            ]
+          }
+        },
+        "server": {
+          "builder": "@angular-devkit/build-angular:server",
+          "options": {
+            "outputPath": "dist/angular-l10n-ssr/server",
+            "main": "projects/angular-l10n-ssr/server.ts",
+            "tsConfig": "projects/angular-l10n-ssr/tsconfig.server.json",
+            "inlineStyleLanguage": "scss"
+          },
+          "configurations": {
+            "production": {
+              "outputHashing": "media"
+            },
+            "development": {
+              "buildOptimizer": false,
+              "optimization": false,
+              "sourceMap": true,
+              "extractLicenses": false,
+              "vendorChunk": true
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "serve-ssr": {
+          "builder": "@nguniversal/builders:ssr-dev-server",
+          "configurations": {
+            "development": {
+              "browserTarget": "angular-l10n-ssr:build:development",
+              "serverTarget": "angular-l10n-ssr:server:development"
+            },
+            "production": {
+              "browserTarget": "angular-l10n-ssr:build:production",
+              "serverTarget": "angular-l10n-ssr:server:production"
+            }
+          },
+          "defaultConfiguration": "development"
+        },
+        "prerender": {
+          "builder": "@nguniversal/builders:prerender",
+          "options": {
+            "routes": [
+              "/"
+            ]
+          },
+          "configurations": {
+            "production": {
+              "browserTarget": "angular-l10n-ssr:build:production",
+              "serverTarget": "angular-l10n-ssr:server:production"
+            },
+            "development": {
+              "browserTarget": "angular-l10n-ssr:build:development",
+              "serverTarget": "angular-l10n-ssr:server:development"
+            }
+          },
+          "defaultConfiguration": "production"
         }
       }
     }
