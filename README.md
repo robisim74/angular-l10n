@@ -25,7 +25,6 @@ npm install angular-l10n --save
 ## Usage
 - Sample [standalone app](projects/angular-l10n-app)
 - Sample [SSR app](projects/angular-l10n-ssr)
-- Live example on [StackBlitz](https://stackblitz.com/edit/angular-l10n)
 
 ### Configuration
 Create the configuration:
