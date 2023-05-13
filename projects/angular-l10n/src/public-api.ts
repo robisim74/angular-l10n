@@ -8,13 +8,14 @@ export * from './lib/models/l10n-config';
 export * from './lib/models/l10n-async-pipe';
 export * from './lib/models/l10n-directive';
 export * from './lib/models/utils';
-// Services
-export * from './lib/services/l10n-resolver';
+// Functions
+export * from './lib/functions/resolveL10n';
+export { provideL10nTranslation, provideL10nIntl, provideL10nValidation } from './lib/functions/provideL10n';
 // L10nTranslationModule
 export * from './lib/services/l10n-translation.service';
 export * from './lib/services/l10n-cache';
 export { L10nStorage } from './lib/services/l10n-storage';
-export { L10nUserLanguage } from './lib/services/l10n-user-language';
+export { L10nLocaleResolver } from './lib/services/l10n-locale-resolver';
 export { L10nTranslationFallback } from './lib/services/l10n-translation-fallback';
 export { L10nTranslationLoader } from './lib/services/l10n-translation-loader';
 export { L10nTranslationHandler } from './lib/services/l10n-translation-handler';
@@ -41,7 +42,3 @@ export * from './lib/directives/l10n-validate-number.directive';
 export * from './lib/directives/l10n-validate-date.directive';
 export { L10nValidation } from './lib/services/l10n-validation';
 export * from './lib/modules/l10n-validation.module';
-// L10nRoutingModule
-export * from './lib/services/l10n-routing.service';
-export * from './lib/modules/l10n-routing.module';
-export { L10nLocation } from './lib/services/l10n-location';

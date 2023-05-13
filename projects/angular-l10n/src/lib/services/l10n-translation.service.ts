@@ -6,12 +6,11 @@ import { L10N_CONFIG, L10nConfig, L10N_LOCALE } from '../models/l10n-config';
 import { formatLanguage, getSchema, getValue, mergeDeep } from '../models/utils';
 import { L10nCache } from './l10n-cache';
 import { L10nStorage } from './l10n-storage';
-import { L10nUserLanguage } from './l10n-user-language';
+import { L10nLocaleResolver } from './l10n-locale-resolver';
 import { L10nTranslationFallback } from './l10n-translation-fallback';
 import { L10nTranslationLoader } from './l10n-translation-loader';
 import { L10nTranslationHandler } from './l10n-translation-handler';
 import { L10nMissingTranslationHandler } from './l10n-missing-translation-handler';
-import { L10nLocation } from './l10n-location';
 
 @Injectable() export class L10nTranslationService {
 
@@ -29,12 +28,11 @@ import { L10nLocation } from './l10n-location';
         @Inject(L10N_LOCALE) private locale: L10nLocale,
         private cache: L10nCache,
         private storage: L10nStorage,
-        private userLanguage: L10nUserLanguage,
+        private resolveLocale: L10nLocaleResolver,
         private translationFallback: L10nTranslationFallback,
         private translationLoader: L10nTranslationLoader,
         private translationHandler: L10nTranslationHandler,
-        private missingTranslationHandler: L10nMissingTranslationHandler,
-        @Optional() private location: L10nLocation
+        private missingTranslationHandler: L10nMissingTranslationHandler
     ) { }
 
     /**
@@ -49,7 +47,7 @@ import { L10nLocation } from './l10n-location';
      * @param locale The new locale
      */
     public async setLocale(locale: L10nLocale): Promise<void> {
-        await this.loadTranslation(this.config.providers, locale);
+        await this.loadTranslations(this.config.providers, locale);
     }
 
     /**
@@ -121,45 +119,27 @@ import { L10nLocation } from './l10n-location';
     }
 
     /**
-     * Should only be called when the service instance is created
-     * or in lazy loaded modules when initialNavigation is enabled.
+     * Initializes the service
      * @param providers An array of L10nProvider
      */
     public async init(providers: L10nProvider[] = this.config.providers): Promise<void> {
         let locale: L10nLocale | null = null;
 
-        // Tries to get locale from path if localized routing is used.
-        if (this.location) {
-            const path = this.location.path();
-            const pathLanguage = this.location.parsePath(path);
-            if (pathLanguage) {
-                const schema = getSchema(this.config.schema, pathLanguage, this.config.format);
-                if (schema) {
-                    locale = schema.locale;
-                }
-            }
-        }
         // Tries to get locale from storage.
         if (locale == null) {
             locale = await this.storage.read();
         }
-        // Tries to get locale through the user language.
+        // Tries resolved locale.
         if (locale == null) {
-            const browserLanguage = await this.userLanguage.get();
-            if (browserLanguage) {
-                const schema = getSchema(this.config.schema, browserLanguage, this.config.format);
-                if (schema) {
-                    locale = schema.locale;
-                }
-            }
+            locale = await this.resolveLocale.get();
         }
-        // Gets the default locale.
+        // Uses default locale.
         if (locale == null) {
             locale = this.config.defaultLocale;
         }
 
         // Loads translation data.
-        await this.loadTranslation(providers, locale);
+        await this.loadTranslations(providers, locale);
     }
 
     /**
@@ -167,7 +147,7 @@ import { L10nLocation } from './l10n-location';
      * @param providers An array of L10nProvider
      * @param locale The current locale
      */
-    public async loadTranslation(providers: L10nProvider[] = this.config.providers, locale = this.locale): Promise<void> {
+    public async loadTranslations(providers: L10nProvider[] = this.config.providers, locale = this.locale): Promise<void> {
         const language = formatLanguage(locale.language, this.config.format);
 
         return new Promise((resolve) => {

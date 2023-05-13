@@ -93,51 +93,6 @@ export function mergeDeep(target: { [key: string]: any }, source: { [key: string
     return output;
 }
 
-export function hasIntl(): boolean {
-    const isAvailable = typeof Intl === 'object' && !!Intl;
-    return isAvailable;
-}
-
-export function hasDateTimeFormat(): boolean {
-    return hasIntl() && Intl.hasOwnProperty('DateTimeFormat');
-}
-
-export function hasNumberFormat(): boolean {
-    return hasIntl() && Intl.hasOwnProperty('NumberFormat');
-}
-
-export function hasTimeZone(): boolean {
-    if (hasIntl() && hasDateTimeFormat()) {
-        try {
-            new Intl.DateTimeFormat('en-US', { timeZone: 'America/Los_Angeles' }).format(new Date());
-        } catch (e) {
-            return false;
-        }
-        return true;
-    }
-    return false;
-}
-
-export function hasRelativeTimeFormat(): boolean {
-    return hasIntl() && Intl.hasOwnProperty('RelativeTimeFormat');
-}
-
-export function hasCollator(): boolean {
-    return hasIntl() && Intl.hasOwnProperty('Collator');
-}
-
-export function hasPluralRules(): boolean {
-    return hasIntl() && Intl.hasOwnProperty('PluralRules');
-}
-
-export function hasListFormat(): boolean {
-    return hasIntl() && Intl.hasOwnProperty('ListFormat');
-}
-
-export function hasDisplayNames(): boolean {
-    return hasIntl() && Intl.hasOwnProperty('DisplayNames');
-}
-
 export function toNumber(value: any): number {
     const parsedValue = typeof value === 'string' && !isNaN(+value - parseFloat(value)) ? +value : value;
     return parsedValue;

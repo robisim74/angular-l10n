@@ -1,0 +1,27 @@
+{
+  "changeLocale": "Change locale",
+  "home": {
+    "title": "Angular localization",
+    "subtitle": "The world is small",
+    "greeting": "Hello world!",
+    "whoIAm": "I am {{name}}",
+    "description": "<em>Angular library to translate texts, dates and numbers</em>",
+    "devs": {
+      "one": "One software developer",
+      "other": "{{value}} software developers"
+    }
+  },
+  "onPush": {
+    "title": "OnPush Change detection strategy"
+  },
+  "validation": {
+    "title": "Validation",
+    "numbers": "Numbers",
+    "numberIsInvalid": "Number is invalid. Required format: {{ format }}",
+    "minValueError": "Minimum value: {{ minValue }}",
+    "maxValueError": "Maximum value: {{ maxValue }}",
+    "numberIsRequired": "Number is required",
+    "numberValue": "Number value: {{ parsedValue }}",
+    "submit": "Submit"
+  }
+}

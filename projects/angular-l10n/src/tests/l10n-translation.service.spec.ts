@@ -5,7 +5,7 @@ import { Injectable, Optional } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
-import { L10nTranslationService, L10nConfig, L10nTranslationModule, L10nTranslationLoader, L10nProvider, L10nUserLanguage } from '../public-api';
+import { L10nTranslationService, L10nConfig, L10nTranslationModule, L10nTranslationLoader, L10nProvider, L10nLocaleResolver, L10nLocale } from '../public-api';
 
 @Injectable() class HttpTranslationLoader implements L10nTranslationLoader {
     private headers = new HttpHeaders({ 'Content-Type': 'application/json' });
@@ -20,9 +20,9 @@ import { L10nTranslationService, L10nConfig, L10nTranslationModule, L10nTranslat
     }
 }
 
-@Injectable() export class UserLanguage implements L10nUserLanguage {
+@Injectable() export class LocaleResolver implements L10nLocaleResolver {
 
-    public get(): Promise<string | null> {
+    public get(): Promise<L10nLocale | null> {
         return Promise.resolve(null);
     }
 
@@ -60,7 +60,7 @@ describe('L10nTranslationService', () => {
         TestBed.configureTestingModule({
             imports: [
                 L10nTranslationModule.forRoot(config, {
-                    userLanguage: UserLanguage
+                    localeResolver: LocaleResolver
                 })
             ]
         });
@@ -372,7 +372,7 @@ describe('Features', () => {
             });
             expect(translation.has('home.title')).toBe(true);
             const providers = [{ name: 'about', asset: './assets/i18n/about', options: { version: '1.0.0' } }];
-            translation.loadTranslation(providers);
+            translation.loadTranslations(providers);
             tick();
             httpMock.expectNone('./assets/i18n/home-en.json?v=1.0.0');
             httpMock.expectNone('./assets/i18n/home-en-US.json?v=1.0.0');

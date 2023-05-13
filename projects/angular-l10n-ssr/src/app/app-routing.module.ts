@@ -1,0 +1,41 @@
+import { NgModule } from '@angular/core';
+import { Routes, RouterModule } from '@angular/router';
+
+import { HomeComponent } from './home/home.component';
+import { OnPushComponent } from './on-push/on-push.component';
+import { ValidationComponent } from './validation/validation.component';
+import { resolveL10n } from 'angular-l10n';
+
+const routes: Routes = [
+  { path: 'home', component: HomeComponent },
+  { path: 'on-push', component: OnPushComponent },
+  { path: 'validation', component: ValidationComponent },
+  {
+    path: 'lazy',
+    loadComponent: () => import('./lazy/lazy.component').then(m => m.LazyComponent),
+    resolve: { l10n: resolveL10n },
+    data: {
+      l10nProviders: [{ name: 'lazy', asset: 'lazy' }]
+    }
+  }
+];
+
+const localizedRoutes: Routes = [
+  { path: '', redirectTo: 'home', pathMatch: 'full' },
+  ...routes,
+  {
+    path: ':lang',
+    children: routes
+  },
+  { path: '**', redirectTo: 'home' }
+];
+
+@NgModule({
+  imports: [
+    RouterModule.forRoot(localizedRoutes, {
+      initialNavigation: 'enabledBlocking'
+    })
+  ],
+  exports: [RouterModule]
+})
+export class AppRoutingModule { }

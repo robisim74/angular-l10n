@@ -1,38 +1,77 @@
-import { Component, OnInit, Inject } from '@angular/core';
+import { Component, HostListener, Inject, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { Location } from '@angular/common';
+import { Router, RouterLink, RouterOutlet } from '@angular/router';
 
-import { L10N_CONFIG, L10nConfig, L10N_LOCALE, L10nLocale, L10nTranslationService } from 'angular-l10n';
+import { L10N_CONFIG, L10nConfig, L10N_LOCALE, L10nLocale, L10nTranslationService, L10nTranslatePipe, L10nDisplayNamesPipe } from 'angular-l10n';
 
 @Component({
-    selector: 'app-root',
-    templateUrl: './app.component.html',
-    styleUrls: ['./app.component.scss']
+  selector: 'app-root',
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.scss'],
+  standalone: true,
+  imports: [
+    CommonModule,
+    RouterLink,
+    RouterOutlet,
+    L10nTranslatePipe,
+    L10nDisplayNamesPipe
+  ]
 })
 export class AppComponent implements OnInit {
 
-    schema = this.l10nConfig.schema;
+  /**
+   * Handle page back/forward
+   */
+  @HostListener('window:popstate', ['$event'])
+  onPopState() {
+    this.translation.init();
+  }
 
-    constructor(
-        @Inject(L10N_LOCALE) public locale: L10nLocale,
-        @Inject(L10N_CONFIG) private l10nConfig: L10nConfig,
-        private translation: L10nTranslationService
-    ) { }
+  schema = this.config.schema;
 
-    ngOnInit() {
-        this.translation.onChange().subscribe({
-            next: (locale: L10nLocale) => {
-                console.log(locale);
-                console.log(this.translation.data);
-            }
-        });
-        this.translation.onError().subscribe({
-            next: (error: any) => {
-                if (error) console.log(error);
-            }
-        });
+  pathLang = this.getPathLang();
+
+  constructor(
+    @Inject(L10N_LOCALE) public locale: L10nLocale,
+    @Inject(L10N_CONFIG) private config: L10nConfig,
+    private translation: L10nTranslationService,
+    private location: Location,
+    private router: Router
+  ) { }
+
+  ngOnInit() {
+    // Update path language
+    this.translation.onChange().subscribe({
+      next: () => {
+        this.pathLang = this.getPathLang();
+      }
+    });
+  }
+
+  /**
+   * Replace the locale and navigate to the new URL
+   */
+  navigateByLocale(locale: L10nLocale) {
+    let path = this.location.path();
+    if (this.locale.language !== this.config.defaultLocale.language) {
+      if (locale.language !== this.config.defaultLocale.language) {
+        path = path.replace(`/${this.locale.language}`, `/${locale.language}`);
+      } else {
+        path = path.replace(`/${this.locale.language}`, '');
+      }
+    } else if (locale.language !== this.config.defaultLocale.language) {
+      path = `/${locale.language}${path}`;
     }
 
-    setLocale(locale: L10nLocale): void {
-        this.translation.setLocale(locale);
-    }
+    this.router.navigate([path]).then(() => {
+      this.translation.init();
+    });
+  }
 
+  getPathLang() {
+    return this.locale.language !== this.config.defaultLocale.language ?
+      this.locale.language :
+      '';
+  }
 }

@@ -3,14 +3,6 @@ import { Injectable, Inject } from '@angular/core';
 import { L10nLocale, L10nDateTimeFormatOptions, L10nNumberFormatOptions } from '../models/types';
 import { L10nConfig, L10N_CONFIG, L10N_LOCALE } from '../models/l10n-config';
 import {
-    hasDateTimeFormat,
-    hasTimeZone,
-    hasNumberFormat,
-    hasRelativeTimeFormat,
-    hasCollator,
-    hasPluralRules,
-    hasListFormat,
-    hasDisplayNames,
     toDate,
     toNumber,
     PARSE_DATE_STYLE,
@@ -40,8 +32,6 @@ import { L10nTranslationService } from './l10n-translation.service';
         language = this.locale.dateLanguage || this.locale.language,
         timeZone = this.locale.timeZone
     ): string {
-        if (!hasDateTimeFormat() || language == null || language === '') return value;
-
         value = toDate(value);
 
         let dateTimeFormatOptions: Intl.DateTimeFormatOptions = {};
@@ -57,7 +47,7 @@ import { L10nTranslationService } from './l10n-translation.service';
                 dateTimeFormatOptions = { ...dateTimeFormatOptions, ...rest };
             }
         }
-        if (hasTimeZone() && timeZone) {
+        if (timeZone) {
             dateTimeFormatOptions.timeZone = timeZone;
         }
 
@@ -85,10 +75,7 @@ import { L10nTranslationService } from './l10n-translation.service';
         convert?: (value: number, locale: L10nLocale, params: any) => number,
         convertParams?: any
     ): string {
-        if (!hasNumberFormat() && options && options['style'] === 'currency') return `${value} ${currency}`;
         if (options && options['style'] === 'unit' && !options['unit']) return value;
-        if (!hasNumberFormat() && options && options['style'] === 'unit') return `${value} ${options['unit']}`;
-        if (!hasNumberFormat() || language == null || language === '') return value;
 
         value = toNumber(value);
 
@@ -123,8 +110,6 @@ import { L10nTranslationService } from './l10n-translation.service';
         options?: Intl.RelativeTimeFormatOptions,
         language = this.locale.dateLanguage || this.locale.language
     ): string {
-        if (!hasRelativeTimeFormat() || language == null || language === '') return value;
-
         value = toNumber(value);
 
         return new Intl.RelativeTimeFormat(language, options).format(value, unit);
@@ -139,8 +124,6 @@ import { L10nTranslationService } from './l10n-translation.service';
      * @param language The current language
      */
     public plural(value: any, prefix = '', options?: Intl.PluralRulesOptions, language = this.locale.language): string {
-        if (!hasPluralRules() || language == null || language === '') return value.toString();
-
         value = toNumber(value);
 
         const rule = new Intl.PluralRules(language, options).select(value);
@@ -157,14 +140,10 @@ import { L10nTranslationService } from './l10n-translation.service';
      * @param language The current language
      */
     public displayNames(code: string, options: Intl.DisplayNamesOptions, language = this.locale.language): string {
-        if (!hasDisplayNames() || language == null || language === '') return code;
-
         return new Intl.DisplayNames(language, options).of(code) || code;
     }
 
     public getCurrencySymbol(locale = this.locale): string | undefined {
-        if (!hasNumberFormat()) return locale.currency;
-
         const decimal = this.formatNumber(0, { digits: '1.0-0' }, locale.numberLanguage || locale.language);
         const currency = this.formatNumber(
             0,
@@ -189,8 +168,6 @@ import { L10nTranslationService } from './l10n-translation.service';
      *         0 if they are considered equal or Intl.Collator is not supported
      */
     public compare(key1: string, key2: string, options?: Intl.CollatorOptions, language = this.locale.language): number {
-        if (!hasCollator() || language == null || language === '') return 0;
-
         const value1 = this.translation.translate(key1);
         const value2 = this.translation.translate(key2);
 
@@ -205,7 +182,7 @@ import { L10nTranslationService } from './l10n-translation.service';
      */
     public list(list: string[], options?: Intl.ListFormatOptions, language = this.locale.language): string {
         const values = list.map(key => this.translation.translate(key));
-        if (!hasListFormat() || language == null || language === '') return values.join(', ');
+        if (language == null || language === '') return values.join(', ');
 
         return new Intl.ListFormat(language, options).format(values);
     }

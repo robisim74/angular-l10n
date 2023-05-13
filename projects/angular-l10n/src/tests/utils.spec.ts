@@ -6,15 +6,6 @@ import {
     getValue,
     handleParams,
     mergeDeep,
-    hasIntl,
-    hasDateTimeFormat,
-    hasNumberFormat,
-    hasTimeZone,
-    hasRelativeTimeFormat,
-    hasCollator,
-    hasPluralRules,
-    hasListFormat,
-    hasDisplayNames,
     toNumber,
     toDate,
     parseDigits
@@ -143,19 +134,6 @@ describe('utils', () => {
                     BB: 'bb'
                 }
             }));
-        });
-    });
-    describe('hasIntl', () => {
-        it('should has Intl', () => {
-            expect(hasIntl()).toBe(true);
-            expect(hasDateTimeFormat()).toBe(true);
-            expect(hasNumberFormat()).toBe(true);
-            expect(hasTimeZone()).toBe(true);
-            expect(hasRelativeTimeFormat()).toBe(true);
-            expect(hasCollator()).toBe(true);
-            expect(hasPluralRules()).toBe(true);
-            expect(hasListFormat()).toBe(true);
-            expect(hasDisplayNames()).toBe(true);
         });
     });
     describe('toNumber', () => {
