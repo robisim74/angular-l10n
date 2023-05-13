@@ -1,6 +1,6 @@
 # Angular l10n
 ![Node.js CI](https://github.com/robisim74/angular-l10n/workflows/Node.js%20CI/badge.svg) [![npm version](https://badge.fury.io/js/angular-l10n.svg)](https://badge.fury.io/js/angular-l10n) [![npm](https://img.shields.io/npm/dm/angular-l10n.svg)](https://www.npmjs.com/package/angular-l10n) [![npm](https://img.shields.io/npm/l/angular-l10n.svg)](https://www.npmjs.com/package/angular-l10n)
-> An Angular library to translate texts, dates and numbers
+> Angular library to translate texts, dates and numbers
 
 This library is for localization of **Angular** apps. It allows, in addition to translation, to format dates and numbers through [Internationalization API](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl)
 
@@ -8,13 +8,12 @@ This library is for localization of **Angular** apps. It allows, in addition to 
 ## Table of Contents
 - [Installation](#installation)
 - [Usage](#usage)
+- [Lazy loading](#lazy-loading)
 - [Localized routing](#localized-routing)
-- [Types](#types)
-- [Intl API](#intl-api)
 - [Server Side Rendering](#server-side-rendering)
-- [Previous versions](#previous-versions)
+- [Types](#types)
 - [Contributing](#contributing)
-- [License](#license)
+- [Versions](./versions.md)
 
 
 ## Installation
@@ -24,108 +23,112 @@ npm install angular-l10n --save
 
 
 ## Usage
-- Sample [app](projects/angular-l10n-app)
-- Sample [standalone app](projects/angular-l10n-app-standalone)
-- Sample [SSR app](projects/angular-l10n-app-ssr)
+- Sample [standalone app](projects/angular-l10n-app)
+- Sample [SSR app](projects/angular-l10n-ssr)
 - Live example on [StackBlitz](https://stackblitz.com/edit/angular-l10n)
 
 ### Configuration
 Create the configuration:
+
+_src/app/l10n-config.ts_
 ```TypeScript
 export const l10nConfig: L10nConfig = {
-    format: 'language-region',
-    providers: [
-        { name: 'app', asset: i18nAsset }
-    ],
-    cache: true,
-    keySeparator: '.',
-    defaultLocale: { language: 'en-US', currency: 'USD', timeZone: 'America/Los_Angeles', units: { 'length': 'mile' } },
-    schema: [
-        { locale: { language: 'en-US', currency: 'USD', timeZone: 'America/Los_Angeles', units: { 'length': 'mile' } }, dir: 'ltr', text: 'United States' },
-        { locale: { language: 'it-IT', currency: 'EUR', timeZone: 'Europe/Rome', units: { 'length': 'kilometer' } }, dir: 'ltr', text: 'Italia' }
-    ],
+  format: 'language-region',
+  providers: [
+    { name: 'app', asset: 'app' }
+  ],
+  cache: true,
+  keySeparator: '.',
+  defaultLocale: { language: 'en-US', currency: 'USD', timeZone: 'America/Los_Angeles' },
+  schema: [
+    { locale: { language: 'en-US', currency: 'USD', timeZone: 'America/Los_Angeles' } },
+    { locale: { language: 'it-IT', currency: 'EUR', timeZone: 'Europe/Rome' } }
+  ]
 };
 
-const i18nAsset = {
-    'en-US': {
-        greeting: 'Hello world!',
-        whoIAm: 'I am {{name}}',
-        devs: {
-            one: 'One software developer',
-            other: '{{value}} software developers'
-        }
-    },
-    'it-IT': {
-        greeting: 'Ciao mondo!',
-        whoIAm: 'Sono {{name}}',
-        devs: {
-            one: 'Uno sviluppatore software',
-            other: "{{ value }} sviluppatori software"
-        }
+@Injectable() export class TranslationLoader implements L10nTranslationLoader {
+  public get(language: string, provider: L10nProvider): Observable<{ [key: string]: any }> {
+    const data = import(`../i18n/${language}/${provider.asset}.json`);
+    return from(data);
+  }
+}
+```
+The implementation of `L10nTranslationLoader` class-interface above creates a js chunk for each translation file in the `src/i18n/[language]/[asset].json` folder during the build:
+
+_src/i18n/en-US/app.json_
+```Json
+{
+  "home": {
+    "greeting": "Hello world!",
+    "whoIAm": "I am {{name}}",
+    "devs": {
+      "one": "One software developer",
+      "other": "{{value}} software developers"
     }
-};
+  }
+}
 ```
 
-Register the providers and the configuration:
+Register the configuration:
+
+_src/app/app.module.ts_
 ```TypeScript
 @NgModule({
-    ...
-    imports: [
-        ...
-        L10nTranslationModule.forRoot(l10nConfig),
-        L10nIntlModule
-    ],
-    bootstrap: [AppComponent]
+  imports: [
+    L10nTranslationModule.forRoot(
+      l10nConfig,
+      {
+        translationLoader: TranslationLoader
+      }
+    ),
+    L10nIntlModule
+  ]
 })
 export class AppModule { }
 ```
 or in standalone app:
+
+_src/app/app.config.ts_
 ```TypeScript
 export const appConfig: ApplicationConfig = {
   providers: [
-    ...
-    provideL10nTranslation(l10nConfig),
+    provideL10nTranslation(
+      l10nConfig,
+      {
+        translationLoader: TranslationLoader
+      }
+    ),
     provideL10nIntl()
   ]
 };
 ```
 
 ### Getting the translation
-#### Pure Pipes (standalone)
+#### Pure Pipes
 ```Html
 <!-- translate pipe -->
-<p>{{ 'greeting' | translate:locale.language }}</p>
-<!-- translate pipe with attributes -->
-<p title="{{ 'greeting' | translate:locale.language }}">{{ 'greeting' | translate:locale.language }}</p>
+<p>{{ 'home.greeting' | translate:locale.language }}</p>
 <!-- Hello world! -->
 
 <!-- translate pipe with params -->
-<p>{{ 'whoIAm' | translate:locale.language:{ name: 'Angular l10n' } }}</p>
+<p>{{ 'home.whoIAm' | translate:locale.language:{ name: 'Angular l10n' } }}</p>
 <!-- I am Angular l10n -->
+
+<!-- l10nPlural pipe -->
+<p>{{ 2 | l10nPlural:locale.language:'home.devs' }}</p>
+<!-- 2 software developers -->
 
 <!-- l10nDate pipe -->
 <p>{{ today | l10nDate:locale.language:{ dateStyle: 'full', timeStyle: 'short' } }}</p>
-<!-- Wednesday, November 10, 2021, 2:17 PM -->
+<!-- Friday, May 12, 2023 at 1:59 PM -->
 
 <!-- l10nTimeAgo pipe -->
-<p>{{ -4 | l10nTimeAgo:locale.language:'second':{ numeric:'always', style:'long' } }}</p>
-<!-- 4 seconds ago -->
+<p>{{ -1 | l10nTimeAgo:locale.language:'second':{ numeric:'always', style:'long' } }}</p>
+<!-- 1 second ago -->
 
 <!-- l10nNumber pipe -->
 <p>{{ 1000 | l10nNumber:locale.language:{ digits: '1.2-2', style: 'currency' } }}</p>
 <!-- $1,000.00 -->
-
-<!-- l10nNumber pipe with convert function -->
-<p>{{ 1000 | l10nNumber:locale.language:{ digits: '1.2-2', style: 'currency' }:locale.currency:convertCurrency:{ rate: 1.16 } }}</p>
-<!-- $1,160.00 -->
-
-<!-- l10nNumber pipe with unit & convert function -->
-<p>{{ 1 | l10nNumber:locale.language:{ digits: '1.0-2', style: 'unit', unit: locale.units['length'] }:undefined:convertLength }}</p>
-<!-- 0.62 mi -->
-
-<!-- l10nPlural pipe -->
-<p>{{ 2 | l10nPlural:locale.language:'devs':{ type: 'cardinal' } }}</p>
-<!-- 2 software developers -->
 
 <!-- l10nDisplayNames pipe -->
 <p>{{ 'en-US' | l10nDisplayNames:locale.language:{ type: 'language' } }}</p>
@@ -140,405 +143,354 @@ export class PipeComponent {
 or in standalone components:
 ```TypeScript
 @Component({
-    ...
-    imports: [
-        L10nTranslatePipe,
-        ...
-    ]
+  standalone: true,
+  imports: [
+    L10nTranslatePipe
+  ]
 })
 export class PipeComponent {
-    locale = inject(L10N_LOCALE);
+  locale = inject(L10N_LOCALE);
 }
 ```
 
-
-##### Convert function
-An optional function to convert the value of numbers, with the same _value_, _locale_ and destructured optional parameters in the signature:
-```TypeScript
-export const convertCurrency = (value: number, locale: L10nLocale, rate: number) => {
-    switch (locale.currency) {
-        case "USD":
-            return value * rate;
-        default:
-            return value;
-    }
-};
-```
-
-##### OnPush Change Detection Strategy
+#### OnPush Change Detection Strategy
 To support this strategy, there is an `Async` version of each pipe, which recognizes by itself when the _locale_ changes:
 ```Html
 <p>{{ 'greeting' | translateAsync }}</p>
 ```
 
-#### Directives (standalone)
-> Don't use directives in SSR apps with client hydration, since they manipulate the DOM
+#### Directives
+> Directives manipulate the DOM
 ```Html
 <!-- l10nTranslate directive -->
-<p l10nTranslate>greeting</p>
+<p l10nTranslate>home.greeting</p>
+
 <!-- l10nTranslate directive with attributes -->
-<p l10n-title title="greeting" l10nTranslate>greeting</p>
+<p l10n-title title="greeting" l10nTranslate>home.greeting</p>
+
 <!-- l10nTranslate directive with params -->
-<p [params]="{ name: 'Angular l10n' }" l10nTranslate>whoIAm</p>
-
-<!-- l10nDate directive -->
-<p [options]="{ dateStyle: 'full', timeStyle: 'short' }" l10nDate>{{ today }}</p>
-
-<!-- l10nTimeAgo directive -->
-<p [options]="{ numeric:'always', style:'long' }" unit="second" l10nTimeAgo>-4</p>
-
-<!-- l10nNumber directive -->
-<p [options]="{ digits: '1.2-2', style: 'currency' }" l10nNumber>1000</p>
-<!-- l10nNumber directive with convert function -->
-<p [options]="{ digits: '1.2-2', style: 'currency' }" [convert]="convertCurrency" [convertParams]="{ rate: 1.16 }" l10nNumber>1000</p>
-<!-- l10nNumber directive with unit & convert function -->
-<p [options]="{ digits: '1.0-2', style: 'unit', unit: locale.units['length'] }" [convert]="convertLength" l10nNumber>1</p>
+<p [params]="{ name: 'Angular l10n' }" l10nTranslate>home.whoIAm</p>
 
 <!-- l10nPlural directive -->
-<p [options]="{ type: 'cardinal' }" prefix="devs" l10nPlural>2</p>
-
-<!-- l10nDisplayNames directive -->
-<p [options]="{ type: 'language' }" l10nDisplayNames>en-US</p>
+<p prefix="devs" l10nPlural>2</p>
 ```
-
-You can dynamically change parameters and expressions values as with pipes, but not in attributes.
 
 #### APIs
-`L10nTranslationService` provides an `onChange` event, which is fired whenever the _locale_ changes.
-```TypeScript
-export class ApiComponent implements OnInit {
+`L10nTranslationService` provides:
 
-    constructor(private translation: L10nTranslationService, private intl: L10nIntlService) { }
-
-    ngOnInit() {
-        this.translation.onChange().subscribe({
-            next: (locale: L10nLocale) => {
-                // Texts
-                this.greeting = this.translation.translate('greeting');
-                this.whoIAm = this.translation.translate('whoIAm', { name: 'Angular l10n' });
-                // Dates
-                this.formattedToday = this.intl.formatDate(this.today, { dateStyle: 'full', timeStyle: 'short' });
-                this.formattedTimeAgo = this.intl.formatRelativeTime(-4, 'second', { numeric: 'always', style: 'long' });
-                // Numbers
-                this.formattedValue = this.intl.formatNumber(
-                    1000,
-                    { digits: '1.2-2', style: 'currency' },
-                    undefined,
-                    undefined,
-                    convertCurrency,
-                    { rate: 1.16 }
-                );
-                this.formattedLength = this.intl.formatNumber(
-                    1,
-                    { digits: '1.0-2', style: 'unit', unit: locale.units['length'] },
-                    undefined,
-                    undefined,
-                    convertLength
-                );
-                this.formattedOnePlural = this.intl.plural(1, 'devs', { type: 'cardinal' });
-                this.formattedOtherPlural = this.intl.plural(2, 'devs', { type: 'cardinal' });
-            }
-        });
-    }
-
-}
-```
-> `L10nIntlService` provides methods for all Intl APIs, including _Collator_ & _ListFormat_.
+- `setLocale(locale: L10nLocale): Promise<void>` Changes the current locale and load the translation data
+- `onChange(): Observable<L10nLocale>` Fired every time the translation data has been loaded. Returns the locale
+- `onError(): Observable<any>` Fired when the translation data could not been loaded. Returns the error
+- `translate(keys: string | string[], params?: any, language?: string): string | any` Translates a key or an array of keys
 
 ### Changing the locale
 You can change the _locale_ at runtime at any time by calling the `setLocale` method of `L10nTranslationService`:
 ```Html
-<button *ngFor="let item of schema" (click)="setLocale(item.locale)">{{ item.locale.language | l10nDisplayNames:locale.language:{ type: 'language' } }}</button>
+<button *ngFor="let item of schema" (click)="setLocale(item.locale)">
+  {{ item.locale.language | l10nDisplayNames:locale.language:{ type: 'language' } }}
+</button>
 ```
 
 ```TypeScript
 export class AppComponent {
 
-    schema = this.l10nConfig.schema;
+  schema = this.config.schema;
 
-    constructor(@Inject(L10N_CONFIG) private l10nConfig: L10nConfig, private translation: L10nTranslationService) { }
+  constructor(
+    @Inject(L10N_LOCALE) public locale: L10nLocale,
+    @Inject(L10N_CONFIG) private config: L10nConfig,
+    private translation: L10nTranslationService
+  ) { }
 
-    setLocale(locale: L10nLocale): void {
-        this.translation.setLocale(locale);
-    }
-
+  setLocale(locale: L10nLocale): void {
+    this.translation.setLocale(locale);
+  }
 }
 ```
-It is not mandatory to use the _schema_ provided during the configuration: it is possible to set the _language_ or _currency_, or any other property of `L10nLocale` separately.
 
-### Customize the library
+### Class-interfaces
 The following features can be customized. You just have to implement the indicated class-interface and pass the token during configuration.
 
-E.g.
-```TypeScript
-@Injectable() export class HttpTranslationLoader implements L10nTranslationLoader {
-
-    private headers = new HttpHeaders({ 'Content-Type': 'application/json' });
-
-    constructor(@Optional() private http: HttpClient) { }
-
-    public get(language: string, provider: L10nProvider): Observable<{ [key: string]: any }> {
-        const url = `${provider.asset}-${language}.json`;
-        const options = {
-            headers: this.headers,
-            params: new HttpParams().set('v', provider.options.version)
-        };
-        return this.http.get(url, options);
-    }
-
-}
-
-export const l10nConfig: L10nConfig = {
-    ...
-    providers: [
-        { name: 'app', asset: './assets/i18n/app', options: { version: '1.0.0' } },
-    ],
-    ...
-};
-
-@NgModule({
-    ...
-    imports: [
-        ...
-        L10nTranslationModule.forRoot(
-            l10nConfig,
-            {
-                translationLoader: HttpTranslationLoader
-            }
-        )
-    ],
-    ...
-})
-export class AppModule { }
-```
-#### Storage
-By default, the library does not store the _locale_. To store it implement the `L10nStorage` class-interface using what you need, such as web storage or cookie, so that the next time the user has the _locale_ he selected.
-#### Resolve locale
-By default, the library attempts to set the _locale_ using the user's browser language, before falling back on the _default locale_. You can change this behavior by implementing the `L10nResolveLocale` class-interface, for example to get the language from the URL.
 #### Translation Loader
 By default, you can only pass JavaScript objects as translation data provider. To implement a different loader, you can implement the `L10nTranslationLoader` class-interface, as in the example above.
-#### Translation Fallback
-You can enable translation fallback during configuration:
 ```TypeScript
-export const l10nConfig: L10nConfig = {
-    ...
-    fallback: true,
-    ...
-};
+export declare abstract class L10nTranslationLoader {
+  /**
+    * This method must contain the logic to get translation data.
+    * @param language The current language
+    * @param provider The provider of the translations data
+    * @return An object of translation data for the language: {key: value}
+    */
+  abstract get(language: string, provider: L10nProvider): Observable<{
+      [key: string]: any;
+  }>;
+}
 ```
-By default, the translation data will be merged in the following order:
-- `'language'`
-- `'language[-script]'`
-- `'language[-script][-region]'`
 
-To change it, implement the `L10nTranslationFallback` class-interface.
-#### Translation Handler
-By default, the library only parse the _params_. `L10nTranslationHandler` is the class-interface to implement to modify the behavior.
+#### Locale resolver
+By default, the library attempts to set the _locale_ using the user's browser language, before falling back to the _default locale_. You can change this behavior by implementing the `L10nLocaleResolver` class-interface, for example to get the language from the URL.
+```TypeScript
+export declare abstract class L10nLocaleResolver {
+  /**
+   * This method must contain the logic to get the locale.
+   * @return The locale
+   */
+  abstract get(): Promise<L10nLocale | null>;
+}
+```
+
+#### Storage
+By default, the library does not store the _locale_. To store it implement the `L10nStorage` class-interface using what you need, such as web storage or cookie, so that the next time the user has the _locale_ he selected.
+```TypeScript
+export declare abstract class L10nStorage {
+  /**
+   * This method must contain the logic to read the storage.
+   * @return A promise with the value of the locale
+   */
+  abstract read(): Promise<L10nLocale | null>;
+  /**
+   * This method must contain the logic to write the storage.
+   * @param locale The current locale
+   */
+  abstract write(locale: L10nLocale): Promise<void>;
+}
+```
+
 #### Missing Translation Handler
 If a key is not found, the same key is returned. To return a different value, you can implement the `L10nMissingTranslationHandler` class-interface.
-#### Loader
-If you need to preload some data before initialization of the library, you can implement the `L10nLoader` class-interface:
 ```TypeScript
-@Injectable() export class AppLoader implements L10nLoader {
-    constructor(private translation: L10nTranslationService) { }
-
-    public async init(): Promise<void> {
-        await ... // Some custom data loading action
-        await this.translation.init();
-    }
+export declare abstract class L10nMissingTranslationHandler {
+  /**
+   * This method must contain the logic to handle missing values.
+   * @param key The key that has been requested
+   * @param value Null or empty string
+   * @param params Optional parameters contained in the key
+   * @return The value
+   */
+  abstract handle(key: string, value?: string, params?: any): string | any;
 }
-
-@NgModule({
-    imports: [
-        L10nTranslationModule.forRoot(
-            l10nConfig,
-            {
-                loader: AppLoader
-            }
-        ),
-    ],
-})
 ```
 
-### Validation
-There are two directives, that you can use with Template driven or Reactive forms: `l10nValidateNumber` and `l10nValidateDate`. To use them, you have to implement the `L10nValidation` class-interface, and import it with the validation module:
+#### Validation
+There are two directives, that you can use with Template driven or Reactive forms: `l10nValidateNumber` and `l10nValidateDate`. To use them, you have to implement the `L10nValidation` class-interface, and import it with the `L10nValidationModule` module.
 ```TypeScript
-@Injectable() export class LocaleValidation implements L10nValidation {
-
-    constructor(@Inject(L10N_LOCALE) private locale: L10nLocale) { }
-
-    public parseNumber(value: string, options?: L10nNumberFormatOptions, language = this.locale.numberLanguage || this.locale.language): number | null {
-        ...
-    }
-
-    public parseDate(value: string, options?: L10nDateTimeFormatOptions, language = this.locale.dateLanguage || this.locale.language): Date | null {
-        ...
-    }
-
+export declare abstract class L10nValidation {
+  /**
+   * This method must contain the logic to convert a string to a number.
+   * @param value The string to be parsed
+   * @param options A L10n or Intl NumberFormatOptions object
+   * @param language The current language
+   * @return The parsed number
+   */
+  abstract parseNumber(value: string, options?: L10nNumberFormatOptions, language?: string): number | null;
+  /**
+   * This method must contain the logic to convert a string to a date.
+   * @param value The string to be parsed
+   * @param options A L10n or Intl DateTimeFormatOptions object
+   * @param language The current language
+   * @return The parsed date
+   */
+  abstract parseDate(value: string, options?: L10nDateTimeFormatOptions, language?: string): Date | null;
 }
-
-@NgModule({
-    ...
-    imports: [
-        ...
-        L10nValidationModule.forRoot({ validation: LocaleValidation })
-    ],
-    ...
-})
-export class AppModule { }
 ```
 
-### Lazy loading
-If you want to add new providers to a lazy loaded module or component, you can use `l10nResolver` function in your routing module:
+## Lazy loading
+If you want to add new providers to a lazy loaded module or component, you can use `resolveL10n` function in your routes:
 ```TypeScript
 const routes: Routes = [
-    ...
-    {
-        path: 'lazy',
-        loadChildren: () => import('./lazy/lazy.module').then(m => m.LazyModule),
-        // loadComponent: () => import('./lazy/lazy.component').then(m => m.LazyComponent),
-        resolve: { l10n: l10nResolver },
-        data: {
-            l10nProviders: [{ name: 'lazy', asset: './assets/i18n/lazy', options: { version: '1.0.0' } }]
-        }
+  {
+    path: 'lazy',
+    loadChildren: () => import('./lazy/lazy.module').then(m => m.LazyModule),
+    resolve: { l10n: resolveL10n },
+    data: {
+      l10nProviders: [{ name: 'lazy', asset: 'lazy' }]
     }
+  }
 ];
 ```
-If it is a module, import the modules you need:
+and import the modules you need:
 ```TypeScript
 @NgModule({
-    declarations: [LazyComponent],
-    imports: [
-        ...
-        L10nTranslationModule
-    ]
+  declarations: [LazyComponent],
+  imports: [
+      L10nTranslationModule
+  ]
 })
 export class LazyModule { }
 ```
-#### Lazy loading with bundled data
-If you are bundling translation data using the default `L10nTranslationLoader`, you can add translation providers to lazy modules by updating the configuration and calling the `loadTranslation` method:
+Or to lazy load a component:
 ```TypeScript
-const i18nLazyAsset = { 'en-US': {...}, 'it-IT': {...} };
-
-this.translation.addProviders([{ name: 'lazy', asset: i18nLazyAsset}]);
-this.translation.loadTranslation([{ name: 'lazy', asset: i18nLazyAsset}]);
-```
-
-### Caching
-Enable caching during configuration if you want to prevent reloading of the already loaded translation data:
-```TypeScript
-export const l10nConfig: L10nConfig = {
-    ...
-    cache: true
-};
-```
-
-### Preloading data
-If you need to preload some translation data, for example to use for missing values, `L10nTranslationService` exposes the translation data in the `data` attribute. You can merge data by calling the `addData` method:
-
-```TypeScript
-@Injectable() export class AppLoader implements L10nLoader {
-    constructor(private translation: L10nTranslationService, private translationLoader: L10nTranslationLoader) { }
-
-    public async init(): Promise<void> {
-        await new Promise((resolve) => {
-            this.translationLoader.get('en-US', { name: 'app', asset: './assets/i18n/app', options: { version: '1.0.0' } })
-                .subscribe({
-                    next: (data) => this.translation.addData(data, 'en-US'),
-                    complete: () => resolve(null)
-                });
-        });
-        await this.translation.init();
+const routes: Routes = [
+  {
+    path: 'lazy',
+    loadComponent: () => import('./lazy/lazy.component').then(m => m.LazyComponent),
+    resolve: { l10n: resolveL10n },
+    data: {
+      l10nProviders: [{ name: 'lazy', asset: 'lazy' }]
     }
-}
+  }
+];
 ```
 
 
 ## Localized routing
+Let's assume that we want to create a navigation of this type:
+- default language (en-US): routes not localized `http://localhost:4200/home`
+- other languages (it-IT): localized routes `http://localhost:4200/it-IT/home`
+
+In `routes` root level add `:lang` param to create `localizedRoutes`:
+```TypeScript
+const routes: Routes = [
+  { path: 'home', component: HomeComponent },
+  {
+    path: 'lazy',
+    loadChildren: () => import('./lazy/lazy.module').then(m => m.LazyModule),
+    resolve: { l10n: resolveL10n },
+    data: {
+      l10nProviders: [{ name: 'lazy', asset: 'lazy' }]
+    }
+  }
+];
+
+export const localizedRoutes: Routes = [
+  { path: '', redirectTo: 'home', pathMatch: 'full' },
+  ...routes,
+  {
+    path: ':lang', // prepend [lang] to all routes
+    children: routes
+  },
+  { path: '**', redirectTo: 'home' }
+];
+```
+and provide it to the router.
+
+Now let's implement the `L10nLocaleResolver` class-interface to get the language from the URL:
+
+_src/app/l10n-config.ts_
+```TypeScript
+@Injectable() export class LocaleResolver implements L10nLocaleResolver {
+
+  constructor(@Inject(L10N_CONFIG) private config: L10nConfig, private location: Location) { }
+
+  public async get(): Promise<L10nLocale | null> {
+    const path = this.location.path();
+
+    for (const schema of this.config.schema) {
+      const language = schema.locale.language;
+      if (new RegExp(`(\/${language}\/)|(\/${language}$)|(\/(${language})(?=\\?))`).test(path)) {
+        return Promise.resolve(schema.locale);
+      }
+    }
+    return Promise.resolve(null);
+  }
+}
+```
+and add it to configuration using `L10nTranslationModule` or `provideL10nTranslation` in a standalone app.
+
+When the app starts, the library will call the `get` method of `LocaleResolver` and use the locale of the URL or the default locale.
+
+> Do not implement storage when using the localized router, because the language of the URL may be inconsistent with the saved one
+
+To change language at runtime, we can't use the `setLocale` method, but we have to navigate to the localized URL without reloading the page. We replace the `setLocale` method with the new `navigateByLocale` and we add `pathLang` to router links:
+```Html
+<a routerLink="{{pathLang}}/home">Home</a>
+<a routerLink="{{pathLang}}/lazy">Lazy</a>
+
+<button *ngFor="let item of schema" (click)="navigateByLocale(item.locale)">
+  {{ item.locale.language | l10nDisplayNames:locale.language:{ type: 'language' } }}
+</button>
+```
+
+```TypeScript
+export class AppComponent implements OnInit {
+
+  /**
+   * Handle page back/forward
+   */
+  @HostListener('window:popstate', ['$event'])
+  onPopState() {
+    this.translation.init();
+  }
+
+  schema = this.config.schema;
+
+  pathLang = this.getPathLang();
+
+  constructor(
+    @Inject(L10N_LOCALE) public locale: L10nLocale,
+    @Inject(L10N_CONFIG) private config: L10nConfig,
+    private translation: L10nTranslationService,
+    private location: Location,
+    private router: Router
+  ) { }
+
+  ngOnInit() {
+    // Update path language
+    this.translation.onChange().subscribe({
+      next: () => {
+        this.pathLang = this.getPathLang();
+      }
+    });
+  }
+
+  /**
+   * Replace the locale and navigate to the new URL
+   */
+  navigateByLocale(locale: L10nLocale) {
+    let path = this.location.path();
+    if (this.locale.language !== this.config.defaultLocale.language) {
+      if (locale.language !== this.config.defaultLocale.language) {
+        path = path.replace(`/${this.locale.language}`, `/${locale.language}`);
+      } else {
+        path = path.replace(`/${this.locale.language}`, '');
+      }
+    } else if (locale.language !== this.config.defaultLocale.language) {
+      path = `/${locale.language}${path}`;
+    }
+
+    this.router.navigate([path]).then(() => {
+      this.translation.init();
+    });
+  }
+
+  getPathLang() {
+    return this.locale.language !== this.config.defaultLocale.language ?
+      this.locale.language :
+      '';
+  }
+}
+```
+Here we are doing three things:
+- we update `pathLang` provided to router links every time the locale changes
+- we implement `navigateByLocale` method, which takes care of replacing the language and navigating to the new URL
+- we handle page back/forward events
 
 
+## Server Side Rendering
+You can find a complete sample app with _@nguniversal/express-engine_ [here](projects/angular-l10n-ssr)
 
+What is important to know:
+- `TranslationLoader` uses dynamic import of json (to avoid fetch requests during SSR)
+- `DirectiveComponent` has `ngSkipHydration` enabled because directives manipolate the DOM
+- `routes.tsx` file contains localized routes (to prerender pages in different languages)
 
 
 ## Types
 Angular l10n types that it is useful to know:
-- `L10nLocale`: contains a _language_, in the format `language[-script][-region][-extension]`, where:
-     - language: ISO 639 two-letter or three-letter code
-     - script: ISO 15924 four-letter script code
-     - region: ISO 3166 two-letter, uppercase code
-     - extension: 'u' (Unicode) extensions
+- `L10nLocale` Contains a `language`, in the format `language[-script][-region][-extension]`, where:
+    - `language` ISO 639 two-letter or three-letter code
+    - `script` ISO 15924 four-letter script code
+    - `region` ISO 3166 two-letter, uppercase code
+    - `extension` 'u' (Unicode) extensions
      
-     Optionally:
-     - _dateLanguage_: alternative language to translate dates
-     - _numberLanguage_: alternative language to translate numbers
-     - _currency_: ISO 4217 three-letter code
-     - _timezone_: from the IANA time zone database
-     - _units_: key value pairs of unit identifiers
+    Optionally:
+    - `currency` ISO 4217 three-letter code
+    - `timezone` From the IANA time zone database
+    - `units` Key value pairs of unit identifiers
 
-- `L10nFormat`: shows the format of the _language_ to be used for translations. The supported formats are: `'language' | 'language-script' | 'language-region' | 'language-script-region'`. So, for example, you can have a _language_ like `en-US-u-ca-gregory-nu-latn` to format dates and numbers, but only use the `en-US` for translations setting `'language-region'`
-- `L10nDateTimeFormatOptions`: the type of _options_ used to format dates. Extends the Intl `DateTimeFormatOptions` interface, replacing the _dateStyle_ and _timeStyle_ attributes. See [DateTimeFormat](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/DateTimeFormat/DateTimeFormat) for more details on available options
-- `L10nNumberFormatOptions`: the type of _options_ used to format numbers. Extends the Intl `NumberFormatOptions` interface, adding the _digits_ attribute. See [NumberFormat](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/NumberFormat/NumberFormat) for more details on available options
-
-
-## Intl API
-To format dates and numbers, this library uses [Intl API](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl)
-
-Current browser support:
-- [ECMAScript compatibility tables](http://kangax.github.io/compat-table/esintl/)
-- [Can I use](http://caniuse.com/#feat=internationalization)
-- [Intl](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl#Browser_compatibility)
-
-### Intl API in Node.js
-To use Intl in _Node.js_, check the support according to the version in the official documentation: [Internationalization Support](https://nodejs.org/api/intl.html)
-
-
-## Server Side Rendering
-You can find a complete sample app with _@nguniversal/express-engine_ [here](projects/angular-l10n-app-ssr)
-
-SSR doesn't work out of the box, so it is important to know:
-- `src\app\universal-interceptor.ts`: used to handle absolute URLs for HTTP requests on the server
-- `DirectiveComponent` ha `ngSkipHydration` enabled because directives manipolate the DOM
-
-
-## Previous versions
-- **Angular v15 (Angular l10n v15.0.0)**
-    - [Branch](https://github.com/robisim74/angular-l10n/tree/angular_v15)
-
-- **Angular v14 (Angular l10n v14.0.0)**
-    - [Branch](https://github.com/robisim74/angular-l10n/tree/angular_v14)
-
-- **Angular v13 (Angular l10n v13.1.0)**
-    - [Branch](https://github.com/robisim74/angular-l10n/tree/angular_v13)
-
-- **Angular v12 (Angular l10n v12.0.1)**
-    - [Branch](https://github.com/robisim74/angular-l10n/tree/angular_v12)
-
-- **Angular v11 (Angular l10n v11.1.0)**
-    - [Branch](https://github.com/robisim74/angular-l10n/tree/angular_v11)
-
-- **Angular v10 (Angular l10n v10.1.2)**
-    - [Branch](https://github.com/robisim74/angular-l10n/tree/angular_v10)
-
-- **Angular v9 (Angular l10n v9.3.0)**
-    - [Branch](https://github.com/robisim74/angular-l10n/tree/angular_v9)
-
-- **Angular v8 (Angular l10n v8.1.2)**
-    - [Branch](https://github.com/robisim74/angular-l10n/tree/angular_v8)
-
-- **Angular v7 (Angular l10n v7.2.0)**
-    - [Branch](https://github.com/robisim74/angular-l10n/tree/angular_v7)
-
-- **Angular v6 (Angular l10n v5.2.0)**
-    - [Branch](https://github.com/robisim74/angular-l10n/tree/angular_v6)
-
-- **Angular v5 (Angular l10n v4.2.0)**
-    - [Branch](https://github.com/robisim74/angular-l10n/tree/angular_v5)
-
-- **Angular v4 (Angular l10n v3.5.2)**
-    - [Branch](https://github.com/robisim74/angular-l10n/tree/angular_v4)
-
-- **Angular v2 (Angular l10n v2.0.11)**
-    - [Branch](https://github.com/robisim74/angular-l10n/tree/angular_v2)
+- `L10nFormat` Shows the format of the _language_ to be used for translations. The supported formats are: `'language' | 'language-script' | 'language-region' | 'language-script-region'`. So, for example, you can have a _language_ like `en-US-u-ca-gregory-nu-latn` to format dates and numbers, but only use the `en-US` for translations setting `'language-region'`
+- `L10nDateTimeFormatOptions` The type of _options_ used to format dates. Extends the Intl `DateTimeFormatOptions` interface, replacing the _dateStyle_ and _timeStyle_ attributes. See [DateTimeFormat](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/DateTimeFormat/DateTimeFormat) for more details on available options
+- `L10nNumberFormatOptions` The type of _options_ used to format numbers. Extends the Intl `NumberFormatOptions` interface, adding the _digits_ attribute. See [NumberFormat](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/NumberFormat/NumberFormat) for more details on available options
 
 
 ## Contributing
@@ -556,11 +508,6 @@ SSR doesn't work out of the box, so it is important to know:
 - Serving the sample app:
     ```Shell
     npm start
-    ```
-
-- Serving the stanalone app:
-    ```Shell
-    npm start:standalone
     ```
 
 - Serving the sample ssr app:

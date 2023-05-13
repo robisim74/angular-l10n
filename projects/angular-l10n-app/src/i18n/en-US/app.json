@@ -5,7 +5,7 @@
     "subtitle": "The world is small",
     "greeting": "Hello world!",
     "whoIAm": "I am {{name}}",
-    "description": "<em>An Angular library to translate texts, dates and numbers</em>",
+    "description": "<em>Angular library to translate texts, dates and numbers</em>",
     "devs": {
       "one": "One software developer",
       "other": "{{value}} software developers"
