@@ -1,0 +1,1 @@
+{"installDependencies":true,"startCommand":"turbo build && turbo start","env":{"ENABLE_CJS_IMPORTS":true}}
