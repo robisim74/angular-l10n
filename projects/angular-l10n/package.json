@@ -1,8 +1,8 @@
 {
   "name": "angular-l10n",
-  "version": "15.0.0",
+  "version": "16.0.0",
   "author": "Roberto Simonetti",
-  "description": "An Angular library to translate texts, dates and numbers",
+  "description": "Angular library to translate texts, dates and numbers",
   "repository": {
     "type": "git",
     "url": "https://github.com/robisim74/angular-l10n.git"
