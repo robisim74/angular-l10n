@@ -1,1 +1,1 @@
-{"installDependencies":true,"startCommand":"turbo build && turbo start","env":{"ENABLE_CJS_IMPORTS":true}}
+{"installDependencies":true,"startCommand":"npm build && npm start","env":{"ENABLE_CJS_IMPORTS":true}}

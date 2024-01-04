@@ -1,11 +1,21 @@
+import { CommonModule } from '@angular/common';
 import { Component, OnInit, Inject } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 
-import { L10N_LOCALE, L10nLocale, L10nTranslationService, L10nValidation, L10nNumberFormatOptions } from 'angular-l10n';
+import { L10N_LOCALE, L10nLocale, L10nTranslationService, L10nValidation, L10nNumberFormatOptions, L10nTranslatePipe, L10nValidateNumberDirective, L10nNumberPipe } from 'angular-l10n';
 
 @Component({
   selector: 'app-validation',
   templateUrl: './validation.component.html',
-  styleUrls: ['./validation.component.scss']
+  styleUrls: ['./validation.component.scss'],
+  standalone: true,
+  imports: [
+    CommonModule,
+    FormsModule,
+    L10nTranslatePipe,
+    L10nNumberPipe,
+    L10nValidateNumberDirective
+  ]
 })
 export class ValidationComponent implements OnInit {
 

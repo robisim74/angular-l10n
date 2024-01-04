@@ -1,13 +1,22 @@
-import { Component, OnInit, Inject, HostListener } from '@angular/core';
+import { Component, HostListener, Inject, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { Location } from '@angular/common';
-import { Router } from '@angular/router';
+import { Router, RouterLink, RouterOutlet } from '@angular/router';
 
-import { L10N_CONFIG, L10nConfig, L10N_LOCALE, L10nLocale, L10nTranslationService } from 'angular-l10n';
+import { L10N_CONFIG, L10nConfig, L10N_LOCALE, L10nLocale, L10nTranslationService, L10nTranslatePipe, L10nDisplayNamesPipe } from 'angular-l10n';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss']
+  styleUrls: ['./app.component.scss'],
+  standalone: true,
+  imports: [
+    CommonModule,
+    RouterLink,
+    RouterOutlet,
+    L10nTranslatePipe,
+    L10nDisplayNamesPipe
+  ]
 })
 export class AppComponent implements OnInit {
 

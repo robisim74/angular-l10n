@@ -467,13 +467,12 @@ Here we are doing three things:
 
 
 ## Server Side Rendering
-You can find a complete sample app with _@nguniversal/express-engine_ [here](projects/angular-l10n-ssr)
+You can find a complete sample app [here](projects/angular-l10n-ssr)
 
 What is important to know:
-- `TranslationLoader` uses dynamic import of json (to avoid fetch requests during SSR)
 - `DirectiveComponent` has `ngSkipHydration` enabled because directives manipolate the DOM
+- `prerender` is enabled in `angular.json`
 - `routes.tsx` file contains localized routes (to prerender pages in different languages)
-
 
 ## Types
 Angular l10n types that it is useful to know:
