@@ -71,6 +71,22 @@ _src/i18n/en-US/app.json_
 
 Register the configuration:
 
+_src/app/app.config.ts_
+```TypeScript
+export const appConfig: ApplicationConfig = {
+  providers: [
+    provideL10nTranslation(
+      l10nConfig,
+      {
+        translationLoader: TranslationLoader
+      }
+    ),
+    provideL10nIntl()
+  ]
+};
+```
+or with modules:
+
 _src/app/app.module.ts_
 ```TypeScript
 @NgModule({
@@ -85,22 +101,6 @@ _src/app/app.module.ts_
   ]
 })
 export class AppModule { }
-```
-or in standalone app:
-
-_src/app/app.config.ts_
-```TypeScript
-export const appConfig: ApplicationConfig = {
-  providers: [
-    provideL10nTranslation(
-      l10nConfig,
-      {
-        translationLoader: TranslationLoader
-      }
-    ),
-    provideL10nIntl()
-  ]
-};
 ```
 
 ### Getting the translation
@@ -136,12 +136,6 @@ export const appConfig: ApplicationConfig = {
 ```
 Pure pipes need to know when the _locale_ changes. So import `L10nLocale` injection token in every component that uses them:
 ```TypeScript
-export class PipeComponent {
-    locale = inject(L10N_LOCALE);
-}
-```
-or in standalone components:
-```TypeScript
 @Component({
   standalone: true,
   imports: [
@@ -150,6 +144,12 @@ or in standalone components:
 })
 export class PipeComponent {
   locale = inject(L10N_LOCALE);
+}
+```
+or with modules:
+```TypeScript
+export class PipeComponent {
+    locale = inject(L10N_LOCALE);
 }
 ```
 
@@ -271,6 +271,78 @@ export declare abstract class L10nMissingTranslationHandler {
 }
 ```
 
+#### Translation fallback
+If you enable translation fallback in configuration, the translation data will be merged in the following order:
+- `'language'`
+- `'language[-script]'`
+- `'language[-script][-region]'`
+
+To change it, implement the `L10nTranslationFallback` class-interface.
+```TypeScript
+export declare abstract class L10nTranslationFallback {
+  /**
+   * This method must contain the logic to get the ordered loaders.
+   * @param language The current language
+   * @param provider The provider of the translations data
+   * @return An array of loaders
+   */
+  abstract get(language: string, provider: L10nProvider): Observable<any>[];
+}
+```
+E.g.:
+```TypeScript
+@Injectable() export class TranslationFallback implements L10nTranslationFallback {
+
+  constructor(
+    @Inject(L10N_CONFIG) private config: L10nConfig,
+    private cache: L10nCache,
+    private translationLoader: L10nTranslationLoader
+  ) { }
+
+  public get(language: string, provider: L10nProvider): Observable<any>[] {
+    const loaders: Observable<any>[] = [];
+    // Fallback current lang to en
+    const languages = ['en', language];
+    for (const lang of languages) {
+        if (this.config.cache) {
+            loaders.push(
+                this.cache.read(`${provider.name}-${lang}`,
+                    this.translationLoader.get(lang, provider))
+            );
+        } else {
+            loaders.push(this.translationLoader.get(lang, provider));
+        }
+    }
+    return loaders;
+  }
+}
+```
+
+#### Loader
+If you need to preload some data before initialization of the library, you can implement the `L10nLoader` class-interface.
+```TypeScript
+export declare abstract class L10nTranslationLoader {
+  /**
+   * This method must contain the logic to get translation data.
+   * @param language The current language
+   * @param provider The provider of the translations data
+   * @return An object of translation data for the language: {key: value}
+   */
+  abstract get(language: string, provider: L10nProvider): Observable<{[key: string]: any;}>;
+}
+```
+E.g.:
+```TypeScript
+@Injectable() export class AppLoader implements L10nLoader {
+  constructor(private translation: L10nTranslationService) { }
+
+  public async init(): Promise<void> {
+      await ... // Some custom data loading action
+      await this.translation.init();
+  }
+}
+```
+
 #### Validation
 There are two directives, that you can use with Template driven or Reactive forms: `l10nValidateNumber` and `l10nValidateDate`. To use them, you have to implement the `L10nValidation` class-interface, and import it with the `L10nValidationModule` module.
 ```TypeScript
@@ -295,7 +367,20 @@ export declare abstract class L10nValidation {
 ```
 
 ## Lazy loading
-If you want to add new providers to a lazy loaded module or component, you can use `resolveL10n` function in your routes:
+If you want to add new providers to a lazy loaded component or module, you can use `resolveL10n` function in your routes:
+```TypeScript
+const routes: Routes = [
+  {
+    path: 'lazy',
+    loadComponent: () => import('./lazy/lazy.component').then(m => m.LazyComponent),
+    resolve: { l10n: resolveL10n },
+    data: {
+      l10nProviders: [{ name: 'lazy', asset: 'lazy' }]
+    }
+  }
+];
+```
+Or to lazy load a module:
 ```TypeScript
 const routes: Routes = [
   {
@@ -317,19 +402,6 @@ and import the modules you need:
   ]
 })
 export class LazyModule { }
-```
-Or to lazy load a component:
-```TypeScript
-const routes: Routes = [
-  {
-    path: 'lazy',
-    loadComponent: () => import('./lazy/lazy.component').then(m => m.LazyComponent),
-    resolve: { l10n: resolveL10n },
-    data: {
-      l10nProviders: [{ name: 'lazy', asset: 'lazy' }]
-    }
-  }
-];
 ```
 
 
@@ -385,7 +457,7 @@ _src/app/l10n-config.ts_
   }
 }
 ```
-and add it to configuration using `L10nTranslationModule` or `provideL10nTranslation` in a standalone app.
+and add it to configuration using `provideL10nTranslation` or `L10nTranslationModule` with modules.
 
 When the app starts, the library will call the `get` method of `LocaleResolver` and use the locale of the URL or the default locale.
 
@@ -476,6 +548,17 @@ What is important to know:
 
 ## Types
 Angular l10n types that it is useful to know:
+- `L10nConfig` Contains:
+    - `format` Format of the translation language. Pattern: `language[-script][-region]`
+    - `providers` The providers of the translations data
+    - `keySeparator` Sets key separator
+    - `defaultLocale` Defines the default locale to be used
+    - `schema` Provides the schema of the supported locales
+     
+    Optionally:
+    - `fallback` Translation fallback
+    - `cache` Caching for providers
+
 - `L10nLocale` Contains a `language`, in the format `language[-script][-region][-extension]`, where:
     - `language` ISO 639 two-letter or three-letter code
     - `script` ISO 15924 four-letter script code
