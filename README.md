@@ -48,6 +48,10 @@ export const l10nConfig: L10nConfig = {
 
 @Injectable() export class TranslationLoader implements L10nTranslationLoader {
   public get(language: string, provider: L10nProvider): Observable<{ [key: string]: any }> {
+    /**
+     * Translation files are lazy-loaded via dynamic import and will be split into separate chunks during build.
+     * Assets names and keys must be valid variable names
+     */
     const data = import(`../i18n/${language}/${provider.asset}.json`);
     return from(data);
   }
@@ -68,6 +72,8 @@ _src/i18n/en-US/app.json_
   }
 }
 ```
+
+> Note. The implementation above of `L10nTranslationLoader` is just an example: you can load the translation data in the way you prefer.
 
 Register the configuration:
 
