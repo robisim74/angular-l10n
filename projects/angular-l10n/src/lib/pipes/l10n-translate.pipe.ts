@@ -12,6 +12,9 @@ export class L10nTranslatePipe implements PipeTransform {
 
     constructor(protected translation: L10nTranslationService) { }
 
+    public transform(key: null, language: string, params?: any): null;
+    public transform(key: "", language: string, params?: any): null;
+    public transform(key: string, language: string, params?: any): string;
     public transform(key: any, language: string, params?: any): string | null {
         if (key == null || key === '') return null;
 
