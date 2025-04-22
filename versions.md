@@ -1,5 +1,8 @@
 ## Versions
 
+- **Angular v16 (Angular l10n v16.0.0)**
+    - [Branch](https://github.com/robisim74/angular-l10n/tree/angular_v16)
+
 - **Angular v15 (Angular l10n v15.0.0)**
     - [Branch](https://github.com/robisim74/angular-l10n/tree/angular_v15)
 

@@ -5,6 +5,7 @@ import { provideL10nIntl, provideL10nTranslation, provideL10nValidation } from '
 
 import { localizedRoutes } from './app.routes';
 import { TranslationLoader, LocaleValidation, LocaleResolver, l10nConfig } from './l10n-config';
+import { provideClientHydration } from '@angular/platform-browser';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -17,6 +18,7 @@ export const appConfig: ApplicationConfig = {
       }
     ),
     provideL10nIntl(),
-    provideL10nValidation({ validation: LocaleValidation })
+    provideL10nValidation({ validation: LocaleValidation }),
+    provideClientHydration()
   ]
 };
