@@ -31,12 +31,14 @@
     "@angular/platform-browser": "17.0.4",
     "@angular/platform-browser-dynamic": "17.0.4",
     "@angular/platform-server": "17.0.4",
-    "@angular/router": "17.0.4",
     "@angular/ssr": "^17.0.3",
     "express": "^4.18.2",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.14.2"
+  },
+  "peerDependencies": {
+    "@angular/router": "17.0.4"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "17.0.3",
