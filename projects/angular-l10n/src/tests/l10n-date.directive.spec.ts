@@ -46,7 +46,7 @@ describe('L10nDateDirective', () => {
             declarations: [MockComponent],
             imports: [
                 L10nTranslationModule.forRoot(config),
-                L10nIntlModule
+                L10nIntlModule.forRoot()
             ]
         }).createComponent(MockComponent);
         comp = fixture.componentInstance;

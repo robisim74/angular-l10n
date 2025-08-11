@@ -33,7 +33,7 @@ describe('L10nIntlService', () => {
         TestBed.configureTestingModule({
             imports: [
                 L10nTranslationModule.forRoot(config),
-                L10nIntlModule
+                L10nIntlModule.forRoot()
             ]
         });
         loader = TestBed.inject(L10nLoader);

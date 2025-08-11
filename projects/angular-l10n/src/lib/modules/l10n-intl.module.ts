@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { ModuleWithProviders, NgModule } from '@angular/core';
 
 import { L10nDatePipe, L10nDateAsyncPipe } from '../pipes/l10n-date.pipe';
 import { L10nNumberPipe, L10nNumberAsyncPipe } from '../pipes/l10n-number.pipe';
@@ -47,6 +47,14 @@ import { L10nIntlService } from '../services/l10n-intl.service';
         L10nPluralDirective,
         L10nDisplayNamesDirective
     ],
-    providers: [L10nIntlService]
 })
-export class L10nIntlModule { }
+export class L10nIntlModule { 
+
+    public static forRoot(): ModuleWithProviders<L10nIntlModule> {
+        return {
+            ngModule: L10nIntlModule,
+            providers: [L10nIntlService]
+        };
+    }
+
+}
